@@ -1,0 +1,96 @@
+[project]
+name = "kuchka"
+version = "0.1.0"
+description = "A small pile of physically-typed engineering units for Python."
+readme = "README.md"
+authors = [{ name = "dimonade", email = "dimonade@protonmail.com" }]
+requires-python = ">=3.15"
+dependencies = []
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+]
+
+[project.urls]
+Homepage = "https://codeberg.org/dimonade/kuchka"
+Repository = "https://codeberg.org/dimonade/kuchka"
+"Bug Tracker" = "https://codeberg.org/dimonade/kuchka/issues"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+  "coverage>=7.15.4",
+  "mccabe>=0.7.0",
+  "mypy>=2.3.1",
+  "pylsp-mypy>=0.8.0",
+  "pytest>=9.1.1",
+  "python-lsp-server>=1.15.0",
+  "reorder-python-imports>=3.17.0",
+  "ruff>=0.16.3",
+  "ty>=0.0.72",
+]
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+fail_under = 85
+omit = ["tests/*"]
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+strict = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+[tool.ruff]
+exclude = [
+  "build",
+  "dist",
+  ".venv",
+  "venv",
+  "site-packages",
+  ".git",
+  ".mypy_cache",
+  ".tox",
+  ".ruff_cache",
+]
+indent-width = 4
+line-length = 88
+target-version = "py315"
+
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "D203",   # No blank lines after class definitions.
+  "D213",   # Docstring summary on first line.
+  "E402",
+  "E722",
+  "F403",
+  "F405",
+  "I001",   # Using reorder-python-imports.
+  "INP001", # Okay to not have `__init__.py` when not needed.
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+  "D103", # Test names are descriptive for the most part.
+  "S101", # Asserts are okay in tests.
+  "S311", # `random` is not used for cryptography.
+  "S603", # Testbench is not a subject to attack.
+  "S605", # Same.
+  "S607", # Same.
+]
