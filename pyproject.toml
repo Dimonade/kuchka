@@ -37,6 +37,7 @@ dev = [
 
 [tool.coverage.run]
 branch = true
+source = ["kuchka"]
 
 [tool.coverage.report]
 fail_under = 85
