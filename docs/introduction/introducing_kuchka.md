@@ -4,7 +4,7 @@ sub_title: a small pile of physically-typed units for Python
 author: dimonade
 ---
 
-## kuchka
+## Hi! My name is `kuchka`
 
 <!-- new_lines: 8 -->
 
@@ -20,14 +20,16 @@ Voltage, Current, Power, Resistance, Temperature.
 
 <!-- new_lines: 2 -->
 
-Nothing else, on purpose. Yet.
+Nothing else, on purpose.
+Yet.
 
 <!-- pause -->
 
 <!-- new_lines: 2 -->
 
 Everything on the following slides actually runs.
-No screenshots. No "trust me."
+No screenshots.
+No "trust me."
 
 <!-- end_slide -->
 
@@ -37,11 +39,19 @@ The year 1999. NASA loses a $125M spacecraft.
 
 <!-- pause -->
 
-Not an explosion. Not aliens. One team's software spoke
-`pound-force-seconds`. The other assumed `newton-seconds`.
+Not an explosion.
+Not aliens.
+One team's software spoke `pound-force-seconds`.
+The other assumed `newton-seconds`.
 Nobody in between noticed.
 
 <!-- pause -->
+
+<!-- new_lines: 2 -->
+
+You'd think 28 years later we've learned more.
+
+<!-- new_lines: 2 -->
 
 > [!caution]
 > Our reports aren't going to Mars.
@@ -68,7 +78,7 @@ It will just be **wrong**, quietly, at 2am, in a report nobody proofreads.
 
 <!-- new_lines: 2 -->
 
-_Voice in my head:_ _Rust wouldn't let this near a compiler..._
+_Voice in my head: "Rust wouldn't let this near a compiler..."_
 
 <!-- pause -->
 
@@ -78,7 +88,9 @@ _The other voice in my head:_ We don't have Rust here. We have Python, and a man
 
 ## We already tried sticks
 
-Linter rules. Style guides nobody reads. "Please use `Volt()` here" in a PR comment.
+Linter rules.
+Style guides nobody reads.
+"Please use volts here" in a PR comment.
 
 <!-- pause -->
 
@@ -88,7 +100,7 @@ It holds -- right up until whoever's enforcing it gets pulled onto something els
 
 <!-- new_lines: 2 -->
 
-_Voice in my head:_ Is `mv` "milli" or "micro"-Volts, though?
+_Voice in my head: Is `mv` "milli" or "micro"-Volts, though? They must be using `u` for "micro", right? Right?_
 
 <!-- pause -->
 
@@ -102,7 +114,9 @@ _Voice in my head:_ Is `mv` "milli" or "micro"-Volts, though?
 
 ## So: carrots
 
-Not a better stick. Not a bot or an agent. No PR police patrol.
+Not a better stick.
+Not a bot or an agent.
+No PR police patrol.
 
 <!-- pause -->
 
@@ -113,8 +127,8 @@ Give engineers something more attractive to reach for than a raw `float` -- ever
 <!-- new_lines: 2 -->
 
 ```python
-Volt(5) + Millivolt(200)   # -> Volt(5.2)
-Volt(5) * Ampere(2)        # -> Power, computed, not asserted in a comment
+Volt(5) + Millivolt(200)   # -> Volt(5.2).
+Volt(5) * Ampere(2)        # -> Power, computed, not asserted in a comment.
 ```
 
 <!-- pause -->
@@ -130,6 +144,22 @@ It's load-bearing -- `mypy`, `ty`, and runtime all agree, because there was neve
 `0.1 + 0.2` should never surprise anyone.
 
 SI prefixes are powers of ten -- exact in `Decimal`, not exact in binary `float`.
+
+<!-- pause -->
+
+```python {1-2|4|6|all} +exec
+thing_a_mw = 0.1
+thing_b_w = 2
+
+power_mw = thing_a_mw + thing_b_w / 10.0
+
+print(power_mw)
+```
+<!-- pause -->
+
+`kuchka` doesn't surprise you:
+
+# TODO: Adjust this to match the more correct comparison with above.
 
 ```python {1|3-4|all} +exec
 from kuchka import Volt, Millivolt
