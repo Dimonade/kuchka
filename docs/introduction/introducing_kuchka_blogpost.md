@@ -188,7 +188,7 @@ No units in the field names.
 No units in the docstring either -- I checked, twice, before running this.
 
 Two of the models read it carefully and got every check right: converted microamps to milliamps, subtracted 273.15 for Kelvin, multiplied correctly to land on milliwatts.
-Both flagged, entirely unprompted, the exact thing we'd built the exercise around: *"the units aren't explicitly stated in the code... that is inferred rather than specified."*
+Both flagged, entirely unprompted, the exact thing we'd built the exercise around: _"the units aren't explicitly stated in the code... that is inferred rather than specified."_
 That's not a point in favor of raw floats.
 That's the two most careful readers in the room telling us, on their own, that the interface itself is the problem.
 
