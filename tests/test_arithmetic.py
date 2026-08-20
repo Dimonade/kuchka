@@ -105,6 +105,4 @@ def test_ordering_across_dimensions_raises():
 
 
 def test_equality_across_dimensions_is_false_not_an_error():
-    # Equality follows ordinary Python convention: different types compare
-    # unequal rather than raising. Only arithmetic and ordering raise.
     assert (Volt(5) == Ampere(5)) is False
