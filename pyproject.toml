@@ -88,10 +88,11 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = [
-  "D103", # Test names are descriptive for the most part.
-  "S101", # Asserts are okay in tests.
-  "S311", # `random` is not used for cryptography.
-  "S603", # Testbench is not a subject to attack.
-  "S605", # Same.
-  "S607", # Same.
+  "ANN201", # Tests usually return `None`s.
+  "D103",   # Test names are descriptive for the most part.
+  "S101",   # Asserts are okay in tests.
+  "S311",   # `random` is not used for cryptography.
+  "S603",   # Testbench is not a subject to attack.
+  "S605",   # Same.
+  "S607",   # Same.
 ]
