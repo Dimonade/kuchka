@@ -6,7 +6,7 @@ author: dimonade
 
 ## Hi! My name is `kuchka`
 
-<!-- new_lines: 8 -->
+<!-- pause -->
 
 _A small pile of units._
 
@@ -14,26 +14,19 @@ _Deliberately small._
 
 <!-- pause -->
 
-<!-- new_lines: 2 -->
-
 Voltage, Current, Power, Resistance, Temperature.
 
-<!-- new_lines: 2 -->
-
 Nothing else, on purpose.
-Yet.
 
 <!-- pause -->
 
-<!-- new_lines: 2 -->
-
 Everything on the following slides actually runs.
-No screenshots.
-No "trust me."
 
 <!-- end_slide -->
 
 ## The problem
+
+<!-- pause -->
 
 The year 1999. NASA loses a $125M spacecraft.
 
@@ -41,15 +34,15 @@ The year 1999. NASA loses a $125M spacecraft.
 
 Not an explosion.
 Not aliens.
+
 One team's software spoke `pound-force-seconds`.
 The other assumed `newton-seconds`.
+
 Nobody in between noticed.
 
 <!-- pause -->
 
-<!-- new_lines: 2 -->
-
-You'd think 28 years later we've learned more.
+You'd think nearly 27 years later we've learned more.
 
 <!-- pause -->
 
@@ -58,7 +51,7 @@ You'd think 28 years later we've learned more.
 > [!caution]
 >
 > Our reports aren't going to Mars.
-> 
+>
 > But the failure mode is identical, just smaller and slower:
 > a number quietly loses track of what it means, somewhere between acquisition and the printed page.
 
@@ -66,23 +59,37 @@ You'd think 28 years later we've learned more.
 
 ## The Python problem specifically
 
+<!-- pause -->
+
 ```python
-v_tot = voltage_v + mv / 1000  # this time the units are correct, trust me,  I prefixed them, I checked 4 times!
+v_tot = voltage_v + mv / 1000
 ```
 
 <!-- pause -->
 
-Python will happily let you add Volts and Millivolts as well as subtract an Ampere from a Volt.
+The comment usually says:
+
+<!-- pause -->
+
+```text
+# this time the units are correct, trust me
+```
+
+<!-- pause -->
+
+Python will happily let you add Volts and Millivolts.
+
+It will also happily subtract an Ampere from a Volt.
 
 It will compute an answer.
 
-It will just be **wrong**, quietly, at 2am, in a report nobody proofreads.
+It will just occasionally be the wrong answer, quietly, at 2am, in a report nobody proofreads.
 
 <!-- pause -->
 
 <!-- new_lines: 2 -->
 
-> _[Voice in my head]_
+> _Voice in my head_
 >
 > "Rust wouldn't let this near a compiler..."
 
@@ -90,13 +97,15 @@ It will just be **wrong**, quietly, at 2am, in a report nobody proofreads.
 
 <!-- new_lines: 2 -->
 
-> _[The other voice in my head]_
+> _The other voice in my head_
 >
-> We don't have Rust here. We have Python, and a manager who wants reports to go brrr.
+> "We don't have Rust here. We have Python."
 
 <!-- end_slide -->
 
 ## We already tried sticks
+
+<!-- pause -->
 
 Linter rules.
 Style guides nobody reads.
@@ -104,15 +113,15 @@ Style guides nobody reads.
 
 <!-- pause -->
 
-It holds -- right up until whoever's enforcing it gets pulled onto something else, and everyone, little by little, drifts back to `measurement_mv`.
+It holds -- right up until whoever's enforcing it gets pulled onto something else.
 
-<!-- pause -->
+Then everyone drifts back to:
 
-<!-- new_lines: 2 -->
-
-> _[Voice in my head]_
->
-> Is `mv` "milli" or "micro"-Volts, though? They must be using `u` for "micro", right? Right?_
+```python
+measurement_mv
+time_ms
+t_c
+```
 
 <!-- pause -->
 
@@ -121,33 +130,28 @@ It holds -- right up until whoever's enforcing it gets pulled onto something els
 > [!caution]
 >
 > A rule you have to _remember_ is a rule you will, eventually, forget.
-> Three months later it's a bug in a report, and a manager asking why "we had a rule about this" wasn't enough.
+>
+> The toolchain should carry the stick for us.
 
 <!-- end_slide -->
 
-## An experiment: the chip nobody wants to own
+## So let's use a real interface
 
-<!-- new_lines: 2 -->
+<!-- pause -->
 
 Enough of the thought experiment.
 
-Let's get our hands dirty.
+I took the shape of a real engineering problem: a vendor diode driver feeding Python, followed by a safety check before acquisition.
 
-<!-- pause -->
+The point is not the diode.
 
-<!-- new_lines: 2 -->
+The point is the boundary between:
 
-The diode driver we're actually stuck with.
+```text
+hardware -> vendor driver -> read_status() -> safety check -> acquisition pipeline
+```
 
-Sourced from a supplier in Shenzhen.
-Python bindings written by a contractor in Shanghai.
-
-<!-- pause -->
-
-<!-- new_lines: 2 -->
-
-Contract ended two years ago.
-The contractor does not work there anymore.
+That boundary is where raw numbers are supposed to become engineering quantities.
 
 <!-- end_slide -->
 
@@ -155,55 +159,66 @@ The contractor does not work there anymore.
 
 <!-- pause -->
 
-_... crickets ..._
+The driver is inherited.
+The documentation is stale.
+The interface is small.
 
 <!-- pause -->
 
-<!-- new_lines: 2 -->
-
-Well, it is non-existent.
+And the function that actually matters looks like this:
 
 <!-- pause -->
-
-<!-- new_lines: 2 -->
 
 ```python
 def read_status():
     ...
 ```
 
+<!-- pause -->
+
+That's it.
+
+<!-- pause -->
+
+No units in the field names.
+
+No units in the docstring.
+
+No typed return value.
+
 <!-- end_slide -->
 
-## The actual task
+## The interface I handed to people
 
-<!-- new_lines: 2 -->
+<!-- pause -->
 
-```text {1|3-5|7-8|10-16|all}
-Quick task: diode pre-flight check.
+I gave the same interface to several AI models and several humans.
 
-We're prototyping a pre-flight safety check for the new diode
-driver before it goes into the acquisition pipeline.
-Nothing fancy - just a first pass.
+The participant-facing task was deliberately ordinary:
 
-Time box: 10 minutes.
-Don't overthink it, don't go looking things up, just write what you'd normally write.
+<!-- pause -->
 
-What you're given
-------------------
-1. `read_status()` which returns the `status` of the diode.
-2. From the datasheet, section 4.2 (Absolute Maximum Ratings):
-    MAX_CURRENT_MA = 250
-    MAX_CASE_TEMP_C = 45
-    MAX_POWER_MW = 500
-```
+> Implement the pre-flight check.
+>
+> You have ten minutes.
+>
+> Don't look anything up.
+>
+> Write what you would normally write.
+
+<!-- pause -->
+
+The important part was **not** whether someone could write ten lines of Python.
+
+The important part was whether the interface gave them enough information to know what those ten lines should mean.
 
 <!-- end_slide -->
 
 ## What `read_status()` actually returns
 
-<!-- new_lines: 2 -->
+<!-- pause -->
 
-```python
+```python +line_numbers
 status = {
     "i_meas": 187500,
     "v_meas": 2350,
@@ -213,27 +228,33 @@ status = {
 
 <!-- pause -->
 
-<!-- new_lines: 2 -->
+And the safety limits were:
+
+```text
+250 mA
+45 °C
+500 mW
+```
+
+<!-- pause -->
 
 That's the whole interface.
 
-No units in the field names.
+No units attached to the measurements.
 
-No units in the docstring either -- go check, they aren't there.
+<!-- pause -->
 
-<!-- new_lines: 1 -->
-
-Ten minutes. No hints. Go.
+What would you assume?
 
 <!-- end_slide -->
 
-## Participants - handful of AI models, handful of humans
+## The first thing that happened
 
-The task was given to a number of AI models, as well as to a number of humans.
+<!-- pause -->
 
-<!-- end_slide -->
+Two models did the careful thing.
 
-## Two models read it carefully
+They inferred the intended units from the values and the specification:
 
 ```python +line_numbers
 current_ma = status["i_meas"] / 1000
@@ -242,214 +263,284 @@ temp_c = status["t_case"] - 273.15
 power_mw = current_ma * voltage_v
 ```
 
-```
-Current: 187.50 mA (Max: 250 mA) -> PASS
-Case Temp: 41.70 C (Max: 45 C) -> PASS
-Power: 440.63 mW (Max: 500 mW) -> PASS
+<!-- pause -->
+
+And they got:
+
+```text
+Current:   187.50 mA   PASS
+Case Temp:  41.70 °C   PASS
+Power:     440.63 mW   PASS
 ```
 
 <!-- pause -->
 
-<!-- new_lines: 2 -->
+More interestingly, both stopped and said essentially the same thing:
 
-Both flagged the ambiguity themselves, unprompted:
-
-<!-- new_lines: 1 -->
-
-- "The units aren't explicitly stated in the code... "
-- "... that is inferred rather than specified."
-
-<!-- pause -->
-
-<!-- new_lines: 2 -->
-
-The two most careful readers in the room, telling us the interface is the problem.
+> The units aren't explicitly stated in the interface.
 
 <!-- end_slide -->
 
-## One model read it wrong -- and didn't even notice
+## That is useful feedback
+
+<!-- pause -->
+
+They solved the calculation.
+
+But they also found a defect in the interface.
+
+That is the result I care about more.
+
+The correct implementation depends on knowledge that exists somewhere outside the value itself.
+
+<!-- pause -->
+
+A human engineer can compensate.
+
+A careful model can compensate.
+
+A future engineer who has never seen the hardware has to rediscover it.
+
+<!-- end_slide -->
+
+## Another model made a different assumption
+
+<!-- pause -->
+
+It treated the temperature as if the value were milli-Celsius:
 
 ```python
 t_case_c = status["t_case"] / 1000
 ```
 
-```
+<!-- pause -->
+
+Result:
+
+```text
 Case temperature: 0.31 °C   PASS
 ```
 
 <!-- pause -->
 
-<!-- new_lines: 2 -->
+Nothing crashed.
 
-Nothing crashed. Nothing looked out of range to the model.
+Nothing was out of numerical range.
 
-<!-- new_lines: 2 -->
+The answer looked plausible enough to continue.
 
-A diode, supposedly under load, reported a third of a degree above freezing -- colder than your fridge.
+<!-- pause -->
 
-The only thing anyone would see is a clean "PASS."
+The diode was supposedly colder than your refrigerator while operating under load.
+
+The interface had no mechanism for objecting.
 
 <!-- end_slide -->
 
 ## Then a human tried it
 
+<!-- pause -->
+
+The current calculation was correct.
+
+<!-- pause -->
+
+The temperature check was:
+
 ```python
 temp_check = "PASS" if status["t_case"] <= MAX_CASE_TEMP_C else "FAIL"
 ```
 
-```
+<!-- pause -->
+
+Which gives:
+
+```text
 temperature, 314.85, FAIL
 ```
 
 <!-- pause -->
 
-<!-- new_lines: 2 -->
+But `314.85 K` is `41.70 °C`.
 
-Kelvin, compared straight against a Celsius limit.
+The diode is fine.
 
-The diode is actually fine -- 41.7°C, well under spec.
-The report says confidently otherwise.
+The report is wrong.
 
 <!-- end_slide -->
 
-## The same submission, one line up
+## And the power check was worse
 
-```python
+<!-- pause -->
+
+The same submission contained:
+
+```python +line_numbers
 power_check = "PASS" if power_in_w / 1000 > MAX_POWER_MW else "FAIL"
 print(f"power, {power_in_w * 1000}, {power_check}")
 ```
 
-```
-power, 440.62500000000006, FAIL
+<!-- pause -->
+
+Result:
+
+```text
+power, 440.625..., FAIL
 ```
 
 <!-- pause -->
 
-<!-- new_lines: 2 -->
+The number being printed is correct.
 
-> [!caution]
+The verdict next to it was computed from a different expression.
+
+<!-- pause -->
+
+> Not one unit conversion error.
 >
-> Read that line again.
->
-> The *number* is exactly right -- 440.6 mW, well under the 500 mW limit.
-> The *verdict* next to it came from a different, wrongly-scaled expression.
->
-> Not a units mix-up.
-> Two numbers that were supposed to be the same value, are drifting apart.
-
-<!-- pause -->
-
-<!-- new_lines: 2 -->
-
-> [!caution]
->
-> Also, take a note of that ugly `.0000000006`. We will deal with that later.
+> Two pieces of code that were supposed to describe the same value quietly stopped agreeing.
 
 <!-- end_slide -->
 
-## None of this is a skill gap
+## What did the exercise actually show?
 
 <!-- pause -->
 
-Two frontier models, reading closely: right twice, and said so out loud.
+Not:
 
-<!-- new_lines: 1 -->
-
-Another frontier model, reading just as closely: silently wrong, no error, no hesitation.
-
-<!-- new_lines: 1 -->
-
-A competent engineer, on a real clock: right on the hard part, wrong on the easy part, for a reason nobody wrote down.
+> "AI is better than engineers."
 
 <!-- pause -->
 
-<!-- new_lines: 2 -->
+Not:
 
-Different people. Different mistakes. Same root cause:
+> "Engineers can't code anymore."
 
-a `float` doesn't know what it means, and nothing forces the number you check against the number you print to be the same number.
+<!-- pause -->
+
+Something much simpler:
+
+> **The interface creates failure opportunities even for competent readers.**
+
+<!-- pause -->
+
+Different participants made different mistakes.
+
+The interface made all of those mistakes easy to express.
+
+<!-- pause -->
+
+A `float` does not remember whether it is:
+
+```text
+187500 µA
+187.5 mA
+0.1875 A
+```
+
+The program sees three numbers.
 
 <!-- end_slide -->
 
-## So: carrots
-
-Not a better stick.
-Not a bot or an agent.
-No PR police patrol.
+## This is where the sticks come back
 
 <!-- pause -->
 
-Give engineers something more attractive to reach for than a raw `float` -- every time, not just when someone's watching -- and there's nothing left to be disciplined about.
+We can tell people:
+
+```text
+Use milliamps here.
+Convert Kelvin here.
+Don't repeat the power calculation.
+Check the units before review.
+```
+
+Those are sticks.
 
 <!-- pause -->
 
-<!-- new_lines: 2 -->
+Let's then move the sticks into the toolchain.
 
-```python
-Volt(5) + Millivolt(200)   # -> Volt(5.2).
-Volt(5) * Ampere(2)        # -> Power, computed, not asserted in a comment.
+Let's make the carrot the natural interface.
+
+<!-- end_slide -->
+
+## What if the values remembered?
+
+<!-- pause -->
+
+```python +exec +line_numbers
+/// from kuchka import Microampere, Millivolt, Kelvin
+current = Microampere(187500)
+voltage = Millivolt(2350)
+temp = Kelvin(314.85)
+
+power = current * voltage
+/// print(f"{current = }     | ({type(current).__name__})")
+/// print(f"{voltage = }       | ({type(voltage).__name__})")
+/// print(f"{temp = }         | ({type(temp).__name__})")
+/// print(f"{power = }   | ({type(power).__name__})")
+```
+
+Now these are not three anonymous numbers.
+
+They are measurements.
+
+<!-- pause -->
+
+```python +line_numbers
+MAX_CURRENT = Milliampere(250)
+MAX_TEMP = Celsius(45)
+MAX_POWER = Milliwatt(500)
+```
+
+And the comparisons happen between physical values, not between conventions encoded in variable names.
+
+<!-- end_slide -->
+
+## The diode check again
+
+<!-- pause -->
+
+```python {1-3|5|7-9|all} +line_numbers
+current = Microampere(187500)
+voltage = Millivolt(2350)
+temp = Kelvin(314.85)
+
+power = current * voltage
+
+MAX_CURRENT = Milliampere(250)
+MAX_TEMP = Celsius(45)
+MAX_POWER = Milliwatt(500)
 ```
 
 <!-- pause -->
 
-The correctness isn't sitting _next to_ the nice interface, waiting to be bypassed.
+Then:
 
-It's load-bearing -- `mypy`, `ty`, and runtime all agree, because there was never a separate rule to begin with.
-
-<!-- pause -->
-
-<!-- new_lines: 2 -->
-
-That's the pitch.
-
-Now let's see if it survives contact with an actual undocumented part.
-
-<!-- end_slide -->
-
-## Same three fields, through `kuchka`
-
-<!-- new_lines: 2 -->
-
-We've seen what a plain `dict` does to three careful readers.
-
-Let's watch the same three demos land on the thing that broke.
-
-<!-- end_slide -->
-
-## Demo: Decimal, not float
-
-`0.1 + 0.2` should never surprise anyone.
-
-SI prefixes are powers of ten -- exact in `Decimal`, not exact in binary `float`.
-
-<!-- pause -->
-
-```python {1-2|4|6|all} +exec +line_numbers
-voltage_a_v = 0.1
-voltage_b_mv = 200
-
-voltage_sum = voltage_a_v + voltage_b_mv / 1000  # "obviously" 0.3 V
-
-print(voltage_sum)
+```python +line_numbers
+current <= MAX_CURRENT
+temp <= MAX_TEMP
+power <= MAX_POWER
 ```
+
 <!-- pause -->
 
-`kuchka` doesn't surprise you:
-
-```python {1|3-4|all} +exec +line_numbers
-from kuchka import Volt, Millivolt
-
-print(Volt(1) + Millivolt(200))
-print(Volt(1) + Millivolt(200) == Volt(1.2))
+```text
+current: 187.500 mA   PASS
+temp:     41.70 °C    PASS
+power:   440.625 mW   PASS
 ```
 
 <!-- end_slide -->
 
-## Demo: derived dimensions
+## Derived dimensions
+
+<!-- pause -->
 
 Multiplication and division understand physics, not just numbers.
 
-```python +exec +line_numbers
+```python +line_numbers +exec
 from kuchka import Volt, Ampere
 
 power = Volt(5) * Ampere(2)
@@ -457,38 +548,20 @@ print(power)
 print(type(power).__name__)
 ```
 
-<!-- pause -->
+The result is a real `Power` instance.
 
-That's a real `Power` instance.
 Not a `float`.
-Not a `Quantity` wearing a trench coat.
+
+Not a quantity object whose physical meaning exists only at runtime.
 
 <!-- end_slide -->
 
-## Demo: incompatible dimensions
-
-```python +exec +line_numbers
-from kuchka import Volt, Ampere, IncompatibleDimensionError
-
-try:
-    Volt(5) + Ampere(2)
-except IncompatibleDimensionError as e:
-    print(e)
-```
+## Some operations simply don't exist
 
 <!-- pause -->
 
-The error tells you what you did wrong in engineering terms, not `TypeError: unsupported operand type(s) for +`.
-
-<!-- end_slide -->
-
-## Demo: temperature is not a float either
-
-```python +exec +line_numbers
+```python +line_numbers +exec
 from kuchka import Celsius, MeasurementError
-
-print(Celsius(0).kelvin)               # exact -- 273.15, no rounding
-print(Celsius(20) - Celsius(15))       # a real TemperatureDelta
 
 try:
     Celsius(20) + Celsius(5)
@@ -498,13 +571,11 @@ except MeasurementError as e:
 
 <!-- pause -->
 
-"Hot + hot" isn't a number. The library agrees with you.
+No.
 
-<!-- end_slide -->
+<!-- pause -->
 
-## Demo: some things just don't exist
-
-```python +exec +line_numbers
+```python +exec
 from kuchka import Celsius
 
 try:
@@ -515,15 +586,58 @@ except TypeError as e:
 
 <!-- pause -->
 
-No code was written to "ban" this.
+Also no.
 
-`Temperature` simply has no `__mul__`.
+<!-- pause -->
 
-Python raises the error on its own -- and so does the type checker, for the same reason.
+<!-- new_lines: 2 -->
+
+Temperature has semantics.
+
+An absolute temperature and a temperature difference are not interchangeable.
+
+```python +exec
+from kuchka import Celsius
+
+dt = Celsius(20) - Celsius(15)
+
+print(dt)
+print(type(dt).__name__)
+```
+
+produces a temperature delta.
 
 <!-- end_slide -->
 
-## Demo: mypy agrees with all of this, statically
+## Decimal, not float
+
+<!-- pause -->
+
+This is not a claim that physical measurements are exact.
+
+They aren't.
+
+The point is narrower: decimal engineering units should not gain binary floating-point surprises as an accidental extra error source.
+
+```python +line_numbers +exec
+from kuchka import Volt, Millivolt
+
+v = Volt(1) + Millivolt(200)
+
+print(v)
+print(v == Volt(1.2))
+print(v == Millivolt(1_200))
+```
+
+The arithmetic is decimal.
+
+The quantities are immutable.
+
+<!-- end_slide -->
+
+## Static typing matters too
+
+<!-- pause -->
 
 ```bash +exec +line_numbers
 cat > /tmp/kuchka_demo.py <<'EOF'
@@ -543,116 +657,263 @@ mypy --strict /tmp/kuchka_demo.py
 
 <!-- pause -->
 
-Two errors, exactly where we want them.
-Before anyone runs the code, not after.
+The first two are wrong.
+
+The last two are valid.
+
+<!-- pause -->
+
+The important bit is not that a checker can produce an error message.
+
+It is that the runtime model and the type model describe the same physics.
 
 <!-- end_slide -->
 
-## The overload table, if anyone asks
+## Runtime and static semantics
 
-Runtime arithmetic is fully general -- exponent algebra, works for any future quantity.
+<!-- pause -->
 
-Static typing isn't; mypy can't infer "Voltage × Current = Power" on its own.
+Runtime arithmetic can use general dimension algebra.
 
-```python +line_numbers
-# What mypy sees is an explicit, hand-written pair:
+Static typing needs explicit knowledge of the relationships we want tools to understand.
 
+<!-- pause -->
+
+For example:
+
+```python {1-2|4-5|all} +line_numbers
 @overload
 def __mul__(self, other: Current) -> Power: ...
+
 @overload
 def __mul__(self, other: Numeric) -> Voltage: ...
-def __mul__(self, other):
-    return super().__mul__(other)   # runtime logic unchanged
 ```
 
 <!-- pause -->
 
-Six pairs for v0.1 (Ohm's law + the power triangle).
-Autogenerate this later, once it outgrows six.
+That is not beautiful metaprogramming.
+
+It is a small, explicit bridge between Python's type system and the physical algebra.
+
+<!-- pause -->
+
+For v0.1, six such relationships cover the power triangle and Ohm's law.
+
+Later, this can be generated.
 
 <!-- end_slide -->
 
-## How would kuchka solve this?
+## The rule
 
-<!-- new_lines: 2 -->
+<!-- pause -->
 
-The same driver. The same three fields. This time typed at
-the boundary, once:
+The architectural rule is simple:
 
-```python {1-2|6-9|11-14|all} +exec +line_numbers
-from kuchka import Microampere, Millivolt, Kelvin, Milliampere, Celsius, Milliwatt
-from kuchka.units import MILLIAMPERE, MILLIWATT
+> **Uninterpreted measurements may exist at I/O boundaries.**
+>
+> **Once interpreted, they must carry their physical meaning.**
 
-current = Microampere(187500)
-voltage = Millivolt(2350)
-temp = Kelvin(314.85)
-power = current * voltage
+Device input.
 
-MAX_CURRENT = Milliampere(250)
-MAX_TEMP = Celsius(45)
-MAX_POWER = Milliwatt(500)
+File input.
 
-print("current:", current.to(MILLIAMPERE), "PASS" if current <= MAX_CURRENT else "FAIL")
-print("temp:   ", temp.to(MAX_TEMP.unit), "PASS" if temp <= MAX_TEMP else "FAIL")
-print("power:  ", power.to(MILLIWATT), "PASS" if power <= MAX_POWER else "FAIL")
-```
+Database input.
+
+Network packet.
+
+It doesn't matter.
+
+Interpret once.
+
+Then keep the meaning attached.
 
 <!-- end_slide -->
 
-## The line that can't be written
+## What `kuchka` is deliberately not
 
-<!-- new_lines: 2 -->
+<!-- pause -->
 
-The exact comparison that broke two separate submissions:
+It is not:
 
-```python
-temp <= 45
+```text
+a scientific array framework
+a NumPy replacement
+a database representation
+a universal unit registry
+a complete SI implementation
 ```
 
 <!-- pause -->
 
-<!-- new_lines: 2 -->
-
-```bash +exec
-cat > /tmp/bare_compare.py <<'EOF'
-from kuchka import Kelvin
-temp = Kelvin(314.85)
-result = temp <= 45
-EOF
-mypy --strict /tmp/bare_compare.py
-```
+v0.1 is deliberately small:
 
 <!-- pause -->
 
-<!-- new_lines: 2 -->
-
-Not "wrong answer."
-Not even "runtime crash."
-The comparison doesn't type-check, so it never ships.
-
-<!-- new_lines: 1 -->
-
-Not because we banned it.
-Because a `Temperature` and an `int` were never the same kind of thing to begin with.
-
-<!-- end_slide -->
-
-## Scope, on purpose
-
-| In v0.1                     | Not yet, and that's fine     |
-| --------------------------- | ----------------------------- |
-| Voltage, Current            | Length, Mass, Time           |
-| Power, Resistance           | NumPy / Pandas integration   |
-| Temperature (Celsius, K)    | JSON / DB persistence        |
+| In v0.1 | Not yet |
+| --- | --- |
+| Voltage, Current | Length, Mass, Time |
+| Power, Resistance | NumPy / Pandas integration |
+| Temperature | JSON / DB persistence |
 | Immutable, `Decimal`-backed | Autogenerated prefix classes |
 
 <!-- pause -->
 
-> [!note]
+Narrow scope is the point.
+
+<!-- end_slide -->
+
+## What is currently available?
+
+<!-- pause -->
+
+Before writing this, I went looking for the obvious answer.
+
+There are plenty of unit libraries.
+
+The strange part is that in more than a decade of engineering work, I have essentially never seen them used in the ordinary Python engineering code around me.
+
+I have seen:
+
+```text
+voltage_mv
+temperature_c
+time_ms
+```
+
+I have seen small home-grown newtypes.
+
+I had not seen the unit ecosystem become part of the daily vocabulary.
+
+<!-- end_slide -->
+
+## `units`
+
+<!-- pause -->
+
+```python +line_numbers
+from units import unit
+
+metre = unit('m')
+print(metre(7) + metre(11))
+```
+
+The semantic unit is introduced from a string.
+
+`kuchka` wants:
+
+```python
+Meter(7) + Meter(11)
+```
+
+where the physical identity _is_ the Python type.
+
+<!-- end_slide -->
+
+## Pint
+
+<!-- pause -->
+
+```python +line_numbers
+import pint
+
+ureg = pint.UnitRegistry()
+
+3 * ureg.meter + 4 * ureg.cm
+```
+
+Pint is mature and powerful.
+
+But compare that with:
+
+```python
+Meter(3) + Centimeter(4)
+```
+
+The first makes the engineer carry a registry-oriented runtime API.
+
+The second makes the physical quantity itself the API.
+
+<!-- pause -->
+
+<!-- new_lines: 2 --> 
+
+That distinction is not cosmetic.
+
+This project is explicitly trying to make the safe path the comfortable path.
+
+<!-- end_slide -->
+
+## unitpy
+
+<!-- pause -->
+
+```python +line_numbers
+Unit("kilometer")
+U("kilometer")
+U("km")
+U.kilometer
+U.km
+```
+
+Again, several runtime spellings for a unit.
+
+I want less discovery.
+
+I want:
+
+```python
+Kilometer
+```
+
+to simply be the type.
+
+<!-- end_slide -->
+
+## The gap I am interested in
+
+<!-- pause -->
+
+I'm not claiming:
+
+> "Python has no unit libraries."
+
+<!-- pause -->
+
+I'm claiming something narrower:
+
+> **I want physical quantities to be ordinary, pleasant Python types that a static type checker can understand, without making an engineer interact with a registry or a stringly-typed unit system.**
+
+That is the gap.
+
+<!-- pause -->
+
+<!-- new_lines: 2 --> 
+
+And that is why `kuchka` exists.
+
+<!-- end_slide -->
+
+## The carrot
+
+<!-- pause -->
+
+The whole argument comes back to this:
+
+> **The problem isn't that engineers forget units.**
 >
-> Narrow scope isn't a limitation here -- it's what makes the whole thing tractable.
->
-> It's also why nobody else has shipped exactly this.
+> **The problem is that the program has no way to remember them for them.**
+
+Move the stick into the toolchain.
+
+Hand the engineer a carrot:
+
+```python +line_numbers
+Volt(5) + Millivolt(200)
+Volt(5) * Ampere(2)
+Celsius(20) - Celsius(15)
+```
+
+Make the correct path the pleasant path.
 
 <!-- end_slide -->
 
