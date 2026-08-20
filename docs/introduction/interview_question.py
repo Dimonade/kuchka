@@ -18,11 +18,11 @@ What you're given
 What we need
 ------------
 
-Write a function check_diode_status(status: dict) -> None that:
+Write a function `check_diode_status(status: dict) -> None: ...` that:
 
-1. Computes the dissipated power from status.
+1. Computes the dissipated power from `status`.
 2. Checks current, case temperature, and power against the three limits above.
-3. Prints one line per check: which metric, its value, and PASS/FAIL.
+3. Prints one line per check: which metric, its value, and `PASS`/`FAIL`.
 
 Run this file when you're done.
 It should print three PASS/FAIL lines.

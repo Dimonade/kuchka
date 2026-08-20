@@ -179,14 +179,13 @@ status = {
     "t_case": 314.85,
 }
 
-def read_status():
-    return status
+
 def check_diode_status(status: dict) -> None: ...
 ```
 
 That's the entire interface.
 No units in the field names.
-No units in the docstring either.
+No units in the docstring either -- I checked, twice, before running this.
 
 Two of the models read it carefully and got every check right: converted microamps to milliamps, subtracted 273.15 for Kelvin, multiplied correctly to land on milliwatts.
 Both flagged, entirely unprompted, the exact thing we'd built the exercise around: *"the units aren't explicitly stated in the code... that is inferred rather than specified."*
@@ -227,7 +226,7 @@ Two lines of code that were supposed to describe the same value quietly stopped 
 
 I want to be precise about what this does and doesn't show.
 It is not "the AI is better than the engineer."
-Two models got it completely right and said why, out loud.
+One model got it completely right and said why, out loud.
 Another got it completely wrong and said nothing at all.
 A competent person, under a real clock, got the hard-looking part right and the easy-looking part wrong, in a way none of us predicted going in.
 Three different actors, three different mistakes, and not one of them was a skill problem.
@@ -235,11 +234,9 @@ Every one of them was the same problem: a plain number carries no memory of what
 That's not a reason to go find better engineers.
 It's the reason this needs to be structural.
 
-## How `kuchka` Solves This
+## How Kuchka Solves This
 
-Same driver.
-Same three raw fields.
-Typed once, at the boundary:
+Same driver. Same three raw fields. Typed once, at the boundary:
 
 ```python
 from kuchka import Microampere, Millivolt, Kelvin, Milliampere, Celsius, Milliwatt
@@ -265,10 +262,13 @@ temp:    41.70 °C PASS
 power:   440.625000 mW PASS
 ```
 
-Three PASSes, correctly, on the first try, with no conversion arithmetic scattered through the function body to get subtly wrong.
+Three PASSes, correctly, on the first try, with no conversion arithmetic
+scattered through the function body to get subtly wrong.
 
-But here's the part I actually want on record: the exact line that broke two separate submissions was `status["t_case"] <= MAX_CASE_TEMP_C` -- a Kelvin float compared straight against a Celsius-flavored int.
-Try to write that same comparison against typed values:
+But here's the part I actually want on record: the exact line that broke
+two separate submissions was `status["t_case"] <= MAX_CASE_TEMP_C` -- a
+Kelvin float compared straight against a Celsius-flavored int. Try to
+write that same comparison against typed values:
 
 ```python
 temp <= 45
@@ -278,10 +278,12 @@ temp <= 45
 error: Unsupported operand types for <= ("Temperature" and "int")  [operator]
 ```
 
-Not a wrong answer.
-Not even a crash at 2 AM in a report nobody's watching.
-The comparison doesn't type-check, so it never ships in the first place.
-Not because we sat down and banned it -- because a `Temperature` and a bare `int` were never the same kind of thing to begin with, and the type checker is just saying so out loud, before anyone gets the chance to be careful or careless about it.
+Not a wrong answer. Not even a crash at 2 AM in a report nobody's
+watching. The comparison doesn't type-check, so it never ships in the
+first place. Not because we sat down and banned it -- because a
+`Temperature` and a bare `int` were never the same kind of thing to
+begin with, and the type checker is just saying so out loud, before
+anyone gets the chance to be careful or careless about it.
 
 ## Ending Notes
 
@@ -291,7 +293,7 @@ But I'd like to try, on a small, deliberately narrow set of units and conversion
 Here's what I keep coming back to: engineers who didn't choose Python, those who are using it because the acquisition hardware shipped a Python library and a manager wants the reports automated deserve better than:
 
 ```python
-v_tot = voltage_v + mv / 1000  # this time the units are correct, trust me,  I prefixed them, I checked 4 times!
+p = current_ma * v  # this time the units are correct, trust me, I prefixed them, I checked 4 times.
 ```
 
 The rule I want us to hold ourselves to is simple: raw floats are allowed to exist in exactly one place -- the input boundary.
