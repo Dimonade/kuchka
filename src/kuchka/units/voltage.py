@@ -10,6 +10,7 @@ from kuchka import Volt, Millivolt
 voltage = Volt(4.2) + Millivolt(200)
 ```
 """
+
 from __future__ import annotations
 
 from decimal import Decimal

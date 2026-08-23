@@ -10,6 +10,7 @@ from kuchka import Ohm
 resistance = Ohm(100)
 ```
 """
+
 from __future__ import annotations
 
 from decimal import Decimal

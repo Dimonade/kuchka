@@ -15,6 +15,7 @@ Every overload list also ends with a fallback overload matching the signature de
 on `LinearQuantity`, which is what keeps these overrides compatible with the base class
 under strict type checking.
 """
+
 from __future__ import annotations
 
 from typing import ClassVar

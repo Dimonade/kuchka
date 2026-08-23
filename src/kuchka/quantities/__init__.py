@@ -8,6 +8,7 @@ conversion, and comparison logic: they share one implementation
 :class:`~kuchka.dimensions.Dimension` and their multiplication/division
 overloads (``electrical.py``, ``thermal.py``).
 """
+
 from __future__ import annotations
 
 from kuchka.quantities.base import LinearQuantity

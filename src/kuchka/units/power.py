@@ -10,6 +10,7 @@ from kuchka import Watt
 power = Watt(5)
 ```
 """
+
 from __future__ import annotations
 
 from decimal import Decimal

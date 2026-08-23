@@ -10,6 +10,7 @@ from kuchka import Ampere, Milliampere
 current = Ampere(1) - Milliampere(250)
 ```
 """
+
 from __future__ import annotations
 
 from decimal import Decimal

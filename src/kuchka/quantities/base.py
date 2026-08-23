@@ -13,6 +13,7 @@ Absolute temperature is not linear in this sense (``2 * Celsius(1)`` is not a
 meaningful statement), so it lives in its own, smaller class in
 ``temperature.py`` instead of here.
 """
+
 from __future__ import annotations
 
 from decimal import Decimal
@@ -63,7 +64,11 @@ class UnitDef:
     __slots__ = ("dimension", "name", "scale", "symbol")
 
     def __init__(
-        self, name: str, symbol: str, scale: Decimal, dimension: Dimension,
+        self,
+        name: str,
+        symbol: str,
+        scale: Decimal,
+        dimension: Dimension,
     ) -> None:
         """Store the unit's display name, symbol, scale factor, and dimension."""
         self.name = name

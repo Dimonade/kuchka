@@ -75,9 +75,9 @@ Give engineers something that's simply more attractive to reach for than a raw `
 The arithmetic has to just work:
 
 ```python
-Volt(5) + Millivolt(200)   # -> Volt(5.2)
-Millivolt(5200)            # -> equal to the above, if they'd rather see it that way
-Volt(5) * Ampere(2)        # -> Power, computed, not asserted in a comment
+Volt(5) + Millivolt(200)  # -> Volt(5.2)
+Millivolt(5200)  # -> equal to the above, if they'd rather see it that way
+Volt(5) * Ampere(2)  # -> Power, computed, not asserted in a comment
 ```
 
 No stringly typed registries.
@@ -132,8 +132,7 @@ The numbers in that half don't always agree with the numbers in the half that is
 
 ```python
 # 太老了
-def read_status():
-    ...
+def read_status(): ...
 ```
 
 Three people on this team claim to read Mandarin.
@@ -293,7 +292,9 @@ But I'd like to try, on a small, deliberately narrow set of units and conversion
 Here's what I keep coming back to: engineers who didn't choose Python, those who are using it because the acquisition hardware shipped a Python library and a manager wants the reports automated deserve better than:
 
 ```python
-p = current_ma * v  # this time the units are correct, trust me, I prefixed them, I checked 4 times.
+p = (
+    current_ma * v
+)  # this time the units are correct, trust me, I prefixed them, I checked 4 times.
 ```
 
 The rule I want us to hold ourselves to is simple: raw floats are allowed to exist in exactly one place -- the input boundary.
