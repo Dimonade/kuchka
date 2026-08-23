@@ -84,15 +84,48 @@ ignore = [
   "F405",
   "I001",   # Using reorder-python-imports.
   "INP001", # Okay to not have `__init__.py` when not needed.
+  "CPY001", # No per-file copyright header policy for this project.
+  "D105",   # Dunder methods (__add__, __eq__, ...) are documented once,
+  # at the class or module level, where the physical meaning of
+  # the operation actually lives; a one-line docstring repeated
+  # on every operator is noise, not documentation.
+  "N802", # Unit constructors (Volt, Ampere, Celsius, ...) are
+  # deliberately capitalized like types: `isinstance(Volt(5),
+  # Voltage)` should read the way a type check reads. See
+  # design_proposal.md, "Separate quantity types from unit
+  # constructors".
+  "EM101",  # These, together with TRY003, want every raise to route a
+  "EM102",  # short message through an intermediate variable. The
+  "TRY003", # exception hierarchy in errors.py exists specifically to
+  # carry a full, engineering-specific explanation inline at
+  # the raise site (see errors.py); routing all of those
+  # through a `msg = ...` line first is boilerplate without a
+  # matching benefit here.
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = [
+  "ANN001", # Parametrized test arguments take on whatever values the
+  # parametrize table provides across cases; giving them a
+  # precise static type would either be `Any` in disguise or
+  # would need a broad union that adds ceremony without
+  # catching anything a wrong table entry wouldn't already.
   "ANN201", # Tests usually return `None`s.
-  "D103",   # Test names are descriptive for the most part.
-  "S101",   # Asserts are okay in tests.
-  "S311",   # `random` is not used for cryptography.
-  "S603",   # Testbench is not a subject to attack.
-  "S605",   # Same.
-  "S607",   # Same.
+  "D100",   # Test module names are descriptive; a repeated one-line
+  "D103",   # module/function docstring on every test file adds no
+  # information the filename and test name did not already
+  # give.
+  "D104", # `tests/__init__.py` is a marker file, not a package with
+  # its own public surface to document.
+  "FBT003", # Tests intentionally pass literal booleans, e.g. `Volt(True)`
+  # to assert that `bool` is rejected as a measurement input.
+  "PLC0415", # `test_typing.py` probes for an optional dependency (mypy)
+  # with an import inside a function; that is the standard
+  # pattern for an optional-dependency check, not a top-level
+  # import that got misplaced.
+  "S101", # Asserts are okay in tests.
+  "S311", # `random` is not used for cryptography.
+  "S603", # Testbench is not a subject to attack.
+  "S605", # Same.
+  "S607", # Same.
 ]

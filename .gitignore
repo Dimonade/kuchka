@@ -29,3 +29,6 @@ cover/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# Project specific
+/tmp
