@@ -1,79 +1,73 @@
-"""Temperature: the one quantity in v0.1.0 that isn't purely linear.
+"""Absolute temperature: an affine quantity, with the smaller API that implies.
 
-Celsius and Kelvin are not just different scale factors on the same axis
-the way Volt and Millivolt are -- they also differ by an *offset*
-(0 degC = 273.15 K).
-That makes absolute temperature an *affine* quantity, not a vector one,
-and the arithmetic has to reflect that:
+Celsius and Kelvin differ by both a scale and an offset (0 degC = 273.15
+K), unlike Volt and Millivolt, which differ only by scale. That makes
+absolute temperature a point on a scale rather than a vector, and the
+available operations follow directly from that:
 
-* ``Temperature - Temperature`` is meaningful (it's a *difference*: "how
-  much hotter is A than B") and produces a :class:`~measurements.quantities.TemperatureDelta`.
-* ``Temperature + Temperature`` is **not** meaningful -- there is no
-  physical sense in which "20 degC + 5 degC" is a temperature -- so it is
-  rejected with an explanatory error rather than silently computing 25 degC
-  or 25 K or anything else.
-* ``Temperature * <number>`` is likewise not defined. "Twice as hot" is not
-  a coherent statement for an affine scale (it depends on which zero point
-  you measure from), so multiplication is simply not implemented. Because
-  neither ``Temperature`` nor ``int``/``float`` defines the operation,
-  Python raises ``TypeError`` on its own, and mypy/pyright reject the
-  expression at the type level for the same reason -- no extra code is
-  needed to "ban" it, only the absence of a method.
+* ``Temperature - Temperature`` produces a
+  :class:`~kuchka.quantities.TemperatureDelta`: "how much hotter is A than
+  B" is a well-defined question.
+* ``Temperature + TemperatureDelta`` produces a ``Temperature``: shifting a
+  reading by a tolerance band is a well-defined question too.
+* ``Temperature + Temperature`` has no called-for interpretation -- there
+  is no physical reading that "20 degC + 5 degC" should produce -- so it
+  raises :class:`~kuchka.errors.MeasurementError` with an explanation
+  instead of guessing.
+* Scaling a ``Temperature`` by a plain number is undefined for the same
+  reason "twice as hot" depends on which zero point you are measuring
+  from. No ``__mul__`` is implemented at all, so both
+  ``Temperature(20) * 2`` and the reflected ``2 * Temperature(20)`` are
+  ``TypeError`` at runtime and rejected by mypy/pyright statically, with
+  no extra code needed to enforce it.
 
-For the *difference* type, none of this applies: a gap of 5 degrees is a
-perfectly ordinary linear quantity, so ``TemperatureDelta`` is just another
-``LinearQuantity`` (see ``quantities.py``) and behaves exactly like
-Voltage or Current -- deltas can be added, subtracted, scaled, compared.
+A gap between two temperatures does not share this restriction: a
+five-degree gap can be doubled or added to another gap the same way a
+voltage or a current can, so :class:`~kuchka.quantities.TemperatureDelta`
+is an ordinary linear quantity, defined alongside Voltage and Current in
+``kuchka.quantities``.
 
-Design note on Kelvin specifically: physically, "2 x 300 K" has a
-respectable meaning in some thermodynamic contexts (Kelvin is a true ratio
-scale), while "2 x 20 degC" does not.
-This version deliberately does not special-case Kelvin to allow that --
-both ``Celsius`` and ``Kelvin`` produce the same ``Temperature`` type,
-uniformly disallowing multiplication.
-Splitting Kelvin into its own multiplicable type would reopen the
-"one class per unit" problem the whole design tries to avoid,
-for a use case (thermodynamic scaling) outside this library's stated scope
-(electrical/optical/medical device engineering).
-If that turns out to be needed later, the extension point is a distinct
-ratio-scale type for Kelvin specifically -- not a special case bolted onto
-``Temperature``.
+This module treats Celsius and Kelvin identically: both construct the same
+``Temperature`` type, and neither supports scalar multiplication, even
+though "2 x 300 K" has a defensible thermodynamic reading that "2 x 20
+degC" does not. Giving Kelvin its own multiplicable type would be a
+reasonable extension for a use case built around thermodynamic scaling,
+but it is out of scope for the device-engineering vocabulary this library
+currently targets.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import ClassVar
-from typing import overload
+from typing import ClassVar, overload
 
-from kuchka.dimensions import Dimension
-from kuchka.dimensions import TEMPERATURE_DELTA
-from kuchka.errors import InvalidConversionError
-from kuchka.errors import MeasurementError
-from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
-from kuchka.quantities import TemperatureDelta
-from kuchka.quantities import UnitDef
+from kuchka.dimensions import TEMPERATURE_DELTA, Dimension
+from kuchka.errors import InvalidConversionError, MeasurementError
+from kuchka.numeric import Numeric, to_decimal
+from kuchka.quantities import TemperatureDelta, UnitDef
 
 DELTA_KELVIN = UnitDef("kelvin_delta", "\u0394K", Decimal(1), TEMPERATURE_DELTA)
-# A one-degree change is the same size in Celsius and Kelvin -- only the
+# A one-degree change is the same size in Celsius and Kelvin: only the
 # absolute zero point differs, and a delta has no zero point.
 DELTA_CELSIUS = UnitDef("celsius_delta", "\u0394\u00b0C", Decimal(1), TEMPERATURE_DELTA)
 
-TemperatureDelta._canonical_unit = DELTA_KELVIN
+TemperatureDelta._canonical_unit = DELTA_KELVIN  # noqa: SLF001 -- this module owns TemperatureDelta's canonical unit
 
 
 def DeltaKelvin(value: Numeric) -> TemperatureDelta:
+    """Construct a TemperatureDelta from a magnitude expressed in kelvin."""
     return TemperatureDelta(to_decimal(value) * DELTA_KELVIN.scale, DELTA_KELVIN)
 
 
 def DeltaCelsius(value: Numeric) -> TemperatureDelta:
+    """Construct a TemperatureDelta from a magnitude expressed in degrees Celsius."""
     return TemperatureDelta(to_decimal(value) * DELTA_CELSIUS.scale, DELTA_CELSIUS)
 
 
 @dataclass(frozen=True, slots=True)
 class AffineUnitDef:
-    """A unit with both a scale and an offset (e.g. Celsius relative to Kelvin)."""
+    """A unit with both a scale and an offset, e.g. Celsius relative to Kelvin."""
 
     name: str
     symbol: str
@@ -88,20 +82,22 @@ CELSIUS = AffineUnitDef("celsius", "\u00b0C", Decimal(1), Decimal("273.15"))
 class Temperature:
     """An absolute thermodynamic temperature reading.
 
-    See the module docstring for why this is not a :class:`LinearQuantity`
-    subclass: absolute temperature is a point on a scale, not a vector, and
-    supports a deliberately smaller set of operations as a result.
+    Supports the operations that are physically meaningful for a point on
+    an affine scale: comparison, subtracting another ``Temperature`` to get
+    a :class:`~kuchka.quantities.TemperatureDelta`, and shifting by a
+    ``TemperatureDelta``. See the module docstring for the operations this
+    deliberately omits, and why.
     """
 
     dimension: ClassVar[Dimension] = TEMPERATURE_DELTA
 
-    # See the identical note in quantities.py: these annotations are what
-    # let mypy --strict see through __slots__ at all.
+    # These annotations are what let mypy --strict see through __slots__.
     _kelvin: Decimal
     _display_unit: AffineUnitDef
     __slots__ = ("_display_unit", "_kelvin")
 
     def __init__(self, kelvin: Decimal, display_unit: AffineUnitDef) -> None:
+        """Store a magnitude already expressed in kelvin, plus its display unit."""
         object.__setattr__(self, "_kelvin", kelvin)
         object.__setattr__(self, "_display_unit", display_unit)
 
@@ -110,22 +106,30 @@ class Temperature:
 
     @property
     def kelvin(self) -> Decimal:
-        """The magnitude expressed in Kelvin (this type's canonical unit)."""
+        """The magnitude expressed in Kelvin, this type's canonical unit."""
         return self._kelvin
 
     @property
     def unit(self) -> AffineUnitDef:
+        """The unit this measurement currently displays as."""
         return self._display_unit
 
     def to(self, unit: AffineUnitDef) -> Temperature:
+        """Return an equal reading that displays as ``unit``.
+
+        This never changes the value being represented, only what
+        ``repr()`` and ``value_in()`` return by default.
+        """
         if not isinstance(unit, AffineUnitDef):
-            raise InvalidConversionError(
+            msg = (
                 "conversion target must be a temperature unit such as "
                 f"Kelvin or Celsius, got {unit!r}"
             )
+            raise InvalidConversionError(msg)
         return Temperature(self._kelvin, unit)
 
     def value_in(self, unit: AffineUnitDef) -> Decimal:
+        """Return the magnitude of this reading expressed in ``unit``."""
         return (self._kelvin - unit.offset) / unit.scale
 
     def __eq__(self, other: object) -> bool:
@@ -156,26 +160,22 @@ class Temperature:
             return NotImplemented
         return self._kelvin >= other._kelvin
 
-    # arithmetic: point +/- delta -> point; point - point -> delta.
-    #
-    # The static signature only admits TemperatureDelta -- that's the only
-    # operation that's ever legal here, so `Celsius(20) + Celsius(5)` is
-    # now a mypy error, not just a runtime one, matching how Voltage,
-    # Current, Power, Resistance, and TemperatureDelta itself all reject
-    # cross-type addition statically (see quantities.py).
-    # The isinstance check for a second Temperature stays in the body regardless, as a
-    # runtime guard for values that arrive from somewhere mypy never saw
-    # (an untyped boundary, an `Any`, a `# type: ignore` upstream) --
-    # exactly the acquisition-boundary problem the whole library exists
-    # to contain.
     def __add__(self, other: TemperatureDelta) -> Temperature:
+        # The static signature only admits TemperatureDelta, so
+        # `Celsius(20) + Celsius(5)` is a mypy error, matching how Voltage,
+        # Current, Power, Resistance, and TemperatureDelta itself all
+        # reject cross-type addition statically (see quantities/base.py).
+        # The isinstance check for a second Temperature stays in the body
+        # as a runtime guard for values that arrive from somewhere mypy
+        # never saw, e.g. an untyped boundary or an upstream `Any`.
         if isinstance(other, Temperature):
-            raise MeasurementError(
+            msg = (
                 "Cannot add two Temperature values: an absolute temperature "
-                "is a point on a scale, not a vector, so 'hot + hot' has no "
-                "physical meaning. Use (a - b) to get a TemperatureDelta, "
-                "or add a TemperatureDelta to a Temperature instead."
+                "is a point on a scale, so 'hot + hot' has no physical "
+                "reading. Use (a - b) to get a TemperatureDelta, or add a "
+                "TemperatureDelta to a Temperature instead."
             )
+            raise MeasurementError(msg)
         if isinstance(other, TemperatureDelta):
             return Temperature(self._kelvin + other.magnitude, self._display_unit)
         return NotImplemented
@@ -188,19 +188,16 @@ class Temperature:
     def __sub__(self, other: TemperatureDelta) -> Temperature: ...
 
     def __sub__(self, other: object) -> Temperature | TemperatureDelta:
+        """Subtract a Temperature to get a delta, or a delta to shift the reading."""
         if isinstance(other, Temperature):
             return TemperatureDelta(self._kelvin - other._kelvin, DELTA_KELVIN)
         if isinstance(other, TemperatureDelta):
             return Temperature(self._kelvin - other.magnitude, self._display_unit)
         return NotImplemented
 
-    # Deliberately no __mul__ / __rmul__ / __truediv__ by a scalar here --
-    # see the module docstring.
-    #
-    # Leaving them undefined means both `Temperature(20) * 2` and
-    # `2 * Temperature(20)` raise TypeError from Python itself,
-    # and mypy reject the expression because Temperature has no such operator
-    # to type-check against.
+    # Deliberately no __mul__ / __rmul__ / __truediv__ by a scalar: see the
+    # module docstring for why scaling an absolute temperature is left
+    # undefined rather than implemented.
 
     def __repr__(self) -> str:
         value = self.value_in(self._display_unit)
@@ -208,10 +205,12 @@ class Temperature:
 
 
 def Kelvin(value: Numeric) -> Temperature:
+    """Construct a Temperature from a magnitude expressed in kelvin."""
     raw = to_decimal(value)
     return Temperature(raw * KELVIN.scale + KELVIN.offset, KELVIN)
 
 
 def Celsius(value: Numeric) -> Temperature:
+    """Construct a Temperature from a magnitude expressed in degrees Celsius."""
     raw = to_decimal(value)
     return Temperature(raw * CELSIUS.scale + CELSIUS.offset, CELSIUS)

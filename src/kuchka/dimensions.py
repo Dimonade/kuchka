@@ -5,23 +5,12 @@ Ordinary users of the library never construct a :class:`Dimension` directly,
 as they use the named engineering types (``Voltage``, ``Current``, ...),
 and unit constructors (``Volt``, ``Milliampere``, ...) exposed from the top-level.
 
-Dimensions are represented as exponent vectors over the SI base quantities:
-mass, length, time, electric current, and thermodynamic temperature.
-
-This is a deliberately, at the moment, subset of the 7 dimenions:
-Out of
-    - Time,
-    - Length,
-    - Mass,
-    - Electric current,
-    - Absolute temperature,
-    - Amount of substance,
-    - Luminous intensity,
-
-Currently taken care of only 5: mass, length, time, current and temperature.
-
-The rest, will, hopefully, be added later, when the need arise,
-or when time becomes available.
+Dimensions are represented as exponent vectors over five of the seven SI base
+quantities: mass, length, time, electric current, and thermodynamic temperature.
+Amount of substance and luminous intensity are not yet represented, since nothing in
+the current engineering vocabulary needs them;
+adding either later means adding a field to :class:`Dimension` and the corresponding
+case to its arithmetic below.
 
 Multiplying two physical quantities adds their exponent vectors.
 Dividing subtracts them.

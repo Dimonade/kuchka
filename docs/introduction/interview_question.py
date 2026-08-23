@@ -38,6 +38,7 @@ MAX_CURRENT_MA = 250
 MAX_CASE_TEMP_C = 45
 MAX_POWER_MW = 500
 
+
 def read_status():
     return status
 

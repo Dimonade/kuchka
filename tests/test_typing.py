@@ -34,6 +34,7 @@ def test_mypy_agrees_with_runtime_on_the_fixture() -> None:
         [sys.executable, "-m", "mypy", "--strict", str(FIXTURE)],
         capture_output=True,
         text=True,
+        check=False,
     )
     assert result.returncode == 0, (
         "mypy did not cleanly accept/reject exactly the lines the fixture "

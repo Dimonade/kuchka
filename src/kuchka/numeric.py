@@ -3,29 +3,29 @@
 SI prefixes (milli, kilo, mega, ...) are all powers of ten, and powers of
 ten are exactly representable in ``Decimal`` but generally are *not*
 exactly representable in binary ``float``.
-That is the concrete, practical reason this library stores magnitudes as 
-``Decimal`` internally rather than ``float``: it is not caution for its own sake,
-it is what makes ``Volt(1) + Millivolt(500) == Volt(1.5)`` true by construction
-instead of true by coincidence.
 
-This module is the single place where "a plain number" is turned into a
-``Decimal`` for use inside a measurement.
-Every unit constructor (``Volt``, ``Ampere``, ``Celsius``, ...)
-routes through :func:`to_decimal`, which is deliberately strict:
-it accepts the numeric types an engineer is likely to have on hand,
-and rejects everything else -- including other measurements -- with a message
-that explains what went wrong.
+That is the concrete, practical reason this library stores magnitudes as ``Decimal``
+internally rather than ``float``:
+it is what makes ``Volt(1) + Millivolt(500) == Volt(1.5)`` true by construction instead
+of true by coincidence.
+
+This module is the single place where "a plain number" is turned into a ``Decimal
+for use inside a measurement.
+Every unit constructor (``Volt``, ``Ampere``, ``Celsius``, ...) routes through
+:func:`to_decimal`, which is deliberately strict:
+it accepts the numeric types an engineer is likely to have on hand, and rejects
+everything else -- including other measurements -- with a message that (hopefully)
+explains what went wrong.
 """
 
 from __future__ import annotations
 
 from decimal import Decimal
 from fractions import Fraction
-from typing import Union
 
 from kuchka.errors import InvalidMeasurementError
 
-Numeric = Union[int, float, Decimal, Fraction]
+Numeric = int | float | Decimal | Fraction
 
 _NUMERIC_TYPES = (int, float, Decimal, Fraction)
 
@@ -47,7 +47,7 @@ def to_decimal(value: object) -> Decimal:
     if isinstance(value, bool):
         raise InvalidMeasurementError(
             f"cannot construct a measurement from a bool ({value!r}); "
-            "expected int, float, Decimal, or Fraction"
+            "expected int, float, Decimal, or Fraction",
         )
     if isinstance(value, Decimal):
         return value
@@ -68,5 +68,5 @@ def to_decimal(value: object) -> Decimal:
         )
     raise InvalidMeasurementError(
         f"cannot construct a measurement from {type_name}; expected int, "
-        f"float, Decimal, or Fraction.{hint}"
+        f"float, Decimal, or Fraction.{hint}",
     )

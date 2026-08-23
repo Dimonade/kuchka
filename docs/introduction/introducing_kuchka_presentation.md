@@ -170,8 +170,7 @@ And the function that actually matters looks like this:
 <!-- pause -->
 
 ```python
-def read_status():
-    ...
+def read_status(): ...
 ```
 
 <!-- pause -->
@@ -685,6 +684,7 @@ For example:
 @overload
 def __mul__(self, other: Current) -> Power: ...
 
+
 @overload
 def __mul__(self, other: Numeric) -> Voltage: ...
 ```
@@ -793,7 +793,7 @@ I had not seen the unit ecosystem become part of the daily vocabulary.
 ```python +line_numbers
 from units import unit
 
-metre = unit('m')
+metre = unit("m")
 print(metre(7) + metre(11))
 ```
 
