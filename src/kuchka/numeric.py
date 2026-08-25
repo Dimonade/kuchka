@@ -9,7 +9,7 @@ internally rather than ``float``:
 it is what makes ``Volt(1) + Millivolt(500) == Volt(1.5)`` true by construction instead
 of true by coincidence.
 
-This module is the single place where "a plain number" is turned into a ``Decimal
+This module is the single place where "a plain number" is turned into a ``Decimal``
 for use inside a measurement.
 Every unit constructor (``Volt``, ``Ampere``, ``Celsius``, ...) routes through
 :func:`to_decimal`, which is deliberately strict:
