@@ -4,6 +4,7 @@ default:
 alias fa := format-all
 # format all relevant files.
 format-all:
+    ruff format
     taplo fmt
     prettier --write '**/*.md'
 
