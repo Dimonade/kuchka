@@ -7,7 +7,7 @@ from kuchka import Volt, Milliampere
 
 voltage = Volt(4.2)
 current = Milliampere(150)
-power = voltage * current  # -> Power(0.63 W), typed and computed automatically
+power = voltage * current  # -> Power(0.63 W), typed and computed automatically.
 ```
 
 ## Why
@@ -76,7 +76,7 @@ See "What this is not (yet)" below.
 `Frequency`, `SampleRate`, and `BaudRate` all share the same physical dimension (T^-1), but they are not the same thing, and `kuchka` keeps them as separate types on purpose:
 
 ```python
-Hertz(50) + SamplesPerSecond(50)  # IncompatibleDimensionError, even though both are dimensionally T^-1
+Hertz(50) + SamplesPerSecond(50)  # IncompatibleDimensionError, even though both are dimensionally T^-1.
 ```
 
 Only one type per dimension is ever the _canonical_ one -- the type generic arithmetic produces automatically.
@@ -86,8 +86,8 @@ Those stay reachable only by explicit construction, the same way `Temperature` a
 Genuine reciprocal pairs convert into each other directly:
 
 ```python
-rate = 1 / SecondSamplingPeriod(2)  # -> SampleRate, not Frequency
-period = 1 / rate  # -> SamplingPeriod again
+rate = 1 / SecondSamplingPeriod(2)  # -> SampleRate, not Frequency.
+period = 1 / rate  # -> SamplingPeriod again.
 ```
 
 `BaudRate` gets no reciprocal at all: baud counts symbols per second, not bits or cycles, so a default equivalence with `Frequency` would be wrong for any encoding other than exactly one bit per symbol. Silently guessing here is worse than refusing.
@@ -122,11 +122,11 @@ The claim here is about mechanism, not a guarantee.
 **Where the existing libraries put the friction:**
 
 ```python
-# Pint / physipy: a registry, and a unit looked up on or from it
+# Pint / physipy: a registry, and a unit looked up on or from it.
 ureg = pint.UnitRegistry()
 voltage = 3 * ureg.volt + 40 * ureg.millivolt
 
-# kuchka: the unit is the constructor
+# kuchka: the unit is the constructor.
 voltage = Volt(3) + Millivolt(40)
 ```
 
