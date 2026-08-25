@@ -10,18 +10,30 @@ from decimal import Decimal
 
 import pytest
 from kuchka import Ampere
+from kuchka import Hertz
 from kuchka import Kiloampere
+from kuchka import Kilohertz
 from kuchka import Kiloohm
+from kuchka import KilosamplesPerSecond
 from kuchka import Kilovolt
 from kuchka import Kilowatt
+from kuchka import Megahertz
 from kuchka import Megaohm
+from kuchka import MegasamplesPerSecond
 from kuchka import Microampere
+from kuchka import Microsecond
+from kuchka import MicrosecondSamplingPeriod
 from kuchka import Microvolt
 from kuchka import Milliampere
+from kuchka import Millisecond
+from kuchka import MillisecondSamplingPeriod
 from kuchka import Milliohm
 from kuchka import Millivolt
 from kuchka import Milliwatt
 from kuchka import Ohm
+from kuchka import SamplesPerSecond
+from kuchka import Second
+from kuchka import SecondSamplingPeriod
 from kuchka import Volt
 from kuchka import Watt
 
@@ -38,6 +50,14 @@ PREFIX_CASES = [
     (Megaohm, Ohm, Decimal(1_000_000)),
     (Milliwatt, Watt, Decimal("0.001")),
     (Kilowatt, Watt, Decimal(1000)),
+    (Microsecond, Second, Decimal("0.000001")),
+    (Millisecond, Second, Decimal("0.001")),
+    (Kilohertz, Hertz, Decimal(1000)),
+    (Megahertz, Hertz, Decimal(1_000_000)),
+    (MicrosecondSamplingPeriod, SecondSamplingPeriod, Decimal("0.000001")),
+    (MillisecondSamplingPeriod, SecondSamplingPeriod, Decimal("0.001")),
+    (KilosamplesPerSecond, SamplesPerSecond, Decimal(1000)),
+    (MegasamplesPerSecond, SamplesPerSecond, Decimal(1_000_000)),
 ]
 
 
