@@ -78,10 +78,16 @@ def Megahertz(value: Numeric) -> Frequency:
 # SamplingPeriod
 
 SAMPLING_PERIOD_MICROSECOND = UnitDef(
-    "sampling_period_microsecond", "\u00b5s", Decimal("0.000001"), TIME,
+    "sampling_period_microsecond",
+    "\u00b5s",
+    Decimal("0.000001"),
+    TIME,
 )
 SAMPLING_PERIOD_MILLISECOND = UnitDef(
-    "sampling_period_millisecond", "ms", Decimal("0.001"), TIME,
+    "sampling_period_millisecond",
+    "ms",
+    Decimal("0.001"),
+    TIME,
 )
 SAMPLING_PERIOD_SECOND = UnitDef("sampling_period_second", "s", Decimal(1), TIME)
 
@@ -107,7 +113,8 @@ def MillisecondSamplingPeriod(value: Numeric) -> SamplingPeriod:
 def SecondSamplingPeriod(value: Numeric) -> SamplingPeriod:
     """Construct a SamplingPeriod from a magnitude expressed in seconds."""
     return SamplingPeriod(
-        to_decimal(value) * SAMPLING_PERIOD_SECOND.scale, SAMPLING_PERIOD_SECOND,
+        to_decimal(value) * SAMPLING_PERIOD_SECOND.scale,
+        SAMPLING_PERIOD_SECOND,
     )
 
 
@@ -115,10 +122,16 @@ def SecondSamplingPeriod(value: Numeric) -> SamplingPeriod:
 
 SAMPLE_PER_SECOND = UnitDef("sample_per_second", "Sa/s", Decimal(1), FREQUENCY)
 KILOSAMPLE_PER_SECOND = UnitDef(
-    "kilosample_per_second", "kSa/s", Decimal(1000), FREQUENCY,
+    "kilosample_per_second",
+    "kSa/s",
+    Decimal(1000),
+    FREQUENCY,
 )
 MEGASAMPLE_PER_SECOND = UnitDef(
-    "megasample_per_second", "MSa/s", Decimal(1_000_000), FREQUENCY,
+    "megasample_per_second",
+    "MSa/s",
+    Decimal(1_000_000),
+    FREQUENCY,
 )
 
 SampleRate._canonical_unit = SAMPLE_PER_SECOND  # noqa: SLF001
@@ -132,14 +145,16 @@ def SamplesPerSecond(value: Numeric) -> SampleRate:
 def KilosamplesPerSecond(value: Numeric) -> SampleRate:
     """Construct a SampleRate from a magnitude expressed in kilosamples per second."""
     return SampleRate(
-        to_decimal(value) * KILOSAMPLE_PER_SECOND.scale, KILOSAMPLE_PER_SECOND,
+        to_decimal(value) * KILOSAMPLE_PER_SECOND.scale,
+        KILOSAMPLE_PER_SECOND,
     )
 
 
 def MegasamplesPerSecond(value: Numeric) -> SampleRate:
     """Construct a SampleRate from a magnitude expressed in megasamples per second."""
     return SampleRate(
-        to_decimal(value) * MEGASAMPLE_PER_SECOND.scale, MEGASAMPLE_PER_SECOND,
+        to_decimal(value) * MEGASAMPLE_PER_SECOND.scale,
+        MEGASAMPLE_PER_SECOND,
     )
 
 

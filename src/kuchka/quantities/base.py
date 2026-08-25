@@ -86,7 +86,7 @@ class UnitDef:
 
     This is internal machinery used by ``units/`` and ``temperature.py`` to
     build unit constructors like ``Volt`` and ``Millivolt``.
-    
+
     Application code never constructs a ``UnitDef`` directly;
     it imports the constructor functions instead.
     """
@@ -94,7 +94,11 @@ class UnitDef:
     __slots__ = ("dimension", "name", "scale", "symbol")
 
     def __init__(
-        self, name: str, symbol: str, scale: Decimal, dimension: Dimension,
+        self,
+        name: str,
+        symbol: str,
+        scale: Decimal,
+        dimension: Dimension,
     ) -> None:
         """Store the unit's display name, symbol, scale factor, and dimension."""
         self.name = name
