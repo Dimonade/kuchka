@@ -157,4 +157,3 @@ def test_subtraction_with_an_unsupported_operand_raises_type_error():
 def test_repr_shows_the_display_unit_symbol():
     assert repr(Celsius(20)) == "20.00 \u00b0C"
     assert repr(Kelvin(20)) == "20 K"
-

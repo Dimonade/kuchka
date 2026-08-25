@@ -1,0 +1,37 @@
+# Device limits configuration -- modern format.
+#
+# Every measurement is a {value, unit} table.
+# "value" is quoted deliberately: TOML's bare number literals are binary floats,
+# and quoting means device_config.py parses the digits you actually typed through Decimal(str),
+# the same reason `kuchka` itself stores magnitudes as Decimal rather than float.
+# "unit" may be any unit that belongs to the field's physical dimension --
+# device_config.py resolves it against a per-dimension table and rejects anything else,
+# including a unit that is valid for some other dimension.
+
+[red_led.accepted_voltage]
+min = { value = "-1.000", unit = "mV" }
+max = { value = "1.000", unit = "mV" }
+
+[red_led.accepted_current]
+min = { value = "0.000", unit = "mA" }
+max = { value = "20.000", unit = "mA" }
+
+[red_led.accepted_temperature]
+min = { value = "15.0", unit = "C" }
+max = { value = "45.0", unit = "C" }
+
+[blue_led.accepted_voltage]
+min = { value = "0.000", unit = "V" }
+max = { value = "3.300", unit = "V" }
+
+[blue_led.accepted_current]
+min = { value = "0.000", unit = "A" }
+max = { value = "0.050", unit = "A" }
+
+[blue_led.accepted_temperature]
+min = { value = "288.15", unit = "K" }
+max = { value = "318.15", unit = "K" }
+
+[comms]
+uart_baud_rate = { value = "9600", unit = "Bd" }
+sensor_poll_rate = { value = "500", unit = "Hz" }
