@@ -1,14 +1,11 @@
 """Current unit constructors: Microampere, Milliampere, Ampere, Kiloampere.
 
-Each function here does the same thing:
-take a plain number, multiply it by a fixed scale factor, and wrap it in
-:class:`~kuchka.quantities.Current`.
+Each function here does the same thing: take a plain number, multiply it
+by a fixed scale factor, and wrap it in :class:`~kuchka.quantities.Current`.
 
-```python
-from kuchka import Ampere, Milliampere
+    from kuchka import Ampere, Milliampere
 
-current = Ampere(1) - Milliampere(250)
-```
+    current = Ampere(1) - Milliampere(250)
 """
 
 from __future__ import annotations

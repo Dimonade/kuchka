@@ -1,14 +1,11 @@
 """Voltage unit constructors: Microvolt, Millivolt, Volt, Kilovolt.
 
-Each function here does the same thing:
-take a plain number, multiply it by a fixed scale factor, and wrap it in
-:class:`~kuchka.quantities.Voltage`.
+Each function here does the same thing: take a plain number, multiply it
+by a fixed scale factor, and wrap it in :class:`~kuchka.quantities.Voltage`.
 
-```python
-from kuchka import Volt, Millivolt
+    from kuchka import Volt, Millivolt
 
-voltage = Volt(4.2) + Millivolt(200)
-```
+    voltage = Volt(4.2) + Millivolt(200)
 """
 
 from __future__ import annotations

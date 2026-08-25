@@ -1,14 +1,11 @@
 """Power unit constructors: Milliwatt, Watt, Kilowatt.
 
-Each function here does the same thing:
-take a plain number, multiply it by a fixed scale factor, and wrap it in
-:class:`~kuchka.quantities.Power`.
+Each function here does the same thing: take a plain number, multiply it
+by a fixed scale factor, and wrap it in :class:`~kuchka.quantities.Power`.
 
-```python
-from kuchka import Watt
+    from kuchka import Watt
 
-power = Watt(5)
-```
+    power = Watt(5)
 """
 
 from __future__ import annotations
