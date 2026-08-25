@@ -23,9 +23,10 @@ There's no reason left to reach for a naked `float`.
 def analyse_voltage(voltage: Voltage) -> Report: ...
 
 
-analyse_voltage(4.2)  # rejected by mypy/ty, and again at runtime
-analyse_voltage(Ampere(2))  # rejected by mypy/ty, and again at runtime
-analyse_voltage(Volt(4.2))  # the only thing that type-checks
+analyse_voltage(4.2)  # rejected by mypy/ty, and again at runtime.
+analyse_voltage(Ampere(2))  # rejected by mypy/ty, and again at runtime.
+analyse_voltage(Volt(4.2))  # one example of a valid type check.
+analyse_voltage(Millivolt(4200))  # another example of a valid type check.
 ```
 
 ## What's in v0.1
