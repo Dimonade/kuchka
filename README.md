@@ -76,7 +76,8 @@ See "What this is not (yet)" below.
 `Frequency`, `SampleRate`, and `BaudRate` all share the same physical dimension (T^-1), but they are not the same thing, and `kuchka` keeps them as separate types on purpose:
 
 ```python
-Hertz(50) + SamplesPerSecond(50)  # IncompatibleDimensionError, even though both are dimensionally T^-1.
+# IncompatibleDimensionError, even though both are dimensionally T^-1.
+Hertz(50) + SamplesPerSecond(50)
 ```
 
 Only one type per dimension is ever the _canonical_ one -- the type generic arithmetic produces automatically.
@@ -179,7 +180,7 @@ asking), is genuinely open.
   Search the test suite for "not (yet) flagged by ty" for the exact cases.
 - **The dimension vocabulary is small on purpose.**
   `Resistance * Resistance` and similar mathematically-valid-but-unregistered products raise `UnrepresentableDimensionError` at runtime rather than returning a typed result.
-  Neither mypy nor ty catch this ahead of time, since the fallback overload on each quantity type has to accept `object` to stay  compatible with the base class.
+  Neither mypy nor ty catch this ahead of time, since the fallback overload on each quantity type has to accept `object` to stay compatible with the base class.
 - No array, NumPy/Pandas, or persistence support -- see above.
 
 ## Examples
