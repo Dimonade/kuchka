@@ -60,25 +60,23 @@ Quoting the value means `device_config.py` parses the digits through `Decimal(st
 `device_config.py` is the only file in this example that ever sees a unit as a string.
 Its job, in three parts:
 
-**1. Unit resolution is closed per dimension.**
+**1. Unit resolution is closed per dimension, using tables kuchka already maintains.**
 
 ```python
-VOLTAGE_UNITS: Mapping[str, Callable[[Numeric], Voltage]] = {
-    "uV": Microvolt,
-    "mV": Millivolt,
-    "V": Volt,
-    "kV": Kilovolt,
-}
-CURRENT_UNITS: Mapping[str, Callable[[Numeric], Current]] = {
-    "uA": Microampere,
-    "mA": Milliampere,
-    "A": Ampere,
-    "kA": Kiloampere,
-}
+from kuchka.units import VOLTAGE_UNITS, CURRENT_UNITS
 ```
 
-A voltage field only ever looks its unit up in `VOLTAGE_UNITS`.
-Writing `unit = "mA"` for a voltage field isn't "the wrong prefix" -- `"mA"` simply isn't in that table, so it fails the same way a typo would.
+`kuchka.units` ships a `Mapping[str, Callable[[Numeric], Q]]` for every
+dimension it knows about -- `VOLTAGE_UNITS`, `CURRENT_UNITS`,
+`TEMPERATURE_UNITS`, `FREQUENCY_UNITS`, `BAUD_RATE_UNITS`, and so on --
+each one closed to that dimension's own constructors and immutable
+(`MappingProxyType`, not a plain `dict`). A voltage field only ever
+looks its unit up in `VOLTAGE_UNITS`. Writing `unit = "mA"` for a
+voltage field isn't "the wrong prefix" -- `"mA"` simply isn't in that
+table, so it fails the same way a typo would. Nothing in this example
+hand-builds these tables; every application doing config-boundary work
+would otherwise be maintaining the same mapping independently, and
+kuchka is the one place that already knows every constructor it exports.
 
 **2. A value becomes a quantity, once.**
 
@@ -154,19 +152,11 @@ sensor_poll_rate = { value = "500", unit = "Hz" }
 ```
 
 ```python
-FREQUENCY_UNITS: Mapping[str, Callable[[Numeric], Frequency]] = {
-    "Hz": Hertz,
-    "kHz": Kilohertz,
-    "MHz": Megahertz,
-}
-BAUD_RATE_UNITS: Mapping[str, Callable[[Numeric], BaudRate]] = {
-    "Bd": Baud,
-    "kBd": Kilobaud,
-}
+from kuchka.units import FREQUENCY_UNITS, BAUD_RATE_UNITS
 ```
 
 `Frequency` and `BaudRate` share a physical dimension but are different concepts (see the main README's "Same dimension, different concepts").
-Nothing about that distinction needed special handling here -- adding a new dimension to this config format is "add one more table, add one more dataclass field", the same shape as every dimension before it.
+Nothing about that distinction needed special handling here -- adding a new dimension to this config format is "import one more table, add one more dataclass field", the same shape as every dimension before it.
 
 ## What this example is not
 

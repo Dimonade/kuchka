@@ -6,17 +6,26 @@ by a fixed scale factor, and wrap it in :class:`~kuchka.quantities.Power`.
     from kuchka import Watt
 
     power = Watt(5)
+
+`POWER_UNITS` maps each symbol to its constructor, for boundary code that reads a unit
+as a string from outside the application.
 """
 
 from __future__ import annotations
 
 from decimal import Decimal
+from types import MappingProxyType
+from typing import TYPE_CHECKING
 
 from kuchka.dimensions import POWER
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
 from kuchka.quantities import Power
 from kuchka.quantities import UnitDef
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from collections.abc import Mapping
 
 MILLIWATT = UnitDef("milliwatt", "mW", Decimal("0.001"), POWER)
 WATT = UnitDef("watt", "W", Decimal(1), POWER)
@@ -38,3 +47,10 @@ def Watt(value: Numeric) -> Power:
 def Kilowatt(value: Numeric) -> Power:
     """Construct a Power from a magnitude expressed in kilowatts."""
     return Power(to_decimal(value) * KILOWATT.scale, KILOWATT)
+
+
+POWER_UNITS: Mapping[str, Callable[[Numeric], Power]] = MappingProxyType({
+    "mW": Milliwatt,
+    "W": Watt,
+    "kW": Kilowatt,
+})

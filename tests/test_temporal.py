@@ -1,9 +1,9 @@
 """Time, Frequency, and the acquisition-domain vocabulary that shares their dimensions.
 
 Covers the registered pair (Time, Frequency) and the domain pair
-(SamplingPeriod, SampleRate) and BaudRate: same two dimensions, three different concepts,
-and the point of this module is to prove that sharing a dimension is not the same as
-being interchangeable.
+(SamplingPeriod, SampleRate) and BaudRate: same two dimensions, three different
+concepts, and the point of this module is to prove that sharing a dimension is not the
+same as being interchangeable.
 """
 
 from decimal import Decimal

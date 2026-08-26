@@ -5,16 +5,22 @@
     period = Millisecond(2)
     rate = Hertz(500)
 
-`SamplingPeriod` and `SampleRate` share their display symbols with `Time`
-and `Frequency` (both read out in seconds and hertz on a datasheet), even
-though they are different Python types; the type is what carries the
-distinction, not the symbol. `BaudRate` gets its own symbol, `Bd`, since
-that is how it actually appears in the wild.
+`SamplingPeriod` and `SampleRate` share their display symbols with `Time` and
+`Frequency` (both read out in seconds and hertz on a datasheet), even though they are
+different Python types;
+the type is what carries the distinction, not the symbol.
+`BaudRate` gets its own symbol, `Bd`, as that is how it actually appears in the wild.
+
+`TIME_UNITS`, `FREQUENCY_UNITS`, `SAMPLING_PERIOD_UNITS`, `SAMPLE_RATE_UNITS`, and
+`BAUD_RATE_UNITS` each map a symbol string to its constructor, for boundary code that
+reads a unit as a string from outside the application.
 """
 
 from __future__ import annotations
 
 from decimal import Decimal
+from types import MappingProxyType
+from typing import TYPE_CHECKING
 
 from kuchka.dimensions import FREQUENCY
 from kuchka.dimensions import TIME
@@ -26,6 +32,10 @@ from kuchka.quantities import SampleRate
 from kuchka.quantities import SamplingPeriod
 from kuchka.quantities import Time
 from kuchka.quantities import UnitDef
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from collections.abc import Mapping
 
 # Time
 
@@ -51,6 +61,13 @@ def Second(value: Numeric) -> Time:
     return Time(to_decimal(value) * SECOND.scale, SECOND)
 
 
+TIME_UNITS: Mapping[str, Callable[[Numeric], Time]] = MappingProxyType({
+    "us": Microsecond,
+    "ms": Millisecond,
+    "s": Second,
+})
+
+
 # Frequency
 
 HERTZ = UnitDef("hertz", "Hz", Decimal(1), FREQUENCY)
@@ -73,6 +90,13 @@ def Kilohertz(value: Numeric) -> Frequency:
 def Megahertz(value: Numeric) -> Frequency:
     """Construct a Frequency from a magnitude expressed in megahertz."""
     return Frequency(to_decimal(value) * MEGAHERTZ.scale, MEGAHERTZ)
+
+
+FREQUENCY_UNITS: Mapping[str, Callable[[Numeric], Frequency]] = MappingProxyType({
+    "Hz": Hertz,
+    "kHz": Kilohertz,
+    "MHz": Megahertz,
+})
 
 
 # SamplingPeriod
@@ -118,6 +142,15 @@ def SecondSamplingPeriod(value: Numeric) -> SamplingPeriod:
     )
 
 
+SAMPLING_PERIOD_UNITS: Mapping[str, Callable[[Numeric], SamplingPeriod]] = (
+    MappingProxyType({
+        "us": MicrosecondSamplingPeriod,
+        "ms": MillisecondSamplingPeriod,
+        "s": SecondSamplingPeriod,
+    })
+)
+
+
 # SampleRate
 
 SAMPLE_PER_SECOND = UnitDef("sample_per_second", "Sa/s", Decimal(1), FREQUENCY)
@@ -158,6 +191,13 @@ def MegasamplesPerSecond(value: Numeric) -> SampleRate:
     )
 
 
+SAMPLE_RATE_UNITS: Mapping[str, Callable[[Numeric], SampleRate]] = MappingProxyType({
+    "Sa/s": SamplesPerSecond,
+    "kSa/s": KilosamplesPerSecond,
+    "MSa/s": MegasamplesPerSecond,
+})
+
+
 # BaudRate
 
 BAUD = UnitDef("baud", "Bd", Decimal(1), FREQUENCY)
@@ -174,3 +214,9 @@ def Baud(value: Numeric) -> BaudRate:
 def Kilobaud(value: Numeric) -> BaudRate:
     """Construct a BaudRate from a magnitude expressed in kilobaud."""
     return BaudRate(to_decimal(value) * KILOBAUD.scale, KILOBAUD)
+
+
+BAUD_RATE_UNITS: Mapping[str, Callable[[Numeric], BaudRate]] = MappingProxyType({
+    "Bd": Baud,
+    "kBd": Kilobaud,
+})

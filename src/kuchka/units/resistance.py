@@ -6,17 +6,26 @@ by a fixed scale factor, and wrap it in :class:`~kuchka.quantities.Resistance`.
     from kuchka import Ohm
 
     resistance = Ohm(100)
+
+`RESISTANCE_UNITS` maps each symbol to its constructor, for boundary code that reads 
+ unit as a string from outside the application.
 """
 
 from __future__ import annotations
 
 from decimal import Decimal
+from types import MappingProxyType
+from typing import TYPE_CHECKING
 
 from kuchka.dimensions import RESISTANCE
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
 from kuchka.quantities import Resistance
 from kuchka.quantities import UnitDef
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from collections.abc import Mapping
 
 MILLIOHM = UnitDef("milliohm", "m\u03a9", Decimal("0.001"), RESISTANCE)
 OHM = UnitDef("ohm", "\u03a9", Decimal(1), RESISTANCE)
@@ -44,3 +53,11 @@ def Kiloohm(value: Numeric) -> Resistance:
 def Megaohm(value: Numeric) -> Resistance:
     """Construct a Resistance from a magnitude expressed in megaohms."""
     return Resistance(to_decimal(value) * MEGAOHM.scale, MEGAOHM)
+
+
+RESISTANCE_UNITS: Mapping[str, Callable[[Numeric], Resistance]] = MappingProxyType({
+    "mOhm": Milliohm,
+    "Ohm": Ohm,
+    "kOhm": Kiloohm,
+    "MOhm": Megaohm,
+})

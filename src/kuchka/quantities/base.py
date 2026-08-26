@@ -59,15 +59,11 @@ _DIMENSION_REGISTRY: dict[Dimension, type[LinearQuantity]] = {}
 """Maps a dimension signature to the name of a quantity this library
 intends to implement but does not yet, e.g. Length / Time -> Velocity.
 
-This is not a registration: there is no type behind it, so
-`_DIMENSION_REGISTRY` never gains an entry from this table. It exists
-only so `_promote` can raise `PlannedDimensionError` instead of the
-generic `UnrepresentableDimensionError` for a dimension this library
-already has a name for, so the message says what the result actually is
-rather than leaving the reader to reverse-engineer the physics from an
-exponent vector. Curated by hand, the same way the `@overload` tables
-are: adding an entry here does not implement the quantity, it only
-improves the error message until someone does.
+Lets `_promote` raise `PlannedDimensionError` for a dimension this
+library already has a name for, naming the result (e.g. "corresponds to
+Velocity") instead of only printing its exponent vector. Curated by
+hand, the same way the `@overload` tables are: adding an entry here
+improves the error message, and is a marker for what to implement next.
 """
 _PLANNED_DIMENSIONS: dict[Dimension, str] = {
     Dimension(length=1, time=-1): "Velocity",

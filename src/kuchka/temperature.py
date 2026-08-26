@@ -40,12 +40,16 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import ClassVar, overload
+from types import MappingProxyType
+from typing import TYPE_CHECKING, ClassVar, overload
 
 from kuchka.dimensions import TEMPERATURE_DELTA, Dimension
 from kuchka.errors import InvalidConversionError, MeasurementError
 from kuchka.numeric import Numeric, to_decimal
 from kuchka.quantities import TemperatureDelta, UnitDef
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Mapping
 
 DELTA_KELVIN = UnitDef("kelvin_delta", "\u0394K", Decimal(1), TEMPERATURE_DELTA)
 # A one-degree change is the same size in Celsius and Kelvin: only the
@@ -63,6 +67,14 @@ def DeltaKelvin(value: Numeric) -> TemperatureDelta:
 def DeltaCelsius(value: Numeric) -> TemperatureDelta:
     """Construct a TemperatureDelta from a magnitude expressed in degrees Celsius."""
     return TemperatureDelta(to_decimal(value) * DELTA_CELSIUS.scale, DELTA_CELSIUS)
+
+
+TEMPERATURE_DELTA_UNITS: Mapping[str, Callable[[Numeric], TemperatureDelta]] = (
+    MappingProxyType({
+        "dK": DeltaKelvin,
+        "dC": DeltaCelsius,
+    })
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -214,3 +226,9 @@ def Celsius(value: Numeric) -> Temperature:
     """Construct a Temperature from a magnitude expressed in degrees Celsius."""
     raw = to_decimal(value)
     return Temperature(raw * CELSIUS.scale + CELSIUS.offset, CELSIUS)
+
+
+TEMPERATURE_UNITS: Mapping[str, Callable[[Numeric], Temperature]] = MappingProxyType({
+    "K": Kelvin,
+    "C": Celsius,
+})

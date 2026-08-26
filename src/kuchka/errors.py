@@ -50,11 +50,13 @@ class InvalidConversionError(MeasurementError):
 class UnrepresentableDimensionError(MeasurementError):
     """Arithmetic produced a dimension with no registered engineering type.
 
-    This is a scope boundary: each released version of the library registers a specific,
-    deliberately limited vocabulary of engineering quantities (see ``kuchka.quantities``).
-    An operation that mathematically produces something outside that vocabulary, e.g.
-    Resistance times Resistance, is rejected clearly here rather than silently returning an
-    untyped number.
+    This is a scope boundary: each released version of the library registers a
+    specific, deliberately limited vocabulary of engineering quantities
+    (see ``kuchka.quantities``).
+    
+    An operation that mathematically produces something outside that vocabulary,
+    e.g. Resistance times Resistance, is rejected clearly here rather than silently
+    returning an untyped number.
     """
 
     def __init__(self, dimension: object) -> None:
@@ -70,12 +72,11 @@ class UnrepresentableDimensionError(MeasurementError):
 class PlannedDimensionError(UnrepresentableDimensionError):
     """Arithmetic produced a dimension that corresponds to a named, planned quantity.
 
-    A narrower case of :class:`UnrepresentableDimensionError`:
-    the resulting dimension isn't just unregistered, it's a concept planned to be implemented,
-    e.g. Length divided by Time producing Velocity.
-    
-    Raised instead of the generic error so the message can say what the result actually is,
-    and not than leaving the reader to work out the physics from an exponent vector.
+    Raised for a dimension this library already has a name for, e.g.
+    Length divided by Time producing Velocity, so the message can say
+    what the result actually is rather than only printing its exponent
+    vector. A subclass of :class:`UnrepresentableDimensionError`, so
+    code that catches the general error still catches this one too.
     """
 
     def __init__(self, dimension: object, planned_name: str) -> None:

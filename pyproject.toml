@@ -66,7 +66,8 @@ exclude = [
   ".mypy_cache",
   ".tox",
   ".ruff_cache",
-  "docs/introduction", # used for comparing current practices with `kuchka` alternatives.
+  "docs/introduction", # historical/narrative content quoted verbatim elsewhere (the blog post, the presentation);
+  # not held to library code standards on purpose.
 ]
 indent-width = 4
 line-length = 88

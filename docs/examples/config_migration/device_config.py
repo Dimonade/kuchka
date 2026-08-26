@@ -6,11 +6,12 @@ nothing downstream of it ever sees a bare number again.
 
 Three rules, matching `kuchka`'s own design:
 
-1. Unit resolution is closed per physical dimension.
-    A voltage field only ever looks a unit symbol up in `VOLTAGE_UNITS`;
-    writing `unit = "mA"` for a voltage field is not "the wrong prefix",
-    it is a symbol that simply is not in that table, and fails the same way a typo
-    would.
+1. Unit resolution is closed per physical dimension, using the tables
+    `kuchka.units` already maintains (`VOLTAGE_UNITS`, `CURRENT_UNITS`, and so on):
+    a voltage field only ever looks a unit symbol up in `VOLTAGE_UNITS`,
+    so writing `unit = "mA"` for a voltage field is not "the wrong prefix",
+    it is a symbol that simply is not in that table, and fails the same way
+    a typo would.
 2. A value is parsed through `Decimal(str)`, never `float(str)`, for the same reason
     `kuchka` itself stores magnitudes as `Decimal`:
     the digits an engineer typed should survive parsing exactly.
@@ -28,67 +29,26 @@ from decimal import InvalidOperation
 from typing import Any
 from typing import TYPE_CHECKING
 
-from kuchka import Ampere
-from kuchka import Baud
-from kuchka import BaudRate
-from kuchka import Celsius
-from kuchka import Current
-from kuchka import Frequency
-from kuchka import Hertz
-from kuchka import Kelvin
-from kuchka import Kiloampere
-from kuchka import Kilobaud
-from kuchka import Kilohertz
-from kuchka import Kilovolt
-from kuchka import Megahertz
-from kuchka import Microampere
-from kuchka import Microvolt
-from kuchka import Milliampere
-from kuchka import Millivolt
-from kuchka import Temperature
-from kuchka import Volt
-from kuchka import Voltage
+from kuchka.units import BAUD_RATE_UNITS
+from kuchka.units import CURRENT_UNITS
+from kuchka.units import FREQUENCY_UNITS
+from kuchka.units import TEMPERATURE_UNITS
+from kuchka.units import VOLTAGE_UNITS
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping
     from pathlib import Path
 
+    from kuchka import BaudRate
+    from kuchka import Current
+    from kuchka import Frequency
+    from kuchka import Temperature
+    from kuchka import Voltage
     from kuchka.numeric import Numeric
 
 
 class ConfigError(Exception):
     """A device-limits config file could not be parsed into typed settings."""
-
-
-# Unit resolution tables: one per physical dimension, deliberately closed.
-# A field for one dimension can never accidentally accept a unit that
-# belongs to a different one, because it is never even looked up in that
-# dimension's table.
-VOLTAGE_UNITS: Mapping[str, Callable[[Numeric], Voltage]] = {
-    "uV": Microvolt,
-    "mV": Millivolt,
-    "V": Volt,
-    "kV": Kilovolt,
-}
-CURRENT_UNITS: Mapping[str, Callable[[Numeric], Current]] = {
-    "uA": Microampere,
-    "mA": Milliampere,
-    "A": Ampere,
-    "kA": Kiloampere,
-}
-TEMPERATURE_UNITS: Mapping[str, Callable[[Numeric], Temperature]] = {
-    "C": Celsius,
-    "K": Kelvin,
-}
-FREQUENCY_UNITS: Mapping[str, Callable[[Numeric], Frequency]] = {
-    "Hz": Hertz,
-    "kHz": Kilohertz,
-    "MHz": Megahertz,
-}
-BAUD_RATE_UNITS: Mapping[str, Callable[[Numeric], BaudRate]] = {
-    "Bd": Baud,
-    "kBd": Kilobaud,
-}
 
 
 def _build_quantity[Q](
