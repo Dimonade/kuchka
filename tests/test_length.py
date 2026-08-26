@@ -1,10 +1,10 @@
 """Length: arithmetic, exact imperial conversion, and the planned-dimension error.
 
-`Length` has no coupled quantities, so this module is mostly about proving three things:
-ordinary arithmetic works the way every other `LinearQuantity` does, `Inch` converts to
-and from the metric prefixes exactly rather than approximately, and dividing a `Length`
-by a `Time` fails with a message that names `Velocity`, not just a generic
-scope-boundary message.
+`Length` has no coupled quantities yet (no `Velocity`, upcoming, planned),
+so this module is mostly about proving three things: ordinary arithmetic works the way
+every other `LinearQuantity` does, `Inch` converts to and from the metric prefixes
+exactly rather than approximately, and dividing a `Length` by a `Time` fails with a
+message that names `Velocity`, not just a generic scope-boundary message.
 """
 
 from decimal import Decimal
