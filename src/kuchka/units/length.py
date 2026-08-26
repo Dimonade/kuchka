@@ -10,24 +10,28 @@ metre since the 1959 international yard and pound agreement, so `Inch`
 sits alongside the metric prefixes without giving up `Decimal` exactness:
 `Inch(1) == Millimeter(Decimal("25.4"))` holds exactly, the same way
 `Volt(1) == Millivolt(1000)` does.
-
-`Foot` (0.3048 m exactly), `Yard` (0.9144 m exactly), and `Mile`
-(1609.344 m exactly) are not implemented yet -- only `Inch` is,
-since it is the one that actually shows up in mechanical and enclosure specs
-even in an otherwise metric shop -- but the same exactness applies to all four,
-and adding one is a two-line `UnitDef` plus a constructor function,
-the same shape as everything below.
+`Foot` (0.3048 m exactly), `Yard` (0.9144 m exactly), and `Mile` (1609.344 m exactly)
+are not implemented yet -- only `Inch` is, since it is the one that actually shows up
+in mechanical and enclosure specs even in an otherwise metric shop -- but the same
+exactness applies to all four, and adding one is a two-line `UnitDef` plus a
+constructor function, the same shape as everything below.
 """
 
 from __future__ import annotations
 
 from decimal import Decimal
+from types import MappingProxyType
+from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LENGTH
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
 from kuchka.quantities import Length
 from kuchka.quantities import UnitDef
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from collections.abc import Mapping
 
 NANOMETER = UnitDef("nanometer", "nm", Decimal("0.000000001"), LENGTH)
 MICROMETER = UnitDef("micrometer", "\u00b5m", Decimal("0.000001"), LENGTH)
@@ -72,3 +76,13 @@ def Inch(value: Numeric) -> Length:
     error than any of the metric prefixes above.
     """
     return Length(to_decimal(value) * INCH.scale, INCH)
+
+
+LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType({
+    "nm": Nanometer,
+    "um": Micrometer,
+    "mm": Millimeter,
+    "m": Meter,
+    "km": Kilometer,
+    "in": Inch,
+})
