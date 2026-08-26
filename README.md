@@ -44,6 +44,7 @@ analyse_voltage(Millivolt(4200))  # another example of a valid type check.
 | `SamplingPeriod`   | `SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod` |
 | `SampleRate`       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`               |
 | `BaudRate`         | `Baud`, `Kilobaud`                                                               |
+| `Length`           | `Nanometer`, `Micrometer`, `Millimeter`, `Meter`, `Kilometer`, `Inch`            |
 
 Deliberately nothing else yet.
 See "What this is not (yet)" below.
@@ -70,6 +71,10 @@ See "What this is not (yet)" below.
   `20 degC + 5 degC` isn't meaningful the way `5V + 3V` is.
   It supports `Temperature +/- TemperatureDelta` and `Temperature - Temperature`, but not `Temperature  - Temperature`, and no scalar multiplication at all.
   See the module docstring next to `Temperature` for the full reasoning.
+- **Scope gaps are curated, not generic, where the gap has a name.**
+  `Resistance * Resistance` raises `UnrepresentableDimensionError`: dimensionally valid, no registered type, and no plan to add one.
+  `Length / Time` raises `PlannedDimensionError` instead, a subclass of the same error, because that result corresponds to `Velocity`, a real quantity this library intends to implement.
+  The message says so, rather than leaving the reader to reverse-engineer the physics from an exponent vector.
 
 ### Same dimension, different concepts
 
@@ -159,7 +164,8 @@ asking), is genuinely open.
 
 ## What this is not (yet)
 
-- No Length or Mass.
+- No Mass.
+  `Length` was added, `Foot`/`Yard`/`Mile` were not -- see the module docstring next to `Inch` for the exact metre-equivalents if one of those is ever needed.
 - No NumPy/Pandas integration.
   `Decimal` doesn't vectorize into `ndarray` cleanly, and per-sample scalar wrapping is the wrong shape for high-rate acquisition.
   Intended pattern for now: buffer raw floats at the acquisition boundary, convert once you have a value worth reasoning about.
@@ -204,8 +210,9 @@ src/kuchka/
         electrical.py      Voltage, Current, Power, Resistance and their overload tables
         temporal.py        Time, Frequency, SamplingPeriod, SampleRate, BaudRate
         thermal.py         TemperatureDelta
+        length.py           Length
     units/
-        voltage.py, current.py, resistance.py, power.py, temporal.py
+        voltage.py, current.py, resistance.py, power.py, temporal.py, length.py
                              one module per dimension's prefix constructors
 ```
 
@@ -236,7 +243,8 @@ Worth reading before adding a new blanket ignore.
 ## Open questions for the next version
 
 - Whether/how to autogenerate the overload table once the quantity vocabulary outgrows hand-maintainable size.
-- Whether Length and Mass get added as their own quantities, or wait for a concrete second use case.
+- Whether Mass gets added as its own quantity, or waits for a concrete second use case.
+- Whether/when `Velocity` (`Length / Time`) gets implemented, now that `Length` exists and `Length / Time` raises the more specific `PlannedDimensionError` instead of than a generic scope-boundary error.
 - Whether Kelvin should get a distinct, scalar-multipliable type (see the design note next to `Temperature`).
 - Whether a point-in-time type (`Instant`, most likely) is ever worth adding, and what its "you can't add two timestamps" rule should look like.
 - NumPy/Pandas integration strategy, once vectorized acquisition is actually needed, not just anticipated.

@@ -50,11 +50,10 @@ class InvalidConversionError(MeasurementError):
 class UnrepresentableDimensionError(MeasurementError):
     """Arithmetic produced a dimension with no registered engineering type.
 
-    This is a scope boundary: each released version of the library
-    registers a specific, deliberately limited vocabulary of engineering
-    quantities (see ``kuchka.quantities``). An operation that mathematically
-    produces something outside that vocabulary, e.g. Resistance times
-    Resistance, is rejected clearly here rather than silently returning an
+    This is a scope boundary: each released version of the library registers a specific,
+    deliberately limited vocabulary of engineering quantities (see ``kuchka.quantities``).
+    An operation that mathematically produces something outside that vocabulary, e.g.
+    Resistance times Resistance, is rejected clearly here rather than silently returning an
     untyped number.
     """
 
@@ -66,3 +65,26 @@ class UnrepresentableDimensionError(MeasurementError):
             "the library.",
         )
         self.dimension = dimension
+
+
+class PlannedDimensionError(UnrepresentableDimensionError):
+    """Arithmetic produced a dimension that corresponds to a named, planned quantity.
+
+    A narrower case of :class:`UnrepresentableDimensionError`:
+    the resulting dimension isn't just unregistered, it's a concept planned to be implemented,
+    e.g. Length divided by Time producing Velocity.
+    
+    Raised instead of the generic error so the message can say what the result actually is,
+    and not than leaving the reader to work out the physics from an exponent vector.
+    """
+
+    def __init__(self, dimension: object, planned_name: str) -> None:
+        """Build the error message from the dimension and its planned quantity name."""
+        MeasurementError.__init__(
+            self,
+            f"the result of this operation has dimension [{dimension!r}], "
+            f"which corresponds to {planned_name} -- planned but not yet "
+            "implemented in this version of the library.",
+        )
+        self.dimension = dimension
+        self.planned_name = planned_name

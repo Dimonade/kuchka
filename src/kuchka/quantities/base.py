@@ -2,10 +2,12 @@
 
 ``LinearQuantity`` implements arithmetic, conversion, comparison, and
 dimensional-mismatch detection exactly once.
-``Voltage``, ``Current``, ``Power``, ``Resistance``, and ``TemperatureDelta``
-(see ``electrical.py`` and ``thermal.py``) each subclass it and differ only in their
-:class:`~kuchka.dimensions.Dimension` and in the handful of ``@overload`` signatures
-that give multiplication and division a precise static type.
+``Voltage``, ``Current``, ``Power``, ``Resistance``, ``TemperatureDelta``,
+``Time``, ``Frequency``, and ``Length`` (see ``electrical.py``,
+``thermal.py``, ``temporal.py``, and ``length.py``) each subclass it and
+differ only in their :class:`~kuchka.dimensions.Dimension` and in the
+handful of ``@overload`` signatures that give multiplication and division
+a precise static type.
 
 "Linear" means unit conversion within the quantity is a pure scale factor,
 with no offset: ``2 * Volt(1) == Volt(2)``.
@@ -20,17 +22,15 @@ from decimal import Decimal
 from fractions import Fraction
 from typing import ClassVar
 from typing import Self
-from typing import TYPE_CHECKING
 
 from kuchka.dimensions import DIMENSIONLESS
+from kuchka.dimensions import Dimension
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
+from kuchka.errors import PlannedDimensionError
 from kuchka.errors import UnrepresentableDimensionError
 from kuchka.numeric import to_decimal
-
-if TYPE_CHECKING:
-    from kuchka.dimensions import Dimension
 
 _NUMERIC_TYPES = (int, float, Decimal, Fraction)
 
@@ -55,6 +55,23 @@ They stay reachable only by explicit construction, exactly like
 for a dimension that already has one, rather than silently overwriting it.
 """
 _DIMENSION_REGISTRY: dict[Dimension, type[LinearQuantity]] = {}
+
+"""Maps a dimension signature to the name of a quantity this library
+intends to implement but does not yet, e.g. Length / Time -> Velocity.
+
+This is not a registration: there is no type behind it, so
+`_DIMENSION_REGISTRY` never gains an entry from this table. It exists
+only so `_promote` can raise `PlannedDimensionError` instead of the
+generic `UnrepresentableDimensionError` for a dimension this library
+already has a name for, so the message says what the result actually is
+rather than leaving the reader to reverse-engineer the physics from an
+exponent vector. Curated by hand, the same way the `@overload` tables
+are: adding an entry here does not implement the quantity, it only
+improves the error message until someone does.
+"""
+_PLANNED_DIMENSIONS: dict[Dimension, str] = {
+    Dimension(length=1, time=-1): "Velocity",
+}
 
 
 def register(dimension: Dimension, quantity_type: type[LinearQuantity]) -> None:
@@ -325,5 +342,8 @@ def _promote(dimension: Dimension, magnitude: Decimal) -> LinearQuantity | Decim
     try:
         quantity_type = _DIMENSION_REGISTRY[dimension]
     except KeyError:
+        planned_name = _PLANNED_DIMENSIONS.get(dimension)
+        if planned_name is not None:
+            raise PlannedDimensionError(dimension, planned_name) from None
         raise UnrepresentableDimensionError(dimension) from None
     return quantity_type(magnitude, quantity_type._canonical_unit)  # noqa: SLF001 -- accessing the registered type's own canonical unit, not a foreign instance's internals

@@ -22,6 +22,18 @@ from kuchka.units.current import MICROAMPERE
 from kuchka.units.current import Microampere
 from kuchka.units.current import MILLIAMPERE
 from kuchka.units.current import Milliampere
+from kuchka.units.length import INCH
+from kuchka.units.length import Inch
+from kuchka.units.length import KILOMETER
+from kuchka.units.length import Kilometer
+from kuchka.units.length import METER
+from kuchka.units.length import Meter
+from kuchka.units.length import MICROMETER
+from kuchka.units.length import Micrometer
+from kuchka.units.length import MILLIMETER
+from kuchka.units.length import Millimeter
+from kuchka.units.length import NANOMETER
+from kuchka.units.length import Nanometer
 from kuchka.units.power import KILOWATT
 from kuchka.units.power import Kilowatt
 from kuchka.units.power import MILLIWATT
@@ -77,9 +89,11 @@ __all__: list[str] = [
     "AMPERE",
     "BAUD",
     "HERTZ",
+    "INCH",
     "KILOAMPERE",
     "KILOBAUD",
     "KILOHERTZ",
+    "KILOMETER",
     "KILOOHM",
     "KILOSAMPLE_PER_SECOND",
     "KILOVOLT",
@@ -87,14 +101,18 @@ __all__: list[str] = [
     "MEGAHERTZ",
     "MEGAOHM",
     "MEGASAMPLE_PER_SECOND",
+    "METER",
     "MICROAMPERE",
+    "MICROMETER",
     "MICROSECOND",
     "MICROVOLT",
     "MILLIAMPERE",
+    "MILLIMETER",
     "MILLIOHM",
     "MILLISECOND",
     "MILLIVOLT",
     "MILLIWATT",
+    "NANOMETER",
     "OHM",
     "SAMPLE_PER_SECOND",
     "SAMPLING_PERIOD_MICROSECOND",
@@ -106,9 +124,11 @@ __all__: list[str] = [
     "Ampere",
     "Baud",
     "Hertz",
+    "Inch",
     "Kiloampere",
     "Kilobaud",
     "Kilohertz",
+    "Kilometer",
     "Kiloohm",
     "KilosamplesPerSecond",
     "Kilovolt",
@@ -116,16 +136,20 @@ __all__: list[str] = [
     "Megahertz",
     "Megaohm",
     "MegasamplesPerSecond",
+    "Meter",
     "Microampere",
+    "Micrometer",
     "Microsecond",
     "MicrosecondSamplingPeriod",
     "Microvolt",
     "Milliampere",
+    "Millimeter",
     "Milliohm",
     "Millisecond",
     "MillisecondSamplingPeriod",
     "Millivolt",
     "Milliwatt",
+    "Nanometer",
     "Ohm",
     "SamplesPerSecond",
     "Second",

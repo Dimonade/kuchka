@@ -17,6 +17,7 @@ from kuchka.quantities.electrical import Current
 from kuchka.quantities.electrical import Power
 from kuchka.quantities.electrical import Resistance
 from kuchka.quantities.electrical import Voltage
+from kuchka.quantities.length import Length
 from kuchka.quantities.temporal import BaudRate
 from kuchka.quantities.temporal import ConvertibleToFrequency
 from kuchka.quantities.temporal import Frequency
@@ -30,6 +31,7 @@ __all__: list[str] = [
     "ConvertibleToFrequency",
     "Current",
     "Frequency",
+    "Length",
     "LinearQuantity",
     "Power",
     "Resistance",

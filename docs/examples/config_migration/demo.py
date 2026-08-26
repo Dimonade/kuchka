@@ -15,7 +15,6 @@ from device_config import load_device_config
 
 def main() -> None:
     """Load the shipped config, then break it three different ways."""
-
     config_path = Path(__file__).parent / "config_modern.toml"
     config = load_device_config(config_path)
 

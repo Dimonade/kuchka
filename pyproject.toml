@@ -66,6 +66,7 @@ exclude = [
   ".mypy_cache",
   ".tox",
   ".ruff_cache",
+  "docs/introduction", # used for comparing current practices with `kuchka` alternatives.
 ]
 indent-width = 4
 line-length = 88
@@ -128,4 +129,19 @@ ignore = [
   "S603", # Testbench is not a subject to attack.
   "S605", # Same.
   "S607", # Same.
+]
+"docs/examples/*/test_*.py" = [
+  # Worked-example tests live outside `tests/` on purpose, so they can be
+  # copied out as a standalone reference alongside their example. Same
+  # reasoning as the `tests/*` ignores above, since this is the same
+  # shape of code.
+  "ANN001",
+  "D100",
+  "D103",
+  "S101",
+]
+"docs/examples/*/demo.py" = [
+  # These scripts exist to print their story to a terminal; that is the
+  # entire point of running them.
+  "T201",
 ]
