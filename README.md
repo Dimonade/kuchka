@@ -59,6 +59,11 @@ See "What this is not (yet)" below.
   There's no `Volt` type to accidentally `isinstance()`-check against, and no subclass/`__new__` surprise where `isinstance(Volt(5), Volt)` is `False`.
 - **`.to(Unit)` uses Python names, never unit strings.**
   There's no `voltage.to("mV")` anywhere in this library.
+- **Boundary code that must resolve a unit from a string has a maintained table to use.**
+  `kuchka.units` exports a `*_UNITS` mapping per dimension (`VOLTAGE_UNITS`, `CURRENT_UNITS`, `FREQUENCY_UNITS`, and so on), closed to that dimension's own constructors and immutable.
+  This is not a second construction path: `Volt(5)` is still how application code builds a `Voltage`.
+  It exists for the one place a unit is expected to arrive as a string -- a config file, a CSV header, a hardware descriptor -- so that place doesn't have to hand-roll the same table every other application resolving `kuchka` units already needed.
+  See `docs/examples/config_migration` for it in use, and `docs/review_notes.md` for why this doesn't reintroduce the registry the "Comparison to existing tools" section below argues against.
 - **Cross-type arithmetic is rejected statically, not just at runtime.**
   `Volt(5) + Ampere(2)` and `Volt(5) + 4.2` are both mypy errors, not only runtime ones.
   This falls out of typing the base arithmetic methods against `Self` instead of `object`, so every quantity type only ever type-checks arithmetic against its own kind.
@@ -244,7 +249,7 @@ Worth reading before adding a new blanket ignore.
 
 - Whether/how to autogenerate the overload table once the quantity vocabulary outgrows hand-maintainable size.
 - Whether Mass gets added as its own quantity, or waits for a concrete second use case.
-- Whether/when `Velocity` (`Length / Time`) gets implemented, now that `Length` exists and `Length / Time` raises the more specific `PlannedDimensionError` instead of than a generic scope-boundary error.
+- Whether/when `Velocity` (`Length / Time`) gets implemented, now that `Length` exists and `Length / Time` raises the more specific `PlannedDimensionError` rather than a generic scope-boundary error.
 - Whether Kelvin should get a distinct, scalar-multipliable type (see the design note next to `Temperature`).
 - Whether a point-in-time type (`Instant`, most likely) is ever worth adding, and what its "you can't add two timestamps" rule should look like.
 - NumPy/Pandas integration strategy, once vectorized acquisition is actually needed, not just anticipated.
