@@ -67,6 +67,7 @@ improves the error message, and is a marker for what to implement next.
 """
 _PLANNED_DIMENSIONS: dict[Dimension, str] = {
     Dimension(length=1, time=-1): "Velocity",
+    Dimension(current=1, time=1): "Charge",
 }
 
 

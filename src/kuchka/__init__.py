@@ -23,6 +23,7 @@ from kuchka.quantities import Current
 from kuchka.quantities import Frequency
 from kuchka.quantities import Length
 from kuchka.quantities import Power
+from kuchka.quantities import Proportion
 from kuchka.quantities import Resistance
 from kuchka.quantities import SampleRate
 from kuchka.quantities import SamplingPeriod
@@ -64,6 +65,8 @@ from kuchka.units import Millivolt
 from kuchka.units import Milliwatt
 from kuchka.units import Nanometer
 from kuchka.units import Ohm
+from kuchka.units import Percent
+from kuchka.units import Ratio
 from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
 from kuchka.units import SecondSamplingPeriod
@@ -114,8 +117,11 @@ __all__: list[str] = [
     "Milliwatt",
     "Nanometer",
     "Ohm",
+    "Percent",
     "PlannedDimensionError",
     "Power",
+    "Proportion",
+    "Ratio",
     "Resistance",
     "SampleRate",
     "SamplesPerSecond",

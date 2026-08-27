@@ -53,7 +53,7 @@ class UnrepresentableDimensionError(MeasurementError):
     This is a scope boundary: each released version of the library registers a
     specific, deliberately limited vocabulary of engineering quantities
     (see ``kuchka.quantities``).
-    
+
     An operation that mathematically produces something outside that vocabulary,
     e.g. Resistance times Resistance, is rejected clearly here rather than silently
     returning an untyped number.

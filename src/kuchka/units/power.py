@@ -49,8 +49,10 @@ def Kilowatt(value: Numeric) -> Power:
     return Power(to_decimal(value) * KILOWATT.scale, KILOWATT)
 
 
-POWER_UNITS: Mapping[str, Callable[[Numeric], Power]] = MappingProxyType({
-    "mW": Milliwatt,
-    "W": Watt,
-    "kW": Kilowatt,
-})
+POWER_UNITS: Mapping[str, Callable[[Numeric], Power]] = MappingProxyType(
+    {
+        "mW": Milliwatt,
+        "W": Watt,
+        "kW": Kilowatt,
+    }
+)

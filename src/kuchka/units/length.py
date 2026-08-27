@@ -78,11 +78,13 @@ def Inch(value: Numeric) -> Length:
     return Length(to_decimal(value) * INCH.scale, INCH)
 
 
-LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType({
-    "nm": Nanometer,
-    "um": Micrometer,
-    "mm": Millimeter,
-    "m": Meter,
-    "km": Kilometer,
-    "in": Inch,
-})
+LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
+    {
+        "nm": Nanometer,
+        "um": Micrometer,
+        "mm": Millimeter,
+        "m": Meter,
+        "km": Kilometer,
+        "in": Inch,
+    }
+)
