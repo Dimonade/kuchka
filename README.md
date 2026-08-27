@@ -45,6 +45,7 @@ analyse_voltage(Millivolt(4200))  # another example of a valid type check.
 | `SampleRate`       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`               |
 | `BaudRate`         | `Baud`, `Kilobaud`                                                               |
 | `Length`           | `Nanometer`, `Micrometer`, `Millimeter`, `Meter`, `Kilometer`, `Inch`            |
+| `Proportion`       | `Ratio`, `Percent`                                                               |
 
 Deliberately nothing else yet.
 See "What this is not (yet)" below.
@@ -78,8 +79,8 @@ See "What this is not (yet)" below.
   See the module docstring next to `Temperature` for the full reasoning.
 - **Scope gaps are curated, not generic, where the gap has a name.**
   `Resistance * Resistance` raises `UnrepresentableDimensionError`: dimensionally valid, no registered type, and no plan to add one.
-  `Length / Time` raises `PlannedDimensionError` instead, a subclass of the same error, because that result corresponds to `Velocity`, a real quantity this library intends to implement.
-  The message says so, rather than leaving the reader to reverse-engineer the physics from an exponent vector.
+  `Length / Time` and `Current * Time` raise `PlannedDimensionError` instead, a subclass of the same error, because those results correspond to `Velocity` and `Charge`, real quantities this library intends to implement.
+  The message says so, and not leaving the reader to reverse-engineer the physics from an exponent vector.
 
 ### Same dimension, different concepts
 
@@ -114,6 +115,27 @@ def nyquist_ok(signal: ConvertibleToFrequency, sample_rate: Frequency) -> bool:
 ```
 
 `BaudRate` deliberately does not satisfy this protocol, since it has no `as_frequency()`.
+
+### Percent and Ratio are the same quantity, not different concepts
+
+`Proportion` is the dimensionless quantity: `Ratio` is its coherent, unscaled unit (a bare fraction), and `Percent` is a hundredth of that.
+Unlike `Frequency`/`SampleRate`/`BaudRate`, these are not different concepts sharing a dimension -- `5%` and `0.05` are the same quantity at different scale, the same relationship `Volt`/`Millivolt` has:
+
+```python
+Percent(5) == Ratio(Decimal("0.05"))  # True
+Percent(5) + Ratio(Decimal("0.05")) == Percent(10)  # True
+```
+
+`Proportion` is never registered for `DIMENSIONLESS`, and could not usefully be even if it wanted to: `Ohm(5) / Ohm(2)` already returns a bare `Decimal` for any dimensionless result, before the registry is even consulted, and that does not change.
+`Percent`/`Ratio` stay reachable only by explicit construction, the same way `SampleRate`/`BaudRate` do.
+
+What does change: multiplying or dividing any existing quantity by a `Proportion` already produces the correctly-typed result, with no new arithmetic added anywhere.
+
+```python
+Volt(5) * Ratio(Decimal("0.1")) == Volt(Decimal("0.5"))  # True, a tolerance band.
+```
+
+This falls out of the same general dimension algebra that already derives `Power` from `Voltage * Current`: multiplying by the dimensionless identity leaves the other operand's dimension, and therefore its type, unchanged.
 
 ## Comparison to existing tools
 
@@ -216,8 +238,9 @@ src/kuchka/
         temporal.py        Time, Frequency, SamplingPeriod, SampleRate, BaudRate
         thermal.py         TemperatureDelta
         length.py           Length
+        proportion.py     Proportion
     units/
-        voltage.py, current.py, resistance.py, power.py, temporal.py, length.py
+        voltage.py, current.py, resistance.py, power.py, temporal.py, length.py, proportion.py
                              one module per dimension's prefix constructors
 ```
 
@@ -245,11 +268,11 @@ Every disabled rule in `pyproject.toml` carries an inline comment explaining why
 style).
 Worth reading before adding a new blanket ignore.
 
-## Open questions for the next version
+## Open questions for the upcoming iterations / next versions
 
 - Whether/how to autogenerate the overload table once the quantity vocabulary outgrows hand-maintainable size.
 - Whether Mass gets added as its own quantity, or waits for a concrete second use case.
-- Whether/when `Velocity` (`Length / Time`) gets implemented, now that `Length` exists and `Length / Time` raises the more specific `PlannedDimensionError` rather than a generic scope-boundary error.
+- Whether/when `Velocity` (`Length / Time`) and `Charge` (`Current * Time`) get implemented, now that both raise the more specific `PlannedDimensionError` rather than a generic scope-boundary error.
 - Whether Kelvin should get a distinct, scalar-multipliable type (see the design note next to `Temperature`).
 - Whether a point-in-time type (`Instant`, most likely) is ever worth adding, and what its "you can't add two timestamps" rule should look like.
 - NumPy/Pandas integration strategy, once vectorized acquisition is actually needed, not just anticipated.
