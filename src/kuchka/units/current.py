@@ -55,9 +55,11 @@ def Kiloampere(value: Numeric) -> Current:
     return Current(to_decimal(value) * KILOAMPERE.scale, KILOAMPERE)
 
 
-CURRENT_UNITS: Mapping[str, Callable[[Numeric], Current]] = MappingProxyType({
-    "uA": Microampere,
-    "mA": Milliampere,
-    "A": Ampere,
-    "kA": Kiloampere,
-})
+CURRENT_UNITS: Mapping[str, Callable[[Numeric], Current]] = MappingProxyType(
+    {
+        "uA": Microampere,
+        "mA": Milliampere,
+        "A": Ampere,
+        "kA": Kiloampere,
+    }
+)

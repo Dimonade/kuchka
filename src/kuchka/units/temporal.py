@@ -61,11 +61,13 @@ def Second(value: Numeric) -> Time:
     return Time(to_decimal(value) * SECOND.scale, SECOND)
 
 
-TIME_UNITS: Mapping[str, Callable[[Numeric], Time]] = MappingProxyType({
-    "us": Microsecond,
-    "ms": Millisecond,
-    "s": Second,
-})
+TIME_UNITS: Mapping[str, Callable[[Numeric], Time]] = MappingProxyType(
+    {
+        "us": Microsecond,
+        "ms": Millisecond,
+        "s": Second,
+    }
+)
 
 
 # Frequency
@@ -92,11 +94,13 @@ def Megahertz(value: Numeric) -> Frequency:
     return Frequency(to_decimal(value) * MEGAHERTZ.scale, MEGAHERTZ)
 
 
-FREQUENCY_UNITS: Mapping[str, Callable[[Numeric], Frequency]] = MappingProxyType({
-    "Hz": Hertz,
-    "kHz": Kilohertz,
-    "MHz": Megahertz,
-})
+FREQUENCY_UNITS: Mapping[str, Callable[[Numeric], Frequency]] = MappingProxyType(
+    {
+        "Hz": Hertz,
+        "kHz": Kilohertz,
+        "MHz": Megahertz,
+    }
+)
 
 
 # SamplingPeriod
@@ -143,11 +147,13 @@ def SecondSamplingPeriod(value: Numeric) -> SamplingPeriod:
 
 
 SAMPLING_PERIOD_UNITS: Mapping[str, Callable[[Numeric], SamplingPeriod]] = (
-    MappingProxyType({
-        "us": MicrosecondSamplingPeriod,
-        "ms": MillisecondSamplingPeriod,
-        "s": SecondSamplingPeriod,
-    })
+    MappingProxyType(
+        {
+            "us": MicrosecondSamplingPeriod,
+            "ms": MillisecondSamplingPeriod,
+            "s": SecondSamplingPeriod,
+        }
+    )
 )
 
 
@@ -191,11 +197,13 @@ def MegasamplesPerSecond(value: Numeric) -> SampleRate:
     )
 
 
-SAMPLE_RATE_UNITS: Mapping[str, Callable[[Numeric], SampleRate]] = MappingProxyType({
-    "Sa/s": SamplesPerSecond,
-    "kSa/s": KilosamplesPerSecond,
-    "MSa/s": MegasamplesPerSecond,
-})
+SAMPLE_RATE_UNITS: Mapping[str, Callable[[Numeric], SampleRate]] = MappingProxyType(
+    {
+        "Sa/s": SamplesPerSecond,
+        "kSa/s": KilosamplesPerSecond,
+        "MSa/s": MegasamplesPerSecond,
+    }
+)
 
 
 # BaudRate
@@ -216,7 +224,9 @@ def Kilobaud(value: Numeric) -> BaudRate:
     return BaudRate(to_decimal(value) * KILOBAUD.scale, KILOBAUD)
 
 
-BAUD_RATE_UNITS: Mapping[str, Callable[[Numeric], BaudRate]] = MappingProxyType({
-    "Bd": Baud,
-    "kBd": Kilobaud,
-})
+BAUD_RATE_UNITS: Mapping[str, Callable[[Numeric], BaudRate]] = MappingProxyType(
+    {
+        "Bd": Baud,
+        "kBd": Kilobaud,
+    }
+)

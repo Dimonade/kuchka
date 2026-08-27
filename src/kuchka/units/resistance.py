@@ -55,9 +55,11 @@ def Megaohm(value: Numeric) -> Resistance:
     return Resistance(to_decimal(value) * MEGAOHM.scale, MEGAOHM)
 
 
-RESISTANCE_UNITS: Mapping[str, Callable[[Numeric], Resistance]] = MappingProxyType({
-    "mOhm": Milliohm,
-    "Ohm": Ohm,
-    "kOhm": Kiloohm,
-    "MOhm": Megaohm,
-})
+RESISTANCE_UNITS: Mapping[str, Callable[[Numeric], Resistance]] = MappingProxyType(
+    {
+        "mOhm": Milliohm,
+        "Ohm": Ohm,
+        "kOhm": Kiloohm,
+        "MOhm": Megaohm,
+    }
+)
