@@ -45,6 +45,11 @@ from kuchka.units.power import Milliwatt
 from kuchka.units.power import POWER_UNITS
 from kuchka.units.power import WATT
 from kuchka.units.power import Watt
+from kuchka.units.proportion import PERCENT
+from kuchka.units.proportion import PROPORTION_UNITS
+from kuchka.units.proportion import Percent
+from kuchka.units.proportion import RATIO
+from kuchka.units.proportion import Ratio
 from kuchka.units.resistance import KILOOHM
 from kuchka.units.resistance import Kiloohm
 from kuchka.units.resistance import MEGAOHM
@@ -130,7 +135,10 @@ __all__: list[str] = [
     "MILLIWATT",
     "NANOMETER",
     "OHM",
+    "PERCENT",
     "POWER_UNITS",
+    "PROPORTION_UNITS",
+    "RATIO",
     "RESISTANCE_UNITS",
     "SAMPLE_PER_SECOND",
     "SAMPLE_RATE_UNITS",
@@ -175,6 +183,8 @@ __all__: list[str] = [
     "Milliwatt",
     "Nanometer",
     "Ohm",
+    "Percent",
+    "Ratio",
     "SamplesPerSecond",
     "Second",
     "SecondSamplingPeriod",
