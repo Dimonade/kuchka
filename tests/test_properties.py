@@ -1,22 +1,17 @@
-"""Algebraic and numeric invariants, run against every quantity family.
+"""Algebraic and numeric invariants, checked once and run against every quantity family.
 
-Every `LinearQuantity` subclass (`Voltage`, `Current`, `Time`, `Length`, ...)
-is supposed to obey the same small set of laws:
+Every `LinearQuantity` subclass (`Voltage`, `Current`, `Time`, `Length`, ...) obeys the
+same small set of laws:
     - addition is commutative and associative,
     - zero is an additive identity,
-    - scalar multiplication distributes over addition,
-    - conversion round-trips and commutes with addition and scalar multiplication,
-    - none of the above should ever degrade into the binary-float `0.1 + 0.2 != 0.3`
-        surprise `Decimal` exists to avoid (see `numeric.py`).
+    - scalar multiplication distributes over addition, and
+    - conversion round-trips and commutes with addition and scalar multiplication.
 
-Every test is parametrized over `quantity_families.FAMILIES` and, where the property is
-about a range of magnitudes, driven by Hypothesis.
+`Decimal` keeps every one of these exact, including the classic `0.1 + 0.2 == 0.3` case
+that trips up binary floats.
 
-NOTE: `Temperature` (affine, not linear -- see `kuchka.temperature`) and `Inch`
-(the one unit in this library whose scale is not a power of ten, so its
-`.value_in(...)` is not always an exact decimal division) are deliberately outside this
-module's scope; see `test_temperature.py` and `test_length.py` for why they get their
-own, narrower treatment instead.
+Every test here is parametrized over every registered linear quantity and, where the
+property spans a range of magnitudes, driven by Hypothesis.
 """
 
 from __future__ import annotations
@@ -177,9 +172,9 @@ def test_conversion_commutes_with_addition(
 ) -> None:
     """`convert(a) + convert(b) == convert(a + b)`, checked through `.value_in(...)`.
 
-    NOTE: `==` between two quantities ignores display unit (see
-    `LinearQuantity.__eq__`), so this has to be asked through `.value_in(...)`
-    to actually exercise the conversion arithmetic.
+    Equality between two quantities ignores display unit, so the property is checked
+    through `.value_in(...)` instead, which is what actually exercises the conversion
+    arithmetic.
     """
     left = family.canonical(a).value_in(family.alt_unit) + family.canonical(b).value_in(
         family.alt_unit,
@@ -213,14 +208,13 @@ def test_decimal_addition_avoids_the_binary_float_rounding_trap(
     b: Decimal,
     expected: Decimal,
 ) -> None:
-    """`0.1 + 0.2 == 0.30000000000000004` in `float`.
+    """`0.1 + 0.2 == 0.30000000000000004` in `float`; exactly `0.3` here.
 
-    This is the whole reason `numeric.py` exists: SI prefixes are powers of ten,
-    exact in `Decimal`, not exact in binary `float`.
+    SI prefixes are powers of ten, exact in `Decimal`, not exact in binary `float`.
 
     Run at both the canonical unit and the alt prefix, since the interesting failure
-    mode would be a prefix constructor that quietly routes through `float` on the way
-    to `Decimal`.
+    mode would be a prefix constructor that quietly routes through `float` on the
+    way to `Decimal`.
     """
     assert family.canonical(a) + family.canonical(b) == family.canonical(expected)
     assert family.alt(a) + family.alt(b) == family.alt(expected)
@@ -237,11 +231,10 @@ def test_float_literals_are_parsed_as_typed_not_as_binary_floats(
     b: Decimal,
     expected: Decimal,
 ) -> None:
-    """The same trap, entered through a `float` literal instead of a `Decimal`.
+    """A `float` literal path to the same trap, checked through `Decimal` construction.
 
-    `to_decimal` routes `float` through `str()` first specifically so that
-    `Volt(0.1) + Volt(0.2) == Volt(0.3)` holds even though the underlying Python floats
-    do not.
+    `Volt(0.1) + Volt(0.2) == Volt(0.3)` holds because float construction routes
+    through `str()` first, preserving the digits as typed.
     """
     forward = family.canonical(float(a)) + family.canonical(float(b))
     assert forward == family.canonical(expected)
@@ -261,7 +254,7 @@ def test_a_negative_magnitude_is_a_valid_quantity(
     family: QuantityFamily,
     a: Decimal,
 ) -> None:
-    """Construction places no domain restriction on sign; see test_construction.py."""
+    """A quantity's magnitude carries its own sign; construction accepts either."""
     negative = family.canonical(-abs(a) - 1)
     assert negative.magnitude < 0
     assert negative == -family.canonical(abs(a) + 1)
