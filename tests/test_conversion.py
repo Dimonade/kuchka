@@ -34,7 +34,7 @@ def test_repr_avoids_scientific_notation_after_conversion():
 
 def test_to_rejects_a_unit_from_a_different_quantity():
     voltage = Volt(1)
-    with pytest.raises(InvalidConversionError, match="different physical dimension"):
+    with pytest.raises(InvalidConversionError, match="incompatible dimensions"):
         voltage.to(OHM)
 
 
