@@ -94,7 +94,7 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class PrefixCase:
-    """One prefix constructor, paired with its canonical constructor and both UnitDefs."""
+    """One prefix constructor paired with its canonical constructor and both units."""
 
     id: str
     prefixed: Callable[[Numeric], LinearQuantity]
