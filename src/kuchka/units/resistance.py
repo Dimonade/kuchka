@@ -7,8 +7,8 @@ by a fixed scale factor, and wrap it in :class:`~kuchka.quantities.Resistance`.
 
     resistance = Ohm(100)
 
-`RESISTANCE_UNITS` maps each symbol to its constructor, for boundary code that reads
- unit as a string from outside the application.
+`RESISTANCE_UNITS` maps each symbol to its constructor, for boundary code that reads a
+unit as a string from outside the application.
 """
 
 from __future__ import annotations

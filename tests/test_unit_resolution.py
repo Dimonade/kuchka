@@ -43,6 +43,8 @@ from kuchka import Millivolt
 from kuchka import Milliwatt
 from kuchka import Nanometer
 from kuchka import Ohm
+from kuchka import Percent
+from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
 from kuchka import SecondSamplingPeriod
@@ -53,6 +55,7 @@ from kuchka.units import CURRENT_UNITS
 from kuchka.units import FREQUENCY_UNITS
 from kuchka.units import LENGTH_UNITS
 from kuchka.units import POWER_UNITS
+from kuchka.units import PROPORTION_UNITS
 from kuchka.units import RESISTANCE_UNITS
 from kuchka.units import SAMPLE_RATE_UNITS
 from kuchka.units import SAMPLING_PERIOD_UNITS
@@ -105,6 +108,7 @@ TABLE_CASES = [
             "in": Inch,
         },
     ),
+    (PROPORTION_UNITS, {"1": Ratio, "%": Percent}),
 ]
 
 
