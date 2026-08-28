@@ -70,10 +70,12 @@ def DeltaCelsius(value: Numeric) -> TemperatureDelta:
 
 
 TEMPERATURE_DELTA_UNITS: Mapping[str, Callable[[Numeric], TemperatureDelta]] = (
-    MappingProxyType({
-        "dK": DeltaKelvin,
-        "dC": DeltaCelsius,
-    })
+    MappingProxyType(
+        {
+            "dK": DeltaKelvin,
+            "dC": DeltaCelsius,
+        }
+    )
 )
 
 
@@ -228,7 +230,9 @@ def Celsius(value: Numeric) -> Temperature:
     return Temperature(raw * CELSIUS.scale + CELSIUS.offset, CELSIUS)
 
 
-TEMPERATURE_UNITS: Mapping[str, Callable[[Numeric], Temperature]] = MappingProxyType({
-    "K": Kelvin,
-    "C": Celsius,
-})
+TEMPERATURE_UNITS: Mapping[str, Callable[[Numeric], Temperature]] = MappingProxyType(
+    {
+        "K": Kelvin,
+        "C": Celsius,
+    }
+)

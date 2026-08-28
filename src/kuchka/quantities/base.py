@@ -167,8 +167,7 @@ class LinearQuantity:
         """
         if not isinstance(unit, UnitDef):
             msg = (
-                f"invalid conversion target {unit!r}: "
-                "expected a Kuchka unit definition"
+                f"invalid conversion target {unit!r}: expected a Kuchka unit definition"
             )
             raise InvalidConversionError(msg)
         if unit.dimension != self.dimension:

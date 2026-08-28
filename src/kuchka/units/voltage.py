@@ -61,9 +61,11 @@ def Kilovolt(value: Numeric) -> Voltage:
     return Voltage(to_decimal(value) * KILOVOLT.scale, KILOVOLT)
 
 
-VOLTAGE_UNITS: Mapping[str, Callable[[Numeric], Voltage]] = MappingProxyType({
-    "uV": Microvolt,
-    "mV": Millivolt,
-    "V": Volt,
-    "kV": Kilovolt,
-})
+VOLTAGE_UNITS: Mapping[str, Callable[[Numeric], Voltage]] = MappingProxyType(
+    {
+        "uV": Microvolt,
+        "mV": Millivolt,
+        "V": Volt,
+        "kV": Kilovolt,
+    }
+)

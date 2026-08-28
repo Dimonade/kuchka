@@ -136,7 +136,7 @@ def scale_by(quantity: LinearQuantity, factor: int) -> LinearQuantity:
     `LinearQuantity | Decimal`, because from the base class's own perspective a
     multiplication can also be quantity-times-quantity, which is sometimes
     dimensionless (see `_promote` in `quantities/base.py`).
-    
+
     Multiplying by a plain scalar never produces a bare `Decimal` at runtime --
     only quantity-times-quantity does -- so this narrows the result back down for tests
     that stay on the abstract `LinearQuantity` interface, where mypy has no way to know

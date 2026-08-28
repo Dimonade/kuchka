@@ -7,7 +7,7 @@ by a fixed scale factor, and wrap it in :class:`~kuchka.quantities.Resistance`.
 
     resistance = Ohm(100)
 
-`RESISTANCE_UNITS` maps each symbol to its constructor, for boundary code that reads 
+`RESISTANCE_UNITS` maps each symbol to its constructor, for boundary code that reads
  unit as a string from outside the application.
 """
 
@@ -55,9 +55,11 @@ def Megaohm(value: Numeric) -> Resistance:
     return Resistance(to_decimal(value) * MEGAOHM.scale, MEGAOHM)
 
 
-RESISTANCE_UNITS: Mapping[str, Callable[[Numeric], Resistance]] = MappingProxyType({
-    "mOhm": Milliohm,
-    "Ohm": Ohm,
-    "kOhm": Kiloohm,
-    "MOhm": Megaohm,
-})
+RESISTANCE_UNITS: Mapping[str, Callable[[Numeric], Resistance]] = MappingProxyType(
+    {
+        "mOhm": Milliohm,
+        "Ohm": Ohm,
+        "kOhm": Kiloohm,
+        "MOhm": Megaohm,
+    }
+)
