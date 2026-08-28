@@ -217,7 +217,7 @@ def test_decimal_addition_avoids_the_binary_float_rounding_trap(
 
     This is the whole reason `numeric.py` exists: SI prefixes are powers of ten,
     exact in `Decimal`, not exact in binary `float`.
-    
+
     Run at both the canonical unit and the alt prefix, since the interesting failure
     mode would be a prefix constructor that quietly routes through `float` on the way
     to `Decimal`.
