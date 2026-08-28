@@ -1,19 +1,12 @@
 """Length: arithmetic, exact imperial conversion, and the planned-dimension error.
 
-`Length` has no coupled quantities yet (no `Velocity`, upcoming, planned), so this
-module is mostly about proving three things: ordinary arithmetic works the way every
-other `LinearQuantity` does (the generic version of that claim, run across every
-dimension, lives in `test_properties.py`), `Inch` converts to and from the metric
-prefixes exactly and not approximately, and dividing a `Length` by a `Time` fails with
-a message that names `Velocity`, not just a generic scope-boundary message.
+NOTE: `Inch`'s scale (`0.0254`) is the one unit definition in this library that isn't a
+power of ten.
+Its conversions are pinned here to specific, known-exact values: an inch has been
+exactly 25.4 mm since 1959, and that's the claim these tests check.
 
-`Inch` is deliberately excluded from `test_properties.py`'s generic, hypothesis-driven
-family sweep: its scale (`0.0254`) is the one unit definition in this library that is
-not a power of ten, so `.value_in(INCH)` is not guaranteed to be an exact decimal
-division for an arbitrary magnitude the way it is for every metric prefix.
-
-The tests below instead pin `Inch` to specific, known-exact values, which is what the
-"since 1959, exactly 25.4 mm" claim in `units/length.py` is actually promising.
+The rest of the module covers ordinary arithmetic on `Length`, and dividing a `Length`
+by a `Time`, whose error message names `Velocity` directly.
 """
 
 from decimal import Decimal

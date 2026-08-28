@@ -56,29 +56,37 @@ def test_naked_number_addition_is_rejected_with_a_helpful_message():
         Volt(5) + 4.2  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 
 
-def test_multiplication_derives_power():
-    result = Volt(5) * Ampere(2)
-    assert isinstance(result, Power)
-    assert result == Watt(10)
-
-
-def test_division_derives_resistance():
-    result = Volt(10) / Ampere(2)
-    assert isinstance(result, Resistance)
-    assert result == Ohm(5)
-
-
-def test_division_derives_current_from_power_and_voltage():
-    result = Watt(20) / Volt(5)
-    assert isinstance(result, Current)
-    assert result == Ampere(4)
-
-
 def test_ohms_law_round_trip_stays_exact_with_prefixed_units():
     voltage = Volt(5)
     current = Milliampere(2)
     resistance = voltage / current
     assert resistance == Kiloohm(Decimal("2.5"))
+
+
+@pytest.mark.parametrize(
+    ("compute", "expected_type", "expected"),
+    [
+        pytest.param(
+            lambda: Volt(5) * Ampere(2), Power, Watt(10), id="voltage*current"
+        ),
+        pytest.param(
+            lambda: Volt(10) / Ampere(2), Resistance, Ohm(5), id="voltage/current"
+        ),
+        pytest.param(
+            lambda: Watt(20) / Volt(5), Current, Ampere(4), id="power/voltage"
+        ),
+        pytest.param(
+            lambda: Ohm(5) * Ampere(2), Voltage, Volt(10), id="resistance*current"
+        ),
+        pytest.param(
+            lambda: Watt(20) / Ampere(4), Voltage, Volt(5), id="power/current"
+        ),
+    ],
+)
+def test_derived_dimension_arithmetic(compute, expected_type, expected):
+    result = compute()
+    assert isinstance(result, expected_type)
+    assert result == expected
 
 
 def test_scalar_multiplication():
@@ -115,20 +123,8 @@ def test_equality_across_dimensions_is_false_not_an_error():
     assert (Volt(5) == Ampere(5)) is False
 
 
-def test_resistance_times_current_derives_voltage():
-    result = Ohm(5) * Ampere(2)
-    assert isinstance(result, Voltage)
-    assert result == Volt(10)
-
-
 def test_current_times_resistance_derives_voltage_commutatively():
     assert Ampere(2) * Ohm(5) == Ohm(5) * Ampere(2)
-
-
-def test_power_divided_by_current_derives_voltage():
-    result = Watt(20) / Ampere(4)
-    assert isinstance(result, Voltage)
-    assert result == Volt(5)
 
 
 def test_multiplication_by_unregistered_dimension_has_no_registered_type():
@@ -189,6 +185,7 @@ def test_equal_measurements_in_different_prefixes_hash_equal():
         (Millivolt(500), Volt(1)),
         (Volt(-5), Volt(-1)),
     ],
+    ids=["volt<volt", "millivolt<volt", "negative_volt<negative_volt"],
 )
 def test_ordering_operators_agree_with_each_other(left, right):
     assert (left < right) == (not (left >= right))
