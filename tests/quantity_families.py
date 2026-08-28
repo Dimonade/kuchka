@@ -1,15 +1,12 @@
 """Shared fixtures describing every `LinearQuantity` family, plus shared strategies.
 
-This is what lets `tests/test_properties.py` express one property ("addition
-is commutative") once and run it against every registered quantity type.
 Each `QuantityFamily` bundles a quantity's canonical constructor with a second,
-differently scaled constructor for the same dimension, so conversion and cross-prefix
-properties have something to convert between.
+differently scaled constructor for the same dimension, so a single property
+("addition is commutative") can run against every registered quantity type at once.
 
-NOTE: `Temperature` is deliberately absent: it is affine, not linear (see
-`kuchka.temperature`), so "scalar multiplication" and "additive identity"
-are not meaningful questions for it.
-It gets its own, smaller set of affine-specific properties in `test_properties.py`.
+Only linear quantities appear here: multiplying by a plain scalar and combining two
+instances behave the same way for each of them, which is what makes one shared
+property suite possible.
 """
 
 from __future__ import annotations
@@ -130,17 +127,11 @@ FAMILY_IDS: list[str] = [family.id for family in FAMILIES]
 
 
 def scale_by(quantity: LinearQuantity, factor: int) -> LinearQuantity:
-    """Multiply a `LinearQuantity` by a plain scalar, narrowing back from the union.
+    """Multiply a `LinearQuantity` by a plain scalar and return the typed result.
 
-    `LinearQuantity.__mul__`'s statically visible signature on the base class returns
-    `LinearQuantity | Decimal`, because from the base class's own perspective a
-    multiplication can also be quantity-times-quantity, which is sometimes
-    dimensionless (see `_promote` in `quantities/base.py`).
-
-    Multiplying by a plain scalar never produces a bare `Decimal` at runtime --
-    only quantity-times-quantity does -- so this narrows the result back down for tests
-    that stay on the abstract `LinearQuantity` interface, where mypy has no way to know
-    that on its own.
+    A scalar multiplication always produces another quantity of the same type, so the
+    runtime `isinstance` check here always holds;
+    it exists to give tests a value typed as `LinearQuantity` to keep working with.
     """
     result = quantity * factor
     assert isinstance(result, LinearQuantity)
@@ -149,13 +140,9 @@ def scale_by(quantity: LinearQuantity, factor: int) -> LinearQuantity:
 
 """Bounded, finite decimals.
 
-These are fitting for:
-- large enough to exercise real arithmetic,
-- small enough in both magnitude and decimal places to stay well under Decimal's
-    default 28-significant-digit context precision even after two or three quantities
-    get combined.
-
-Extreme magnitudes get their own dedicated, explicit test cases (see EXTREME_MAGNITUDES).
+Large enough to exercise real arithmetic, small enough in both magnitude and decimal
+places to stay well under Decimal's default 28-significant-digit context precision
+even after two or three quantities get combined.
 """
 FINITE_DECIMALS = st.decimals(
     allow_nan=False,
@@ -165,22 +152,16 @@ FINITE_DECIMALS = st.decimals(
     places=9,
 )
 
-"""Deliberate zero excluded finite decimals.
-
-Division by a hypothesis-generated zero is a separate concern (see test_arithmetic.py's
-ZeroDivisionError tests), not something every property test needs to special-case.
-"""
+"""Excludes zero, for tests exercising division by a generated value."""
 NONZERO_FINITE_DECIMALS = FINITE_DECIMALS.filter(lambda value: value != 0)
 
 SCALARS = st.integers(min_value=-1000, max_value=1000)
 NONZERO_SCALARS = SCALARS.filter(lambda value: value != 0)
 
-"""Deliberate round numbers of varying magnitude.
+"""Extreme magnitude collection.
 
-These include the smallest quantity's own prefix vocabulary ever needs (1E-9, for a
-nanometer expressed in meters) out to far beyond it.
-
-This is used specifically for a "huge and tiny exponents" sweep.
+Round numbers spanning many orders of magnitude, from the smallest a quantity's own
+prefix vocabulary needs out to far beyond it.
 """
 EXTREME_MAGNITUDES: list[Decimal] = [
     Decimal("1E-100"),
@@ -197,12 +178,9 @@ EXTREME_MAGNITUDES: list[Decimal] = [
     Decimal("1E100"),
 ]
 
-"""A handful of hand-picked binary-float traps.
+"""Values where binary float arithmetic and decimal arithmetic disagree.
 
-This is the category of `0.1 + 0.2 != 0.3` in `float`, by design, because none of the
-three has an exact binary fraction.
-
-`Decimal` (and therefore every `kuchka` quantity) must not inherit that surprise.
+0.1 + 0.2 prints as 0.30000000000000004 in `float`, exactly 0.3 in `Decimal`.
 """
 BINARY_IMPRECISE_TRIPLES: list[tuple[Decimal, Decimal, Decimal]] = [
     (Decimal("0.1"), Decimal("0.2"), Decimal("0.3")),
