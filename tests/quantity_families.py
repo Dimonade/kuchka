@@ -69,7 +69,7 @@ class QuantityFamily:
 
     `units` is the same `*_UNITS` table `kuchka.units` exports for this dimension
     (e.g. `VOLTAGE_UNITS`), keyed by symbol.
-    
+
     Iterating it gives tests every constructor this dimension actually has.
     """
 

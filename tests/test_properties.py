@@ -5,13 +5,14 @@ same small set of laws:
     - addition is commutative and associative,
     - zero is an additive identity,
     - scalar multiplication distributes over addition, and
-    - conversion round-trips and commutes with addition and scalar multiplication.
-
-`Decimal` keeps every one of these exact, including the classic `0.1 + 0.2 == 0.3` case
-that trips up binary floats.
+    - none of that degrades into the binary-float `0.1 + 0.2 != 0.3` surprise `Decimal`
+        exists to avoid.
 
 Every test here is parametrized over every registered linear quantity and, where the
 property spans a range of magnitudes, driven by Hypothesis.
+
+Only the canonical constructor for each family is used: conversion-specific properties,
+run against every unit a family has, live alongside this module in their own tests.
 """
 
 from __future__ import annotations
@@ -138,86 +139,7 @@ def test_scalar_multiplication_and_division_are_inverses(
     assert scale_by(quantity, scalar) / scalar == quantity
 
 
-# Conversion:
-#   - round-trips,
-#   - commutes with addition and scalar multiplication.
-
-
-@given(a=FINITE_DECIMALS)
-def test_converting_and_converting_back_recovers_the_original(
-    family: QuantityFamily,
-    a: Decimal,
-) -> None:
-    quantity = family.canonical(a)
-    round_tripped = quantity.to(family.alt_unit).to(family.canonical_unit)
-    assert round_tripped == quantity
-    assert round_tripped.magnitude == quantity.magnitude
-
-
-@given(a=FINITE_DECIMALS)
-def test_conversion_never_changes_the_value_only_the_display(
-    family: QuantityFamily,
-    a: Decimal,
-) -> None:
-    quantity = family.canonical(a)
-    assert quantity.to(family.alt_unit) == quantity
-    assert quantity.to(family.alt_unit).magnitude == quantity.magnitude
-
-
-@given(a=FINITE_DECIMALS, b=FINITE_DECIMALS)
-def test_conversion_commutes_with_addition(
-    family: QuantityFamily,
-    a: Decimal,
-    b: Decimal,
-) -> None:
-    """`convert(a) + convert(b) == convert(a + b)`, checked through `.value_in(...)`.
-
-    Equality between two quantities ignores display unit, so the property is checked
-    through `.value_in(...)` instead, which is what actually exercises the conversion
-    arithmetic.
-    """
-    left = family.canonical(a).value_in(family.alt_unit) + family.canonical(b).value_in(
-        family.alt_unit,
-    )
-    right = (family.canonical(a) + family.canonical(b)).value_in(family.alt_unit)
-    assert left == right
-
-
-@given(a=FINITE_DECIMALS, scalar=SCALARS)
-def test_conversion_commutes_with_scalar_multiplication(
-    family: QuantityFamily,
-    a: Decimal,
-    scalar: int,
-) -> None:
-    left = family.canonical(a).value_in(family.alt_unit) * scalar
-    right = scale_by(family.canonical(a), scalar).value_in(family.alt_unit)
-    assert left == right
-
-
-# Binary to Decimal bug/trap case: `0.1 + 0.2`.
-
-
-@pytest.mark.parametrize(
-    ("a", "b", "expected"),
-    BINARY_IMPRECISE_TRIPLES,
-    ids=[f"{a}+{b}={expected}" for a, b, expected in BINARY_IMPRECISE_TRIPLES],
-)
-def test_decimal_addition_avoids_the_binary_float_rounding_trap(
-    family: QuantityFamily,
-    a: Decimal,
-    b: Decimal,
-    expected: Decimal,
-) -> None:
-    """`0.1 + 0.2 == 0.30000000000000004` in `float`; exactly `0.3` here.
-
-    SI prefixes are powers of ten, exact in `Decimal`, not exact in binary `float`.
-
-    Run at both the canonical unit and the alt prefix, since the interesting failure
-    mode would be a prefix constructor that quietly routes through `float` on the
-    way to `Decimal`.
-    """
-    assert family.canonical(a) + family.canonical(b) == family.canonical(expected)
-    assert family.alt(a) + family.alt(b) == family.alt(expected)
+# Binary to Decimal bug/trap case: `0.1 + 0.2` on the canonical unit.
 
 
 @pytest.mark.parametrize(
@@ -269,14 +191,3 @@ def test_construction_is_exact_at_extreme_magnitudes(
     magnitude: Decimal,
 ) -> None:
     assert family.canonical(magnitude).magnitude == magnitude
-
-
-@pytest.mark.parametrize("magnitude", EXTREME_MAGNITUDES, ids=str)
-def test_round_trip_conversion_is_exact_at_extreme_magnitudes(
-    family: QuantityFamily,
-    magnitude: Decimal,
-) -> None:
-    quantity = family.canonical(magnitude)
-    round_tripped = quantity.to(family.alt_unit).to(family.canonical_unit)
-    assert round_tripped == quantity
-    assert round_tripped.magnitude == magnitude
