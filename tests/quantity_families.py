@@ -1,12 +1,13 @@
 """Shared fixtures describing every `LinearQuantity` family, plus shared strategies.
 
-Each `QuantityFamily` bundles a quantity's canonical constructor with a second,
-differently scaled constructor for the same dimension, so a single property
-("addition is commutative") can run against every registered quantity type at once.
+Each `QuantityFamily` bundles a quantity's canonical constructor with the `*_UNITS`
+table `kuchka.units` already maintains for that dimension, so a single property
+("addition is commutative") can run against every registered quantity type,
+and every unit that dimension has, at once.
 
 Only linear quantities appear here: multiplying by a plain scalar and combining two
-instances behave the same way for each of them, which is what makes one shared
-property suite possible.
+instances behave the same way for each of them, which is what makes one shared property
+suite possible.
 """
 
 from __future__ import annotations
@@ -18,22 +19,10 @@ from typing import TYPE_CHECKING
 from hypothesis import strategies as st
 from kuchka import Ampere
 from kuchka import Baud
-from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
 from kuchka import Hertz
-from kuchka import Kilobaud
-from kuchka import Kilohertz
-from kuchka import Kiloohm
-from kuchka import KilosamplesPerSecond
 from kuchka import Meter
-from kuchka import Milliampere
-from kuchka import Millimeter
-from kuchka import Millisecond
-from kuchka import MillisecondSamplingPeriod
-from kuchka import Millivolt
-from kuchka import Milliwatt
 from kuchka import Ohm
-from kuchka import Percent
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
@@ -41,33 +30,34 @@ from kuchka import SecondSamplingPeriod
 from kuchka import Volt
 from kuchka import Watt
 from kuchka.quantities import LinearQuantity
-from kuchka.temperature import DELTA_CELSIUS
 from kuchka.temperature import DELTA_KELVIN
 from kuchka.units import AMPERE
 from kuchka.units import BAUD
+from kuchka.units import BAUD_RATE_UNITS
+from kuchka.units import CURRENT_UNITS
+from kuchka.units import FREQUENCY_UNITS
 from kuchka.units import HERTZ
-from kuchka.units import KILOBAUD
-from kuchka.units import KILOHERTZ
-from kuchka.units import KILOOHM
-from kuchka.units import KILOSAMPLE_PER_SECOND
+from kuchka.units import LENGTH_UNITS
 from kuchka.units import METER
-from kuchka.units import MILLIAMPERE
-from kuchka.units import MILLIMETER
-from kuchka.units import MILLISECOND
-from kuchka.units import MILLIVOLT
-from kuchka.units import MILLIWATT
 from kuchka.units import OHM
-from kuchka.units import PERCENT
+from kuchka.units import POWER_UNITS
+from kuchka.units import PROPORTION_UNITS
 from kuchka.units import RATIO
+from kuchka.units import RESISTANCE_UNITS
 from kuchka.units import SAMPLE_PER_SECOND
-from kuchka.units import SAMPLING_PERIOD_MILLISECOND
+from kuchka.units import SAMPLE_RATE_UNITS
 from kuchka.units import SAMPLING_PERIOD_SECOND
+from kuchka.units import SAMPLING_PERIOD_UNITS
 from kuchka.units import SECOND
+from kuchka.units import TEMPERATURE_DELTA_UNITS
+from kuchka.units import TIME_UNITS
 from kuchka.units import VOLT
+from kuchka.units import VOLTAGE_UNITS
 from kuchka.units import WATT
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from collections.abc import Mapping
 
     from kuchka.numeric import Numeric
     from kuchka.quantities.base import UnitDef
@@ -77,53 +67,79 @@ if TYPE_CHECKING:
 class QuantityFamily:
     """One `LinearQuantity` dimension, plus everything needed to test it generically.
 
-    `canonical` and `alt` construct the same physical quantity at two different scales
-    (e.g. `Volt`/`Millivolt`); `canonical_unit` and `alt_unit` are the
-    `UnitDef`s those two constructors carry, so tests can convert between them with
-    `.to(...)` without a hand-written per-dimension conversion table.
+    `units` is the same `*_UNITS` table `kuchka.units` exports for this dimension
+    (e.g. `VOLTAGE_UNITS`), keyed by symbol.
+    
+    Iterating it gives tests every constructor this dimension actually has.
     """
 
     id: str
     canonical: Callable[[Numeric], LinearQuantity]
-    alt: Callable[[Numeric], LinearQuantity]
     canonical_unit: UnitDef
-    alt_unit: UnitDef
+    units: Mapping[str, Callable[[Numeric], LinearQuantity]]
 
 
 FAMILIES: list[QuantityFamily] = [
-    QuantityFamily("voltage", Volt, Millivolt, VOLT, MILLIVOLT),
-    QuantityFamily("current", Ampere, Milliampere, AMPERE, MILLIAMPERE),
-    QuantityFamily("power", Watt, Milliwatt, WATT, MILLIWATT),
-    QuantityFamily("resistance", Ohm, Kiloohm, OHM, KILOOHM),
-    QuantityFamily("time", Second, Millisecond, SECOND, MILLISECOND),
-    QuantityFamily("frequency", Hertz, Kilohertz, HERTZ, KILOHERTZ),
-    QuantityFamily("length", Meter, Millimeter, METER, MILLIMETER),
-    QuantityFamily("proportion", Ratio, Percent, RATIO, PERCENT),
+    QuantityFamily("voltage", Volt, VOLT, VOLTAGE_UNITS),
+    QuantityFamily("current", Ampere, AMPERE, CURRENT_UNITS),
+    QuantityFamily("power", Watt, WATT, POWER_UNITS),
+    QuantityFamily("resistance", Ohm, OHM, RESISTANCE_UNITS),
+    QuantityFamily("time", Second, SECOND, TIME_UNITS),
+    QuantityFamily("frequency", Hertz, HERTZ, FREQUENCY_UNITS),
+    QuantityFamily("length", Meter, METER, LENGTH_UNITS),
+    QuantityFamily("proportion", Ratio, RATIO, PROPORTION_UNITS),
     QuantityFamily(
-        "temperature_delta",
-        DeltaKelvin,
-        DeltaCelsius,
-        DELTA_KELVIN,
-        DELTA_CELSIUS,
+        "temperature_delta", DeltaKelvin, DELTA_KELVIN, TEMPERATURE_DELTA_UNITS
     ),
     QuantityFamily(
         "sampling_period",
         SecondSamplingPeriod,
-        MillisecondSamplingPeriod,
         SAMPLING_PERIOD_SECOND,
-        SAMPLING_PERIOD_MILLISECOND,
+        SAMPLING_PERIOD_UNITS,
     ),
     QuantityFamily(
-        "sample_rate",
-        SamplesPerSecond,
-        KilosamplesPerSecond,
-        SAMPLE_PER_SECOND,
-        KILOSAMPLE_PER_SECOND,
+        "sample_rate", SamplesPerSecond, SAMPLE_PER_SECOND, SAMPLE_RATE_UNITS
     ),
-    QuantityFamily("baud_rate", Baud, Kilobaud, BAUD, KILOBAUD),
+    QuantityFamily("baud_rate", Baud, BAUD, BAUD_RATE_UNITS),
 ]
 
 FAMILY_IDS: list[str] = [family.id for family in FAMILIES]
+
+"""Every (family, constructor) pair every `*_UNITS` table registers, paired with a
+matching id list -- one entry per unit a dimension has.
+"""
+ALL_UNIT_CASES: list[tuple[QuantityFamily, Callable[[Numeric], LinearQuantity]]] = [
+    (family, constructor)
+    for family in FAMILIES
+    for constructor in family.units.values()
+]
+ALL_UNIT_CASE_IDS: list[str] = [
+    f"{family.id}-{symbol}" for family in FAMILIES for symbol in family.units
+]
+
+"""Some properties divide by a unit's scale more than once in the same computation,
+and need every scale involved to have a terminating decimal reciprocal to compare
+exactly.
+
+`Inch`'s scale, 0.0254, has a prime factor other than 2 and 5 in its denominator,
+so its reciprocal does not terminate; it sits out these specific properties.
+"""
+EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {"length": frozenset({"in"})}
+
+EXACT_DIVISION_UNIT_CASES: list[
+    tuple[QuantityFamily, Callable[[Numeric], LinearQuantity]]
+] = [
+    (family, constructor)
+    for family in FAMILIES
+    for symbol, constructor in family.units.items()
+    if symbol not in EXACT_DIVISION_EXCLUSIONS.get(family.id, frozenset())
+]
+EXACT_DIVISION_UNIT_CASE_IDS: list[str] = [
+    f"{family.id}-{symbol}"
+    for family in FAMILIES
+    for symbol in family.units
+    if symbol not in EXACT_DIVISION_EXCLUSIONS.get(family.id, frozenset())
+]
 
 
 def scale_by(quantity: LinearQuantity, factor: int) -> LinearQuantity:
