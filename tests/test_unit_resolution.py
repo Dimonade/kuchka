@@ -111,26 +111,42 @@ TABLE_CASES = [
     (PROPORTION_UNITS, {"1": Ratio, "%": Percent}),
 ]
 
+TABLE_CASE_IDS = [
+    "voltage",
+    "current",
+    "resistance",
+    "power",
+    "temperature",
+    "temperature_delta",
+    "time",
+    "frequency",
+    "sampling_period",
+    "sample_rate",
+    "baud_rate",
+    "length",
+    "proportion",
+]
 
-@pytest.mark.parametrize(("table", "expected"), TABLE_CASES)
+
+@pytest.mark.parametrize(("table", "expected"), TABLE_CASES, ids=TABLE_CASE_IDS)
 def test_table_resolves_every_symbol_to_the_matching_constructor(table, expected):
     assert dict(table) == expected
 
 
-@pytest.mark.parametrize(("table", "expected"), TABLE_CASES)
+@pytest.mark.parametrize(("table", "expected"), TABLE_CASES, ids=TABLE_CASE_IDS)
 def test_table_constructors_agree_with_calling_them_directly(table, expected):
     for symbol, constructor in expected.items():
         assert table[symbol](5) == constructor(5)
 
 
-@pytest.mark.parametrize(("table", "expected"), TABLE_CASES)
+@pytest.mark.parametrize(("table", "expected"), TABLE_CASES, ids=TABLE_CASE_IDS)
 def test_table_is_closed_to_symbols_from_other_dimensions(table, expected):
     foreign_symbols = {"mA", "V", "Hz", "Bd", "m", "C"} - set(expected)
     for symbol in foreign_symbols:
         assert symbol not in table
 
 
-@pytest.mark.parametrize(("table", "expected"), TABLE_CASES)
+@pytest.mark.parametrize(("table", "expected"), TABLE_CASES, ids=TABLE_CASE_IDS)
 def test_table_is_immutable(table, expected):
     # `table` and `expected` are untyped (parametrized), so mypy sees
     # them as `Any` and raises no static error here to suppress; only
