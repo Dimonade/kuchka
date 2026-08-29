@@ -141,6 +141,19 @@ EXACT_DIVISION_UNIT_CASE_IDS: list[str] = [
     if symbol not in EXACT_DIVISION_EXCLUSIONS.get(family.id, frozenset())
 ]
 
+"""The `UnitDef` each constructor carries.
+
+A constructor always displays the same unit regardless of the magnitude it's called
+with, so calling it to read `.unit` back is only worth doing a single time per case.
+"""
+ALL_UNITDEF_CASES: list[tuple[QuantityFamily, UnitDef]] = [
+    (family, constructor(1).unit) for family, constructor in ALL_UNIT_CASES
+]
+
+EXACT_DIVISION_UNITDEF_CASES: list[tuple[QuantityFamily, UnitDef]] = [
+    (family, constructor(1).unit) for family, constructor in EXACT_DIVISION_UNIT_CASES
+]
+
 
 def scale_by(quantity: LinearQuantity, factor: int) -> LinearQuantity:
     """Multiply a `LinearQuantity` by a plain scalar and return the typed result.
