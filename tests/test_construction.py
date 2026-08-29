@@ -52,7 +52,11 @@ def test_rejects_none():
         Volt(None)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
 
-@pytest.mark.parametrize("bad_value", ["5", None, [5], {5}, 5j])
+@pytest.mark.parametrize(
+    "bad_value",
+    ["5", None, [5], {5}, 5j],
+    ids=["string", "none", "list", "set", "complex"],
+)
 def test_rejects_a_variety_of_non_numeric_inputs(bad_value):
     # `bad_value` is untyped (parametrized), so mypy sees it as `Any` and
     # raises no static error here to suppress; only the runtime check in
@@ -72,7 +76,11 @@ def test_isinstance_of_the_semantic_type_not_the_constructor():
     assert not isinstance(Volt, type)
 
 
-@pytest.mark.parametrize("magnitude", [0, -5, Decimal("0.0000001"), 10**9])
+@pytest.mark.parametrize(
+    "magnitude",
+    [0, -5, Decimal("0.0000001"), 10**9],
+    ids=["zero", "negative", "tiny_decimal", "extreme_positive"],
+)
 def test_accepts_zero_negative_and_extreme_magnitudes(magnitude):
     """Construction places no domain restriction on the magnitude itself.
 
