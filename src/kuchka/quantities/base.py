@@ -168,17 +168,15 @@ class LinearQuantity:
         """
         if not isinstance(unit, UnitDef):
             msg = (
-                "conversion target must be a unit constructor's unit "
-                f"definition (e.g. the one behind "
-                f"{self._canonical_unit.name.capitalize()}), got {unit!r}"
+                f"invalid conversion target {unit!r}: expected a Kuchka unit definition"
             )
             raise InvalidConversionError(msg)
         if unit.dimension != self.dimension:
             msg = (
-                f"cannot convert a {type(self).__name__} to {unit.name} "
-                f"({unit.symbol}): that unit belongs to a different "
-                f"physical dimension [{unit.dimension!r}], not "
-                f"[{self.dimension!r}]"
+                f"cannot convert {self.unit.name} ({self.unit.symbol}) "
+                f"to {unit.name} ({unit.symbol}): "
+                f"incompatible dimensions - "
+                f"[{self.dimension!r}] and [{unit.dimension!r}]."
             )
             raise InvalidConversionError(msg)
         return type(self)(self._magnitude, unit)

@@ -1,10 +1,12 @@
 """Length: arithmetic, exact imperial conversion, and the planned-dimension error.
 
-`Length` has no coupled quantities yet (no `Velocity`, upcoming, planned),
-so this module is mostly about proving three things: ordinary arithmetic works the way
-every other `LinearQuantity` does, `Inch` converts to and from the metric prefixes
-exactly rather than approximately, and dividing a `Length` by a `Time` fails with a
-message that names `Velocity`, not just a generic scope-boundary message.
+NOTE: `Inch`'s scale (`0.0254`) is the one unit definition in this library that isn't a
+power of ten.
+Its conversions are pinned here to specific, known-exact values: an inch has been
+exactly 25.4 mm since 1959, and that's the claim these tests check.
+
+The rest of the module covers ordinary arithmetic on `Length`, and dividing a `Length`
+by a `Time`, whose error message names `Velocity` directly.
 """
 
 from decimal import Decimal
@@ -21,12 +23,28 @@ from kuchka import Nanometer
 from kuchka import PlannedDimensionError
 from kuchka import Second
 from kuchka import UnrepresentableDimensionError
+from kuchka.units import METER
+from kuchka.units import MICROMETER
+from kuchka.units import MILLIMETER
 
 
-def test_addition_across_prefixes_is_exact():
-    total = Meter(1) + Millimeter(500)
-    assert total == Meter(Decimal("1.5"))
-    assert total == Millimeter(1500)
+@pytest.mark.parametrize(
+    ("a", "b", "expected"),
+    [
+        (Meter(1), Millimeter(500), Meter(Decimal("1.5"))),
+        (Millimeter(500), Meter(1), Meter(Decimal("1.5"))),
+        (Inch(1), Millimeter(Decimal("25.4")), Meter(Decimal("0.0508"))),
+        (Micrometer(1000), Millimeter(1), Millimeter(2)),
+    ],
+    ids=[
+        "meter+millimeter",
+        "millimeter+meter",
+        "inch+millimeter",
+        "micrometer+millimeter",
+    ],
+)
+def test_addition(a, b, expected):
+    assert a + b == expected
 
 
 def test_inch_converts_to_millimeters_exactly():
@@ -34,9 +52,35 @@ def test_inch_converts_to_millimeters_exactly():
     assert Inch(1) == Millimeter(Decimal("25.4"))
 
 
-def test_inch_round_trips_through_meter():
-    assert Meter(Decimal("0.0254")) == Inch(1)
-    assert Inch(2).to(Meter(0).unit).value_in(Meter(0).unit) == Decimal("0.0508")
+@pytest.mark.parametrize(
+    ("inches", "expected_meters"),
+    [
+        (1, Decimal("0.0254")),
+        (2, Decimal("0.0508")),
+        (10, Decimal("0.254")),
+        (Decimal("0.5"), Decimal("0.0127")),
+        (-1, Decimal("-0.0254")),
+    ],
+    ids=["1in", "2in", "10in", "half_in", "negative_1in"],
+)
+def test_inch_round_trips_through_meter_exactly(inches, expected_meters):
+    as_meters = Inch(inches).to(METER)
+    assert as_meters == Meter(expected_meters)
+    assert as_meters.value_in(METER) == expected_meters
+
+
+@pytest.mark.parametrize(
+    ("prefixed", "canonical", "scale"),
+    [
+        (Nanometer, Meter, Decimal("0.000000001")),
+        (Micrometer, Meter, Decimal("0.000001")),
+        (Millimeter, Meter, Decimal("0.001")),
+        (Kilometer, Meter, Decimal(1000)),
+    ],
+    ids=["nanometer", "micrometer", "millimeter", "kilometer"],
+)
+def test_metric_prefixes_scale_correctly(prefixed, canonical, scale):
+    assert prefixed(1) == canonical(scale)
 
 
 def test_nanometer_and_micrometer_scale_correctly():
@@ -45,18 +89,23 @@ def test_nanometer_and_micrometer_scale_correctly():
     assert Micrometer(1000) == Millimeter(1)
 
 
-def test_kilometer_scales_correctly():
-    assert Kilometer(1) == Meter(1000)
-
-
 def test_scalar_multiplication_and_division():
     assert Meter(2) * 3 == Meter(6)
     assert Meter(6) / 3 == Meter(2)
 
 
-def test_ordering_within_length():
-    assert Millimeter(500) < Meter(1)
-    assert Inch(1) > Millimeter(20)
+@pytest.mark.parametrize(
+    ("smaller", "larger"),
+    [
+        (Millimeter(500), Meter(1)),
+        (Millimeter(20), Inch(1)),
+        (Meter(0), Micrometer(1)),
+    ],
+    ids=["millimeter<meter", "millimeter<inch", "zero<micrometer"],
+)
+def test_ordering_within_length(smaller, larger):
+    assert smaller < larger
+    assert larger > smaller
 
 
 def test_isinstance_of_length():
@@ -96,3 +145,10 @@ def test_length_times_length_does_not_raise_planned_dimension_error():
     with pytest.raises(UnrepresentableDimensionError) as excinfo:
         Meter(5) * Meter(2)
     assert not isinstance(excinfo.value, PlannedDimensionError)
+
+
+def test_micrometer_and_millimeter_unit_constants_round_trip():
+    """`.unit` here comes from a constant, not a throwaway zero-valued quantity."""
+    original = Meter(1)
+    converted = original.to(MICROMETER).to(MILLIMETER).to(METER)
+    assert converted == original

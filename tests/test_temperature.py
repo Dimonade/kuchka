@@ -108,6 +108,7 @@ def test_temperature_equality_across_scales():
         (Kelvin(0), Kelvin(1)),
         (Celsius(-273), Kelvin(1)),
     ],
+    ids=["celsius<celsius", "kelvin<kelvin", "near_absolute_zero<kelvin"],
 )
 def test_temperature_ordering_operators_agree_with_each_other(low, high):
     assert low < high

@@ -43,8 +43,36 @@ def test_time_and_frequency_are_reciprocals_of_each_other():
     assert 1 / Hertz(50) == Second(Decimal("0.02"))
 
 
-def test_reciprocal_round_trips():
-    original = Second(4)
+"""Curated list of reciprocal round-trips values.
+
+`Decimal`'s division only terminates exactly when the divisor's prime factors are
+2 and 5, so a value like 3 would make `1 / (1 / x) == x` a statement about rounding
+behavior, not about whether the reciprocal itself is correct.
+"""
+CLEAN_RECIPROCAL_VALUES = [
+    Decimal(1),
+    Decimal(2),
+    Decimal(4),
+    Decimal(5),
+    Decimal(8),
+    Decimal(10),
+    Decimal("0.5"),
+    Decimal("0.25"),
+    Decimal(100),
+    Decimal(1000),
+    Decimal("2.5"),
+]
+
+
+@pytest.mark.parametrize("value", CLEAN_RECIPROCAL_VALUES, ids=str)
+def test_time_and_frequency_reciprocal_round_trips(value):
+    original = Second(value)
+    assert 1 / (1 / original) == original
+
+
+@pytest.mark.parametrize("value", CLEAN_RECIPROCAL_VALUES, ids=str)
+def test_sampling_period_and_sample_rate_reciprocal_round_trips(value):
+    original = SecondSamplingPeriod(value)
     assert 1 / (1 / original) == original
 
 
@@ -141,17 +169,22 @@ def test_register_is_idempotent_for_the_same_type():
     register(FREQUENCY, Frequency)  # should not raise
 
 
-def test_scalar_multiplication_and_division_across_all_temporal_types():
-    assert Second(2) * 3 == Second(6)
-    assert Second(6) / 3 == Second(2)
-    assert Hertz(2) * 3 == Hertz(6)
-    assert Hertz(6) / 3 == Hertz(2)
-    assert SecondSamplingPeriod(2) * 3 == SecondSamplingPeriod(6)
-    assert SecondSamplingPeriod(6) / 3 == SecondSamplingPeriod(2)
-    assert SamplesPerSecond(2) * 3 == SamplesPerSecond(6)
-    assert SamplesPerSecond(6) / 3 == SamplesPerSecond(2)
-    assert Baud(2) * 3 == Baud(6)
-    assert Baud(6) / 3 == Baud(2)
+@pytest.mark.parametrize(
+    ("constructor", "value", "factor", "expected"),
+    [
+        pytest.param(Second, 2, 3, 6, id="Second"),
+        pytest.param(Hertz, 2, 3, 6, id="Hertz"),
+        pytest.param(SecondSamplingPeriod, 2, 3, 6, id="SecondSamplingPeriod"),
+        pytest.param(SamplesPerSecond, 2, 3, 6, id="SamplesPerSecond"),
+        pytest.param(Baud, 2, 3, 6, id="Baud"),
+    ],
+)
+def test_scalar_multiplication_and_division(constructor, value, factor, expected):
+    assert constructor(value) * factor == constructor(expected)
+    assert constructor(expected) / factor == constructor(value)
+
+
+def test_kilobaud_scales_correctly():
     assert Kilobaud(1) == Baud(1000)
 
 
