@@ -67,19 +67,34 @@ def test_ohms_law_round_trip_stays_exact_with_prefixed_units():
     ("compute", "expected_type", "expected"),
     [
         pytest.param(
-            lambda: Volt(5) * Ampere(2), Power, Watt(10), id="voltage*current"
+            lambda: Volt(5) * Ampere(2),
+            Power,
+            Watt(10),
+            id="voltage*current=power",
         ),
         pytest.param(
-            lambda: Volt(10) / Ampere(2), Resistance, Ohm(5), id="voltage/current"
+            lambda: Volt(10) / Ampere(2),
+            Resistance,
+            Ohm(5),
+            id="voltage/current=resistance",
         ),
         pytest.param(
-            lambda: Watt(20) / Volt(5), Current, Ampere(4), id="power/voltage"
+            lambda: Watt(20) / Volt(5),
+            Current,
+            Ampere(4),
+            id="power/voltage=current",
         ),
         pytest.param(
-            lambda: Ohm(5) * Ampere(2), Voltage, Volt(10), id="resistance*current"
+            lambda: Ohm(5) * Ampere(2),
+            Voltage,
+            Volt(10),
+            id="resistance*current=voltage",
         ),
         pytest.param(
-            lambda: Watt(20) / Ampere(4), Voltage, Volt(5), id="power/current"
+            lambda: Watt(20) / Ampere(4),
+            Voltage,
+            Volt(5),
+            id="power/current=voltage",
         ),
     ],
 )
