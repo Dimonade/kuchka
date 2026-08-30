@@ -53,12 +53,15 @@ from kuchka.units.mass import Gram
 from kuchka.units.mass import KILOGRAM
 from kuchka.units.mass import Kilogram
 from kuchka.units.mass import MASS_UNITS
+from kuchka.units.mass import MEGAGRAM
+from kuchka.units.mass import Megagram     
 from kuchka.units.mass import MICROGRAM
 from kuchka.units.mass import Microgram
 from kuchka.units.mass import MILLIGRAM
 from kuchka.units.mass import Milligram
 from kuchka.units.mass import NANOGRAM
 from kuchka.units.mass import Nanogram
+from kuchka.units.mass import Tonne
 from kuchka.units.power import KILOWATT
 from kuchka.units.power import Kilowatt
 from kuchka.units.power import MILLIWATT
@@ -146,6 +149,7 @@ __all__: list[str] = [
     "LENGTH_UNITS",
     "LUMINOUS_INTENSITY_UNITS",
     "MASS_UNITS",
+    "MEGAGRAM",
     "MEGAHERTZ",
     "MEGAOHM",
     "MEGASAMPLE_PER_SECOND",
@@ -201,6 +205,7 @@ __all__: list[str] = [
     "KilosamplesPerSecond",
     "Kilovolt",
     "Kilowatt",
+    "Megagram",
     "Megahertz",
     "Megaohm",
     "MegasamplesPerSecond",
@@ -230,6 +235,7 @@ __all__: list[str] = [
     "SamplesPerSecond",
     "Second",
     "SecondSamplingPeriod",
+    "Tonne",
     "Volt",
     "Watt",
 ]

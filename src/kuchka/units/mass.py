@@ -1,4 +1,4 @@
-"""Mass unit constructors: Nanogram, Microgram, Milligram, Gram, Kilogram.
+"""Mass unit constructors: Nanogram, Microgram, Milligram, Gram, Kilogram, Megagram.
 
 Each function here does the same thing: take a plain number, multiply it by a fixed
 scale factor, and wrap it in :class:`~kuchka.quantities.Mass`.
@@ -15,8 +15,16 @@ to their own SI base or coherent unit.
 This makes Mass the one family whose canonical unit already carries an SI prefix in its
 own name.
 
-`MASS_UNITS` maps each symbol to its constructor, for boundary code that reads a unit
-as a string from outside the application.
+NOTE: `Tonne` is a plain alias for `Megagram`, not a second constructor:
+a tonne and a megagram are the same quantity, and the common name (`Tonne`) is more
+convenient to reach for than the SI-coherent one (`Megagram`) for most engineering use.
+Aliasing keeps that convenience without introducing a second `UnitDef` for the same
+scale -- `Tonne is Megagram` holds at the function level, so `Tonne(5)` and
+`Megagram(5)` are identical `Mass` instances, including their displayed unit symbol
+(`Mg`, not `t`).
+
+`MASS_UNITS` maps each symbol to its constructor, for boundary code that
+reads a unit as a string from outside the application.
 """
 
 from __future__ import annotations
@@ -40,6 +48,7 @@ MICROGRAM = UnitDef("microgram", "\u00b5g", Decimal("0.000000001"), MASS)
 MILLIGRAM = UnitDef("milligram", "mg", Decimal("0.000001"), MASS)
 GRAM = UnitDef("gram", "g", Decimal("0.001"), MASS)
 KILOGRAM = UnitDef("kilogram", "kg", Decimal(1), MASS)
+MEGAGRAM = UnitDef("megagram", "Mg", Decimal(1000), MASS)
 
 Mass._canonical_unit = KILOGRAM  # noqa: SLF001 -- this module owns Mass's canonical unit
 
@@ -69,6 +78,18 @@ def Kilogram(value: Numeric) -> Mass:
     return Mass(to_decimal(value) * KILOGRAM.scale, KILOGRAM)
 
 
+def Megagram(value: Numeric) -> Mass:
+    """Construct a Mass from a magnitude expressed in megagrams."""
+    return Mass(to_decimal(value) * MEGAGRAM.scale, MEGAGRAM)
+
+
+Tonne = Megagram
+"""A tonne is a megagram. this name is the same function object as `Megagram`,
+not a wrapper around it, so the two are interchangeable at every level --
+identity, display, and unit resolution -- rather than merely equal in value.
+"""
+
+
 MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = MappingProxyType(
     {
         "ng": Nanogram,
@@ -76,5 +97,7 @@ MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = MappingProxyType(
         "mg": Milligram,
         "g": Gram,
         "kg": Kilogram,
+        "Mg": Megagram,
+        "t": Tonne,
     }
 )

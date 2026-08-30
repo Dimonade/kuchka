@@ -53,6 +53,7 @@ from kuchka.units import Kiloohm
 from kuchka.units import KilosamplesPerSecond
 from kuchka.units import Kilovolt
 from kuchka.units import Kilowatt
+from kuchka.units import Megagram
 from kuchka.units import Megahertz
 from kuchka.units import Megaohm
 from kuchka.units import MegasamplesPerSecond
@@ -82,6 +83,7 @@ from kuchka.units import Ratio
 from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
 from kuchka.units import SecondSamplingPeriod
+from kuchka.units import Tonne
 from kuchka.units import Volt
 from kuchka.units import Watt
 
@@ -117,6 +119,7 @@ __all__: list[str] = [
     "LuminousIntensity",
     "Mass",
     "MeasurementError",
+    "Megagram",
     "Megahertz",
     "Megaohm",
     "MegasamplesPerSecond",
@@ -155,6 +158,7 @@ __all__: list[str] = [
     "Temperature",
     "TemperatureDelta",
     "Time",
+    "Tonne",
     "UnrepresentableDimensionError",
     "Volt",
     "Voltage",
