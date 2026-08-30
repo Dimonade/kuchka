@@ -19,9 +19,12 @@ from typing import TYPE_CHECKING
 from hypothesis import strategies as st
 from kuchka import Ampere
 from kuchka import Baud
+from kuchka import Candela
 from kuchka import DeltaKelvin
 from kuchka import Hertz
+from kuchka import Kilogram
 from kuchka import Meter
+from kuchka import Mole
 from kuchka import Ohm
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
@@ -30,15 +33,21 @@ from kuchka import SecondSamplingPeriod
 from kuchka import Volt
 from kuchka import Watt
 from kuchka.quantities import LinearQuantity
-from kuchka.temperature import DELTA_KELVIN
+from kuchka.quantities.temperature import DELTA_KELVIN
+from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
 from kuchka.units import AMPERE
 from kuchka.units import BAUD
 from kuchka.units import BAUD_RATE_UNITS
+from kuchka.units import CANDELA
 from kuchka.units import CURRENT_UNITS
 from kuchka.units import FREQUENCY_UNITS
 from kuchka.units import HERTZ
+from kuchka.units import KILOGRAM
 from kuchka.units import LENGTH_UNITS
+from kuchka.units import LUMINOUS_INTENSITY_UNITS
+from kuchka.units import MASS_UNITS
 from kuchka.units import METER
+from kuchka.units import MOLE
 from kuchka.units import OHM
 from kuchka.units import POWER_UNITS
 from kuchka.units import PROPORTION_UNITS
@@ -54,6 +63,7 @@ from kuchka.units import TIME_UNITS
 from kuchka.units import VOLT
 from kuchka.units import VOLTAGE_UNITS
 from kuchka.units import WATT
+
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -101,6 +111,9 @@ FAMILIES: list[QuantityFamily] = [
         "sample_rate", SamplesPerSecond, SAMPLE_PER_SECOND, SAMPLE_RATE_UNITS
     ),
     QuantityFamily("baud_rate", Baud, BAUD, BAUD_RATE_UNITS),
+    QuantityFamily("mass", Kilogram, KILOGRAM, MASS_UNITS),
+    QuantityFamily("amount_of_substance", Mole, MOLE, AMOUNT_OF_SUBSTANCE_UNITS),
+    QuantityFamily("luminous_intensity", Candela, CANDELA, LUMINOUS_INTENSITY_UNITS),
 ]
 
 FAMILY_IDS: list[str] = [family.id for family in FAMILIES]
