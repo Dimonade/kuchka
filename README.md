@@ -31,21 +31,24 @@ analyse_voltage(Millivolt(4200))  # another example of a valid type check.
 
 ## What's in v0.1
 
-| Quantity           | Constructors                                                                     |
-| ------------------ | -------------------------------------------------------------------------------- |
-| `Voltage`          | `Volt`, `Millivolt`, `Microvolt`, `Kilovolt`                                     |
-| `Current`          | `Ampere`, `Milliampere`, `Microampere`, `Kiloampere`                             |
-| `Power`            | `Watt`, `Milliwatt`, `Kilowatt`                                                  |
-| `Resistance`       | `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`                                          |
-| `Temperature`      | `Celsius`, `Kelvin`                                                              |
-| `TemperatureDelta` | `DeltaCelsius`, `DeltaKelvin`                                                    |
-| `Time`             | `Second`, `Millisecond`, `Microsecond`                                           |
-| `Frequency`        | `Hertz`, `Kilohertz`, `Megahertz`                                                |
-| `SamplingPeriod`   | `SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod` |
-| `SampleRate`       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`               |
-| `BaudRate`         | `Baud`, `Kilobaud`                                                               |
-| `Length`           | `Nanometer`, `Micrometer`, `Millimeter`, `Meter`, `Kilometer`, `Inch`            |
-| `Proportion`       | `Ratio`, `Percent`                                                               |
+| Quantity            | Constructors                                                                     |
+| ------------------- | -------------------------------------------------------------------------------- |
+| `Voltage`           | `Volt`, `Millivolt`, `Microvolt`, `Kilovolt`                                     |
+| `Current`           | `Ampere`, `Milliampere`, `Microampere`, `Kiloampere`                             |
+| `Power`             | `Watt`, `Milliwatt`, `Kilowatt`                                                  |
+| `Resistance`        | `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`                                          |
+| `Temperature`       | `Celsius`, `Kelvin`                                                              |
+| `TemperatureDelta`  | `DeltaCelsius`, `DeltaKelvin`                                                    |
+| `Time`              | `Second`, `Millisecond`, `Microsecond`                                           |
+| `Frequency`         | `Hertz`, `Kilohertz`, `Megahertz`                                                |
+| `SamplingPeriod`    | `SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod` |
+| `SampleRate`        | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`               |
+| `BaudRate`          | `Baud`, `Kilobaud`                                                               |
+| `Length`            | `Nanometer`, `Micrometer`, `Millimeter`, `Meter`, `Kilometer`, `Inch`            |
+| `Mass`              | `Nanogram`, `Microgram`, `Milligram`, `Gram`, `Kilogram`, `Megagram`, `Tonne`    |
+| `AmountOfSubstance` | `Micromole`, `Millimole`, `Mole`                                                 |
+| `LuminousIntensity` | `Candela`                                                                        |
+| `Proportion`        | `Ratio`, `Percent`                                                               |
 
 Deliberately nothing else yet.
 See "What this is not (yet)" below.
@@ -191,7 +194,6 @@ asking), is genuinely open.
 
 ## What this is not (yet)
 
-- No Mass.
   `Length` was added, `Foot`/`Yard`/`Mile` were not -- see the module docstring next to `Inch` for the exact metre-equivalents if one of those is ever needed.
 - No NumPy/Pandas integration.
   `Decimal` doesn't vectorize into `ndarray` cleanly, and per-sample scalar wrapping is the wrong shape for high-rate acquisition.
@@ -231,17 +233,21 @@ src/kuchka/
     dimensions.py        exponent-vector dimensional algebra
     numeric.py            strict coercion of int/float/Decimal/Fraction into Decimal
     errors.py              the exception hierarchy
-    temperature.py       the affine Temperature type, plus Kelvin/Celsius constructors
     quantities/
         base.py             the quantity engine: LinearQuantity, UnitDef, the dimension registry
         electrical.py      Voltage, Current, Power, Resistance and their overload tables
         temporal.py        Time, Frequency, SamplingPeriod, SampleRate, BaudRate
-        thermal.py         TemperatureDelta
+        thermal.py         TemperatureDelta, and the affine Temperature type
         length.py           Length
+        mass.py              Mass
+        amount.py           AmountOfSubstance
+        luminous_intensity.py   LuminousIntensity
         proportion.py     Proportion
     units/
-        voltage.py, current.py, resistance.py, power.py, temporal.py, length.py, proportion.py
+        voltage.py, current.py, resistance.py, power.py, temporal.py, length.py,
+        mass.py, amount.py, luminous_intensity.py, proportion.py
                              one module per dimension's prefix constructors
+tests/                      All tests in the module.
 ```
 
 Application code should only ever need the top-level `kuchka` package.
@@ -276,3 +282,7 @@ Worth reading before adding a new blanket ignore.
 - Whether Kelvin should get a distinct, scalar-multipliable type (see the design note next to `Temperature`).
 - Whether a point-in-time type (`Instant`, most likely) is ever worth adding, and what its "you can't add two timestamps" rule should look like.
 - NumPy/Pandas integration strategy, once vectorized acquisition is actually needed, not just anticipated.
+
+## History
+
+The original pre-implementation design proposal lives at [`docs/introduction/design_proposal.md`](docs/introduction/design_proposal.md), kept as a record of the initial thinking.

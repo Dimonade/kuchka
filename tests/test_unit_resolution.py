@@ -63,6 +63,20 @@ from kuchka.units import TEMPERATURE_DELTA_UNITS
 from kuchka.units import TEMPERATURE_UNITS
 from kuchka.units import TIME_UNITS
 from kuchka.units import VOLTAGE_UNITS
+from kuchka import Candela
+from kuchka import Gram
+from kuchka import Kilogram
+from kuchka import Megagram
+from kuchka import Microgram
+from kuchka import Micromole
+from kuchka import Milligram
+from kuchka import Millimole
+from kuchka import Mole
+from kuchka import Nanogram
+from kuchka import Tonne
+from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
+from kuchka.units import LUMINOUS_INTENSITY_UNITS
+from kuchka.units import MASS_UNITS
 
 # (table, {expected symbol: expected constructor})
 TABLE_CASES = [
@@ -109,6 +123,20 @@ TABLE_CASES = [
         },
     ),
     (PROPORTION_UNITS, {"1": Ratio, "%": Percent}),
+    (
+        MASS_UNITS,
+        {
+            "ng": Nanogram,
+            "ug": Microgram,
+            "mg": Milligram,
+            "g": Gram,
+            "kg": Kilogram,
+            "Mg": Megagram,
+            "t": Tonne,
+        },
+    ),
+    (AMOUNT_OF_SUBSTANCE_UNITS, {"umol": Micromole, "mmol": Millimole, "mol": Mole}),
+    (LUMINOUS_INTENSITY_UNITS, {"cd": Candela}),
 ]
 
 TABLE_CASE_IDS = [
@@ -125,6 +153,9 @@ TABLE_CASE_IDS = [
     "baud_rate",
     "length",
     "proportion",
+    "mass",
+    "amount_of_substance",
+    "luminous_intensity",
 ]
 
 

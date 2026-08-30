@@ -5,12 +5,9 @@ Ordinary users of the library never construct a :class:`Dimension` directly,
 as they use the named engineering types (``Voltage``, ``Current``, ...),
 and unit constructors (``Volt``, ``Milliampere``, ...) exposed from the top-level.
 
-Dimensions are represented as exponent vectors over five of the seven SI base
-quantities: mass, length, time, electric current, and thermodynamic temperature.
-Amount of substance and luminous intensity are not yet represented, since nothing in
-the current engineering vocabulary needs them;
-adding either later means adding a field to :class:`Dimension` and the corresponding
-case to its arithmetic below.
+Dimensions are represented as exponent vectors over all seven SI base quantities:
+mass, length, time, electric current, thermodynamic temperature, amount of substance,
+and luminous intensity.
 
 Multiplying two physical quantities adds their exponent vectors.
 Dividing subtracts them.
@@ -38,6 +35,8 @@ class Dimension:
     time: int = 0
     current: int = 0
     temperature: int = 0
+    amount: int = 0
+    luminous_intensity: int = 0
 
     def __mul__(self, other: Dimension) -> Dimension:
         return Dimension(
@@ -46,6 +45,8 @@ class Dimension:
             time=self.time + other.time,
             current=self.current + other.current,
             temperature=self.temperature + other.temperature,
+            amount=self.amount + other.amount,
+            luminous_intensity=self.luminous_intensity + other.luminous_intensity,
         )
 
     def __truediv__(self, other: Dimension) -> Dimension:
@@ -55,6 +56,8 @@ class Dimension:
             time=self.time - other.time,
             current=self.current - other.current,
             temperature=self.temperature - other.temperature,
+            amount=self.amount - other.amount,
+            luminous_intensity=self.luminous_intensity - other.luminous_intensity,
         )
 
     def __repr__(self) -> str:
@@ -64,6 +67,8 @@ class Dimension:
             ("time", "T"),
             ("current", "I"),
             ("temperature", "\u0398"),
+            ("amount", "N"),
+            ("luminous_intensity", "J"),
         )
         parts = []
         for field, label in labels:
@@ -75,6 +80,7 @@ class Dimension:
 
 
 DIMENSIONLESS = Dimension()
+MASS = Dimension(mass=1)
 CURRENT = Dimension(current=1)
 VOLTAGE = Dimension(mass=1, length=2, time=-3, current=-1)
 POWER = Dimension(mass=1, length=2, time=-3)
@@ -83,3 +89,5 @@ TEMPERATURE_DELTA = Dimension(temperature=1)
 TIME = Dimension(time=1)
 FREQUENCY = Dimension(time=-1)
 LENGTH = Dimension(length=1)
+AMOUNT_OF_SUBSTANCE = Dimension(amount=1)
+LUMINOUS_INTENSITY = Dimension(luminous_intensity=1)
