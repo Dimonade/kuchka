@@ -33,7 +33,7 @@ from kuchka import SecondSamplingPeriod
 from kuchka import Volt
 from kuchka import Watt
 from kuchka.quantities import LinearQuantity
-from kuchka.quantities.temperature import DELTA_KELVIN
+from kuchka.quantities.thermal import DELTA_KELVIN
 from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
 from kuchka.units import AMPERE
 from kuchka.units import BAUD

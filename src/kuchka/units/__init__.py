@@ -54,7 +54,7 @@ from kuchka.units.mass import KILOGRAM
 from kuchka.units.mass import Kilogram
 from kuchka.units.mass import MASS_UNITS
 from kuchka.units.mass import MEGAGRAM
-from kuchka.units.mass import Megagram     
+from kuchka.units.mass import Megagram
 from kuchka.units.mass import MICROGRAM
 from kuchka.units.mass import Microgram
 from kuchka.units.mass import MILLIGRAM

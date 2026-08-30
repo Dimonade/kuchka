@@ -14,8 +14,8 @@ from kuchka import InvalidConversionError
 from kuchka import Kelvin
 from kuchka import MeasurementError
 from kuchka import Temperature
-from kuchka.quantities.temperature import CELSIUS
-from kuchka.quantities.temperature import KELVIN
+from kuchka.quantities.thermal import CELSIUS
+from kuchka.quantities.thermal import KELVIN
 
 
 def test_celsius_to_kelvin_offset_is_exact():
