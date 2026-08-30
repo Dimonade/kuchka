@@ -1,4 +1,5 @@
-"""AmountOfSubstance: a count of elementary entities, expressed in moles."""
+"""Amount Of Substance: a count of elementary entities, expressed in moles."""
+
 from __future__ import annotations
 
 from typing import ClassVar
