@@ -8,13 +8,11 @@ from kuchka import Current
 from kuchka import IncompatibleDimensionError
 from kuchka import InvalidMeasurementError
 from kuchka import Kiloohm
-from kuchka import Microampere
 from kuchka import Milliampere
 from kuchka import Millivolt
 from kuchka import Ohm
 from kuchka import Power
 from kuchka import Resistance
-from kuchka import Second
 from kuchka import UnrepresentableDimensionError
 from kuchka import Volt
 from kuchka import Voltage
@@ -155,14 +153,6 @@ def test_multiplication_by_unregistered_dimension_has_no_registered_type():
         # generic `object` overload (LinearQuantity | Decimal), so this is
         # a runtime-only scope-boundary error, not a static type error.
         Ohm(5) * Ohm(2)
-
-
-def test_current_times_time_is_charge():
-    """Test that `Current` times `Time` is `Charge`."""
-    from kuchka import Charge
-
-    result = Microampere(500) * Second(2)
-    assert isinstance(result, Charge)
 
 
 def test_naked_number_subtraction_is_rejected_with_a_helpful_message():

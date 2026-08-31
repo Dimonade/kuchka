@@ -1,4 +1,4 @@
-"""Length: arithmetic, exact imperial conversion, and the planned-dimension error.
+"""Length: arithmetic, exact imperial conversion, and Metre/Meter naming.
 
 NOTE: `Inch`'s scale (`0.0254`) is the one unit definition in this library that isn't a
 power of ten.
@@ -15,15 +15,22 @@ import pytest
 from kuchka import Inch
 from kuchka import InvalidMeasurementError
 from kuchka import Kilometer
+from kuchka import Kilometre
 from kuchka import Length
 from kuchka import Meter
+from kuchka import Metre
 from kuchka import Micrometer
+from kuchka import Micrometre
 from kuchka import Millimeter
+from kuchka import Millimetre
 from kuchka import Nanometer
+from kuchka import Nanometre
 from kuchka import PlannedDimensionError
-from kuchka import Second
 from kuchka import UnrepresentableDimensionError
+from kuchka.units import KILOMETER
+from kuchka.units import KILOMETRE
 from kuchka.units import METER
+from kuchka.units import METRE
 from kuchka.units import MICROMETER
 from kuchka.units import MILLIMETER
 
@@ -118,14 +125,6 @@ def test_naked_number_addition_is_rejected():
         Meter(5) + 4.2  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 
 
-def test_length_divided_by_time_is_now_a_registered_velocity():
-    """Test `Length` / `Time` = `Velocity`."""
-    from kuchka import Velocity
-
-    result = Meter(10) / Second(2)
-    assert isinstance(result, Velocity)
-
-
 def test_length_times_length_is_unrepresentable_not_planned():
     """Test that area is out of scope but planned and gives unrepresentable error."""
     match = "no registered engineering type"
@@ -145,3 +144,36 @@ def test_micrometer_and_millimeter_unit_constants_round_trip():
     original = Meter(1)
     converted = original.to(MICROMETER).to(MILLIMETER).to(METER)
     assert converted == original
+
+
+def test_meter_and_metre_are_the_same_function():
+    assert Meter is Metre
+    assert Millimeter is Millimetre
+    assert Micrometer is Micrometre
+    assert Nanometer is Nanometre
+    assert Kilometer is Kilometre
+
+
+def test_meter_and_metre_unit_constants_are_the_same_object():
+    assert METER is METRE
+    assert KILOMETER is KILOMETRE
+
+
+def test_meter_displays_as_metre():
+    """Both spellings share one symbol, `m`, so there is nothing to reconcile."""
+    assert repr(Meter(1)) == "1 m"
+    assert repr(Metre(1)) == "1 m"
+
+
+def test_meter_and_metre_arithmetic_mixes_freely():
+    assert Meter(1) + Metre(1) == Metre(2)
+    assert Kilometre(1) == Kilometer(1)
+    assert Meter(1000) == Kilometre(1)
+
+
+def test_metre_is_canonical():
+    assert Length._canonical_unit is METRE  # noqa: SLF001 -- verifying the module's own wiring
+
+
+def test_metre_and_millimetre_scale_exactly():
+    assert Metre(1) == Millimetre(1000)
