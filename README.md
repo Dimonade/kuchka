@@ -256,13 +256,12 @@ Everything under `quantities/`, `units/`, and the internals of `temperature.py` 
 ## Development
 
 ```bash
-pip install -e .
-pip install pytest mypy ty coverage
+uv sync
 
-pytest
-mypy --strict src/kuchka
-ty check src/kuchka tests
-coverage run -m pytest && coverage report
+uv run pytest
+uv run mypy --strict src/kuchka
+uv run ty check src/kuchka tests
+uv run coverage run -m pytest && uv run coverage report
 ```
 
 `tests/test_typing.py` runs mypy against `tests/typing_fixtures/should_fail.py`, a file that mixes lines that must type-check with lines marked `# type: ignore[...]` that must not.
