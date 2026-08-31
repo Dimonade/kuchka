@@ -15,10 +15,13 @@ from __future__ import annotations
 from kuchka.quantities.amount import AmountOfSubstance
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import UnitDef
+from kuchka.quantities.charge import Charge
 from kuchka.quantities.electrical import Current
 from kuchka.quantities.electrical import Power
 from kuchka.quantities.electrical import Resistance
 from kuchka.quantities.electrical import Voltage
+from kuchka.quantities.energy import Energy
+from kuchka.quantities.kinematics import Velocity
 from kuchka.quantities.length import Length
 from kuchka.quantities.luminous_intensity import LuminousIntensity
 from kuchka.quantities.mass import Mass
@@ -35,8 +38,10 @@ from kuchka.quantities.thermal import TemperatureDelta
 __all__: list[str] = [
     "AmountOfSubstance",
     "BaudRate",
+    "Charge",
     "ConvertibleToFrequency",
     "Current",
+    "Energy",
     "Frequency",
     "Length",
     "LinearQuantity",
@@ -51,5 +56,6 @@ __all__: list[str] = [
     "TemperatureDelta",
     "Time",
     "UnitDef",
+    "Velocity",
     "Voltage",
 ]

@@ -42,6 +42,12 @@ from kuchka.quantities.base import register
 if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.charge import Charge
+    from kuchka.quantities.electrical import Current
+    from kuchka.quantities.electrical import Power
+    from kuchka.quantities.energy import Energy
+    from kuchka.quantities.kinematics import Velocity
+    from kuchka.quantities.length import Length
 
 _NUMERIC_TYPES = (int, float, Decimal, Fraction)
 
@@ -53,6 +59,12 @@ class Time(LinearQuantity):
 
     @overload
     def __mul__(self, other: Frequency) -> Decimal: ...
+    @overload
+    def __mul__(self, other: Current) -> Charge: ...
+    @overload
+    def __mul__(self, other: Power) -> Energy: ...
+    @overload
+    def __mul__(self, other: Velocity) -> Length: ...
     @overload
     def __mul__(self, other: Numeric) -> Time: ...
     @overload
