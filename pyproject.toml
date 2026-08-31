@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A small pile of physically-typed engineering units for Python."
 readme = "README.md"
 authors = [{ name = "dimonade", email = "dimonade@protonmail.com" }]
-requires-python = ">=3.15"
+requires-python = ">=3.11"
 dependencies = []
 classifiers = [
   "Development Status :: 3 - Alpha",
@@ -72,7 +72,7 @@ exclude = [
 ]
 indent-width = 4
 line-length = 88
-target-version = "py315"
+target-version = "py311"
 
 
 [tool.ruff.lint]
