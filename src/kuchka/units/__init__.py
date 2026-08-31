@@ -17,6 +17,32 @@ from __future__ import annotations
 from kuchka.quantities.thermal import TEMPERATURE_DELTA_UNITS
 from kuchka.quantities.thermal import TEMPERATURE_UNITS
 from kuchka.units.amount import AMOUNT_OF_SUBSTANCE_UNITS
+from kuchka.units.charge import CHARGE_UNITS
+from kuchka.units.charge import COULOMB
+from kuchka.units.charge import Coulomb
+from kuchka.units.charge import MICROCOULOMB
+from kuchka.units.charge import Microcoulomb
+from kuchka.units.charge import MILLICOULOMB
+from kuchka.units.charge import Millicoulomb
+from kuchka.units.energy import ENERGY_UNITS
+from kuchka.units.energy import JOULE
+from kuchka.units.energy import Joule
+from kuchka.units.energy import KILOJOULE
+from kuchka.units.energy import Kilojoule
+from kuchka.units.energy import MEGAJOULE
+from kuchka.units.energy import Megajoule
+from kuchka.units.energy import MICROJOULE
+from kuchka.units.energy import Microjoule
+from kuchka.units.energy import MILLIJOULE
+from kuchka.units.energy import Millijoule
+from kuchka.units.energy import NANOJOULE
+from kuchka.units.energy import Nanojoule
+from kuchka.units.energy import PICOJOULE
+from kuchka.units.energy import Picojoule
+from kuchka.units.kinematics import METRE_PER_SECOND
+from kuchka.units.kinematics import MeterPerSecond
+from kuchka.units.kinematics import MetrePerSecond
+from kuchka.units.kinematics import VELOCITY_UNITS
 from kuchka.units.amount import MICROMOLE
 from kuchka.units.amount import Micromole
 from kuchka.units.amount import MILLIMOLE
@@ -35,16 +61,26 @@ from kuchka.units.current import Milliampere
 from kuchka.units.length import INCH
 from kuchka.units.length import Inch
 from kuchka.units.length import KILOMETER
+from kuchka.units.length import KILOMETRE
 from kuchka.units.length import Kilometer
+from kuchka.units.length import Kilometre
 from kuchka.units.length import LENGTH_UNITS
 from kuchka.units.length import METER
+from kuchka.units.length import METRE
 from kuchka.units.length import Meter
+from kuchka.units.length import Metre
 from kuchka.units.length import MICROMETER
+from kuchka.units.length import MICROMETRE
 from kuchka.units.length import Micrometer
+from kuchka.units.length import Micrometre
 from kuchka.units.length import MILLIMETER
+from kuchka.units.length import MILLIMETRE
 from kuchka.units.length import Millimeter
+from kuchka.units.length import Millimetre
 from kuchka.units.length import NANOMETER
+from kuchka.units.length import NANOMETRE
 from kuchka.units.length import Nanometer
+from kuchka.units.length import Nanometre
 from kuchka.units.luminous_intensity import CANDELA
 from kuchka.units.luminous_intensity import Candela
 from kuchka.units.luminous_intensity import LUMINOUS_INTENSITY_UNITS
@@ -132,16 +168,22 @@ __all__: list[str] = [
     "BAUD",
     "BAUD_RATE_UNITS",
     "CANDELA",
+    "CHARGE_UNITS",
+    "COULOMB",
     "CURRENT_UNITS",
+    "ENERGY_UNITS",
     "FREQUENCY_UNITS",
     "GRAM",
     "HERTZ",
     "INCH",
+    "JOULE",
     "KILOAMPERE",
     "KILOBAUD",
     "KILOGRAM",
     "KILOHERTZ",
+    "KILOJOULE",
     "KILOMETER",
+    "KILOMETRE",
     "KILOOHM",
     "KILOSAMPLE_PER_SECOND",
     "KILOVOLT",
@@ -151,18 +193,27 @@ __all__: list[str] = [
     "MASS_UNITS",
     "MEGAGRAM",
     "MEGAHERTZ",
+    "MEGAJOULE",
     "MEGAOHM",
     "MEGASAMPLE_PER_SECOND",
     "METER",
+    "METRE",
+    "METRE_PER_SECOND",
     "MICROAMPERE",
+    "MICROCOULOMB",
     "MICROGRAM",
+    "MICROJOULE",
     "MICROMETER",
+    "MICROMETRE",
     "MICROMOLE",
     "MICROSECOND",
     "MICROVOLT",
     "MILLIAMPERE",
+    "MILLICOULOMB",
     "MILLIGRAM",
+    "MILLIJOULE",
     "MILLIMETER",
+    "MILLIMETRE",
     "MILLIMOLE",
     "MILLIOHM",
     "MILLISECOND",
@@ -170,9 +221,12 @@ __all__: list[str] = [
     "MILLIWATT",
     "MOLE",
     "NANOGRAM",
+    "NANOJOULE",
     "NANOMETER",
+    "NANOMETRE",
     "OHM",
     "PERCENT",
+    "PICOJOULE",
     "POWER_UNITS",
     "PROPORTION_UNITS",
     "RATIO",
@@ -187,39 +241,54 @@ __all__: list[str] = [
     "TEMPERATURE_DELTA_UNITS",
     "TEMPERATURE_UNITS",
     "TIME_UNITS",
+    "VELOCITY_UNITS",
     "VOLT",
     "VOLTAGE_UNITS",
     "WATT",
     "Ampere",
     "Baud",
     "Candela",
+    "Coulomb",
     "Gram",
     "Hertz",
     "Inch",
+    "Joule",
     "Kiloampere",
     "Kilobaud",
     "Kilogram",
     "Kilohertz",
+    "Kilojoule",
     "Kilometer",
+    "Kilometre",
     "Kiloohm",
     "KilosamplesPerSecond",
     "Kilovolt",
     "Kilowatt",
     "Megagram",
     "Megahertz",
+    "Megajoule",
     "Megaohm",
     "MegasamplesPerSecond",
     "Meter",
+    "MeterPerSecond",
+    "Metre",
+    "MetrePerSecond",
     "Microampere",
+    "Microcoulomb",
     "Microgram",
+    "Microjoule",
     "Micrometer",
+    "Micrometre",
     "Micromole",
     "Microsecond",
     "MicrosecondSamplingPeriod",
     "Microvolt",
     "Milliampere",
+    "Millicoulomb",
     "Milligram",
+    "Millijoule",
     "Millimeter",
+    "Millimetre",
     "Millimole",
     "Milliohm",
     "Millisecond",
@@ -228,9 +297,12 @@ __all__: list[str] = [
     "Milliwatt",
     "Mole",
     "Nanogram",
+    "Nanojoule",
     "Nanometer",
+    "Nanometre",
     "Ohm",
     "Percent",
+    "Picojoule",
     "Ratio",
     "SamplesPerSecond",
     "Second",
