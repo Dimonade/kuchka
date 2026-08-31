@@ -34,6 +34,9 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.charge import Charge
+    from kuchka.quantities.energy import Energy
+    from kuchka.quantities.temporal import Time
 
 
 class Voltage(LinearQuantity):
@@ -74,6 +77,8 @@ class Current(LinearQuantity):
     @overload
     def __mul__(self, other: Resistance) -> Voltage: ...
     @overload
+    def __mul__(self, other: Time) -> Charge: ...
+    @overload
     def __mul__(self, other: Numeric) -> Current: ...
     @overload
     def __mul__(self, other: object) -> LinearQuantity | Decimal: ...
@@ -86,6 +91,16 @@ class Power(LinearQuantity):
     """The rate at which electrical energy is transferred or dissipated."""
 
     dimension: ClassVar[Dimension] = POWER
+
+    @overload
+    def __mul__(self, other: Time) -> Energy: ...
+    @overload
+    def __mul__(self, other: Numeric) -> Power: ...
+    @overload
+    def __mul__(self, other: object) -> LinearQuantity | Decimal: ...
+
+    def __mul__(self, other: object) -> LinearQuantity | Decimal:
+        return super().__mul__(other)
 
     @overload
     def __truediv__(self, other: Voltage) -> Current: ...

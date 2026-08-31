@@ -20,10 +20,13 @@ from hypothesis import strategies as st
 from kuchka import Ampere
 from kuchka import Baud
 from kuchka import Candela
+from kuchka import Coulomb
 from kuchka import DeltaKelvin
 from kuchka import Hertz
+from kuchka import Joule
 from kuchka import Kilogram
-from kuchka import Meter
+from kuchka import Metre
+from kuchka import MetrePerSecond
 from kuchka import Mole
 from kuchka import Ohm
 from kuchka import Ratio
@@ -39,14 +42,19 @@ from kuchka.units import AMPERE
 from kuchka.units import BAUD
 from kuchka.units import BAUD_RATE_UNITS
 from kuchka.units import CANDELA
+from kuchka.units import CHARGE_UNITS
+from kuchka.units import COULOMB
 from kuchka.units import CURRENT_UNITS
+from kuchka.units import ENERGY_UNITS
 from kuchka.units import FREQUENCY_UNITS
 from kuchka.units import HERTZ
+from kuchka.units import JOULE
 from kuchka.units import KILOGRAM
 from kuchka.units import LENGTH_UNITS
 from kuchka.units import LUMINOUS_INTENSITY_UNITS
 from kuchka.units import MASS_UNITS
-from kuchka.units import METER
+from kuchka.units import METRE
+from kuchka.units import METRE_PER_SECOND
 from kuchka.units import MOLE
 from kuchka.units import OHM
 from kuchka.units import POWER_UNITS
@@ -60,6 +68,7 @@ from kuchka.units import SAMPLING_PERIOD_UNITS
 from kuchka.units import SECOND
 from kuchka.units import TEMPERATURE_DELTA_UNITS
 from kuchka.units import TIME_UNITS
+from kuchka.units import VELOCITY_UNITS
 from kuchka.units import VOLT
 from kuchka.units import VOLTAGE_UNITS
 from kuchka.units import WATT
@@ -96,7 +105,7 @@ FAMILIES: list[QuantityFamily] = [
     QuantityFamily("resistance", Ohm, OHM, RESISTANCE_UNITS),
     QuantityFamily("time", Second, SECOND, TIME_UNITS),
     QuantityFamily("frequency", Hertz, HERTZ, FREQUENCY_UNITS),
-    QuantityFamily("length", Meter, METER, LENGTH_UNITS),
+    QuantityFamily("length", Metre, METRE, LENGTH_UNITS),
     QuantityFamily("proportion", Ratio, RATIO, PROPORTION_UNITS),
     QuantityFamily(
         "temperature_delta", DeltaKelvin, DELTA_KELVIN, TEMPERATURE_DELTA_UNITS
@@ -114,30 +123,32 @@ FAMILIES: list[QuantityFamily] = [
     QuantityFamily("mass", Kilogram, KILOGRAM, MASS_UNITS),
     QuantityFamily("amount_of_substance", Mole, MOLE, AMOUNT_OF_SUBSTANCE_UNITS),
     QuantityFamily("luminous_intensity", Candela, CANDELA, LUMINOUS_INTENSITY_UNITS),
+    QuantityFamily("velocity", MetrePerSecond, METRE_PER_SECOND, VELOCITY_UNITS),
+    QuantityFamily("charge", Coulomb, COULOMB, CHARGE_UNITS),
+    QuantityFamily("energy", Joule, JOULE, ENERGY_UNITS),
 ]
 
 FAMILY_IDS: list[str] = [family.id for family in FAMILIES]
 
-"""Every (family, constructor) pair every `*_UNITS` table registers, paired with a
-matching id list -- one entry per unit a dimension has.
-"""
 ALL_UNIT_CASES: list[tuple[QuantityFamily, Callable[[Numeric], LinearQuantity]]] = [
     (family, constructor)
     for family in FAMILIES
     for constructor in family.units.values()
 ]
+"""Every (family, constructor) pair every `*_UNITS` table registers, paired with a
+matching id list -- one entry per unit a dimension has.
+"""
+
 ALL_UNIT_CASE_IDS: list[str] = [
     f"{family.id}-{symbol}" for family in FAMILIES for symbol in family.units
 ]
 
-"""Some properties divide by a unit's scale more than once in the same computation,
-and need every scale involved to have a terminating decimal reciprocal to compare
-exactly.
-
-`Inch`'s scale, 0.0254, has a prime factor other than 2 and 5 in its denominator,
-so its reciprocal does not terminate; it sits out these specific properties.
-"""
 EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {"length": frozenset({"in"})}
+"""Units excluded from properties that require exact decimal reciprocals.
+
+`in` (inch) is excluded because its scale (0.0254) produces a non-terminating
+decimal reciprocal, making exact `Decimal` comparison impossible in those cases.
+"""
 
 EXACT_DIVISION_UNIT_CASES: list[
     tuple[QuantityFamily, Callable[[Numeric], LinearQuantity]]
@@ -154,14 +165,14 @@ EXACT_DIVISION_UNIT_CASE_IDS: list[str] = [
     if symbol not in EXACT_DIVISION_EXCLUSIONS.get(family.id, frozenset())
 ]
 
+ALL_UNITDEF_CASES: list[tuple[QuantityFamily, UnitDef]] = [
+    (family, constructor(1).unit) for family, constructor in ALL_UNIT_CASES
+]
 """The `UnitDef` each constructor carries.
 
 A constructor always displays the same unit regardless of the magnitude it's called
 with, so calling it to read `.unit` back is only worth doing a single time per case.
 """
-ALL_UNITDEF_CASES: list[tuple[QuantityFamily, UnitDef]] = [
-    (family, constructor(1).unit) for family, constructor in ALL_UNIT_CASES
-]
 
 EXACT_DIVISION_UNITDEF_CASES: list[tuple[QuantityFamily, UnitDef]] = [
     (family, constructor(1).unit) for family, constructor in EXACT_DIVISION_UNIT_CASES
@@ -180,12 +191,6 @@ def scale_by(quantity: LinearQuantity, factor: int) -> LinearQuantity:
     return result
 
 
-"""Bounded, finite decimals.
-
-Large enough to exercise real arithmetic, small enough in both magnitude and decimal
-places to stay well under Decimal's default 28-significant-digit context precision
-even after two or three quantities get combined.
-"""
 FINITE_DECIMALS = st.decimals(
     allow_nan=False,
     allow_infinity=False,
@@ -193,18 +198,19 @@ FINITE_DECIMALS = st.decimals(
     max_value=Decimal("1E9"),
     places=9,
 )
+"""Bounded, finite decimals.
 
-"""Excludes zero, for tests exercising division by a generated value."""
+Large enough to exercise real arithmetic, small enough in both magnitude and decimal
+places to stay well under Decimal's default 28-significant-digit context precision
+even after two or three quantities get combined.
+"""
+
 NONZERO_FINITE_DECIMALS = FINITE_DECIMALS.filter(lambda value: value != 0)
+"""Excludes zero, for tests exercising division by a generated value."""
 
 SCALARS = st.integers(min_value=-1000, max_value=1000)
 NONZERO_SCALARS = SCALARS.filter(lambda value: value != 0)
 
-"""Extreme magnitude collection.
-
-Round numbers spanning many orders of magnitude, from the smallest a quantity's own
-prefix vocabulary needs out to far beyond it.
-"""
 EXTREME_MAGNITUDES: list[Decimal] = [
     Decimal("1E-100"),
     Decimal("1E-50"),
@@ -219,14 +225,19 @@ EXTREME_MAGNITUDES: list[Decimal] = [
     Decimal("1E50"),
     Decimal("1E100"),
 ]
+"""Extreme magnitude collection.
 
-"""Values where binary float arithmetic and decimal arithmetic disagree.
-
-0.1 + 0.2 prints as 0.30000000000000004 in `float`, exactly 0.3 in `Decimal`.
+Round numbers spanning many orders of magnitude, from the smallest a quantity's own
+prefix vocabulary needs out to far beyond it.
 """
+
 BINARY_IMPRECISE_TRIPLES: list[tuple[Decimal, Decimal, Decimal]] = [
     (Decimal("0.1"), Decimal("0.2"), Decimal("0.3")),
     (Decimal("0.1"), Decimal("0.7"), Decimal("0.8")),
     (Decimal("1.1"), Decimal("2.2"), Decimal("3.3")),
     (Decimal("0.01"), Decimal("0.02"), Decimal("0.03")),
 ]
+"""Values where binary float arithmetic and decimal arithmetic disagree.
+
+0.1 + 0.2 prints as 0.30000000000000004 in `float`, exactly 0.3 in `Decimal`.
+"""

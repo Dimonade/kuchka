@@ -194,7 +194,7 @@ asking), is genuinely open.
 
 ## What this is not (yet)
 
-  `Length` was added, `Foot`/`Yard`/`Mile` were not -- see the module docstring next to `Inch` for the exact metre-equivalents if one of those is ever needed.
+- `Length` was added, `Foot`/`Yard`/`Mile` were not -- see the module docstring next to `Inch` for the exact metre-equivalents if one of those is ever needed.
 - No NumPy/Pandas integration.
   `Decimal` doesn't vectorize into `ndarray` cleanly, and per-sample scalar wrapping is the wrong shape for high-rate acquisition.
   Intended pattern for now: buffer raw floats at the acquisition boundary, convert once you have a value worth reasoning about.
@@ -256,13 +256,12 @@ Everything under `quantities/`, `units/`, and the internals of `temperature.py` 
 ## Development
 
 ```bash
-pip install -e .
-pip install pytest mypy ty coverage
+uv sync
 
-pytest
-mypy --strict src/kuchka
-ty check src/kuchka tests
-coverage run -m pytest && coverage report
+uv run pytest
+uv run mypy --strict src/kuchka
+uv run ty check src/kuchka tests
+uv run coverage run -m pytest && uv run coverage report
 ```
 
 `tests/test_typing.py` runs mypy against `tests/typing_fixtures/should_fail.py`, a file that mixes lines that must type-check with lines marked `# type: ignore[...]` that must not.

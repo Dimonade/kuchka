@@ -28,6 +28,7 @@ from decimal import Decimal
 from decimal import InvalidOperation
 from typing import Any
 from typing import TYPE_CHECKING
+from typing import TypeVar
 
 from kuchka.units import BAUD_RATE_UNITS
 from kuchka.units import CURRENT_UNITS
@@ -36,7 +37,8 @@ from kuchka.units import TEMPERATURE_UNITS
 from kuchka.units import VOLTAGE_UNITS
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Mapping
+    from collections.abc import Callable
+    from collections.abs import Mapping
     from pathlib import Path
 
     from kuchka import BaudRate
@@ -46,12 +48,14 @@ if TYPE_CHECKING:
     from kuchka import Voltage
     from kuchka.numeric import Numeric
 
+Q = TypeVar("Q")
+
 
 class ConfigError(Exception):
     """A device-limits config file could not be parsed into typed settings."""
 
 
-def _build_quantity[Q](
+def _build_quantity(
     raw: Mapping[str, Any],
     units: Mapping[str, Callable[[Numeric], Q]],
     *,

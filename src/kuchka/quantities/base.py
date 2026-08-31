@@ -34,6 +34,7 @@ from kuchka.numeric import to_decimal
 
 _NUMERIC_TYPES = (int, float, Decimal, Fraction)
 
+_DIMENSION_REGISTRY: dict[Dimension, type[LinearQuantity]] = {}
 """Maps a dimension signature back to the named type that represents it, so
 that e.g. ``Volt(5) * Ampere(2)`` produces a real ``Power`` instance
 instead of a generic, untyped quantity.
@@ -54,21 +55,19 @@ They stay reachable only by explicit construction, exactly like
 ``Temperature`` -- ``register`` enforces this by refusing a second type
 for a dimension that already has one, rather than silently overwriting it.
 """
-_DIMENSION_REGISTRY: dict[Dimension, type[LinearQuantity]] = {}
 
+_PLANNED_DIMENSIONS: dict[Dimension, str] = {}
 """Maps a dimension signature to the name of a quantity this library
-intends to implement but does not yet, e.g. Length / Time -> Velocity.
+intends to implement but does not yet.
 
-Lets `_promote` raise `PlannedDimensionError` for a dimension this
-library already has a name for, naming the result (e.g. "corresponds to
-Velocity") instead of only printing its exponent vector. Curated by
-hand, the same way the `@overload` tables are: adding an entry here
+Lets `_promote` raise `PlannedDimensionError` for a dimension this library already has
+a name for, naming the result instead of only printing its exponent vector.
+
+Curated by hand, the same way the `@overload` tables are: adding an entry here
 improves the error message, and is a marker for what to implement next.
+
+Emptied out as each named dimension gets a real registered type.
 """
-_PLANNED_DIMENSIONS: dict[Dimension, str] = {
-    Dimension(length=1, time=-1): "Velocity",
-    Dimension(current=1, time=1): "Charge",
-}
 
 
 def register(dimension: Dimension, quantity_type: type[LinearQuantity]) -> None:

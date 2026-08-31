@@ -7,8 +7,8 @@ by a fixed scale factor, and wrap it in :class:`~kuchka.quantities.Current`.
 
     current = Ampere(1) - Milliampere(250)
 
-`CURRENT_UNITS` maps each symbol to its constructor, for boundary code
-that reads a unit as a string from outside the application.
+`CURRENT_UNITS` maps each symbol to its constructor, for boundary code that reads a
+unit as a string from outside the application.
 """
 
 from __future__ import annotations
