@@ -48,7 +48,7 @@ def test_addition(a, b, expected):
 
 
 def test_inch_converts_to_millimeters_exactly():
-    """An inch has been exactly 25.4 mm since 1959, not an approximation."""
+    """Test that an inch has been exactly 25.4 mm since 1959, not an approximation."""
     assert Inch(1) == Millimeter(Decimal("25.4"))
 
 
@@ -118,23 +118,16 @@ def test_naked_number_addition_is_rejected():
         Meter(5) + 4.2  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 
 
-def test_length_divided_by_time_names_velocity_as_planned():
-    """Length / Time is a real planned relation, not an accidental scope gap."""
-    with pytest.raises(PlannedDimensionError, match="Velocity"):
-        # Statically valid: falls through to the fallback `object` overload
-        # (LinearQuantity | Decimal), so no ignore is needed -- the error
-        # only shows up once `_promote` runs at call time.
-        Meter(10) / Second(2)
+def test_length_divided_by_time_is_now_a_registered_velocity():
+    """Test `Length` / `Time` = `Velocity`."""
+    from kuchka import Velocity
 
-
-def test_planned_dimension_error_is_also_unrepresentable():
-    """A caller that only knows about the general error still catches this one."""
-    with pytest.raises(UnrepresentableDimensionError):
-        Meter(10) / Second(2)
+    result = Meter(10) / Second(2)
+    assert isinstance(result, Velocity)
 
 
 def test_length_times_length_is_unrepresentable_not_planned():
-    """Area is out of scope entirely: the generic message, not the named one."""
+    """Test that area is out of scope but planned and gives unrepresentable error."""
     match = "no registered engineering type"
     with pytest.raises(UnrepresentableDimensionError, match=match):
         Meter(5) * Meter(2)
