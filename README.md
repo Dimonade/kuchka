@@ -194,7 +194,7 @@ asking), is genuinely open.
 
 ## What this is not (yet)
 
-  `Length` was added, `Foot`/`Yard`/`Mile` were not -- see the module docstring next to `Inch` for the exact metre-equivalents if one of those is ever needed.
+- `Length` was added, `Foot`/`Yard`/`Mile` were not -- see the module docstring next to `Inch` for the exact metre-equivalents if one of those is ever needed.
 - No NumPy/Pandas integration.
   `Decimal` doesn't vectorize into `ndarray` cleanly, and per-sample scalar wrapping is the wrong shape for high-rate acquisition.
   Intended pattern for now: buffer raw floats at the acquisition boundary, convert once you have a value worth reasoning about.
