@@ -144,12 +144,10 @@ ALL_UNIT_CASE_IDS: list[str] = [
 ]
 
 EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {"length": frozenset({"in"})}
-"""Some properties divide by a unit's scale more than once in the same computation,
-and need every scale involved to have a terminating decimal reciprocal to compare
-exactly.
+"""Units excluded from properties that require exact decimal reciprocals.
 
-`Inch`'s scale, 0.0254, has a prime factor other than 2 and 5 in its denominator,
-so its reciprocal does not terminate; it sits out these specific properties.
+`in` (inch) is excluded because its scale (0.0254) produces a non-terminating
+decimal reciprocal, making exact `Decimal` comparison impossible in those cases.
 """
 
 EXACT_DIVISION_UNIT_CASES: list[
