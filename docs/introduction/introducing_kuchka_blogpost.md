@@ -139,9 +139,9 @@ The numbers in that half don't always agree with the numbers in the half that is
 def read_status(): ...
 ```
 
-Welp.
+_Welp._
 That does not look like documentation, does it?
-What if we squint harder?
+What if I squint harder?
 Still no.
 
 This is what `GuideFinal_2021_last_Copy Copy (4).docx` grows up to become, if you let it.
@@ -192,7 +192,7 @@ The results were quite interesting.
 Two of the models read it carefully and got every check right: converted microamps to milliamps, subtracted 273.15 for Kelvin, multiplied correctly to land on milliwatts.
 Both flagged, entirely unprompted, the exact thing we'd built the exercise around: _"the units aren't explicitly stated in the code..."_, _"... that is inferred rather than specified."_
 That's not a point in favor of raw floats.
-That's the two most careful readers (a.k.a., this task fills completely in their context) in the room telling us, on their own, that the interface itself is the problem.
+That's the two most careful readers -- and this whole task fit comfortably inside their context window, so "I didn't have room to think about it" isn't an excuse either of them gets to reach for -- telling us, on their own, that the interface itself is the problem.
 
 A third model read the same fields and quietly decided the case temperature was in milli-Celsius.
 `314.85 / 1000` prints `0.31 °C`.
@@ -201,8 +201,9 @@ Nothing about running that code says anything went wrong.
 There is no exception, no warning, and no red blinking lights with Hell March 2 music gradually getting louder in the background.
 Just a clean `PASS` next to a number that should have raised an eyebrow, if there'd been anyone looking for one to raise.
 
-Then a real engineer took a swing at it, on the clock, no do-overs.
-The current check: exactly right.
+Then I asked people around to try it out.
+
+First engineer -- the current check: exactly right.
 The temperature check:
 
 ```python
@@ -225,17 +226,48 @@ The verdict sitting right next to it was computed from a different expression en
 Nobody mixed up a prefix here.
 Two lines of code that were supposed to describe the same value quietly stopped agreeing with each other, and nothing about the output tells you that happened -- the number you'd trust is attached to the wrong label.
 
-I want to be precise about what this does and doesn't show.
+Two more volunteers turned up after the first draft of this made its rounds, because apparently nothing invites additional test subjects quite like publicly cataloguing everyone else's mistakes.
 
-It is not "the AI is better than the engineer".
+The first one left a comment above every conversion, stating the assumed unit outright -- and got one of the three wrong:
+
+```python
+# assuming i_meas is in milliamps
+# assuming v_meas is in millivolts
+# assuming t_case is in celsius
+i = status["i_meas"] / 1000
+v = status["v_meas"] / 1000
+t = status["t_case"]
+```
+
+`i_meas` is, in fact, microamps, not milliamps -- but dividing microamps by a thousand also gets you milliamps, so the arithmetic came out right despite the comment above it being wrong about what it was dividing.
+The voltage comment happened to be correct, so that one landed right for the right reason.
+The temperature got no conversion at all, on the stated assumption that `t_case` "is in celsius" -- it isn't -- so the report says `FAIL` on a diode running at a perfectly reasonable 41.7 °C, same failure shape as the Kelvin/Celsius mixup two paragraphs up, same root cause.
+
+Here's the part I find more unsettling than any mistake so far: a wrong comment sitting directly above code that happens to work is worse than no comment at all.
+A reviewer reads "assuming milliamps," checks that the code divides by 1000, nods, and moves on -- the comment and the code agree with each other.
+They're just both quietly wrong about the same input, in a way that happens to cancel out.
+
+The second volunteer applied no unit handling whatsoever -- no division, no conversion, nothing -- and printed the raw fields straight through:
+
+```text
+Current = 187500 mA, FAIL
+Temperature = 314.85 °C, FAIL
+Power = 440625000 mW, FAIL
+```
+
+Every single check fails.
+The diode, which is fine on all three counts, gets flunked across the board, because a microamp reading got compared directly against a milliamp limit, a Kelvin reading got compared directly against a Celsius limit, and a power figure off by six orders of magnitude got compared against a milliwatt budget as though it already were one.
+
+I want to be precise about what all of this does and doesn't show.
+
+And no, sorry techbros, it is not "the AI is better than the engineer", it never is (for many, many reasons).
 Two models got it completely right and said why, out loud.
-Another got it completely wrong and said nothing at all.
+One got it completely wrong and said nothing at all -- confidently, cleanly, with a `PASS` sitting right there to back it up.
+Three separate engineers, working independently, produced three separate flavors of wrong: a comparison run against the wrong reference scale, a printed number attached to a verdict computed from an entirely different expression, and a comment that lied just convincingly enough to make the line beneath it look reviewed.
 
-A competent person, under a real clock, got the hard-looking part right and the easy-looking part wrong, in a way I did not predict going in.
+Six attempts. Five distinct ways to get it wrong, and not one of them was a skill problem.
 
-Three different actors, three different mistakes, and not one of them was a skill problem.
-
-Every one of them was the same problem: a plain number carries no memory of what it means, and nothing forces the value you print and the value you check to be the same value.
+Every one of them traces back to the same problem: a plain number carries no memory of what it means, and nothing forces the value you print, the value you compare, and the value you meant, to all be the same value.
 That's not a reason to go find better engineers.
 It's the reason this needs to be structural.
 
@@ -270,7 +302,7 @@ power:   440.625000 mW PASS
 Three `PASS`es, correctly, on the first try, with no conversion arithmetic scattered through the function body to get subtly wrong.
 
 But here's the part I actually want to stress on:
-the exact line that broke two separate submissions was `status["t_case"] <= MAX_CASE_TEMP_C` -- a Kelvin float compared straight against a Celsius-flavored int.
+the exact line `status["t_case"] <= MAX_CASE_TEMP_C` -- a Kelvin float compared straight against a Celsius-flavored int -- shows up, essentially unchanged, in three separate submissions.
 Try to write that same comparison against typed values:
 
 ```python
@@ -284,6 +316,66 @@ error: Unsupported operand types for <= ("Temperature" and "int")  [operator]
 That is much better.
 The comparison is not even flying to begin with.
 Not because I sat down and banned it -- because a `Temperature` and a bare `int` were never the same kind of thing to begin with, and the type checker is just saying so out loud, before anyone gets the chance to be careful or careless about it.
+
+And if the mistake ever does slip past `mypy` -- an untyped boundary, a suppressed warning, a `# type: ignore` someone added under deadline and never removed -- the runtime is not left guessing either:
+
+```python
+from kuchka import Volt, Ampere
+
+Volt(12) - Ampere(2)
+```
+
+```
+kuchka.errors.IncompatibleDimensionError: Cannot subtract Voltage and Current.
+Voltage has dimension [M L^2 T^-3 I^-1].
+Current has dimension [I].
+```
+
+_Nice._
+
+Compare that against the `TypeError: unsupported operand type(s)`.
+This one names both quantities, names both dimensions, and says exactly why they don't belong in the same sentence -- not a stack trace to go spelunking through, an actual answer.
+
+## More Carrots
+
+Since the first draft of this went around, a few more carrots got planted.
+They aren't load-bearing to the argument above, they are the kind of thing you only notice is missing once you go looking for it.
+
+**Constants, so the universe doesn't need a `# in m/s, I checked` comment either.**
+
+```python
+from kuchka import Hertz
+from kuchka.constants import SPEED_OF_LIGHT
+
+wifi_wavelength = SPEED_OF_LIGHT / Hertz(2_400_000_000)
+print(f"{wifi_wavelength:.4f}")
+```
+
+```
+0.1249 m
+```
+
+`SPEED_OF_LIGHT` is a `Velocity`.
+`Hertz(2_400_000_000)` is a `Frequency`.
+Dividing one by the other produces a `Length` -- correctly, because that's what dividing a velocity by a frequency has always meant, and the type system had already agreed on that before I typed a single line of this example.
+
+**Formatting, for the reports that started this whole argument.**
+
+```python
+from kuchka import Volt
+
+voltage = Volt(1234.5)
+print(f"{voltage:.2f}")
+print(f"{voltage:.2e}")
+```
+
+```
+1234.50 V
+1.23e+3 V
+```
+
+Every quantity understands Python's own format spec now, the same one `float` has always had.
+No new syntax to learn, no `.format_as("scientific")` method to go hunting for -- the digits format the way digits already know how to format, and the unit symbol rides along after.
 
 ## Ending Notes
 
@@ -306,7 +398,7 @@ The instant a number crosses into the application, the analysis pipeline, the re
 Nobody should ever again have to reconstruct, from source comments and a file called `GuideFinal_2021_last_Copy Copy (4).docx`, that is a Fw of a Fw from some Outlook email that the first half of a calculation assumed millivolts, storage assumed volts, and the dashboard re-assumed millivolts on the way out.
 Is that the final version of that doc file?
 I don't know.
-And I sencirely doubt you do either.
+And I sincerely doubt you do either.
 The person who wrote it has since left the company, or been promoted, or -- in the grand tradition of undocumented tribal knowledge -- both.
 
 _[meme: the "must resist urge" format - "must resist urge to use Rust."]_

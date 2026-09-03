@@ -43,22 +43,38 @@ It's a naming convention, not a check.
 <!-- pause -->
 
 ```python +exec +line_numbers
-measured_current_a = 0.52       # from the current-meter driver -- always amps
-MAX_ALLOWED_CURRENT_MA = 500    # straight off the datasheet, in mA
+measured_current_a  = 0.52      # from the current-meter driver -- always amps
+measured_voltage_mv = 9800      # from the ADC -- always millivolts
+measured_temp_k     = 314.85    # from the thermal sensor -- always kelvin
 
-naive_check = "PASS" if measured_current_a <= MAX_ALLOWED_CURRENT_MA else "FAIL"
-print(naive_check)
+MAX_ALLOWED_CURRENT_MA = 500     # datasheet, milliamps
+MIN_ALLOWED_VOLTAGE_V  = 10.5    # datasheet, volts
+MAX_ALLOWED_TEMP_C     = 45      # datasheet, celsius
+
+naive_current = "PASS" if measured_current_a <= MAX_ALLOWED_CURRENT_MA else "FAIL"
+naive_voltage = "PASS" if measured_voltage_mv >= MIN_ALLOWED_VOLTAGE_V else "FAIL"
+naive_temp    = "PASS" if measured_temp_k <= MAX_ALLOWED_TEMP_C else "FAIL"
+
+print("current:", naive_current)
+print("voltage:", naive_voltage)
+print("temp:   ", naive_temp)
 ```
 
 <!-- pause -->
 
-520 mA is over the 500 mA limit. The check says PASS.
+Three checks. Three wrong answers. Two different directions.
 
 <!-- pause -->
 
-Nobody chose to get this wrong.
-The meter driver just always reports amps; the datasheet just always writes mA.
-Two numbers, two unrelated sources, compared directly by an honest mistake.
+520 mA is over the 500 mA limit -- current check says PASS.
+9.8 V is under the 10.5 V minimum -- voltage check says PASS.
+41.7 °C is comfortably under the 45 °C limit -- temperature check says FAIL.
+
+<!-- pause -->
+
+Nobody chose to get any of this wrong.
+Each driver reports in whatever unit it always reports in; each datasheet limit is written in whatever unit that datasheet always uses.
+Three unrelated sources, compared directly, three honest mistakes.
 
 <!-- pause -->
 
@@ -66,8 +82,10 @@ Two numbers, two unrelated sources, compared directly by an honest mistake.
 
 > [!caution]
 >
-> This check passes for any current up to 500 A -- a device in this class could never draw that much.
-> This is just to prove a point.
+> The current check passes for anything up to 500 A.
+> The voltage check passes for any real voltage down to about 10 millivolts -- a supply that dead couldn't light the reader's own status LED, let alone drive the lock.
+> The temperature check fails a unit that is, in reality, running cool.
+> This isn't one bug that's too cautious or too lax. It's one root cause, producing both kinds of wrong answer, in the same report, at the same time.
 
 <!-- end_slide -->
 
@@ -76,21 +94,27 @@ Two numbers, two unrelated sources, compared directly by an honest mistake.
 <!-- pause -->
 
 ```python +exec +line_numbers
-from kuchka import Ampere, Milliampere
+from kuchka import Ampere, Milliampere, Millivolt, Volt, Kelvin, Celsius
 
 measured_current = Ampere(0.52)
-MAX_ALLOWED_CURRENT = Milliampere(500)
+measured_voltage = Millivolt(9800)
+measured_temp    = Kelvin(314.85)
 
-correct_check = "PASS" if measured_current <= MAX_ALLOWED_CURRENT else "FAIL"
-print(correct_check)
+MAX_ALLOWED_CURRENT = Milliampere(500)
+MIN_ALLOWED_VOLTAGE = Volt(10.5)
+MAX_ALLOWED_TEMP    = Celsius(45)
+
+print("current:", "PASS" if measured_current <= MAX_ALLOWED_CURRENT else "FAIL")
+print("voltage:", "PASS" if measured_voltage >= MIN_ALLOWED_VOLTAGE else "FAIL")
+print("temp:   ", "PASS" if measured_temp <= MAX_ALLOWED_TEMP else "FAIL")
 ```
 
 <!-- pause -->
 
-No conversion step to remember, on either side.
-Nothing to get backwards.
+No conversion step to remember, on any of the three.
+Nothing to get backwards, and nothing that happens to cancel out by luck.
 
-`measured_current` is a Current -- amps or milliamps, `kuchka` already knows they're the same kind of thing.
+`measured_current`, `measured_voltage`, and `measured_temp` are each their own type -- amps or milliamps, millivolts or volts, kelvin or celsius, `kuchka` already knows which readings are the same kind of thing and which aren't.
 
 <!-- end_slide -->
 
@@ -138,8 +162,10 @@ Combining a measurement with a plain number -- the "forgot to wrap it" mistake -
 ```python +exec +line_numbers
 from kuchka import Volt, Ampere
 
+measurement = Ampere(5)
+
 try:
-    Volt(Ampere(5))
+    Volt(measurement)
 except Exception as e:
     print(type(e).__name__, "-\n\n", e)
 ```
@@ -224,7 +250,7 @@ Directly useful for battery life estimation on wireless locks and readers, with 
 
 <!-- pause -->
 
-- A small set of physical constants (speed of light and similar), so common reference values don't get re-typed as bare floats either.
+- A small set of physical constants (speed of light, elementary charge, a few particle masses) already shipped, so common reference values don't get re-typed as bare floats either.
 - A few more physical quantities as real engineering needs come up -- the same pattern each time, no architecture change required.
 - Longer-term, possible NumPy/pandas integration for higher-rate acquisition -- not needed yet, not blocking anything today.
 
