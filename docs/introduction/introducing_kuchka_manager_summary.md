@@ -45,7 +45,7 @@ It's a naming convention, not a check.
 ```python +exec +line_numbers
 measured_current_a = 0.52       # from the current-meter driver -- always amps
 MAX_ALLOWED_CURRENT_MA = 500    # straight off the datasheet, in mA
- 
+
 naive_check = "PASS" if measured_current_a <= MAX_ALLOWED_CURRENT_MA else "FAIL"
 print(naive_check)
 ```
@@ -68,7 +68,6 @@ Two numbers, two unrelated sources, compared directly by an honest mistake.
 >
 > This check passes for any current up to 500 A -- a device in this class could never draw that much.
 > This is just to prove a point.
-
 
 <!-- end_slide -->
 
