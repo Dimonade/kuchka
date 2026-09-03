@@ -1,36 +1,5 @@
 """Construction and arithmetic throughput, measured with the standard library.
 
-Run it directly:
-
-    uv run python benchmarks/construction.py
-
-or, without uv:
-
-    python benchmarks/construction.py
-
-WHAT THIS MEASURES, AND WHY:
-
-kuchka's own design choice is `Decimal`, not `float` (see the README).
-That choice has a cost, and the point of this script is to show where
-that cost actually comes from: the `Decimal(str(x))` parse, not the
-class/`@overload` machinery wrapped around it. Each case below isolates
-one layer, so the numbers can be read as "how much does the next layer
-add", not just as one opaque total.
-
-Cases:
-    1. Raw float arithmetic -- the floor, no correctness guarantees at all.
-    2. Decimal construction alone (`Decimal(str(x)) * scale`) -- the cost
-       `kuchka` inherits from its own design choice, independent of kuchka.
-    3. A single kuchka constructor call (`Millivolt(x)`) -- construction cost,
-       what a boundary layer pays once per raw reading.
-    4. A batch of kuchka constructor calls over a list -- the realistic shape
-       of translating a burst of acquisition samples, not just one call in
-       isolation.
-    5. Arithmetic on already-constructed quantities (`+`, `/`) -- the
-       steady-state cost once inside the measurement domain, which is what
-       actually dominates a hot loop that does more than one operation per
-       sample.
-
 This script prints both a human-readable table and the interpreter/platform
 info needed to make the numbers reproducible, since throughput numbers
 without that context are not comparable between machines.
