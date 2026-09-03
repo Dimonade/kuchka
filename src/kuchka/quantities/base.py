@@ -158,6 +158,26 @@ class LinearQuantity:
         """The unit this measurement currently displays as."""
         return self._display_unit
 
+    def __getstate__(self) -> tuple[Decimal, UnitDef]:
+        """Return the pickle/copy state: the two slots: `magnitude` and `display_unit`.
+
+        `LinearQuantity` blocks `__setattr__` for immutability, which also blocks the
+        default slot-restoring path `pickle` and `copy` use when no
+        `__getstate__`/`__setstate__` pair is defined -- that path calls plain
+        `setattr()`, and this class's own guard rejects it.
+
+        Defining both explicitly, routing through `object.__setattr__` the same way
+        `__init__` already does, is what lets an immutable, `__slots__`-only type still
+        be pickled, copied, and deep-copied.
+        """
+        return (self._magnitude, self._display_unit)
+
+    def __setstate__(self, state: tuple[Decimal, UnitDef]) -> None:
+        """Restore a pickled/copied instance without going through `__setattr__`."""
+        magnitude, display_unit = state
+        object.__setattr__(self, "_magnitude", magnitude)
+        object.__setattr__(self, "_display_unit", display_unit)
+
     def to(self, unit: UnitDef) -> Self:
         """Return an equal measurement that displays as ``unit``.
 
@@ -322,6 +342,19 @@ class LinearQuantity:
     def __repr__(self) -> str:
         value = self.value_in(self._display_unit)
         return f"{format(value, 'f')} {self._display_unit.symbol}"
+
+    def __format__(self, format_spec: str) -> str:
+        """Format the magnitude in the display unit, e.g. `f"{Volt(4.2):.2f}"`.
+
+        An empty `format_spec` (`f"{voltage}"`, `str(voltage)`) matches `repr()`.
+        A non-empty spec is applied to the underlying `Decimal` the same way it would
+        be to a `float` or `int`, and the unit symbol is appended after --
+        `f"{Volt(4.2):.2f}"` reads `"4.20 V"`.
+        """
+        if not format_spec:
+            return repr(self)
+        value = self.value_in(self._display_unit)
+        return f"{format(value, format_spec)} {self._display_unit.symbol}"
 
 
 def _promote(dimension: Dimension, magnitude: Decimal) -> LinearQuantity | Decimal:
