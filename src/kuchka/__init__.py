@@ -11,6 +11,9 @@ Internal modules (``quantities``, ``dimensions``, ``numeric``, ...) are implemen
 details and are not part of the supported API.
 """
 
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version
+
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
@@ -123,6 +126,11 @@ from kuchka.units import SecondSamplingPeriod
 from kuchka.units import Tonne
 from kuchka.units import Volt
 from kuchka.units import Watt
+
+try:
+    __version__ = version("kuchka")
+except PackageNotFoundError:  # pragma: no cover -- running from an uninstalled checkout
+    __version__ = "0.0.0+unknown"
 
 __all__: list[str] = [
     "COULOMB",
@@ -237,4 +245,5 @@ __all__: list[str] = [
     "Volt",
     "Voltage",
     "Watt",
+    "__version__",
 ]

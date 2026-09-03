@@ -10,6 +10,28 @@ current = Milliampere(150)
 power = voltage * current  # -> Power(0.63 W), typed and computed automatically.
 ```
 
+## Installation
+
+```bash
+uv add kuchka
+```
+
+or, with pip:
+
+```bash
+pip install kuchka
+```
+
+That's the only install step needed to use kuchka in application code.
+The `Development` section below covers the separate, larger set of tools (ruff, mypy, ty, pytest, hypothesis, ...) needed to work `kuchka`.
+
+## Stability
+
+kuchka is `0.1.0`: pre-1.0, and versioned accordingly.
+Breaking changes are expected between `0.1.x` releases while the API settles.
+From `0.2.0` onward, kuchka follows ordinary semantic versioning:
+a minor version bump won't break existing code, and a breaking change always comes with a major version bump.
+
 ## Why
 
 A raw `float` doesn't remember what it means.
@@ -218,6 +240,18 @@ asking), is genuinely open.
   Neither mypy nor ty catch this ahead of time, since the fallback overload on each quantity type has to accept `object` to stay compatible with the base class.
 - No array, NumPy/Pandas, or persistence support -- see above.
 
+## Errors
+
+Every error kuchka raises for a mistake in application code is a `MeasurementError`; catch that to handle the whole family at once.
+
+| Error                           | Raised when                                                                                                                      |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `InvalidMeasurementError`       | a unit constructor got a non-numeric value, a `bool`, or an incompatible measurement                                             |
+| `IncompatibleDimensionError`    | an operation was attempted between two incompatible dimensions or types                                                          |
+| `InvalidConversionError`        | `.to(...)` was given something that isn't a valid unit for that dimension                                                        |
+| `UnrepresentableDimensionError` | arithmetic produced a dimension with no registered engineering type                                                              |
+| `PlannedDimensionError`         | same as above, but for a dimension already named and intended for a future release (subclass of `UnrepresentableDimensionError`) |
+
 ## Examples
 
 - **[Migrating a config from unit-suffixed keys to kuchka](docs/examples/config_migration/README.md)** --
@@ -255,6 +289,8 @@ Everything under `quantities/`, `units/`, and the internals of `temperature.py` 
 
 ## Development
 
+`uv sync` installs the `dev` dependency group (ruff, mypy, ty, pytest, hypothesis, coverage, and editor tooling) alongside kuchka itself.
+
 ```bash
 uv sync
 
@@ -264,6 +300,8 @@ uv run ty check src/kuchka tests
 uv run coverage run -m pytest && uv run coverage report
 ```
 
+Alternatively, one can leverage the `justfile`'s `just ct` or `just covtest` to execute the whole testbench and additional statistics.
+
 `tests/test_typing.py` runs mypy against `tests/typing_fixtures/should_fail.py`, a file that mixes lines that must type-check with lines marked `# type: ignore[...]` that must not.
 Under `--strict`, an _unused_ `type: ignore` is itself an error.
 A clean run of that test is only possible if mypy's static verdict matches the fixture's claim on every single line -- that's the thing that actually proves the type story works, not just that it looks plausible.
@@ -272,6 +310,14 @@ Ruff runs with `select = ["ALL"]`.
 Every disabled rule in `pyproject.toml` carries an inline comment explaining why it doesn't fit this codebase (mostly: dunder-per-dunder docstrings, the deliberately capitalized unit-constructor names, and the exception hierarchy's inline-message
 style).
 Worth reading before adding a new blanket ignore.
+
+## Performance
+
+`kuchka` deliberately uses `Decimal` under the hood for correctness.
+The design philosophy is to utilize `kuchka` for unit correctness as they come from configuration files, through permutations and checks into reports.
+Running `kuchka` in a hot loop transforming values in a vector or MSamples per Second live is not really the intended use of it.
+
+For more see [`benchmarks`](benchmarks/README.md).
 
 ## Open questions for the upcoming iterations / next versions
 
