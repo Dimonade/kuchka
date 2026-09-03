@@ -138,6 +138,16 @@ class Temperature:
     def __setattr__(self, name: str, value: object) -> None:
         raise AttributeError(f"{type(self).__name__} is immutable")
 
+    def __getstate__(self) -> tuple[Decimal, AffineUnitDef]:
+        """Return the pickle/copy state. See `LinearQuantity.__getstate__`."""
+        return (self._kelvin, self._display_unit)
+
+    def __setstate__(self, state: tuple[Decimal, AffineUnitDef]) -> None:
+        """Restore a pickled/copied instance without going through `__setattr__`."""
+        kelvin, display_unit = state
+        object.__setattr__(self, "_kelvin", kelvin)
+        object.__setattr__(self, "_display_unit", display_unit)
+
     @property
     def kelvin(self) -> Decimal:
         """The magnitude expressed in Kelvin, this type's canonical unit."""
@@ -237,6 +247,13 @@ class Temperature:
     def __repr__(self) -> str:
         value = self.value_in(self._display_unit)
         return f"{format(value, 'f')} {self._display_unit.symbol}"
+
+    def __format__(self, format_spec: str) -> str:
+        """Format the reading in the display unit. See `LinearQuantity.__format__`."""
+        if not format_spec:
+            return repr(self)
+        value = self.value_in(self._display_unit)
+        return f"{format(value, format_spec)} {self._display_unit.symbol}"
 
 
 def Kelvin(value: Numeric) -> Temperature:

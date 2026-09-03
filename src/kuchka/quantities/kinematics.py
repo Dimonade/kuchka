@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.length import Length
+    from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
 
@@ -37,6 +38,8 @@ class Velocity(LinearQuantity):
     def __mul__(self, other: object) -> LinearQuantity | Decimal:
         return super().__mul__(other)
 
+    @overload
+    def __truediv__(self, other: Frequency) -> Length: ...
     @overload
     def __truediv__(self, other: Numeric) -> Velocity: ...
     @overload
