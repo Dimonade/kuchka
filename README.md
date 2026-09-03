@@ -162,6 +162,120 @@ Volt(5) * Ratio(Decimal("0.1")) == Volt(Decimal("0.5"))  # True, a tolerance ban
 
 This falls out of the same general dimension algebra that already derives `Power` from `Voltage * Current`: multiplying by the dimensionless identity leaves the other operand's dimension, and therefore its type, unchanged.
 
+## Physical constants
+
+`kuchka.constants` provides a small set of physical constants as ordinary kuchka quantities.
+
+```python
+from kuchka import Hertz
+from kuchka.constants import SPEED_OF_LIGHT
+
+wifi_wavelength = SPEED_OF_LIGHT / Hertz(2_400_000_000)  # -> Length, ~0.1249 m
+```
+
+`SPEED_OF_LIGHT` and `ELEMENTARY_CHARGE` are exact by SI definition.
+`ELECTRON_MASS`, `PROTON_MASS`, and `NEUTRON_MASS` are CODATA 2022 recommended values, carrying exactly as many significant digits as CODATA publishes for each.
+The module docstring states which category each constant belongs to.
+
+The set grows as concrete needs come up, the same way the unit vocabulary itself does.
+
+## Errors
+
+Every error kuchka raises for a mistake in application code is a `MeasurementError`; catch that to handle the whole family at once.
+
+| Error                           | Raised when                                                                                                                      |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `InvalidMeasurementError`       | a unit constructor got a non-numeric value, a `bool`, or an incompatible measurement                                             |
+| `IncompatibleDimensionError`    | an operation was attempted between two incompatible dimensions or types                                                          |
+| `InvalidConversionError`        | `.to(...)` was given something that isn't a valid unit for that dimension                                                        |
+| `UnrepresentableDimensionError` | arithmetic produced a dimension with no registered engineering type                                                              |
+| `PlannedDimensionError`         | same as above, but for a dimension already named and intended for a future release (subclass of `UnrepresentableDimensionError`) |
+
+## Formatting
+
+Every quantity supports Python's format mini-language through `__format__`, applied to the magnitude in its current display unit.
+
+```python
+from kuchka import Volt
+
+voltage = Volt(1234.5)
+
+f"{voltage}"  # "1234.5 V"   -- matches repr()
+f"{voltage:.2f}"  # "1234.50 V"
+f"{voltage:.2e}"  # "1.23e+3 V"
+f"{voltage:,.2f}"  # "1,234.50 V"
+```
+
+An empty format spec matches `repr()` exactly. A non-empty spec applies to the underlying `Decimal`, and the unit symbol is appended after.
+
+## Examples
+
+- **[Migrating a config from unit-suffixed keys to kuchka](docs/examples/config_migration/README.md)** --
+  a worked example: an old `.ini` file where units live in the key name (`accepted_voltage_min_mv`), migrated to a `.toml` file where units are data, parsed through a boundary layer into typed dataclasses.
+  Covers closed per-dimension unit resolution, `Decimal`-exact parsing, and three concrete failure modes the boundary layer catches at load time.
+
+## Package layout
+
+_subject to change as the design and architecture bounces around and settles down._
+
+```text
+src/kuchka/
+    constants.py         a handful of physical constants
+    dimensions.py        exponent-vector dimensional algebra
+    numeric.py            strict coercion of int/float/Decimal/Fraction into Decimal
+    errors.py              the exception hierarchy
+    quantities/
+        base.py             the quantity engine: LinearQuantity, UnitDef, the dimension registry
+        electrical.py      Voltage, Current, Power, Resistance and their overload tables
+        temporal.py        Time, Frequency, SamplingPeriod, SampleRate, BaudRate
+        thermal.py         TemperatureDelta, and the affine Temperature type
+        length.py           Length
+        mass.py              Mass
+        amount.py           AmountOfSubstance
+        luminous_intensity.py   LuminousIntensity
+        proportion.py     Proportion
+    units/
+        voltage.py, current.py, resistance.py, power.py, temporal.py, length.py,
+        mass.py, amount.py, luminous_intensity.py, proportion.py
+                             one module per dimension's prefix constructors
+tests/                      All tests in the module.
+```
+
+Application code should only ever need the top-level `kuchka` package.
+Everything under `quantities/`, `units/`, and the internals of `temperature.py` is implementation detail, re-exported for convenience but not meant to be imported piecemeal.
+
+## Development
+
+`uv sync` installs the `dev` dependency group (ruff, mypy, ty, pytest, hypothesis, coverage, and editor tooling) alongside kuchka itself.
+
+```bash
+uv sync
+
+uv run pytest
+uv run mypy --strict src/kuchka
+uv run ty check src/kuchka tests
+uv run coverage run -m pytest && uv run coverage report
+```
+
+Alternatively, one can leverage the `justfile`'s `just ct` or `just covtest` to execute the whole testbench and additional statistics.
+
+`tests/test_typing.py` runs mypy against `tests/typing_fixtures/should_fail.py`, a file that mixes lines that must type-check with lines marked `# type: ignore[...]` that must not.
+Under `--strict`, an _unused_ `type: ignore` is itself an error.
+A clean run of that test is only possible if mypy's static verdict matches the fixture's claim on every single line -- that's the thing that actually proves the type story works, not just that it looks plausible.
+
+Ruff runs with `select = ["ALL"]`.
+Every disabled rule in `pyproject.toml` carries an inline comment explaining why it doesn't fit this codebase (mostly: dunder-per-dunder docstrings, the deliberately capitalized unit-constructor names, and the exception hierarchy's inline-message
+style).
+Worth reading before adding a new blanket ignore.
+
+## Performance
+
+`kuchka` deliberately uses `Decimal` under the hood for correctness.
+The design philosophy is to utilize `kuchka` for unit correctness as they come from configuration files, through permutations and checks into reports.
+Running `kuchka` in a hot loop transforming values in a vector or MSamples per Second live is not really the intended use of it.
+
+For more see [`benchmarks`](benchmarks/README.md).
+
 ## Comparison to existing tools
 
 `kuchka` isn't the first attempt at physical quantities in Python.
@@ -239,85 +353,6 @@ asking), is genuinely open.
   `Resistance * Resistance` and similar mathematically-valid-but-unregistered products raise `UnrepresentableDimensionError` at runtime rather than returning a typed result.
   Neither mypy nor ty catch this ahead of time, since the fallback overload on each quantity type has to accept `object` to stay compatible with the base class.
 - No array, NumPy/Pandas, or persistence support -- see above.
-
-## Errors
-
-Every error kuchka raises for a mistake in application code is a `MeasurementError`; catch that to handle the whole family at once.
-
-| Error                           | Raised when                                                                                                                      |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `InvalidMeasurementError`       | a unit constructor got a non-numeric value, a `bool`, or an incompatible measurement                                             |
-| `IncompatibleDimensionError`    | an operation was attempted between two incompatible dimensions or types                                                          |
-| `InvalidConversionError`        | `.to(...)` was given something that isn't a valid unit for that dimension                                                        |
-| `UnrepresentableDimensionError` | arithmetic produced a dimension with no registered engineering type                                                              |
-| `PlannedDimensionError`         | same as above, but for a dimension already named and intended for a future release (subclass of `UnrepresentableDimensionError`) |
-
-## Examples
-
-- **[Migrating a config from unit-suffixed keys to kuchka](docs/examples/config_migration/README.md)** --
-  a worked example: an old `.ini` file where units live in the key name (`accepted_voltage_min_mv`), migrated to a `.toml` file where units are data, parsed through a boundary layer into typed dataclasses.
-  Covers closed per-dimension unit resolution, `Decimal`-exact parsing, and three concrete failure modes the boundary layer catches at load time.
-
-## Package layout
-
-_subject to change as the design and architecture bounces around and settles down._
-
-```text
-src/kuchka/
-    dimensions.py        exponent-vector dimensional algebra
-    numeric.py            strict coercion of int/float/Decimal/Fraction into Decimal
-    errors.py              the exception hierarchy
-    quantities/
-        base.py             the quantity engine: LinearQuantity, UnitDef, the dimension registry
-        electrical.py      Voltage, Current, Power, Resistance and their overload tables
-        temporal.py        Time, Frequency, SamplingPeriod, SampleRate, BaudRate
-        thermal.py         TemperatureDelta, and the affine Temperature type
-        length.py           Length
-        mass.py              Mass
-        amount.py           AmountOfSubstance
-        luminous_intensity.py   LuminousIntensity
-        proportion.py     Proportion
-    units/
-        voltage.py, current.py, resistance.py, power.py, temporal.py, length.py,
-        mass.py, amount.py, luminous_intensity.py, proportion.py
-                             one module per dimension's prefix constructors
-tests/                      All tests in the module.
-```
-
-Application code should only ever need the top-level `kuchka` package.
-Everything under `quantities/`, `units/`, and the internals of `temperature.py` is implementation detail, re-exported for convenience but not meant to be imported piecemeal.
-
-## Development
-
-`uv sync` installs the `dev` dependency group (ruff, mypy, ty, pytest, hypothesis, coverage, and editor tooling) alongside kuchka itself.
-
-```bash
-uv sync
-
-uv run pytest
-uv run mypy --strict src/kuchka
-uv run ty check src/kuchka tests
-uv run coverage run -m pytest && uv run coverage report
-```
-
-Alternatively, one can leverage the `justfile`'s `just ct` or `just covtest` to execute the whole testbench and additional statistics.
-
-`tests/test_typing.py` runs mypy against `tests/typing_fixtures/should_fail.py`, a file that mixes lines that must type-check with lines marked `# type: ignore[...]` that must not.
-Under `--strict`, an _unused_ `type: ignore` is itself an error.
-A clean run of that test is only possible if mypy's static verdict matches the fixture's claim on every single line -- that's the thing that actually proves the type story works, not just that it looks plausible.
-
-Ruff runs with `select = ["ALL"]`.
-Every disabled rule in `pyproject.toml` carries an inline comment explaining why it doesn't fit this codebase (mostly: dunder-per-dunder docstrings, the deliberately capitalized unit-constructor names, and the exception hierarchy's inline-message
-style).
-Worth reading before adding a new blanket ignore.
-
-## Performance
-
-`kuchka` deliberately uses `Decimal` under the hood for correctness.
-The design philosophy is to utilize `kuchka` for unit correctness as they come from configuration files, through permutations and checks into reports.
-Running `kuchka` in a hot loop transforming values in a vector or MSamples per Second live is not really the intended use of it.
-
-For more see [`benchmarks`](benchmarks/README.md).
 
 ## Open questions for the upcoming iterations / next versions
 

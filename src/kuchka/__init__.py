@@ -14,6 +14,11 @@ details and are not part of the supported API.
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version
 
+from kuchka.constants import ELECTRON_MASS
+from kuchka.constants import ELEMENTARY_CHARGE
+from kuchka.constants import NEUTRON_MASS
+from kuchka.constants import PROTON_MASS
+from kuchka.constants import SPEED_OF_LIGHT
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
@@ -134,6 +139,8 @@ except PackageNotFoundError:  # pragma: no cover -- running from an uninstalled 
 
 __all__: list[str] = [
     "COULOMB",
+    "ELECTRON_MASS",
+    "ELEMENTARY_CHARGE",
     "ENERGY_UNITS",
     "JOULE",
     "KILOJOULE",
@@ -149,7 +156,10 @@ __all__: list[str] = [
     "MILLIMETRE",
     "NANOJOULE",
     "NANOMETRE",
+    "NEUTRON_MASS",
     "PICOJOULE",
+    "PROTON_MASS",
+    "SPEED_OF_LIGHT",
     "AmountOfSubstance",
     "Ampere",
     "Baud",
