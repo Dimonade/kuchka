@@ -23,7 +23,7 @@ pip install kuchka
 ```
 
 That's the only install step needed to use kuchka in application code.
-The `Development` section below covers the separate, larger set of tools (ruff, mypy, ty, pytest, hypothesis, ...) needed to work `kuchka`.
+The `Development` section below covers the separate, larger set of tools (ruff, mypy, ty, pytest, hypothesis, ...) needed to work on `kuchka`.
 
 ## Stability
 
