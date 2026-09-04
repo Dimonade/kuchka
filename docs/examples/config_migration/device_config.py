@@ -6,14 +6,13 @@ nothing downstream of it ever sees a bare number again.
 
 Three rules, matching `kuchka`'s own design:
 
-1. Unit resolution is closed per physical dimension, using the tables
-    `kuchka.units` already maintains (`VOLTAGE_UNITS`, `CURRENT_UNITS`, and so on):
-    a voltage field only ever looks a unit symbol up in `VOLTAGE_UNITS`,
-    so writing `unit = "mA"` for a voltage field is not "the wrong prefix",
-    it is a symbol that simply is not in that table, and fails the same way
-    a typo would.
-2. A value is parsed through `Decimal(str)`, never `float(str)`, for the same reason
-    `kuchka` itself stores magnitudes as `Decimal`:
+1. Unit resolution is closed per physical dimension, using the tables `kuchka.units`
+    already maintains (`VOLTAGE_UNITS`, `CURRENT_UNITS`, and so on):
+    a voltage field only ever looks a unit symbol up in `VOLTAGE_UNITS`, so writing
+    `unit = "mA"` for a voltage field is not merely "the wrong prefix", it is a symbol
+    that simply is not in that table, and fails the same way a typo would.
+2. A value is parsed through `Decimal(str)`, instead of `float(str)`, for the same
+    reason `kuchka` itself stores magnitudes as `Decimal`:
     the digits an engineer typed should survive parsing exactly.
 3. Unknown keys are treated the same as missing ones.
     A typo'd section or field name fails loudly at load time, not silently three
@@ -217,9 +216,9 @@ _KNOWN_TOP_LEVEL_SECTIONS = frozenset({"red_led", "blue_led", "comms"})
 def load_device_config(path: Path) -> DeviceConfig:
     """Load and fully validate a device-limits TOML file into a `DeviceConfig`.
 
-    Raises `ConfigError` for anything wrong with the file: an unknown
-    section, a missing field, an unparsable number, or a unit that does
-    not belong to the field it was written for.
+    Raises `ConfigError` for anything wrong with the file:
+    an unknown section, a missing field, an unparsable number, or a unit that does not
+    belong to the field it was written for.
     """
     with path.open("rb") as handle:
         raw = tomllib.load(handle)

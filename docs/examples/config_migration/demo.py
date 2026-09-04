@@ -27,10 +27,9 @@ def main() -> None:
     print(f"  blue_led temp limits:    {config.blue_led.temperature}")
     print(f"  comms settings:          {config.comms}")
 
-    # The point of the exercise: red_led's voltage limit was written in
-    # millivolts, blue_led's in volts, and this comparison is still just
-    # ordinary Python -- no manual unit alignment required to ask a
-    # meaningful question across the two.
+    # The point of the exercise: red_led's voltage limit was written in millivolts,
+    # blue_led's in volts, and this comparison is still just ordinary Python --
+    # no manual unit alignment required to ask a meaningful question across the two.
     print(
         "\n  red_led max voltage < blue_led max voltage: "
         f"{config.red_led.voltage.maximum < config.blue_led.voltage.maximum}",

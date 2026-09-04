@@ -66,17 +66,14 @@ Its job, in three parts:
 from kuchka.units import VOLTAGE_UNITS, CURRENT_UNITS
 ```
 
-`kuchka.units` ships a `Mapping[str, Callable[[Numeric], Q]]` for every
-dimension it knows about -- `VOLTAGE_UNITS`, `CURRENT_UNITS`,
-`TEMPERATURE_UNITS`, `FREQUENCY_UNITS`, `BAUD_RATE_UNITS`, and so on --
-each one closed to that dimension's own constructors and immutable
-(`MappingProxyType`, not a plain `dict`). A voltage field only ever
-looks its unit up in `VOLTAGE_UNITS`. Writing `unit = "mA"` for a
-voltage field isn't "the wrong prefix" -- `"mA"` simply isn't in that
-table, so it fails the same way a typo would. Nothing in this example
-hand-builds these tables; every application doing config-boundary work
-would otherwise be maintaining the same mapping independently, and
-kuchka is the one place that already knows every constructor it exports.
+`kuchka.units` ships a `Mapping[str, Callable[[Numeric], Q]]` for every dimension it knows about.
+This includes (but not limited to) `VOLTAGE_UNITS`, `CURRENT_UNITS`, `TEMPERATURE_UNITS`, `FREQUENCY_UNITS`, `BAUD_RATE_UNITS`, and so on.
+Each one closed to that dimension's own constructors and immutable (`MappingProxyType`).
+
+A voltage field only ever looks its unit up in `VOLTAGE_UNITS`.
+Writing `unit = "mA"` for a voltage field isn't "the wrong prefix" -- `"mA"` simply isn't in that table, so it fails the same way a typo would.
+The code in this example does not hand-build these tables.
+Every application doing config-boundary work would otherwise be maintaining the same mapping independently, and `kuchka` is the one place that already knows every constructor it exports.
 
 **2. A value becomes a quantity, once.**
 
@@ -88,7 +85,7 @@ def _build_quantity(raw, units, *, field):
 ```
 
 Everything past this function only ever sees a `Voltage`, a `Current`, a `Temperature`, a `Frequency`, or a `BaudRate`.
-Never a bare number again.
+From this point on, it is never a bare number again, unless explicitly converted.
 
 **3. Invalid configurations can't be constructed.**
 
@@ -138,8 +135,7 @@ Comparing them is still just Python:
 config.red_led.voltage.maximum < config.blue_led.voltage.maximum
 ```
 
-No manual "convert both to the same unit first" step.
-That step already happened, once, at the boundary.
+The conversion to the same unit happens at the boundary.
 
 ## Frequency and BaudRate, the same way
 
@@ -156,11 +152,13 @@ from kuchka.units import FREQUENCY_UNITS, BAUD_RATE_UNITS
 ```
 
 `Frequency` and `BaudRate` share a physical dimension but are different concepts (see the main README's "Same dimension, different concepts").
-Nothing about that distinction needed special handling here -- adding a new dimension to this config format is "import one more table, add one more dataclass field", the same shape as every dimension before it.
+Nothing about that distinction needed special handling here.
+Adding a new dimension to this config format is "import one more table, add one more dataclass field", the same shape as every dimension before it.
 
 ## What this example is not
 
 This is not a pitch for validating untrusted input.
 The premise here is narrower and more specific:
 a config file that engineers on the same team write and maintain, where the realistic failure mode is a mistyped unit or a copy-paste error, not an adversarial payload.
+
 If the config format needs to defend against malicious input, that's a different problem with a different toolset -- this example is about catching honest mistakes as early and as clearly as possible, which is the problem `kuchka` is for.
