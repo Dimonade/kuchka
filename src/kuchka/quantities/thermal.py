@@ -205,10 +205,9 @@ class Temperature:
         return self._kelvin >= other._kelvin
 
     def __add__(self, other: TemperatureDelta) -> Temperature:
-        # The static signature only admits TemperatureDelta, so
+        # NOTE: The static signature only admits TemperatureDelta, so
         # `Celsius(20) + Celsius(5)` is a mypy error, matching how other units, and
-        # TemperatureDelta itself all reject cross-type addition statically
-        # (see quantities/base.py).
+        # TemperatureDelta itself all reject cross-type addition statically.
         #
         # The isinstance check for a second Temperature stays in the body as a runtime
         # guard for values that arrive from somewhere mypy never saw, e.g. an untyped
@@ -240,9 +239,9 @@ class Temperature:
             return Temperature(self._kelvin - other.magnitude, self._display_unit)
         return NotImplemented
 
-    # Deliberately no __mul__ / __rmul__ / __truediv__ by a scalar: see the module
-    # docstring for why scaling an absolute temperature is left undefined rather than
-    # implemented.
+    # NOTE: Deliberately no __mul__ / __rmul__ / __truediv__ by a scalar:
+    # see the module docstring for why scaling an absolute temperature is left
+    # undefined rather than implemented.
 
     def __repr__(self) -> str:
         value = self.value_in(self._display_unit)

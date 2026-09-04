@@ -1,9 +1,9 @@
 """The measurement system's exception hierarchy.
 
 Every error a user is likely to hit -- a dimension mismatch, a naked float where a
-measurement was expected, an unrecognised conversion target --
-is a subclass of :class:`MeasurementError`, so application code can catch the whole
-family with one except clause if it wants to.
+measurement was expected, an unrecognised conversion target -- is a subclass of
+:class:`MeasurementError`, so application code can catch the whole family with one
+except clause if it wants to.
 """
 
 from __future__ import annotations
@@ -16,10 +16,9 @@ class MeasurementError(Exception):
 class InvalidMeasurementError(MeasurementError):
     """A value could not be turned into, or combined with, a measurement.
 
-    Raised at construction time, e.g. passing a string, or a measurement of
-    the wrong dimension, into a unit constructor, and at arithmetic
-    boundaries where a naked number was used where a measurement was
-    expected.
+    Raised at construction time, e.g. passing a string, or a measurement of the wrong
+    dimension, into a unit constructor, and at arithmetic boundaries where a naked
+    number was used where a measurement was expected.
     """
 
 
@@ -72,11 +71,11 @@ class UnrepresentableDimensionError(MeasurementError):
 class PlannedDimensionError(UnrepresentableDimensionError):
     """Arithmetic produced a dimension that corresponds to a named, planned quantity.
 
-    Raised for a dimension this library already has a name for, e.g.
-    Length divided by Time producing Velocity, so the message can say
-    what the result actually is rather than only printing its exponent
-    vector. A subclass of :class:`UnrepresentableDimensionError`, so
-    code that catches the general error still catches this one too.
+    Raised for a dimension this library already has a name for, e.g., formerly, Length
+    divided by Time producing Velocity, so the message can say what the result actually
+    is rather than only printing its exponent vector.
+    A subclass of :class:`UnrepresentableDimensionError`, so code that catches the
+    general error still catches this one too.
     """
 
     def __init__(self, dimension: object, planned_name: str) -> None:

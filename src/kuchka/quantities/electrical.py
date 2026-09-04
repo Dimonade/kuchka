@@ -4,9 +4,9 @@ These four types are defined together, in one module, as they are not independen
 their `@overload` tables are the power triangle and Ohm's law, so each type's
 multiplication and division signatures name the other three directly.
 
-Runtime arithmetic (`+`, `-`, `*`, `/`) is fully general and lives on `LinearQuantity`
-(`base.py`): it derives any product or quotient from `Dimension` exponent-vector
-algebra, and does not need to know about "Power" as a concept at all.
+Runtime arithmetic (`+`, `-`, `*`, `/`) is fully general and lives on `LinearQuantity`:
+it derives any product or quotient from `Dimension` exponent-vector algebra, and does
+not need to know about "Power" as a concept at all.
 Python's type checkers cannot infer "Voltage times Current is Power" from that general
 algebra, though -- they only know it because each of the six relationships below is
 spelled out as an explicit `@overload`.

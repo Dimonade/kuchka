@@ -2,18 +2,17 @@
 
 ``LinearQuantity`` implements arithmetic, conversion, comparison, and
 dimensional-mismatch detection exactly once.
-``Voltage``, ``Current``, ``Power``, ``Resistance``, ``TemperatureDelta``,
-``Time``, ``Frequency``, and ``Length`` (see ``electrical.py``,
-``thermal.py``, ``temporal.py``, and ``length.py``) each subclass it and
-differ only in their :class:`~kuchka.dimensions.Dimension` and in the
-handful of ``@overload`` signatures that give multiplication and division
-a precise static type.
+``Voltage``, ``Current``, ``Power``, ``Resistance``, ``TemperatureDelta``, ``Time``,
+``Frequency``, and ``Length``, each subclass it and differ only in their
+:class:`~kuchka.dimensions.Dimension` and in the handful of ``@overload`` signatures
+that give multiplication and division a precise static type.
 
-"Linear" means unit conversion within the quantity is a pure scale factor,
-with no offset: ``2 * Volt(1) == Volt(2)``.
+"Linear" means unit conversion within the quantity is a pure scale factor, with no
+offset:
+``2 * Volt(1) == Volt(2)``.
+
 Absolute temperature is not linear in this sense (``2 * Celsius(1)`` is not a
-meaningful statement), so it lives in its own, smaller class in
-``temperature.py`` instead of here.
+meaningful statement), so it lives in its own.
 """
 
 from __future__ import annotations
@@ -35,36 +34,35 @@ from kuchka.numeric import to_decimal
 _NUMERIC_TYPES = (int, float, Decimal, Fraction)
 
 _DIMENSION_REGISTRY: dict[Dimension, type[LinearQuantity]] = {}
-"""Maps a dimension signature back to the named type that represents it, so
-that e.g. ``Volt(5) * Ampere(2)`` produces a real ``Power`` instance
-instead of a generic, untyped quantity.
+"""Maps a dimension signature back to the named type that represents it, so that e.g.
+``Volt(5) * Ampere(2)`` produces a real ``Power`` instance.
 
 Each quantity module populates this via ``register`` as a side effect of being
-imported, which is what lets new quantity types be added without this module
-knowing about them in advance.
+imported, which is what lets new quantity types be added without this module knowing
+about them in advance.
 
-LOAD-BEARING RULE: at most one type may ever be registered per dimension,
-and it must always be the general SI/physics name for that dimension
-(``Voltage`` for M L^2 T^-3 I^-1, ``Frequency`` for T^-1, and so on),
-never a domain-specific vocabulary type.
+NOTE: LOAD-BEARING RULE: at most one type may ever be registered per dimension, and it
+must always be the general SI/physics name for that dimension
+(``Voltage`` for M L^2 T^-3 I^-1, ``Frequency`` for T^-1, and so on), never a
+domain-specific vocabulary type.
 
 This matters once more than one type can share a dimension:
-``SampleRate`` and ``BaudRate`` are both T^-1, the same as ``Frequency``,
-but neither of them registers.
-They stay reachable only by explicit construction, exactly like
-``Temperature`` -- ``register`` enforces this by refusing a second type
-for a dimension that already has one, rather than silently overwriting it.
+``SampleRate`` and ``BaudRate`` are both T^-1, the same as ``Frequency``, but neither
+of them registers.
+They stay reachable only by explicit construction, exactly like ``Temperature`` --
+``register`` enforces this by refusing a second type for a dimension that already has
+one, rather than silently overwriting it.
 """
 
 _PLANNED_DIMENSIONS: dict[Dimension, str] = {}
-"""Maps a dimension signature to the name of a quantity this library
-intends to implement but does not yet.
+"""Maps a dimension signature to the name of a quantity this library intends to
+implement but does not yet.
 
 Lets `_promote` raise `PlannedDimensionError` for a dimension this library already has
 a name for, naming the result instead of only printing its exponent vector.
 
-Curated by hand, the same way the `@overload` tables are: adding an entry here
-improves the error message, and is a marker for what to implement next.
+Curated by hand, the same way the `@overload` tables are: adding an entry here improves
+the error message, and is a marker for what to implement next.
 
 Emptied out as each named dimension gets a real registered type.
 """
@@ -73,12 +71,14 @@ Emptied out as each named dimension gets a real registered type.
 def register(dimension: Dimension, quantity_type: type[LinearQuantity]) -> None:
     """Associate a dimension signature with the type that represents it.
 
-    Called once per quantity type, at import time, by the module that
-    defines that type. Application code never needs to call this
-    directly. Raises `TypeError` if another type already claimed this
-    dimension: this is a defect in kuchka's own quantity modules, not
-    something a caller of the public API can trigger, so it is not part
-    of the `MeasurementError` hierarchy that application code handles.
+    Called once per quantity type, at import time, by the module that defines that type.
+    
+    Application code never needs to call this directly.
+    
+    Raises `TypeError` if another type already claimed this dimension:
+    this is a defect in kuchka's own quantity modules, not something a caller of the
+    public API can trigger, so it is not part of the `MeasurementError` hierarchy that
+    application code handles.
     """
     existing = _DIMENSION_REGISTRY.get(dimension)
     if existing is not None and existing is not quantity_type:
@@ -97,8 +97,8 @@ def register(dimension: Dimension, quantity_type: type[LinearQuantity]) -> None:
 class UnitDef:
     """A named, purely multiplicative unit, e.g. the ``mV`` behind ``Millivolt``.
 
-    This is internal machinery used by ``units/`` and ``temperature.py`` to
-    build unit constructors like ``Volt`` and ``Millivolt``.
+    This is internal machinery used by to build unit constructors like ``Volt`` and
+    ``Millivolt``.
 
     Application code never constructs a ``UnitDef`` directly;
     it imports the constructor functions instead.
@@ -126,11 +126,12 @@ class UnitDef:
 class LinearQuantity:
     """Base class for physical quantities whose units differ by a pure scale.
 
-    Stores its magnitude in the quantity's canonical unit (volts for
-    Voltage, amperes for Current, ...) plus the unit most recently asked to
-    be seen in (``_display_unit``), which affects only ``repr()``.
-    Arithmetic and equality always operate on the canonical magnitude, so
-    the display unit never affects correctness.
+    Stores its magnitude in the quantity's canonical unit (volts for Voltage,
+    amperes for Current, ...) plus the unit most recently asked to be seen in
+    (``_display_unit``), which affects only ``repr()``.
+
+    Arithmetic and equality always operate on the canonical magnitude, so the display
+    unit never affects correctness.
     """
 
     dimension: ClassVar[Dimension]
@@ -233,20 +234,22 @@ class LinearQuantity:
         return self._magnitude >= other._magnitude
 
     def __add__(self, other: Self) -> Self:
-        # `other` is typed as `Self` rather than `object` so that
-        # `Volt(5) + Ampere(2)` and `Volt(5) + 4.2` are both rejected by
-        # mypy/pyright, not just at runtime. Because this method is
-        # inherited as-is (no subclass overrides it), `Self` binds to
-        # whichever quantity type it is actually called on, e.g. Voltage
-        # for `Voltage.__add__`. The isinstance checks below remain the
-        # authoritative guard for values that reach this call dynamically
-        # typed, e.g. from an unchecked boundary or a suppressed type error.
+        # NOTE: `other` is typed as `Self` rather than `object` so that
+        # `Volt(5) + Ampere(2)` and `Volt(5) + 4.2` are both rejected by type checkers,
+        # not just at runtime.
         #
-        # The runtime guard compares `type(self) is type(other)` rather
-        # than `self.dimension != other.dimension`: two different types
-        # can share a dimension (`Frequency` and `BaudRate` are both
-        # T^-1), and adding across that boundary is exactly the mistake
-        # this check exists to catch, even though the dimensions agree.
+        # Because this method is inherited as-is (no subclass overrides it), `Self`
+        # binds to whichever quantity type it is actually called on, e.g. Voltage for
+        # `Voltage.__add__`.
+        # The isinstance checks below remain the authoritative guard for values that
+        # reach this call dynamically typed, e.g. from an unchecked boundary or a
+        # suppressed type error.
+        #
+        # The runtime guard compares `type(self) is type(other)` rather than
+        # `self.dimension != other.dimension`:
+        # two different types can share a dimension (`Frequency` and `BaudRate` are
+        # both T^-1), and adding across that boundary is exactly the mistake this check
+        # exists to catch, even though the dimensions agree.
         if isinstance(other, LinearQuantity):
             if type(self) is not type(other):
                 raise IncompatibleDimensionError("add", self, other)
@@ -277,17 +280,18 @@ class LinearQuantity:
         raise InvalidMeasurementError(msg)
 
     # NOTE ON TYPING: the return type here is intentionally broad
-    # (`LinearQuantity | Decimal`) because this base implementation runs
-    # the fully general dimension algebra -- it has no static way of
-    # knowing that a Voltage times a Current specifically produces a
-    # Power. That precision is added by the `@overload`-decorated methods
-    # on Voltage/Current/Power/Resistance (see `electrical.py`), which
-    # narrow this signature for the specific pairs this version supports,
-    # and delegate back to this method for the actual runtime logic.
+    # (`LinearQuantity | Decimal`) because this base implementation runs the fully
+    # general dimension algebra -- it has no static way of knowing that a Voltage times
+    # a Current specifically produces a Power.
     #
-    # Each subclass overload list ends with a fallback overload matching
-    # this exact signature (`other: object -> LinearQuantity | Decimal`)
-    # so that overriding it remains compatible with this base signature.
+    # That precision is added by the `@overload`-decorated methods on
+    # Voltage/Current/Power/Resistance, which narrow this signature for the specific
+    # pairs this version supports, and delegate back to this method for the actual
+    # runtime logic.
+    #
+    # Each subclass overload list ends with a fallback overload matching this exact
+    # signature (`other: object -> LinearQuantity | Decimal`) so that overriding it
+    # remains compatible with this base signature.
     def __mul__(self, other: object) -> LinearQuantity | Decimal:
         if isinstance(other, LinearQuantity):
             result_dimension = self.dimension * other.dimension
@@ -312,19 +316,19 @@ class LinearQuantity:
         return NotImplemented
 
     def __rtruediv__(self, other: object) -> LinearQuantity | Decimal:
-        # `Numeric / self`, e.g. `1 / Time(2)`. This only derives an
-        # answer through the shared dimension registry when `self`'s own
-        # type is the *canonical* one for its dimension (the guard
-        # below). That guard matters the moment two types share a
-        # dimension: `SamplingPeriod` and `Time` are both T^1, so a naive
-        # `1 / self._magnitude` promoted through `_promote` would always
-        # hand back a `Time` -- the registered T^-1 owner -- even when
-        # `self` was a `SamplingPeriod`, silently mislabelling a sample
-        # rate as a generic frequency. Non-canonical types are expected to
-        # override this method themselves if they have a specific,
-        # well-defined reciprocal (see `SamplingPeriod`/`SampleRate` in
-        # `temporal.py`), or to have none at all if they do not (see
-        # `BaudRate`, whose reciprocal is not a modelled concept).
+        # NOTE: `Numeric / self`, e.g. `1 / Time(2)`.
+        # This only derives an answer through the shared dimension registry when
+        # `self`'s own type is the *canonical* one for its dimension (the guard below).
+        # That guard matters the moment two types share a dimension:
+        # `SamplingPeriod` and `Time` are both T^1, so a naive `1 / self._magnitude`
+        # promoted through `_promote` would always hand back a `Time` --
+        # the registered T^-1 owner -- even when `self` was a `SamplingPeriod`,
+        # silently mislabelling a sample rate as a generic frequency.
+        #
+        # Non-canonical types are expected to override this method themselves if they
+        # have a specific, well-defined reciprocal (see `SamplingPeriod`/`SampleRate`,
+        # or to have none at all if they do not (see `BaudRate`, whose reciprocal is
+        # not a modelled concept).
         if isinstance(other, _NUMERIC_TYPES):
             if _DIMENSION_REGISTRY.get(self.dimension) is not type(self):
                 return NotImplemented
@@ -360,9 +364,9 @@ class LinearQuantity:
 def _promote(dimension: Dimension, magnitude: Decimal) -> LinearQuantity | Decimal:
     """Build the correctly-typed result of a multiplication or division.
 
-    A dimensionless result (e.g. Resistance / Resistance) is returned as a
-    plain ``Decimal`` ratio, matching ordinary physics convention: it is
-    not a measurement of anything, so it should not pretend to be one.
+    A dimensionless result (e.g. Resistance / Resistance) is returned as a plain
+    ``Decimal`` ratio, matching ordinary physics convention:
+    it is not a measurement of anything, so it should not pretend to be one.
     """
     if dimension == DIMENSIONLESS:
         return magnitude

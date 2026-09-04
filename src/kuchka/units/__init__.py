@@ -6,10 +6,10 @@
     current = Milliampere(150)
     power = voltage * current
 
-Each quantity's canonical unit (the one arithmetic results come back in,
-e.g. ``Voltage * Current`` yields a result expressed in ``Watt``) is
-assigned onto the corresponding domain class from ``kuchka.quantities``
-at the bottom of the module that owns that dimension.
+Each quantity's canonical unit (the one arithmetic results come back in, e.g.
+``Voltage * Current`` yields a result expressed in ``Watt``) is assigned onto the
+corresponding domain class from ``kuchka.quantities`` at the bottom of the module that
+owns that dimension.
 """
 
 from __future__ import annotations

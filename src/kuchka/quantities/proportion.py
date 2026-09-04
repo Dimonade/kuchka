@@ -7,8 +7,8 @@ quantities never silently hands back a `Proportion`.
 
 Unlike `SampleRate`/`BaudRate`, this is also structural rather than a choice --
 `_promote` already returns a bare `Decimal` for any dimensionless result before it ever
-consults the registry (see its docstring in `base.py`), so a registration here would be
-dead code regardless.
+consults the registry (see its docstring), so a registration here would be dead code
+regardless.
 """
 
 from __future__ import annotations
