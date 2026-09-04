@@ -4,14 +4,15 @@ version = "0.1.0"
 description = "A small pile of physically-typed engineering units for Python."
 readme = "README.md"
 authors = [{ name = "dimonade", email = "dimonade@protonmail.com" }]
-requires-python = ">=3.15"
+requires-python = ">=3.11"
 dependencies = []
 classifiers = [
   "Development Status :: 3 - Alpha",
-  "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Scientific/Engineering",
 ]
+license = "Apache-2.0"
 
 [project.urls]
 Homepage = "https://codeberg.org/dimonade/kuchka"
@@ -25,6 +26,7 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
   "coverage>=7.15.4",
+  "hypothesis>=6.165.10",
   "mccabe>=0.7.0",
   "mypy>=2.3.1",
   "pylsp-mypy>=0.8.0",
@@ -70,12 +72,16 @@ exclude = [
 ]
 indent-width = 4
 line-length = 88
-target-version = "py315"
+target-version = "py311"
 
 
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
+  "COM812", # justfile's `just fa` already uses `ruff format` which takes care of commas.
+  "CPY001", # No per-file copyright header policy for this project.
+  "D105",   # Dunder methods (__add__, __eq__, ...) are documented once, at the class or module level, where the physical meaning of
+  # the operation actually lives; a one-line docstring repeated on every operator is noise, not documentation.
   "D203",   # No blank lines after class definitions.
   "D213",   # Docstring summary on first line.
   "E402",
@@ -84,14 +90,52 @@ ignore = [
   "F405",
   "I001",   # Using reorder-python-imports.
   "INP001", # Okay to not have `__init__.py` when not needed.
+  "N802",   # Unit constructors (Volt, Ampere, Celsius, ...) are
+  # intentionally capitalized like types: `isinstance(Volt(5), Voltage)` should read the way a type check reads.
+  # See design_proposal.md, "Separate quantity types from unit constructors".
+  "EM101",  # These, together with TRY003, want every raise to route a
+  "EM102",  # short message through an intermediate variable. The
+  "TRY003", # exception hierarchy in errors.py exists specifically to
+  # carry a full, engineering-specific explanation inline at
+  # the raise site (see errors.py); routing all of those
+  # through a `msg = ...` line first is boilerplate without a
+  # matching benefit here.
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = [
-  "D103", # Test names are descriptive for the most part.
+  "ANN001", # Parametrized test arguments take on whatever values the parametrize table provides across cases;
+  # giving them a precise static type would either be `Any` in disguise or would need a broad union that adds
+  # ceremony without catching anything a wrong table entry wouldn't already.
+  "ANN201", # Tests usually return `None`s.
+  "D100",   # Test module names are descriptive; a repeated one-line
+  "D103",   # module/function docstring on every test file adds no
+  # information the filename and test name did not already give.
+  "D104",    # `tests/__init__.py` is a marker file, not a package with its own public surface to document.
+  "FBT003",  # Tests intentionally pass literal booleans, e.g. `Volt(True)` to assert that `bool` is rejected as a measurement input.
+  "PLC0415", # `test_typing.py` probes for an optional dependency (mypy) with an import inside a function;
+  # that is the standard pattern for an optional-dependency check, not a top-level import that got misplaced.
   "S101", # Asserts are okay in tests.
+  "S301", # These tests pickle/unpickle values they just constructed themselves, in the same process;
+  # there is no untrusted data on the other end of the `pickle.loads` call.
   "S311", # `random` is not used for cryptography.
   "S603", # Testbench is not a subject to attack.
   "S605", # Same.
   "S607", # Same.
+]
+"docs/examples/*/test_*.py" = [
+  # Worked-example tests live outside `tests/` on purpose, so they can be copied out as a standalone reference alongside their example.
+  # Same reasoning as the `tests/*` ignores above, since this is the same shape of code.
+  "ANN001",
+  "D100",
+  "D103",
+  "S101",
+]
+"docs/examples/*/demo.py" = [
+  # These scripts exist to print their story to a terminal; that is the entire point of running them.
+  "T201",
+]
+"benchmarks/*.py" = [
+  # Same reasoning as demo.py above: a benchmark script's entire job is to print a results table to a terminal.
+  "T201",
 ]
