@@ -19,7 +19,6 @@ from kuchka import Microgram
 from kuchka import Milligram
 from kuchka import Nanogram
 from kuchka import Tonne
-from kuchka.units import GRAM
 from kuchka.units import KILOGRAM
 from kuchka.units import MEGAGRAM
 

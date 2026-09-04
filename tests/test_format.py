@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from kuchka import Celsius
-from kuchka import Kelvin
 from kuchka import Volt
 from kuchka.units import MILLIVOLT
 

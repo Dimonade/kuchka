@@ -72,9 +72,9 @@ def register(dimension: Dimension, quantity_type: type[LinearQuantity]) -> None:
     """Associate a dimension signature with the type that represents it.
 
     Called once per quantity type, at import time, by the module that defines that type.
-    
+
     Application code never needs to call this directly.
-    
+
     Raises `TypeError` if another type already claimed this dimension:
     this is a defect in kuchka's own quantity modules, not something a caller of the
     public API can trigger, so it is not part of the `MeasurementError` hierarchy that
