@@ -2,15 +2,19 @@
 
 ## Motivation
 
-Engineering software routinely moves physical measurements through acquisition, processing, analysis, reporting, and persistence. A value such as `4.2` is not meaningful on its own: it may represent volts, millivolts, amperes, seconds, degrees Celsius, or something else entirely.
+Engineering software routinely moves physical measurements through acquisition, processing, analysis, reporting, and persistence.
+A value such as `4.2` is not meaningful on its own: it may represent volts, millivolts, amperes, seconds, degrees Celsius, or something else entirely.
 
-Using naked numeric values throughout an engineering pipeline makes unit errors easy to introduce and difficult to detect. A value can be converted incorrectly, combined with an incompatible quantity, or silently lose its unit while passing through a function that accepts an ordinary `float`.
+Using naked numeric values throughout an engineering pipeline makes unit errors easy to introduce and difficult to detect.
+A value can be converted incorrectly, combined with an incompatible quantity, or silently lose its unit while passing through a function that accepts an ordinary `float`.
 
-These failures are particularly dangerous because the resulting program often remains perfectly valid Python. The mistake is semantic rather than syntactic, and therefore may survive testing until it produces an incorrect engineering result.
+These failures are particularly dangerous because the resulting program often remains perfectly valid Python.
+The mistake is semantic rather than syntactic, and therefore may survive testing until it produces an incorrect engineering result.
 
 The goal of this project is to provide a measurement system for Python in which **physical quantities are first-class values**, while presenting an API that is natural to engineers regardless of their familiarity with Python.
 
-The intended user should not need to understand registries, unit strings, dimensional-analysis internals, decorators, metaclasses, or the representation used internally by the library. They should be able to work with measurements in terms that correspond directly to the engineering concepts they already use.
+The intended user should not need to understand registries, unit strings, dimensional-analysis internals, decorators, metaclasses, or the representation used internally by the library.
+They should be able to work with measurements in terms that correspond directly to the engineering concepts they already use.
 
 A typical engineer-facing interface should therefore look approximately like:
 
@@ -50,9 +54,7 @@ analyse_voltage(Volt(4.2))
 should be required.
 
 The system should make it possible to enforce this distinction both statically, through type checking, and dynamically, at runtime boundaries where values enter the system.
-
 A raw numeric value may exist at an external boundary — for example, a sensor API, CSV file, database driver, or network message — but it should be converted into a measurement immediately.
-
 Once inside the measurement domain, naked numeric values should not be permitted to silently propagate.
 
 ### 2. Engineering concepts should be represented by named types
@@ -109,7 +111,6 @@ Kilometer(5)
 or an equivalent API where the unit is encoded directly in the constructor or type.
 
 The system should favour discoverability through normal Python tooling: completion, documentation, static analysis, and symbol search.
-
 There should be no need for engineers to remember whether a particular string is `"m"`, `"meter"`, `"metre"`, or another accepted spelling.
 
 ### 4. Units must be readable without being noisy
@@ -124,9 +125,7 @@ current = Milliampere(150)
 ```
 
 The library should avoid conventions that turn otherwise readable engineering code into collections of constants written in unusual capitalization or registry boilerplate.
-
 Names should look like normal Python classes and normal engineering terminology.
-
 The API should also distinguish between physical quantity types and unit construction without requiring the user to understand the distinction.
 
 ### 5. Dimensional correctness must be enforced
@@ -285,8 +284,6 @@ Advanced users should be able to access those facilities when necessary, but the
 
 Safety should come from the architecture rather than from requiring users to remember a large set of rules.
 
----
-
 # Architecture
 
 The implementation should be divided into several layers with deliberately narrow responsibilities.
@@ -431,19 +428,17 @@ Where Python's type system cannot represent a dimensional relationship precisely
 
 The static typing layer should therefore be treated as an aid to safety and developer tooling, not as the sole mechanism enforcing dimensional correctness.
 
----
-
 # Ergonomics Before Safety
 
 The project should explicitly adopt a two-stage design philosophy.
 
 First, establish the API that engineers naturally want to use.
-
 Then establish the mechanisms required to make that API safe.
 
 This matters because an extremely safe API that engineers dislike will simply be bypassed.
 
-The goal is not to force engineers to learn a measurement framework. The goal is to make the correct representation the natural representation.
+The goal is not to force engineers to learn a measurement framework.
+The goal is to make the correct representation the natural representation.
 
 The desired experience is closer to:
 
@@ -454,61 +449,45 @@ current = Milliampere(250)
 
 with all unit algebra occurring behind the scenes.
 
----
-
 # Safety Invariants
 
 The implementation should ultimately aim to establish the following invariants.
 
 **A physical quantity has a physical type.**
-
 A voltage is not represented merely by a float.
 
 **A physical quantity always has dimensional information.**
-
 A value cannot silently become dimensionless during ordinary application operations.
 
 **Raw numerics may enter only at explicit boundaries.**
-
 Acquisition, deserialization, and other external interfaces must convert them into measurements.
 
 **Incompatible dimensions cannot participate in arithmetic.**
-
 `Voltage + Current` is an error.
 
 **Equivalent units are transparently compatible.**
-
 `Volt(1)` and `Millivolt(1000)` represent compatible quantities.
 
 **Derived quantities retain their dimension.**
-
 `Voltage * Current` produces `Power`, not an untyped numeric result.
 
 **Serialization cannot silently strip units.**
-
 Measurement data written by the system remains identifiable as measurement data when read back.
 
 **The public API does not require knowledge of the implementation.**
-
 An engineer should be able to use the system correctly without understanding registries, conversion tables, dimensional vectors, generic quantity classes, or internal numeric representations.
-
----
 
 # Non-Goals
 
 The project is not intended to become a general-purpose symbolic mathematics framework.
 
-It is not intended to expose every possible unit-system feature directly to ordinary users.
-
-It is not intended to replace NumPy, Pandas, or other data-processing libraries.
-
-It is not intended to make Python behave exactly like Rust's type system.
+- It is not intended to expose every possible unit-system feature directly to ordinary users.
+- It is not intended to replace NumPy, Pandas, or other data-processing libraries.
+- It is not intended to make Python behave exactly like Rust's type system.
 
 Instead, the goal is to use Python's existing runtime and typing capabilities to approximate the strongest practical engineering guarantees while preserving a conventional Python programming experience.
 
 The project should prefer a small amount of sophisticated machinery behind the scenes over exposing that machinery to every user.
-
----
 
 # Guiding Principle
 
@@ -537,20 +516,16 @@ analyse(4.2)
 
 difficult to introduce, easy for static analysis to reject, and guaranteed to fail at runtime when it crosses a protected API boundary.
 
-The engineer should see **Voltage**, not `Quantity[float, Dimension[...]]`.
-
-The engineer should see **Millivolt**, not `"mV"`.
-
-The engineer should see **Power**, not the result of a unit algebra expression.
+- The engineer should see **Voltage**, not `Quantity[float, Dimension[...]]`.
+- The engineer should see **Millivolt**, not `"mV"`.
+- The engineer should see **Power**, not the result of a unit algebra expression.
 
 All of the machinery required to make those statements true belongs behind the API.
 
----
+# Initial Implementation Draft-Proposal-However-you-call-it
 
-# Initial Implementation Proposal
-
-The first implementation should deliberately avoid attempting to solve every possible unit-system problem. The objective of version 0.1 is to establish the API and invariants that the rest of the system can grow around.
-
+The first implementation should deliberately avoid attempting to solve every possible unit-system problem.
+The objective of version 0.1 is to establish the API and invariants that the rest of the system can grow around.
 The implementation should begin with a relatively small set of SI quantities and common engineering prefixes, then expand only after the core semantics are stable.
 
 ## 1. Public Package Structure
@@ -616,7 +591,8 @@ assert isinstance(v1, Voltage)
 assert isinstance(v2, Voltage)
 ```
 
-The precise implementation may instead make `Volt` a factory function or a lightweight class deriving from a common constructor abstraction. The important part is that the static and runtime semantic type remains `Voltage`.
+The precise implementation may instead make `Volt` a factory function or a lightweight class deriving from a common constructor abstraction.
+The important part is that the static and runtime semantic type remains `Voltage`.
 
 This prevents the type system from exploding into unrelated types such as `VoltVoltage`, `MillivoltVoltage`, and `KilovoltVoltage`.
 
@@ -756,7 +732,7 @@ Quantity(5)
 
 The project should support ordinary Python static analysis from the beginning.
 
-The initial target should be modern mypy and/or pyright with strict settings.
+The initial target should be modern mypy, ty, and/or pyright with strict settings.
 
 Example:
 
@@ -796,11 +772,12 @@ For example:
 
 ```text
 MeasurementError
-├── InvalidMeasurementError
-├── InvalidUnitError
-├── IncompatibleDimensionError
-├── InvalidConversionError
-└── SerializationError
+-> InvalidMeasurementError
+-> InvalidUnitError
+-> IncompatibleDimensionError
+-> InvalidConversionError
+-> SerializationError
+-> etc...
 ```
 
 The exact names can evolve, but the distinction between ordinary programming errors and measurement-system errors should be clear.
@@ -831,9 +808,7 @@ registry = UnitRegistry()
 
 The registry should be initialized by the library and used internally by constructors and conversion operations.
 
-This is an important distinction:
-
-> A registry can be a good implementation technique while still being a bad public API.
+This is an important distinction -- a registry can be a good implementation technique while still being a bad public API.
 
 ## 12. Prefix Generation
 
@@ -888,7 +863,8 @@ A measurement serialized to JSON-like data might become conceptually:
 }
 ```
 
-The string here is acceptable as a **storage format**, because it is not the application API. The important requirement is that deserialization reconstructs a typed measurement rather than returning `4.2`.
+The string here is acceptable as a **storage format**, because it is not the application API.
+The important requirement is that deserialization reconstructs a typed measurement rather than returning `4.2`.
 
 The serializer should validate the unit identifier against the known internal unit catalogue and fail on unknown or malformed units.
 
@@ -920,7 +896,7 @@ rather than allowing a normal `ndarray[float]` to masquerade as a voltage array.
 
 ## 16. Testing Strategy
 
-The safety properties should be encoded as tests rather than relying only on documentation.
+The safety properties should be encoded as tests, while documentation may provide reasoning for edge cases and uncertainties.
 
 At minimum, the initial test suite should cover:
 
@@ -987,7 +963,9 @@ This is enough to exercise:
 
 The project should not attempt to implement every obscure unit or imperial variant before the core API is proven.
 
-## 18. Suggested Milestones
+## 18. Milestones
+
+General collection of steps to serve as an accumulation of building blocks.
 
 ### Milestone 1: Core semantics
 
@@ -1038,13 +1016,12 @@ Add:
 
 Only at this point should broader integration concerns shape the API.
 
----
-
 # Recommended First Technical Direction
 
 A practical first implementation should be deliberately conservative.
 
-The core should use ordinary Python classes and a small internal dimension algebra. The public API should be expressed entirely in conventional Python types and constructors.
+The core should use ordinary Python classes and a small internal dimension algebra.
+The public API should be expressed entirely in conventional Python types and constructors.
 
 A rough shape might be:
 
@@ -1067,7 +1044,8 @@ class Millivolt(Voltage):
     def __new__(cls, value: float) -> Voltage: ...
 ```
 
-This code is only illustrative. A real implementation should avoid duplicating conversion behaviour across every prefixed constructor.
+This code is only illustrative.
+A real implementation should avoid duplicating conversion behaviour across every prefixed constructor.
 
 A better internal model is likely:
 
@@ -1094,7 +1072,8 @@ Measurement
 
 while the public layer provides engineering-specific types around it.
 
-The next implementation decision should be whether arithmetic results remain generic measurements or are promoted to named domain types. The preferred answer is named domain types whenever the resulting dimension has a registered engineering meaning:
+The next implementation decision should be whether arithmetic results remain generic measurements or are promoted to named domain types.
+The preferred answer is named domain types whenever the resulting dimension has a registered engineering meaning:
 
 ```python
 Volt(12) * Ampere(2)  # -> Power
@@ -1122,8 +1101,6 @@ The following questions should be resolved during implementation rather than pre
 
 These should be answered by small prototypes and tests, not by making the public API depend on an implementation choice too early.
 
----
-
 # Final Principle
 
 The project is successful when an engineer can work with measurements naturally and cannot accidentally forget what those measurements mean.
@@ -1139,3 +1116,7 @@ It is:
 The engineering team should spend its attention on engineering problems, not on unit-registry mechanics.
 
 The complexity required to make that safe belongs in the library itself.
+
+---
+
+This is all a set of guideline principles, some of them might not be implemented in this order, others not at all, and the other others might be implemented in a different way.

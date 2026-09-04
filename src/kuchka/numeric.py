@@ -33,17 +33,17 @@ _NUMERIC_TYPES = (int, float, Decimal, Fraction)
 def to_decimal(value: object) -> Decimal:
     """Coerce ``value`` into an exact :class:`~decimal.Decimal`.
 
-    ``float`` values are routed through ``str()`` first. ``Decimal(4.2)``
-    would faithfully reproduce the binary float's rounding error
+    ``float`` values are routed through ``str()`` first. ``Decimal(4.2)`` would
+    faithfully reproduce the binary float's rounding error
     (``4.20000000000000017763...``);
     ``Decimal(str(4.2))`` reproduces what an engineer actually typed.
-    That one-line rule is what keeps float literals like ``Volt(4.2)``
-    numerically sane without asking the engineer to write
-    ``Volt(Decimal("4.2"))`` themselves.
+
+    That one-line rule is what keeps float literals like ``Volt(4.2)`` numerically sane
+    without asking the engineer to write ``Volt(Decimal("4.2"))`` themselves.
     """
-    # bool is a subclass of int in Python; True/False silently becoming 1/0
-    # inside a measurement is a classic footgun, so it is rejected
-    # explicitly rather than accepted by isinstance(value, int).
+    # NOTE: bool is a subclass of int in Python; True/False silently becoming 1/0
+    # inside a measurement is a classic footgun, so it is rejected explicitly rather
+    # than accepted by isinstance(value, int).
     if isinstance(value, bool):
         raise InvalidMeasurementError(
             f"cannot construct a measurement from a bool ({value!r}); "

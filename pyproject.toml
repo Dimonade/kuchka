@@ -8,9 +8,12 @@ requires-python = ">=3.11"
 dependencies = []
 classifiers = [
   "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: Apache Software License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Scientific/Engineering",
 ]
+license = "Apache-2.0"
 
 [project.urls]
 Homepage = "https://codeberg.org/dimonade/kuchka"
@@ -67,8 +70,6 @@ exclude = [
   ".mypy_cache",
   ".tox",
   ".ruff_cache",
-  "docs/introduction", # historical/narrative content quoted verbatim elsewhere (the blog post, the presentation);
-  # not held to library code standards on purpose.
 ]
 indent-width = 4
 line-length = 88

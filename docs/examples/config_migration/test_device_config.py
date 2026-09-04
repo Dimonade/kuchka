@@ -1,10 +1,11 @@
 """Tests for device_config.py.
 
-This directory is documentation, not part of the installed `kuchka`
-package, so `device_config` is imported by adding this directory to
-`sys.path` rather than through a package import. Run with
-`pytest docs/examples/config_migration` from the repository root, or
-`pytest` from inside this directory.
+This directory is documentation, not part of the installed `kuchka` package,
+so `device_config` is imported by adding this directory to `sys.path` and not through
+a package import.
+
+Run with `pytest docs/examples/config_migration` from the repository root, or `pytest`
+from inside this directory.
 """
 
 from __future__ import annotations
