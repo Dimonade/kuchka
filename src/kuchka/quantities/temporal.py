@@ -263,7 +263,7 @@ class BaudRate(LinearQuantity):
     baud counts symbols per second, not bits or cycles, so it is not a `Frequency` in
     disguise the way `SampleRate` is a `Frequency`-shaped concept restricted to
     acquisition.
-    
+
     It is deliberately given no reciprocal and no `as_frequency()` -- neither is a
     well-defined, encoding-independent conversion, and a wrong default here would be
     wrong silently.

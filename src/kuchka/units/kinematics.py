@@ -12,7 +12,8 @@ its scale relative to metres per second is `1000 / 3600`, which does not termina
 `Decimal` any more than in binary `float` (the denominator's prime factors are not
 only 2 and 5, the same reason `Inch`'s reciprocal sits out some property tests in
 `length.py`).
-Adding it needs a decision about how much rounding is acceptable, not just a new `UnitDef`.
+Adding it needs a decision about how much rounding is acceptable, not just a new
+`UnitDef`.
 """
 
 from __future__ import annotations
