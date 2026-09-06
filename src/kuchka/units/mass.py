@@ -29,28 +29,38 @@ reads a unit as a string from outside the application.
 
 from __future__ import annotations
 
-from decimal import Decimal
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import MASS
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
+from kuchka.prefixes import NANO, PICO, MICRO, MILLI, UNIT, KILO, MEGA
+from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Mass
-from kuchka.quantities import UnitDef
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
-NANOGRAM = UnitDef("nanogram", "ng", Decimal("0.000000000001"), MASS)
-MICROGRAM = UnitDef("microgram", "\u00b5g", Decimal("0.000000001"), MASS)
-MILLIGRAM = UnitDef("milligram", "mg", Decimal("0.000001"), MASS)
-GRAM = UnitDef("gram", "g", Decimal("0.001"), MASS)
-KILOGRAM = UnitDef("kilogram", "kg", Decimal(1), MASS)
-MEGAGRAM = UnitDef("megagram", "Mg", Decimal(1000), MASS)
+GRAM_NAME = "gram"
+GRAM_SYMBOL = "g"
+
+
+PICOGRAM = prefixed_unit(PICO, GRAM_NAME, GRAM_SYMBOL, MASS, coherent_offset=-3)
+NANOGRAM = prefixed_unit(NANO, GRAM_NAME, GRAM_SYMBOL, MASS, coherent_offset=-3)
+MICROGRAM = prefixed_unit(MICRO, GRAM_NAME, GRAM_SYMBOL, MASS, coherent_offset=-3)
+MILLIGRAM = prefixed_unit(MILLI, GRAM_NAME, GRAM_SYMBOL, MASS, coherent_offset=-3)
+GRAM = prefixed_unit(UNIT, GRAM_NAME, GRAM_SYMBOL, MASS, coherent_offset=-3)
+KILOGRAM = prefixed_unit(KILO, GRAM_NAME, GRAM_SYMBOL, MASS, coherent_offset=-3)
+MEGAGRAM = prefixed_unit(MEGA, GRAM_NAME, GRAM_SYMBOL, MASS, coherent_offset=-3)
 
 Mass._canonical_unit = KILOGRAM  # noqa: SLF001 -- this module owns Mass's canonical unit
+
+
+def Picogram(value: Numeric) -> Mass:
+    """Construct a Mass from a magnitude expressed in picograms."""
+    return Mass(to_decimal(value) * PICOGRAM.scale, PICOGRAM)
 
 
 def Nanogram(value: Numeric) -> Mass:
@@ -84,20 +94,20 @@ def Megagram(value: Numeric) -> Mass:
 
 
 Tonne = Megagram
-"""A tonne is a megagram. this name is the same function object as `Megagram`,
-not a wrapper around it, so the two are interchangeable at every level --
-identity, display, and unit resolution -- rather than merely equal in value.
+"""A tonne is a megagram.
+
+This name is the same function object as `Megagram`, so the two are interchangeable.
 """
 
 
 MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = MappingProxyType(
     {
-        "ng": Nanogram,
-        "ug": Microgram,
-        "mg": Milligram,
-        "g": Gram,
-        "kg": Kilogram,
-        "Mg": Megagram,
+        PICOGRAM.symbol: Picogram,
+        MICROGRAM.symbol: Microgram,
+        MILLIGRAM.symbol: Milligram,
+        GRAM.symbol: Gram,
+        KILOGRAM.symbol: Kilogram,
+        MEGAGRAM.symbol: Megagram,
         "t": Tonne,
     }
 )
