@@ -13,24 +13,33 @@ unit as a string from outside the application.
 
 from __future__ import annotations
 
-from decimal import Decimal
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import RESISTANCE
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
+from kuchka.prefixes import KILO
+from kuchka.prefixes import MEGA
+from kuchka.prefixes import MILLI
+from kuchka.prefixes import prefixed_unit
+from kuchka.prefixes import UNIT
 from kuchka.quantities import Resistance
-from kuchka.quantities import UnitDef
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
-MILLIOHM = UnitDef("milliohm", "m\u03a9", Decimal("0.001"), RESISTANCE)
-OHM = UnitDef("ohm", "\u03a9", Decimal(1), RESISTANCE)
-KILOOHM = UnitDef("kiloohm", "k\u03a9", Decimal(1000), RESISTANCE)
-MEGAOHM = UnitDef("megaohm", "M\u03a9", Decimal(1_000_000), RESISTANCE)
+
+OHM_NAME = "Ohm"
+OHM_SYMBOL = "\u03a9"
+
+
+MILLIOHM = prefixed_unit(MILLI, OHM_NAME, OHM_SYMBOL, RESISTANCE)
+OHM = prefixed_unit(UNIT, OHM_NAME, OHM_SYMBOL, RESISTANCE)
+KILOOHM = prefixed_unit(KILO, OHM_NAME, OHM_SYMBOL, RESISTANCE)
+MEGAOHM = prefixed_unit(MEGA, OHM_NAME, OHM_SYMBOL, RESISTANCE)
+
 
 Resistance._canonical_unit = OHM  # noqa: SLF001 -- this module owns Resistance's canonical unit
 
@@ -57,9 +66,9 @@ def Megaohm(value: Numeric) -> Resistance:
 
 RESISTANCE_UNITS: Mapping[str, Callable[[Numeric], Resistance]] = MappingProxyType(
     {
-        "mOhm": Milliohm,
-        "Ohm": Ohm,
-        "kOhm": Kiloohm,
-        "MOhm": Megaohm,
+        MILLIOHM.symbol: Milliohm,
+        OHM.symbol: Ohm,
+        KILOOHM.symbol: Kiloohm,
+        MEGAOHM.symbol: Megaohm,
     }
 )

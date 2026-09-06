@@ -109,6 +109,7 @@ This name is the same function object as `Megagram`, so the two are interchangea
 MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = MappingProxyType(
     {
         PICOGRAM.symbol: Picogram,
+        NANOGRAM.symbol: Nanogram,
         MICROGRAM.symbol: Microgram,
         MILLIGRAM.symbol: Milligram,
         GRAM.symbol: Gram,
