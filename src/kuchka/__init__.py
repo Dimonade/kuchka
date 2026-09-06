@@ -110,6 +110,7 @@ from kuchka.units import Micromole
 from kuchka.units import Microsecond
 from kuchka.units import MicrosecondSamplingPeriod
 from kuchka.units import Microvolt
+from kuchka.units import Microwatt
 from kuchka.units import Milliampere
 from kuchka.units import Milligram
 from kuchka.units import Millimeter
@@ -216,6 +217,7 @@ __all__: list[str] = [
     "Microsecond",
     "MicrosecondSamplingPeriod",
     "Microvolt",
+    "Microwatt",
     "Milliampere",
     "Millicoulomb",
     "Milligram",

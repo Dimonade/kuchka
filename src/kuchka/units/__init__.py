@@ -97,7 +97,11 @@ from kuchka.units.mass import MILLIGRAM
 from kuchka.units.mass import Milligram
 from kuchka.units.mass import NANOGRAM
 from kuchka.units.mass import Nanogram
+from kuchka.units.mass import PICOGRAM
+from kuchka.units.mass import Picogram
 from kuchka.units.mass import Tonne
+from kuchka.units.power import MICROWATT
+from kuchka.units.power import Microwatt
 from kuchka.units.power import KILOWATT
 from kuchka.units.power import Kilowatt
 from kuchka.units.power import MILLIWATT
@@ -208,6 +212,7 @@ __all__: list[str] = [
     "MICROMOLE",
     "MICROSECOND",
     "MICROVOLT",
+    "MICROWATT",
     "MILLIAMPERE",
     "MILLICOULOMB",
     "MILLIGRAM",
@@ -283,6 +288,7 @@ __all__: list[str] = [
     "Microsecond",
     "MicrosecondSamplingPeriod",
     "Microvolt",
+    "Microwatt",
     "Milliampere",
     "Millicoulomb",
     "Milligram",
@@ -302,6 +308,7 @@ __all__: list[str] = [
     "Nanometre",
     "Ohm",
     "Percent",
+    "Picogram",
     "Picojoule",
     "Ratio",
     "SamplesPerSecond",

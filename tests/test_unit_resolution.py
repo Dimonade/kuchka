@@ -8,6 +8,10 @@ specifically for the one place a unit is expected to arrive as a string:
 an I/O boundary such as a config file, CSV header, or hardware descriptor.
 """
 
+from kuchka.units.power import Microwatt
+
+from kuchka.units.mass import Picogram
+
 import pytest
 from kuchka import Ampere
 from kuchka import Baud
@@ -80,24 +84,24 @@ from kuchka.units import MASS_UNITS
 
 # (table, {expected symbol: expected constructor})
 TABLE_CASES = [
-    (VOLTAGE_UNITS, {"uV": Microvolt, "mV": Millivolt, "V": Volt, "kV": Kilovolt}),
+    (VOLTAGE_UNITS, {"\u00b5V": Microvolt, "mV": Millivolt, "V": Volt, "kV": Kilovolt}),
     (
         CURRENT_UNITS,
-        {"uA": Microampere, "mA": Milliampere, "A": Ampere, "kA": Kiloampere},
+        {"\u00b5A": Microampere, "mA": Milliampere, "A": Ampere, "kA": Kiloampere},
     ),
     (
         RESISTANCE_UNITS,
-        {"mOhm": Milliohm, "Ohm": Ohm, "kOhm": Kiloohm, "MOhm": Megaohm},
+        {"m\u03a9": Milliohm, "\u03a9": Ohm, "k\u03a9": Kiloohm, "M\u03a9": Megaohm},
     ),
-    (POWER_UNITS, {"mW": Milliwatt, "W": Watt, "kW": Kilowatt}),
+    (POWER_UNITS, {"\u00b5W": Microwatt, "mW": Milliwatt, "W": Watt, "kW": Kilowatt}),
     (TEMPERATURE_UNITS, {"K": Kelvin, "C": Celsius}),
     (TEMPERATURE_DELTA_UNITS, {"dK": DeltaKelvin, "dC": DeltaCelsius}),
-    (TIME_UNITS, {"us": Microsecond, "ms": Millisecond, "s": Second}),
+    (TIME_UNITS, {"\u00b5s": Microsecond, "ms": Millisecond, "s": Second}),
     (FREQUENCY_UNITS, {"Hz": Hertz, "kHz": Kilohertz, "MHz": Megahertz}),
     (
         SAMPLING_PERIOD_UNITS,
         {
-            "us": MicrosecondSamplingPeriod,
+            "\u00b5s": MicrosecondSamplingPeriod,
             "ms": MillisecondSamplingPeriod,
             "s": SecondSamplingPeriod,
         },
@@ -115,7 +119,7 @@ TABLE_CASES = [
         LENGTH_UNITS,
         {
             "nm": Nanometer,
-            "um": Micrometer,
+            "\u00b5m": Micrometer,
             "mm": Millimeter,
             "m": Meter,
             "km": Kilometer,
@@ -126,8 +130,9 @@ TABLE_CASES = [
     (
         MASS_UNITS,
         {
+            "pg": Picogram,
             "ng": Nanogram,
-            "ug": Microgram,
+            "\u00b5g": Microgram,
             "mg": Milligram,
             "g": Gram,
             "kg": Kilogram,
@@ -135,7 +140,10 @@ TABLE_CASES = [
             "t": Tonne,
         },
     ),
-    (AMOUNT_OF_SUBSTANCE_UNITS, {"umol": Micromole, "mmol": Millimole, "mol": Mole}),
+    (
+        AMOUNT_OF_SUBSTANCE_UNITS,
+        {"\u00b5mol": Micromole, "mmol": Millimole, "mol": Mole},
+    ),
     (LUMINOUS_INTENSITY_UNITS, {"cd": Candela}),
 ]
 

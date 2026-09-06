@@ -13,24 +13,31 @@ unit as a string from outside the application.
 
 from __future__ import annotations
 
-from decimal import Decimal
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import CURRENT
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
+from kuchka.prefixes import KILO
+from kuchka.prefixes import MICRO
+from kuchka.prefixes import MILLI
+from kuchka.prefixes import prefixed_unit
+from kuchka.prefixes import UNIT
 from kuchka.quantities import Current
-from kuchka.quantities import UnitDef
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
-MICROAMPERE = UnitDef("microampere", "\u00b5A", Decimal("0.000001"), CURRENT)
-MILLIAMPERE = UnitDef("milliampere", "mA", Decimal("0.001"), CURRENT)
-AMPERE = UnitDef("ampere", "A", Decimal(1), CURRENT)
-KILOAMPERE = UnitDef("kiloampere", "kA", Decimal(1000), CURRENT)
+
+AMPERE_NAME = "ampere"
+AMPERE_SYMBOL = "A"
+
+MICROAMPERE = prefixed_unit(MICRO, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
+MILLIAMPERE = prefixed_unit(MILLI, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
+AMPERE = prefixed_unit(UNIT, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
+KILOAMPERE = prefixed_unit(KILO, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
 
 Current._canonical_unit = AMPERE  # noqa: SLF001 -- this module owns Current's canonical unit
 
@@ -57,9 +64,9 @@ def Kiloampere(value: Numeric) -> Current:
 
 CURRENT_UNITS: Mapping[str, Callable[[Numeric], Current]] = MappingProxyType(
     {
-        "uA": Microampere,
-        "mA": Milliampere,
-        "A": Ampere,
-        "kA": Kiloampere,
+        MICROAMPERE.symbol: Microampere,
+        MILLIAMPERE.symbol: Milliampere,
+        AMPERE.symbol: Ampere,
+        KILOAMPERE.symbol: Kiloampere,
     }
 )

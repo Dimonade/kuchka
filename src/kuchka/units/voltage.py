@@ -19,24 +19,31 @@ unit as a string from outside the application, e.g. a config file field written 
 
 from __future__ import annotations
 
-from decimal import Decimal
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import VOLTAGE
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
-from kuchka.quantities import UnitDef
+from kuchka.prefixes import KILO
+from kuchka.prefixes import MICRO
+from kuchka.prefixes import MILLI
+from kuchka.prefixes import prefixed_unit
+from kuchka.prefixes import UNIT
 from kuchka.quantities import Voltage
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
-MICROVOLT = UnitDef("microvolt", "\u00b5V", Decimal("0.000001"), VOLTAGE)
-MILLIVOLT = UnitDef("millivolt", "mV", Decimal("0.001"), VOLTAGE)
-VOLT = UnitDef("volt", "V", Decimal(1), VOLTAGE)
-KILOVOLT = UnitDef("kilovolt", "kV", Decimal(1000), VOLTAGE)
+VOLT_NAME = "volt"
+VOLT_SYMBOL = "V"
+
+MICROVOLT = prefixed_unit(MICRO, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
+MILLIVOLT = prefixed_unit(MILLI, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
+VOLT = prefixed_unit(UNIT, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
+KILOVOLT = prefixed_unit(KILO, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
+
 
 Voltage._canonical_unit = VOLT  # noqa: SLF001 -- this module owns Voltage's canonical unit
 
@@ -63,9 +70,9 @@ def Kilovolt(value: Numeric) -> Voltage:
 
 VOLTAGE_UNITS: Mapping[str, Callable[[Numeric], Voltage]] = MappingProxyType(
     {
-        "uV": Microvolt,
-        "mV": Millivolt,
-        "V": Volt,
-        "kV": Kilovolt,
+        MICROVOLT.symbol: Microvolt,
+        MILLIVOLT.symbol: Millivolt,
+        VOLT.symbol: Volt,
+        KILOVOLT.symbol: Kilovolt,
     }
 )

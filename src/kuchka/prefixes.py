@@ -10,11 +10,15 @@ be displayed.
 """
 
 from __future__ import annotations
-from kuchka.quantities import UnitDef
-from kuchka.dimensions import Dimension
 
 from dataclasses import dataclass
 from decimal import Decimal
+from typing import TYPE_CHECKING
+
+from kuchka.quantities import UnitDef
+
+if TYPE_CHECKING:
+    from kuchka.dimensions import Dimension
 
 
 @dataclass(frozen=True, slots=True)

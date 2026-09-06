@@ -47,6 +47,6 @@ MeterPerSecond = MetrePerSecond
 
 VELOCITY_UNITS: Mapping[str, Callable[[Numeric], Velocity]] = MappingProxyType(
     {
-        "m/s": MetrePerSecond,
+        METRE_PER_SECOND.symbol: MetrePerSecond,
     }
 )

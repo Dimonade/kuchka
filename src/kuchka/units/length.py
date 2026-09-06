@@ -35,6 +35,12 @@ from typing import TYPE_CHECKING
 from kuchka.dimensions import LENGTH
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
+from kuchka.prefixes import KILO
+from kuchka.prefixes import MICRO
+from kuchka.prefixes import MILLI
+from kuchka.prefixes import NANO
+from kuchka.prefixes import prefixed_unit
+from kuchka.prefixes import UNIT
 from kuchka.quantities import Length
 from kuchka.quantities import UnitDef
 
@@ -42,18 +48,23 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
-NANOMETRE = UnitDef("nanometre", "nm", Decimal("0.000000001"), LENGTH)
-MICROMETRE = UnitDef("micrometre", "\u00b5m", Decimal("0.000001"), LENGTH)
-MILLIMETRE = UnitDef("millimetre", "mm", Decimal("0.001"), LENGTH)
-METRE = UnitDef("metre", "m", Decimal(1), LENGTH)
-KILOMETRE = UnitDef("kilometre", "km", Decimal(1000), LENGTH)
-INCH = UnitDef("inch", "in", Decimal("0.0254"), LENGTH)
+METRE_NAME = "metre"
+METRE_SYMBOL = "m"
+
+NANOMETRE = prefixed_unit(NANO, METRE_NAME, METRE_SYMBOL, LENGTH)
+MICROMETRE = prefixed_unit(MICRO, METRE_NAME, METRE_SYMBOL, LENGTH)
+MILLIMETRE = prefixed_unit(MILLI, METRE_NAME, METRE_SYMBOL, LENGTH)
+METRE = prefixed_unit(UNIT, METRE_NAME, METRE_SYMBOL, LENGTH)
+KILOMETRE = prefixed_unit(KILO, METRE_NAME, METRE_SYMBOL, LENGTH)
 
 NANOMETER = NANOMETRE
 MICROMETER = MICROMETRE
 MILLIMETER = MILLIMETRE
 METER = METRE
 KILOMETER = KILOMETRE
+
+INCH = UnitDef("inch", "in", Decimal("0.0254"), LENGTH)
+
 
 Length._canonical_unit = METRE  # noqa: SLF001 -- this module owns Length's canonical unit
 
@@ -101,11 +112,11 @@ Kilometer = Kilometre
 
 LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
     {
-        "nm": Nanometre,
-        "um": Micrometre,
-        "mm": Millimetre,
-        "m": Metre,
-        "km": Kilometre,
+        NANOMETRE.symbol: Nanometre,
+        MICROMETRE.symbol: Micrometre,
+        MILLIMETRE.symbol: Millimetre,
+        METRE.symbol: Metre,
+        KILOMETRE.symbol: Kilometre,
         "in": Inch,
     }
 )
