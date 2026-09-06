@@ -10,6 +10,8 @@ be displayed.
 """
 
 from __future__ import annotations
+from kuchka.quantities import UnitDef
+from kuchka.dimensions import Dimension
 
 from dataclasses import dataclass
 from decimal import Decimal
@@ -46,3 +48,30 @@ MEGA = Prefix("mega", "M", 6)
 GIGA = Prefix("giga", "G", 9)
 TERA = Prefix("tera", "T", 12)
 PETA = Prefix("peta", "P", 15)
+
+
+def prefixed_unit(
+    prefix: Prefix,
+    base_name: str,
+    base_symbol: str,
+    dimension: Dimension,
+    *,
+    coherent_offset: int = 0,
+) -> UnitDef:
+    """Build a `UnitDef` for `prefix` applied to a dimenion's coherent SI unit.
+
+    `coherent_offset` corrects for a dimension whose canonical unit, namely, what
+    `UnitDef.scale` is expressed relative to, is not itself the coherent SI unit.
+
+    Mass is one such example - its canonical unit is kilogram, not gram, so every
+    mass prefix needs an extra `-3` baked in.
+
+    Every other dimension's canonical unit already is its own coherent unit, so the
+    default of 0 is correct for them.
+    """
+    return UnitDef(
+        f"{prefix.name}{base_name}",
+        f"{prefix.symbol}{base_symbol}",
+        Decimal(1).scaleb(prefix.exponent + coherent_offset),
+        dimension,
+    )
