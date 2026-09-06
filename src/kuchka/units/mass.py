@@ -26,6 +26,7 @@ scale -- `Tonne is Megagram` holds at the function level, so `Tonne(5)` and
 `MASS_UNITS` maps each symbol to its constructor, for boundary code that
 reads a unit as a string from outside the application.
 """
+
 from __future__ import annotations
 
 from types import MappingProxyType
