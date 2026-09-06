@@ -13,25 +13,38 @@ as a string from outside the application.
 
 from __future__ import annotations
 
-from decimal import Decimal
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import POWER
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
+from kuchka.prefixes import KILO
+from kuchka.prefixes import MICRO
+from kuchka.prefixes import MILLI
+from kuchka.prefixes import prefixed_unit
+from kuchka.prefixes import UNIT
 from kuchka.quantities import Power
-from kuchka.quantities import UnitDef
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
-MILLIWATT = UnitDef("milliwatt", "mW", Decimal("0.001"), POWER)
-WATT = UnitDef("watt", "W", Decimal(1), POWER)
-KILOWATT = UnitDef("kilowatt", "kW", Decimal(1000), POWER)
+WATT_NAME = "watt"
+WATT_SYMBOL = "W"
+
+MICROWATT = prefixed_unit(MICRO, WATT_NAME, WATT_SYMBOL, POWER)
+MILLIWATT = prefixed_unit(MILLI, WATT_NAME, WATT_SYMBOL, POWER)
+WATT = prefixed_unit(UNIT, WATT_NAME, WATT_SYMBOL, POWER)
+KILOWATT = prefixed_unit(KILO, WATT_NAME, WATT_SYMBOL, POWER)
+
 
 Power._canonical_unit = WATT  # noqa: SLF001 -- this module owns Power's canonical unit
+
+
+def Microwatt(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in microwatts."""
+    return Power(to_decimal(value) * MICROWATT.scale, MICROWATT)
 
 
 def Milliwatt(value: Numeric) -> Power:
@@ -51,8 +64,9 @@ def Kilowatt(value: Numeric) -> Power:
 
 POWER_UNITS: Mapping[str, Callable[[Numeric], Power]] = MappingProxyType(
     {
-        "mW": Milliwatt,
-        "W": Watt,
-        "kW": Kilowatt,
+        MICROWATT.symbol: Microwatt,
+        MILLIWATT.symbol: Milliwatt,
+        WATT.symbol: Watt,
+        KILOWATT.symbol: Kilowatt,
     }
 )

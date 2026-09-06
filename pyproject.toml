@@ -86,8 +86,6 @@ ignore = [
   "D213",   # Docstring summary on first line.
   "E402",
   "E722",
-  "F403",
-  "F405",
   "I001",   # Using reorder-python-imports.
   "INP001", # Okay to not have `__init__.py` when not needed.
   "N802",   # Unit constructors (Volt, Ampere, Celsius, ...) are

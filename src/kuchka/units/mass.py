@@ -26,7 +26,6 @@ scale -- `Tonne is Megagram` holds at the function level, so `Tonne(5)` and
 `MASS_UNITS` maps each symbol to its constructor, for boundary code that
 reads a unit as a string from outside the application.
 """
-
 from __future__ import annotations
 
 from types import MappingProxyType
@@ -35,8 +34,14 @@ from typing import TYPE_CHECKING
 from kuchka.dimensions import MASS
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
-from kuchka.prefixes import NANO, PICO, MICRO, MILLI, UNIT, KILO, MEGA
+from kuchka.prefixes import KILO
+from kuchka.prefixes import MEGA
+from kuchka.prefixes import MICRO
+from kuchka.prefixes import MILLI
+from kuchka.prefixes import NANO
+from kuchka.prefixes import PICO
 from kuchka.prefixes import prefixed_unit
+from kuchka.prefixes import UNIT
 from kuchka.quantities import Mass
 
 if TYPE_CHECKING:
