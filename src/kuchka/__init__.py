@@ -45,10 +45,10 @@ from kuchka.quantities import TemperatureDelta
 from kuchka.quantities import Velocity
 from kuchka.quantities import Time
 from kuchka.quantities import Voltage
-from kuchka.quantities.thermal import Celsius
-from kuchka.quantities.thermal import DeltaCelsius
-from kuchka.quantities.thermal import DeltaKelvin
-from kuchka.quantities.thermal import Kelvin
+from kuchka.units.thermal import Celsius
+from kuchka.units.thermal import DeltaCelsius
+from kuchka.units.thermal import DeltaKelvin
+from kuchka.units.thermal import Kelvin
 from kuchka.units import Ampere
 from kuchka.units import COULOMB
 from kuchka.units import Coulomb

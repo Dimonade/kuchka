@@ -14,8 +14,18 @@ owns that dimension.
 
 from __future__ import annotations
 
-from kuchka.quantities.thermal import TEMPERATURE_DELTA_UNITS
-from kuchka.quantities.thermal import TEMPERATURE_UNITS
+from kuchka.units.voltage import *
+
+from kuchka.units.thermal import CELSIUS
+from kuchka.units.thermal import Celsius
+from kuchka.units.thermal import DELTA_CELSIUS
+from kuchka.units.thermal import DeltaCelsius
+from kuchka.units.thermal import DELTA_KELVIN
+from kuchka.units.thermal import DeltaKelvin
+from kuchka.units.thermal import KELVIN
+from kuchka.units.thermal import Kelvin
+from kuchka.units.thermal import TEMPERATURE_DELTA_UNITS
+from kuchka.units.thermal import TEMPERATURE_UNITS
 from kuchka.units.amount import AMOUNT_OF_SUBSTANCE_UNITS
 from kuchka.units.charge import CHARGE_UNITS
 from kuchka.units.charge import COULOMB
@@ -172,15 +182,19 @@ __all__: list[str] = [
     "BAUD",
     "BAUD_RATE_UNITS",
     "CANDELA",
+    "CELSIUS",
     "CHARGE_UNITS",
     "COULOMB",
     "CURRENT_UNITS",
+    "DELTA_CELSIUS",
+    "DELTA_KELVIN",
     "ENERGY_UNITS",
     "FREQUENCY_UNITS",
     "GRAM",
     "HERTZ",
     "INCH",
     "JOULE",
+    "KELVIN",
     "KILOAMPERE",
     "KILOBAUD",
     "KILOGRAM",
@@ -231,6 +245,7 @@ __all__: list[str] = [
     "NANOMETRE",
     "OHM",
     "PERCENT",
+    "PICOGRAM",
     "PICOJOULE",
     "POWER_UNITS",
     "PROPORTION_UNITS",
@@ -253,11 +268,15 @@ __all__: list[str] = [
     "Ampere",
     "Baud",
     "Candela",
+    "Celsius",
     "Coulomb",
+    "DeltaCelsius",
+    "DeltaKelvin",
     "Gram",
     "Hertz",
     "Inch",
     "Joule",
+    "Kelvin",
     "Kiloampere",
     "Kilobaud",
     "Kilogram",

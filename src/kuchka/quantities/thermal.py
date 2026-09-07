@@ -81,16 +81,23 @@ class AffineUnitDef:
 class Temperature:
     """An absolute thermodynamic temperature reading.
 
-    [... unchanged ...]
+    Supports the operations that are physically meaningful for a point on an affine
+    scale:
+    comparison, subtracting another ``Temperature`` to get a ``TemperatureDelta``,
+    and shifting by a ``TemperatureDelta``.
+
+    See the module docstring for the operations this deliberately omits, and why.
     """
 
     dimension: ClassVar[Dimension] = TEMPERATURE_DELTA
 
+    # These annotations are what let mypy --strict see through __slots__.
     _kelvin: Decimal
     _display_unit: AffineUnitDef
     __slots__ = ("_display_unit", "_kelvin")
 
     def __init__(self, kelvin: Decimal, display_unit: AffineUnitDef) -> None:
+        """Store a magnitude already expressed in Kelvin, plus its display unit."""
         object.__setattr__(self, "_kelvin", kelvin)
         object.__setattr__(self, "_display_unit", display_unit)
 
@@ -98,22 +105,31 @@ class Temperature:
         raise AttributeError(f"{type(self).__name__} is immutable")
 
     def __getstate__(self) -> tuple[Decimal, AffineUnitDef]:
+        """Return the pickle/copy state. See `LinearQuantity.__getstate__`."""
         return (self._kelvin, self._display_unit)
 
     def __setstate__(self, state: tuple[Decimal, AffineUnitDef]) -> None:
+        """Restore a pickled/copied instance without going through `__setattr__`."""
         kelvin, display_unit = state
         object.__setattr__(self, "_kelvin", kelvin)
         object.__setattr__(self, "_display_unit", display_unit)
 
     @property
     def kelvin(self) -> Decimal:
+        """The magnitude expressed in Kelvin, this type's canonical unit."""
         return self._kelvin
 
     @property
     def unit(self) -> AffineUnitDef:
+        """The unit this measurement currently displays as."""
         return self._display_unit
 
     def to(self, unit: AffineUnitDef) -> Temperature:
+        """Return an equal reading that displays as ``unit``.
+
+        This never changes the value being represented, only what ``repr()`` and
+        ``value_in()`` return by default. 		
+        """
         if not isinstance(unit, AffineUnitDef):
             msg = (
                 "conversion target must be a temperature unit such as "
@@ -123,6 +139,7 @@ class Temperature:
         return Temperature(self._kelvin, unit)
 
     def value_in(self, unit: AffineUnitDef) -> Decimal:
+        """Return the magnitude of this reading expressed in ``unit``."""
         return (self._kelvin - unit.offset) / unit.scale
 
     def __eq__(self, other: object) -> bool:
@@ -154,6 +171,13 @@ class Temperature:
         return self._kelvin >= other._kelvin
 
     def __add__(self, other: TemperatureDelta) -> Temperature:
+        # NOTE: The static signature only admits TemperatureDelta, so 		
+        # `Celsius(20) + Celsius(5)` is a mypy error, matching how other units, and 		
+        # TemperatureDelta itself all reject cross-type addition statically. 		
+        # 		
+        # The isinstance check for a second Temperature stays in the body as a runtime 		
+        # guard for values that arrive from somewhere mypy never saw, e.g. an untyped 		
+        # boundary or an upstream `Any`.
         if isinstance(other, Temperature):
             msg = (
                 "Cannot add two Temperature values: an absolute temperature "
@@ -183,12 +207,17 @@ class Temperature:
         if isinstance(other, TemperatureDelta):
             return Temperature(self._kelvin - other.magnitude, self._display_unit)
         return NotImplemented
+    
+    # NOTE: Deliberately no __mul__ / __rmul__ / __truediv__ by a scalar: 		
+    # see the module docstring for why scaling an absolute temperature is left 		
+    # undefined rather than implemented.
 
     def __repr__(self) -> str:
         value = self.value_in(self._display_unit)
         return f"{format(value, 'f')} {self._display_unit.symbol}"
 
     def __format__(self, format_spec: str) -> str:
+        """Format the reading in the display unit. See `LinearQuantity.__format__`."""
         if not format_spec:
             return repr(self)
         value = self.value_in(self._display_unit)

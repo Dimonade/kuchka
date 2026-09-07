@@ -32,10 +32,13 @@ from kuchka.quantities.temporal import Frequency
 from kuchka.quantities.temporal import SampleRate
 from kuchka.quantities.temporal import SamplingPeriod
 from kuchka.quantities.temporal import Time
+from kuchka.quantities.thermal import AffineUnitDef
 from kuchka.quantities.thermal import Temperature
 from kuchka.quantities.thermal import TemperatureDelta
 
+
 __all__: list[str] = [
+    "AffineUnitDef",
     "AmountOfSubstance",
     "BaudRate",
     "Charge",
