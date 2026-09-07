@@ -50,3 +50,11 @@ VELOCITY_UNITS: Mapping[str, Callable[[Numeric], Velocity]] = MappingProxyType(
         METRE_PER_SECOND.symbol: MetrePerSecond,
     }
 )
+
+__all__ = [
+    "METER_PER_SECOND",
+    "METRE_PER_SECOND",
+    "VELOCITY_UNITS",
+    "MeterPerSecond",
+    "MetrePerSecond",
+]
