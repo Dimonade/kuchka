@@ -34,6 +34,8 @@ if TYPE_CHECKING:
 
 METRE_PER_SECOND = UnitDef("metre_per_second", "m/s", Decimal(1), VELOCITY)
 
+METER_PER_SECOND = METRE_PER_SECOND
+
 Velocity._canonical_unit = METRE_PER_SECOND  # noqa: SLF001 -- this module owns Velocity's canonical unit
 
 

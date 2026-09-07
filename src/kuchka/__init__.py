@@ -6,9 +6,17 @@
     current = Milliampere(150)
     power = voltage * current   # -> Power, computed and typed automatically
 
-Everything below is the entire intended public surface.
-Internal modules (``quantities``, ``dimensions``, ``numeric``, ...) are implementation
-details and are not part of the supported API.
+Two-tier export policy:
+  - kuchka (this package): unit constructors (Volt, Tonne, ...) and semantic quantity
+  types (Voltage, Temperature, ...) only.
+  - kuchka.units / kuchka.quantities: the complete surface, including raw `UnitDef`
+  constants (VOLT, KILOVOLT, ...) and `*_UNITS` boundary tables.
+  _see docs/examples/config_migration for why those exist and who needs them._
+
+This file is hand-maintained on purpose.
+`tests/test_public_api_surface.py` checks it against
+`kuchka.units.__all__` / `kuchka.quantities.__all__` mechanically, so a new dimension
+can't quietly go unpromoted, and a UnitDef/table can't quietly leak up a level.
 """
 
 from importlib.metadata import PackageNotFoundError
