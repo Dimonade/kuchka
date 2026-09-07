@@ -133,6 +133,7 @@ from kuchka.units import Nanogram
 from kuchka.units import Nanometer
 from kuchka.units import Ohm
 from kuchka.units import Percent
+from kuchka.units import Picogram
 from kuchka.units import Ratio
 from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
@@ -245,6 +246,7 @@ __all__: list[str] = [
     "Nanometre",
     "Ohm",
     "Percent",
+    "Picogram",
     "Picojoule",
     "PlannedDimensionError",
     "Power",
