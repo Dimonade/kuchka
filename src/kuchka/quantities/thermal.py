@@ -128,7 +128,7 @@ class Temperature:
         """Return an equal reading that displays as ``unit``.
 
         This never changes the value being represented, only what ``repr()`` and
-        ``value_in()`` return by default. 		
+        ``value_in()`` return by default.
         """
         if not isinstance(unit, AffineUnitDef):
             msg = (
@@ -171,12 +171,12 @@ class Temperature:
         return self._kelvin >= other._kelvin
 
     def __add__(self, other: TemperatureDelta) -> Temperature:
-        # NOTE: The static signature only admits TemperatureDelta, so 		
-        # `Celsius(20) + Celsius(5)` is a mypy error, matching how other units, and 		
-        # TemperatureDelta itself all reject cross-type addition statically. 		
-        # 		
-        # The isinstance check for a second Temperature stays in the body as a runtime 		
-        # guard for values that arrive from somewhere mypy never saw, e.g. an untyped 		
+        # NOTE: The static signature only admits TemperatureDelta, so
+        # `Celsius(20) + Celsius(5)` is a mypy error, matching how other units, and
+        # TemperatureDelta itself all reject cross-type addition statically.
+        #
+        # The isinstance check for a second Temperature stays in the body as a runtime
+        # guard for values that arrive from somewhere mypy never saw, e.g. an untyped
         # boundary or an upstream `Any`.
         if isinstance(other, Temperature):
             msg = (
@@ -207,9 +207,9 @@ class Temperature:
         if isinstance(other, TemperatureDelta):
             return Temperature(self._kelvin - other.magnitude, self._display_unit)
         return NotImplemented
-    
-    # NOTE: Deliberately no __mul__ / __rmul__ / __truediv__ by a scalar: 		
-    # see the module docstring for why scaling an absolute temperature is left 		
+
+    # NOTE: Deliberately no __mul__ / __rmul__ / __truediv__ by a scalar:
+    # see the module docstring for why scaling an absolute temperature is left
     # undefined rather than implemented.
 
     def __repr__(self) -> str:
