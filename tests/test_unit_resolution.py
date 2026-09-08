@@ -54,7 +54,7 @@ from kuchka import Second
 from kuchka import SecondSamplingPeriod
 from kuchka import Volt
 from kuchka import Watt
-from kuchka.units import BAUD_RATE_UNITS
+from kuchka.units import BAUD_RATE_UNITS, Centimeter, Decimeter
 from kuchka.units import CURRENT_UNITS
 from kuchka.units import FREQUENCY_UNITS
 from kuchka.units import LENGTH_UNITS
@@ -121,6 +121,8 @@ TABLE_CASES = [
             "nm": Nanometer,
             "\u00b5m": Micrometer,
             "mm": Millimeter,
+            "cm": Centimeter,
+            "dm": Decimeter,
             "m": Meter,
             "km": Kilometer,
             "in": Inch,

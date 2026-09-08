@@ -57,7 +57,11 @@ from kuchka.units import Ampere
 from kuchka.units import Baud
 from kuchka.units import Candela
 from kuchka.units import Celsius
+from kuchka.units import Centimeter
+from kuchka.units import Centimetre
 from kuchka.units import Coulomb
+from kuchka.units import Decimeter
+from kuchka.units import Decimetre
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaKelvin
 from kuchka.units import Gram
@@ -144,10 +148,14 @@ __all__: list[str] = [
     "BaudRate",
     "Candela",
     "Celsius",
+    "Centimeter",
+    "Centimetre",
     "Charge",
     "ConvertibleToFrequency",
     "Coulomb",
     "Current",
+    "Decimeter",
+    "Decimetre",
     "DeltaCelsius",
     "DeltaKelvin",
     "Energy",
