@@ -127,11 +127,13 @@ __all__ = [
     "MICROGRAM",
     "MILLIGRAM",
     "NANOGRAM",
+    "PICOGRAM",
     "Gram",
     "Kilogram",
     "Megagram",
     "Microgram",
     "Milligram",
     "Nanogram",
+    "Picogram",
     "Tonne",
 ]

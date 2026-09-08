@@ -73,10 +73,12 @@ POWER_UNITS: Mapping[str, Callable[[Numeric], Power]] = MappingProxyType(
 
 __all__ = [
     "KILOWATT",
+    "MICROWATT",
     "MILLIWATT",
     "POWER_UNITS",
     "WATT",
     "Kilowatt",
+    "Microwatt",
     "Milliwatt",
     "Watt",
 ]

@@ -109,12 +109,14 @@ from kuchka.units import MillisecondSamplingPeriod
 from kuchka.units import Millivolt
 from kuchka.units import Milliwatt
 from kuchka.units import Mole
+from kuchka.units import Nanocoulomb
 from kuchka.units import Nanogram
 from kuchka.units import Nanojoule
 from kuchka.units import Nanometer
 from kuchka.units import Nanometre
 from kuchka.units import Ohm
 from kuchka.units import Percent
+from kuchka.units import Picocoulomb
 from kuchka.units import Picogram
 from kuchka.units import Picojoule
 from kuchka.units import Ratio
@@ -206,12 +208,14 @@ __all__: list[str] = [
     "Millivolt",
     "Milliwatt",
     "Mole",
+    "Nanocoulomb",
     "Nanogram",
     "Nanojoule",
     "Nanometer",
     "Nanometre",
     "Ohm",
     "Percent",
+    "Picocoulomb",
     "Picogram",
     "Picojoule",
     "PlannedDimensionError",
