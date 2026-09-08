@@ -17,6 +17,7 @@ meaningful statement), so it lives in its own.
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from decimal import Decimal
 from fractions import Fraction
 from typing import ClassVar
@@ -359,6 +360,25 @@ class LinearQuantity:
             return repr(self)
         value = self.value_in(self._display_unit)
         return f"{format(value, format_spec)} {self._display_unit.symbol}"
+
+
+@dataclass(frozen=True, slots=True)
+class AffineUnitDef:
+    """A unit with both a scale and an offset, e.g. Celsius relative to Kelvin.
+
+    The affine counterpart to `UnitDef`.
+    Most physical quantities convert by a pure scale factor, but a quantity whose zero
+    point is itself a convention, like absolute temperature today, a point-in-time
+    `Instant` needs an offset alongside the scale.
+
+    Application code never constructs one directly;
+    it imports the unit constants (`KELVIN`, `CELSIUS`, ...) from `kuchka.units`.
+    """
+
+    name: str
+    symbol: str
+    scale: Decimal
+    offset: Decimal
 
 
 def _promote(dimension: Dimension, magnitude: Decimal) -> LinearQuantity | Decimal:

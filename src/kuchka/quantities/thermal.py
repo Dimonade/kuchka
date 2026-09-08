@@ -38,7 +38,6 @@ vocabulary this library currently targets.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 from decimal import Decimal
 from typing import ClassVar
 from typing import overload
@@ -47,6 +46,7 @@ from typing import TYPE_CHECKING
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import MeasurementError
+from kuchka.quantities.base import AffineUnitDef
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import register
 
@@ -61,21 +61,6 @@ class TemperatureDelta(LinearQuantity):
 
 
 register(TEMPERATURE_DELTA, TemperatureDelta)
-
-
-@dataclass(frozen=True, slots=True)
-class AffineUnitDef:
-    """A unit with both a scale and an offset, e.g. Celsius relative to Kelvin.
-
-    Internal machinery, the affine counterpart to `UnitDef` in `base.py`.
-    Application code never constructs one directly; it imports the unit
-    constants (`KELVIN`, `CELSIUS`, ...) from `kuchka.units` instead.
-    """
-
-    name: str
-    symbol: str
-    scale: Decimal
-    offset: Decimal
 
 
 class Temperature:
@@ -224,4 +209,4 @@ class Temperature:
         return f"{format(value, format_spec)} {self._display_unit.symbol}"
 
 
-__all__ = ["AffineUnitDef", "Temperature", "TemperatureDelta"]
+__all__ = ["Temperature", "TemperatureDelta"]
