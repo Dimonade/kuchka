@@ -18,9 +18,9 @@ under strict type checking.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import overload
-from typing import TYPE_CHECKING
 
 from kuchka.dimensions import CURRENT
 from kuchka.dimensions import POWER

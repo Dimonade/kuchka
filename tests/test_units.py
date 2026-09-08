@@ -16,6 +16,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from hypothesis import given
+
 from kuchka import Ampere
 from kuchka import Gram
 from kuchka import Hertz
@@ -95,7 +96,6 @@ from kuchka.units import SAMPLING_PERIOD_SECOND
 from kuchka.units import SECOND
 from kuchka.units import VOLT
 from kuchka.units import WATT
-
 from tests.quantity_families import FINITE_DECIMALS
 
 if TYPE_CHECKING:

@@ -2,15 +2,17 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import overload
-from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LENGTH
-from kuchka.quantities.base import LinearQuantity, register
+from kuchka.quantities.base import LinearQuantity
+from kuchka.quantities.base import register
 
 if TYPE_CHECKING:
     from decimal import Decimal
+
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.kinematics import Velocity

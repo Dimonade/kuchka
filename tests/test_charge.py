@@ -9,6 +9,7 @@ the `Current * Time` relationship and its inverses.
 from decimal import Decimal
 
 import pytest
+
 from kuchka import Ampere
 from kuchka import Charge
 from kuchka import Coulomb

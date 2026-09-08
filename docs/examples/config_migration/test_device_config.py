@@ -19,6 +19,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 import pytest
 from device_config import ConfigError
 from device_config import load_device_config
+
 from kuchka import Baud
 from kuchka import Celsius
 from kuchka import Hertz

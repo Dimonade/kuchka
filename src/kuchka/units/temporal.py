@@ -30,8 +30,8 @@ from kuchka.prefixes import KILO
 from kuchka.prefixes import MEGA
 from kuchka.prefixes import MICRO
 from kuchka.prefixes import MILLI
-from kuchka.prefixes import prefixed_unit
 from kuchka.prefixes import UNIT
+from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import BaudRate
 from kuchka.quantities import Frequency
 from kuchka.quantities import SampleRate

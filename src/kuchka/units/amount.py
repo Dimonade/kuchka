@@ -21,8 +21,8 @@ from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
 from kuchka.prefixes import MICRO
 from kuchka.prefixes import MILLI
-from kuchka.prefixes import prefixed_unit
 from kuchka.prefixes import UNIT
+from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import AmountOfSubstance
 
 if TYPE_CHECKING:

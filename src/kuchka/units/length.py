@@ -35,14 +35,14 @@ from typing import TYPE_CHECKING
 from kuchka.dimensions import LENGTH
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
-from kuchka.prefixes import KILO
 from kuchka.prefixes import CENTI
 from kuchka.prefixes import DECI
+from kuchka.prefixes import KILO
 from kuchka.prefixes import MICRO
 from kuchka.prefixes import MILLI
 from kuchka.prefixes import NANO
-from kuchka.prefixes import prefixed_unit
 from kuchka.prefixes import UNIT
+from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Length
 from kuchka.quantities import UnitDef
 

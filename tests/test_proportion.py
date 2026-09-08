@@ -14,6 +14,7 @@ a bare `Decimal`, exactly as it did before `Proportion` existed.
 from decimal import Decimal
 
 import pytest
+
 from kuchka import IncompatibleDimensionError
 from kuchka import InvalidMeasurementError
 from kuchka import Ohm
