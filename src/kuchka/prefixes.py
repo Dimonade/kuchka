@@ -4,7 +4,7 @@ The central registry exists for two reasons:
 - remove the need to manually type the same things, and
 - reduce the risk of typos and special character rolling (micro*).
 
-NOTE: This must come thoroughly and tested against manually written tables.
+NOTE: This must be thoroughly and tested against manually written tables.
 The reason is that an error in the registry will seep into all the units, and will not
 be displayed.
 """
