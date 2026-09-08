@@ -135,3 +135,5 @@ register(VOLTAGE, Voltage)
 register(CURRENT, Current)
 register(POWER, Power)
 register(RESISTANCE, Resistance)
+
+__all__ = ["Current", "Power", "Resistance", "Voltage"]

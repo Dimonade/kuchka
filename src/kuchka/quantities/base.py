@@ -398,3 +398,6 @@ def _promote(dimension: Dimension, magnitude: Decimal) -> LinearQuantity | Decim
             raise PlannedDimensionError(dimension, planned_name) from None
         raise UnrepresentableDimensionError(dimension) from None
     return quantity_type(magnitude, quantity_type._canonical_unit)  # noqa: SLF001 -- accessing the registered type's own canonical unit, not a foreign instance's internals
+
+
+__all__ = ["AffineUnitDef", "LinearQuantity", "UnitDef"]

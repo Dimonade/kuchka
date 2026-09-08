@@ -83,8 +83,6 @@ __all__ = [
     "MILLIVOLT",
     "VOLT",
     "VOLTAGE_UNITS",
-    "VOLT_NAME",
-    "VOLT_SYMBOL",
     "Kilovolt",
     "Microvolt",
     "Millivolt",

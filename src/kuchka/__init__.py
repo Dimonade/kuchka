@@ -50,78 +50,58 @@ from kuchka.quantities import SampleRate
 from kuchka.quantities import SamplingPeriod
 from kuchka.quantities import Temperature
 from kuchka.quantities import TemperatureDelta
-from kuchka.quantities import Velocity
 from kuchka.quantities import Time
+from kuchka.quantities import Velocity
 from kuchka.quantities import Voltage
-from kuchka.units.thermal import Celsius
-from kuchka.units.thermal import DeltaCelsius
-from kuchka.units.thermal import DeltaKelvin
-from kuchka.units.thermal import Kelvin
 from kuchka.units import Ampere
-from kuchka.units import COULOMB
-from kuchka.units import Coulomb
-from kuchka.units import ENERGY_UNITS
-from kuchka.units import JOULE
-from kuchka.units import Joule
-from kuchka.units import KILOJOULE
-from kuchka.units import KILOMETRE
-from kuchka.units import Kilojoule
-from kuchka.units import Kilometre
-from kuchka.units import MEGAJOULE
-from kuchka.units import METRE
-from kuchka.units import Megajoule
-from kuchka.units import Metre
-from kuchka.units import METRE_PER_SECOND
-from kuchka.units import MeterPerSecond
-from kuchka.units import MetrePerSecond
-from kuchka.units import MICROCOULOMB
-from kuchka.units import MICROJOULE
-from kuchka.units import MICROMETRE
-from kuchka.units import Microcoulomb
-from kuchka.units import Microjoule
-from kuchka.units import Micrometre
-from kuchka.units import MILLICOULOMB
-from kuchka.units import MILLIJOULE
-from kuchka.units import MILLIMETRE
-from kuchka.units import Millicoulomb
-from kuchka.units import Millijoule
-from kuchka.units import Millimetre
-from kuchka.units import NANOJOULE
-from kuchka.units import NANOMETRE
-from kuchka.units import Nanojoule
-from kuchka.units import Nanometre
-from kuchka.units import PICOJOULE
-from kuchka.units import Picojoule
 from kuchka.units import Baud
 from kuchka.units import Candela
+from kuchka.units import Celsius
+from kuchka.units import Coulomb
+from kuchka.units import DeltaCelsius
+from kuchka.units import DeltaKelvin
 from kuchka.units import Gram
 from kuchka.units import Hertz
 from kuchka.units import Inch
+from kuchka.units import Joule
+from kuchka.units import Kelvin
 from kuchka.units import Kiloampere
 from kuchka.units import Kilobaud
 from kuchka.units import Kilogram
 from kuchka.units import Kilohertz
+from kuchka.units import Kilojoule
 from kuchka.units import Kilometer
+from kuchka.units import Kilometre
 from kuchka.units import Kiloohm
 from kuchka.units import KilosamplesPerSecond
 from kuchka.units import Kilovolt
 from kuchka.units import Kilowatt
 from kuchka.units import Megagram
 from kuchka.units import Megahertz
+from kuchka.units import Megajoule
 from kuchka.units import Megaohm
 from kuchka.units import MegasamplesPerSecond
 from kuchka.units import Meter
+from kuchka.units import MeterPerSecond
+from kuchka.units import Metre
+from kuchka.units import MetrePerSecond
 from kuchka.units import Microampere
+from kuchka.units import Microcoulomb
 from kuchka.units import Microgram
+from kuchka.units import Microjoule
 from kuchka.units import Micrometer
+from kuchka.units import Micrometre
 from kuchka.units import Micromole
 from kuchka.units import Microsecond
 from kuchka.units import MicrosecondSamplingPeriod
 from kuchka.units import Microvolt
 from kuchka.units import Microwatt
 from kuchka.units import Milliampere
+from kuchka.units import Millicoulomb
 from kuchka.units import Milligram
+from kuchka.units import Millijoule
 from kuchka.units import Millimeter
+from kuchka.units import Millimetre
 from kuchka.units import Millimole
 from kuchka.units import Milliohm
 from kuchka.units import Millisecond
@@ -130,10 +110,13 @@ from kuchka.units import Millivolt
 from kuchka.units import Milliwatt
 from kuchka.units import Mole
 from kuchka.units import Nanogram
+from kuchka.units import Nanojoule
 from kuchka.units import Nanometer
+from kuchka.units import Nanometre
 from kuchka.units import Ohm
 from kuchka.units import Percent
 from kuchka.units import Picogram
+from kuchka.units import Picojoule
 from kuchka.units import Ratio
 from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
@@ -148,26 +131,9 @@ except PackageNotFoundError:  # pragma: no cover -- running from an uninstalled 
     __version__ = "0.0.0+unknown"
 
 __all__: list[str] = [
-    "COULOMB",
     "ELECTRON_MASS",
     "ELEMENTARY_CHARGE",
-    "ENERGY_UNITS",
-    "JOULE",
-    "KILOJOULE",
-    "KILOMETRE",
-    "MEGAJOULE",
-    "METRE",
-    "METRE_PER_SECOND",
-    "MICROCOULOMB",
-    "MICROJOULE",
-    "MICROMETRE",
-    "MILLICOULOMB",
-    "MILLIJOULE",
-    "MILLIMETRE",
-    "NANOJOULE",
-    "NANOMETRE",
     "NEUTRON_MASS",
-    "PICOJOULE",
     "PROTON_MASS",
     "SPEED_OF_LIGHT",
     "AmountOfSubstance",

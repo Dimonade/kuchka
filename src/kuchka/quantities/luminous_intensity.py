@@ -20,3 +20,5 @@ class LuminousIntensity(LinearQuantity):
 
 
 register(LUMINOUS_INTENSITY, LuminousIntensity)
+
+__all__ = ["LuminousIntensity"]
