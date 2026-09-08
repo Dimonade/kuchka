@@ -23,8 +23,10 @@ from fractions import Fraction
 from typing import ClassVar
 from typing import Self
 
+from kuchka.dimensions import AREA
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import Dimension
+from kuchka.dimensions import VOLUME
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
@@ -55,7 +57,10 @@ They stay reachable only by explicit construction, exactly like ``Temperature`` 
 one, rather than silently overwriting it.
 """
 
-_PLANNED_DIMENSIONS: dict[Dimension, str] = {}
+_PLANNED_DIMENSIONS: dict[Dimension, str] = {
+    AREA: "Area",
+    VOLUME: "Volume",
+}
 """Maps a dimension signature to the name of a quantity this library intends to
 implement but does not yet.
 
