@@ -95,8 +95,8 @@ __all__ = [
     "NANO",
     "PETA",
     "PICO",
-    "Prefix",
     "TERA",
     "UNIT",
+    "Prefix",
     "prefixed_unit",
 ]

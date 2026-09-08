@@ -100,7 +100,6 @@ __all__ = [
     "CHARGE",
     "CURRENT",
     "DIMENSIONLESS",
-    "Dimension",
     "ENERGY",
     "FREQUENCY",
     "LENGTH",
@@ -112,4 +111,5 @@ __all__ = [
     "TIME",
     "VELOCITY",
     "VOLTAGE",
+    "Dimension",
 ]
