@@ -25,8 +25,8 @@ import tomllib
 from dataclasses import dataclass
 from decimal import Decimal
 from decimal import InvalidOperation
-from typing import Any
 from typing import TYPE_CHECKING
+from typing import Any
 from typing import TypeVar
 
 from kuchka.units import BAUD_RATE_UNITS

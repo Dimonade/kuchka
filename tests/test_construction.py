@@ -4,6 +4,7 @@ from decimal import Decimal
 from fractions import Fraction
 
 import pytest
+
 from kuchka import Ampere
 from kuchka import InvalidMeasurementError
 from kuchka import Volt

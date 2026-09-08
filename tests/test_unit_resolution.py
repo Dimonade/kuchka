@@ -7,11 +7,15 @@ These are not the primary construction path -- `Volt(5)` remains that -- they ex
 specifically for the one place a unit is expected to arrive as a string:
 an I/O boundary such as a config file, CSV header, or hardware descriptor.
 """
+
 import pytest
+
 from kuchka import Ampere
 from kuchka import Baud
 from kuchka import Candela
 from kuchka import Celsius
+from kuchka import Centimeter
+from kuchka import Decimeter
 from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
 from kuchka import Gram
@@ -39,6 +43,7 @@ from kuchka import Micromole
 from kuchka import Microsecond
 from kuchka import MicrosecondSamplingPeriod
 from kuchka import Microvolt
+from kuchka import Microwatt
 from kuchka import Milliampere
 from kuchka import Milligram
 from kuchka import Millimeter
@@ -53,6 +58,7 @@ from kuchka import Nanogram
 from kuchka import Nanometer
 from kuchka import Ohm
 from kuchka import Percent
+from kuchka import Picogram
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
@@ -62,9 +68,7 @@ from kuchka import Volt
 from kuchka import Watt
 from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
 from kuchka.units import BAUD_RATE_UNITS
-from kuchka.units import Centimeter
 from kuchka.units import CURRENT_UNITS
-from kuchka.units import Decimeter
 from kuchka.units import FREQUENCY_UNITS
 from kuchka.units import LENGTH_UNITS
 from kuchka.units import LUMINOUS_INTENSITY_UNITS
@@ -78,8 +82,6 @@ from kuchka.units import TEMPERATURE_DELTA_UNITS
 from kuchka.units import TEMPERATURE_UNITS
 from kuchka.units import TIME_UNITS
 from kuchka.units import VOLTAGE_UNITS
-from kuchka.units.mass import Picogram
-from kuchka.units.power import Microwatt
 
 # (table, {expected symbol: expected constructor})
 TABLE_CASES = [

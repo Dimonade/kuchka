@@ -12,6 +12,7 @@ by a `Time`, whose error message names `Velocity` directly.
 from decimal import Decimal
 
 import pytest
+
 from kuchka import Inch
 from kuchka import InvalidMeasurementError
 from kuchka import Kilometer

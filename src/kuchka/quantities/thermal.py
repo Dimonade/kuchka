@@ -38,10 +38,9 @@ vocabulary this library currently targets.
 
 from __future__ import annotations
 
-from decimal import Decimal
+from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import overload
-from typing import TYPE_CHECKING
 
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.errors import InvalidConversionError
@@ -51,6 +50,8 @@ from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import register
 
 if TYPE_CHECKING:
+    from decimal import Decimal
+
     from kuchka.dimensions import Dimension
 
 

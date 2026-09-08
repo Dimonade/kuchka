@@ -22,6 +22,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from hypothesis import given
+
 from tests.quantity_families import BINARY_IMPRECISE_TRIPLES
 from tests.quantity_families import EXTREME_MAGNITUDES
 from tests.quantity_families import FAMILIES

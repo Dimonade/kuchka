@@ -13,7 +13,8 @@ regardless.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar
+from typing import TYPE_CHECKING
+from typing import ClassVar
 
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.quantities.base import LinearQuantity

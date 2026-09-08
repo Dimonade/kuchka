@@ -15,13 +15,13 @@ import copy
 import pickle
 
 import pytest
-from tests.quantity_families import FAMILIES
-from tests.quantity_families import FAMILY_IDS
 
 from kuchka import Celsius
 from kuchka import Kelvin
 from kuchka import Volt
 from kuchka.units import MILLIVOLT
+from tests.quantity_families import FAMILIES
+from tests.quantity_families import FAMILY_IDS
 
 
 @pytest.mark.parametrize("family", FAMILIES, ids=FAMILY_IDS)
@@ -63,4 +63,4 @@ def test_temperature_pickle_round_trips() -> None:
 def test_copied_and_pickled_values_stay_immutable() -> None:
     copied = copy.deepcopy(Volt(5))
     with pytest.raises(AttributeError):
-        copied._magnitude = 1  # noqa: SLF001
+        copied._magnitude = 1  # type: ignore[assignment]  # ty: ignore[invalid-assignment]  # noqa: SLF001

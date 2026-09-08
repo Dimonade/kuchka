@@ -19,6 +19,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from hypothesis import given
+
 from tests.quantity_families import ALL_UNIT_CASE_IDS
 from tests.quantity_families import ALL_UNIT_CASES
 from tests.quantity_families import ALL_UNITDEF_CASES
@@ -37,7 +38,6 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities import LinearQuantity
     from kuchka.quantities.base import UnitDef
-
     from tests.quantity_families import QuantityFamily
 
 

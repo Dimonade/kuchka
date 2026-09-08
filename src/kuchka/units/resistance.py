@@ -22,8 +22,8 @@ from kuchka.numeric import to_decimal
 from kuchka.prefixes import KILO
 from kuchka.prefixes import MEGA
 from kuchka.prefixes import MILLI
-from kuchka.prefixes import prefixed_unit
 from kuchka.prefixes import UNIT
+from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Resistance
 
 if TYPE_CHECKING:

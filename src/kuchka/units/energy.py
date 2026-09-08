@@ -25,8 +25,8 @@ from kuchka.prefixes import MICRO
 from kuchka.prefixes import MILLI
 from kuchka.prefixes import NANO
 from kuchka.prefixes import PICO
-from kuchka.prefixes import prefixed_unit
 from kuchka.prefixes import UNIT
+from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Energy
 
 if TYPE_CHECKING:

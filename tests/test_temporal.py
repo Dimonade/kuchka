@@ -9,6 +9,7 @@ same as being interchangeable.
 from decimal import Decimal
 
 import pytest
+
 from kuchka import Baud
 from kuchka import ConvertibleToFrequency
 from kuchka import Frequency

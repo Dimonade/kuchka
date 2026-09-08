@@ -4,12 +4,10 @@ Currently the only affine quantity that is implemented, therefore lives in a ded
 space.
 """
 
-from kuchka.units import CELSIUS
-from kuchka.units import KELVIN
-
 from decimal import Decimal
 
 import pytest
+
 from kuchka import Celsius
 from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
@@ -17,6 +15,8 @@ from kuchka import InvalidConversionError
 from kuchka import Kelvin
 from kuchka import MeasurementError
 from kuchka import Temperature
+from kuchka.units import CELSIUS
+from kuchka.units import KELVIN
 
 
 def test_celsius_to_kelvin_offset_is_exact():

@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from typing import ClassVar
 from typing import TYPE_CHECKING
+from typing import ClassVar
 
 from kuchka.dimensions import MASS
 from kuchka.quantities.base import LinearQuantity

@@ -108,15 +108,6 @@ wheels = [
 ]
 
 [[package]]
-name = "classify-imports"
-version = "4.5.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/b5/ac/1223bc31ef2947227fe8c705efd005e6d06170cff33db3ccaef34ab98b69/classify_imports-4.5.0.tar.gz", hash = "sha256:83af69ba9d4d05dd15146848d7b2cfa900a8f5cc81f26693688af73e8b199497", size = 4830, upload-time = "2026-07-10T18:05:25.973Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/0e/d2/23d18e9a5047bb2b5a30b82fd89aa22b095e3347b7dc0f1dc624fa011564/classify_imports-4.5.0-py2.py3-none-any.whl", hash = "sha256:04f37f789241f2f35cb04b63de8f77b502405bba144402a97b75542582fbdcdc", size = 5107, upload-time = "2026-07-10T18:05:25.179Z" },
-]
-
-[[package]]
 name = "click"
 version = "8.4.2"
 source = { registry = "https://pypi.org/simple" }
@@ -395,7 +386,6 @@ dev = [
     { name = "pylsp-mypy" },
     { name = "pytest" },
     { name = "python-lsp-server" },
-    { name = "reorder-python-imports" },
     { name = "ruff" },
     { name = "ty" },
 ]
@@ -411,7 +401,6 @@ dev = [
     { name = "pylsp-mypy", specifier = ">=0.8.0" },
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "python-lsp-server", specifier = ">=1.15.0" },
-    { name = "reorder-python-imports", specifier = ">=3.17.0" },
     { name = "ruff", specifier = ">=0.16.3" },
     { name = "ty", specifier = ">=0.0.72" },
 ]
@@ -754,18 +743,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/52/a0/07907b6ff512674d9b201859f7d212298c44933633c946703a20c25e9d81/pytokens-0.4.1-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:967cf6e3fd4adf7de8fc73cd3043754ae79c36475c1c11d514fc72cf5490094a", size = 306698, upload-time = "2026-01-30T01:03:29.653Z" },
     { url = "https://files.pythonhosted.org/packages/39/2a/cbbf9250020a4a8dd53ba83a46c097b69e5eb49dd14e708f496f548c6612/pytokens-0.4.1-cp314-cp314t-win_amd64.whl", hash = "sha256:584c80c24b078eec1e227079d56dc22ff755e0ba8654d8383b2c549107528918", size = 116287, upload-time = "2026-01-30T01:03:30.912Z" },
     { url = "https://files.pythonhosted.org/packages/c6/78/397db326746f0a342855b81216ae1f0a32965deccfd7c830a2dbc66d2483/pytokens-0.4.1-py3-none-any.whl", hash = "sha256:26cef14744a8385f35d0e095dc8b3a7583f6c953c2e3d269c7f82484bf5ad2de", size = 13729, upload-time = "2026-01-30T01:03:45.029Z" },
-]
-
-[[package]]
-name = "reorder-python-imports"
-version = "3.17.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "classify-imports" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/06/0e/7d36e6213d30c2639e031992fc2afbe34a7149f1a0bc1e980c451944a0b8/reorder_python_imports-3.17.0.tar.gz", hash = "sha256:be8269009c1638b09e3dea8381b25689f468a09b4fddd7adc02638386a30252b", size = 11779, upload-time = "2026-07-10T18:44:29.719Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9d/72/080979d322d3fcc7a5498422cfd34003d208f44e905f372ed772e6aa84fa/reorder_python_imports-3.17.0-py2.py3-none-any.whl", hash = "sha256:ca074de155a18f1d28bd5274fefb2d6fb18b90bdbdce547c23163c18ea2c1795", size = 11989, upload-time = "2026-07-10T18:44:28.808Z" },
 ]
 
 [[package]]
