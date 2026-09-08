@@ -12,6 +12,9 @@ by a `Time`, whose error message names `Velocity` directly.
 from decimal import Decimal
 
 import pytest
+
+from kuchka import Centimeter
+from kuchka import Decimeter
 from kuchka import Inch
 from kuchka import InvalidMeasurementError
 from kuchka import Kilometer
@@ -82,9 +85,18 @@ def test_inch_round_trips_through_meter_exactly(inches, expected_meters):
         (Nanometer, Meter, Decimal("0.000000001")),
         (Micrometer, Meter, Decimal("0.000001")),
         (Millimeter, Meter, Decimal("0.001")),
+        (Centimeter, Meter, Decimal("0.01")),
+        (Decimeter, Meter, Decimal("0.1")),
         (Kilometer, Meter, Decimal(1000)),
     ],
-    ids=["nanometer", "micrometer", "millimeter", "kilometer"],
+    ids=[
+        "nanometer",
+        "micrometer",
+        "millimeter",
+        "centimeter",
+        "decimeter",
+        "kilometer",
+    ],
 )
 def test_metric_prefixes_scale_correctly(prefixed, canonical, scale):
     assert prefixed(1) == canonical(scale)
@@ -125,18 +137,18 @@ def test_naked_number_addition_is_rejected():
         Meter(5) + 4.2  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 
 
-def test_length_times_length_is_unrepresentable_not_planned():
-    """Test that area is out of scope but planned and gives unrepresentable error."""
-    match = "no registered engineering type"
-    with pytest.raises(UnrepresentableDimensionError, match=match):
+def test_length_times_length_is_planned():
+    """Test that area is out of scope but planned and gives planned error."""
+    match = "planned but not yet"
+    with pytest.raises(PlannedDimensionError, match=match):
         Meter(5) * Meter(2)
 
 
-def test_length_times_length_does_not_raise_planned_dimension_error():
-    """Area must not be mistaken for a tracked, planned relation."""
-    with pytest.raises(UnrepresentableDimensionError) as excinfo:
-        Meter(5) * Meter(2)
-    assert not isinstance(excinfo.value, PlannedDimensionError)
+def test_length_times_length_times_length_is_planned():
+    """Test that volume is out of scope but planned and gives planned error."""
+    match = "planned but not yet"
+    with pytest.raises(PlannedDimensionError, match=match):
+        Meter(5) * Meter(2) * Meter(1)
 
 
 def test_micrometer_and_millimeter_unit_constants_round_trip():

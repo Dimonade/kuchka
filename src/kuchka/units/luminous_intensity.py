@@ -45,3 +45,9 @@ LUMINOUS_INTENSITY_UNITS: Mapping[str, Callable[[Numeric], LuminousIntensity]] =
         }
     )
 )
+
+__all__ = [
+    "CANDELA",
+    "LUMINOUS_INTENSITY_UNITS",
+    "Candela",
+]

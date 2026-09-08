@@ -26,6 +26,12 @@ from kuchka.dimensions import FREQUENCY
 from kuchka.dimensions import TIME
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
+from kuchka.prefixes import KILO
+from kuchka.prefixes import MEGA
+from kuchka.prefixes import MICRO
+from kuchka.prefixes import MILLI
+from kuchka.prefixes import UNIT
+from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import BaudRate
 from kuchka.quantities import Frequency
 from kuchka.quantities import SampleRate
@@ -39,9 +45,13 @@ if TYPE_CHECKING:
 
 # Time
 
-MICROSECOND = UnitDef("microsecond", "\u00b5s", Decimal("0.000001"), TIME)
-MILLISECOND = UnitDef("millisecond", "ms", Decimal("0.001"), TIME)
-SECOND = UnitDef("second", "s", Decimal(1), TIME)
+SECOND_NAME = "second"
+SECOND_SYMBOL = "s"
+
+MICROSECOND = prefixed_unit(MICRO, SECOND_NAME, SECOND_SYMBOL, TIME)
+MILLISECOND = prefixed_unit(MILLI, SECOND_NAME, SECOND_SYMBOL, TIME)
+SECOND = prefixed_unit(UNIT, SECOND_NAME, SECOND_SYMBOL, TIME)
+
 
 Time._canonical_unit = SECOND  # noqa: SLF001 -- this module owns Time's canonical unit
 
@@ -63,18 +73,22 @@ def Second(value: Numeric) -> Time:
 
 TIME_UNITS: Mapping[str, Callable[[Numeric], Time]] = MappingProxyType(
     {
-        "us": Microsecond,
-        "ms": Millisecond,
-        "s": Second,
+        MICROSECOND.symbol: Microsecond,
+        MILLISECOND.symbol: Millisecond,
+        SECOND.symbol: Second,
     }
 )
 
 
 # Frequency
 
-HERTZ = UnitDef("hertz", "Hz", Decimal(1), FREQUENCY)
-KILOHERTZ = UnitDef("kilohertz", "kHz", Decimal(1000), FREQUENCY)
-MEGAHERTZ = UnitDef("megahertz", "MHz", Decimal(1_000_000), FREQUENCY)
+HERTZ_NAME = "hertz"
+HERTZ_SYMBOL = "Hz"
+
+HERTZ = prefixed_unit(UNIT, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
+KILOHERTZ = prefixed_unit(KILO, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
+MEGAHERTZ = prefixed_unit(MEGA, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
+
 
 Frequency._canonical_unit = HERTZ  # noqa: SLF001 -- this module owns Frequency's canonical unit
 
@@ -96,9 +110,9 @@ def Megahertz(value: Numeric) -> Frequency:
 
 FREQUENCY_UNITS: Mapping[str, Callable[[Numeric], Frequency]] = MappingProxyType(
     {
-        "Hz": Hertz,
-        "kHz": Kilohertz,
-        "MHz": Megahertz,
+        HERTZ.symbol: Hertz,
+        KILOHERTZ.symbol: Kilohertz,
+        MEGAHERTZ.symbol: Megahertz,
     }
 )
 
@@ -149,9 +163,9 @@ def SecondSamplingPeriod(value: Numeric) -> SamplingPeriod:
 SAMPLING_PERIOD_UNITS: Mapping[str, Callable[[Numeric], SamplingPeriod]] = (
     MappingProxyType(
         {
-            "us": MicrosecondSamplingPeriod,
-            "ms": MillisecondSamplingPeriod,
-            "s": SecondSamplingPeriod,
+            SAMPLING_PERIOD_MICROSECOND.symbol: MicrosecondSamplingPeriod,
+            SAMPLING_PERIOD_MILLISECOND.symbol: MillisecondSamplingPeriod,
+            SAMPLING_PERIOD_SECOND.symbol: SecondSamplingPeriod,
         }
     )
 )
@@ -199,9 +213,9 @@ def MegasamplesPerSecond(value: Numeric) -> SampleRate:
 
 SAMPLE_RATE_UNITS: Mapping[str, Callable[[Numeric], SampleRate]] = MappingProxyType(
     {
-        "Sa/s": SamplesPerSecond,
-        "kSa/s": KilosamplesPerSecond,
-        "MSa/s": MegasamplesPerSecond,
+        SAMPLE_PER_SECOND.symbol: SamplesPerSecond,
+        KILOSAMPLE_PER_SECOND.symbol: KilosamplesPerSecond,
+        MEGASAMPLE_PER_SECOND.symbol: MegasamplesPerSecond,
     }
 )
 
@@ -226,7 +240,43 @@ def Kilobaud(value: Numeric) -> BaudRate:
 
 BAUD_RATE_UNITS: Mapping[str, Callable[[Numeric], BaudRate]] = MappingProxyType(
     {
-        "Bd": Baud,
-        "kBd": Kilobaud,
+        BAUD.symbol: Baud,
+        KILOBAUD.symbol: Kilobaud,
     }
 )
+
+__all__ = [
+    "BAUD",
+    "BAUD_RATE_UNITS",
+    "FREQUENCY_UNITS",
+    "HERTZ",
+    "KILOBAUD",
+    "KILOHERTZ",
+    "KILOSAMPLE_PER_SECOND",
+    "MEGAHERTZ",
+    "MEGASAMPLE_PER_SECOND",
+    "MICROSECOND",
+    "MILLISECOND",
+    "SAMPLE_PER_SECOND",
+    "SAMPLE_RATE_UNITS",
+    "SAMPLING_PERIOD_MICROSECOND",
+    "SAMPLING_PERIOD_MILLISECOND",
+    "SAMPLING_PERIOD_SECOND",
+    "SAMPLING_PERIOD_UNITS",
+    "SECOND",
+    "TIME_UNITS",
+    "Baud",
+    "Hertz",
+    "Kilobaud",
+    "Kilohertz",
+    "KilosamplesPerSecond",
+    "Megahertz",
+    "MegasamplesPerSecond",
+    "Microsecond",
+    "MicrosecondSamplingPeriod",
+    "Millisecond",
+    "MillisecondSamplingPeriod",
+    "SamplesPerSecond",
+    "Second",
+    "SecondSamplingPeriod",
+]

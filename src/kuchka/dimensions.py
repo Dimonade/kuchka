@@ -89,8 +89,32 @@ TEMPERATURE_DELTA = Dimension(temperature=1)
 TIME = Dimension(time=1)
 FREQUENCY = Dimension(time=-1)
 LENGTH = Dimension(length=1)
+LENGTH = Dimension(length=1)
+AREA = Dimension(length=2)
+VOLUME = Dimension(length=3)
 AMOUNT_OF_SUBSTANCE = Dimension(amount=1)
 LUMINOUS_INTENSITY = Dimension(luminous_intensity=1)
 VELOCITY = Dimension(length=1, time=-1)
 CHARGE = Dimension(current=1, time=1)
 ENERGY = Dimension(mass=1, length=2, time=-2)
+
+__all__ = [
+    "AMOUNT_OF_SUBSTANCE",
+    "AREA",
+    "CHARGE",
+    "CURRENT",
+    "DIMENSIONLESS",
+    "ENERGY",
+    "FREQUENCY",
+    "LENGTH",
+    "LUMINOUS_INTENSITY",
+    "MASS",
+    "POWER",
+    "RESISTANCE",
+    "TEMPERATURE_DELTA",
+    "TIME",
+    "VELOCITY",
+    "VOLTAGE",
+    "VOLUME",
+    "Dimension",
+]

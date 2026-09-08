@@ -1,6 +1,6 @@
 [project]
 name = "kuchka"
-version = "0.1.0"
+version = "0.1.1"
 description = "A small pile of physically-typed engineering units for Python."
 readme = "README.md"
 authors = [{ name = "dimonade", email = "dimonade@protonmail.com" }]
@@ -32,7 +32,6 @@ dev = [
   "pylsp-mypy>=0.8.0",
   "pytest>=9.1.1",
   "python-lsp-server>=1.15.0",
-  "reorder-python-imports>=3.17.0",
   "ruff>=0.16.3",
   "ty>=0.0.72",
 ]
@@ -86,9 +85,8 @@ ignore = [
   "D213",   # Docstring summary on first line.
   "E402",
   "E722",
-  "F403",
-  "F405",
-  "I001",   # Using reorder-python-imports.
+  "F403",   # Star imports deliberately aggregate re-exports in units/__init__.py and
+  "F405",   # Only used at module level `__init__`'s `__all__` definitions, curated by hand.
   "INP001", # Okay to not have `__init__.py` when not needed.
   "N802",   # Unit constructors (Volt, Ampere, Celsius, ...) are
   # intentionally capitalized like types: `isinstance(Volt(5), Voltage)` should read the way a type check reads.
@@ -102,7 +100,15 @@ ignore = [
   # matching benefit here.
 ]
 
+[tool.ruff.lint.isort]
+force-single-line = true
+
 [tool.ruff.lint.per-file-ignores]
+"src/kuchka/units/__init__.py" = [
+  "PLE0605",
+] # Every leaf file maintains their own __all__.
+"src/kuchka/quantities/__init__.py" = ["PLE0605"] # Same.
+
 "tests/*" = [
   "ANN001", # Parametrized test arguments take on whatever values the parametrize table provides across cases;
   # giving them a precise static type would either be `Any` in disguise or would need a broad union that adds

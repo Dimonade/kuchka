@@ -13,27 +13,38 @@ as a string from outside the application.
 
 from __future__ import annotations
 
-from decimal import Decimal
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import ENERGY
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
+from kuchka.prefixes import KILO
+from kuchka.prefixes import MEGA
+from kuchka.prefixes import MICRO
+from kuchka.prefixes import MILLI
+from kuchka.prefixes import NANO
+from kuchka.prefixes import PICO
+from kuchka.prefixes import UNIT
+from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Energy
-from kuchka.quantities import UnitDef
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
-PICOJOULE = UnitDef("picojoule", "pJ", Decimal("0.000000000001"), ENERGY)
-NANOJOULE = UnitDef("nanojoule", "nJ", Decimal("0.000000001"), ENERGY)
-MICROJOULE = UnitDef("microjoule", "\u00b5J", Decimal("0.000001"), ENERGY)
-MILLIJOULE = UnitDef("millijoule", "mJ", Decimal("0.001"), ENERGY)
-JOULE = UnitDef("joule", "J", Decimal(1), ENERGY)
-KILOJOULE = UnitDef("kilojoule", "kJ", Decimal(1000), ENERGY)
-MEGAJOULE = UnitDef("megajoule", "MJ", Decimal(1_000_000), ENERGY)
+
+JOULE_NAME = "joule"
+JOULE_SYMBOL = "J"
+
+PICOJOULE = prefixed_unit(PICO, JOULE_NAME, JOULE_SYMBOL, ENERGY)
+NANOJOULE = prefixed_unit(NANO, JOULE_NAME, JOULE_SYMBOL, ENERGY)
+MICROJOULE = prefixed_unit(MICRO, JOULE_NAME, JOULE_SYMBOL, ENERGY)
+MILLIJOULE = prefixed_unit(MILLI, JOULE_NAME, JOULE_SYMBOL, ENERGY)
+JOULE = prefixed_unit(UNIT, JOULE_NAME, JOULE_SYMBOL, ENERGY)
+KILOJOULE = prefixed_unit(KILO, JOULE_NAME, JOULE_SYMBOL, ENERGY)
+MEGAJOULE = prefixed_unit(MEGA, JOULE_NAME, JOULE_SYMBOL, ENERGY)
+
 
 Energy._canonical_unit = JOULE  # noqa: SLF001 -- this module owns Energy's canonical unit
 
@@ -75,12 +86,30 @@ def Megajoule(value: Numeric) -> Energy:
 
 ENERGY_UNITS: Mapping[str, Callable[[Numeric], Energy]] = MappingProxyType(
     {
-        "pJ": Picojoule,
-        "nJ": Nanojoule,
-        "uJ": Microjoule,
-        "mJ": Millijoule,
-        "J": Joule,
-        "kJ": Kilojoule,
-        "MJ": Megajoule,
+        PICOJOULE.symbol: Picojoule,
+        NANOJOULE.symbol: Nanojoule,
+        MICROJOULE.symbol: Microjoule,
+        MILLIJOULE.symbol: Millijoule,
+        JOULE.symbol: Joule,
+        KILOJOULE.symbol: Kilojoule,
+        MEGAJOULE.symbol: Megajoule,
     }
 )
+
+__all__ = [
+    "ENERGY_UNITS",
+    "JOULE",
+    "KILOJOULE",
+    "MEGAJOULE",
+    "MICROJOULE",
+    "MILLIJOULE",
+    "NANOJOULE",
+    "PICOJOULE",
+    "Joule",
+    "Kilojoule",
+    "Megajoule",
+    "Microjoule",
+    "Millijoule",
+    "Nanojoule",
+    "Picojoule",
+]

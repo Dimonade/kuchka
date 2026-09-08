@@ -53,24 +53,27 @@ analyse_voltage(Millivolt(4200))  # another example of a valid type check.
 
 ## What's in v0.1
 
-| Quantity            | Constructors                                                                     |
-| ------------------- | -------------------------------------------------------------------------------- |
-| `Voltage`           | `Volt`, `Millivolt`, `Microvolt`, `Kilovolt`                                     |
-| `Current`           | `Ampere`, `Milliampere`, `Microampere`, `Kiloampere`                             |
-| `Power`             | `Watt`, `Milliwatt`, `Kilowatt`                                                  |
-| `Resistance`        | `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`                                          |
-| `Temperature`       | `Celsius`, `Kelvin`                                                              |
-| `TemperatureDelta`  | `DeltaCelsius`, `DeltaKelvin`                                                    |
-| `Time`              | `Second`, `Millisecond`, `Microsecond`                                           |
-| `Frequency`         | `Hertz`, `Kilohertz`, `Megahertz`                                                |
-| `SamplingPeriod`    | `SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod` |
-| `SampleRate`        | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`               |
-| `BaudRate`          | `Baud`, `Kilobaud`                                                               |
-| `Length`            | `Nanometer`, `Micrometer`, `Millimeter`, `Meter`, `Kilometer`, `Inch`            |
-| `Mass`              | `Nanogram`, `Microgram`, `Milligram`, `Gram`, `Kilogram`, `Megagram`, `Tonne`    |
-| `AmountOfSubstance` | `Micromole`, `Millimole`, `Mole`                                                 |
-| `LuminousIntensity` | `Candela`                                                                        |
-| `Proportion`        | `Ratio`, `Percent`                                                               |
+| Quantity            | Constructors                                                                                     |
+| ------------------- | ------------------------------------------------------------------------------------------------ |
+| `Voltage`           | `Volt`, `Millivolt`, `Microvolt`, `Kilovolt`                                                     |
+| `Current`           | `Ampere`, `Milliampere`, `Microampere`, `Kiloampere`                                             |
+| `Charge`            | `Coulomb`, `Millicoulomb`, `Microcoulomb`, `Nanocoulomb`, `Picocoulomb`                          |
+| `Power`             | `Watt`, `Milliwatt`, `Kilowatt`                                                                  |
+| `Energy`            | `Joule`, `Millijoule`, `Microjoule`, `Nanojoule`, `Picojoule`, `Kilojoule`, `Megajoule`          |
+| `Resistance`        | `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`                                                          |
+| `Temperature`       | `Celsius`, `Kelvin`                                                                              |
+| `TemperatureDelta`  | `DeltaCelsius`, `DeltaKelvin`                                                                    |
+| `Time`              | `Second`, `Millisecond`, `Microsecond`                                                           |
+| `Frequency`         | `Hertz`, `Kilohertz`, `Megahertz`                                                                |
+| `SamplingPeriod`    | `SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod`                 |
+| `SampleRate`        | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`                               |
+| `BaudRate`          | `Baud`, `Kilobaud`                                                                               |
+| `Length`            | `Nanometer`, `Micrometer`, `Millimeter`, `Centimeter`, `Decimeter`, `Meter`, `Kilometer`, `Inch` |
+| `Velocity`          | `MetrePerSecond` (`MeterPerSecond`)                                                              |
+| `Mass`              | `Nanogram`, `Microgram`, `Milligram`, `Gram`, `Kilogram`, `Megagram`, `Tonne`                    |
+| `AmountOfSubstance` | `Micromole`, `Millimole`, `Mole`                                                                 |
+| `LuminousIntensity` | `Candela`                                                                                        |
+| `Proportion`        | `Ratio`, `Percent`                                                                               |
 
 Deliberately nothing else yet.
 See "What this is not (yet)" below.
@@ -90,7 +93,6 @@ See "What this is not (yet)" below.
   This is not a second construction path: `Volt(5)` is still how application code builds a `Voltage`.
   It exists for the one place a unit is expected to arrive as a string -- a config file, a CSV header, a hardware descriptor.
   The intention is so that place doesn't have to hand-roll the same table every other application resolving `kuchka` units already needed.
-  See `docs/examples/config_migration` for it in use, and `docs/review_notes.md` for why this doesn't reintroduce the registry the "Comparison to existing tools" section below argues against.
 - **Cross-type arithmetic is rejected statically, not just at runtime.**
   `Volt(5) + Ampere(2)` and `Volt(5) + 4.2` are both mypy errors, not only runtime ones.
   This falls out of typing the base arithmetic methods against `Self` instead of `object`, so every quantity type only ever type-checks arithmetic against its own kind.
@@ -222,26 +224,31 @@ A non-empty spec applies to the underlying `Decimal`, and the unit symbol is app
 _subject to change as the design and architecture bounces around and settles down._
 
 ```text
-src/kuchka/
-    constants.py         a handful of physical constants
-    dimensions.py        exponent-vector dimensional algebra
-    numeric.py            strict coercion of int/float/Decimal/Fraction into Decimal
-    errors.py              the exception hierarchy
+ssrc/kuchka/
+    constants.py            a handful of physical constants
+    dimensions.py           exponent-vector dimensional algebra
+    prefixes.py             SI prefix definitions and the prefixed_unit() helper
+    numeric.py              strict coercion of int/float/Decimal/Fraction into Decimal
+    errors.py               the exception hierarchy
     quantities/
-        base.py             the quantity engine: LinearQuantity, UnitDef, the dimension registry
-        electrical.py      Voltage, Current, Power, Resistance and their overload tables
-        temporal.py        Time, Frequency, SamplingPeriod, SampleRate, BaudRate
-        thermal.py         TemperatureDelta, and the affine Temperature type
-        length.py           Length
-        mass.py              Mass
-        amount.py           AmountOfSubstance
+        base.py                 the quantity engine: LinearQuantity, UnitDef, the dimension registry
+        electrical.py           Voltage, Current, Power, Resistance and their overload tables
+        charge.py               Charge
+        energy.py               Energy
+        kinematics.py           Velocity
+        temporal.py             Time, Frequency, SamplingPeriod, SampleRate, BaudRate
+        thermal.py              TemperatureDelta, and the affine Temperature type
+        length.py               Length
+        mass.py                 Mass
+        amount.py               AmountOfSubstance
         luminous_intensity.py   LuminousIntensity
-        proportion.py     Proportion
+        proportion.py           Proportion
     units/
-        voltage.py, current.py, resistance.py, power.py, temporal.py, length.py,
-        mass.py, amount.py, luminous_intensity.py, proportion.py, ...
-                             one module per dimension's prefix constructors
-tests/                      All tests in the module.
+        voltage.py, current.py, resistance.py, power.py, charge.py, energy.py,
+        kinematics.py, temporal.py, length.py, mass.py, amount.py,
+        luminous_intensity.py, proportion.py, thermal.py, ...
+                                 one module per dimension's prefix constructors
+tests/                          All tests in the module.
 ```
 
 Application code should only ever need the top-level `kuchka` package.

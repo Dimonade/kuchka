@@ -17,6 +17,7 @@ from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from hypothesis import strategies as st
+
 from kuchka import Ampere
 from kuchka import Baud
 from kuchka import Candela
@@ -36,7 +37,6 @@ from kuchka import SecondSamplingPeriod
 from kuchka import Volt
 from kuchka import Watt
 from kuchka.quantities import LinearQuantity
-from kuchka.quantities.thermal import DELTA_KELVIN
 from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
 from kuchka.units import AMPERE
 from kuchka.units import BAUD
@@ -45,6 +45,7 @@ from kuchka.units import CANDELA
 from kuchka.units import CHARGE_UNITS
 from kuchka.units import COULOMB
 from kuchka.units import CURRENT_UNITS
+from kuchka.units import DELTA_KELVIN
 from kuchka.units import ENERGY_UNITS
 from kuchka.units import FREQUENCY_UNITS
 from kuchka.units import HERTZ
@@ -72,7 +73,6 @@ from kuchka.units import VELOCITY_UNITS
 from kuchka.units import VOLT
 from kuchka.units import VOLTAGE_UNITS
 from kuchka.units import WATT
-
 
 if TYPE_CHECKING:
     from collections.abc import Callable

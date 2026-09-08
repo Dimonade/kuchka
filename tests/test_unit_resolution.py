@@ -9,51 +9,70 @@ an I/O boundary such as a config file, CSV header, or hardware descriptor.
 """
 
 import pytest
+
 from kuchka import Ampere
 from kuchka import Baud
+from kuchka import Candela
 from kuchka import Celsius
+from kuchka import Centimeter
+from kuchka import Decimeter
 from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
+from kuchka import Gram
 from kuchka import Hertz
 from kuchka import Inch
 from kuchka import Kelvin
 from kuchka import Kiloampere
 from kuchka import Kilobaud
+from kuchka import Kilogram
 from kuchka import Kilohertz
 from kuchka import Kilometer
 from kuchka import Kiloohm
 from kuchka import KilosamplesPerSecond
 from kuchka import Kilovolt
 from kuchka import Kilowatt
+from kuchka import Megagram
 from kuchka import Megahertz
 from kuchka import Megaohm
 from kuchka import MegasamplesPerSecond
 from kuchka import Meter
 from kuchka import Microampere
+from kuchka import Microgram
 from kuchka import Micrometer
+from kuchka import Micromole
 from kuchka import Microsecond
 from kuchka import MicrosecondSamplingPeriod
 from kuchka import Microvolt
+from kuchka import Microwatt
 from kuchka import Milliampere
+from kuchka import Milligram
 from kuchka import Millimeter
+from kuchka import Millimole
+from kuchka import Milliohm
 from kuchka import Millisecond
 from kuchka import MillisecondSamplingPeriod
-from kuchka import Milliohm
 from kuchka import Millivolt
 from kuchka import Milliwatt
+from kuchka import Mole
+from kuchka import Nanogram
 from kuchka import Nanometer
 from kuchka import Ohm
 from kuchka import Percent
+from kuchka import Picogram
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
 from kuchka import SecondSamplingPeriod
+from kuchka import Tonne
 from kuchka import Volt
 from kuchka import Watt
+from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
 from kuchka.units import BAUD_RATE_UNITS
 from kuchka.units import CURRENT_UNITS
 from kuchka.units import FREQUENCY_UNITS
 from kuchka.units import LENGTH_UNITS
+from kuchka.units import LUMINOUS_INTENSITY_UNITS
+from kuchka.units import MASS_UNITS
 from kuchka.units import POWER_UNITS
 from kuchka.units import PROPORTION_UNITS
 from kuchka.units import RESISTANCE_UNITS
@@ -63,41 +82,27 @@ from kuchka.units import TEMPERATURE_DELTA_UNITS
 from kuchka.units import TEMPERATURE_UNITS
 from kuchka.units import TIME_UNITS
 from kuchka.units import VOLTAGE_UNITS
-from kuchka import Candela
-from kuchka import Gram
-from kuchka import Kilogram
-from kuchka import Megagram
-from kuchka import Microgram
-from kuchka import Micromole
-from kuchka import Milligram
-from kuchka import Millimole
-from kuchka import Mole
-from kuchka import Nanogram
-from kuchka import Tonne
-from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
-from kuchka.units import LUMINOUS_INTENSITY_UNITS
-from kuchka.units import MASS_UNITS
 
 # (table, {expected symbol: expected constructor})
 TABLE_CASES = [
-    (VOLTAGE_UNITS, {"uV": Microvolt, "mV": Millivolt, "V": Volt, "kV": Kilovolt}),
+    (VOLTAGE_UNITS, {"\u00b5V": Microvolt, "mV": Millivolt, "V": Volt, "kV": Kilovolt}),
     (
         CURRENT_UNITS,
-        {"uA": Microampere, "mA": Milliampere, "A": Ampere, "kA": Kiloampere},
+        {"\u00b5A": Microampere, "mA": Milliampere, "A": Ampere, "kA": Kiloampere},
     ),
     (
         RESISTANCE_UNITS,
-        {"mOhm": Milliohm, "Ohm": Ohm, "kOhm": Kiloohm, "MOhm": Megaohm},
+        {"m\u03a9": Milliohm, "\u03a9": Ohm, "k\u03a9": Kiloohm, "M\u03a9": Megaohm},
     ),
-    (POWER_UNITS, {"mW": Milliwatt, "W": Watt, "kW": Kilowatt}),
+    (POWER_UNITS, {"\u00b5W": Microwatt, "mW": Milliwatt, "W": Watt, "kW": Kilowatt}),
     (TEMPERATURE_UNITS, {"K": Kelvin, "C": Celsius}),
     (TEMPERATURE_DELTA_UNITS, {"dK": DeltaKelvin, "dC": DeltaCelsius}),
-    (TIME_UNITS, {"us": Microsecond, "ms": Millisecond, "s": Second}),
+    (TIME_UNITS, {"\u00b5s": Microsecond, "ms": Millisecond, "s": Second}),
     (FREQUENCY_UNITS, {"Hz": Hertz, "kHz": Kilohertz, "MHz": Megahertz}),
     (
         SAMPLING_PERIOD_UNITS,
         {
-            "us": MicrosecondSamplingPeriod,
+            "\u00b5s": MicrosecondSamplingPeriod,
             "ms": MillisecondSamplingPeriod,
             "s": SecondSamplingPeriod,
         },
@@ -115,8 +120,10 @@ TABLE_CASES = [
         LENGTH_UNITS,
         {
             "nm": Nanometer,
-            "um": Micrometer,
+            "\u00b5m": Micrometer,
             "mm": Millimeter,
+            "cm": Centimeter,
+            "dm": Decimeter,
             "m": Meter,
             "km": Kilometer,
             "in": Inch,
@@ -126,8 +133,9 @@ TABLE_CASES = [
     (
         MASS_UNITS,
         {
+            "pg": Picogram,
             "ng": Nanogram,
-            "ug": Microgram,
+            "\u00b5g": Microgram,
             "mg": Milligram,
             "g": Gram,
             "kg": Kilogram,
@@ -135,7 +143,10 @@ TABLE_CASES = [
             "t": Tonne,
         },
     ),
-    (AMOUNT_OF_SUBSTANCE_UNITS, {"umol": Micromole, "mmol": Millimole, "mol": Mole}),
+    (
+        AMOUNT_OF_SUBSTANCE_UNITS,
+        {"\u00b5mol": Micromole, "mmol": Millimole, "mol": Mole},
+    ),
     (LUMINOUS_INTENSITY_UNITS, {"cd": Candela}),
 ]
 

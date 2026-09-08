@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from typing import ClassVar
 from typing import TYPE_CHECKING
+from typing import ClassVar
 
 from kuchka.dimensions import AMOUNT_OF_SUBSTANCE
 from kuchka.quantities.base import LinearQuantity
@@ -20,3 +20,5 @@ class AmountOfSubstance(LinearQuantity):
 
 
 register(AMOUNT_OF_SUBSTANCE, AmountOfSubstance)
+
+__all__ = ["AmountOfSubstance"]

@@ -38,24 +38,19 @@ vocabulary this library currently targets.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from decimal import Decimal
-from types import MappingProxyType
+from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import overload
-from typing import TYPE_CHECKING
 
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import MeasurementError
-from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.quantities.base import AffineUnitDef
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import register
-from kuchka.quantities.base import UnitDef
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Mapping
+    from decimal import Decimal
 
     from kuchka.dimensions import Dimension
 
@@ -67,49 +62,6 @@ class TemperatureDelta(LinearQuantity):
 
 
 register(TEMPERATURE_DELTA, TemperatureDelta)
-
-DELTA_KELVIN = UnitDef("kelvin_delta", "\u0394K", Decimal(1), TEMPERATURE_DELTA)
-"""A one-degree change is the same size in Celsius and Kelvin.
-
-Only the absolute zero point differs, and a delta has no zero point.
-"""
-DELTA_CELSIUS = UnitDef("celsius_delta", "\u0394\u00b0C", Decimal(1), TEMPERATURE_DELTA)
-
-TemperatureDelta._canonical_unit = DELTA_KELVIN  # noqa: SLF001 -- this module owns TemperatureDelta's canonical unit
-
-
-def DeltaKelvin(value: Numeric) -> TemperatureDelta:
-    """Construct a TemperatureDelta from a magnitude expressed in Kelvin."""
-    return TemperatureDelta(to_decimal(value) * DELTA_KELVIN.scale, DELTA_KELVIN)
-
-
-def DeltaCelsius(value: Numeric) -> TemperatureDelta:
-    """Construct a TemperatureDelta from a magnitude expressed in degrees Celsius."""
-    return TemperatureDelta(to_decimal(value) * DELTA_CELSIUS.scale, DELTA_CELSIUS)
-
-
-TEMPERATURE_DELTA_UNITS: Mapping[str, Callable[[Numeric], TemperatureDelta]] = (
-    MappingProxyType(
-        {
-            "dK": DeltaKelvin,
-            "dC": DeltaCelsius,
-        }
-    )
-)
-
-
-@dataclass(frozen=True, slots=True)
-class AffineUnitDef:
-    """A unit with both a scale and an offset, e.g. Celsius relative to Kelvin."""
-
-    name: str
-    symbol: str
-    scale: Decimal
-    offset: Decimal
-
-
-KELVIN = AffineUnitDef("kelvin", "K", Decimal(1), Decimal(0))
-CELSIUS = AffineUnitDef("celsius", "\u00b0C", Decimal(1), Decimal("273.15"))
 
 
 class Temperature:
@@ -234,7 +186,10 @@ class Temperature:
     def __sub__(self, other: object) -> Temperature | TemperatureDelta:
         """Subtract a Temperature to get a delta, or a delta to shift the reading."""
         if isinstance(other, Temperature):
-            return TemperatureDelta(self._kelvin - other._kelvin, DELTA_KELVIN)
+            return TemperatureDelta(
+                self._kelvin - other._kelvin,
+                TemperatureDelta._canonical_unit,
+            )
         if isinstance(other, TemperatureDelta):
             return Temperature(self._kelvin - other.magnitude, self._display_unit)
         return NotImplemented
@@ -255,21 +210,4 @@ class Temperature:
         return f"{format(value, format_spec)} {self._display_unit.symbol}"
 
 
-def Kelvin(value: Numeric) -> Temperature:
-    """Construct a Temperature from a magnitude expressed in Kelvin."""
-    raw = to_decimal(value)
-    return Temperature(raw * KELVIN.scale + KELVIN.offset, KELVIN)
-
-
-def Celsius(value: Numeric) -> Temperature:
-    """Construct a Temperature from a magnitude expressed in degrees Celsius."""
-    raw = to_decimal(value)
-    return Temperature(raw * CELSIUS.scale + CELSIUS.offset, CELSIUS)
-
-
-TEMPERATURE_UNITS: Mapping[str, Callable[[Numeric], Temperature]] = MappingProxyType(
-    {
-        "K": Kelvin,
-        "C": Celsius,
-    }
-)
+__all__ = ["Temperature", "TemperatureDelta"]

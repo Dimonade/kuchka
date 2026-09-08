@@ -1,9 +1,12 @@
-"""Luminous Intensity: the power a light source emits in a given direction, per solid angle."""
+"""Luminous Intensity.
+
+The power a light source emits in a given direction, per solid angle.
+"""
 
 from __future__ import annotations
 
-from typing import ClassVar
 from typing import TYPE_CHECKING
+from typing import ClassVar
 
 from kuchka.dimensions import LUMINOUS_INTENSITY
 from kuchka.quantities.base import LinearQuantity
@@ -20,3 +23,5 @@ class LuminousIntensity(LinearQuantity):
 
 
 register(LUMINOUS_INTENSITY, LuminousIntensity)
+
+__all__ = ["LuminousIntensity"]

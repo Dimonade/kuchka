@@ -7,9 +7,9 @@ Defined alongside its one relationship to `Current` and `Time`
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import overload
-from typing import TYPE_CHECKING
 
 from kuchka.dimensions import CHARGE
 from kuchka.quantities.base import LinearQuantity
@@ -17,6 +17,7 @@ from kuchka.quantities.base import register
 
 if TYPE_CHECKING:
     from decimal import Decimal
+
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.electrical import Current
@@ -42,3 +43,5 @@ class Charge(LinearQuantity):
 
 
 register(CHARGE, Charge)
+
+__all__ = ["Charge"]

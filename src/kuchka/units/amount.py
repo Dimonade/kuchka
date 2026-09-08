@@ -13,23 +13,29 @@ reads a unit as a string from outside the application.
 
 from __future__ import annotations
 
-from decimal import Decimal
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import AMOUNT_OF_SUBSTANCE
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
+from kuchka.prefixes import MICRO
+from kuchka.prefixes import MILLI
+from kuchka.prefixes import UNIT
+from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import AmountOfSubstance
-from kuchka.quantities import UnitDef
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
-MICROMOLE = UnitDef("micromole", "\u00b5mol", Decimal("0.000001"), AMOUNT_OF_SUBSTANCE)
-MILLIMOLE = UnitDef("millimole", "mmol", Decimal("0.001"), AMOUNT_OF_SUBSTANCE)
-MOLE = UnitDef("mole", "mol", Decimal(1), AMOUNT_OF_SUBSTANCE)
+MOLE_NAME = "mole"
+MOLE_SYMBOL = "mol"
+
+MICROMOLE = prefixed_unit(MICRO, MOLE_NAME, MOLE_SYMBOL, AMOUNT_OF_SUBSTANCE)
+MILLIMOLE = prefixed_unit(MILLI, MOLE_NAME, MOLE_SYMBOL, AMOUNT_OF_SUBSTANCE)
+MOLE = prefixed_unit(UNIT, MOLE_NAME, MOLE_SYMBOL, AMOUNT_OF_SUBSTANCE)
+
 
 AmountOfSubstance._canonical_unit = MOLE  # noqa: SLF001 -- this module owns AmountOfSubstance's canonical unit
 
@@ -52,9 +58,19 @@ def Mole(value: Numeric) -> AmountOfSubstance:
 AMOUNT_OF_SUBSTANCE_UNITS: Mapping[str, Callable[[Numeric], AmountOfSubstance]] = (
     MappingProxyType(
         {
-            "umol": Micromole,
-            "mmol": Millimole,
-            "mol": Mole,
+            MICROMOLE.symbol: Micromole,
+            MILLIMOLE.symbol: Millimole,
+            MOLE.symbol: Mole,
         }
     )
 )
+
+__all__ = [
+    "AMOUNT_OF_SUBSTANCE_UNITS",
+    "MICROMOLE",
+    "MILLIMOLE",
+    "MOLE",
+    "Micromole",
+    "Millimole",
+    "Mole",
+]

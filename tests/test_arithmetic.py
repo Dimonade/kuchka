@@ -3,6 +3,7 @@
 from decimal import Decimal
 
 import pytest
+
 from kuchka import Ampere
 from kuchka import Current
 from kuchka import IncompatibleDimensionError

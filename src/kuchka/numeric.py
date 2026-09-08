@@ -70,3 +70,6 @@ def to_decimal(value: object) -> Decimal:
         f"cannot construct a measurement from {type_name}; expected int, "
         f"float, Decimal, or Fraction.{hint}",
     )
+
+
+__all__ = ["Numeric", "to_decimal"]

@@ -16,7 +16,10 @@ from typing import TYPE_CHECKING
 
 import pytest
 from hypothesis import given
+
 from kuchka import Ampere
+from kuchka import Centimeter
+from kuchka import Decimeter
 from kuchka import Gram
 from kuchka import Hertz
 from kuchka import Inch
@@ -57,6 +60,8 @@ from kuchka import Tonne
 from kuchka import Volt
 from kuchka import Watt
 from kuchka.units import AMPERE
+from kuchka.units import CENTIMETER
+from kuchka.units import DECIMETER
 from kuchka.units import GRAM
 from kuchka.units import HERTZ
 from kuchka.units import INCH
@@ -95,7 +100,6 @@ from kuchka.units import SAMPLING_PERIOD_SECOND
 from kuchka.units import SECOND
 from kuchka.units import VOLT
 from kuchka.units import WATT
-
 from tests.quantity_families import FINITE_DECIMALS
 
 if TYPE_CHECKING:
@@ -177,6 +181,8 @@ PREFIX_CASES: list[PrefixCase] = [
     PrefixCase("Nanometer", Nanometer, Meter, Decimal("0.000000001"), NANOMETER, METER),
     PrefixCase("Micrometer", Micrometer, Meter, Decimal("0.000001"), MICROMETER, METER),
     PrefixCase("Millimeter", Millimeter, Meter, Decimal("0.001"), MILLIMETER, METER),
+    PrefixCase("Centimeter", Centimeter, Meter, Decimal("0.01"), CENTIMETER, METER),
+    PrefixCase("Decimeter", Decimeter, Meter, Decimal("0.1"), DECIMETER, METER),
     PrefixCase("Kilometer", Kilometer, Meter, Decimal(1000), KILOMETER, METER),
     PrefixCase("Inch", Inch, Meter, Decimal("0.0254"), INCH, METER),
     PrefixCase(

@@ -69,11 +69,10 @@ class UnrepresentableDimensionError(MeasurementError):
 
 
 class PlannedDimensionError(UnrepresentableDimensionError):
-    """Arithmetic produced a dimension that corresponds to a named, planned quantity.
+    """Arithmetic produced a dimension this library already has a name for.
 
-    Raised for a dimension this library already has a name for, e.g., formerly, Length
-    divided by Time producing Velocity, so the message can say what the result actually
-    is rather than only printing its exponent vector.
+    Raised instead of the more general `UnrepresentableDimensionError` so the message
+    can say what the result actually is, on top of printing the exponent vector.
     A subclass of :class:`UnrepresentableDimensionError`, so code that catches the
     general error still catches this one too.
     """
@@ -88,3 +87,13 @@ class PlannedDimensionError(UnrepresentableDimensionError):
         )
         self.dimension = dimension
         self.planned_name = planned_name
+
+
+__all__ = [
+    "IncompatibleDimensionError",
+    "InvalidConversionError",
+    "InvalidMeasurementError",
+    "MeasurementError",
+    "PlannedDimensionError",
+    "UnrepresentableDimensionError",
+]

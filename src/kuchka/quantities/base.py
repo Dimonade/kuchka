@@ -17,13 +17,16 @@ meaningful statement), so it lives in its own.
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from decimal import Decimal
 from fractions import Fraction
 from typing import ClassVar
 from typing import Self
 
+from kuchka.dimensions import AREA
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import Dimension
+from kuchka.dimensions import VOLUME
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
@@ -54,7 +57,10 @@ They stay reachable only by explicit construction, exactly like ``Temperature`` 
 one, rather than silently overwriting it.
 """
 
-_PLANNED_DIMENSIONS: dict[Dimension, str] = {}
+_PLANNED_DIMENSIONS: dict[Dimension, str] = {
+    AREA: "Area",
+    VOLUME: "Volume",
+}
 """Maps a dimension signature to the name of a quantity this library intends to
 implement but does not yet.
 
@@ -361,6 +367,25 @@ class LinearQuantity:
         return f"{format(value, format_spec)} {self._display_unit.symbol}"
 
 
+@dataclass(frozen=True, slots=True)
+class AffineUnitDef:
+    """A unit with both a scale and an offset, e.g. Celsius relative to Kelvin.
+
+    The affine counterpart to `UnitDef`.
+    Most physical quantities convert by a pure scale factor, but a quantity whose zero
+    point is itself a convention, like absolute temperature today, a point-in-time
+    `Instant` needs an offset alongside the scale.
+
+    Application code never constructs one directly;
+    it imports the unit constants (`KELVIN`, `CELSIUS`, ...) from `kuchka.units`.
+    """
+
+    name: str
+    symbol: str
+    scale: Decimal
+    offset: Decimal
+
+
 def _promote(dimension: Dimension, magnitude: Decimal) -> LinearQuantity | Decimal:
     """Build the correctly-typed result of a multiplication or division.
 
@@ -378,3 +403,6 @@ def _promote(dimension: Dimension, magnitude: Decimal) -> LinearQuantity | Decim
             raise PlannedDimensionError(dimension, planned_name) from None
         raise UnrepresentableDimensionError(dimension) from None
     return quantity_type(magnitude, quantity_type._canonical_unit)  # noqa: SLF001 -- accessing the registered type's own canonical unit, not a foreign instance's internals
+
+
+__all__ = ["AffineUnitDef", "LinearQuantity", "UnitDef"]

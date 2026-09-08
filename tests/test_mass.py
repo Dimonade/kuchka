@@ -10,6 +10,7 @@ and round-tripping through `.to(...)`.
 from decimal import Decimal
 
 import pytest
+
 from kuchka import Gram
 from kuchka import InvalidMeasurementError
 from kuchka import Kilogram

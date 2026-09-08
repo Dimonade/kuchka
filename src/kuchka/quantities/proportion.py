@@ -13,7 +13,8 @@ regardless.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar
+from typing import TYPE_CHECKING
+from typing import ClassVar
 
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.quantities.base import LinearQuantity
@@ -26,3 +27,6 @@ class Proportion(LinearQuantity):
     """A dimensionless quantity: how much of something, relative to a whole."""
 
     dimension: ClassVar[Dimension] = DIMENSIONLESS
+
+
+__all__ = ["Proportion"]
