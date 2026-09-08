@@ -11,6 +11,8 @@ this only checks it against the auto-complete surface one level down.
 from __future__ import annotations
 
 import kuchka
+from kuchka import constants
+from kuchka import errors
 from kuchka import quantities as quantities_pkg
 from kuchka import units as units_pkg
 from kuchka.quantities.base import LinearQuantity
@@ -67,4 +69,18 @@ def test_no_unitdef_or_units_table_leaks_to_top_level() -> None:
         )
         assert not name.endswith("_UNITS"), (
             f"{name} is a boundary table; it belongs at kuchka.units only"
+        )
+
+
+def test_every_constant_is_reachable_from_top_level() -> None:
+    for name in constants.__all__:
+        assert hasattr(kuchka, name), (
+            f"{name} is defined in kuchka.constants but missing from top-level kuchka."
+        )
+
+
+def test_every_error_is_reachable_from_top_level() -> None:
+    for name in errors.__all__:
+        assert hasattr(kuchka, name), (
+            f"{name} is defined in kuchka.errors but missing from top-level kuchka."
         )
