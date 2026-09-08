@@ -15,6 +15,7 @@ from kuchka import constants
 from kuchka import errors
 from kuchka import quantities as quantities_pkg
 from kuchka import units as units_pkg
+from kuchka.quantities.base import AffineUnitDef
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import UnitDef
 
@@ -27,6 +28,11 @@ def _is_boundary_only(name: str, value: object) -> bool:
 def _is_unit_constructor(name: str, value: object) -> bool:
     """Callable that builds a quantity from a plain number, e.g. Volt, Tonne."""
     return callable(value) and not isinstance(value, type) and not name.isupper()
+
+
+def _is_boundary_only(name: str, value: object) -> bool:
+    """UnitDef/AffineUnitDef constant or a *_UNITS table: kuchka.units-level, never top-level."""
+    return isinstance(value, (UnitDef, AffineUnitDef)) or name.endswith("_UNITS")
 
 
 def test_every_unit_constructor_is_reachable_from_top_level() -> None:
@@ -83,4 +89,18 @@ def test_every_error_is_reachable_from_top_level() -> None:
     for name in errors.__all__:
         assert hasattr(kuchka, name), (
             f"{name} is defined in kuchka.errors but missing from top-level kuchka."
+        )
+
+
+def test_no_unitdef_or_units_table_leaks_to_top_level() -> None:
+    for name in dir(kuchka):
+        if name.startswith("_"):
+            continue
+        value = getattr(kuchka, name)
+        assert not isinstance(value, (UnitDef, AffineUnitDef)), (
+            f"{name} is a UnitDef/AffineUnitDef constant; it belongs at "
+            f"kuchka.units only"
+        )
+        assert not name.endswith("_UNITS"), (
+            f"{name} is a boundary table; it belongs at kuchka.units only"
         )
