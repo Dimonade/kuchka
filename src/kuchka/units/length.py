@@ -36,6 +36,8 @@ from kuchka.dimensions import LENGTH
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_decimal
 from kuchka.prefixes import KILO
+from kuchka.prefixes import CENTI
+from kuchka.prefixes import DECI
 from kuchka.prefixes import MICRO
 from kuchka.prefixes import MILLI
 from kuchka.prefixes import NANO
@@ -54,12 +56,16 @@ METRE_SYMBOL = "m"
 NANOMETRE = prefixed_unit(NANO, METRE_NAME, METRE_SYMBOL, LENGTH)
 MICROMETRE = prefixed_unit(MICRO, METRE_NAME, METRE_SYMBOL, LENGTH)
 MILLIMETRE = prefixed_unit(MILLI, METRE_NAME, METRE_SYMBOL, LENGTH)
+CENTIMETRE = prefixed_unit(CENTI, METRE_NAME, METRE_SYMBOL, LENGTH)
+DECIMETRE = prefixed_unit(DECI, METRE_NAME, METRE_SYMBOL, LENGTH)
 METRE = prefixed_unit(UNIT, METRE_NAME, METRE_SYMBOL, LENGTH)
 KILOMETRE = prefixed_unit(KILO, METRE_NAME, METRE_SYMBOL, LENGTH)
 
 NANOMETER = NANOMETRE
 MICROMETER = MICROMETRE
 MILLIMETER = MILLIMETRE
+CENTIMETER = CENTIMETRE
+DECIMETER = DECIMETRE
 METER = METRE
 KILOMETER = KILOMETRE
 
@@ -81,6 +87,16 @@ def Micrometre(value: Numeric) -> Length:
 
 def Millimetre(value: Numeric) -> Length:
     """Construct a Length from a magnitude expressed in millimetres."""
+    return Length(to_decimal(value) * MILLIMETRE.scale, MILLIMETRE)
+
+
+def Centimetre(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in centimetres."""
+    return Length(to_decimal(value) * MILLIMETRE.scale, MILLIMETRE)
+
+
+def Decimetre(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in decimetres."""
     return Length(to_decimal(value) * MILLIMETRE.scale, MILLIMETRE)
 
 
@@ -107,6 +123,8 @@ def Inch(value: Numeric) -> Length:
 Nanometer = Nanometre
 Micrometer = Micrometre
 Millimeter = Millimetre
+Centimeter = Centimetre
+Decimeter = Decimetre
 Meter = Metre
 Kilometer = Kilometre
 
@@ -115,6 +133,8 @@ LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
         NANOMETRE.symbol: Nanometre,
         MICROMETRE.symbol: Micrometre,
         MILLIMETRE.symbol: Millimetre,
+        CENTIMETRE.symbol: Centimetre,
+        DECIMETRE.symbol: Decimetre,
         METRE.symbol: Metre,
         KILOMETRE.symbol: Kilometre,
         "in": Inch,
@@ -122,6 +142,10 @@ LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
 )
 
 __all__ = [
+    "CENTIMETER",
+    "CENTIMETRE",
+    "DECIMETER",
+    "DECIMETRE",
     "INCH",
     "KILOMETER",
     "KILOMETRE",
@@ -134,6 +158,10 @@ __all__ = [
     "MILLIMETRE",
     "NANOMETER",
     "NANOMETRE",
+    "Centimeter",
+    "Centimetre",
+    "Decimeter",
+    "Decimetre",
     "Inch",
     "Kilometer",
     "Kilometre",
