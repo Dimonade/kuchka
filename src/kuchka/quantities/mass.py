@@ -20,3 +20,5 @@ class Mass(LinearQuantity):
 
 
 register(MASS, Mass)
+
+__all__ = ["Mass"]

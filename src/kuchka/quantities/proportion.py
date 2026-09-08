@@ -26,3 +26,6 @@ class Proportion(LinearQuantity):
     """A dimensionless quantity: how much of something, relative to a whole."""
 
     dimension: ClassVar[Dimension] = DIMENSIONLESS
+
+
+__all__ = ["Proportion"]

@@ -50,3 +50,5 @@ class Velocity(LinearQuantity):
 
 
 register(VELOCITY, Velocity)
+
+__all__ = ["Velocity"]

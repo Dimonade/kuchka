@@ -86,6 +86,8 @@ ignore = [
   "D213",   # Docstring summary on first line.
   "E402",
   "E722",
+  "F403",   # Star imports deliberately aggregate re-exports in units/__init__.py and
+  "F405",   # Only used at module level `__init__`'s `__all__` definitions, curated by hand.
   "I001",   # Using reorder-python-imports.
   "INP001", # Okay to not have `__init__.py` when not needed.
   "N802",   # Unit constructors (Volt, Ampere, Celsius, ...) are

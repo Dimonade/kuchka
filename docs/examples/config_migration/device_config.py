@@ -37,7 +37,7 @@ from kuchka.units import VOLTAGE_UNITS
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-    from collections.abs import Mapping
+    from collections.abc import Mapping
     from pathlib import Path
 
     from kuchka import BaudRate

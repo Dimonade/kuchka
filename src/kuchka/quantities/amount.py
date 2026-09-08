@@ -20,3 +20,5 @@ class AmountOfSubstance(LinearQuantity):
 
 
 register(AMOUNT_OF_SUBSTANCE, AmountOfSubstance)
+
+__all__ = ["AmountOfSubstance"]
