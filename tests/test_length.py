@@ -13,6 +13,8 @@ from decimal import Decimal
 
 import pytest
 
+from kuchka import Centimeter
+from kuchka import Decimeter
 from kuchka import Inch
 from kuchka import InvalidMeasurementError
 from kuchka import Kilometer
@@ -83,9 +85,18 @@ def test_inch_round_trips_through_meter_exactly(inches, expected_meters):
         (Nanometer, Meter, Decimal("0.000000001")),
         (Micrometer, Meter, Decimal("0.000001")),
         (Millimeter, Meter, Decimal("0.001")),
+        (Centimeter, Meter, Decimal("0.01")),
+        (Decimeter, Meter, Decimal("0.1")),
         (Kilometer, Meter, Decimal(1000)),
     ],
-    ids=["nanometer", "micrometer", "millimeter", "kilometer"],
+    ids=[
+        "nanometer",
+        "micrometer",
+        "millimeter",
+        "centimeter",
+        "decimeter",
+        "kilometer",
+    ],
 )
 def test_metric_prefixes_scale_correctly(prefixed, canonical, scale):
     assert prefixed(1) == canonical(scale)

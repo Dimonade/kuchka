@@ -92,12 +92,12 @@ def Millimetre(value: Numeric) -> Length:
 
 def Centimetre(value: Numeric) -> Length:
     """Construct a Length from a magnitude expressed in centimetres."""
-    return Length(to_decimal(value) * MILLIMETRE.scale, MILLIMETRE)
+    return Length(to_decimal(value) * CENTIMETRE.scale, CENTIMETRE)
 
 
 def Decimetre(value: Numeric) -> Length:
     """Construct a Length from a magnitude expressed in decimetres."""
-    return Length(to_decimal(value) * MILLIMETRE.scale, MILLIMETRE)
+    return Length(to_decimal(value) * DECIMETRE.scale, DECIMETRE)
 
 
 def Metre(value: Numeric) -> Length:
