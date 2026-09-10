@@ -20,10 +20,12 @@ from hypothesis import given
 from kuchka import Acre
 from kuchka import Ampere
 from kuchka import AmpereHour
+from kuchka import Centimeter
 from kuchka import Coulomb
 from kuchka import CubicCentimetre
 from kuchka import CubicMetre
 from kuchka import CubicMillimetre
+from kuchka import Decimeter
 from kuchka import Gram
 from kuchka import Hectare
 from kuchka import Hertz
@@ -82,10 +84,12 @@ from kuchka import WattHour
 from kuchka.units import ACRE
 from kuchka.units import AMPERE
 from kuchka.units import AMPERE_HOUR
+from kuchka.units import CENTIMETER
 from kuchka.units import COULOMB
 from kuchka.units import CUBIC_CENTIMETRE
 from kuchka.units import CUBIC_METRE
 from kuchka.units import CUBIC_MILLIMETRE
+from kuchka.units import DECIMETER
 from kuchka.units import GRAM
 from kuchka.units import HECTARE
 from kuchka.units import HERTZ
@@ -221,6 +225,8 @@ PREFIX_CASES: list[PrefixCase] = [
     PrefixCase("Nanometer", Nanometer, Meter, Decimal("0.000000001"), NANOMETER, METER),
     PrefixCase("Micrometer", Micrometer, Meter, Decimal("0.000001"), MICROMETER, METER),
     PrefixCase("Millimeter", Millimeter, Meter, Decimal("0.001"), MILLIMETER, METER),
+    PrefixCase("Centimeter", Centimeter, Meter, Decimal("0.01"), CENTIMETER, METER),
+    PrefixCase("Decimeter", Decimeter, Meter, Decimal("0.1"), DECIMETER, METER),
     PrefixCase("Kilometer", Kilometer, Meter, Decimal(1000), KILOMETER, METER),
     PrefixCase("Inch", Inch, Meter, Decimal("0.0254"), INCH, METER),
     PrefixCase(
