@@ -17,20 +17,31 @@ from typing import TYPE_CHECKING
 import pytest
 from hypothesis import given
 
+from kuchka import Acre
 from kuchka import Ampere
+from kuchka import AmpereHour
 from kuchka import Centimeter
+from kuchka import Coulomb
+from kuchka import CubicCentimetre
+from kuchka import CubicMetre
+from kuchka import CubicMillimetre
 from kuchka import Decimeter
 from kuchka import Gram
+from kuchka import Hectare
 from kuchka import Hertz
+from kuchka import Hour
 from kuchka import Inch
+from kuchka import Joule
 from kuchka import Kiloampere
 from kuchka import Kilogram
 from kuchka import Kilohertz
+from kuchka import Kilolitre
 from kuchka import Kilometer
 from kuchka import Kiloohm
 from kuchka import KilosamplesPerSecond
 from kuchka import Kilovolt
 from kuchka import Kilowatt
+from kuchka import Litre
 from kuchka import Megagram
 from kuchka import Megahertz
 from kuchka import Megaohm
@@ -38,41 +49,63 @@ from kuchka import MegasamplesPerSecond
 from kuchka import Meter
 from kuchka import Microampere
 from kuchka import Microgram
+from kuchka import Microlitre
 from kuchka import Micrometer
 from kuchka import Microsecond
 from kuchka import MicrosecondSamplingPeriod
 from kuchka import Microvolt
 from kuchka import Milliampere
+from kuchka import MilliampereHour
+from kuchka import MilliampereSecond
 from kuchka import Milligram
+from kuchka import Millilitre
 from kuchka import Millimeter
 from kuchka import Milliohm
 from kuchka import Millisecond
 from kuchka import MillisecondSamplingPeriod
 from kuchka import Millivolt
 from kuchka import Milliwatt
+from kuchka import MilliwattHour
+from kuchka import Minute
 from kuchka import Nanogram
 from kuchka import Nanometer
 from kuchka import Ohm
 from kuchka import SamplesPerSecond
 from kuchka import Second
 from kuchka import SecondSamplingPeriod
+from kuchka import SquareCentimetre
+from kuchka import SquareKilometre
+from kuchka import SquareMetre
+from kuchka import SquareMillimetre
 from kuchka import Tonne
 from kuchka import Volt
 from kuchka import Watt
+from kuchka import WattHour
+from kuchka.units import ACRE
 from kuchka.units import AMPERE
+from kuchka.units import AMPERE_HOUR
 from kuchka.units import CENTIMETER
+from kuchka.units import COULOMB
+from kuchka.units import CUBIC_CENTIMETRE
+from kuchka.units import CUBIC_METRE
+from kuchka.units import CUBIC_MILLIMETRE
 from kuchka.units import DECIMETER
 from kuchka.units import GRAM
+from kuchka.units import HECTARE
 from kuchka.units import HERTZ
+from kuchka.units import HOUR
 from kuchka.units import INCH
+from kuchka.units import JOULE
 from kuchka.units import KILOAMPERE
 from kuchka.units import KILOGRAM
 from kuchka.units import KILOHERTZ
+from kuchka.units import KILOLITRE
 from kuchka.units import KILOMETER
 from kuchka.units import KILOOHM
 from kuchka.units import KILOSAMPLE_PER_SECOND
 from kuchka.units import KILOVOLT
 from kuchka.units import KILOWATT
+from kuchka.units import LITRE
 from kuchka.units import MEGAGRAM
 from kuchka.units import MEGAHERTZ
 from kuchka.units import MEGAOHM
@@ -80,16 +113,22 @@ from kuchka.units import MEGASAMPLE_PER_SECOND
 from kuchka.units import METER
 from kuchka.units import MICROAMPERE
 from kuchka.units import MICROGRAM
+from kuchka.units import MICROLITRE
 from kuchka.units import MICROMETER
 from kuchka.units import MICROSECOND
 from kuchka.units import MICROVOLT
 from kuchka.units import MILLIAMPERE
+from kuchka.units import MILLIAMPERE_HOUR
+from kuchka.units import MILLIAMPERE_SECOND
 from kuchka.units import MILLIGRAM
+from kuchka.units import MILLILITRE
 from kuchka.units import MILLIMETER
 from kuchka.units import MILLIOHM
 from kuchka.units import MILLISECOND
 from kuchka.units import MILLIVOLT
 from kuchka.units import MILLIWATT
+from kuchka.units import MILLIWATT_HOUR
+from kuchka.units import MINUTE
 from kuchka.units import NANOGRAM
 from kuchka.units import NANOMETER
 from kuchka.units import OHM
@@ -98,8 +137,13 @@ from kuchka.units import SAMPLING_PERIOD_MICROSECOND
 from kuchka.units import SAMPLING_PERIOD_MILLISECOND
 from kuchka.units import SAMPLING_PERIOD_SECOND
 from kuchka.units import SECOND
+from kuchka.units import SQUARE_CENTIMETRE
+from kuchka.units import SQUARE_KILOMETRE
+from kuchka.units import SQUARE_METRE
+from kuchka.units import SQUARE_MILLIMETRE
 from kuchka.units import VOLT
 from kuchka.units import WATT
+from kuchka.units import WATT_HOUR
 from tests.quantity_families import FINITE_DECIMALS
 
 if TYPE_CHECKING:
@@ -197,6 +241,74 @@ PREFIX_CASES: list[PrefixCase] = [
     PrefixCase("Gram", Gram, Kilogram, Decimal("0.001"), GRAM, KILOGRAM),
     PrefixCase("Megagram", Megagram, Kilogram, Decimal(1000), MEGAGRAM, KILOGRAM),
     PrefixCase("Tonne", Tonne, Kilogram, Decimal(1000), MEGAGRAM, KILOGRAM),
+    PrefixCase("Minute", Minute, Second, Decimal(60), MINUTE, SECOND),
+    PrefixCase("Hour", Hour, Second, Decimal(3600), HOUR, SECOND),
+    PrefixCase("WattHour", WattHour, Joule, Decimal(3600), WATT_HOUR, JOULE),
+    PrefixCase(
+        "MilliwattHour", MilliwattHour, Joule, Decimal("3.6"), MILLIWATT_HOUR, JOULE
+    ),
+    PrefixCase(
+        "MilliampereSecond",
+        MilliampereSecond,
+        Coulomb,
+        Decimal("0.001"),
+        MILLIAMPERE_SECOND,
+        COULOMB,
+    ),
+    PrefixCase(
+        "MilliampereHour",
+        MilliampereHour,
+        Coulomb,
+        Decimal("3.6"),
+        MILLIAMPERE_HOUR,
+        COULOMB,
+    ),
+    PrefixCase("AmpereHour", AmpereHour, Coulomb, Decimal(3600), AMPERE_HOUR, COULOMB),
+    PrefixCase(
+        "SquareMillimetre",
+        SquareMillimetre,
+        SquareMetre,
+        Decimal("0.000001"),
+        SQUARE_MILLIMETRE,
+        SQUARE_METRE,
+    ),
+    PrefixCase(
+        "SquareCentimetre",
+        SquareCentimetre,
+        SquareMetre,
+        Decimal("0.0001"),
+        SQUARE_CENTIMETRE,
+        SQUARE_METRE,
+    ),
+    PrefixCase(
+        "SquareKilometre",
+        SquareKilometre,
+        SquareMetre,
+        Decimal(1_000_000),
+        SQUARE_KILOMETRE,
+        SQUARE_METRE,
+    ),
+    PrefixCase("Hectare", Hectare, SquareMetre, Decimal(10_000), HECTARE, SQUARE_METRE),
+    PrefixCase("Acre", Acre, SquareMetre, Decimal("4046.8564224"), ACRE, SQUARE_METRE),
+    PrefixCase(
+        "CubicMillimetre",
+        CubicMillimetre,
+        CubicMetre,
+        Decimal("0.000000001"),
+        CUBIC_MILLIMETRE,
+        CUBIC_METRE,
+    ),
+    PrefixCase(
+        "CubicCentimetre",
+        CubicCentimetre,
+        CubicMetre,
+        Decimal("0.000001"),
+        CUBIC_CENTIMETRE,
+        CUBIC_METRE,
+    ),
+    PrefixCase("Microlitre", Microlitre, Litre, Decimal("0.000001"), MICROLITRE, LITRE),
+    PrefixCase("Millilitre", Millilitre, Litre, Decimal("0.001"), MILLILITRE, LITRE),
+    PrefixCase("Kilolitre", Kilolitre, Litre, Decimal(1000), KILOLITRE, LITRE),
 ]
 
 PREFIX_CASE_IDS: list[str] = [case.id for case in PREFIX_CASES]

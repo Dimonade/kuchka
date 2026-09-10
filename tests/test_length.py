@@ -1,9 +1,8 @@
 """Length: arithmetic, exact imperial conversion, and Metre/Meter naming.
 
-NOTE: `Inch`'s scale (`0.0254`) is the one unit definition in this library that isn't a
-power of ten.
-Its conversions are pinned here to specific, known-exact values: an inch has been
-exactly 25.4 mm since 1959, and that's the claim these tests check.
+NOTE: `Inch`'s (`0.0254`), `Acre`'s, `Hour`'s, and a few others units' scales are not a
+power of ten. These are excluded from the exact-division property suite.
+Their conversions are checked elsewhere.
 
 The rest of the module covers ordinary arithmetic on `Length`, and dividing a `Length`
 by a `Time`, whose error message names `Velocity` directly.
@@ -13,8 +12,7 @@ from decimal import Decimal
 
 import pytest
 
-from kuchka import Centimeter
-from kuchka import Decimeter
+from kuchka import Area
 from kuchka import Inch
 from kuchka import InvalidMeasurementError
 from kuchka import Kilometer
@@ -28,8 +26,7 @@ from kuchka import Millimeter
 from kuchka import Millimetre
 from kuchka import Nanometer
 from kuchka import Nanometre
-from kuchka import PlannedDimensionError
-from kuchka import UnrepresentableDimensionError
+from kuchka import SquareMeter
 from kuchka.units import KILOMETER
 from kuchka.units import KILOMETRE
 from kuchka.units import METER
@@ -85,18 +82,9 @@ def test_inch_round_trips_through_meter_exactly(inches, expected_meters):
         (Nanometer, Meter, Decimal("0.000000001")),
         (Micrometer, Meter, Decimal("0.000001")),
         (Millimeter, Meter, Decimal("0.001")),
-        (Centimeter, Meter, Decimal("0.01")),
-        (Decimeter, Meter, Decimal("0.1")),
         (Kilometer, Meter, Decimal(1000)),
     ],
-    ids=[
-        "nanometer",
-        "micrometer",
-        "millimeter",
-        "centimeter",
-        "decimeter",
-        "kilometer",
-    ],
+    ids=["nanometer", "micrometer", "millimeter", "kilometer"],
 )
 def test_metric_prefixes_scale_correctly(prefixed, canonical, scale):
     assert prefixed(1) == canonical(scale)
@@ -137,18 +125,15 @@ def test_naked_number_addition_is_rejected():
         Meter(5) + 4.2  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 
 
-def test_length_times_length_is_planned():
-    """Test that area is out of scope but planned and gives planned error."""
-    match = "planned but not yet"
-    with pytest.raises(PlannedDimensionError, match=match):
-        Meter(5) * Meter(2)
+def test_length_times_length_is_area():
+    """Length * Length used to be unrepresentable; it is now a registered Area."""
+    result = Meter(5) * Meter(2)
+    assert isinstance(result, Area)
+    assert result == SquareMeter(10)
 
 
-def test_length_times_length_times_length_is_planned():
-    """Test that volume is out of scope but planned and gives planned error."""
-    match = "planned but not yet"
-    with pytest.raises(PlannedDimensionError, match=match):
-        Meter(5) * Meter(2) * Meter(1)
+def test_length_times_length_is_commutative():
+    assert Meter(5) * Meter(2) == Meter(2) * Meter(5)
 
 
 def test_micrometer_and_millimeter_unit_constants_round_trip():

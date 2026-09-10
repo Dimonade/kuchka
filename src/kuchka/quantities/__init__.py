@@ -18,6 +18,7 @@ requires touching this file.
 from __future__ import annotations
 
 from kuchka.quantities.amount import *
+from kuchka.quantities.area import *
 from kuchka.quantities.base import *
 from kuchka.quantities.charge import *
 from kuchka.quantities.electrical import *
@@ -29,5 +30,6 @@ from kuchka.quantities.mass import *
 from kuchka.quantities.proportion import *
 from kuchka.quantities.temporal import *
 from kuchka.quantities.thermal import *
+from kuchka.quantities.volume import *
 
 __all__: list[str] = sorted(name for name in globals() if not name.startswith("_"))

@@ -22,6 +22,7 @@ from kuchka import Ampere
 from kuchka import Baud
 from kuchka import Candela
 from kuchka import Coulomb
+from kuchka import CubicMetre
 from kuchka import DeltaKelvin
 from kuchka import Hertz
 from kuchka import Joule
@@ -34,16 +35,19 @@ from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
 from kuchka import SecondSamplingPeriod
+from kuchka import SquareMetre
 from kuchka import Volt
 from kuchka import Watt
 from kuchka.quantities import LinearQuantity
 from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
 from kuchka.units import AMPERE
+from kuchka.units import AREA_UNITS
 from kuchka.units import BAUD
 from kuchka.units import BAUD_RATE_UNITS
 from kuchka.units import CANDELA
 from kuchka.units import CHARGE_UNITS
 from kuchka.units import COULOMB
+from kuchka.units import CUBIC_METRE
 from kuchka.units import CURRENT_UNITS
 from kuchka.units import DELTA_KELVIN
 from kuchka.units import ENERGY_UNITS
@@ -67,11 +71,13 @@ from kuchka.units import SAMPLE_RATE_UNITS
 from kuchka.units import SAMPLING_PERIOD_SECOND
 from kuchka.units import SAMPLING_PERIOD_UNITS
 from kuchka.units import SECOND
+from kuchka.units import SQUARE_METRE
 from kuchka.units import TEMPERATURE_DELTA_UNITS
 from kuchka.units import TIME_UNITS
 from kuchka.units import VELOCITY_UNITS
 from kuchka.units import VOLT
 from kuchka.units import VOLTAGE_UNITS
+from kuchka.units import VOLUME_UNITS
 from kuchka.units import WATT
 
 if TYPE_CHECKING:
@@ -126,6 +132,8 @@ FAMILIES: list[QuantityFamily] = [
     QuantityFamily("velocity", MetrePerSecond, METRE_PER_SECOND, VELOCITY_UNITS),
     QuantityFamily("charge", Coulomb, COULOMB, CHARGE_UNITS),
     QuantityFamily("energy", Joule, JOULE, ENERGY_UNITS),
+    QuantityFamily("area", SquareMetre, SQUARE_METRE, AREA_UNITS),
+    QuantityFamily("volume", CubicMetre, CUBIC_METRE, VOLUME_UNITS),
 ]
 
 FAMILY_IDS: list[str] = [family.id for family in FAMILIES]
@@ -143,11 +151,25 @@ ALL_UNIT_CASE_IDS: list[str] = [
     f"{family.id}-{symbol}" for family in FAMILIES for symbol in family.units
 ]
 
-EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {"length": frozenset({"in"})}
+EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
+    "length": frozenset({"in"}),
+    "area": frozenset({"ac", "in\u00b2"}),
+    "time": frozenset({"min", "h"}),
+    "energy": frozenset({"mWh", "Wh"}),
+    "charge": frozenset({"mAh", "Ah"}),
+}
 """Units excluded from properties that require exact decimal reciprocals.
 
 `in` (inch) is excluded because its scale (0.0254) produces a non-terminating
 decimal reciprocal, making exact `Decimal` comparison impossible in those cases.
+
+`ac` (acre, 4046.8564224) and `in\u00b2` (square inch, 0.00064516) are excluded for
+the same reason, since neither derives from a power of ten either.
+
+`min`/`h` (60, 3600), `Wh`/`mWh` (3600, 3.6), and `mAh`/`Ah` (3.6, 3600) are excluded
+for the identical reason: none of those scale factors are powers of ten, so dividing
+by them does not always terminate exactly in `Decimal`, the same way dividing by 0.0254
+does not.
 """
 
 EXACT_DIVISION_UNIT_CASES: list[

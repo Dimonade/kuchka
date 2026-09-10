@@ -20,6 +20,7 @@ requires touching this file.
 from __future__ import annotations
 
 from kuchka.units.amount import *
+from kuchka.units.area import *
 from kuchka.units.charge import *
 from kuchka.units.current import *
 from kuchka.units.energy import *
@@ -33,5 +34,6 @@ from kuchka.units.resistance import *
 from kuchka.units.temporal import *
 from kuchka.units.thermal import *
 from kuchka.units.voltage import *
+from kuchka.units.volume import *
 
 __all__: list[str] = sorted(name for name in globals() if not name.startswith("_"))

@@ -13,6 +13,7 @@ as a string from outside the application.
 
 from __future__ import annotations
 
+from decimal import Decimal
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
@@ -28,6 +29,7 @@ from kuchka.prefixes import PICO
 from kuchka.prefixes import UNIT
 from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Energy
+from kuchka.quantities import UnitDef
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -84,6 +86,22 @@ def Megajoule(value: Numeric) -> Energy:
     return Energy(to_decimal(value) * MEGAJOULE.scale, MEGAJOULE)
 
 
+# Watt times Time.
+
+MILLIWATT_HOUR = UnitDef("milliwatt_hour", "mWh", Decimal("3.6"), ENERGY)
+WATT_HOUR = UnitDef("watt_hour", "Wh", Decimal(3600), ENERGY)
+
+
+def MilliwattHour(value: Numeric) -> Energy:
+    """Construct an Energy from a magnitude expressed in milliwatt-hours."""
+    return Energy(to_decimal(value) * MILLIWATT_HOUR.scale, MILLIWATT_HOUR)
+
+
+def WattHour(value: Numeric) -> Energy:
+    """Construct an Energy from a magnitude expressed in watt-hours."""
+    return Energy(to_decimal(value) * WATT_HOUR.scale, WATT_HOUR)
+
+
 ENERGY_UNITS: Mapping[str, Callable[[Numeric], Energy]] = MappingProxyType(
     {
         PICOJOULE.symbol: Picojoule,
@@ -93,6 +111,8 @@ ENERGY_UNITS: Mapping[str, Callable[[Numeric], Energy]] = MappingProxyType(
         JOULE.symbol: Joule,
         KILOJOULE.symbol: Kilojoule,
         MEGAJOULE.symbol: Megajoule,
+        MILLIWATT_HOUR.symbol: MilliwattHour,
+        WATT_HOUR.symbol: WattHour,
     }
 )
 
@@ -103,13 +123,17 @@ __all__ = [
     "MEGAJOULE",
     "MICROJOULE",
     "MILLIJOULE",
+    "MILLIWATT_HOUR",
     "NANOJOULE",
     "PICOJOULE",
+    "WATT_HOUR",
     "Joule",
     "Kilojoule",
     "Megajoule",
     "Microjoule",
     "Millijoule",
+    "MilliwattHour",
     "Nanojoule",
     "Picojoule",
+    "WattHour",
 ]
