@@ -51,31 +51,44 @@ analyse_voltage(Volt(4.2))  # one example of a valid type check.
 analyse_voltage(Millivolt(4200))  # another example of a valid type check.
 ```
 
-## What's in v0.1
+## What's in v0.1.x
 
-| Quantity            | Constructors                                                                                     |
-| ------------------- | ------------------------------------------------------------------------------------------------ |
-| `Voltage`           | `Volt`, `Millivolt`, `Microvolt`, `Kilovolt`                                                     |
-| `Current`           | `Ampere`, `Milliampere`, `Microampere`, `Kiloampere`                                             |
-| `Charge`            | `Coulomb`, `Millicoulomb`, `Microcoulomb`, `Nanocoulomb`, `Picocoulomb`                          |
-| `Power`             | `Watt`, `Milliwatt`, `Kilowatt`                                                                  |
-| `Energy`            | `Joule`, `Millijoule`, `Microjoule`, `Nanojoule`, `Picojoule`, `Kilojoule`, `Megajoule`          |
-| `Resistance`        | `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`                                                          |
-| `Temperature`       | `Celsius`, `Kelvin`                                                                              |
-| `TemperatureDelta`  | `DeltaCelsius`, `DeltaKelvin`                                                                    |
-| `Time`              | `Second`, `Millisecond`, `Microsecond`                                                           |
-| `Frequency`         | `Hertz`, `Kilohertz`, `Megahertz`                                                                |
-| `SamplingPeriod`    | `SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod`                 |
-| `SampleRate`        | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`                               |
-| `BaudRate`          | `Baud`, `Kilobaud`                                                                               |
-| `Length`            | `Nanometer`, `Micrometer`, `Millimeter`, `Centimeter`, `Decimeter`, `Meter`, `Kilometer`, `Inch` |
-| `Velocity`          | `MetrePerSecond` (`MeterPerSecond`)                                                              |
-| `Mass`              | `Nanogram`, `Microgram`, `Milligram`, `Gram`, `Kilogram`, `Megagram`, `Tonne`                    |
-| `AmountOfSubstance` | `Micromole`, `Millimole`, `Mole`                                                                 |
-| `LuminousIntensity` | `Candela`                                                                                        |
-| `Proportion`        | `Ratio`, `Percent`                                                                               |
+**Electrical**
 
-Deliberately nothing else yet.
+- **Voltage:** `Volt`, `Millivolt`, `Microvolt`, `Kilovolt`
+- **Current:** `Ampere`, `Milliampere`, `Microampere`, `Kiloampere`
+- **Power:** `Watt`, `Milliwatt`, `Kilowatt`
+- **Resistance:** `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`
+- **Charge:** `Coulomb`, `Millicoulomb`, `Microcoulomb`, `Nanocoulomb`, `Picocoulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`
+- **Energy:** `Joule`, `Millijoule`, `Microjoule`, `Nanojoule`, `Picojoule`, `Kilojoule`, `Megajoule`, `MilliwattHour`, `WattHour`
+
+**Time & Signal**
+
+- **Temperature:** `Celsius`, `Kelvin`
+- **Temperature Delta:** `DeltaCelsius`, `DeltaKelvin`
+- **Time:** `Second`, `Millisecond`, `Microsecond`, `Minute`, `Hour`
+- **Frequency:** `Hertz`, `Kilohertz`, `Megahertz`
+- **Sampling Period:** `SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod`
+- **Sample Rate:** `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`
+- **Baud Rate:** `Baud`, `Kilobaud`
+
+**Geometry & Mechanics**
+
+- **Length:** `Nanometer`, `Micrometer`, `Millimeter`, `Centimeter`, `Decimeter`, `Meter`, `Kilometer`, `Inch`
+- **Area:** `SquareMillimetre`, `SquareCentimetre`, `SquareMetre`, `SquareKilometre`, `Hectare`, `Acre`, `SquareInch`
+- **Volume:** `CubicMillimetre`, `CubicCentimetre`, `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`
+- **Velocity:** `MetrePerSecond`
+- **Mass:** `Nanogram`, `Microgram`, `Milligram`, `Gram`, `Kilogram`, `Megagram`, `Tonne`
+
+**Chemistry & Light**
+
+- **Amount of Substance:** `Micromole`, `Millimole`, `Mole`
+- **Luminous Intensity:** `Candela`
+
+**Dimensionless**
+
+- **Proportion:** `Ratio`, `Percent`
+
 See "What this is not (yet)" below.
 
 ## Design choices, and why
@@ -166,6 +179,17 @@ Volt(5) * Ratio(Decimal("0.1")) == Volt(Decimal("0.5"))  # True, a tolerance ban
 
 This falls out of the same general dimension algebra that already derives `Power` from `Voltage * Current`: multiplying by the dimensionless identity leaves the other operand's dimension, and therefore its type, unchanged.
 
+### Area and Volume fall out of Length, and Litre is its own unit family
+
+`Length * Length` produces an `Area`, and `Area * Length` (or `Length * Area`) produces a `Volume`, through the same general dimension algebra as everything else -- no special-cased geometry code was needed:
+
+```python
+plot = Meter(5) * Meter(2)  # -> Area, 10 m^2
+tank = plot * Meter(3)  # -> Volume, 30 m^3
+```
+
+`Litre` is not a prefix of `CubicMetre` the way `Millivolt` is a prefix of `Volt` -- it's a separate, coherent metric volume unit in its own right (one cubic decimetre, exactly), with its own full prefix vocabulary (`Microlitre`, `Millilitre`, `Kilolitre`).
+
 ## Physical constants
 
 `kuchka.constants` provides a small set of physical constants as ordinary `kuchka` quantities.
@@ -224,31 +248,18 @@ A non-empty spec applies to the underlying `Decimal`, and the unit symbol is app
 _subject to change as the design and architecture bounces around and settles down._
 
 ```text
-ssrc/kuchka/
-    constants.py            a handful of physical constants
-    dimensions.py           exponent-vector dimensional algebra
-    prefixes.py             SI prefix definitions and the prefixed_unit() helper
-    numeric.py              strict coercion of int/float/Decimal/Fraction into Decimal
-    errors.py               the exception hierarchy
-    quantities/
-        base.py                 the quantity engine: LinearQuantity, UnitDef, the dimension registry
-        electrical.py           Voltage, Current, Power, Resistance and their overload tables
-        charge.py               Charge
-        energy.py               Energy
-        kinematics.py           Velocity
-        temporal.py             Time, Frequency, SamplingPeriod, SampleRate, BaudRate
-        thermal.py              TemperatureDelta, and the affine Temperature type
-        length.py               Length
-        mass.py                 Mass
-        amount.py               AmountOfSubstance
-        luminous_intensity.py   LuminousIntensity
-        proportion.py           Proportion
-    units/
-        voltage.py, current.py, resistance.py, power.py, charge.py, energy.py,
-        kinematics.py, temporal.py, length.py, mass.py, amount.py,
-        luminous_intensity.py, proportion.py, thermal.py, ...
-                                 one module per dimension's prefix constructors
-tests/                          All tests in the module.
+src/kuchka/
+    constants.py      physical constants
+    dimensions.py     dimensional algebra
+    prefixes.py       SI prefixes and `prefixed_unit()`
+    numeric.py        numeric coercion to `Decimal`
+    errors.py         exception hierarchy
+    quantities/       quantity types and their arithmetic
+                       (`base.py`, electrical, temporal, thermal, geometric,
+                       kinematic, charge, energy, mass, amount, luminous,
+                       proportion, ...)
+    units/            unit constructors, one module per dimension
+tests/                test suite
 ```
 
 Application code should only ever need the top-level `kuchka` package.
