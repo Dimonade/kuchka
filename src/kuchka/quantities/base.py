@@ -25,8 +25,8 @@ from typing import Self
 
 from kuchka.dimensions import AREA
 from kuchka.dimensions import DIMENSIONLESS
-from kuchka.dimensions import Dimension
 from kuchka.dimensions import VOLUME
+from kuchka.dimensions import Dimension
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError

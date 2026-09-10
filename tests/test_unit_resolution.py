@@ -13,6 +13,7 @@ import pytest
 from kuchka import Acre
 from kuchka import Ampere
 from kuchka import AmpereHour
+from kuchka import AmpereSecond
 from kuchka import Baud
 from kuchka import Candela
 from kuchka import Celsius
@@ -204,6 +205,7 @@ TABLE_CASES = [
             "C": Coulomb,
             "mAs": MilliampereSecond,
             "mAh": MilliampereHour,
+            "As": AmpereSecond,
             "Ah": AmpereHour,
         },
     ),

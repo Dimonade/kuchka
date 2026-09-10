@@ -58,6 +58,7 @@ from kuchka.quantities import Volume
 from kuchka.units import Acre
 from kuchka.units import Ampere
 from kuchka.units import AmpereHour
+from kuchka.units import AmpereSecond
 from kuchka.units import Baud
 from kuchka.units import Candela
 from kuchka.units import Celsius
@@ -180,6 +181,7 @@ __all__: list[str] = [
     "AmountOfSubstance",
     "Ampere",
     "AmpereHour",
+    "AmpereSecond",
     "Area",
     "Baud",
     "BaudRate",

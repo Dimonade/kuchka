@@ -75,6 +75,8 @@ def Coulomb(value: Numeric) -> Charge:
 MILLIAMPERE_SECOND = UnitDef("milliampere_second", "mAs", Decimal("0.001"), CHARGE)
 MILLIAMPERE_HOUR = UnitDef("milliampere_hour", "mAh", Decimal("3.6"), CHARGE)
 AMPERE_HOUR = UnitDef("ampere_hour", "Ah", Decimal(3600), CHARGE)
+AmpereSecond = Coulomb
+"""An ampere-second by definition is a coulomb."""
 
 
 def MilliampereSecond(value: Numeric) -> Charge:
@@ -99,6 +101,7 @@ CHARGE_UNITS: Mapping[str, Callable[[Numeric], Charge]] = MappingProxyType(
         MICROCOULOMB.symbol: Microcoulomb,
         MILLICOULOMB.symbol: Millicoulomb,
         COULOMB.symbol: Coulomb,
+        "As": AmpereSecond,
         MILLIAMPERE_SECOND.symbol: MilliampereSecond,
         MILLIAMPERE_HOUR.symbol: MilliampereHour,
         AMPERE_HOUR.symbol: AmpereHour,
@@ -116,6 +119,7 @@ __all__ = [
     "NANOCOULOMB",
     "PICOCOULOMB",
     "AmpereHour",
+    "AmpereSecond",
     "Coulomb",
     "Microcoulomb",
     "MilliampereHour",
