@@ -70,6 +70,8 @@ def Coulomb(value: Numeric) -> Charge:
     return Charge(to_decimal(value) * COULOMB.scale, COULOMB)
 
 
+# Ampere times Time.
+
 MILLIAMPERE_SECOND = UnitDef("milliampere_second", "mAs", Decimal("0.001"), CHARGE)
 MILLIAMPERE_HOUR = UnitDef("milliampere_hour", "mAh", Decimal("3.6"), CHARGE)
 AMPERE_HOUR = UnitDef("ampere_hour", "Ah", Decimal(3600), CHARGE)

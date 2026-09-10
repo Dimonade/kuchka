@@ -86,6 +86,9 @@ CubicCentimeter = CubicCentimetre
 CubicMeter = CubicMetre
 
 
+# Litres -- non-SI, but very frequent.
+
+
 LITRE_NAME = "litre"
 LITRE_SYMBOL = "L"
 

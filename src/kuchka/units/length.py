@@ -69,8 +69,6 @@ DECIMETER = DECIMETRE
 METER = METRE
 KILOMETER = KILOMETRE
 
-INCH = UnitDef("inch", "in", Decimal("0.0254"), LENGTH)
-
 
 Length._canonical_unit = METRE  # noqa: SLF001 -- this module owns Length's canonical unit
 
@@ -108,6 +106,11 @@ def Metre(value: Numeric) -> Length:
 def Kilometre(value: Numeric) -> Length:
     """Construct a Length from a magnitude expressed in kilometres."""
     return Length(to_decimal(value) * KILOMETRE.scale, KILOMETRE)
+
+
+# Non-SI units.
+
+INCH = UnitDef("inch", "in", Decimal("0.0254"), LENGTH)
 
 
 def Inch(value: Numeric) -> Length:

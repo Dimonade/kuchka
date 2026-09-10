@@ -52,7 +52,6 @@ MICROSECOND = prefixed_unit(MICRO, SECOND_NAME, SECOND_SYMBOL, TIME)
 MILLISECOND = prefixed_unit(MILLI, SECOND_NAME, SECOND_SYMBOL, TIME)
 SECOND = prefixed_unit(UNIT, SECOND_NAME, SECOND_SYMBOL, TIME)
 
-
 Time._canonical_unit = SECOND  # noqa: SLF001 -- this module owns Time's canonical unit
 
 
@@ -71,11 +70,34 @@ def Second(value: Numeric) -> Time:
     return Time(to_decimal(value) * SECOND.scale, SECOND)
 
 
+# Non-SI but omnipresent - Minutes, Hours.
+
+MINUTE = UnitDef("minute", "min", Decimal(60), TIME)
+HOUR = UnitDef("hour", "h", Decimal(3600), TIME)
+
+
+def Minute(value: Numeric) -> Time:
+    """Construct a Time from a magnitude expressed in minutes.
+
+    Exact: a minute has always been exactly 60 seconds, with no leap-second modelling.
+    The reason for this is to use it for measurement and timeout purposes, while trying
+    to avoid a calendar or civil-time type madhouse accounting.
+    """
+    return Time(to_decimal(value) * MINUTE.scale, MINUTE)
+
+
+def Hour(value: Numeric) -> Time:
+    """Construct a Time from a magnitude expressed in hours."""
+    return Time(to_decimal(value) * HOUR.scale, HOUR)
+
+
 TIME_UNITS: Mapping[str, Callable[[Numeric], Time]] = MappingProxyType(
     {
         MICROSECOND.symbol: Microsecond,
         MILLISECOND.symbol: Millisecond,
         SECOND.symbol: Second,
+        MINUTE.symbol: Minute,
+        HOUR.symbol: Hour,
     }
 )
 
@@ -250,6 +272,7 @@ __all__ = [
     "BAUD_RATE_UNITS",
     "FREQUENCY_UNITS",
     "HERTZ",
+    "HOUR",
     "KILOBAUD",
     "KILOHERTZ",
     "KILOSAMPLE_PER_SECOND",
@@ -257,6 +280,7 @@ __all__ = [
     "MEGASAMPLE_PER_SECOND",
     "MICROSECOND",
     "MILLISECOND",
+    "MINUTE",
     "SAMPLE_PER_SECOND",
     "SAMPLE_RATE_UNITS",
     "SAMPLING_PERIOD_MICROSECOND",
@@ -267,6 +291,7 @@ __all__ = [
     "TIME_UNITS",
     "Baud",
     "Hertz",
+    "Hour",
     "Kilobaud",
     "Kilohertz",
     "KilosamplesPerSecond",
@@ -276,6 +301,7 @@ __all__ = [
     "MicrosecondSamplingPeriod",
     "Millisecond",
     "MillisecondSamplingPeriod",
+    "Minute",
     "SamplesPerSecond",
     "Second",
     "SecondSamplingPeriod",

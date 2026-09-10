@@ -77,10 +77,6 @@ SQUARE_CENTIMETER = SQUARE_CENTIMETRE
 SQUARE_METER = SQUARE_METRE
 SQUARE_KILOMETER = SQUARE_KILOMETRE
 
-HECTARE = UnitDef("hectare", "ha", Decimal(10_000), AREA)
-ACRE = UnitDef("acre", "ac", Decimal("4046.8564224"), AREA)
-SQUARE_INCH = UnitDef("square_inch", "in\u00b2", Decimal("0.00064516"), AREA)
-
 Area._canonical_unit = SQUARE_METRE  # noqa: SLF001 -- this module owns Area's canonical unit
 
 
@@ -108,6 +104,13 @@ SquareMillimeter = SquareMillimetre
 SquareCentimeter = SquareCentimetre
 SquareMeter = SquareMetre
 SquareKilometer = SquareKilometre
+
+
+# Non-SI units.
+
+HECTARE = UnitDef("hectare", "ha", Decimal(10_000), AREA)
+ACRE = UnitDef("acre", "ac", Decimal("4046.8564224"), AREA)
+SQUARE_INCH = UnitDef("square_inch", "in\u00b2", Decimal("0.00064516"), AREA)
 
 
 def Hectare(value: Numeric) -> Area:

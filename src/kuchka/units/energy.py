@@ -86,6 +86,8 @@ def Megajoule(value: Numeric) -> Energy:
     return Energy(to_decimal(value) * MEGAJOULE.scale, MEGAJOULE)
 
 
+# Watt times Time.
+
 MILLIWATT_HOUR = UnitDef("milliwatt_hour", "mWh", Decimal("3.6"), ENERGY)
 WATT_HOUR = UnitDef("watt_hour", "Wh", Decimal(3600), ENERGY)
 
