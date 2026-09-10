@@ -2,19 +2,33 @@
 
 All notable changes to kuchka are documented here.
 
-The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+The format tries to follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 See the `Stability` section in `README.md` for what versioning means before `0.2.0`.
 
-## Unreleased
+## [0.1.2] - Unreleased, available on `develop`
 
-- `Area` family.
-- `MilePerHour` unit.
-- `Modular` / `Cyclic` category for, for instance, angles.
-- Adding additional magnitudes to units where it makes practical sense.
-- `ConvertibleToTime` protocol/trait.
-- `Instant`
+### Added
 
-## [0.1.1]
+#### Area and Volume families
+
+- `SquareMillimetre`/`SquareCentimetre`/`SquareMetre`/`SquareKilometre`, plus `Hectare`, `Acre`, and `SquareInch`.
+  `Length * Length -> Area` and `Area / Length -> Length`.
+- `CubicMillimetre`/`CubicCentimetre`/`CubicMetre`, plus `Litre` and its own `Microlitre`/`Millilitre`/`Kilolitre` prefixes.
+  `Area * Length -> Volume`, `Length * Area -> Volume`, and both inverses (`Volume / Length -> Area`, `Volume / Area -> Length`).
+
+#### New Temporals
+
+- `Minute` and `Hour` for `Time`.
+
+#### New Charge units
+
+- `MilliampereSecond`, `MilliampereHour`, and `AmpereHour`.
+
+#### New Energy units
+
+- `WattHour` and `MilliwattHour`.
+
+## [0.1.1] - 2026-09-9
 
 ### Added
 
