@@ -10,34 +10,50 @@ an I/O boundary such as a config file, CSV header, or hardware descriptor.
 
 import pytest
 
+from kuchka import Acre
 from kuchka import Ampere
+from kuchka import AmpereHour
 from kuchka import Baud
 from kuchka import Candela
 from kuchka import Celsius
 from kuchka import Centimeter
+from kuchka import Coulomb
+from kuchka import CubicCentimetre
+from kuchka import CubicMetre
+from kuchka import CubicMillimetre
 from kuchka import Decimeter
 from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
 from kuchka import Gram
+from kuchka import Hectare
 from kuchka import Hertz
+from kuchka import Hour
 from kuchka import Inch
+from kuchka import Joule
 from kuchka import Kelvin
 from kuchka import Kiloampere
 from kuchka import Kilobaud
 from kuchka import Kilogram
 from kuchka import Kilohertz
+from kuchka import Kilojoule
+from kuchka import Kilolitre
 from kuchka import Kilometer
 from kuchka import Kiloohm
 from kuchka import KilosamplesPerSecond
 from kuchka import Kilovolt
 from kuchka import Kilowatt
+from kuchka import Litre
 from kuchka import Megagram
 from kuchka import Megahertz
+from kuchka import Megajoule
 from kuchka import Megaohm
 from kuchka import MegasamplesPerSecond
 from kuchka import Meter
 from kuchka import Microampere
+from kuchka import Microcoulomb
 from kuchka import Microgram
+from kuchka import Microjoule
+from kuchka import Microlitre
 from kuchka import Micrometer
 from kuchka import Micromole
 from kuchka import Microsecond
@@ -45,7 +61,12 @@ from kuchka import MicrosecondSamplingPeriod
 from kuchka import Microvolt
 from kuchka import Microwatt
 from kuchka import Milliampere
+from kuchka import MilliampereHour
+from kuchka import MilliampereSecond
+from kuchka import Millicoulomb
 from kuchka import Milligram
+from kuchka import Millijoule
+from kuchka import Millilitre
 from kuchka import Millimeter
 from kuchka import Millimole
 from kuchka import Milliohm
@@ -53,22 +74,37 @@ from kuchka import Millisecond
 from kuchka import MillisecondSamplingPeriod
 from kuchka import Millivolt
 from kuchka import Milliwatt
+from kuchka import MilliwattHour
+from kuchka import Minute
 from kuchka import Mole
+from kuchka import Nanocoulomb
 from kuchka import Nanogram
+from kuchka import Nanojoule
 from kuchka import Nanometer
 from kuchka import Ohm
 from kuchka import Percent
+from kuchka import Picocoulomb
 from kuchka import Picogram
+from kuchka import Picojoule
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
 from kuchka import SecondSamplingPeriod
+from kuchka import SquareCentimetre
+from kuchka import SquareInch
+from kuchka import SquareKilometre
+from kuchka import SquareMetre
+from kuchka import SquareMillimetre
 from kuchka import Tonne
 from kuchka import Volt
 from kuchka import Watt
+from kuchka import WattHour
 from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
+from kuchka.units import AREA_UNITS
 from kuchka.units import BAUD_RATE_UNITS
+from kuchka.units import CHARGE_UNITS
 from kuchka.units import CURRENT_UNITS
+from kuchka.units import ENERGY_UNITS
 from kuchka.units import FREQUENCY_UNITS
 from kuchka.units import LENGTH_UNITS
 from kuchka.units import LUMINOUS_INTENSITY_UNITS
@@ -82,6 +118,7 @@ from kuchka.units import TEMPERATURE_DELTA_UNITS
 from kuchka.units import TEMPERATURE_UNITS
 from kuchka.units import TIME_UNITS
 from kuchka.units import VOLTAGE_UNITS
+from kuchka.units import VOLUME_UNITS
 
 # (table, {expected symbol: expected constructor})
 TABLE_CASES = [
@@ -97,7 +134,16 @@ TABLE_CASES = [
     (POWER_UNITS, {"\u00b5W": Microwatt, "mW": Milliwatt, "W": Watt, "kW": Kilowatt}),
     (TEMPERATURE_UNITS, {"K": Kelvin, "C": Celsius}),
     (TEMPERATURE_DELTA_UNITS, {"dK": DeltaKelvin, "dC": DeltaCelsius}),
-    (TIME_UNITS, {"\u00b5s": Microsecond, "ms": Millisecond, "s": Second}),
+    (
+        TIME_UNITS,
+        {
+            "\u00b5s": Microsecond,
+            "ms": Millisecond,
+            "s": Second,
+            "min": Minute,
+            "h": Hour,
+        },
+    ),
     (FREQUENCY_UNITS, {"Hz": Hertz, "kHz": Kilohertz, "MHz": Megahertz}),
     (
         SAMPLING_PERIOD_UNITS,
@@ -148,6 +194,57 @@ TABLE_CASES = [
         {"\u00b5mol": Micromole, "mmol": Millimole, "mol": Mole},
     ),
     (LUMINOUS_INTENSITY_UNITS, {"cd": Candela}),
+    (
+        CHARGE_UNITS,
+        {
+            "pC": Picocoulomb,
+            "nC": Nanocoulomb,
+            "\u00b5C": Microcoulomb,
+            "mC": Millicoulomb,
+            "C": Coulomb,
+            "mAs": MilliampereSecond,
+            "mAh": MilliampereHour,
+            "Ah": AmpereHour,
+        },
+    ),
+    (
+        ENERGY_UNITS,
+        {
+            "pJ": Picojoule,
+            "nJ": Nanojoule,
+            "\u00b5J": Microjoule,
+            "mJ": Millijoule,
+            "J": Joule,
+            "kJ": Kilojoule,
+            "MJ": Megajoule,
+            "mWh": MilliwattHour,
+            "Wh": WattHour,
+        },
+    ),
+    (
+        AREA_UNITS,
+        {
+            "mm\u00b2": SquareMillimetre,
+            "cm\u00b2": SquareCentimetre,
+            "m\u00b2": SquareMetre,
+            "km\u00b2": SquareKilometre,
+            "ha": Hectare,
+            "ac": Acre,
+            "in\u00b2": SquareInch,
+        },
+    ),
+    (
+        VOLUME_UNITS,
+        {
+            "mm\u00b3": CubicMillimetre,
+            "cm\u00b3": CubicCentimetre,
+            "m\u00b3": CubicMetre,
+            "\u00b5L": Microlitre,
+            "mL": Millilitre,
+            "L": Litre,
+            "kL": Kilolitre,
+        },
+    ),
 ]
 
 TABLE_CASE_IDS = [
@@ -167,6 +264,10 @@ TABLE_CASE_IDS = [
     "mass",
     "amount_of_substance",
     "luminous_intensity",
+    "charge",
+    "energy",
+    "area",
+    "volume",
 ]
 
 

@@ -8,6 +8,7 @@ not just a runtime one.
 from decimal import Decimal
 
 from kuchka import Ampere
+from kuchka import Area
 from kuchka import Baud
 from kuchka import BaudRate
 from kuchka import Celsius
@@ -15,6 +16,8 @@ from kuchka import ConvertibleToFrequency
 from kuchka import Current
 from kuchka import Frequency
 from kuchka import Hertz
+from kuchka import Length
+from kuchka import Meter
 from kuchka import Percent
 from kuchka import Power
 from kuchka import Proportion
@@ -28,6 +31,7 @@ from kuchka import SecondSamplingPeriod
 from kuchka import Time
 from kuchka import Volt
 from kuchka import Voltage
+from kuchka import Volume
 from kuchka import Watt
 
 
@@ -105,3 +109,17 @@ _bad_proportion_add = Percent(5) + Volt(5)  # type: ignore[operator]  # not (yet
 # algebra (see quantities/proportion.py), but not statically narrowed to Voltage,
 # the same gap Ohm(5) * Ohm(2) already has.
 scaled_voltage: Voltage = Volt(5) * Ratio(Decimal("0.1"))  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+
+# Length * Length is statically known to produce Area, and Area * Length / Length *
+# Area both statically produce Volume.
+area: Area = Meter(5) * Meter(2)  # OK: statically known to be Area.
+volume_a: Volume = area * Meter(3)  # OK: statically known to be Volume.
+volume_b: Volume = Meter(3) * area  # OK: statically known to be Volume.
+side: Length = area / Meter(5)  # OK: statically known to be Length.
+base: Area = volume_a / Meter(3)  # OK: statically known to be Area.
+height: Length = volume_a / area  # OK: statically known to be Length.
+
+# Area * Length is Volume, not Area -- the fallback `object` overload accepts the
+# assignment statically (the same known gap Ohm(5) * Ohm(2) already has), and only
+# the runtime type actually disagrees.
+wrong_area: Area = area * Meter(3)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
