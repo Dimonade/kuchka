@@ -59,6 +59,7 @@ analyse_voltage(Millivolt(4200))  # another example of a valid type check.
 - **Current:** `Ampere`, `Milliampere`, `Microampere`, `Kiloampere`
 - **Power:** `Watt`, `Milliwatt`, `Kilowatt`
 - **Resistance:** `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`
+- **Conductance:** `Siemens`, `Microsiemens`, `Millisiemens`, `Kilosiemens`       
 - **Charge:** `Coulomb`, `Millicoulomb`, `Microcoulomb`, `Nanocoulomb`, `Picocoulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`
 - **Energy:** `Joule`, `Millijoule`, `Microjoule`, `Nanojoule`, `Picojoule`, `Kilojoule`, `Megajoule`, `MilliwattHour`, `WattHour`
 
@@ -189,6 +190,23 @@ tank = plot * Meter(3)  # -> Volume, 30 m^3
 ```
 
 `Litre` is not a prefix of `CubicMetre` the way `Millivolt` is a prefix of `Volt` -- it's a separate, coherent metric volume unit in its own right (one cubic decimetre, exactly), with its own full prefix vocabulary (`Microlitre`, `Millilitre`, `Kilolitre`).
+Two of those prefixes land on exactly the same scale as a cubic-metric unit by coincidence, not by design: a millilitre and a cubic centimetre are the same quantity, and a microlitre and a cubic millimetre are too.
+They stay as separate `UnitDef`s rather than aliases (the way `Tonne` aliases `Megagram`) because they come from different naming traditions that happen to agree numerically, not from one SI unit with two names.
+
+### Resistance and Conductance are reciprocals, the same shape as Time and Frequency
+
+`Conductance` (`Siemens`) is `Resistance`'s reciprocal, registered and typed the same way `Frequency` is `Time`'s:
+
+```python
+conductance = 1 / Ohm(5)  # -> Conductance, 0.2 S
+resistance = 1 / conductance  # -> Resistance, 5 ohm, round-trips exactly
+```
+
+Ohm's law works from either side of that reciprocal, and both forms agree:
+
+```python
+Volt(10) / Ohm(5) == Volt(10) * Siemens(Decimal("0.2")) == Ampere(2)
+```
 
 ## Physical constants
 
