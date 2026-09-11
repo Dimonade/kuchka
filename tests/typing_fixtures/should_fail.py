@@ -12,12 +12,14 @@ from kuchka import Area
 from kuchka import Baud
 from kuchka import BaudRate
 from kuchka import Celsius
+from kuchka import Conductance
 from kuchka import ConvertibleToFrequency
 from kuchka import Current
 from kuchka import Frequency
 from kuchka import Hertz
 from kuchka import Length
 from kuchka import Meter
+from kuchka import Ohm
 from kuchka import Percent
 from kuchka import Power
 from kuchka import Proportion
@@ -28,6 +30,7 @@ from kuchka import SamplesPerSecond
 from kuchka import SamplingPeriod
 from kuchka import Second
 from kuchka import SecondSamplingPeriod
+from kuchka import Siemens
 from kuchka import Time
 from kuchka import Volt
 from kuchka import Voltage
@@ -111,7 +114,8 @@ _bad_proportion_add = Percent(5) + Volt(5)  # type: ignore[operator]  # not (yet
 scaled_voltage: Voltage = Volt(5) * Ratio(Decimal("0.1"))  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
 
 # Length * Length is statically known to produce Area, and Area * Length / Length *
-# Area both statically produce Volume.
+# Area both statically produce Volume -- the same overload-table shape Voltage,
+# Current, Power, and Resistance already get for the power triangle.
 area: Area = Meter(5) * Meter(2)  # OK: statically known to be Area.
 volume_a: Volume = area * Meter(3)  # OK: statically known to be Volume.
 volume_b: Volume = Meter(3) * area  # OK: statically known to be Volume.
@@ -123,3 +127,16 @@ height: Length = volume_a / area  # OK: statically known to be Length.
 # assignment statically (the same known gap Ohm(5) * Ohm(2) already has), and only
 # the runtime type actually disagrees.
 wrong_area: Area = area * Meter(3)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+
+# Resistance and Conductance are reciprocals of each other, the same shape
+# Time/Frequency already have, and Ohm's law works from either side of that
+# reciprocal.
+conductance: Conductance = 1 / Ohm(5)  # OK: statically known to be Conductance.
+resistance_back: Resistance = 1 / Siemens(Decimal("0.2"))  # OK: back to Resistance.
+current_via_conductance: Current = Volt(10) * Siemens(Decimal("0.5"))  # OK: Current.
+conductance_via_current: Conductance = Ampere(5) / Volt(10)  # OK: Conductance.
+voltage_via_conductance: Voltage = Ampere(5) / Siemens(Decimal("0.5"))  # OK: Voltage.
+
+# The reciprocal only narrows for the two registered canonical types -- a plain
+# assignment mismatch between them is still statically rejected.
+wrong_conductance_reciprocal: Resistance = 1 / Ohm(5)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]

@@ -41,6 +41,7 @@ from kuchka import Kilolitre
 from kuchka import Kilometer
 from kuchka import Kiloohm
 from kuchka import KilosamplesPerSecond
+from kuchka import Kilosiemens
 from kuchka import Kilovolt
 from kuchka import Kilowatt
 from kuchka import Litre
@@ -59,6 +60,7 @@ from kuchka import Micrometer
 from kuchka import Micromole
 from kuchka import Microsecond
 from kuchka import MicrosecondSamplingPeriod
+from kuchka import Microsiemens
 from kuchka import Microvolt
 from kuchka import Microwatt
 from kuchka import Milliampere
@@ -73,6 +75,7 @@ from kuchka import Millimole
 from kuchka import Milliohm
 from kuchka import Millisecond
 from kuchka import MillisecondSamplingPeriod
+from kuchka import Millisiemens
 from kuchka import Millivolt
 from kuchka import Milliwatt
 from kuchka import MilliwattHour
@@ -91,6 +94,7 @@ from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
 from kuchka import SecondSamplingPeriod
+from kuchka import Siemens
 from kuchka import SquareCentimetre
 from kuchka import SquareInch
 from kuchka import SquareKilometre
@@ -104,6 +108,7 @@ from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
 from kuchka.units import AREA_UNITS
 from kuchka.units import BAUD_RATE_UNITS
 from kuchka.units import CHARGE_UNITS
+from kuchka.units import CONDUCTANCE_UNITS
 from kuchka.units import CURRENT_UNITS
 from kuchka.units import ENERGY_UNITS
 from kuchka.units import FREQUENCY_UNITS
@@ -203,9 +208,9 @@ TABLE_CASES = [
             "\u00b5C": Microcoulomb,
             "mC": Millicoulomb,
             "C": Coulomb,
+            "As": AmpereSecond,
             "mAs": MilliampereSecond,
             "mAh": MilliampereHour,
-            "As": AmpereSecond,
             "Ah": AmpereHour,
         },
     ),
@@ -247,6 +252,15 @@ TABLE_CASES = [
             "kL": Kilolitre,
         },
     ),
+    (
+        CONDUCTANCE_UNITS,
+        {
+            "\u00b5S": Microsiemens,
+            "mS": Millisiemens,
+            "S": Siemens,
+            "kS": Kilosiemens,
+        },
+    ),
 ]
 
 TABLE_CASE_IDS = [
@@ -270,6 +284,7 @@ TABLE_CASE_IDS = [
     "energy",
     "area",
     "volume",
+    "conductance",
 ]
 
 
