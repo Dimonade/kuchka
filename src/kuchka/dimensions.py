@@ -85,6 +85,7 @@ CURRENT = Dimension(current=1)
 VOLTAGE = Dimension(mass=1, length=2, time=-3, current=-1)
 POWER = Dimension(mass=1, length=2, time=-3)
 RESISTANCE = Dimension(mass=1, length=2, time=-3, current=-2)
+CONDUCTANCE = Dimension(mass=-1, length=-2, time=3, current=2)
 TEMPERATURE_DELTA = Dimension(temperature=1)
 TIME = Dimension(time=1)
 FREQUENCY = Dimension(time=-1)
@@ -101,6 +102,7 @@ __all__ = [
     "AMOUNT_OF_SUBSTANCE",
     "AREA",
     "CHARGE",
+    "CONDUCTANCE",
     "CURRENT",
     "DIMENSIONLESS",
     "ENERGY",
