@@ -260,6 +260,8 @@ A non-empty spec applies to the underlying `Decimal`, and the unit symbol is app
 - **[Migrating a config from unit-suffixed keys to kuchka](docs/examples/config_migration/README.md)** --
   a worked example: an old `.ini` file where units live in the key name (`accepted_voltage_min_mv`), migrated to a `.toml` file where units are data, parsed through a boundary layer into typed dataclasses.
   Covers closed per-dimension unit resolution, `Decimal`-exact parsing, and three concrete failure modes the boundary layer catches at load time.
+- **[Working around an unrepresentable intermediate dimension](docs/examples/unrepresentable_dimensions/README.md)** --
+  engineering formulas such as `P = V² / R` and parallel resistor networks, demonstrating the recommended pattern of dropping to `.magnitude` only for a single unrepresentable intermediate value before reconstructing a typed quantity.
 
 ## Package layout
 
