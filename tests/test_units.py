@@ -39,6 +39,7 @@ from kuchka import Kilolitre
 from kuchka import Kilometer
 from kuchka import Kiloohm
 from kuchka import KilosamplesPerSecond
+from kuchka import Kilosiemens
 from kuchka import Kilovolt
 from kuchka import Kilowatt
 from kuchka import Litre
@@ -53,6 +54,7 @@ from kuchka import Microlitre
 from kuchka import Micrometer
 from kuchka import Microsecond
 from kuchka import MicrosecondSamplingPeriod
+from kuchka import Microsiemens
 from kuchka import Microvolt
 from kuchka import Milliampere
 from kuchka import MilliampereHour
@@ -63,6 +65,7 @@ from kuchka import Millimeter
 from kuchka import Milliohm
 from kuchka import Millisecond
 from kuchka import MillisecondSamplingPeriod
+from kuchka import Millisiemens
 from kuchka import Millivolt
 from kuchka import Milliwatt
 from kuchka import MilliwattHour
@@ -73,6 +76,7 @@ from kuchka import Ohm
 from kuchka import SamplesPerSecond
 from kuchka import Second
 from kuchka import SecondSamplingPeriod
+from kuchka import Siemens
 from kuchka import SquareCentimetre
 from kuchka import SquareKilometre
 from kuchka import SquareMetre
@@ -103,6 +107,7 @@ from kuchka.units import KILOLITRE
 from kuchka.units import KILOMETER
 from kuchka.units import KILOOHM
 from kuchka.units import KILOSAMPLE_PER_SECOND
+from kuchka.units import KILOSIEMENS
 from kuchka.units import KILOVOLT
 from kuchka.units import KILOWATT
 from kuchka.units import LITRE
@@ -116,6 +121,7 @@ from kuchka.units import MICROGRAM
 from kuchka.units import MICROLITRE
 from kuchka.units import MICROMETER
 from kuchka.units import MICROSECOND
+from kuchka.units import MICROSIEMENS
 from kuchka.units import MICROVOLT
 from kuchka.units import MILLIAMPERE
 from kuchka.units import MILLIAMPERE_HOUR
@@ -125,6 +131,7 @@ from kuchka.units import MILLILITRE
 from kuchka.units import MILLIMETER
 from kuchka.units import MILLIOHM
 from kuchka.units import MILLISECOND
+from kuchka.units import MILLISIEMENS
 from kuchka.units import MILLIVOLT
 from kuchka.units import MILLIWATT
 from kuchka.units import MILLIWATT_HOUR
@@ -137,6 +144,7 @@ from kuchka.units import SAMPLING_PERIOD_MICROSECOND
 from kuchka.units import SAMPLING_PERIOD_MILLISECOND
 from kuchka.units import SAMPLING_PERIOD_SECOND
 from kuchka.units import SECOND
+from kuchka.units import SIEMENS
 from kuchka.units import SQUARE_CENTIMETRE
 from kuchka.units import SQUARE_KILOMETRE
 from kuchka.units import SQUARE_METRE
@@ -309,6 +317,20 @@ PREFIX_CASES: list[PrefixCase] = [
     PrefixCase("Microlitre", Microlitre, Litre, Decimal("0.000001"), MICROLITRE, LITRE),
     PrefixCase("Millilitre", Millilitre, Litre, Decimal("0.001"), MILLILITRE, LITRE),
     PrefixCase("Kilolitre", Kilolitre, Litre, Decimal(1000), KILOLITRE, LITRE),
+    PrefixCase(
+        "Microsiemens",
+        Microsiemens,
+        Siemens,
+        Decimal("0.000001"),
+        MICROSIEMENS,
+        SIEMENS,
+    ),
+    PrefixCase(
+        "Millisiemens", Millisiemens, Siemens, Decimal("0.001"), MILLISIEMENS, SIEMENS
+    ),
+    PrefixCase(
+        "Kilosiemens", Kilosiemens, Siemens, Decimal(1000), KILOSIEMENS, SIEMENS
+    ),
 ]
 
 PREFIX_CASE_IDS: list[str] = [case.id for case in PREFIX_CASES]

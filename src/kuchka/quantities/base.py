@@ -57,10 +57,7 @@ They stay reachable only by explicit construction, exactly like ``Temperature`` 
 one, rather than silently overwriting it.
 """
 
-_PLANNED_DIMENSIONS: dict[Dimension, str] = {
-    AREA: "Area",
-    VOLUME: "Volume",
-}
+_PLANNED_DIMENSIONS: dict[Dimension, str] = {}
 """Maps a dimension signature to the name of a quantity this library intends to
 implement but does not yet.
 

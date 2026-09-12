@@ -37,6 +37,7 @@ from kuchka.quantities import AmountOfSubstance
 from kuchka.quantities import Area
 from kuchka.quantities import BaudRate
 from kuchka.quantities import Charge
+from kuchka.quantities import Conductance
 from kuchka.quantities import ConvertibleToFrequency
 from kuchka.quantities import Current
 from kuchka.quantities import Energy
@@ -93,6 +94,7 @@ from kuchka.units import Kilometer
 from kuchka.units import Kilometre
 from kuchka.units import Kiloohm
 from kuchka.units import KilosamplesPerSecond
+from kuchka.units import Kilosiemens
 from kuchka.units import Kilovolt
 from kuchka.units import Kilowatt
 from kuchka.units import Liter
@@ -117,6 +119,7 @@ from kuchka.units import Micrometre
 from kuchka.units import Micromole
 from kuchka.units import Microsecond
 from kuchka.units import MicrosecondSamplingPeriod
+from kuchka.units import Microsiemens
 from kuchka.units import Microvolt
 from kuchka.units import Microwatt
 from kuchka.units import Milliampere
@@ -133,6 +136,7 @@ from kuchka.units import Millimole
 from kuchka.units import Milliohm
 from kuchka.units import Millisecond
 from kuchka.units import MillisecondSamplingPeriod
+from kuchka.units import Millisiemens
 from kuchka.units import Millivolt
 from kuchka.units import Milliwatt
 from kuchka.units import MilliwattHour
@@ -152,6 +156,7 @@ from kuchka.units import Ratio
 from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
 from kuchka.units import SecondSamplingPeriod
+from kuchka.units import Siemens
 from kuchka.units import SquareCentimeter
 from kuchka.units import SquareCentimetre
 from kuchka.units import SquareInch
@@ -190,6 +195,7 @@ __all__: list[str] = [
     "Centimeter",
     "Centimetre",
     "Charge",
+    "Conductance",
     "ConvertibleToFrequency",
     "Coulomb",
     "CubicCentimeter",
@@ -226,6 +232,7 @@ __all__: list[str] = [
     "Kilometre",
     "Kiloohm",
     "KilosamplesPerSecond",
+    "Kilosiemens",
     "Kilovolt",
     "Kilowatt",
     "Length",
@@ -254,6 +261,7 @@ __all__: list[str] = [
     "Micromole",
     "Microsecond",
     "MicrosecondSamplingPeriod",
+    "Microsiemens",
     "Microvolt",
     "Microwatt",
     "Milliampere",
@@ -270,6 +278,7 @@ __all__: list[str] = [
     "Milliohm",
     "Millisecond",
     "MillisecondSamplingPeriod",
+    "Millisiemens",
     "Millivolt",
     "Milliwatt",
     "MilliwattHour",
@@ -295,6 +304,7 @@ __all__: list[str] = [
     "SamplingPeriod",
     "Second",
     "SecondSamplingPeriod",
+    "Siemens",
     "SquareCentimeter",
     "SquareCentimetre",
     "SquareInch",

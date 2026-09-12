@@ -59,6 +59,7 @@ analyse_voltage(Millivolt(4200))  # another example of a valid type check.
 - **Current:** `Ampere`, `Milliampere`, `Microampere`, `Kiloampere`
 - **Power:** `Watt`, `Milliwatt`, `Kilowatt`
 - **Resistance:** `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`
+- **Conductance:** `Siemens`, `Microsiemens`, `Millisiemens`, `Kilosiemens`
 - **Charge:** `Coulomb`, `Millicoulomb`, `Microcoulomb`, `Nanocoulomb`, `Picocoulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`
 - **Energy:** `Joule`, `Millijoule`, `Microjoule`, `Nanojoule`, `Picojoule`, `Kilojoule`, `Megajoule`, `MilliwattHour`, `WattHour`
 
@@ -189,6 +190,23 @@ tank = plot * Meter(3)  # -> Volume, 30 m^3
 ```
 
 `Litre` is not a prefix of `CubicMetre` the way `Millivolt` is a prefix of `Volt` -- it's a separate, coherent metric volume unit in its own right (one cubic decimetre, exactly), with its own full prefix vocabulary (`Microlitre`, `Millilitre`, `Kilolitre`).
+Two of those prefixes land on exactly the same scale as a cubic-metric unit by coincidence, not by design: a millilitre and a cubic centimetre are the same quantity, and a microlitre and a cubic millimetre are too.
+They stay as separate `UnitDef`s rather than aliases (the way `Tonne` aliases `Megagram`) because they come from different naming traditions that happen to agree numerically, not from one SI unit with two names.
+
+### Resistance and Conductance are reciprocals, the same shape as Time and Frequency
+
+`Conductance` (`Siemens`) is `Resistance`'s reciprocal, registered and typed the same way `Frequency` is `Time`'s:
+
+```python
+conductance = 1 / Ohm(5)  # -> Conductance, 0.2 S
+resistance = 1 / conductance  # -> Resistance, 5 ohm, round-trips exactly
+```
+
+Ohm's law works from either side of that reciprocal, and both forms agree:
+
+```python
+Volt(10) / Ohm(5) == Volt(10) * Siemens(Decimal("0.2")) == Ampere(2)
+```
 
 ## Physical constants
 
@@ -242,6 +260,8 @@ A non-empty spec applies to the underlying `Decimal`, and the unit symbol is app
 - **[Migrating a config from unit-suffixed keys to kuchka](docs/examples/config_migration/README.md)** --
   a worked example: an old `.ini` file where units live in the key name (`accepted_voltage_min_mv`), migrated to a `.toml` file where units are data, parsed through a boundary layer into typed dataclasses.
   Covers closed per-dimension unit resolution, `Decimal`-exact parsing, and three concrete failure modes the boundary layer catches at load time.
+- **[Working around an unrepresentable intermediate dimension](docs/examples/unrepresentable_dimensions/README.md)** --
+  engineering formulas such as `P = V² / R` and parallel resistor networks, demonstrating the recommended pattern of dropping to `.magnitude` only for a single unrepresentable intermediate value before reconstructing a typed quantity.
 
 ## Package layout
 

@@ -5,6 +5,7 @@ from decimal import Decimal
 import pytest
 
 from kuchka import Ampere
+from kuchka import Conductance
 from kuchka import Current
 from kuchka import IncompatibleDimensionError
 from kuchka import InvalidMeasurementError
@@ -14,6 +15,7 @@ from kuchka import Millivolt
 from kuchka import Ohm
 from kuchka import Power
 from kuchka import Resistance
+from kuchka import Siemens
 from kuchka import UnrepresentableDimensionError
 from kuchka import Volt
 from kuchka import Voltage
@@ -93,6 +95,36 @@ def test_ohms_law_round_trip_stays_exact_with_prefixed_units():
             Voltage,
             Volt(5),
             id="power/current=voltage",
+        ),
+        pytest.param(
+            lambda: 1 / Ohm(5),
+            Conductance,
+            Siemens(Decimal("0.2")),
+            id="1/resistance=conductance",
+        ),
+        pytest.param(
+            lambda: 1 / Siemens(Decimal("0.2")),
+            Resistance,
+            Ohm(5),
+            id="1/conductance=resistance",
+        ),
+        pytest.param(
+            lambda: Volt(10) * Siemens(Decimal("0.5")),
+            Current,
+            Ampere(5),
+            id="voltage*conductance=current",
+        ),
+        pytest.param(
+            lambda: Ampere(5) / Volt(10),
+            Conductance,
+            Siemens(Decimal("0.5")),
+            id="current/voltage=conductance",
+        ),
+        pytest.param(
+            lambda: Ampere(5) / Siemens(Decimal("0.5")),
+            Voltage,
+            Volt(10),
+            id="current/conductance=voltage",
         ),
     ],
 )

@@ -35,6 +35,7 @@ from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
 from kuchka import SecondSamplingPeriod
+from kuchka import Siemens
 from kuchka import SquareMetre
 from kuchka import Volt
 from kuchka import Watt
@@ -46,6 +47,7 @@ from kuchka.units import BAUD
 from kuchka.units import BAUD_RATE_UNITS
 from kuchka.units import CANDELA
 from kuchka.units import CHARGE_UNITS
+from kuchka.units import CONDUCTANCE_UNITS
 from kuchka.units import COULOMB
 from kuchka.units import CUBIC_METRE
 from kuchka.units import CURRENT_UNITS
@@ -71,6 +73,7 @@ from kuchka.units import SAMPLE_RATE_UNITS
 from kuchka.units import SAMPLING_PERIOD_SECOND
 from kuchka.units import SAMPLING_PERIOD_UNITS
 from kuchka.units import SECOND
+from kuchka.units import SIEMENS
 from kuchka.units import SQUARE_METRE
 from kuchka.units import TEMPERATURE_DELTA_UNITS
 from kuchka.units import TIME_UNITS
@@ -134,6 +137,7 @@ FAMILIES: list[QuantityFamily] = [
     QuantityFamily("energy", Joule, JOULE, ENERGY_UNITS),
     QuantityFamily("area", SquareMetre, SQUARE_METRE, AREA_UNITS),
     QuantityFamily("volume", CubicMetre, CUBIC_METRE, VOLUME_UNITS),
+    QuantityFamily("conductance", Siemens, SIEMENS, CONDUCTANCE_UNITS),
 ]
 
 FAMILY_IDS: list[str] = [family.id for family in FAMILIES]
