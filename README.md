@@ -59,7 +59,7 @@ analyse_voltage(Millivolt(4200))  # another example of a valid type check.
 - **Current:** `Ampere`, `Milliampere`, `Microampere`, `Kiloampere`
 - **Power:** `Watt`, `Milliwatt`, `Kilowatt`
 - **Resistance:** `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`
-- **Conductance:** `Siemens`, `Microsiemens`, `Millisiemens`, `Kilosiemens`       
+- **Conductance:** `Siemens`, `Microsiemens`, `Millisiemens`, `Kilosiemens`
 - **Charge:** `Coulomb`, `Millicoulomb`, `Microcoulomb`, `Nanocoulomb`, `Picocoulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`
 - **Energy:** `Joule`, `Millijoule`, `Microjoule`, `Nanojoule`, `Picojoule`, `Kilojoule`, `Megajoule`, `MilliwattHour`, `WattHour`
 

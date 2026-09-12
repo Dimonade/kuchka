@@ -8,11 +8,11 @@ Total resistance of resistors in parallel may require multiplying N resistors, w
 is not representable.
 Thus, the pathway is to go through `Conductance` instead.
 
-| File                        | What it is                                    |
-| ---------------------------- | ----------------------------------------------- |
-| `resistor_network.py`        | `parallel()`, `series()`, `power_dissipation()` |
-| `demo.py`                    | Run this                                        |
-| `test_resistor_network.py`   | Tests for `resistor_network.py`                 |
+| File                       | What it is                                      |
+| -------------------------- | ----------------------------------------------- |
+| `resistor_network.py`      | `parallel()`, `series()`, `power_dissipation()` |
+| `demo.py`                  | Run this                                        |
+| `test_resistor_network.py` | Tests for `resistor_network.py`                 |
 
 ## The pattern
 
