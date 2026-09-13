@@ -11,6 +11,7 @@ import pytest
 from kuchka import Celsius
 from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
+from kuchka import IncompatibleDimensionError
 from kuchka import InvalidConversionError
 from kuchka import Kelvin
 from kuchka import MeasurementError
@@ -128,17 +129,17 @@ def test_to_rejects_a_non_temperature_unit():
         Celsius(20).to(object())  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
 
-def test_comparison_against_a_non_temperature_raises_type_error():
-    with pytest.raises(TypeError):
+def test_comparison_against_a_non_temperature_raises_incompatible_dimension_error():
+    with pytest.raises(IncompatibleDimensionError):
         Celsius(20) < object()  # type: ignore[operator]  # ty: ignore[unsupported-operator]  # noqa: B015
 
-    with pytest.raises(TypeError):
+    with pytest.raises(IncompatibleDimensionError):
         Celsius(20) <= object()  # type: ignore[operator]  # ty: ignore[unsupported-operator]  # noqa: B015
 
-    with pytest.raises(TypeError):
+    with pytest.raises(IncompatibleDimensionError):
         Celsius(20) > object()  # type: ignore[operator]  # ty: ignore[unsupported-operator]  # noqa: B015
 
-    with pytest.raises(TypeError):
+    with pytest.raises(IncompatibleDimensionError):
         Celsius(20) >= object()  # type: ignore[operator]  # ty: ignore[unsupported-operator]  # noqa: B015
 
 
