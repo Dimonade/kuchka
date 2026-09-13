@@ -5,26 +5,28 @@ Three layers, from the ground up:
 - :class:`_ScalarStorage` owns the state and boilerplate every scalar-valued quantity
   needs regardless of its arithmetic shape: an immutable ``Decimal`` magnitude
   expressed in this quantity's own canonical frame, a display unit, pickling, and
-  text rendering. It implements no operator at all.
+  text rendering.
+  It implements no operator at all.
 - :class:`_OrderedScalarMixin` adds equality, hashing, and a total order over that
-  magnitude, restricted to exact-type comparisons. It is composed into shapes where
-  "greater than" is unambiguous, and left out of shapes where it is not (a future
-  modular/circular quantity, for instance, where "greater than" is either undefined
-  or convention-dependent).
+  magnitude, restricted to exact-type comparisons.
+  It is composed into shapes where "greater than" is unambiguous, and left out of
+  shapes where it is not (i.e., a modular/circular quantity, where "greater than"
+  is either undefined or convention-dependent).
 - :class:`LinearQuantity` and :class:`AffineQuantity` each combine the two above with
   the arithmetic that actually differs between them.
 
 ``LinearQuantity`` means unit conversion within the quantity is a pure scale factor,
-with no offset: ``2 * Volt(1) == Volt(2)``. ``Voltage``, ``Current``, ``Power``,
-``Resistance``, ``TemperatureDelta``, ``Time``, ``Frequency``, and ``Length`` all
-subclass it, differing only in their :class:`~kuchka.dimensions.Dimension` and in the
-handful of ``@overload`` signatures that give multiplication and division a precise
-static type.
+with no offset: ``2 * Volt(1) == Volt(2)``.
+``Voltage``, ``Current``, ``Power``, ``Resistance``, ``TemperatureDelta``, ``Time``,
+``Frequency``, and ``Length`` all subclass it, differing only in their
+:class:`~kuchka.dimensions.Dimension` and in the handful of ``@overload`` signatures
+that give multiplication and division a precise static type.
 
 ``AffineQuantity`` means the quantity is a point on a scale rather than a vector:
 its units differ by both a scale and an offset (0 degC = 273.15 K), so doubling a
-reading or adding two readings together has no physical meaning. ``Temperature`` is
-the only current subclass; a future point-in-time ``Instant`` would be a second one.
+reading or adding two readings together has no physical meaning.
+``Temperature`` is the only current subclass; a point-in-time ``Instant`` would be a
+second one.
 """
 
 from __future__ import annotations
@@ -482,9 +484,9 @@ class AffineQuantity(
     """Base class for quantities that are a point on a scale, not a vector.
 
     Its units differ by both a scale and an offset (0 degC = 273.15 K for
-    `Temperature`), unlike `LinearQuantity`, whose units differ only by scale. That
-    makes a reading a point rather than a vector, and the available operations follow
-    directly from that:
+    `Temperature`), unlike `LinearQuantity`, whose units differ only by scale.
+    That makes a reading a point rather than a vector, and the available operations
+    follow directly from that:
 
     * ``Point - Point`` produces a `_DeltaT` instance:
         "how much more is A than B" is a well-defined question.
@@ -555,11 +557,11 @@ class AffineQuantity(
             if type(self) is not type(other):
                 raise IncompatibleDimensionError("add", self, other)
             msg = (
-                f"Cannot add two {type(self).__name__} values: a "
-                f"{type(self).__name__} reading is a point on a scale, so "
+                f"Cannot add two `{type(self).__name__}` values: a "
+                f"`{type(self).__name__}` reading is a point on a scale, so "
                 "'a + a' has no physical reading. Use (a - b) to get a "
-                f"{self._delta_type.__name__}, or add a "
-                f"{self._delta_type.__name__} to a {type(self).__name__} "
+                f"`{self._delta_type.__name__}`, or add a "
+                f"`{self._delta_type.__name__}` to a `{type(self).__name__}` "
                 "instead."
             )
             raise MeasurementError(msg)
