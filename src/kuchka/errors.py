@@ -32,9 +32,9 @@ class IncompatibleDimensionError(MeasurementError):
         left_dim = getattr(left, "dimension", None)
         right_dim = getattr(right, "dimension", None)
         message = (
-            f"Cannot {operation} {left_name} and {right_name}.\n"
-            f"{left_name} has dimension [{left_dim!r}].\n"
-            f"{right_name} has dimension [{right_dim!r}]."
+            f"Cannot {operation} `{left_name}` and `{right_name}`.\n"
+            f"`{left_name}` has dimension [{left_dim!r}].\n"
+            f"`{right_name}` has dimension [{right_dim!r}]."
         )
         super().__init__(message)
         self.operation = operation

@@ -1,18 +1,32 @@
-"""The generic quantity engine shared by every linear physical quantity.
+"""The generic quantity engine shared by every physically-typed quantity.
 
-``LinearQuantity`` implements arithmetic, conversion, comparison, and
-dimensional-mismatch detection exactly once.
+Three layers, from the ground up:
+
+- :class:`_ScalarStorage` owns the state and boilerplate every scalar-valued quantity
+  needs regardless of its arithmetic shape: an immutable ``Decimal`` magnitude
+  expressed in this quantity's own canonical frame, a display unit, pickling, and
+  text rendering.
+  It implements no operator at all.
+- :class:`_OrderedScalarMixin` adds equality, hashing, and a total order over that
+  magnitude, restricted to exact-type comparisons.
+  It is composed into shapes where "greater than" is unambiguous, and left out of
+  shapes where it is not (i.e., a modular/circular quantity, where "greater than"
+  is either undefined or convention-dependent).
+- :class:`LinearQuantity` and :class:`AffineQuantity` each combine the two above with
+  the arithmetic that actually differs between them.
+
+``LinearQuantity`` means unit conversion within the quantity is a pure scale factor,
+with no offset: ``2 * Volt(1) == Volt(2)``.
 ``Voltage``, ``Current``, ``Power``, ``Resistance``, ``TemperatureDelta``, ``Time``,
-``Frequency``, and ``Length``, each subclass it and differ only in their
+``Frequency``, and ``Length`` all subclass it, differing only in their
 :class:`~kuchka.dimensions.Dimension` and in the handful of ``@overload`` signatures
 that give multiplication and division a precise static type.
 
-"Linear" means unit conversion within the quantity is a pure scale factor, with no
-offset:
-``2 * Volt(1) == Volt(2)``.
-
-Absolute temperature is not linear in this sense (``2 * Celsius(1)`` is not a
-meaningful statement), so it lives in its own.
+``AffineQuantity`` means the quantity is a point on a scale rather than a vector:
+its units differ by both a scale and an offset (0 degC = 273.15 K), so doubling a
+reading or adding two readings together has no physical meaning.
+``Temperature`` is the only current subclass; a point-in-time ``Instant`` would be a
+second one.
 """
 
 from __future__ import annotations
@@ -21,15 +35,18 @@ from dataclasses import dataclass
 from decimal import Decimal
 from fractions import Fraction
 from typing import ClassVar
+from typing import Generic
+from typing import Protocol
 from typing import Self
+from typing import TypeVar
+from typing import overload
 
-from kuchka.dimensions import AREA
 from kuchka.dimensions import DIMENSIONLESS
-from kuchka.dimensions import VOLUME
 from kuchka.dimensions import Dimension
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
+from kuchka.errors import MeasurementError
 from kuchka.errors import PlannedDimensionError
 from kuchka.errors import UnrepresentableDimensionError
 from kuchka.numeric import to_decimal
@@ -126,7 +143,175 @@ class UnitDef:
         return f"UnitDef({self.name!r}, {self.symbol!r})"
 
 
-class LinearQuantity:
+@dataclass(frozen=True, slots=True)
+class AffineUnitDef:
+    """A unit with both a scale and an offset, e.g. Celsius relative to Kelvin.
+
+    The affine counterpart to `UnitDef`.
+    Most physical quantities convert by a pure scale factor, but a quantity whose zero
+    point is itself a convention, like absolute temperature, a point-in-time `Instant`
+    needs an offset alongside the scale.
+
+    Application code never constructs one directly;
+    it imports the unit constants (`KELVIN`, `CELSIUS`, ...) from `kuchka.units`.
+    """
+
+    name: str
+    symbol: str
+    scale: Decimal
+    offset: Decimal
+
+
+class _DisplayUnit(Protocol):
+    """Structural shape a `_ScalarStorage` display unit must have: a name and a symbol.
+
+    Both `UnitDef` and `AffineUnitDef` satisfy this without declaring it explicitly;
+    it exists so `_ScalarStorage.__repr__`/`__format__` can read `.symbol` off a
+    display unit whose exact type (`UnitDef` for `LinearQuantity`, `AffineUnitDef` for
+    `AffineQuantity`) it does not otherwise know.
+
+    Declared as read-only properties: `AffineUnitDef` is a frozen dataclass, so its
+    `name`/`symbol` fields are read-only, and a Protocol with plain mutable attributes
+    only matches types whose matching attributes are settable.
+    """
+
+    @property
+    def name(self) -> str: ...
+    @property
+    def symbol(self) -> str: ...
+
+
+_UnitT = TypeVar("_UnitT", bound=_DisplayUnit)
+
+
+class _ScalarStorage(Generic[_UnitT]):
+    """Immutable storage, pickling, and text rendering shared by every scalar quantity.
+
+    Owns exactly the state every concrete quantity needs regardless of its algebraic
+    shape: a `Decimal` magnitude expressed in this quantity's own canonical frame
+    (volts for Voltage, kelvin for Temperature, ...), plus the unit it currently
+    displays as.
+
+    Deliberately implements no operator at all, not even equality:
+    those differ by algebraic shape, and are added by `_OrderedScalarMixin` and the
+    concrete bases (`LinearQuantity`, `AffineQuantity`) that compose it.
+    Keeping this layer operator-free is what lets a future shape with no total order
+    build on the same storage without inheriting comparisons it would have to
+    un-implement.
+    """
+
+    _magnitude: Decimal
+    _display_unit: _UnitT
+    __slots__ = ("_display_unit", "_magnitude")
+
+    def __init__(self, magnitude: Decimal, display_unit: _UnitT) -> None:
+        """Store a magnitude in this quantity's canonical frame, plus a display unit."""
+        object.__setattr__(self, "_magnitude", magnitude)
+        object.__setattr__(self, "_display_unit", display_unit)
+
+    def __setattr__(self, name: str, value: object) -> None:
+        raise AttributeError(f"{type(self).__name__} is immutable")
+
+    @property
+    def unit(self) -> _UnitT:
+        """The unit this measurement currently displays as."""
+        return self._display_unit
+
+    def __getstate__(self) -> tuple[Decimal, _UnitT]:
+        """Return the pickle/copy state: the magnitude and the display unit.
+
+        Blocking `__setattr__` for immutability also blocks the default
+        slot-restoring path `pickle` and `copy` use for `__slots__`-only classes with
+        no `__getstate__`/`__setstate__` pair, since that path calls plain
+        `setattr()`.
+
+        Routing through `object.__setattr__`, the same way `__init__` already does, is
+        what lets an immutable, `__slots__`-only quantity still be pickled, copied,
+        and deep-copied.
+        """
+        return (self._magnitude, self._display_unit)
+
+    def __setstate__(self, state: tuple[Decimal, _UnitT]) -> None:
+        """Restore a pickled/copied instance without going through `__setattr__`."""
+        magnitude, display_unit = state
+        object.__setattr__(self, "_magnitude", magnitude)
+        object.__setattr__(self, "_display_unit", display_unit)
+
+    def value_in(self, unit: _UnitT) -> Decimal:
+        """Return the magnitude of this measurement expressed in `unit`.
+
+        Overridden by each algebraic base: the formula differs between a pure scale
+        (`LinearQuantity`) and a scale-plus-offset (`AffineQuantity`).
+        """
+        raise NotImplementedError
+
+    def __repr__(self) -> str:
+        value = self.value_in(self._display_unit)
+        return f"{format(value, 'f')} {self._display_unit.symbol}"
+
+    def __format__(self, format_spec: str) -> str:
+        """Format the magnitude in the display unit, e.g. `f"{Volt(4.2):.2f}"`.
+
+        An empty `format_spec` (`f"{voltage}"`, `str(voltage)`) matches `repr()`.
+        A non-empty spec is applied to the underlying `Decimal` the same way it would
+        be to a `float` or `int`, and the unit symbol is appended after --
+        `f"{Volt(4.2):.2f}"` reads `"4.20 V"`.
+        """
+        if not format_spec:
+            return repr(self)
+        value = self.value_in(self._display_unit)
+        return f"{format(value, format_spec)} {self._display_unit.symbol}"
+
+
+class _OrderedScalarMixin:
+    """Equality, hashing, and a total order over a `_ScalarStorage` magnitude.
+
+    Composed into `LinearQuantity` and `AffineQuantity`: both are exact-type,
+    totally-ordered scalars, so "equal" and "less than" mean the same thing for
+    either -- compare the stored magnitude, only against another instance of the
+    exact same type.
+
+    Deliberately not part of `_ScalarStorage` itself: a modular/circular quantity
+    (a compass heading, a phase angle) shares the same storage shape but has no
+    well-defined, universal "greater than", so it composes `_ScalarStorage` directly
+    and leaves ordering out, rather than inheriting it here and having to
+    un-implement it.
+    """
+
+    _magnitude: Decimal
+    dimension: ClassVar[Dimension]
+    __slots__ = ()
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, _OrderedScalarMixin) or type(self) is not type(other):
+            return NotImplemented
+        return self._magnitude == other._magnitude
+
+    def __hash__(self) -> int:
+        return hash((type(self), self._magnitude))
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, _OrderedScalarMixin) or type(self) is not type(other):
+            raise IncompatibleDimensionError("compare", self, other)
+        return self._magnitude < other._magnitude
+
+    def __le__(self, other: object) -> bool:
+        if not isinstance(other, _OrderedScalarMixin) or type(self) is not type(other):
+            raise IncompatibleDimensionError("compare", self, other)
+        return self._magnitude <= other._magnitude
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, _OrderedScalarMixin) or type(self) is not type(other):
+            raise IncompatibleDimensionError("compare", self, other)
+        return self._magnitude > other._magnitude
+
+    def __ge__(self, other: object) -> bool:
+        if not isinstance(other, _OrderedScalarMixin) or type(self) is not type(other):
+            raise IncompatibleDimensionError("compare", self, other)
+        return self._magnitude >= other._magnitude
+
+
+class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
     """Base class for physical quantities whose units differ by a pure scale.
 
     Stores its magnitude in the quantity's canonical unit (volts for Voltage,
@@ -139,48 +324,12 @@ class LinearQuantity:
 
     dimension: ClassVar[Dimension]
     _canonical_unit: ClassVar[UnitDef]
-
-    _magnitude: Decimal
-    _display_unit: UnitDef
-    __slots__ = ("_display_unit", "_magnitude")
-
-    def __init__(self, magnitude: Decimal, display_unit: UnitDef) -> None:
-        """Store a magnitude in the canonical unit, plus a unit to display it as."""
-        object.__setattr__(self, "_magnitude", magnitude)
-        object.__setattr__(self, "_display_unit", display_unit)
-
-    def __setattr__(self, name: str, value: object) -> None:
-        raise AttributeError(f"{type(self).__name__} is immutable")
+    __slots__ = ()
 
     @property
     def magnitude(self) -> Decimal:
         """The magnitude expressed in this quantity's canonical unit."""
         return self._magnitude
-
-    @property
-    def unit(self) -> UnitDef:
-        """The unit this measurement currently displays as."""
-        return self._display_unit
-
-    def __getstate__(self) -> tuple[Decimal, UnitDef]:
-        """Return the pickle/copy state: the two slots: `magnitude` and `display_unit`.
-
-        `LinearQuantity` blocks `__setattr__` for immutability, which also blocks the
-        default slot-restoring path `pickle` and `copy` use when no
-        `__getstate__`/`__setstate__` pair is defined -- that path calls plain
-        `setattr()`, and this class's own guard rejects it.
-
-        Defining both explicitly, routing through `object.__setattr__` the same way
-        `__init__` already does, is what lets an immutable, `__slots__`-only type still
-        be pickled, copied, and deep-copied.
-        """
-        return (self._magnitude, self._display_unit)
-
-    def __setstate__(self, state: tuple[Decimal, UnitDef]) -> None:
-        """Restore a pickled/copied instance without going through `__setattr__`."""
-        magnitude, display_unit = state
-        object.__setattr__(self, "_magnitude", magnitude)
-        object.__setattr__(self, "_display_unit", display_unit)
 
     def to(self, unit: UnitDef) -> Self:
         """Return an equal measurement that displays as ``unit``.
@@ -207,34 +356,6 @@ class LinearQuantity:
     def value_in(self, unit: UnitDef) -> Decimal:
         """Return the magnitude of this measurement expressed in ``unit``."""
         return self._magnitude / unit.scale
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, LinearQuantity) or type(self) is not type(other):
-            return NotImplemented
-        return self._magnitude == other._magnitude
-
-    def __hash__(self) -> int:
-        return hash((type(self), self._magnitude))
-
-    def __lt__(self, other: object) -> bool:
-        if not isinstance(other, LinearQuantity) or type(self) is not type(other):
-            raise IncompatibleDimensionError("compare", self, other)
-        return self._magnitude < other._magnitude
-
-    def __le__(self, other: object) -> bool:
-        if not isinstance(other, LinearQuantity) or type(self) is not type(other):
-            raise IncompatibleDimensionError("compare", self, other)
-        return self._magnitude <= other._magnitude
-
-    def __gt__(self, other: object) -> bool:
-        if not isinstance(other, LinearQuantity) or type(self) is not type(other):
-            raise IncompatibleDimensionError("compare", self, other)
-        return self._magnitude > other._magnitude
-
-    def __ge__(self, other: object) -> bool:
-        if not isinstance(other, LinearQuantity) or type(self) is not type(other):
-            raise IncompatibleDimensionError("compare", self, other)
-        return self._magnitude >= other._magnitude
 
     def __add__(self, other: Self) -> Self:
         # NOTE: `other` is typed as `Self` rather than `object` so that
@@ -346,41 +467,130 @@ class LinearQuantity:
     def __abs__(self) -> Self:
         return type(self)(abs(self._magnitude), self._display_unit)
 
-    def __repr__(self) -> str:
-        value = self.value_in(self._display_unit)
-        return f"{format(value, 'f')} {self._display_unit.symbol}"
 
-    def __format__(self, format_spec: str) -> str:
-        """Format the magnitude in the display unit, e.g. `f"{Volt(4.2):.2f}"`.
+_DeltaT = TypeVar("_DeltaT", bound=LinearQuantity)
+"""The `LinearQuantity` type representing a difference between two readings of a
+particular `AffineQuantity`, e.g. `TemperatureDelta` for `Temperature`.
 
-        An empty `format_spec` (`f"{voltage}"`, `str(voltage)`) matches `repr()`.
-        A non-empty spec is applied to the underlying `Decimal` the same way it would
-        be to a `float` or `int`, and the unit symbol is appended after --
-        `f"{Volt(4.2):.2f}"` reads `"4.20 V"`.
-        """
-        if not format_spec:
-            return repr(self)
-        value = self.value_in(self._display_unit)
-        return f"{format(value, format_spec)} {self._display_unit.symbol}"
+Bound to `LinearQuantity` because a delta is always an ordinary vector quantity --
+"5 degrees warmer" adds and scales the same way a voltage does, even though the
+`Temperature` reading it was derived from does not.
+"""
 
 
-@dataclass(frozen=True, slots=True)
-class AffineUnitDef:
-    """A unit with both a scale and an offset, e.g. Celsius relative to Kelvin.
+class AffineQuantity(
+    _OrderedScalarMixin, _ScalarStorage[AffineUnitDef], Generic[_DeltaT]
+):
+    """Base class for quantities that are a point on a scale, not a vector.
 
-    The affine counterpart to `UnitDef`.
-    Most physical quantities convert by a pure scale factor, but a quantity whose zero
-    point is itself a convention, like absolute temperature today, a point-in-time
-    `Instant` needs an offset alongside the scale.
+    Its units differ by both a scale and an offset (0 degC = 273.15 K for
+    `Temperature`), unlike `LinearQuantity`, whose units differ only by scale.
+    That makes a reading a point rather than a vector, and the available operations
+    follow directly from that:
 
-    Application code never constructs one directly;
-    it imports the unit constants (`KELVIN`, `CELSIUS`, ...) from `kuchka.units`.
+    * ``Point - Point`` produces a `_DeltaT` instance:
+        "how much more is A than B" is a well-defined question.
+    * ``Point + Delta`` produces another `Point`:
+        shifting a reading by a tolerance band is a well-defined question too.
+    * ``Point + Point`` has no called-for interpretation:
+        there is no reading that "20 degC + 5 degC" should produce, so it is
+        rejected -- and, because `__add__`'s parameter is typed as `_DeltaT` rather
+        than `object` (the same reason `LinearQuantity.__add__` types its parameter
+        as `Self`), this is rejected *statically* as well: `Celsius(20) +
+        Celsius(5)` is a mypy/ty error, not only a runtime one.
+    * Scaling a `Point` by a plain number is undefined, for the same reason "twice as
+        hot" depends on which zero point is being measured from: no ``__mul__`` is
+        implemented at all, so both ``Celsius(20) * 2`` and the reflected
+        ``2 * Celsius(20)`` are ``TypeError`` at runtime and rejected by mypy/ty/
+        pyright statically, with no extra code needed to enforce it.
+
+    A concrete subclass (`Temperature`) is parametrized with its own delta type
+    (``class Temperature(AffineQuantity[TemperatureDelta])``) and assigns two class
+    attributes once, the same way a `LinearQuantity` subclass's owning unit module
+    assigns `_canonical_unit`:
+
+    - `_delta_type`: the same type passed as the generic parameter, repeated as a
+      plain `ClassVar` so the runtime methods below can construct and `isinstance`-
+      check against it -- the generic parameter itself is erased at runtime.
+    - `_conversion_target_hint`: a short phrase naming what `.to(...)` expects,
+      used only in the error message when it is given something that is not an
+      `AffineUnitDef` at all.
+
+    Unlike `LinearQuantity`'s `__mul__`/`__truediv__`, a concrete subclass does not
+    need to restate `__add__`/`__sub__` with its own `@overload`s: generic parameter
+    substitution alone gives `Temperature` the precise static signature it needs
+    (`TemperatureDelta -> Temperature`, `Temperature -> TemperatureDelta`) purely by
+    inheritance.
     """
 
-    name: str
-    symbol: str
-    scale: Decimal
-    offset: Decimal
+    dimension: ClassVar[Dimension]
+    _delta_type: ClassVar[type[LinearQuantity]]
+    _conversion_target_hint: ClassVar[str] = "a matching affine unit"
+    __slots__ = ()
+
+    def to(self, unit: AffineUnitDef) -> Self:
+        """Return an equal reading that displays as ``unit``.
+
+        This never changes the value being represented, only what ``repr()`` and
+        ``value_in()`` return by default.
+        """
+        if not isinstance(unit, AffineUnitDef):
+            msg = (
+                f"conversion target must be {self._conversion_target_hint}, "
+                f"got {unit!r}"
+            )
+            raise InvalidConversionError(msg)
+        return type(self)(self._magnitude, unit)
+
+    def value_in(self, unit: AffineUnitDef) -> Decimal:
+        """Return the magnitude of this reading expressed in ``unit``."""
+        return (self._magnitude - unit.offset) / unit.scale
+
+    def __add__(self, other: _DeltaT) -> Self:
+        # NOTE: `other` is typed as `_DeltaT`, not `object`, so `Celsius(20) +
+        # Celsius(5)` is a *static* error (a `Temperature` is not a
+        # `TemperatureDelta`) -- see the class docstring. The `isinstance` checks
+        # below remain the authoritative runtime guard for values that arrive
+        # dynamically typed, e.g. from an unchecked boundary or a suppressed type
+        # error.
+        if isinstance(other, AffineQuantity):
+            if type(self) is not type(other):
+                raise IncompatibleDimensionError("add", self, other)
+            msg = (
+                f"Cannot add two `{type(self).__name__}` values: a "
+                f"`{type(self).__name__}` reading is a point on a scale, so "
+                "'a + a' has no physical reading. Use (a - b) to get a "
+                f"`{self._delta_type.__name__}`, or add a "
+                f"`{self._delta_type.__name__}` to a `{type(self).__name__}` "
+                "instead."
+            )
+            raise MeasurementError(msg)
+        if isinstance(other, self._delta_type):
+            return type(self)(self._magnitude + other.magnitude, self._display_unit)
+        return NotImplemented
+
+    def __radd__(self, other: _DeltaT) -> Self:
+        return self.__add__(other)
+
+    @overload
+    def __sub__(self, other: Self) -> _DeltaT: ...
+    @overload
+    def __sub__(self, other: _DeltaT) -> Self: ...
+
+    def __sub__(self, other: object) -> Self | LinearQuantity:
+        """Subtract a `Point` to get a delta, or a delta to shift the reading."""
+        if isinstance(other, AffineQuantity):
+            if type(self) is not type(other):
+                raise IncompatibleDimensionError("subtract", self, other)
+            delta_magnitude = self._magnitude - other._magnitude
+            return self._delta_type(delta_magnitude, self._delta_type._canonical_unit)
+        if isinstance(other, self._delta_type):
+            return type(self)(self._magnitude - other.magnitude, self._display_unit)
+        return NotImplemented
+
+    # NOTE: Deliberately no __mul__ / __rmul__ / __truediv__ by a scalar:
+    # see the class docstring for why scaling a point on a scale is left undefined
+    # rather than implemented.
 
 
 def _promote(dimension: Dimension, magnitude: Decimal) -> LinearQuantity | Decimal:
@@ -402,4 +612,4 @@ def _promote(dimension: Dimension, magnitude: Decimal) -> LinearQuantity | Decim
     return quantity_type(magnitude, quantity_type._canonical_unit)  # noqa: SLF001 -- accessing the registered type's own canonical unit, not a foreign instance's internals
 
 
-__all__ = ["AffineUnitDef", "LinearQuantity", "UnitDef"]
+__all__ = ["AffineQuantity", "AffineUnitDef", "LinearQuantity", "UnitDef"]
