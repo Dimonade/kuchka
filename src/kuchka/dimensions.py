@@ -5,9 +5,19 @@ Ordinary users of the library never construct a :class:`Dimension` directly,
 as they use the named engineering types (``Voltage``, ``Current``, ...),
 and unit constructors (``Volt``, ``Milliampere``, ...) exposed from the top-level.
 
-Dimensions are represented as exponent vectors over all seven SI base quantities:
+Dimensions are represented as exponent vectors over the seven SI base quantities:
 mass, length, time, electric current, thermodynamic temperature, amount of substance,
-and luminous intensity.
+and luminous intensity -- plus one supplementary axis, ``angle``, tracked separately
+from the seven base quantities.
+
+SI itself treats plane angle as a quantity of dimension one (the radian is a
+dimensionless derived unit), and `kuchka` is not taking a position against that.
+The ``angle`` field exists purely so that :data:`ANGLE` and :data:`DIMENSIONLESS` are
+distinguishable ``Dimension`` values here.
+Without it, `Proportion` (genuinely dimensionless, ``Percent``/``Ratio``) and `Angle`
+would compare as the exact same dimension, which would be wrong to build error messages
+and conversion checks against even though SI's own base-quantity accounting agrees they
+are both "one".
 
 Multiplying two physical quantities adds their exponent vectors.
 Dividing subtracts them.
@@ -37,6 +47,7 @@ class Dimension:
     temperature: int = 0
     amount: int = 0
     luminous_intensity: int = 0
+    angle: int = 0
 
     def __mul__(self, other: Dimension) -> Dimension:
         return Dimension(
@@ -47,6 +58,7 @@ class Dimension:
             temperature=self.temperature + other.temperature,
             amount=self.amount + other.amount,
             luminous_intensity=self.luminous_intensity + other.luminous_intensity,
+            angle=self.angle + other.angle,
         )
 
     def __truediv__(self, other: Dimension) -> Dimension:
@@ -58,6 +70,7 @@ class Dimension:
             temperature=self.temperature - other.temperature,
             amount=self.amount - other.amount,
             luminous_intensity=self.luminous_intensity - other.luminous_intensity,
+            angle=self.angle - other.angle,
         )
 
     def __repr__(self) -> str:
@@ -69,6 +82,7 @@ class Dimension:
             ("temperature", "\u0398"),
             ("amount", "N"),
             ("luminous_intensity", "J"),
+            ("angle", "\u2220"),
         )
         parts = []
         for field, label in labels:
@@ -97,9 +111,16 @@ LUMINOUS_INTENSITY = Dimension(luminous_intensity=1)
 VELOCITY = Dimension(length=1, time=-1)
 CHARGE = Dimension(current=1, time=1)
 ENERGY = Dimension(mass=1, length=2, time=-2)
+ANGLE = Dimension(angle=1)
+"""The dimension of a plane angle: `Angle`'s dimension.
+
+See the module docstring for why this is tracked as its own axis rather than reusing
+:data:`DIMENSIONLESS`, even though SI itself treats plane angle as dimensionless.
+"""
 
 __all__ = [
     "AMOUNT_OF_SUBSTANCE",
+    "ANGLE",
     "AREA",
     "CHARGE",
     "CONDUCTANCE",

@@ -9,6 +9,14 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
+#### `ModularQuantity`
+
+An algebraic base for quantities that wrap around after a fixed period, such as a position on a circle.
+
+#### `AffineQuantity` is a generic base
+
+`AffineQuantity` is taken out of `Temperature` to be able to support additional affine quantities like a future `Instant`.
+
 #### Conductance family
 
 `Siemens`, `Microsiemens`, `Millisiemens`, `Kilosiemens`, registered as `Resistance`'s reciprocal.
