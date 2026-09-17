@@ -5,6 +5,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from typing import ClassVar
 
+from typing_extensions import override
+
 from kuchka.errors import IncompatibleDimensionError
 
 if TYPE_CHECKING:
@@ -32,11 +34,13 @@ class _OrderedScalarMixin:
     dimension: ClassVar[Dimension]
     __slots__ = ()
 
+    @override
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, _OrderedScalarMixin) or type(self) is not type(other):
             return NotImplemented
         return self._magnitude == other._magnitude
 
+    @override
     def __hash__(self) -> int:
         return hash((type(self), self._magnitude))
 

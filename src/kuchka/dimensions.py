@@ -30,6 +30,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from typing_extensions import override
+
 
 @dataclass(frozen=True, slots=True)
 class Dimension:
@@ -73,6 +75,7 @@ class Dimension:
             angle=self.angle - other.angle,
         )
 
+    @override
     def __repr__(self) -> str:
         labels = (
             ("time", "T"),

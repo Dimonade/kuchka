@@ -9,9 +9,9 @@ format-all:
     prettier --write '**/*.md'
 
 # Type-check with mypy --strict and ty.
-typecheck:
+check:
     uv run mypy --strict src/kuchka
-    uv run ty check src/kuchka tests
+    uv run ty check src/kuchka
 
 
 alias dfp := develop-fetch-pull
@@ -23,7 +23,7 @@ develop-fetch-pull:
 
 alias ct := covtest
 # Run coverage on tests and present results.
-covtest: typecheck
+covtest: check
     cd tests
     clear
     coverage erase

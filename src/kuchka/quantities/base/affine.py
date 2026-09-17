@@ -14,6 +14,8 @@ from typing import Self
 from typing import TypeVar
 from typing import overload
 
+from typing_extensions import override
+
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import MeasurementError
@@ -101,6 +103,7 @@ class AffineQuantity(
             raise InvalidConversionError(msg)
         return type(self)(self._magnitude, unit)
 
+    @override
     def value_in(self, unit: AffineUnitDef) -> Fraction:
         """Exact magnitude expressed in ``unit``."""
         return (self._magnitude - unit.offset) / unit.scale

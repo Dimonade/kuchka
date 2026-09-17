@@ -10,16 +10,18 @@ that give multiplication and division a precise static type.
 
 from __future__ import annotations
 
-from decimal import Decimal
-from fractions import Fraction
+from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import Self
+
+from typing_extensions import override
 
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import Dimension
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
+from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities.base.ordering import _OrderedScalarMixin
 from kuchka.quantities.base.registry import _DIMENSION_REGISTRY
@@ -27,7 +29,8 @@ from kuchka.quantities.base.registry import _promote
 from kuchka.quantities.base.storage import _ScalarStorage
 from kuchka.quantities.base.units import UnitDef
 
-_NUMERIC_TYPES = (int, float, Decimal, Fraction)
+if TYPE_CHECKING:
+    from fractions import Fraction
 
 
 class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
@@ -72,6 +75,7 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
             raise InvalidConversionError(msg)
         return type(self)(self._magnitude, unit)
 
+    @override
     def value_in(self, unit: UnitDef) -> Fraction:
         """Exact magnitude expressed in ``unit``."""
         return self._magnitude / unit.scale
@@ -97,7 +101,7 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
             if type(self) is not type(other):
                 raise IncompatibleDimensionError("add", self, other)
             return type(self)(self._magnitude + other._magnitude, self._display_unit)
-        if isinstance(other, _NUMERIC_TYPES):
+        if isinstance(other, Numeric):
             self._reject_naked_number("add", other)
         return NotImplemented
 
@@ -109,7 +113,7 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
             if type(self) is not type(other):
                 raise IncompatibleDimensionError("subtract", self, other)
             return type(self)(self._magnitude - other._magnitude, self._display_unit)
-        if isinstance(other, _NUMERIC_TYPES):
+        if isinstance(other, Numeric):
             self._reject_naked_number("subtract", other)
         return NotImplemented
 
@@ -140,12 +144,12 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
             result_dimension = self.dimension * other.dimension
             result_magnitude = self._magnitude * other._magnitude
             return _promote(result_dimension, result_magnitude)
-        if isinstance(other, _NUMERIC_TYPES):
+        if isinstance(other, Numeric):
             return type(self)(self._magnitude * to_exact(other), self._display_unit)
         return NotImplemented
 
     def __rmul__(self, other: object) -> Self:
-        if isinstance(other, _NUMERIC_TYPES):
+        if isinstance(other, Numeric):
             return type(self)(self._magnitude * to_exact(other), self._display_unit)
         return NotImplemented
 
@@ -154,7 +158,7 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
             result_dimension = self.dimension / other.dimension
             result_magnitude = self._magnitude / other._magnitude
             return _promote(result_dimension, result_magnitude)
-        if isinstance(other, _NUMERIC_TYPES):
+        if isinstance(other, Numeric):
             return type(self)(self._magnitude / to_exact(other), self._display_unit)
         return NotImplemented
 
@@ -172,7 +176,7 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
         # have a specific, well-defined reciprocal (see `SamplingPeriod`/`SampleRate`,
         # or to have none at all if they do not (see `BaudRate`, whose reciprocal is
         # not a modelled concept).
-        if isinstance(other, _NUMERIC_TYPES):
+        if isinstance(other, Numeric):
             if _DIMENSION_REGISTRY.get(self.dimension) is not type(self):
                 return NotImplemented
             result_dimension = DIMENSIONLESS / self.dimension

@@ -13,23 +13,24 @@ way, and ``kuchka`` does not decide it for anyone.
 
 from __future__ import annotations
 
-from decimal import Decimal
-from fractions import Fraction
 from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import Self
 
+from typing_extensions import override
+
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
+from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities.base.storage import _ScalarStorage
 from kuchka.quantities.base.units import UnitDef
 
 if TYPE_CHECKING:
-    from kuchka.dimensions import Dimension
+    from fractions import Fraction
 
-_NUMERIC_TYPES = (int, float, Decimal, Fraction)
+    from kuchka.dimensions import Dimension
 
 
 class ModularQuantity(_ScalarStorage[UnitDef]):
@@ -76,6 +77,7 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
             raise InvalidConversionError(msg)
         return type(self)(self._magnitude, unit)
 
+    @override
     def value_in(self, unit: UnitDef) -> Fraction:
         """Exact magnitude expressed in ``unit``."""
         return self._magnitude / unit.scale
@@ -111,12 +113,14 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
             raw -= self._period
         return type(self)(raw, self._display_unit)
 
+    @override
     def __eq__(self, other: object) -> bool:
         # Compares normalized magnitude: `Angle(0) == Angle(360)` is true.
         if not isinstance(other, ModularQuantity) or type(self) is not type(other):
             return NotImplemented
         return self._wrap(self._magnitude) == other._wrap(other._magnitude)
 
+    @override
     def __hash__(self) -> int:
         return hash((type(self), self._wrap(self._magnitude)))
 
@@ -126,7 +130,7 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
                 raise IncompatibleDimensionError("add", self, other)
             magnitude = self._wrap(self._magnitude + other._magnitude)
             return type(self)(magnitude, self._display_unit)
-        if isinstance(other, _NUMERIC_TYPES):
+        if isinstance(other, Numeric):
             self._reject_naked_number("add", other)
         return NotImplemented
 
@@ -143,7 +147,7 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
                 raise IncompatibleDimensionError("subtract", self, other)
             magnitude = self._wrap(self._magnitude - other._magnitude)
             return type(self)(magnitude, self._display_unit)
-        if isinstance(other, _NUMERIC_TYPES):
+        if isinstance(other, Numeric):
             self._reject_naked_number("subtract", other)
         return NotImplemented
 
@@ -157,7 +161,7 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
         raise InvalidMeasurementError(msg)
 
     def __mul__(self, other: object) -> Self:
-        if isinstance(other, _NUMERIC_TYPES):
+        if isinstance(other, Numeric):
             magnitude = self._wrap(self._magnitude * to_exact(other))
             return type(self)(magnitude, self._display_unit)
         return NotImplemented
@@ -166,7 +170,7 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
         return self.__mul__(other)
 
     def __truediv__(self, other: object) -> Self:
-        if isinstance(other, _NUMERIC_TYPES):
+        if isinstance(other, Numeric):
             magnitude = self._wrap(self._magnitude / to_exact(other))
             return type(self)(magnitude, self._display_unit)
         return NotImplemented
