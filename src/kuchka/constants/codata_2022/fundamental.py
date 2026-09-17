@@ -28,53 +28,45 @@ https://physics.nist.gov/cuu/Constants/
 
 from __future__ import annotations
 
-from decimal import Decimal
+from decimal import Decimal as _Decimal
 from typing import TYPE_CHECKING
 
-from kuchka.units import Coulomb
-from kuchka.units import Kilogram
-from kuchka.units import MetrePerSecond
+from kuchka.units import Coulomb as _Coulomb
+from kuchka.units import Kilogram as _Kilogram
+from kuchka.units import MetrePerSecond as _MetrePerSecond
 
 if TYPE_CHECKING:
     from kuchka.quantities import Charge
     from kuchka.quantities import Mass
     from kuchka.quantities import Velocity
 
-SPEED_OF_LIGHT: Velocity = MetrePerSecond(299_792_458)
+SPEED_OF_LIGHT: Velocity = _MetrePerSecond(299_792_458)
 """The speed of light in vacuum, c.
 
 Exact by definition: the metre has been defined in terms of c and the second since 1983.
 """
 
-ELEMENTARY_CHARGE: Charge = Coulomb(Decimal("1.602176634E-19"))
+ELEMENTARY_CHARGE: Charge = _Coulomb(_Decimal("1.602176634E-19"))
 """The elementary charge, e.
 
 Exact by definition since the 2019 SI redefinition: the coulomb is now defined in terms
 of e.
 """
 
-ELECTRON_MASS: Mass = Kilogram(Decimal("9.1093837139E-31"))
+ELECTRON_MASS: Mass = _Kilogram(_Decimal("9.1093837139E-31"))
 """The electron rest mass, m_e.
 
 CODATA 2022 recommended value: 9.109 383 7139(28) x 10^-31 kg. Measured, not exact.
 """
 
-PROTON_MASS: Mass = Kilogram(Decimal("1.67262192595E-27"))
+PROTON_MASS: Mass = _Kilogram(_Decimal("1.67262192595E-27"))
 """The proton rest mass, m_p.
 
 CODATA 2022 recommended value: 1.672 621 925 95(52) x 10^-27 kg. Measured, not exact.
 """
 
-NEUTRON_MASS: Mass = Kilogram(Decimal("1.67492750056E-27"))
+NEUTRON_MASS: Mass = _Kilogram(_Decimal("1.67492750056E-27"))
 """The neutron rest mass, m_n.
 
 CODATA 2022 recommended value: 1.674 927 500 56(85) x 10^-27 kg. Measured, not exact.
 """
-
-__all__ = [
-    "ELECTRON_MASS",
-    "ELEMENTARY_CHARGE",
-    "NEUTRON_MASS",
-    "PROTON_MASS",
-    "SPEED_OF_LIGHT",
-]

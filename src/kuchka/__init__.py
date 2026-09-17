@@ -22,11 +22,7 @@ can't quietly go unpromoted, and a UnitDef/table can't quietly leak up a level.
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version
 
-from kuchka.constants import ELECTRON_MASS
-from kuchka.constants import ELEMENTARY_CHARGE
-from kuchka.constants import NEUTRON_MASS
-from kuchka.constants import PROTON_MASS
-from kuchka.constants import SPEED_OF_LIGHT
+from kuchka.constants import codata_2022
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
@@ -177,11 +173,6 @@ except PackageNotFoundError:  # pragma: no cover -- running from an uninstalled 
     __version__ = "0.0.0+unknown"
 
 __all__: list[str] = [
-    "ELECTRON_MASS",
-    "ELEMENTARY_CHARGE",
-    "NEUTRON_MASS",
-    "PROTON_MASS",
-    "SPEED_OF_LIGHT",
     "Acre",
     "AmountOfSubstance",
     "Ampere",
@@ -326,4 +317,5 @@ __all__: list[str] = [
     "Watt",
     "WattHour",
     "__version__",
+    "codata_2022",
 ]
