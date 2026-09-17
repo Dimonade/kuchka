@@ -94,9 +94,9 @@ See "What this is not (yet)" below.
 
 ## Design choices, and why
 
-- **`Decimal`, not `float`.**
-  SI prefixes are powers of ten, and those are exact in `Decimal` but usually not in binary `float`.
-  `Volt(1) + Millivolt(500) == Volt(1.5)` is true by construction, and not by lucky rounding.
+- **Exact rational storage, not `float`.**
+  Every magnitude is stored as an exact `Fraction`, so `Volt(1) + Millivolt(500) == Volt(1.5)` is true by construction, not by lucky rounding, and `Litre(Fraction(5, 18))` keeps its exact value instead of being rounded at construction.
+  `Decimal` is how a value displays -- `repr()`/`__format__` materialize the exact `Fraction` into a `Decimal` only at that point.
 - **Unit constructors are plain functions, not classes.**
   `Volt(4.2)` returns a `Voltage`.
   There's no `Volt` type to accidentally `isinstance()`-check against, and no subclass/`__new__` surprise where `isinstance(Volt(5), Volt)` is `False`.
@@ -191,7 +191,7 @@ tank = plot * Meter(3)  # -> Volume, 30 m^3
 
 `Litre` is not a prefix of `CubicMetre` the way `Millivolt` is a prefix of `Volt` -- it's a separate, coherent metric volume unit in its own right (one cubic decimetre, exactly), with its own full prefix vocabulary (`Microlitre`, `Millilitre`, `Kilolitre`).
 Two of those prefixes land on exactly the same scale as a cubic-metric unit by coincidence, not by design: a millilitre and a cubic centimetre are the same quantity, and a microlitre and a cubic millimetre are too.
-They stay as separate `UnitDef`s rather than aliases (the way `Tonne` aliases `Megagram`) because they come from different naming traditions that happen to agree numerically, not from one SI unit with two names.
+They stay as separate `UnitDef`s and not aliases (the way `Tonne` aliases `Megagram`) because they come from different naming traditions that happen to agree numerically, not from one SI unit with two names.
 
 ### Resistance and Conductance are reciprocals, the same shape as Time and Frequency
 
@@ -253,7 +253,7 @@ f"{voltage:,.2f}"  # "1,234.50 V"
 ```
 
 An empty format spec matches `repr()`.
-A non-empty spec applies to the underlying `Decimal`, and the unit symbol is appended after.
+A non-empty spec applies to the magnitude, materialized to `Decimal` for display, and the unit symbol is appended after.
 
 ## Examples
 
@@ -272,7 +272,7 @@ src/kuchka/
     constants.py      physical constants
     dimensions.py     dimensional algebra
     prefixes.py       SI prefixes and `prefixed_unit()`
-    numeric.py        numeric coercion to `Decimal`
+    numeric.py        numeric coercion: exact `Fraction` at construction, `Decimal` for display
     errors.py         exception hierarchy
     quantities/       quantity types and their arithmetic
                        (`base.py`, electrical, temporal, thermal, geometric,
@@ -311,7 +311,7 @@ Worth reading before adding a new blanket ignore.
 
 ## Performance
 
-`kuchka` deliberately uses `Decimal` under the hood for correctness.
+`kuchka` deliberately uses exact rational arithmetic (`Fraction`) under the hood for correctness.
 The design philosophy is to utilize `kuchka` for unit correctness as values come from configuration files, through permutations and checks flow into reports.
 Running `kuchka` in a hot loop transforming values in a vector of mega-samples-per-second live is not really the intended use case of it.
 

@@ -5,6 +5,7 @@ ones exactly, the measured ones to CODATA 2022's own precision).
 """
 
 from decimal import Decimal
+from fractions import Fraction
 
 from kuchka import Charge
 from kuchka import Frequency
@@ -49,7 +50,8 @@ def test_neutron_is_heavier_than_proton() -> None:
 def test_proton_electron_mass_ratio_matches_codata() -> None:
     """CODATA 2022: m_p / m_e = 1836.152 673 426(32)."""
     ratio = PROTON_MASS / ELECTRON_MASS
-    assert round(ratio, 1) == Decimal("1836.2")
+    assert isinstance(ratio, Fraction)
+    assert round(ratio, 1) == Fraction("1836.2")
 
 
 def test_wavelength_from_speed_of_light_and_frequency_is_a_length() -> None:

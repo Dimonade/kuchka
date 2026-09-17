@@ -31,7 +31,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import VOLUME
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.prefixes import KILO
 from kuchka.prefixes import MICRO
 from kuchka.prefixes import MILLI
@@ -68,17 +68,17 @@ Volume._canonical_unit = CUBIC_METRE  # noqa: SLF001 -- this module owns Volume'
 
 def CubicMillimetre(value: Numeric) -> Volume:
     """Construct a Volume from a magnitude expressed in cubic millimetres."""
-    return Volume(to_decimal(value) * CUBIC_MILLIMETRE.scale, CUBIC_MILLIMETRE)
+    return Volume(to_exact(value) * CUBIC_MILLIMETRE.scale, CUBIC_MILLIMETRE)
 
 
 def CubicCentimetre(value: Numeric) -> Volume:
     """Construct a Volume from a magnitude expressed in cubic centimetres."""
-    return Volume(to_decimal(value) * CUBIC_CENTIMETRE.scale, CUBIC_CENTIMETRE)
+    return Volume(to_exact(value) * CUBIC_CENTIMETRE.scale, CUBIC_CENTIMETRE)
 
 
 def CubicMetre(value: Numeric) -> Volume:
     """Construct a Volume from a magnitude expressed in cubic metres."""
-    return Volume(to_decimal(value) * CUBIC_METRE.scale, CUBIC_METRE)
+    return Volume(to_exact(value) * CUBIC_METRE.scale, CUBIC_METRE)
 
 
 CubicMillimeter = CubicMillimetre
@@ -100,22 +100,22 @@ KILOLITRE = prefixed_unit(KILO, LITRE_NAME, LITRE_SYMBOL, VOLUME, coherent_offse
 
 def Microlitre(value: Numeric) -> Volume:
     """Construct a Volume from a magnitude expressed in microlitres."""
-    return Volume(to_decimal(value) * MICROLITRE.scale, MICROLITRE)
+    return Volume(to_exact(value) * MICROLITRE.scale, MICROLITRE)
 
 
 def Millilitre(value: Numeric) -> Volume:
     """Construct a Volume from a magnitude expressed in millilitres."""
-    return Volume(to_decimal(value) * MILLILITRE.scale, MILLILITRE)
+    return Volume(to_exact(value) * MILLILITRE.scale, MILLILITRE)
 
 
 def Litre(value: Numeric) -> Volume:
     """Construct a Volume from a magnitude expressed in litres."""
-    return Volume(to_decimal(value) * LITRE.scale, LITRE)
+    return Volume(to_exact(value) * LITRE.scale, LITRE)
 
 
 def Kilolitre(value: Numeric) -> Volume:
     """Construct a Volume from a magnitude expressed in kilolitres."""
-    return Volume(to_decimal(value) * KILOLITRE.scale, KILOLITRE)
+    return Volume(to_exact(value) * KILOLITRE.scale, KILOLITRE)
 
 
 Microliter = Microlitre

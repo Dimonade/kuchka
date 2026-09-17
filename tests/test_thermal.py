@@ -131,16 +131,16 @@ def test_to_rejects_a_non_temperature_unit():
 
 def test_comparison_against_a_non_temperature_raises_incompatible_dimension_error():
     with pytest.raises(IncompatibleDimensionError):
-        Celsius(20) < object()  # type: ignore[operator]  # ty: ignore[unsupported-operator]  # noqa: B015
+        Celsius(20) < object()  # noqa: B015
 
     with pytest.raises(IncompatibleDimensionError):
-        Celsius(20) <= object()  # type: ignore[operator]  # ty: ignore[unsupported-operator]  # noqa: B015
+        Celsius(20) <= object()  # noqa: B015
 
     with pytest.raises(IncompatibleDimensionError):
-        Celsius(20) > object()  # type: ignore[operator]  # ty: ignore[unsupported-operator]  # noqa: B015
+        Celsius(20) > object()  # noqa: B015
 
     with pytest.raises(IncompatibleDimensionError):
-        Celsius(20) >= object()  # type: ignore[operator]  # ty: ignore[unsupported-operator]  # noqa: B015
+        Celsius(20) >= object()  # noqa: B015
 
 
 def test_equality_against_a_non_temperature_is_false_not_an_error():
@@ -158,5 +158,5 @@ def test_subtraction_with_an_unsupported_operand_raises_type_error():
 
 
 def test_repr_shows_the_display_unit_symbol():
-    assert repr(Celsius(20)) == "20.00 \u00b0C"
+    assert repr(Celsius(20)) == "20 \u00b0C"
     assert repr(Kelvin(20)) == "20 K"

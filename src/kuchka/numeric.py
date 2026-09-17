@@ -1,21 +1,21 @@
-"""Strict numeric coercion into :class:`decimal.Decimal`.
+"""Numeric coercion: boundary validation into Fraction, materialization into Decimal.
 
-SI prefixes (milli, kilo, mega, ...) are all powers of ten, and powers of
-ten are exactly representable in ``Decimal`` but generally are *not*
-exactly representable in binary ``float``.
+Two functions, two directions:
 
-That is the concrete, practical reason this library stores magnitudes as ``Decimal``
-internally rather than ``float``:
-it is what makes ``Volt(1) + Millivolt(500) == Volt(1.5)`` true by construction instead
-of true by coincidence.
+- `to_exact`: raw input at a construction boundary -> `Fraction`.
+    Every unit constructor (`Volt`, `Ampere`, `Celsius`, ...) routes through this.
+    Rejects anything that is not `int`, `float`, `Decimal`, or `Fraction`, plus `bool`
+    and non-finite `float`/`Decimal` values.
+- `to_decimal`: an already-exact `Fraction` -> `Decimal`, for display
+    (`__repr__`, `__format__`) and explicit materialization.
+    Exact when the denominator's prime factors are 2 and 5;
+    rounded to the current `Decimal` context precision otherwise.
 
-This module is the single place where "a plain number" is turned into a ``Decimal``
-for use inside a measurement.
-Every unit constructor (``Volt``, ``Ampere``, ``Celsius``, ...) routes through
-:func:`to_decimal`, which is deliberately strict:
-it accepts the numeric types an engineer is likely to have on hand, and rejects
-everything else -- including other measurements -- with a message that (hopefully)
-explains what went wrong.
+`int` and `Decimal` convert to `Fraction` exactly, with no rounding, in either
+direction.
+`float` is routed through `str()` before parsing: `Volt(4.2)` stores the digits typed
+(`Fraction(str(4.2)) == Fraction(21, 5)`), not float's binary representation of them.
+`Fraction` is stored as-is: `Litre(Fraction(5, 18)).magnitude == Fraction(5, 18)`.
 """
 
 from __future__ import annotations
@@ -30,33 +30,33 @@ Numeric = int | float | Decimal | Fraction
 _NUMERIC_TYPES = (int, float, Decimal, Fraction)
 
 
-def to_decimal(value: object) -> Decimal:
-    """Coerce ``value`` into an exact :class:`~decimal.Decimal`.
-
-    ``float`` values are routed through ``str()`` first. ``Decimal(4.2)`` would
-    faithfully reproduce the binary float's rounding error
-    (``4.20000000000000017763...``);
-    ``Decimal(str(4.2))`` reproduces what an engineer actually typed.
-
-    That one-line rule is what keeps float literals like ``Volt(4.2)`` numerically sane
-    without asking the engineer to write ``Volt(Decimal("4.2"))`` themselves.
-    """
-    # NOTE: bool is a subclass of int in Python; True/False silently becoming 1/0
-    # inside a measurement is a classic footgun, so it is rejected explicitly rather
-    # than accepted by isinstance(value, int).
+def to_exact(value: object) -> Fraction:
+    """Coerce `value` into an exact `Fraction`."""
+    # NOTE: bool is a subclass of int.
+    # Therefore, True/False silently becoming 1/0 is rejected explicitly.
     if isinstance(value, bool):
         raise InvalidMeasurementError(
             f"cannot construct a measurement from a bool ({value!r}); "
             "expected int, float, Decimal, or Fraction",
         )
-    if isinstance(value, Decimal):
+    if isinstance(value, Fraction):
         return value
     if isinstance(value, int):
-        return Decimal(value)
-    if isinstance(value, Fraction):
-        return Decimal(value.numerator) / Decimal(value.denominator)
+        return Fraction(value)
+    if isinstance(value, Decimal):
+        try:
+            return Fraction(value)
+        except (ValueError, OverflowError) as exc:
+            raise InvalidMeasurementError(
+                f"cannot construct a measurement from {value!r}: not finite.",
+            ) from exc
     if isinstance(value, float):
-        return Decimal(str(value))
+        try:
+            return Fraction(str(value))
+        except ValueError as exc:
+            raise InvalidMeasurementError(
+                f"cannot construct a measurement from {value!r}: not finite.",
+            ) from exc
 
     type_name = type(value).__name__
     hint = ""
@@ -72,4 +72,9 @@ def to_decimal(value: object) -> Decimal:
     )
 
 
-__all__ = ["Numeric", "to_decimal"]
+def to_decimal(value: Fraction) -> Decimal:
+    """Materialize an exact `Fraction` into a `Decimal`. Display only."""
+    return Decimal(value.numerator) / Decimal(value.denominator)
+
+
+__all__ = ["Numeric", "to_decimal", "to_exact"]

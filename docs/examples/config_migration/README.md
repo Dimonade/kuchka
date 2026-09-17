@@ -53,7 +53,7 @@ An engineer can still write the wrong unit -- but now something checks.
 
 One deliberate detail: `value` is a quoted string, not a bare TOML number.
 TOML's bare numbers are binary floats.
-Quoting the value means `device_config.py` parses the digits through `Decimal(str)`, the same reason `kuchka` itself stores magnitudes as `Decimal` rather than `float`.
+Quoting the value means `device_config.py` parses the digits through `Decimal(str)`, the same reason `kuchka` itself stores magnitudes as `Fraction`.
 
 ## The boundary layer
 

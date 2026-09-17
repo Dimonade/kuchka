@@ -29,7 +29,7 @@ from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import register
 
 if TYPE_CHECKING:
-    from decimal import Decimal
+    from fractions import Fraction
 
     from kuchka.dimensions import Dimension
 
@@ -65,8 +65,8 @@ class Temperature(AffineQuantity[TemperatureDelta]):
     __slots__ = ()
 
     @property
-    def kelvin(self) -> Decimal:
-        """The magnitude expressed in Kelvin, this type's canonical unit."""
+    def kelvin(self) -> Fraction:
+        """Magnitude expressed in Kelvin, this type's canonical unit."""
         return self._magnitude
 
 

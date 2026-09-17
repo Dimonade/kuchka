@@ -1,11 +1,11 @@
 """The dimension registry: what arithmetic hands back for a given exponent vector.
 
-Kept separate from `linear.py` even though `_promote` only ever constructs
+NOTE: Kept separate from `linear.py` even though `_promote` only ever constructs
 `LinearQuantity` subclasses, because the dependency runs the other way at import
 time: `LinearQuantity.__mul__`/`__truediv__` call `_promote`, so this module cannot
 import `linear.py` at runtime without creating a cycle.
 The `LinearQuantity` import below is therefore `TYPE_CHECKING`-only -- needed for
-accurate annotations, never needed to actually run `register()` or `_promote()`.
+accurate annotations, not needed to actually run `register()` or `_promote()`.
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ from kuchka.errors import PlannedDimensionError
 from kuchka.errors import UnrepresentableDimensionError
 
 if TYPE_CHECKING:
-    from decimal import Decimal
+    from fractions import Fraction
 
     from kuchka.dimensions import Dimension
     from kuchka.quantities.base.linear import LinearQuantity
@@ -83,12 +83,11 @@ def register(dimension: Dimension, quantity_type: type[LinearQuantity]) -> None:
     _DIMENSION_REGISTRY[dimension] = quantity_type
 
 
-def _promote(dimension: Dimension, magnitude: Decimal) -> LinearQuantity | Decimal:
+def _promote(dimension: Dimension, magnitude: Fraction) -> LinearQuantity | Fraction:
     """Build the correctly-typed result of a multiplication or division.
 
     A dimensionless result (e.g. Resistance / Resistance) is returned as a plain
-    ``Decimal`` ratio, matching ordinary physics convention:
-    it is not a measurement of anything, so it should not pretend to be one.
+    ``Fraction`` ratio, matching ordinary physics convention.
     """
     if dimension == DIMENSIONLESS:
         return magnitude

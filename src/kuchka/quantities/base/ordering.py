@@ -8,7 +8,7 @@ from typing import ClassVar
 from kuchka.errors import IncompatibleDimensionError
 
 if TYPE_CHECKING:
-    from decimal import Decimal
+    from fractions import Fraction
 
     from kuchka.dimensions import Dimension
 
@@ -28,7 +28,7 @@ class _OrderedScalarMixin:
     un-implement it.
     """
 
-    _magnitude: Decimal
+    _magnitude: Fraction
     dimension: ClassVar[Dimension]
     __slots__ = ()
 

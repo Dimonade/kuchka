@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import CURRENT
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.prefixes import KILO
 from kuchka.prefixes import MICRO
 from kuchka.prefixes import MILLI
@@ -44,22 +44,22 @@ Current._canonical_unit = AMPERE  # noqa: SLF001 -- this module owns Current's c
 
 def Microampere(value: Numeric) -> Current:
     """Construct a Current from a magnitude expressed in microamperes."""
-    return Current(to_decimal(value) * MICROAMPERE.scale, MICROAMPERE)
+    return Current(to_exact(value) * MICROAMPERE.scale, MICROAMPERE)
 
 
 def Milliampere(value: Numeric) -> Current:
     """Construct a Current from a magnitude expressed in milliamperes."""
-    return Current(to_decimal(value) * MILLIAMPERE.scale, MILLIAMPERE)
+    return Current(to_exact(value) * MILLIAMPERE.scale, MILLIAMPERE)
 
 
 def Ampere(value: Numeric) -> Current:
     """Construct a Current from a magnitude expressed in amperes."""
-    return Current(to_decimal(value) * AMPERE.scale, AMPERE)
+    return Current(to_exact(value) * AMPERE.scale, AMPERE)
 
 
 def Kiloampere(value: Numeric) -> Current:
     """Construct a Current from a magnitude expressed in kiloamperes."""
-    return Current(to_decimal(value) * KILOAMPERE.scale, KILOAMPERE)
+    return Current(to_exact(value) * KILOAMPERE.scale, KILOAMPERE)
 
 
 CURRENT_UNITS: Mapping[str, Callable[[Numeric], Current]] = MappingProxyType(

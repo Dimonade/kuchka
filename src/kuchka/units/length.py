@@ -34,7 +34,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LENGTH
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.prefixes import CENTI
 from kuchka.prefixes import DECI
 from kuchka.prefixes import KILO
@@ -75,37 +75,37 @@ Length._canonical_unit = METRE  # noqa: SLF001 -- this module owns Length's cano
 
 def Nanometre(value: Numeric) -> Length:
     """Construct a Length from a magnitude expressed in nanometres."""
-    return Length(to_decimal(value) * NANOMETRE.scale, NANOMETRE)
+    return Length(to_exact(value) * NANOMETRE.scale, NANOMETRE)
 
 
 def Micrometre(value: Numeric) -> Length:
     """Construct a Length from a magnitude expressed in micrometres."""
-    return Length(to_decimal(value) * MICROMETRE.scale, MICROMETRE)
+    return Length(to_exact(value) * MICROMETRE.scale, MICROMETRE)
 
 
 def Millimetre(value: Numeric) -> Length:
     """Construct a Length from a magnitude expressed in millimetres."""
-    return Length(to_decimal(value) * MILLIMETRE.scale, MILLIMETRE)
+    return Length(to_exact(value) * MILLIMETRE.scale, MILLIMETRE)
 
 
 def Centimetre(value: Numeric) -> Length:
     """Construct a Length from a magnitude expressed in centimetres."""
-    return Length(to_decimal(value) * CENTIMETRE.scale, CENTIMETRE)
+    return Length(to_exact(value) * CENTIMETRE.scale, CENTIMETRE)
 
 
 def Decimetre(value: Numeric) -> Length:
     """Construct a Length from a magnitude expressed in decimetres."""
-    return Length(to_decimal(value) * DECIMETRE.scale, DECIMETRE)
+    return Length(to_exact(value) * DECIMETRE.scale, DECIMETRE)
 
 
 def Metre(value: Numeric) -> Length:
     """Construct a Length from a magnitude expressed in metres."""
-    return Length(to_decimal(value) * METRE.scale, METRE)
+    return Length(to_exact(value) * METRE.scale, METRE)
 
 
 def Kilometre(value: Numeric) -> Length:
     """Construct a Length from a magnitude expressed in kilometres."""
-    return Length(to_decimal(value) * KILOMETRE.scale, KILOMETRE)
+    return Length(to_exact(value) * KILOMETRE.scale, KILOMETRE)
 
 
 # Non-SI units.
@@ -120,7 +120,7 @@ def Inch(value: Numeric) -> Length:
     0.0254 meters since 1959, so this conversion carries no more rounding
     error than any of the metric prefixes above.
     """
-    return Length(to_decimal(value) * INCH.scale, INCH)
+    return Length(to_exact(value) * INCH.scale, INCH)
 
 
 Nanometer = Nanometre

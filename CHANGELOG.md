@@ -41,7 +41,7 @@ An algebraic base for quantities that wrap around after a fixed period, such as 
 
 - `WattHour` and `MilliwattHour`.
 
-## [0.1.1] - 2026-09-9
+## [0.1.1] - 2026-09-09
 
 ### Added
 

@@ -18,7 +18,7 @@ from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import register
 
 if TYPE_CHECKING:
-    from decimal import Decimal
+    from fractions import Fraction
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
@@ -38,17 +38,17 @@ class Volume(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Volume: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __truediv__(self, other: object) -> LinearQuantity | Decimal:
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
     @overload
     def __mul__(self, other: Numeric) -> Volume: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __mul__(self, other: object) -> LinearQuantity | Decimal:
+    def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
 

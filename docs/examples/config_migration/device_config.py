@@ -12,7 +12,7 @@ Three rules, matching `kuchka`'s own design:
     `unit = "mA"` for a voltage field is not merely "the wrong prefix", it is a symbol
     that simply is not in that table, and fails the same way a typo would.
 2. A value is parsed through `Decimal(str)`, instead of `float(str)`, for the same
-    reason `kuchka` itself stores magnitudes as `Decimal`:
+    reason `kuchka` itself preserves exact values internally:
     the digits an engineer typed should survive parsing exactly.
 3. Unknown keys are treated the same as missing ones.
     A typo'd section or field name fails loudly at load time, not silently three

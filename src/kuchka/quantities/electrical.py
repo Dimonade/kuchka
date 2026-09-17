@@ -38,7 +38,7 @@ from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import register
 
 if TYPE_CHECKING:
-    from decimal import Decimal
+    from fractions import Fraction
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
@@ -59,9 +59,9 @@ class Voltage(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Voltage: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __mul__(self, other: object) -> LinearQuantity | Decimal:
+    def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
@@ -71,9 +71,9 @@ class Voltage(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Voltage: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __truediv__(self, other: object) -> LinearQuantity | Decimal:
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 
@@ -91,9 +91,9 @@ class Current(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Current: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __mul__(self, other: object) -> LinearQuantity | Decimal:
+    def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
@@ -103,9 +103,9 @@ class Current(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Current: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __truediv__(self, other: object) -> LinearQuantity | Decimal:
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 
@@ -119,9 +119,9 @@ class Power(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Power: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __mul__(self, other: object) -> LinearQuantity | Decimal:
+    def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
@@ -131,9 +131,9 @@ class Power(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Power: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __truediv__(self, other: object) -> LinearQuantity | Decimal:
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 
@@ -147,17 +147,17 @@ class Resistance(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Resistance: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __mul__(self, other: object) -> LinearQuantity | Decimal:
+    def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
     def __rtruediv__(self, other: Numeric) -> Conductance: ...
     @overload
-    def __rtruediv__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __rtruediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __rtruediv__(self, other: object) -> LinearQuantity | Decimal:
+    def __rtruediv__(self, other: object) -> LinearQuantity | Fraction:
         # NOTE: `Resistance` is the registered canonical type for `RESISTANCE`, so the
         # base implementation's canonical-type guard passes and this reaches
         # `Conductance` through ordinary dimension algebra -- no override of the
@@ -176,25 +176,25 @@ class Conductance(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Conductance: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __mul__(self, other: object) -> LinearQuantity | Decimal:
+    def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
     def __truediv__(self, other: Numeric) -> Conductance: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __truediv__(self, other: object) -> LinearQuantity | Decimal:
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
     @overload
     def __rtruediv__(self, other: Numeric) -> Resistance: ...
     @overload
-    def __rtruediv__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __rtruediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __rtruediv__(self, other: object) -> LinearQuantity | Decimal:
+    def __rtruediv__(self, other: object) -> LinearQuantity | Fraction:
         return super().__rtruediv__(other)
 
 
