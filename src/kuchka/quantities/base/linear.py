@@ -77,7 +77,7 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
         return self._magnitude / unit.scale
 
     def __add__(self, other: Self) -> Self:
-        # NOTE: `other` is typed as `Self` rather than `object` so that
+        # NOTE: `other` is typed as `Self` instead of an `object` so that
         # `Volt(5) + Ampere(2)` and `Volt(5) + 4.2` are both rejected by type checkers,
         # not just at runtime.
         #
@@ -88,7 +88,7 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
         # reach this call dynamically typed, e.g. from an unchecked boundary or a
         # suppressed type error.
         #
-        # The runtime guard compares `type(self) is type(other)` rather than
+        # The runtime guard compares `type(self) is type(other)` and not
         # `self.dimension != other.dimension`:
         # two different types can share a dimension (`Frequency` and `BaudRate` are
         # both T^-1), and adding across that boundary is exactly the mistake this check

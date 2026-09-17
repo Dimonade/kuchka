@@ -18,16 +18,16 @@ extracting new features into modules:
   lets e.g. ``Volt(5) * Ampere(2)`` come back as a real `Power` instance.
 - `linear.py` -- `LinearQuantity`: units differ by a pure scale factor.
 - `affine.py` -- `AffineQuantity`: units differ by both a scale and an offset, so
-  the quantity is a point on a scale rather than a vector (`Temperature`).
+  the quantity is a point on a scale and not a vector (`Temperature`).
 - `modular.py` -- `ModularQuantity`: the quantity wraps around after a fixed
-  period, so it is a position on a circle rather than a point on a line (`Angle`).
+  period, so it is a position on a circle and not a point on a line (`Angle`).
 
 Every name below is re-exported here so existing imports
 (``from kuchka.quantities.base import LinearQuantity``) keep working exactly as
 before the split -- this package's import surface is unchanged even though its
 internals are now spread across several files.
 
-NOTE: ``register`` is re-exported via the ``import x as x`` form rather than by adding
+NOTE: ``register`` is re-exported via the ``import x as x`` form and not by adding
 it to ``__all__``: it needs to stay importable by name for every quantity module
 (``from kuchka.quantities.base import register``), which ``mypy --strict``'s
 ``--no-implicit-reexport`` check requires to be spelled out explicitly, but it must
