@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import Decimal
+from fractions import Fraction
 from typing import TYPE_CHECKING
 
 import pytest
@@ -349,7 +350,9 @@ def test_prefix_scale_is_exact_across_a_range_of_magnitudes(
     case: PrefixCase,
     magnitude: Decimal,
 ) -> None:
-    assert case.prefixed(magnitude) == case.canonical(magnitude * case.scale)
+    assert case.prefixed(magnitude) == case.canonical(
+        Fraction(magnitude) * Fraction(case.scale)
+    )
 
 
 @pytest.mark.parametrize("case", PREFIX_CASES, ids=PREFIX_CASE_IDS)
@@ -359,7 +362,7 @@ def test_round_trip_conversion_through_to(case: PrefixCase) -> None:
     converted = original.to(case.prefixed_unit)
     assert converted == original
     assert converted.unit is case.prefixed_unit
-    assert converted.value_in(case.prefixed_unit) == 1 / case.scale
+    assert converted.value_in(case.prefixed_unit) == 1 / Fraction(case.scale)
     assert converted.to(case.canonical_unit) == original
 
 
