@@ -23,7 +23,7 @@ from kuchka.quantities.base.storage import _ScalarStorage
 from kuchka.quantities.base.units import AffineUnitDef
 
 if TYPE_CHECKING:
-    from decimal import Decimal
+    from fractions import Fraction
 
     from kuchka.dimensions import Dimension
 
@@ -101,8 +101,8 @@ class AffineQuantity(
             raise InvalidConversionError(msg)
         return type(self)(self._magnitude, unit)
 
-    def value_in(self, unit: AffineUnitDef) -> Decimal:
-        """Return the magnitude of this reading expressed in ``unit``."""
+    def value_in(self, unit: AffineUnitDef) -> Fraction:
+        """Exact magnitude expressed in ``unit``."""
         return (self._magnitude - unit.offset) / unit.scale
 
     def __add__(self, other: _DeltaT) -> Self:

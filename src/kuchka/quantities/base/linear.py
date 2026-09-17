@@ -20,7 +20,7 @@ from kuchka.dimensions import Dimension
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.quantities.base.ordering import _OrderedScalarMixin
 from kuchka.quantities.base.registry import _DIMENSION_REGISTRY
 from kuchka.quantities.base.registry import _promote
@@ -46,8 +46,8 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
     __slots__ = ()
 
     @property
-    def magnitude(self) -> Decimal:
-        """The magnitude expressed in this quantity's canonical unit."""
+    def magnitude(self) -> Fraction:
+        """Magnitude in this quantity's canonical unit."""
         return self._magnitude
 
     def to(self, unit: UnitDef) -> Self:
@@ -72,8 +72,8 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
             raise InvalidConversionError(msg)
         return type(self)(self._magnitude, unit)
 
-    def value_in(self, unit: UnitDef) -> Decimal:
-        """Return the magnitude of this measurement expressed in ``unit``."""
+    def value_in(self, unit: UnitDef) -> Fraction:
+        """Exact magnitude expressed in ``unit``."""
         return self._magnitude / unit.scale
 
     def __add__(self, other: Self) -> Self:
@@ -123,7 +123,7 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
         raise InvalidMeasurementError(msg)
 
     # NOTE ON TYPING: the return type here is intentionally broad
-    # (`LinearQuantity | Decimal`) because this base implementation runs the fully
+    # (`LinearQuantity | Fraction`) because this base implementation runs the fully
     # general dimension algebra -- it has no static way of knowing that a Voltage times
     # a Current specifically produces a Power.
     #
@@ -133,32 +133,32 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
     # runtime logic.
     #
     # Each subclass overload list ends with a fallback overload matching this exact
-    # signature (`other: object -> LinearQuantity | Decimal`) so that overriding it
+    # signature (`other: object -> LinearQuantity | Fraction`) so that overriding it
     # remains compatible with this base signature.
-    def __mul__(self, other: object) -> LinearQuantity | Decimal:
+    def __mul__(self, other: object) -> LinearQuantity | Fraction:
         if isinstance(other, LinearQuantity):
             result_dimension = self.dimension * other.dimension
             result_magnitude = self._magnitude * other._magnitude
             return _promote(result_dimension, result_magnitude)
         if isinstance(other, _NUMERIC_TYPES):
-            return type(self)(self._magnitude * to_decimal(other), self._display_unit)
+            return type(self)(self._magnitude * to_exact(other), self._display_unit)
         return NotImplemented
 
     def __rmul__(self, other: object) -> Self:
         if isinstance(other, _NUMERIC_TYPES):
-            return type(self)(self._magnitude * to_decimal(other), self._display_unit)
+            return type(self)(self._magnitude * to_exact(other), self._display_unit)
         return NotImplemented
 
-    def __truediv__(self, other: object) -> LinearQuantity | Decimal:
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
         if isinstance(other, LinearQuantity):
             result_dimension = self.dimension / other.dimension
             result_magnitude = self._magnitude / other._magnitude
             return _promote(result_dimension, result_magnitude)
         if isinstance(other, _NUMERIC_TYPES):
-            return type(self)(self._magnitude / to_decimal(other), self._display_unit)
+            return type(self)(self._magnitude / to_exact(other), self._display_unit)
         return NotImplemented
 
-    def __rtruediv__(self, other: object) -> LinearQuantity | Decimal:
+    def __rtruediv__(self, other: object) -> LinearQuantity | Fraction:
         # NOTE: `Numeric / self`, e.g. `1 / Time(2)`.
         # This only derives an answer through the shared dimension registry when
         # `self`'s own type is the *canonical* one for its dimension (the guard below).
@@ -176,7 +176,7 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
             if _DIMENSION_REGISTRY.get(self.dimension) is not type(self):
                 return NotImplemented
             result_dimension = DIMENSIONLESS / self.dimension
-            result_magnitude = to_decimal(other) / self._magnitude
+            result_magnitude = to_exact(other) / self._magnitude
             return _promote(result_dimension, result_magnitude)
         return NotImplemented
 
