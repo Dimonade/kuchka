@@ -30,6 +30,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from typing_extensions import override
+
 
 @dataclass(frozen=True, slots=True)
 class Dimension:
@@ -40,9 +42,9 @@ class Dimension:
     look up "which named type does M^1 L^2 T^-3 correspond to?".
     """
 
-    mass: int = 0
-    length: int = 0
     time: int = 0
+    length: int = 0
+    mass: int = 0
     current: int = 0
     temperature: int = 0
     amount: int = 0
@@ -51,9 +53,9 @@ class Dimension:
 
     def __mul__(self, other: Dimension) -> Dimension:
         return Dimension(
-            mass=self.mass + other.mass,
-            length=self.length + other.length,
             time=self.time + other.time,
+            length=self.length + other.length,
+            mass=self.mass + other.mass,
             current=self.current + other.current,
             temperature=self.temperature + other.temperature,
             amount=self.amount + other.amount,
@@ -63,9 +65,9 @@ class Dimension:
 
     def __truediv__(self, other: Dimension) -> Dimension:
         return Dimension(
-            mass=self.mass - other.mass,
-            length=self.length - other.length,
             time=self.time - other.time,
+            length=self.length - other.length,
+            mass=self.mass - other.mass,
             current=self.current - other.current,
             temperature=self.temperature - other.temperature,
             amount=self.amount - other.amount,
@@ -73,11 +75,12 @@ class Dimension:
             angle=self.angle - other.angle,
         )
 
+    @override
     def __repr__(self) -> str:
         labels = (
-            ("mass", "M"),
-            ("length", "L"),
             ("time", "T"),
+            ("length", "L"),
+            ("mass", "M"),
             ("current", "I"),
             ("temperature", "\u0398"),
             ("amount", "N"),
@@ -94,23 +97,23 @@ class Dimension:
 
 
 DIMENSIONLESS = Dimension()
-MASS = Dimension(mass=1)
-CURRENT = Dimension(current=1)
-VOLTAGE = Dimension(mass=1, length=2, time=-3, current=-1)
-POWER = Dimension(mass=1, length=2, time=-3)
-RESISTANCE = Dimension(mass=1, length=2, time=-3, current=-2)
-CONDUCTANCE = Dimension(mass=-1, length=-2, time=3, current=2)
-TEMPERATURE_DELTA = Dimension(temperature=1)
-TIME = Dimension(time=1)
+POWER = Dimension(time=-3, length=2, mass=1)
+RESISTANCE = Dimension(time=-3, length=2, mass=1, current=-2)
+VOLTAGE = Dimension(time=-3, length=2, mass=1, current=-1)
+ENERGY = Dimension(time=-2, length=2, mass=1)
 FREQUENCY = Dimension(time=-1)
+VELOCITY = Dimension(time=-1, length=1)
+TIME = Dimension(time=1)
+CHARGE = Dimension(time=1, current=1)
+CONDUCTANCE = Dimension(time=3, length=-2, mass=-1, current=2)
 LENGTH = Dimension(length=1)
 AREA = Dimension(length=2)
 VOLUME = Dimension(length=3)
+MASS = Dimension(mass=1)
+CURRENT = Dimension(current=1)
+TEMPERATURE_DELTA = Dimension(temperature=1)
 AMOUNT_OF_SUBSTANCE = Dimension(amount=1)
 LUMINOUS_INTENSITY = Dimension(luminous_intensity=1)
-VELOCITY = Dimension(length=1, time=-1)
-CHARGE = Dimension(current=1, time=1)
-ENERGY = Dimension(mass=1, length=2, time=-2)
 ANGLE = Dimension(angle=1)
 """The dimension of a plane angle: `Angle`'s dimension.
 

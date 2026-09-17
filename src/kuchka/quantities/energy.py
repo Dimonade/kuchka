@@ -10,6 +10,8 @@ from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import overload
 
+from typing_extensions import override
+
 from kuchka.dimensions import ENERGY
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import register
@@ -37,6 +39,7 @@ class Energy(LinearQuantity):
     @overload
     def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __truediv__(self, other: object) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 

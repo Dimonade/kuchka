@@ -14,6 +14,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from typing import Protocol
 
+from typing_extensions import override
+
 from kuchka.numeric import to_exact
 
 if TYPE_CHECKING:
@@ -48,6 +50,7 @@ class UnitDef:
         self.scale: Fraction = to_exact(scale)
         self.dimension = dimension
 
+    @override
     def __repr__(self) -> str:
         return f"UnitDef({self.name!r}, {self.symbol!r})"
 
@@ -76,6 +79,7 @@ class AffineUnitDef:
         self.scale: Fraction = to_exact(scale)
         self.offset: Fraction = to_exact(offset)
 
+    @override
     def __repr__(self) -> str:
         return f"AffineUnitDef({self.name!r}, {self.symbol!r})"
 

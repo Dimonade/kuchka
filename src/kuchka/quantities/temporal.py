@@ -28,31 +28,31 @@ is kept from silently answering with the wrong sibling type.
 
 from __future__ import annotations
 
-from decimal import Decimal
-from fractions import Fraction
 from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import Protocol
 from typing import overload
 from typing import runtime_checkable
 
+from typing_extensions import override
+
 from kuchka.dimensions import FREQUENCY
 from kuchka.dimensions import TIME
+from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import register
 
 if TYPE_CHECKING:
+    from fractions import Fraction
+
     from kuchka.dimensions import Dimension
-    from kuchka.numeric import Numeric
     from kuchka.quantities.charge import Charge
     from kuchka.quantities.electrical import Current
     from kuchka.quantities.electrical import Power
     from kuchka.quantities.energy import Energy
     from kuchka.quantities.kinematics import Velocity
     from kuchka.quantities.length import Length
-
-_NUMERIC_TYPES = (int, float, Decimal, Fraction)
 
 
 class Time(LinearQuantity):
@@ -73,6 +73,7 @@ class Time(LinearQuantity):
     @overload
     def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
@@ -81,6 +82,7 @@ class Time(LinearQuantity):
     @overload
     def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __truediv__(self, other: object) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
@@ -89,6 +91,7 @@ class Time(LinearQuantity):
     @overload
     def __rtruediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __rtruediv__(self, other: object) -> LinearQuantity | Fraction:
         # NOTE: `Time` is the registered T^1 type, so the base implementation's
         # canonical-type guard passes and this reaches `Frequency` through
@@ -109,6 +112,7 @@ class Frequency(LinearQuantity):
     @overload
     def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
@@ -117,6 +121,7 @@ class Frequency(LinearQuantity):
     @overload
     def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __truediv__(self, other: object) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
@@ -125,6 +130,7 @@ class Frequency(LinearQuantity):
     @overload
     def __rtruediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __rtruediv__(self, other: object) -> LinearQuantity | Fraction:
         return super().__rtruediv__(other)
 
@@ -176,6 +182,7 @@ class SamplingPeriod(LinearQuantity):
     @overload
     def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
@@ -184,6 +191,7 @@ class SamplingPeriod(LinearQuantity):
     @overload
     def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __truediv__(self, other: object) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
@@ -192,6 +200,7 @@ class SamplingPeriod(LinearQuantity):
     @overload
     def __rtruediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __rtruediv__(self, other: object) -> LinearQuantity | Fraction:
         # NOTE: Overridden and not inherited:
         # `SamplingPeriod` is not the registered type for T^1 (`Time` is), so the base
@@ -200,7 +209,7 @@ class SamplingPeriod(LinearQuantity):
         #
         # `SamplingPeriod` and `SampleRate` are genuine reciprocals of each other
         # specifically, so that conversion is spelled out here directly instead.
-        if isinstance(other, _NUMERIC_TYPES):
+        if isinstance(other, Numeric):
             magnitude = to_exact(other) / self._magnitude
             return SampleRate(magnitude, SampleRate._canonical_unit)
         return NotImplemented
@@ -223,6 +232,7 @@ class SampleRate(LinearQuantity):
     @overload
     def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
@@ -231,6 +241,7 @@ class SampleRate(LinearQuantity):
     @overload
     def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __truediv__(self, other: object) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
@@ -239,8 +250,9 @@ class SampleRate(LinearQuantity):
     @overload
     def __rtruediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __rtruediv__(self, other: object) -> LinearQuantity | Fraction:
-        if isinstance(other, _NUMERIC_TYPES):
+        if isinstance(other, Numeric):
             magnitude = to_exact(other) / self._magnitude
             return SamplingPeriod(magnitude, SamplingPeriod._canonical_unit)
         return NotImplemented
@@ -276,6 +288,7 @@ class BaudRate(LinearQuantity):
     @overload
     def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
@@ -284,6 +297,7 @@ class BaudRate(LinearQuantity):
     @overload
     def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
+    @override
     def __truediv__(self, other: object) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 

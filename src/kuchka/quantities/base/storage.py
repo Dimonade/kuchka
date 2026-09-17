@@ -12,6 +12,8 @@ from typing import TYPE_CHECKING
 from typing import Generic
 from typing import TypeVar
 
+from typing_extensions import override
+
 from kuchka.numeric import to_decimal
 from kuchka.quantities.base.units import _DisplayUnit
 
@@ -39,6 +41,7 @@ class _ScalarStorage(Generic[_UnitT]):
         object.__setattr__(self, "_magnitude", magnitude)
         object.__setattr__(self, "_display_unit", display_unit)
 
+    @override
     def __setattr__(self, name: str, value: object) -> None:
         raise AttributeError(f"{type(self).__name__} is immutable")
 
@@ -47,6 +50,7 @@ class _ScalarStorage(Generic[_UnitT]):
         """Unit this measurement currently displays as."""
         return self._display_unit
 
+    @override
     def __getstate__(self) -> tuple[Fraction, _UnitT]:
         """Pickle/copy state: magnitude and display unit.
 
@@ -71,10 +75,12 @@ class _ScalarStorage(Generic[_UnitT]):
         """
         raise NotImplementedError
 
+    @override
     def __repr__(self) -> str:
         value = to_decimal(self.value_in(self._display_unit))
         return f"{format(value, 'f')} {self._display_unit.symbol}"
 
+    @override
     def __format__(self, format_spec: str) -> str:
         """Format the magnitude in the display unit, e.g. `f"{Volt(4.2):.2f}"`.
 

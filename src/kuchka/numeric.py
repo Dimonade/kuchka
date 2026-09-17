@@ -27,8 +27,6 @@ from kuchka.errors import InvalidMeasurementError
 
 Numeric = int | float | Decimal | Fraction
 
-_NUMERIC_TYPES = (int, float, Decimal, Fraction)
-
 
 def to_exact(value: object) -> Fraction:
     """Coerce `value` into an exact `Fraction`."""

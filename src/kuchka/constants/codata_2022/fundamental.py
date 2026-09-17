@@ -8,8 +8,8 @@
 Two different kinds of "exact" live in this module, and each constant's docstring says
 which one applies:
 
-- SI-defining constants (`SPEED_OF_LIGHT`, `ELEMENTARY_CHARGE`) have been exact by
-    definition since the 2019 SI redefinition.
+- SI-defining constants (`SPEED_OF_LIGHT_IN_VACUUM`, `ELEMENTARY_CHARGE`) have been
+    exact by definition since the 2019 SI redefinition.
     The `Decimal` below is the entire value, not a rounded measurement, and every digit
     shown is significant.
 - Measured constants (`ELECTRON_MASS`, `PROTON_MASS`, `NEUTRON_MASS`) are CODATA 2022
@@ -30,6 +30,7 @@ from __future__ import annotations
 
 from decimal import Decimal as _Decimal
 from typing import TYPE_CHECKING
+from typing import Final
 
 from kuchka.units import Coulomb as _Coulomb
 from kuchka.units import Kilogram as _Kilogram
@@ -40,7 +41,7 @@ if TYPE_CHECKING:
     from kuchka.quantities import Mass
     from kuchka.quantities import Velocity
 
-ALPHA_PARTICLE_MASS: Mass = _Kilogram(_Decimal("6.6446573450e-27"))
+ALPHA_PARTICLE_MASS: Final[Mass] = _Kilogram(_Decimal("6.6446573450e-27"))
 """Alpha particle mass.
 
 Accuracy: Measured.
@@ -49,7 +50,7 @@ Uncertainty: 0.000 000 0021 e-27 kg.
 Link: https://en.wikipedia.org/wiki/Alpha_particle
 """
 
-ELECTRON_MASS: Mass = _Kilogram(_Decimal("9.1093837139E-31"))
+ELECTRON_MASS: Final[Mass] = _Kilogram(_Decimal("9.1093837139E-31"))
 """The electron rest mass, m_e.
 
 Accuracy: Measured.
@@ -58,7 +59,7 @@ Uncertainty: 0.000 000 0028 e-31 kg.
 Link: https://en.wikipedia.org/wiki/Electron_mass
 """
 
-ELEMENTARY_CHARGE: Charge = _Coulomb(_Decimal("1.602176634e-19"))
+ELEMENTARY_CHARGE: Final[Charge] = _Coulomb(_Decimal("1.602176634e-19"))
 """The elementary charge, e.
 
 Accuracy: Exact.
@@ -67,7 +68,7 @@ Uncertainty: None.
 Link: https://en.wikipedia.org/wiki/Elementary_charge
 """
 
-SPEED_OF_LIGHT_IN_VACUUM: Velocity = _MetrePerSecond(299_792_458)
+SPEED_OF_LIGHT_IN_VACUUM: Final[Velocity] = _MetrePerSecond(299_792_458)
 """The speed of light in vacuum, c.
 
 Accuracy: Exact.
@@ -76,7 +77,7 @@ Uncertainty: None.
 Link: https://en.wikipedia.org/wiki/Speed_of_light
 """
 
-NEUTRON_MASS: Mass = _Kilogram(_Decimal("1.67492750056E-27"))
+NEUTRON_MASS: Final[Mass] = _Kilogram(_Decimal("1.67492750056E-27"))
 """The neutron rest mass, m_n.
 
 Accuracy: Measured.
@@ -85,7 +86,7 @@ Uncertainty: 0.000 000 000 85 e-27 kg.
 Link: https://en.wikipedia.org/wiki/Neutron#Mass
 """
 
-PROTON_MASS: Mass = _Kilogram(_Decimal("1.67262192595E-27"))
+PROTON_MASS: Final[Mass] = _Kilogram(_Decimal("1.67262192595E-27"))
 """The proton rest mass, m_p.
 
 Accuracy: Measured.
@@ -93,5 +94,3 @@ Value: 1.672 621 925 95 e-27 kg.
 Uncertainty: 0.000 000 000 52 e-27 kg.
 Link: https://en.wikipedia.org/wiki/Proton
 """
-
-
