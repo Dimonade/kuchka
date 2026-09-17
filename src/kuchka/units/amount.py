@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import AMOUNT_OF_SUBSTANCE
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.prefixes import MICRO
 from kuchka.prefixes import MILLI
 from kuchka.prefixes import UNIT
@@ -42,17 +42,17 @@ AmountOfSubstance._canonical_unit = MOLE  # noqa: SLF001 -- this module owns Amo
 
 def Micromole(value: Numeric) -> AmountOfSubstance:
     """Construct an AmountOfSubstance from a magnitude expressed in micromoles."""
-    return AmountOfSubstance(to_decimal(value) * MICROMOLE.scale, MICROMOLE)
+    return AmountOfSubstance(to_exact(value) * MICROMOLE.scale, MICROMOLE)
 
 
 def Millimole(value: Numeric) -> AmountOfSubstance:
     """Construct an AmountOfSubstance from a magnitude expressed in millimoles."""
-    return AmountOfSubstance(to_decimal(value) * MILLIMOLE.scale, MILLIMOLE)
+    return AmountOfSubstance(to_exact(value) * MILLIMOLE.scale, MILLIMOLE)
 
 
 def Mole(value: Numeric) -> AmountOfSubstance:
     """Construct an AmountOfSubstance from a magnitude expressed in moles."""
-    return AmountOfSubstance(to_decimal(value) * MOLE.scale, MOLE)
+    return AmountOfSubstance(to_exact(value) * MOLE.scale, MOLE)
 
 
 AMOUNT_OF_SUBSTANCE_UNITS: Mapping[str, Callable[[Numeric], AmountOfSubstance]] = (

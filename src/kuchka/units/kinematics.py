@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import VELOCITY
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.quantities import UnitDef
 from kuchka.quantities import Velocity
 
@@ -41,7 +41,7 @@ Velocity._canonical_unit = METRE_PER_SECOND  # noqa: SLF001 -- this module owns 
 
 def MetrePerSecond(value: Numeric) -> Velocity:
     """Construct a Velocity from a magnitude expressed in metres per second."""
-    return Velocity(to_decimal(value) * METRE_PER_SECOND.scale, METRE_PER_SECOND)
+    return Velocity(to_exact(value) * METRE_PER_SECOND.scale, METRE_PER_SECOND)
 
 
 MeterPerSecond = MetrePerSecond

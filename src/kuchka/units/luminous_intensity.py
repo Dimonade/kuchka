@@ -20,7 +20,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LUMINOUS_INTENSITY
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.quantities import LuminousIntensity
 from kuchka.quantities import UnitDef
 
@@ -35,7 +35,7 @@ LuminousIntensity._canonical_unit = CANDELA  # noqa: SLF001 -- this module owns 
 
 def Candela(value: Numeric) -> LuminousIntensity:
     """Construct a LuminousIntensity from a magnitude expressed in candela."""
-    return LuminousIntensity(to_decimal(value) * CANDELA.scale, CANDELA)
+    return LuminousIntensity(to_exact(value) * CANDELA.scale, CANDELA)
 
 
 LUMINOUS_INTENSITY_UNITS: Mapping[str, Callable[[Numeric], LuminousIntensity]] = (

@@ -31,7 +31,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import AREA
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.prefixes import CENTI
 from kuchka.prefixes import KILO
 from kuchka.prefixes import MILLI
@@ -82,22 +82,22 @@ Area._canonical_unit = SQUARE_METRE  # noqa: SLF001 -- this module owns Area's c
 
 def SquareMillimetre(value: Numeric) -> Area:
     """Construct an Area from a magnitude expressed in square millimetres."""
-    return Area(to_decimal(value) * SQUARE_MILLIMETRE.scale, SQUARE_MILLIMETRE)
+    return Area(to_exact(value) * SQUARE_MILLIMETRE.scale, SQUARE_MILLIMETRE)
 
 
 def SquareCentimetre(value: Numeric) -> Area:
     """Construct an Area from a magnitude expressed in square centimetres."""
-    return Area(to_decimal(value) * SQUARE_CENTIMETRE.scale, SQUARE_CENTIMETRE)
+    return Area(to_exact(value) * SQUARE_CENTIMETRE.scale, SQUARE_CENTIMETRE)
 
 
 def SquareMetre(value: Numeric) -> Area:
     """Construct an Area from a magnitude expressed in square metres."""
-    return Area(to_decimal(value) * SQUARE_METRE.scale, SQUARE_METRE)
+    return Area(to_exact(value) * SQUARE_METRE.scale, SQUARE_METRE)
 
 
 def SquareKilometre(value: Numeric) -> Area:
     """Construct an Area from a magnitude expressed in square kilometres."""
-    return Area(to_decimal(value) * SQUARE_KILOMETRE.scale, SQUARE_KILOMETRE)
+    return Area(to_exact(value) * SQUARE_KILOMETRE.scale, SQUARE_KILOMETRE)
 
 
 SquareMillimeter = SquareMillimetre
@@ -115,7 +115,7 @@ SQUARE_INCH = UnitDef("square_inch", "in\u00b2", Decimal("0.00064516"), AREA)
 
 def Hectare(value: Numeric) -> Area:
     """Construct an Area from a magnitude expressed in hectares."""
-    return Area(to_decimal(value) * HECTARE.scale, HECTARE)
+    return Area(to_exact(value) * HECTARE.scale, HECTARE)
 
 
 def Acre(value: Numeric) -> Area:
@@ -124,12 +124,12 @@ def Acre(value: Numeric) -> Area:
     Exact, not approximate: an acre has been precisely `4840` international square
     yards since 1959, the same yard definition that makes `Inch` exact.
     """
-    return Area(to_decimal(value) * ACRE.scale, ACRE)
+    return Area(to_exact(value) * ACRE.scale, ACRE)
 
 
 def SquareInch(value: Numeric) -> Area:
     """Construct an Area from a magnitude expressed in square inches."""
-    return Area(to_decimal(value) * SQUARE_INCH.scale, SQUARE_INCH)
+    return Area(to_exact(value) * SQUARE_INCH.scale, SQUARE_INCH)
 
 
 AREA_UNITS: Mapping[str, Callable[[Numeric], Area]] = MappingProxyType(

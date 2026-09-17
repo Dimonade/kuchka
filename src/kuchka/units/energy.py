@@ -19,7 +19,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import ENERGY
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.prefixes import KILO
 from kuchka.prefixes import MEGA
 from kuchka.prefixes import MICRO
@@ -53,37 +53,37 @@ Energy._canonical_unit = JOULE  # noqa: SLF001 -- this module owns Energy's cano
 
 def Picojoule(value: Numeric) -> Energy:
     """Construct an Energy from a magnitude expressed in picojoules."""
-    return Energy(to_decimal(value) * PICOJOULE.scale, PICOJOULE)
+    return Energy(to_exact(value) * PICOJOULE.scale, PICOJOULE)
 
 
 def Nanojoule(value: Numeric) -> Energy:
     """Construct an Energy from a magnitude expressed in nanojoules."""
-    return Energy(to_decimal(value) * NANOJOULE.scale, NANOJOULE)
+    return Energy(to_exact(value) * NANOJOULE.scale, NANOJOULE)
 
 
 def Microjoule(value: Numeric) -> Energy:
     """Construct an Energy from a magnitude expressed in microjoules."""
-    return Energy(to_decimal(value) * MICROJOULE.scale, MICROJOULE)
+    return Energy(to_exact(value) * MICROJOULE.scale, MICROJOULE)
 
 
 def Millijoule(value: Numeric) -> Energy:
     """Construct an Energy from a magnitude expressed in millijoules."""
-    return Energy(to_decimal(value) * MILLIJOULE.scale, MILLIJOULE)
+    return Energy(to_exact(value) * MILLIJOULE.scale, MILLIJOULE)
 
 
 def Joule(value: Numeric) -> Energy:
     """Construct an Energy from a magnitude expressed in joules."""
-    return Energy(to_decimal(value) * JOULE.scale, JOULE)
+    return Energy(to_exact(value) * JOULE.scale, JOULE)
 
 
 def Kilojoule(value: Numeric) -> Energy:
     """Construct an Energy from a magnitude expressed in kilojoules."""
-    return Energy(to_decimal(value) * KILOJOULE.scale, KILOJOULE)
+    return Energy(to_exact(value) * KILOJOULE.scale, KILOJOULE)
 
 
 def Megajoule(value: Numeric) -> Energy:
     """Construct an Energy from a magnitude expressed in megajoules."""
-    return Energy(to_decimal(value) * MEGAJOULE.scale, MEGAJOULE)
+    return Energy(to_exact(value) * MEGAJOULE.scale, MEGAJOULE)
 
 
 # Watt times Time.
@@ -94,12 +94,12 @@ WATT_HOUR = UnitDef("watt_hour", "Wh", Decimal(3600), ENERGY)
 
 def MilliwattHour(value: Numeric) -> Energy:
     """Construct an Energy from a magnitude expressed in milliwatt-hours."""
-    return Energy(to_decimal(value) * MILLIWATT_HOUR.scale, MILLIWATT_HOUR)
+    return Energy(to_exact(value) * MILLIWATT_HOUR.scale, MILLIWATT_HOUR)
 
 
 def WattHour(value: Numeric) -> Energy:
     """Construct an Energy from a magnitude expressed in watt-hours."""
-    return Energy(to_decimal(value) * WATT_HOUR.scale, WATT_HOUR)
+    return Energy(to_exact(value) * WATT_HOUR.scale, WATT_HOUR)
 
 
 ENERGY_UNITS: Mapping[str, Callable[[Numeric], Energy]] = MappingProxyType(

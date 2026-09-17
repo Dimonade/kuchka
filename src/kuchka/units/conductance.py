@@ -26,7 +26,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import CONDUCTANCE
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.prefixes import KILO
 from kuchka.prefixes import MICRO
 from kuchka.prefixes import MILLI
@@ -52,22 +52,22 @@ Conductance._canonical_unit = SIEMENS  # noqa: SLF001 -- this module owns Conduc
 
 def Microsiemens(value: Numeric) -> Conductance:
     """Construct a Conductance from a magnitude expressed in microsiemens."""
-    return Conductance(to_decimal(value) * MICROSIEMENS.scale, MICROSIEMENS)
+    return Conductance(to_exact(value) * MICROSIEMENS.scale, MICROSIEMENS)
 
 
 def Millisiemens(value: Numeric) -> Conductance:
     """Construct a Conductance from a magnitude expressed in millisiemens."""
-    return Conductance(to_decimal(value) * MILLISIEMENS.scale, MILLISIEMENS)
+    return Conductance(to_exact(value) * MILLISIEMENS.scale, MILLISIEMENS)
 
 
 def Siemens(value: Numeric) -> Conductance:
     """Construct a Conductance from a magnitude expressed in siemens."""
-    return Conductance(to_decimal(value) * SIEMENS.scale, SIEMENS)
+    return Conductance(to_exact(value) * SIEMENS.scale, SIEMENS)
 
 
 def Kilosiemens(value: Numeric) -> Conductance:
     """Construct a Conductance from a magnitude expressed in kilosiemens."""
-    return Conductance(to_decimal(value) * KILOSIEMENS.scale, KILOSIEMENS)
+    return Conductance(to_exact(value) * KILOSIEMENS.scale, KILOSIEMENS)
 
 
 CONDUCTANCE_UNITS: Mapping[str, Callable[[Numeric], Conductance]] = MappingProxyType(

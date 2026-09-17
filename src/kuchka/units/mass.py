@@ -34,7 +34,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import MASS
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.prefixes import KILO
 from kuchka.prefixes import MEGA
 from kuchka.prefixes import MICRO
@@ -66,37 +66,37 @@ Mass._canonical_unit = KILOGRAM  # noqa: SLF001 -- this module owns Mass's canon
 
 def Picogram(value: Numeric) -> Mass:
     """Construct a Mass from a magnitude expressed in picograms."""
-    return Mass(to_decimal(value) * PICOGRAM.scale, PICOGRAM)
+    return Mass(to_exact(value) * PICOGRAM.scale, PICOGRAM)
 
 
 def Nanogram(value: Numeric) -> Mass:
     """Construct a Mass from a magnitude expressed in nanograms."""
-    return Mass(to_decimal(value) * NANOGRAM.scale, NANOGRAM)
+    return Mass(to_exact(value) * NANOGRAM.scale, NANOGRAM)
 
 
 def Microgram(value: Numeric) -> Mass:
     """Construct a Mass from a magnitude expressed in micrograms."""
-    return Mass(to_decimal(value) * MICROGRAM.scale, MICROGRAM)
+    return Mass(to_exact(value) * MICROGRAM.scale, MICROGRAM)
 
 
 def Milligram(value: Numeric) -> Mass:
     """Construct a Mass from a magnitude expressed in milligrams."""
-    return Mass(to_decimal(value) * MILLIGRAM.scale, MILLIGRAM)
+    return Mass(to_exact(value) * MILLIGRAM.scale, MILLIGRAM)
 
 
 def Gram(value: Numeric) -> Mass:
     """Construct a Mass from a magnitude expressed in grams."""
-    return Mass(to_decimal(value) * GRAM.scale, GRAM)
+    return Mass(to_exact(value) * GRAM.scale, GRAM)
 
 
 def Kilogram(value: Numeric) -> Mass:
     """Construct a Mass from a magnitude expressed in kilograms."""
-    return Mass(to_decimal(value) * KILOGRAM.scale, KILOGRAM)
+    return Mass(to_exact(value) * KILOGRAM.scale, KILOGRAM)
 
 
 def Megagram(value: Numeric) -> Mass:
     """Construct a Mass from a magnitude expressed in megagrams."""
-    return Mass(to_decimal(value) * MEGAGRAM.scale, MEGAGRAM)
+    return Mass(to_exact(value) * MEGAGRAM.scale, MEGAGRAM)
 
 
 Tonne = Megagram

@@ -19,7 +19,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.quantities import Proportion
 from kuchka.quantities import UnitDef
 
@@ -35,12 +35,12 @@ Proportion._canonical_unit = RATIO  # noqa: SLF001 -- this module owns Proportio
 
 def Ratio(value: Numeric) -> Proportion:
     """Construct a Proportion from a bare fraction, e.g. 0.05 for five percent."""
-    return Proportion(to_decimal(value) * RATIO.scale, RATIO)
+    return Proportion(to_exact(value) * RATIO.scale, RATIO)
 
 
 def Percent(value: Numeric) -> Proportion:
     """Construct a Proportion from a magnitude expressed in percent."""
-    return Proportion(to_decimal(value) * PERCENT.scale, PERCENT)
+    return Proportion(to_exact(value) * PERCENT.scale, PERCENT)
 
 
 PROPORTION_UNITS: Mapping[str, Callable[[Numeric], Proportion]] = MappingProxyType(

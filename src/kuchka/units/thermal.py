@@ -22,7 +22,7 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.quantities import AffineUnitDef
 from kuchka.quantities import Temperature
 from kuchka.quantities import TemperatureDelta
@@ -47,12 +47,12 @@ TemperatureDelta._canonical_unit = DELTA_KELVIN  # noqa: SLF001 -- this module o
 
 def DeltaKelvin(value: Numeric) -> TemperatureDelta:
     """Construct a TemperatureDelta from a magnitude expressed in Kelvin."""
-    return TemperatureDelta(to_decimal(value) * DELTA_KELVIN.scale, DELTA_KELVIN)
+    return TemperatureDelta(to_exact(value) * DELTA_KELVIN.scale, DELTA_KELVIN)
 
 
 def DeltaCelsius(value: Numeric) -> TemperatureDelta:
     """Construct a TemperatureDelta from a magnitude expressed in degrees Celsius."""
-    return TemperatureDelta(to_decimal(value) * DELTA_CELSIUS.scale, DELTA_CELSIUS)
+    return TemperatureDelta(to_exact(value) * DELTA_CELSIUS.scale, DELTA_CELSIUS)
 
 
 TEMPERATURE_DELTA_UNITS: Mapping[str, Callable[[Numeric], TemperatureDelta]] = (
@@ -65,13 +65,13 @@ CELSIUS = AffineUnitDef("celsius", "\u00b0C", Decimal(1), Decimal("273.15"))
 
 def Kelvin(value: Numeric) -> Temperature:
     """Construct a Temperature from a magnitude expressed in Kelvin."""
-    raw = to_decimal(value)
+    raw = to_exact(value)
     return Temperature(raw * KELVIN.scale + KELVIN.offset, KELVIN)
 
 
 def Celsius(value: Numeric) -> Temperature:
     """Construct a Temperature from a magnitude expressed in degrees Celsius."""
-    raw = to_decimal(value)
+    raw = to_exact(value)
     return Temperature(raw * CELSIUS.scale + CELSIUS.offset, CELSIUS)
 
 
