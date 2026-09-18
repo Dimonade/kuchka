@@ -120,7 +120,6 @@ def test_to_lossy_returns_a_decimal():
 
 
 def test_to_lossy_matches_known_pi_to_context_precision():
-    # pi to 28 significant digits (Decimal's default context precision).
     expected = Decimal("3.1415926535897930")
     assert Degree(180).to_lossy() == expected
 

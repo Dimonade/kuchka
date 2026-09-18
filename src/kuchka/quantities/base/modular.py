@@ -82,6 +82,7 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
             raise InvalidConversionError(msg)
         return type(self)(self._magnitude, unit)
 
+    @override
     def value_in(self, unit: UnitDef) -> Fraction:
         """Exact magnitude expressed in ``unit``."""
         return self._magnitude / unit.scale
@@ -117,12 +118,14 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
             raw -= self._period
         return type(self)(raw, self._display_unit)
 
+    @override
     def __eq__(self, other: object) -> bool:
         # Compares normalized magnitude: `Angle(0) == Angle(360)` is true.
         if not isinstance(other, ModularQuantity) or type(self) is not type(other):
             return NotImplemented
         return self._wrap(self._magnitude) == other._wrap(other._magnitude)
 
+    @override
     def __hash__(self) -> int:
         return hash((type(self), self._wrap(self._magnitude)))
 
