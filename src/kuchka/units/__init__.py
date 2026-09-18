@@ -20,6 +20,7 @@ requires touching this file.
 from __future__ import annotations
 
 from kuchka.units.amount import *
+from kuchka.units.angular import *
 from kuchka.units.area import *
 from kuchka.units.charge import *
 from kuchka.units.conductance import *

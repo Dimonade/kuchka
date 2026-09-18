@@ -30,6 +30,7 @@ from kuchka.errors import MeasurementError
 from kuchka.errors import PlannedDimensionError
 from kuchka.errors import UnrepresentableDimensionError
 from kuchka.quantities import AmountOfSubstance
+from kuchka.quantities import Angle
 from kuchka.quantities import Area
 from kuchka.quantities import BaudRate
 from kuchka.quantities import Charge
@@ -56,6 +57,8 @@ from kuchka.units import Acre
 from kuchka.units import Ampere
 from kuchka.units import AmpereHour
 from kuchka.units import AmpereSecond
+from kuchka.units import ArcMinute
+from kuchka.units import ArcSecond
 from kuchka.units import Baud
 from kuchka.units import Candela
 from kuchka.units import Celsius
@@ -70,8 +73,10 @@ from kuchka.units import CubicMillimeter
 from kuchka.units import CubicMillimetre
 from kuchka.units import Decimeter
 from kuchka.units import Decimetre
+from kuchka.units import Degree
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaKelvin
+from kuchka.units import Gradian
 from kuchka.units import Gram
 from kuchka.units import Hectare
 from kuchka.units import Hertz
@@ -148,6 +153,7 @@ from kuchka.units import Percent
 from kuchka.units import Picocoulomb
 from kuchka.units import Picogram
 from kuchka.units import Picojoule
+from kuchka.units import Radian
 from kuchka.units import Ratio
 from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
@@ -163,6 +169,7 @@ from kuchka.units import SquareMetre
 from kuchka.units import SquareMillimeter
 from kuchka.units import SquareMillimetre
 from kuchka.units import Tonne
+from kuchka.units import Turn
 from kuchka.units import Volt
 from kuchka.units import Watt
 from kuchka.units import WattHour
@@ -178,6 +185,9 @@ __all__: list[str] = [
     "Ampere",
     "AmpereHour",
     "AmpereSecond",
+    "Angle",
+    "ArcMinute",
+    "ArcSecond",
     "Area",
     "Baud",
     "BaudRate",
@@ -198,10 +208,12 @@ __all__: list[str] = [
     "Current",
     "Decimeter",
     "Decimetre",
+    "Degree",
     "DeltaCelsius",
     "DeltaKelvin",
     "Energy",
     "Frequency",
+    "Gradian",
     "Gram",
     "Hectare",
     "Hertz",
@@ -288,6 +300,7 @@ __all__: list[str] = [
     "PlannedDimensionError",
     "Power",
     "Proportion",
+    "Radian",
     "Ratio",
     "Resistance",
     "SampleRate",
@@ -309,6 +322,7 @@ __all__: list[str] = [
     "TemperatureDelta",
     "Time",
     "Tonne",
+    "Turn",
     "UnrepresentableDimensionError",
     "Velocity",
     "Volt",

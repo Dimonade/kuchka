@@ -18,6 +18,7 @@ requires touching this file.
 from __future__ import annotations
 
 from kuchka.quantities.amount import *
+from kuchka.quantities.angular import *
 from kuchka.quantities.area import *
 from kuchka.quantities.base import *
 from kuchka.quantities.charge import *

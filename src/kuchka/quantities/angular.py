@@ -1,71 +1,57 @@
 """Angle: a plane angle -- a bearing, a phase, a joint rotation.
 
-NOT YET USABLE.
-Nothing about `Angle` works yet, including construction.
-This module is not imported by `kuchka.quantities`'s wildcard aggregation and is not
-part of the public API -- it exists in `develop` so the type has a stable home to
-build on, not because it is ready to use.
+Radian is the SI-coherent unit for plane angle.
+Internal storage uses turns as the exact rational frame: one full turn is
+`Fraction(1)`.
+`Degree`, `Turn`, `Gradian`, `ArcMinute`, and `ArcSecond` are each an exact rational
+fraction of a turn, so every one of them is exact end to end, including `.to()` between
+any pair of them.
 
-The SI-coherent unit for plane angle is the radian, and one of this library's own
-design commitments is that a `UnitDef` scale factor is always exact -- no unit
-conversion in kuchka silently approximates.
-The degree-radian relationship is pi/180: genuinely irrational, with no exact
-representation in `Decimal` or `Fraction`.
-The already-solved non-power-of-ten cases elsewhere in this library
-(`Inch`, `Minute`/`Hour`, ...) have scale factors that are exact rationals, even when
-their reciprocals do not terminate in base 10; pi is not rational at all.
+`Radian` needs pi, which has no exact rational representation.
+There is no `UnitDef` for it: a `UnitDef.scale` is always an exact `Fraction`, and no
+`Fraction` equals pi.
+NOTE: `kuchka.units.angular.Radian` currently raises `PlannedDimensionError`
+unconditionally.
 
-Declaring `Degree` the canonical unit to sidestep that would misrepresent the
-physically correct SI-coherent unit as a workaround -- exactly the kind of quiet
-inaccuracy this library exists to prevent.
-So `Angle` ships as a named, importable type with a correctly distinct `dimension`
-(see `kuchka.dimensions.ANGLE`), but `_period` and `_canonical_unit` are deliberately
-left unset below, and `kuchka.units.angular.Degree`/`Radian` both unconditionally raise
-`PlannedDimensionError`.
-
-This is blocked on a decision broader than `Angle` alone: representing pi exactly.
-kuchka's internal magnitude storage is `Fraction`, which holds every exact rational
-value -- the rational relationships between `Degree`, `Turn`, `Gradian`, `ArcMinute`,
-and `ArcSecond` are all representable this way, with no symbolic machinery needed.
-`Radian` specifically needs an exact symbolic constant for pi, which `Fraction` cannot
-express (no rational number equals pi).
-`Angle` will be finished once that representation exists.
+`to_lossy()` is the one approximate operation on `Angle`.
+It materializes the exact turn-count into a `Decimal` count of radians.
+Every other operation on `Angle`, including `.to()`, stays exact.
 """
 
 from __future__ import annotations
 
+from decimal import Decimal
 from typing import TYPE_CHECKING
 from typing import ClassVar
 
 from kuchka.dimensions import ANGLE
+from kuchka.numeric import to_decimal
 from kuchka.quantities.base import ModularQuantity
 
 if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
 
+_TWO_PI = Decimal("6.283185307179586")
+"""Two pi to 15 significant digits.
+
+Used only by `Angle.to_lossy`.
+"""
+
 
 class Angle(ModularQuantity):
-    """A plane angle. NOT YET USABLE -- see this module's docstring."""
+    """A plane angle: a bearing, a phase, a joint rotation."""
 
     dimension: ClassVar[Dimension] = ANGLE
     __slots__ = ()
 
-    # NOTE: `_period` and `_canonical_unit` are deliberately left unset.
-    # There is no exact value for one full turn expressed in radians (2 * pi):
-    # `Fraction` holds exact rationals, and pi is irrational, so this class cannot yet
-    # honor `ModularQuantity`'s contract at all.
-    # Setting either attribute to a rounded approximation would silently violate
-    # kuchka's own exactness guarantee instead of failing loudly.
-    # `kuchka.units.angular.Degree`/`Radian`, the only intended entry points for
-    # constructing an `Angle`, raise `PlannedDimensionError` unconditionally, so the
-    # reason is clear at the call site instead of an `AttributeError` from deep inside
-    # `ModularQuantity`.
+    def to_lossy(self) -> Decimal:
+        """Materialize this angle as an approximate Decimal count of radians.
+
+        Multiplies the exact turn-count by a fixed 15-digit approximation of two pi.
+        Not exact: pi has no exact rational representation.
+        The one approximate operation on `Angle`.
+        """
+        return to_decimal(self._magnitude) * _TWO_PI
 
 
 __all__ = ["Angle"]
-"""Declared normally, matching every other leaf module's convention.
-
-Not wired into `kuchka.quantities`'s wildcard aggregation, though -- that omission,
-not this list, is what actually keeps `Angle` off the public API for now. See the
-module docstring.
-"""
