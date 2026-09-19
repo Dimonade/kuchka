@@ -29,7 +29,9 @@ from kuchka import Joule
 from kuchka import Kilogram
 from kuchka import Metre
 from kuchka import MetrePerSecond
+from kuchka import MetrePerSecondSquared
 from kuchka import Mole
+from kuchka import Newton
 from kuchka import Ohm
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
@@ -40,6 +42,7 @@ from kuchka import SquareMetre
 from kuchka import Volt
 from kuchka import Watt
 from kuchka.quantities import LinearQuantity
+from kuchka.units import ACCELERATION_UNITS
 from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
 from kuchka.units import AMPERE
 from kuchka.units import AREA_UNITS
@@ -53,6 +56,7 @@ from kuchka.units import CUBIC_METRE
 from kuchka.units import CURRENT_UNITS
 from kuchka.units import DELTA_KELVIN
 from kuchka.units import ENERGY_UNITS
+from kuchka.units import FORCE_UNITS
 from kuchka.units import FREQUENCY_UNITS
 from kuchka.units import HERTZ
 from kuchka.units import JOULE
@@ -62,7 +66,9 @@ from kuchka.units import LUMINOUS_INTENSITY_UNITS
 from kuchka.units import MASS_UNITS
 from kuchka.units import METRE
 from kuchka.units import METRE_PER_SECOND
+from kuchka.units import METRE_PER_SECOND_SQUARED
 from kuchka.units import MOLE
+from kuchka.units import NEWTON
 from kuchka.units import OHM
 from kuchka.units import POWER_UNITS
 from kuchka.units import PROPORTION_UNITS
@@ -138,6 +144,13 @@ FAMILIES: list[QuantityFamily] = [
     QuantityFamily("area", SquareMetre, SQUARE_METRE, AREA_UNITS),
     QuantityFamily("volume", CubicMetre, CUBIC_METRE, VOLUME_UNITS),
     QuantityFamily("conductance", Siemens, SIEMENS, CONDUCTANCE_UNITS),
+    QuantityFamily(
+        "acceleration",
+        MetrePerSecondSquared,
+        METRE_PER_SECOND_SQUARED,
+        ACCELERATION_UNITS,
+    ),
+    QuantityFamily("force", Newton, NEWTON, FORCE_UNITS),
 ]
 
 FAMILY_IDS: list[str] = [family.id for family in FAMILIES]

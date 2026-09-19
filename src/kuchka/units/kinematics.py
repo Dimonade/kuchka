@@ -49,6 +49,7 @@ KILOMETRE_PER_HOUR = UnitDef(
 )
 
 METER_PER_SECOND = METRE_PER_SECOND
+KILOMETER_PER_HOUR = KILOMETRE_PER_HOUR
 
 Velocity._canonical_unit = METRE_PER_SECOND  # noqa: SLF001 -- this module owns Velocity's canonical unit
 
@@ -61,8 +62,7 @@ def MetrePerSecond(value: Numeric) -> Velocity:
 def KilometrePerHour(value: Numeric) -> Velocity:
     """Construct a Velocity from a magnitude expressed in kilometres per hour.
 
-    Exact: `1000 / 3600` is stored as the `Fraction` `5/18`, not rounded, even
-    though it has no finite `Decimal` representation.
+    Exact: `1000 / 3600` is stored as the `Fraction` `5/18`.
     """
     return Velocity(to_exact(value) * KILOMETRE_PER_HOUR.scale, KILOMETRE_PER_HOUR)
 
@@ -183,6 +183,7 @@ __all__ = [
     "DYNE",
     "FORCE_UNITS",
     "KILOMETRE_PER_HOUR",
+    "KILOMETER_PER_HOUR",
     "KILONEWTON",
     "METER_PER_SECOND",
     "METER_PER_SECOND_SQUARED",
