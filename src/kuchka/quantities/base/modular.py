@@ -60,6 +60,11 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
     _canonical_unit: ClassVar[UnitDef]
     __slots__ = ()
 
+    @property
+    def magnitude(self) -> Fraction:
+        """Magnitude in this quantity's canonical unit."""
+        return self._magnitude
+
     def to(self, unit: UnitDef) -> Self:
         """Return an equal reading that displays as ``unit``."""
         if not isinstance(unit, UnitDef):

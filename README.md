@@ -1,6 +1,6 @@
 # kuchka
 
-A small pile of physically-typed engineering units for Python.
+A small pile of strongly-typed engineering units for Python.
 
 ```python
 from kuchka import Volt, Milliampere
@@ -394,11 +394,8 @@ asking), is genuinely open.
 
 ## Open questions for the upcoming iterations / next versions
 
-- Whether Kelvin should get a distinct, scalar-multipliable type (see the design note next to `Temperature`).
 - Whether a point-in-time type (`Instant`, most likely) is ever worth adding, and what its "you can't add two timestamps" rule should look like.
 - NumPy/Pandas integration strategy, once vectorized acquisition is actually needed, not just anticipated.
-- Better `AffineQuantity` representation.
-- `Modular` or `Cyclic` - for angles, compass values, etc.
 - `dB` family.
 
 ## History
