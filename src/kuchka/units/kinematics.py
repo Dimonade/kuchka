@@ -1,30 +1,36 @@
-"""Velocity unit constructors: MetrePerSecond.
+"""Unit constructors for Velocity, Acceleration, and Force.
 
-    from kuchka import MetrePerSecond
+    from kuchka import MetrePerSecond, MetrePerSecondSquared, Newton
 
     speed = MetrePerSecond(3)
+    rate_of_change = MetrePerSecondSquared(9.81)
+    push = Newton(10)
 
-`VELOCITY_UNITS` maps each symbol to its constructor, for boundary code that reads a
-unit as a string from outside the application.
+`KilometrePerHour` scales to metres per second by an exact `Fraction` (`5/18`).
 
-NOTE: `KilometrePerHour` is deliberately not implemented here:
-its scale relative to metres per second is `1000 / 3600`, which does not terminate in
-`Decimal` any more than in binary `float` (the denominator's prime factors are not
-only 2 and 5, the same reason `Inch`'s reciprocal sits out some property tests in
-`length.py`).
-Adding it needs a decision about how much rounding is acceptable, not just a new
-`UnitDef`.
+`VELOCITY_UNITS`, `ACCELERATION_UNITS`, and `FORCE_UNITS` each map a symbol to its
+constructor, for boundary code that reads a unit as a string from outside the
+application.
 """
 
 from __future__ import annotations
 
 from decimal import Decimal
+from fractions import Fraction
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
+from kuchka.dimensions import ACCELERATION
+from kuchka.dimensions import FORCE
 from kuchka.dimensions import VELOCITY
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
+from kuchka.prefixes import KILO
+from kuchka.prefixes import MILLI
+from kuchka.prefixes import UNIT
+from kuchka.prefixes import prefixed_unit
+from kuchka.quantities import Acceleration
+from kuchka.quantities import Force
 from kuchka.quantities import UnitDef
 from kuchka.quantities import Velocity
 
@@ -32,7 +38,15 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
+# Velocity
+
 METRE_PER_SECOND = UnitDef("metre_per_second", "m/s", Decimal(1), VELOCITY)
+KILOMETRE_PER_HOUR = UnitDef(
+    "kilometre_per_hour",
+    "km/h",
+    Fraction(1000, 3600),
+    VELOCITY,
+)
 
 METER_PER_SECOND = METRE_PER_SECOND
 
@@ -44,19 +58,149 @@ def MetrePerSecond(value: Numeric) -> Velocity:
     return Velocity(to_exact(value) * METRE_PER_SECOND.scale, METRE_PER_SECOND)
 
 
+def KilometrePerHour(value: Numeric) -> Velocity:
+    """Construct a Velocity from a magnitude expressed in kilometres per hour.
+
+    Exact: `1000 / 3600` is stored as the `Fraction` `5/18`, not rounded, even
+    though it has no finite `Decimal` representation.
+    """
+    return Velocity(to_exact(value) * KILOMETRE_PER_HOUR.scale, KILOMETRE_PER_HOUR)
+
+
 MeterPerSecond = MetrePerSecond
 """American spelling, aliasing `MetrePerSecond`: the same function object."""
+
+KilometerPerHour = KilometrePerHour
+"""American spelling, aliasing `KilometrePerHour`: the same function object."""
 
 VELOCITY_UNITS: Mapping[str, Callable[[Numeric], Velocity]] = MappingProxyType(
     {
         METRE_PER_SECOND.symbol: MetrePerSecond,
+        KILOMETRE_PER_HOUR.symbol: KilometrePerHour,
+    }
+)
+
+
+# Acceleration
+
+METRE_PER_SECOND_SQUARED = UnitDef(
+    "metre_per_second_squared",
+    "m/s\u00b2",
+    Decimal(1),
+    ACCELERATION,
+)
+
+METER_PER_SECOND_SQUARED = METRE_PER_SECOND_SQUARED
+
+Acceleration._canonical_unit = METRE_PER_SECOND_SQUARED  # noqa: SLF001 -- this module owns Acceleration's canonical unit
+
+
+def MetrePerSecondSquared(value: Numeric) -> Acceleration:
+    """Construct an Acceleration from a magnitude in metres per second squared."""
+    return Acceleration(
+        to_exact(value) * METRE_PER_SECOND_SQUARED.scale,
+        METRE_PER_SECOND_SQUARED,
+    )
+
+
+MeterPerSecondSquared = MetrePerSecondSquared
+"""American spelling, aliasing `MetrePerSecondSquared`: the same function object."""
+
+ACCELERATION_UNITS: Mapping[str, Callable[[Numeric], Acceleration]] = MappingProxyType(
+    {
+        METRE_PER_SECOND_SQUARED.symbol: MetrePerSecondSquared,
+    }
+)
+
+
+# Force
+
+NEWTON_NAME = "newton"
+NEWTON_SYMBOL = "N"
+
+MILLINEWTON = prefixed_unit(MILLI, NEWTON_NAME, NEWTON_SYMBOL, FORCE)
+NEWTON = prefixed_unit(UNIT, NEWTON_NAME, NEWTON_SYMBOL, FORCE)
+KILONEWTON = prefixed_unit(KILO, NEWTON_NAME, NEWTON_SYMBOL, FORCE)
+
+Force._canonical_unit = NEWTON  # noqa: SLF001 -- this module owns Force's canonical unit
+
+
+def Millinewton(value: Numeric) -> Force:
+    """Construct a Force from a magnitude expressed in millinewtons."""
+    return Force(to_exact(value) * MILLINEWTON.scale, MILLINEWTON)
+
+
+def Newton(value: Numeric) -> Force:
+    """Construct a Force from a magnitude expressed in newtons."""
+    return Force(to_exact(value) * NEWTON.scale, NEWTON)
+
+
+def Kilonewton(value: Numeric) -> Force:
+    """Construct a Force from a magnitude expressed in kilonewtons."""
+    return Force(to_exact(value) * KILONEWTON.scale, KILONEWTON)
+
+
+# Non-SI units.
+
+DYNE = UnitDef("dyne", "dyn", Decimal("0.00001"), FORCE)
+"""The CGS unit of force: exactly `1e-5` newtons, by definition of the CGS system."""
+
+POUND_FORCE = UnitDef("pound_force", "lbf", Decimal("4.4482216152605"), FORCE)
+"""The imperial unit of force.
+
+Exact: a pound-force is, by definition, one avoirdupois pound (exactly `0.45359237`
+kg since 1959) accelerated at the standard acceleration of gravity (exactly
+`9.80665` m/s^2), and both of those are themselves exact -- the product carries no
+rounding error.
+"""
+
+
+def Dyne(value: Numeric) -> Force:
+    """Construct a Force from a magnitude expressed in dynes."""
+    return Force(to_exact(value) * DYNE.scale, DYNE)
+
+
+def PoundForce(value: Numeric) -> Force:
+    """Construct a Force from a magnitude expressed in pound-force.
+
+    Exact, not approximate: see `POUND_FORCE`'s own docstring.
+    """
+    return Force(to_exact(value) * POUND_FORCE.scale, POUND_FORCE)
+
+
+FORCE_UNITS: Mapping[str, Callable[[Numeric], Force]] = MappingProxyType(
+    {
+        MILLINEWTON.symbol: Millinewton,
+        NEWTON.symbol: Newton,
+        KILONEWTON.symbol: Kilonewton,
+        DYNE.symbol: Dyne,
+        POUND_FORCE.symbol: PoundForce,
     }
 )
 
 __all__ = [
+    "ACCELERATION_UNITS",
+    "DYNE",
+    "FORCE_UNITS",
+    "KILOMETRE_PER_HOUR",
+    "KILONEWTON",
     "METER_PER_SECOND",
+    "METER_PER_SECOND_SQUARED",
     "METRE_PER_SECOND",
+    "METRE_PER_SECOND_SQUARED",
+    "MILLINEWTON",
+    "NEWTON",
+    "POUND_FORCE",
     "VELOCITY_UNITS",
+    "Dyne",
+    "KilometerPerHour",
+    "KilometrePerHour",
+    "Kilonewton",
     "MeterPerSecond",
+    "MeterPerSecondSquared",
     "MetrePerSecond",
+    "MetrePerSecondSquared",
+    "Millinewton",
+    "Newton",
+    "PoundForce",
 ]
