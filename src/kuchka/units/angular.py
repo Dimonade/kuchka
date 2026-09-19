@@ -1,38 +1,55 @@
-"""Unit constructors for Angle: Degree, Turn, Gradian, ArcMinute, ArcSecond, Radian.
+"""Unit constructors for Angle: Radian, Degree, Turn, Gradian, ArcMinute, ArcSecond.
 
-    from kuchka import Degree, Turn
+    from kuchka import Radian, Degree
 
     heading = Degree(90) + Degree(45)
-    full_circle = Turn(1)
+    sensor_reading = Radian(1.5707963)
 
-Turn is the canonical unit: one full turn is `Fraction(1)`.
-Every other working unit here is an exact rational fraction of a turn:
-- `1 degree = 1/360 turn`,
-- `1 gradian = 1/400 turn`,
-- `1 arcminute = 1/21600 turn`,
-- `1 arcsecond = 1/1296000 turn`.
+Radian is the canonical unit: the SI-coherent unit for plane angle, and the unit every
+other constructor here is scaled relative to.
+`Radian(value)` is an ordinary unit constructor, exactly like `Degree(value)` or
+`Volt(value)`:
+a sensor or config value already expressed in radians is stored exactly, with no
+approximation step at the boundary.
 
-Thus, construction, arithmetic, and `.to()` between any pair of them are all exact.
+One full turn is two pi radians, which is an irrational number.
+kuchka defines its own fixed, deterministic, finite rational representation of pi,
+`_PI` below, and uses it to define Degree/Turn/Gradian/ArcMinute/ArcSecond's scales
+relative to Radian.
+The approximation is confined entirely to those five scale definitions, chosen once
+here.
 
-`Radian` needs pi, which has no exact rational representation, so it raises
-`PlannedDimensionError` unconditionally.
-`Angle.to_lossy()` is the explicit approximate escape hatch for reading an angle as a
-`Decimal` count of radians.
+Angle's arithmetic is exact relative to kuchka's own `_PI`, not to the true,
+irrational, transcendental pi.
+Two angles built entirely from Degree, Turn, Gradian, ArcMinute, and ArcSecond compare
+exactly as their true rational relationship dictates: `_PI` cancels out of every such
+comparison (`Degree(180) / Turn(1) == Fraction(1, 2)` exactly, regardless of `_PI`'s
+value).
+A `Radian`-built value compares exactly to kuchka's own `_PI`, and to nothing more or
+less precise than that.
+
+Concretely: `Radian(math.pi) == Degree(180)` is `False`.
+Python's `math.pi` is a binary-float approximation of pi at roughly 17 significant
+digits.
+kuchka's `_PI` is a separately chosen decimal value at 15.
+The two numbers are close but not identical, and exact `Fraction` equality reports
+exactly that.
+This is correct behavior under this design, not a bug: to build a `Radian` value that
+is guaranteed to compare equal to a `Degree`-family value, construct it from
+`kuchka.units.angular._PI` itself, not from an independently sourced pi.
 
 `ANGLE_UNITS` maps each symbol to its constructor, for boundary code that reads a unit
 as a string from outside the application.
-`"rad"` maps to `Radian`, so a config field naming radians fails with a clear
-`PlannedDimensionError`.
 """
 
 from __future__ import annotations
 
+from decimal import Decimal
 from fractions import Fraction
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import ANGLE
-from kuchka.errors import PlannedDimensionError
 from kuchka.numeric import to_exact
 from kuchka.quantities import Angle
 from kuchka.quantities import UnitDef
@@ -43,24 +60,40 @@ if TYPE_CHECKING:
 
     from kuchka.numeric import Numeric
 
-TURN = UnitDef("turn", "tr", Fraction(1), ANGLE)
-DEGREE = UnitDef("degree", "\u00b0", Fraction(1, 360), ANGLE)
-GRADIAN = UnitDef("gradian", "gon", Fraction(1, 400), ANGLE)
-ARCMINUTE = UnitDef("arcminute", "\u2032", Fraction(1, 21600), ANGLE)
-ARCSECOND = UnitDef("arcsecond", "\u2033", Fraction(1, 1296000), ANGLE)
+_PI = Fraction(Decimal("3.14159265358979"))
+"""kuchka's own fixed, finite rational representation of pi.
 
-Angle._period = Fraction(1)  # noqa: SLF001 -- this module owns Angle's period, tied to its canonical unit choice
-Angle._canonical_unit = TURN  # noqa: SLF001 -- this module owns Angle's canonical unit
+Fifteen significant digits, the precision commonly cited by NASA/JPL for spacecraft
+navigation.
+Defines the scales of Degree, Turn, Gradian, ArcMinute, and ArcSecond relative to
+Radian.
+Otherwise, currently not used anywhere else in kuchka.
+"""
+
+RADIAN = UnitDef("radian", "rad", Fraction(1), ANGLE)
+DEGREE = UnitDef("degree", "\u00b0", _PI / 180, ANGLE)
+GRADIAN = UnitDef("gradian", "gon", _PI / 200, ANGLE)
+ARCMINUTE = UnitDef("arcminute", "\u2032", _PI / 10800, ANGLE)
+ARCSECOND = UnitDef("arcsecond", "\u2033", _PI / 648000, ANGLE)
+TURN = UnitDef("turn", "tr", 2 * _PI, ANGLE)
+
+Angle._canonical_unit = RADIAN  # noqa: SLF001 -- this module owns Angle's canonical unit
+Angle._period = TURN.scale  # noqa: SLF001 -- this module owns Angle's period, tied to its canonical unit choice
 
 
-def Turn(value: Numeric) -> Angle:
-    """Construct an Angle from a magnitude expressed in turns."""
-    return Angle(to_exact(value) * TURN.scale, TURN)
+def Radian(value: Numeric) -> Angle:
+    """Construct an Angle from a magnitude expressed in radians."""
+    return Angle(to_exact(value), RADIAN)
 
 
 def Degree(value: Numeric) -> Angle:
     """Construct an Angle from a magnitude expressed in degrees."""
     return Angle(to_exact(value) * DEGREE.scale, DEGREE)
+
+
+def Turn(value: Numeric) -> Angle:
+    """Construct an Angle from a magnitude expressed in turns."""
+    return Angle(to_exact(value) * TURN.scale, TURN)
 
 
 def Gradian(value: Numeric) -> Angle:
@@ -78,27 +111,14 @@ def ArcSecond(value: Numeric) -> Angle:
     return Angle(to_exact(value) * ARCSECOND.scale, ARCSECOND)
 
 
-_PLANNED_NAME = "Angle"
-
-
-def Radian(value: Numeric) -> Angle:  # noqa: ARG001 -- signature kept stable for when this is implemented.
-    """Raise `PlannedDimensionError` unconditionally. Not implemented.
-
-    Blocked on an exact representation for pi: `Angle.to_lossy()` is the
-    approximate escape hatch for reading an angle as a `Decimal` count of
-    radians.
-    """
-    raise PlannedDimensionError(ANGLE, _PLANNED_NAME)
-
-
 ANGLE_UNITS: Mapping[str, Callable[[Numeric], Angle]] = MappingProxyType(
     {
-        TURN.symbol: Turn,
+        RADIAN.symbol: Radian,
         DEGREE.symbol: Degree,
+        TURN.symbol: Turn,
         GRADIAN.symbol: Gradian,
         ARCMINUTE.symbol: ArcMinute,
         ARCSECOND.symbol: ArcSecond,
-        "rad": Radian,
     }
 )
 
@@ -108,6 +128,7 @@ __all__ = [
     "ARCSECOND",
     "DEGREE",
     "GRADIAN",
+    "RADIAN",
     "TURN",
     "ArcMinute",
     "ArcSecond",

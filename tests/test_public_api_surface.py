@@ -15,8 +15,10 @@ from kuchka import constants
 from kuchka import errors
 from kuchka import quantities as quantities_pkg
 from kuchka import units as units_pkg
+from kuchka.quantities.base import AffineQuantity
 from kuchka.quantities.base import AffineUnitDef
 from kuchka.quantities.base import LinearQuantity
+from kuchka.quantities.base import ModularQuantity
 from kuchka.quantities.base import UnitDef
 
 
@@ -42,18 +44,31 @@ def test_every_unit_constructor_is_reachable_from_top_level() -> None:
             )
 
 
-# ConvertibleToFrequency is a Protocol, not a LinearQuantity subclass and named
-# explicitly, since it's currently the only exception this policy has.
 _QUANTITY_TYPE_EXTRAS = {"ConvertibleToFrequency"}
+"""ConvertibleToFrequency is a Protocol.
+
+It is not a subclass of any of the three quantity bases, and named explicitly since
+it's currently the only exception this policy has.
+"""
+_QUANTITY_BASES = (LinearQuantity, AffineQuantity, ModularQuantity)
+_INTERNAL_MACHINERY = (
+    LinearQuantity,
+    AffineQuantity,
+    ModularQuantity,
+    UnitDef,
+    AffineUnitDef,
+)
 
 
 def test_every_quantity_type_is_reachable_from_top_level() -> None:
     for name in quantities_pkg.__all__:
         value = getattr(quantities_pkg, name)
-        if value in (LinearQuantity, UnitDef):
-            continue  # internal machinery, deliberately not top-level
-        is_quantity_type = isinstance(value, type) and issubclass(value, LinearQuantity)
-        if is_quantity_type or name in _QUANTITY_TYPE_EXTRAS or name == "Temperature":
+        if value in _INTERNAL_MACHINERY:
+            continue  # the generic engine itself, deliberately not top-level
+        is_quantity_type = isinstance(value, type) and issubclass(
+            value, _QUANTITY_BASES
+        )
+        if is_quantity_type or name in _QUANTITY_TYPE_EXTRAS:
             assert hasattr(kuchka, name), (
                 f"{name} is a quantity type in kuchka.quantities but missing "
                 f"from top-level kuchka."
