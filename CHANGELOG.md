@@ -72,6 +72,6 @@ Now they are split correctly and exposed as first class API.
 
 Properly exposed API of all units, quantities, utility methods and definitions.
 
-## [0.1.0] -- initial release
+## [0.1.0] - initial release
 
 Base version.
