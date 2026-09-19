@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING
 from typing import ClassVar
 
 from kuchka.dimensions import TEMPERATURE_DELTA
+from kuchka.errors import InvalidMeasurementError
 from kuchka.quantities.base import AffineQuantity
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import register
@@ -32,6 +33,7 @@ if TYPE_CHECKING:
     from fractions import Fraction
 
     from kuchka.dimensions import Dimension
+    from kuchka.quantities.base import AffineUnitDef
 
 
 class TemperatureDelta(LinearQuantity):
@@ -55,6 +57,15 @@ class Temperature(AffineQuantity[TemperatureDelta]):
     parametrizing `AffineQuantity` with `TemperatureDelta` above is what gives this
     class its precise arithmetic signature (`TemperatureDelta -> Temperature`,
     `Temperature -> TemperatureDelta`) by inheritance alone.
+
+    A reading below absolute zero (0 K) is rejected at construction:
+    ordinary thermodynamic temperature has a hard lower bound, and this vocabulary
+    targets device-engineering measurements, not the negative-thermodynamic-temperature
+    regime physics reserves for specific bounded-spectrum systems
+    (population inversions, certain spin systems).
+
+    NOTE: A future release could add a distinct, explicitly-named quantity for that
+    regime; this type stays restricted to ordinary readings.
     """
 
     dimension: ClassVar[Dimension] = TEMPERATURE_DELTA
@@ -63,6 +74,16 @@ class Temperature(AffineQuantity[TemperatureDelta]):
         "a temperature unit such as Kelvin or Celsius"
     )
     __slots__ = ()
+
+    def __init__(self, magnitude: Fraction, display_unit: AffineUnitDef) -> None:
+        """Store `magnitude`, rejecting a reading below absolute zero (0 K)."""
+        if magnitude < 0:
+            msg = (
+                f"cannot construct a Temperature of {float(magnitude)} K: physical "
+                "temperature cannot be below absolute zero (0 K)."
+            )
+            raise InvalidMeasurementError(msg)
+        super().__init__(magnitude, display_unit)
 
     @property
     def kelvin(self) -> Fraction:

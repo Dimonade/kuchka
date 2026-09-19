@@ -9,6 +9,11 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
+#### `Temperature` below 0 degrees Kelvin raises `InvalidMeasurementError`
+
+Except of specific domains, temperature below 0 degrees Kelvin does not make much sense.
+Once such domain will be required, it could be added through a distinct quantity.
+
 #### `Angle` family
 
 `Radian` is the canonical unit, matching the SI-coherent unit for plane angle.

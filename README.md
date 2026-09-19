@@ -315,7 +315,7 @@ Every error `kuchka` raises for a mistake in application code is a `MeasurementE
 
 | Error                           | Raised when                                                                                                                      |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `InvalidMeasurementError`       | a unit constructor got a non-numeric value, a `bool`, or an incompatible measurement                                             |
+| `InvalidMeasurementError`       | a unit constructor got a non-numeric value, a `bool`, or an incompatible measurement (i.e., `Temperature` below 0 K)             |
 | `IncompatibleDimensionError`    | an operation was attempted between two incompatible dimensions or types                                                          |
 | `InvalidConversionError`        | `.to(...)` was given something that isn't a valid unit for that dimension                                                        |
 | `UnrepresentableDimensionError` | arithmetic produced a dimension with no registered engineering type                                                              |
