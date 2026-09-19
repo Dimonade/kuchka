@@ -13,6 +13,7 @@ from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
 from kuchka import IncompatibleDimensionError
 from kuchka import InvalidConversionError
+from kuchka import InvalidMeasurementError
 from kuchka import Kelvin
 from kuchka import MeasurementError
 from kuchka import Temperature
@@ -160,3 +161,23 @@ def test_subtraction_with_an_unsupported_operand_raises_type_error():
 def test_repr_shows_the_display_unit_symbol():
     assert repr(Celsius(20)) == "20 \u00b0C"
     assert repr(Kelvin(20)) == "20 K"
+
+
+def test_kelvin_below_absolute_zero_is_rejected():
+    with pytest.raises(InvalidMeasurementError, match="absolute zero"):
+        Kelvin(-1)
+
+
+def test_celsius_below_absolute_zero_is_rejected():
+    with pytest.raises(InvalidMeasurementError, match="absolute zero"):
+        Celsius(-274)
+
+
+def test_absolute_zero_itself_is_a_valid_temperature():
+    assert Kelvin(0).kelvin == 0
+    assert Celsius(-273.15).kelvin == 0
+
+
+def test_subtracting_a_delta_below_absolute_zero_is_rejected():
+    with pytest.raises(InvalidMeasurementError, match="absolute zero"):
+        Kelvin(5) - DeltaKelvin(10)
