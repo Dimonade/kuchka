@@ -9,20 +9,29 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
+#### `Angle` family
+
+`Radian` is the canonical unit, matching the SI-coherent unit for plane angle.
+
+`kuchka.units.angular` defines its own fixed, deterministic, 15-significant-digit rational representation of pi (`_PI`, matching the precision commonly cited by NASA/JPL) and uses it to define `Degree`, `Turn`, `Gradian`, `ArcMinute`, and `ArcSecond`'s scales relative to `Radian`.
+
 #### `ModularQuantity`
 
 An algebraic base for quantities that wrap around after a fixed period, such as a position on a circle.
+
+`+`/`-` are ordinary wraparound group arithmetic (`[0, period)`); `difference()` is the separate shortest-signed-path method (`(-period/2, +period/2]`) for heading-error/control-loop-style use.
+Deliberately has no total order (`__lt__` and friends are not implemented at all -- there is no universal "greater than" for a cyclic reading).
 
 #### `AffineQuantity` is a generic base
 
 `AffineQuantity` is taken out of `Temperature` to be able to support additional affine quantities like a future `Instant`.
 
-#### Conductance family
+#### `Conductance` family
 
 `Siemens`, `Microsiemens`, `Millisiemens`, `Kilosiemens`, registered as `Resistance`'s reciprocal.
 `1 / Resistance -> Conductance`, `1 / Conductance -> Resistance`, and Ohm's law in conductance form (`Voltage * Conductance -> Current`, `Current / Voltage -> Conductance`, `Current / Conductance -> Voltage`).
 
-#### Area and Volume families
+#### `Area` and `Volume` families
 
 - `SquareMillimetre`/`SquareCentimetre`/`SquareMetre`/`SquareKilometre`, plus `Hectare`, `Acre`, and `SquareInch`.
   `Length * Length -> Area` and `Area / Length -> Length`.
@@ -33,11 +42,11 @@ An algebraic base for quantities that wrap around after a fixed period, such as 
 
 - `Minute` and `Hour` for `Time`.
 
-#### New Charge units
+#### New `Charge` units
 
 - `MilliampereSecond`, `MilliampereHour`, and `AmpereHour`.
 
-#### New Energy units
+#### New `Energy` units
 
 - `WattHour` and `MilliwattHour`.
 

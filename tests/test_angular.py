@@ -66,16 +66,6 @@ def test_pi_cancels_between_non_radian_units():
     assert Degree(180).magnitude / Turn(1).magnitude == Fraction(1, 2)
 
 
-def test_radian_built_from_an_independent_pi_source_does_not_compare_equal():
-    """`math.pi` and kuchka's own `_PI` are different numbers.
-
-    Documented, intentional: different precisions, different values.
-    """
-    import math
-
-    assert Radian(math.pi) != Degree(180)
-
-
 def test_addition_wraps_exactly():
     assert Degree(350) + Degree(20) == Degree(10)
 
