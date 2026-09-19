@@ -9,6 +9,25 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
+#### Expanded kinematics
+
+Overall, the new additions to the kinematics module allow to express Newton's Second Law as it is taught in school: `F = ma`.
+
+##### `Velocity` gets new units
+
+`KilometrePerHour` and `KilometerPerHour`.
+
+##### `Acceleration` family
+
+`MetrePerSecondSquared` and `MeterPerSecondSquared`, where the first unit is the canonical, and the second is an alias.
+
+##### `Force` family
+
+`Newton` is the canonical unit.
+Additional multiples are defined as `Millinewton` and `Kilonewton`.
+
+Non-SI units: `Dyne` and `PoundForce`.
+
 #### `Temperature` below 0 degrees Kelvin raises `InvalidMeasurementError`
 
 Except of specific domains, temperature below 0 degrees Kelvin does not make much sense.

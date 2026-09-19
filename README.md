@@ -111,11 +111,13 @@ More shapes can be added later without touching the ones that already exist, and
 
 **Geometry and Mechanics**
 
-- **Length:** `Nanometer`, `Micrometer`, `Millimeter`, `Centimeter`, `Decimeter`, `Meter`, `Kilometer`, `Inch`
+- **Length:** `Nanometre`, `Micrometre`, `Millimetre`, `Centimetre`, `Decimetre`, `Metre`, `Kilometre`, `Inch`
 - **Area:** `SquareMillimetre`, `SquareCentimetre`, `SquareMetre`, `SquareKilometre`, `Hectare`, `Acre`, `SquareInch`
 - **Volume:** `CubicMillimetre`, `CubicCentimetre`, `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`
-- **Velocity:** `MetrePerSecond`
+- **Velocity:** `MetrePerSecond`, `KilometrePerHour`
+- **Acceleration:** `MetrePerSecondSquared`
 - **Mass:** `Nanogram`, `Microgram`, `Milligram`, `Gram`, `Kilogram`, `Megagram`, `Tonne`
+- **Force:** `Millinewton`, `Newton`, `Kilonewton`, `Dyne`, `PoundForce`
 
 **Angle**
 
@@ -130,7 +132,7 @@ More shapes can be added later without touching the ones that already exist, and
 
 - **Proportion:** `Ratio`, `Percent`
 
-_NOTE: The *canonical* spelling of the unit of length is `*metre`. `kuchka` aliases all `*meter` with `*metre`, so they are essentially the same objects._
+_NOTE: The *canonical* spelling of the unit of length is `*metre`. `kuchka` aliases all `*meter` with `*metre`, so they are essentially the same objects for all units that define them._
 
 See [What this is not (yet)](#what-this-is-not-yet) below for the gaps.
 
