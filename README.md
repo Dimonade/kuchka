@@ -74,6 +74,14 @@ Celsius(20) + DeltaCelsius(5) == Celsius(25)  # a shifted reading
 Celsius(20) + Celsius(5)  # raises: not a meaningful reading
 ```
 
+`Temperature` also rejects any reading below absolute zero, 0 K, in either `Kelvin` or `Celsius`:
+
+```python
+Kelvin(-1)  # raises InvalidMeasurementError
+Celsius(-274)  # raises too: -274 degC is below 0 K
+Kelvin(0)  # fine -- absolute zero itself is a valid reading
+```
+
 **Modular:** a quantity wraps around after a fixed period, so it's a position on a circle rather than a point on a line.
 Addition and subtraction wrap into `[0, period)`.
 There is no total order, since "greater than" depends on a direction-of-travel convention the library doesn't pick for you.
@@ -114,10 +122,10 @@ More shapes can be added later without touching the ones that already exist, and
 - **Length:** `Nanometre`, `Micrometre`, `Millimetre`, `Centimetre`, `Decimetre`, `Metre`, `Kilometre`, `Inch`
 - **Area:** `SquareMillimetre`, `SquareCentimetre`, `SquareMetre`, `SquareKilometre`, `Hectare`, `Acre`, `SquareInch`
 - **Volume:** `CubicMillimetre`, `CubicCentimetre`, `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`
-- **Velocity:** `MetrePerSecond`, `KilometrePerHour`
+- **Velocity:** `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`
 - **Acceleration:** `MetrePerSecondSquared`
 - **Mass:** `Nanogram`, `Microgram`, `Milligram`, `Gram`, `Kilogram`, `Megagram`, `Tonne`
-- **Force:** `Millinewton`, `Newton`, `Kilonewton`, `Dyne`, `PoundForce`
+- **Force:** `Newton`, `Millinewton`, `Kilonewton`, `Dyne`, `PoundForce`
 
 **Angle**
 
@@ -132,7 +140,7 @@ More shapes can be added later without touching the ones that already exist, and
 
 - **Proportion:** `Ratio`, `Percent`
 
-_NOTE: The *canonical* spelling of the unit of length is `*metre`. `kuchka` aliases all `*meter` with `*metre`, so they are essentially the same objects for all units that define them._
+_NOTE: The *canonical* spelling of the unit of length is `*metre`. `kuchka` aliases all `*meter` with `*metre`, so they are essentially the same objects._
 
 See [What this is not (yet)](#what-this-is-not-yet) below for the gaps.
 
@@ -251,6 +259,14 @@ def nyquist_ok(signal: ConvertibleToFrequency, sample_rate: Frequency) -> bool:
   Volt(5) * Ratio(Decimal("0.1")) == Volt(0.5)  # multiplying by a Proportion just scales
   ```
 
+- **Force, Mass, and Acceleration give you Newton's second law, F = ma.**
+  `Mass * Acceleration` gives a `Force`, both ways round, and both inverses work too.
+
+  ```python
+  weight = Kilogram(70) * MetrePerSecondSquared(9.81)  # -> Force, ~686.7 N
+  weight / Kilogram(70)  # -> Acceleration, back to 9.81 m/s^2
+  ```
+
 ## Exact by construction, and its limitations
 
 Every magnitude in `kuchka` is stored as a `Fraction`.
@@ -308,8 +324,14 @@ wifi_wavelength = kc.SPEED_OF_LIGHT_IN_VACUUM / Hertz(
 )  # -> Length, ~0.1249 m
 ```
 
-`SPEED_OF_LIGHT_IN_VACUUM` and `ELEMENTARY_CHARGE` are exact by SI definition.
-`ELECTRON_MASS`, `PROTON_MASS`, and `NEUTRON_MASS` are CODATA 2022 recommended values, carrying exactly as many significant digits as CODATA publishes for each - each constant's own docstring states which category it belongs to.
+Some constants like `SPEED_OF_LIGHT_IN_VACUUM`, and `STANDARD_ACCELERATION_OF_GRAVITY` are exact by definition.
+Others, like `ELECTRON_MASS`, `PROTON_MASS`, `NEUTRON_MASS`, and the four `PLANCK_*` constants are CODATA 2022 recommended values, carrying exactly as many significant digits as CODATA publishes for each - each constant's own docstring states which category it belongs to.
+
+```python
+from kuchka.constants.codata_2022 import PLANCK_LENGTH, PLANCK_TIME
+
+PLANCK_LENGTH / PLANCK_TIME  # -> Velocity, very close to the speed of light
+```
 
 ## Errors
 

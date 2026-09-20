@@ -1,9 +1,9 @@
 """A small set of physical constants, expressed as ordinary kuchka quantities.
 
     from kuchka import Hertz
-    import kuchka.constants.codata_2022 as kc  # Or any other named import.
+    from kuchka.constants.codata_2022 import SPEED_OF_LIGHT_IN_VACUUM
 
-    wifi_wavelength = kc.SPEED_OF_LIGHT_IN_VACUUM / Hertz(2_400_000_000)
+    wifi_wavelength = SPEED_OF_LIGHT_IN_VACUUM / Hertz(2_400_000_000)
 
 Two different kinds of "exact" live in this module, and each constant's docstring says
 which one applies:

@@ -174,6 +174,8 @@ EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
     "time": frozenset({"min", "h"}),
     "energy": frozenset({"mWh", "Wh"}),
     "charge": frozenset({"mAh", "Ah"}),
+    "velocity": frozenset({"km/h"}),
+    "force": frozenset({"lbf"}),
 }
 """Units excluded from properties that require exact decimal reciprocals.
 
@@ -187,6 +189,15 @@ the same reason, since neither derives from a power of ten either.
 for the identical reason: none of those scale factors are powers of ten, so dividing
 by them does not always terminate exactly in `Decimal`, the same way dividing by 0.0254
 does not.
+
+`km/h` (kilometre per hour, `5/18`) is excluded for the same reason: its exact
+`Fraction` scale has no finite `Decimal` representation at all.
+
+`lbf` (pound-force, 4.4482216152605) is a terminating decimal itself, but its
+reciprocal (~0.224809...) is not, so it sits out the same properties `in` does.
+`mph` (mile per hour, 0.44704) needs no exclusion: both it and its reciprocal
+terminate exactly, since a mile-per-hour's scale factor has only 2 and 5 as prime
+factors in its denominator.
 """
 
 EXACT_DIVISION_UNIT_CASES: list[

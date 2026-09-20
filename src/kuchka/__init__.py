@@ -131,6 +131,7 @@ from kuchka.units import MicrosecondSamplingPeriod
 from kuchka.units import Microsiemens
 from kuchka.units import Microvolt
 from kuchka.units import Microwatt
+from kuchka.units import MilePerHour
 from kuchka.units import Milliampere
 from kuchka.units import MilliampereHour
 from kuchka.units import MilliampereSecond
@@ -286,6 +287,7 @@ __all__: list[str] = [
     "Microsiemens",
     "Microvolt",
     "Microwatt",
+    "MilePerHour",
     "Milliampere",
     "MilliampereHour",
     "MilliampereSecond",

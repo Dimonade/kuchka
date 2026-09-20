@@ -81,6 +81,7 @@ KilometerPerHour = KilometrePerHour
 
 MILE_PER_HOUR = UnitDef("mile_per_hour", "mph", Decimal("0.44704"), VELOCITY)
 
+
 def MilePerHour(value: Numeric) -> Velocity:
     """Construct a Velocity from a magnitude expressed in miles per hour.
 
