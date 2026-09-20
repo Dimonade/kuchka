@@ -36,7 +36,6 @@ if TYPE_CHECKING:
     from kuchka.quantities.energy import Energy
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
-    from kuchka.quantities.pressure import Pressure
 
 
 class Volume(LinearQuantity):
@@ -59,8 +58,6 @@ class Volume(LinearQuantity):
 
     @overload
     def __mul__(self, other: Density) -> Mass: ...
-    @overload
-    def __mul__(self, other: Pressure) -> Energy: ...
     @overload
     def __mul__(self, other: Numeric) -> Volume: ...
     @overload
