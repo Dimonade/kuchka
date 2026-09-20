@@ -51,6 +51,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electrical import Current
     from kuchka.quantities.electrical import Power
     from kuchka.quantities.energy import Energy
+    from kuchka.quantities.kinematics import Acceleration
     from kuchka.quantities.kinematics import Velocity
     from kuchka.quantities.length import Length
 
@@ -68,6 +69,8 @@ class Time(LinearQuantity):
     def __mul__(self, other: Power) -> Energy: ...
     @overload
     def __mul__(self, other: Velocity) -> Length: ...
+    @overload
+    def __mul__(self, other: Acceleration) -> Velocity: ...
     @overload
     def __mul__(self, other: Numeric) -> Time: ...
     @overload

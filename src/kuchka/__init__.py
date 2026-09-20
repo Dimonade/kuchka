@@ -29,6 +29,7 @@ from kuchka.errors import InvalidMeasurementError
 from kuchka.errors import MeasurementError
 from kuchka.errors import PlannedDimensionError
 from kuchka.errors import UnrepresentableDimensionError
+from kuchka.quantities import Acceleration
 from kuchka.quantities import AmountOfSubstance
 from kuchka.quantities import Angle
 from kuchka.quantities import Area
@@ -38,6 +39,7 @@ from kuchka.quantities import Conductance
 from kuchka.quantities import ConvertibleToFrequency
 from kuchka.quantities import Current
 from kuchka.quantities import Energy
+from kuchka.quantities import Force
 from kuchka.quantities import Frequency
 from kuchka.quantities import Length
 from kuchka.quantities import LuminousIntensity
@@ -76,6 +78,7 @@ from kuchka.units import Decimetre
 from kuchka.units import Degree
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaKelvin
+from kuchka.units import Dyne
 from kuchka.units import Gradian
 from kuchka.units import Gram
 from kuchka.units import Hectare
@@ -92,7 +95,10 @@ from kuchka.units import Kilojoule
 from kuchka.units import Kiloliter
 from kuchka.units import Kilolitre
 from kuchka.units import Kilometer
+from kuchka.units import KilometerPerHour
 from kuchka.units import Kilometre
+from kuchka.units import KilometrePerHour
+from kuchka.units import Kilonewton
 from kuchka.units import Kiloohm
 from kuchka.units import KilosamplesPerSecond
 from kuchka.units import Kilosiemens
@@ -107,8 +113,10 @@ from kuchka.units import Megaohm
 from kuchka.units import MegasamplesPerSecond
 from kuchka.units import Meter
 from kuchka.units import MeterPerSecond
+from kuchka.units import MeterPerSecondSquared
 from kuchka.units import Metre
 from kuchka.units import MetrePerSecond
+from kuchka.units import MetrePerSecondSquared
 from kuchka.units import Microampere
 from kuchka.units import Microcoulomb
 from kuchka.units import Microgram
@@ -123,6 +131,7 @@ from kuchka.units import MicrosecondSamplingPeriod
 from kuchka.units import Microsiemens
 from kuchka.units import Microvolt
 from kuchka.units import Microwatt
+from kuchka.units import MilePerHour
 from kuchka.units import Milliampere
 from kuchka.units import MilliampereHour
 from kuchka.units import MilliampereSecond
@@ -134,6 +143,7 @@ from kuchka.units import Millilitre
 from kuchka.units import Millimeter
 from kuchka.units import Millimetre
 from kuchka.units import Millimole
+from kuchka.units import Millinewton
 from kuchka.units import Milliohm
 from kuchka.units import Millisecond
 from kuchka.units import MillisecondSamplingPeriod
@@ -148,11 +158,13 @@ from kuchka.units import Nanogram
 from kuchka.units import Nanojoule
 from kuchka.units import Nanometer
 from kuchka.units import Nanometre
+from kuchka.units import Newton
 from kuchka.units import Ohm
 from kuchka.units import Percent
 from kuchka.units import Picocoulomb
 from kuchka.units import Picogram
 from kuchka.units import Picojoule
+from kuchka.units import PoundForce
 from kuchka.units import Radian
 from kuchka.units import Ratio
 from kuchka.units import SamplesPerSecond
@@ -180,6 +192,7 @@ except PackageNotFoundError:  # pragma: no cover -- running from an uninstalled 
     __version__ = "0.0.0+unknown"
 
 __all__: list[str] = [
+    "Acceleration",
     "Acre",
     "AmountOfSubstance",
     "Ampere",
@@ -211,7 +224,9 @@ __all__: list[str] = [
     "Degree",
     "DeltaCelsius",
     "DeltaKelvin",
+    "Dyne",
     "Energy",
+    "Force",
     "Frequency",
     "Gradian",
     "Gram",
@@ -232,7 +247,10 @@ __all__: list[str] = [
     "Kiloliter",
     "Kilolitre",
     "Kilometer",
+    "KilometerPerHour",
     "Kilometre",
+    "KilometrePerHour",
+    "Kilonewton",
     "Kiloohm",
     "KilosamplesPerSecond",
     "Kilosiemens",
@@ -251,8 +269,10 @@ __all__: list[str] = [
     "MegasamplesPerSecond",
     "Meter",
     "MeterPerSecond",
+    "MeterPerSecondSquared",
     "Metre",
     "MetrePerSecond",
+    "MetrePerSecondSquared",
     "Microampere",
     "Microcoulomb",
     "Microgram",
@@ -267,6 +287,7 @@ __all__: list[str] = [
     "Microsiemens",
     "Microvolt",
     "Microwatt",
+    "MilePerHour",
     "Milliampere",
     "MilliampereHour",
     "MilliampereSecond",
@@ -278,6 +299,7 @@ __all__: list[str] = [
     "Millimeter",
     "Millimetre",
     "Millimole",
+    "Millinewton",
     "Milliohm",
     "Millisecond",
     "MillisecondSamplingPeriod",
@@ -292,12 +314,14 @@ __all__: list[str] = [
     "Nanojoule",
     "Nanometer",
     "Nanometre",
+    "Newton",
     "Ohm",
     "Percent",
     "Picocoulomb",
     "Picogram",
     "Picojoule",
     "PlannedDimensionError",
+    "PoundForce",
     "Power",
     "Proportion",
     "Radian",

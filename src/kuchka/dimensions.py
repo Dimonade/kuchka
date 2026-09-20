@@ -100,6 +100,8 @@ DIMENSIONLESS = Dimension()
 POWER = Dimension(time=-3, length=2, mass=1)
 RESISTANCE = Dimension(time=-3, length=2, mass=1, current=-2)
 VOLTAGE = Dimension(time=-3, length=2, mass=1, current=-1)
+ACCELERATION = Dimension(time=-2, length=1)
+FORCE = Dimension(time=-2, length=1, mass=1)
 ENERGY = Dimension(time=-2, length=2, mass=1)
 FREQUENCY = Dimension(time=-1)
 VELOCITY = Dimension(time=-1, length=1)
@@ -122,6 +124,7 @@ See the module docstring for why this is tracked as its own axis rather than reu
 """
 
 __all__ = [
+    "ACCELERATION",
     "AMOUNT_OF_SUBSTANCE",
     "ANGLE",
     "AREA",
@@ -130,6 +133,7 @@ __all__ = [
     "CURRENT",
     "DIMENSIONLESS",
     "ENERGY",
+    "FORCE",
     "FREQUENCY",
     "LENGTH",
     "LUMINOUS_INTENSITY",

@@ -29,7 +29,9 @@ from kuchka import Joule
 from kuchka import Kilogram
 from kuchka import Metre
 from kuchka import MetrePerSecond
+from kuchka import MetrePerSecondSquared
 from kuchka import Mole
+from kuchka import Newton
 from kuchka import Ohm
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
@@ -40,6 +42,7 @@ from kuchka import SquareMetre
 from kuchka import Volt
 from kuchka import Watt
 from kuchka.quantities import LinearQuantity
+from kuchka.units import ACCELERATION_UNITS
 from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
 from kuchka.units import AMPERE
 from kuchka.units import AREA_UNITS
@@ -53,6 +56,7 @@ from kuchka.units import CUBIC_METRE
 from kuchka.units import CURRENT_UNITS
 from kuchka.units import DELTA_KELVIN
 from kuchka.units import ENERGY_UNITS
+from kuchka.units import FORCE_UNITS
 from kuchka.units import FREQUENCY_UNITS
 from kuchka.units import HERTZ
 from kuchka.units import JOULE
@@ -62,7 +66,9 @@ from kuchka.units import LUMINOUS_INTENSITY_UNITS
 from kuchka.units import MASS_UNITS
 from kuchka.units import METRE
 from kuchka.units import METRE_PER_SECOND
+from kuchka.units import METRE_PER_SECOND_SQUARED
 from kuchka.units import MOLE
+from kuchka.units import NEWTON
 from kuchka.units import OHM
 from kuchka.units import POWER_UNITS
 from kuchka.units import PROPORTION_UNITS
@@ -138,6 +144,13 @@ FAMILIES: list[QuantityFamily] = [
     QuantityFamily("area", SquareMetre, SQUARE_METRE, AREA_UNITS),
     QuantityFamily("volume", CubicMetre, CUBIC_METRE, VOLUME_UNITS),
     QuantityFamily("conductance", Siemens, SIEMENS, CONDUCTANCE_UNITS),
+    QuantityFamily(
+        "acceleration",
+        MetrePerSecondSquared,
+        METRE_PER_SECOND_SQUARED,
+        ACCELERATION_UNITS,
+    ),
+    QuantityFamily("force", Newton, NEWTON, FORCE_UNITS),
 ]
 
 FAMILY_IDS: list[str] = [family.id for family in FAMILIES]
@@ -161,6 +174,8 @@ EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
     "time": frozenset({"min", "h"}),
     "energy": frozenset({"mWh", "Wh"}),
     "charge": frozenset({"mAh", "Ah"}),
+    "velocity": frozenset({"km/h"}),
+    "force": frozenset({"lbf"}),
 }
 """Units excluded from properties that require exact decimal reciprocals.
 
@@ -174,6 +189,15 @@ the same reason, since neither derives from a power of ten either.
 for the identical reason: none of those scale factors are powers of ten, so dividing
 by them does not always terminate exactly in `Decimal`, the same way dividing by 0.0254
 does not.
+
+`km/h` (kilometre per hour, `5/18`) is excluded for the same reason: its exact
+`Fraction` scale has no finite `Decimal` representation at all.
+
+`lbf` (pound-force, 4.4482216152605) is a terminating decimal itself, but its
+reciprocal (~0.224809...) is not, so it sits out the same properties `in` does.
+`mph` (mile per hour, 0.44704) needs no exclusion: both it and its reciprocal
+terminate exactly, since a mile-per-hour's scale factor has only 2 and 5 as prime
+factors in its denominator.
 """
 
 EXACT_DIVISION_UNIT_CASES: list[

@@ -96,6 +96,40 @@ def test_every_constant_is_reachable_from_top_level() -> None:
         )
 
 
+def test_every_fundamental_constant_is_reachable_from_the_dataset_namespace() -> None:
+    """A constant added to `fundamental.py` must not go quietly unexported.
+
+    `kuchka.constants.codata_2022` hand-lists its re-exports rather than
+    wildcard-aggregating `fundamental.py` (see that module's own docstring for why),
+    so nothing stops a new constant from being added to `fundamental.py` without a
+    matching import/`__all__` entry here -- this walks `fundamental.__all__`, the
+    actual source of truth, rather than `codata_2022.__all__` against itself, which
+    would only prove the hand-written list is internally consistent, not complete.
+    """
+    from kuchka.constants import codata_2022
+    from kuchka.constants.codata_2022 import fundamental
+
+    for name in fundamental.__all__:
+        assert name in codata_2022.__all__, (
+            f"{name} is defined in kuchka.constants.codata_2022.fundamental but "
+            f"missing from kuchka.constants.codata_2022.__all__ -- add the import "
+            f"and the __all__ entry."
+        )
+        assert hasattr(codata_2022, name), (
+            f"{name} is listed in kuchka.constants.codata_2022.__all__ but is not "
+            f"actually imported there."
+        )
+        assert getattr(codata_2022, name) is getattr(fundamental, name), (
+            f"{name} on kuchka.constants.codata_2022 is not the same object as "
+            f"kuchka.constants.codata_2022.fundamental.{name} -- check for a stale "
+            f"or shadowed re-export."
+        )
+        assert hasattr(kuchka.codata_2022, name), (
+            f"{name} is a CODATA 2022 constant but missing from "
+            f"kuchka.codata_2022, the top-level re-export of the submodule."
+        )
+
+
 def test_every_error_is_reachable_from_top_level() -> None:
     for name in errors.__all__:
         assert hasattr(kuchka, name), (

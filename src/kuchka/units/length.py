@@ -108,6 +108,15 @@ def Kilometre(value: Numeric) -> Length:
     return Length(to_exact(value) * KILOMETRE.scale, KILOMETRE)
 
 
+Nanometer = Nanometre
+Micrometer = Micrometre
+Millimeter = Millimetre
+Centimeter = Centimetre
+Decimeter = Decimetre
+Meter = Metre
+Kilometer = Kilometre
+
+
 # Non-SI units.
 
 INCH = UnitDef("inch", "in", Decimal("0.0254"), LENGTH)
@@ -122,14 +131,6 @@ def Inch(value: Numeric) -> Length:
     """
     return Length(to_exact(value) * INCH.scale, INCH)
 
-
-Nanometer = Nanometre
-Micrometer = Micrometre
-Millimeter = Millimetre
-Centimeter = Centimetre
-Decimeter = Decimetre
-Meter = Metre
-Kilometer = Kilometre
 
 LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
     {
