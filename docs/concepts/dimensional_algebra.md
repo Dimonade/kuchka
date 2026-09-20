@@ -52,7 +52,7 @@ Genuine reciprocal pairs retain reciprocal behavior:
 
 ```python
 rate = 1 / SecondSamplingPeriod(2)  # SampleRate
-period = 1 / rate                    # SamplingPeriod
+period = 1 / rate  # SamplingPeriod
 ```
 
 `BaudRate` has no automatic reciprocal relationship because baud counts symbols per second as symbols per second, not cycles or bits.
