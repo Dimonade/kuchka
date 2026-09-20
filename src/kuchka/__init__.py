@@ -46,6 +46,7 @@ from kuchka.quantities import Length
 from kuchka.quantities import LuminousIntensity
 from kuchka.quantities import Mass
 from kuchka.quantities import Power
+from kuchka.quantities import Pressure
 from kuchka.quantities import Proportion
 from kuchka.quantities import Resistance
 from kuchka.quantities import SampleRate
@@ -62,6 +63,8 @@ from kuchka.units import AmpereHour
 from kuchka.units import AmpereSecond
 from kuchka.units import ArcMinute
 from kuchka.units import ArcSecond
+from kuchka.units import Atmosphere
+from kuchka.units import Bar
 from kuchka.units import Baud
 from kuchka.units import Candela
 from kuchka.units import Celsius
@@ -85,6 +88,7 @@ from kuchka.units import Gram
 from kuchka.units import GramPerCubicCentimeter
 from kuchka.units import GramPerCubicCentimetre
 from kuchka.units import Hectare
+from kuchka.units import Hectopascal
 from kuchka.units import Hertz
 from kuchka.units import Hour
 from kuchka.units import Inch
@@ -107,6 +111,7 @@ from kuchka.units import Kilometre
 from kuchka.units import KilometrePerHour
 from kuchka.units import Kilonewton
 from kuchka.units import Kiloohm
+from kuchka.units import Kilopascal
 from kuchka.units import KilosamplesPerSecond
 from kuchka.units import Kilosiemens
 from kuchka.units import Kilovolt
@@ -117,6 +122,7 @@ from kuchka.units import Megagram
 from kuchka.units import Megahertz
 from kuchka.units import Megajoule
 from kuchka.units import Megaohm
+from kuchka.units import Megapascal
 from kuchka.units import MegasamplesPerSecond
 from kuchka.units import Meter
 from kuchka.units import MeterPerSecond
@@ -142,6 +148,7 @@ from kuchka.units import MilePerHour
 from kuchka.units import Milliampere
 from kuchka.units import MilliampereHour
 from kuchka.units import MilliampereSecond
+from kuchka.units import Millibar
 from kuchka.units import Millicoulomb
 from kuchka.units import Milligram
 from kuchka.units import Millijoule
@@ -167,11 +174,13 @@ from kuchka.units import Nanometer
 from kuchka.units import Nanometre
 from kuchka.units import Newton
 from kuchka.units import Ohm
+from kuchka.units import Pascal
 from kuchka.units import Percent
 from kuchka.units import Picocoulomb
 from kuchka.units import Picogram
 from kuchka.units import Picojoule
 from kuchka.units import PoundForce
+from kuchka.units import PoundPerSquareInch
 from kuchka.units import Radian
 from kuchka.units import Ratio
 from kuchka.units import SamplesPerSecond
@@ -209,6 +218,8 @@ __all__: list[str] = [
     "ArcMinute",
     "ArcSecond",
     "Area",
+    "Atmosphere",
+    "Bar",
     "Baud",
     "BaudRate",
     "Candela",
@@ -241,6 +252,7 @@ __all__: list[str] = [
     "GramPerCubicCentimeter",
     "GramPerCubicCentimetre",
     "Hectare",
+    "Hectopascal",
     "Hertz",
     "Hour",
     "Inch",
@@ -266,6 +278,7 @@ __all__: list[str] = [
     "KilometrePerHour",
     "Kilonewton",
     "Kiloohm",
+    "Kilopascal",
     "KilosamplesPerSecond",
     "Kilosiemens",
     "Kilovolt",
@@ -280,6 +293,7 @@ __all__: list[str] = [
     "Megahertz",
     "Megajoule",
     "Megaohm",
+    "Megapascal",
     "MegasamplesPerSecond",
     "Meter",
     "MeterPerSecond",
@@ -305,6 +319,7 @@ __all__: list[str] = [
     "Milliampere",
     "MilliampereHour",
     "MilliampereSecond",
+    "Millibar",
     "Millicoulomb",
     "Milligram",
     "Millijoule",
@@ -330,13 +345,16 @@ __all__: list[str] = [
     "Nanometre",
     "Newton",
     "Ohm",
+    "Pascal",
     "Percent",
     "Picocoulomb",
     "Picogram",
     "Picojoule",
     "PlannedDimensionError",
     "PoundForce",
+    "PoundPerSquareInch",
     "Power",
+    "Pressure",
     "Proportion",
     "Radian",
     "Ratio",

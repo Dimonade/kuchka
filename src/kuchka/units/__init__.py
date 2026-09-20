@@ -32,6 +32,7 @@ from kuchka.units.length import *
 from kuchka.units.luminous_intensity import *
 from kuchka.units.mass import *
 from kuchka.units.power import *
+from kuchka.units.pressure import *
 from kuchka.units.proportion import *
 from kuchka.units.resistance import *
 from kuchka.units.temporal import *

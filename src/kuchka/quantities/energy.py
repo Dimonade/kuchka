@@ -1,7 +1,11 @@
 """Energy: the capacity to do work, e.g. a laser pulse's delivered energy.
 
-Defined alongside its one relationship to `Power` and `Time` (`Power * Time -> Energy`,
-and its two inverses, `Energy / Time -> Power` and `Energy / Power -> Time`).
+Defined alongside two relationships:
+- `Power * Time -> Energy`, and its two inverses, `Energy / Time -> Power` and
+  `Energy / Power -> Time`.
+- `Pressure * Volume -> Energy`, the P-V work relationship, and its two inverses,
+  `Energy / Pressure -> Volume` and `Energy / Volume -> Pressure`, whose other
+  overload halves live on `Pressure` and `Volume` themselves.
 """
 
 from __future__ import annotations
@@ -22,7 +26,9 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.electrical import Power
+    from kuchka.quantities.pressure import Pressure
     from kuchka.quantities.temporal import Time
+    from kuchka.quantities.volume import Volume
 
 
 class Energy(LinearQuantity):
@@ -34,6 +40,10 @@ class Energy(LinearQuantity):
     def __truediv__(self, other: Time) -> Power: ...
     @overload
     def __truediv__(self, other: Power) -> Time: ...
+    @overload
+    def __truediv__(self, other: Pressure) -> Volume: ...
+    @overload
+    def __truediv__(self, other: Volume) -> Pressure: ...
     @overload
     def __truediv__(self, other: Numeric) -> Energy: ...
     @overload

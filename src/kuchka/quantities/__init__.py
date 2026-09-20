@@ -29,6 +29,7 @@ from kuchka.quantities.kinematics import *
 from kuchka.quantities.length import *
 from kuchka.quantities.luminous_intensity import *
 from kuchka.quantities.mass import *
+from kuchka.quantities.pressure import *
 from kuchka.quantities.proportion import *
 from kuchka.quantities.temporal import *
 from kuchka.quantities.thermal import *
