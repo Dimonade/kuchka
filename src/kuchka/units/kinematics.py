@@ -8,6 +8,9 @@
 
 `KilometrePerHour` scales to metres per second by an exact `Fraction` (`5/18`).
 
+`MilePerHour` scales exactly too (`0.44704`, a terminating decimal, since a mile has
+been exactly `1609.344` m and an hour exactly `3600` s.
+
 `VELOCITY_UNITS`, `ACCELERATION_UNITS`, and `FORCE_UNITS` each map a symbol to its
 constructor, for boundary code that reads a unit as a string from outside the
 application.
@@ -73,10 +76,25 @@ MeterPerSecond = MetrePerSecond
 KilometerPerHour = KilometrePerHour
 """American spelling, aliasing `KilometrePerHour`: the same function object."""
 
+
+# Mile per hour.
+
+MILE_PER_HOUR = UnitDef("mile_per_hour", "mph", Decimal("0.44704"), VELOCITY)
+
+def MilePerHour(value: Numeric) -> Velocity:
+    """Construct a Velocity from a magnitude expressed in miles per hour.
+
+    Exact: a mile has been exactly `1609.344` m, so a mile per hour is exactly
+    `0.44704` m/s.
+    """
+    return Velocity(to_exact(value) * MILE_PER_HOUR.scale, MILE_PER_HOUR)
+
+
 VELOCITY_UNITS: Mapping[str, Callable[[Numeric], Velocity]] = MappingProxyType(
     {
         METRE_PER_SECOND.symbol: MetrePerSecond,
         KILOMETRE_PER_HOUR.symbol: KilometrePerHour,
+        MILE_PER_HOUR.symbol: MilePerHour,
     }
 )
 
@@ -183,12 +201,12 @@ __all__ = [
     "DYNE",
     "FORCE_UNITS",
     "KILOMETRE_PER_HOUR",
-    "KILOMETER_PER_HOUR",
     "KILONEWTON",
     "METER_PER_SECOND",
     "METER_PER_SECOND_SQUARED",
     "METRE_PER_SECOND",
     "METRE_PER_SECOND_SQUARED",
+    "MILE_PER_HOUR",
     "MILLINEWTON",
     "NEWTON",
     "POUND_FORCE",
@@ -201,6 +219,7 @@ __all__ = [
     "MeterPerSecondSquared",
     "MetrePerSecond",
     "MetrePerSecondSquared",
+    "MilePerHour",
     "Millinewton",
     "Newton",
     "PoundForce",
