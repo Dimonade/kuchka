@@ -15,7 +15,7 @@ Overall, the new additions to the kinematics module allow to express Newton's Se
 
 ##### `Velocity` gets new units
 
-`KilometrePerHour` and `KilometerPerHour`.
+`KilometrePerHour`, `KilometerPerHour`, and `MilePerHour`.
 
 ##### `Acceleration` family
 
