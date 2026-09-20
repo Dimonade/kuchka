@@ -27,6 +27,7 @@ from kuchka import DeltaKelvin
 from kuchka import Hertz
 from kuchka import Joule
 from kuchka import Kilogram
+from kuchka import KilogramPerCubicMetre
 from kuchka import Metre
 from kuchka import MetrePerSecond
 from kuchka import MetrePerSecondSquared
@@ -55,12 +56,14 @@ from kuchka.units import COULOMB
 from kuchka.units import CUBIC_METRE
 from kuchka.units import CURRENT_UNITS
 from kuchka.units import DELTA_KELVIN
+from kuchka.units import DENSITY_UNITS
 from kuchka.units import ENERGY_UNITS
 from kuchka.units import FORCE_UNITS
 from kuchka.units import FREQUENCY_UNITS
 from kuchka.units import HERTZ
 from kuchka.units import JOULE
 from kuchka.units import KILOGRAM
+from kuchka.units import KILOGRAM_PER_CUBIC_METRE
 from kuchka.units import LENGTH_UNITS
 from kuchka.units import LUMINOUS_INTENSITY_UNITS
 from kuchka.units import MASS_UNITS
@@ -151,6 +154,12 @@ FAMILIES: list[QuantityFamily] = [
         ACCELERATION_UNITS,
     ),
     QuantityFamily("force", Newton, NEWTON, FORCE_UNITS),
+    QuantityFamily(
+        "density",
+        KilogramPerCubicMetre,
+        KILOGRAM_PER_CUBIC_METRE,
+        DENSITY_UNITS,
+    ),
 ]
 
 FAMILY_IDS: list[str] = [family.id for family in FAMILIES]

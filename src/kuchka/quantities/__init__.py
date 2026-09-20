@@ -22,6 +22,7 @@ from kuchka.quantities.angular import *
 from kuchka.quantities.area import *
 from kuchka.quantities.base import *
 from kuchka.quantities.charge import *
+from kuchka.quantities.density import *
 from kuchka.quantities.electrical import *
 from kuchka.quantities.energy import *
 from kuchka.quantities.kinematics import *

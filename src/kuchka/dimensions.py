@@ -100,6 +100,7 @@ DIMENSIONLESS = Dimension()
 POWER = Dimension(time=-3, length=2, mass=1)
 RESISTANCE = Dimension(time=-3, length=2, mass=1, current=-2)
 VOLTAGE = Dimension(time=-3, length=2, mass=1, current=-1)
+DENSITY = Dimension(length=-3, mass=1)
 ACCELERATION = Dimension(time=-2, length=1)
 FORCE = Dimension(time=-2, length=1, mass=1)
 ENERGY = Dimension(time=-2, length=2, mass=1)
@@ -131,6 +132,7 @@ __all__ = [
     "CHARGE",
     "CONDUCTANCE",
     "CURRENT",
+    "DENSITY",
     "DIMENSIONLESS",
     "ENERGY",
     "FORCE",

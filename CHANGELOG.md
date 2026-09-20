@@ -9,6 +9,11 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
+#### `Density` family
+
+`KilogramPerCubicMetre` is the canonical unit.
+Additional units are: `GramPerCubicCentimetre`, `KilogramPerCubicLitre`.
+
 #### Expanded kinematics
 
 Overall, the new additions to the kinematics module allow to express Newton's Second Law as it is taught in school: `F = ma`.

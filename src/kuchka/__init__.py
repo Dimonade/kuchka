@@ -38,6 +38,7 @@ from kuchka.quantities import Charge
 from kuchka.quantities import Conductance
 from kuchka.quantities import ConvertibleToFrequency
 from kuchka.quantities import Current
+from kuchka.quantities import Density
 from kuchka.quantities import Energy
 from kuchka.quantities import Force
 from kuchka.quantities import Frequency
@@ -81,6 +82,8 @@ from kuchka.units import DeltaKelvin
 from kuchka.units import Dyne
 from kuchka.units import Gradian
 from kuchka.units import Gram
+from kuchka.units import GramPerCubicCentimeter
+from kuchka.units import GramPerCubicCentimetre
 from kuchka.units import Hectare
 from kuchka.units import Hertz
 from kuchka.units import Hour
@@ -90,6 +93,10 @@ from kuchka.units import Kelvin
 from kuchka.units import Kiloampere
 from kuchka.units import Kilobaud
 from kuchka.units import Kilogram
+from kuchka.units import KilogramPerCubicMeter
+from kuchka.units import KilogramPerCubicMetre
+from kuchka.units import KilogramPerLiter
+from kuchka.units import KilogramPerLitre
 from kuchka.units import Kilohertz
 from kuchka.units import Kilojoule
 from kuchka.units import Kiloliter
@@ -224,12 +231,15 @@ __all__: list[str] = [
     "Degree",
     "DeltaCelsius",
     "DeltaKelvin",
+    "Density",
     "Dyne",
     "Energy",
     "Force",
     "Frequency",
     "Gradian",
     "Gram",
+    "GramPerCubicCentimeter",
+    "GramPerCubicCentimetre",
     "Hectare",
     "Hertz",
     "Hour",
@@ -242,6 +252,10 @@ __all__: list[str] = [
     "Kiloampere",
     "Kilobaud",
     "Kilogram",
+    "KilogramPerCubicMeter",
+    "KilogramPerCubicMetre",
+    "KilogramPerLiter",
+    "KilogramPerLitre",
     "Kilohertz",
     "Kilojoule",
     "Kiloliter",
