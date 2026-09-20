@@ -25,6 +25,7 @@ from kuchka.units.area import *
 from kuchka.units.charge import *
 from kuchka.units.conductance import *
 from kuchka.units.current import *
+from kuchka.units.density import *
 from kuchka.units.energy import *
 from kuchka.units.kinematics import *
 from kuchka.units.length import *
