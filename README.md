@@ -126,6 +126,8 @@ More shapes can be added later without touching the ones that already exist, and
 - **Acceleration:** `MetrePerSecondSquared`
 - **Mass:** `Nanogram`, `Microgram`, `Milligram`, `Gram`, `Kilogram`, `Megagram`, `Tonne`
 - **Force:** `Newton`, `Millinewton`, `Kilonewton`, `Dyne`, `PoundForce`
+- **Density:** `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`
+- **Pressure:** `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`
 
 **Angle**
 
@@ -265,6 +267,18 @@ def nyquist_ok(signal: ConvertibleToFrequency, sample_rate: Frequency) -> bool:
   ```python
   weight = Kilogram(70) * MetrePerSecondSquared(9.81)  # -> Force, ~686.7 N
   weight / Kilogram(70)  # -> Acceleration, back to 9.81 m/s^2
+  ```
+
+- **Force and Area give you Pressure, and Pressure and Volume give you Energy.**
+  `Force / Area -> Pressure` and `Pressure * Volume -> Energy` (P-V work) both fall
+  out of the same general arithmetic, with `Mass / Volume -> Density` alongside them.
+
+  ```python
+  tyre_pressure = Bar(2.2)
+  contact_area = SquareCentimetre(150)
+  tyre_pressure * contact_area  # -> Force, 3300 N, the load on that contact patch
+
+  water = GramPerCubicCentimetre(1)  # -> Density, 1000 kg/m^3
   ```
 
 ## Exact by construction, and its limitations

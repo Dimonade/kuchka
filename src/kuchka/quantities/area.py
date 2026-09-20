@@ -6,7 +6,9 @@ Defined alongside its relationships to `Length` and `Volume`:
 - `Area * Length -> Volume`, and its inverse,
 - `Volume / Area -> Length`.
 
-The other halves defined and derived on `Length` and `Volume` accordingly..
+The other halves defined and derived on `Length` and `Volume` accordingly.
+
+Also carries the other overload half of `Area * Pressure -> Force` (see `Pressure`).
 """
 
 from __future__ import annotations
@@ -26,7 +28,9 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.kinematics import Force
     from kuchka.quantities.length import Length
+    from kuchka.quantities.pressure import Pressure
     from kuchka.quantities.volume import Volume
 
 
@@ -37,6 +41,8 @@ class Area(LinearQuantity):
 
     @overload
     def __mul__(self, other: Length) -> Volume: ...
+    @overload
+    def __mul__(self, other: Pressure) -> Force: ...
     @overload
     def __mul__(self, other: Numeric) -> Area: ...
     @overload

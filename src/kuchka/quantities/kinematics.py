@@ -7,6 +7,10 @@ A number of related relationships defined as:
     `Acceleration * Time -> Velocity` -- the rate of change of a rate of change.
 - `Mass * Acceleration -> Force`, Newton's second law, and its two inverses,
   `Force / Mass -> Acceleration` and `Force / Acceleration -> Mass`.
+
+`Force` also carries the other overload half of `Force / Area -> Pressure` and its
+two inverses, `Pressure * Area -> Force` and `Force / Pressure -> Area` (see
+`Pressure`).
 """
 
 from __future__ import annotations
@@ -28,8 +32,10 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.area import Area
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.pressure import Pressure
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -112,6 +118,10 @@ class Force(LinearQuantity):
     def __truediv__(self, other: Mass) -> Acceleration: ...
     @overload
     def __truediv__(self, other: Acceleration) -> Mass: ...
+    @overload
+    def __truediv__(self, other: Area) -> Pressure: ...
+    @overload
+    def __truediv__(self, other: Pressure) -> Area: ...
     @overload
     def __truediv__(self, other: Numeric) -> Force: ...
     @overload

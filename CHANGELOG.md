@@ -9,6 +9,11 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
+#### `Pressure` family
+
+`Pascal` is the canonical unit.
+Additional units are: `Atmosphere`, `Bar`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Millibar`, and `PoundPerSquareInch`.
+
 #### `Density` family
 
 `KilogramPerCubicMetre` is the canonical unit.
