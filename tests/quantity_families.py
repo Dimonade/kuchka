@@ -34,6 +34,7 @@ from kuchka import MetrePerSecondSquared
 from kuchka import Mole
 from kuchka import Newton
 from kuchka import Ohm
+from kuchka import Pascal
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
@@ -73,7 +74,9 @@ from kuchka.units import METRE_PER_SECOND_SQUARED
 from kuchka.units import MOLE
 from kuchka.units import NEWTON
 from kuchka.units import OHM
+from kuchka.units import PASCAL
 from kuchka.units import POWER_UNITS
+from kuchka.units import PRESSURE_UNITS
 from kuchka.units import PROPORTION_UNITS
 from kuchka.units import RATIO
 from kuchka.units import RESISTANCE_UNITS
@@ -160,6 +163,7 @@ FAMILIES: list[QuantityFamily] = [
         KILOGRAM_PER_CUBIC_METRE,
         DENSITY_UNITS,
     ),
+    QuantityFamily("pressure", Pascal, PASCAL, PRESSURE_UNITS),
 ]
 
 FAMILY_IDS: list[str] = [family.id for family in FAMILIES]
@@ -185,6 +189,7 @@ EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
     "charge": frozenset({"mAh", "Ah"}),
     "velocity": frozenset({"km/h"}),
     "force": frozenset({"lbf"}),
+    "pressure": frozenset({"psi"}),
 }
 """Units excluded from properties that require exact decimal reciprocals.
 
@@ -207,6 +212,11 @@ reciprocal (~0.224809...) is not, so it sits out the same properties `in` does.
 `mph` (mile per hour, 0.44704) needs no exclusion: both it and its reciprocal
 terminate exactly, since a mile-per-hour's scale factor has only 2 and 5 as prime
 factors in its denominator.
+
+`psi` (pound per square inch) is excluded for the same shape of reason as `lbf`:
+it is computed exactly as `POUND_FORCE.scale / SQUARE_INCH.scale`, but that exact
+`Fraction`'s denominator has a prime factor other than 2 and 5, so it has no finite
+`Decimal` representation.
 """
 
 EXACT_DIVISION_UNIT_CASES: list[
