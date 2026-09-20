@@ -82,6 +82,7 @@ from kuchka.units import DeltaKelvin
 from kuchka.units import Dyne
 from kuchka.units import Gradian
 from kuchka.units import Gram
+from kuchka.units import GramPerCubicCentimeter
 from kuchka.units import GramPerCubicCentimetre
 from kuchka.units import Hectare
 from kuchka.units import Hertz
@@ -92,6 +93,7 @@ from kuchka.units import Kelvin
 from kuchka.units import Kiloampere
 from kuchka.units import Kilobaud
 from kuchka.units import Kilogram
+from kuchka.units import KilogramPerCubicMeter
 from kuchka.units import KilogramPerCubicMetre
 from kuchka.units import KilogramPerLitre
 from kuchka.units import Kilohertz
@@ -235,6 +237,7 @@ __all__: list[str] = [
     "Frequency",
     "Gradian",
     "Gram",
+    "GramPerCubicCentimeter",
     "GramPerCubicCentimetre",
     "Hectare",
     "Hertz",
@@ -248,6 +251,7 @@ __all__: list[str] = [
     "Kiloampere",
     "Kilobaud",
     "Kilogram",
+    "KilogramPerCubicMeter",
     "KilogramPerCubicMetre",
     "KilogramPerLitre",
     "Kilohertz",
