@@ -1,9 +1,9 @@
 """A small set of physical constants, expressed as ordinary kuchka quantities.
 
     from kuchka import Hertz
-    from kuchka.constants import SPEED_OF_LIGHT
+    import kuchka.constants.codata_2022 as kc  # Or any other named import.
 
-    wifi_wavelength = SPEED_OF_LIGHT / Hertz(2_400_000_000)
+    wifi_wavelength = kc.SPEED_OF_LIGHT_IN_VACUUM / Hertz(2_400_000_000)
 
 Two different kinds of "exact" live in this module, and each constant's docstring says
 which one applies:
@@ -33,12 +33,20 @@ from typing import TYPE_CHECKING
 from typing import Final
 
 from kuchka.units import Coulomb as _Coulomb
+from kuchka.units import Kelvin as _Kelvin
 from kuchka.units import Kilogram as _Kilogram
+from kuchka.units import Metre as _Metre
 from kuchka.units import MetrePerSecond as _MetrePerSecond
+from kuchka.units import MetrePerSecondSquared as _MetrePerSecondSquared
+from kuchka.units import Second as _Second
 
 if TYPE_CHECKING:
+    from kuchka.quantities import Acceleration
     from kuchka.quantities import Charge
+    from kuchka.quantities import Length
     from kuchka.quantities import Mass
+    from kuchka.quantities import Temperature
+    from kuchka.quantities import Time
     from kuchka.quantities import Velocity
 
 ALPHA_PARTICLE_MASS: Final[Mass] = _Kilogram(_Decimal("6.6446573450e-27"))
@@ -86,6 +94,42 @@ Uncertainty: 0.000 000 000 85 e-27 kg.
 Link: https://en.wikipedia.org/wiki/Neutron#Mass
 """
 
+PLANCK_LENGTH: Final[Length] = _Metre(_Decimal("1.616255e-35"))
+"""The Planck length, l_P: the length scale at which quantum gravity dominates.
+
+Accuracy: Measured.
+Value: 1.616 255 e-35 m.
+Uncertainty: 0.000 018 e-35 m.
+Link: https://en.wikipedia.org/wiki/Planck_units#Planck_length
+"""
+
+PLANCK_MASS: Final[Mass] = _Kilogram(_Decimal("2.176434e-8"))
+"""The Planck mass, m_P.
+
+Accuracy: Measured.
+Value: 2.176 434 e-8 kg.
+Uncertainty: 0.000 024 e-8 kg.
+Link: https://en.wikipedia.org/wiki/Planck_units
+"""
+
+PLANCK_TEMPERATURE: Final[Temperature] = _Kelvin(_Decimal("1.416784e32"))
+"""The Planck temperature, T_P.
+
+Accuracy: Measured.
+Value: 1.416 784 e32 K.
+Uncertainty: 0.000 016 e32 K.
+Link: https://en.wikipedia.org/wiki/Planck_units#Planck_temperature
+"""
+
+PLANCK_TIME: Final[Time] = _Second(_Decimal("5.391247e-44"))
+"""The Planck time, t_P: the time light takes to cross one Planck length in vacuum.
+
+Accuracy: Measured.
+Value: 5.391 247 e-44 s.
+Uncertainty: 0.000 060 e-44 s.
+Link: https://en.wikipedia.org/wiki/Planck_units#Planck_time
+"""
+
 PROTON_MASS: Final[Mass] = _Kilogram(_Decimal("1.67262192595E-27"))
 """The proton rest mass, m_p.
 
@@ -94,3 +138,28 @@ Value: 1.672 621 925 95 e-27 kg.
 Uncertainty: 0.000 000 000 52 e-27 kg.
 Link: https://en.wikipedia.org/wiki/Proton
 """
+
+STANDARD_ACCELERATION_OF_GRAVITY: Final[Acceleration] = _MetrePerSecondSquared(
+    _Decimal("9.80665")
+)
+"""The standard acceleration of gravity, g_n.
+
+Accuracy: Exact.
+Value: 9.806 65 m s^-2.
+Uncertainty: None.
+Link: https://en.wikipedia.org/wiki/Gravitational_acceleration
+"""
+
+__all__ = [
+    "ALPHA_PARTICLE_MASS",
+    "ELECTRON_MASS",
+    "ELEMENTARY_CHARGE",
+    "NEUTRON_MASS",
+    "PLANCK_LENGTH",
+    "PLANCK_MASS",
+    "PLANCK_TEMPERATURE",
+    "PLANCK_TIME",
+    "PROTON_MASS",
+    "SPEED_OF_LIGHT_IN_VACUUM",
+    "STANDARD_ACCELERATION_OF_GRAVITY",
+]
