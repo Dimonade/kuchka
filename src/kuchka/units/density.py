@@ -51,6 +51,8 @@ Density._canonical_unit = KILOGRAM_PER_CUBIC_METRE  # noqa: SLF001 -- this modul
 
 KILOGRAM_PER_LITRE = UnitDef("kilogram_per_litre", "kg/L", Decimal(1000), DENSITY)
 
+KILOGRAM_PER_LITER = KILOGRAM_PER_LITRE
+
 
 def KilogramPerCubicMetre(value: Numeric) -> Density:
     """Construct a Density from a magnitude expressed in kilograms per cubic metre."""
@@ -76,6 +78,8 @@ def KilogramPerLitre(value: Numeric) -> Density:
 KilogramPerCubicMeter = KilogramPerCubicMetre
 GramPerCubicCentimeter = GramPerCubicCentimetre
 
+KilogramPerLiter = KilogramPerLitre
+
 
 DENSITY_UNITS: Mapping[str, Callable[[Numeric], Density]] = MappingProxyType(
     {
@@ -91,10 +95,12 @@ __all__ = [
     "GRAM_PER_CUBIC_CENTIMETRE",
     "KILOGRAM_PER_CUBIC_METER",
     "KILOGRAM_PER_CUBIC_METRE",
+    "KILOGRAM_PER_LITER",
     "KILOGRAM_PER_LITRE",
     "GramPerCubicCentimeter",
     "GramPerCubicCentimetre",
     "KilogramPerCubicMeter",
     "KilogramPerCubicMetre",
+    "KilogramPerLiter",
     "KilogramPerLitre",
 ]

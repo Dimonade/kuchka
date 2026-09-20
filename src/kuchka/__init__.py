@@ -95,6 +95,7 @@ from kuchka.units import Kilobaud
 from kuchka.units import Kilogram
 from kuchka.units import KilogramPerCubicMeter
 from kuchka.units import KilogramPerCubicMetre
+from kuchka.units import KilogramPerLiter
 from kuchka.units import KilogramPerLitre
 from kuchka.units import Kilohertz
 from kuchka.units import Kilojoule
@@ -253,6 +254,7 @@ __all__: list[str] = [
     "Kilogram",
     "KilogramPerCubicMeter",
     "KilogramPerCubicMetre",
+    "KilogramPerLiter",
     "KilogramPerLitre",
     "Kilohertz",
     "Kilojoule",
