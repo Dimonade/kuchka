@@ -17,12 +17,10 @@ A calculation can cross several engineering domains while retaining that meaning
 Here is a small mechanical example: a load acts through a piston, so the same values carry through force, pressure, swept volume, and work:
 
 ```python
-from kuchka import (
-    Centimetre,
-    Kilogram,
-    MetrePerSecondSquared,
-    SquareCentimetre,
-)
+from kuchka import Centimetre,
+from kuchka import Kilogram
+from kuchka import MetrePerSecondSquared
+from kuchka import SquareCentimetre
 
 mass = Kilogram(1000)
 acceleration = MetrePerSecondSquared(0.5)
@@ -74,7 +72,10 @@ A unit constructor such as `Volt` creates a `Voltage`; `Milliampere` creates a `
 The unit is part of construction, while the resulting object has the physical quantity type.
 
 ```python
-from kuchka import Ampere, Milliampere, Volt, Voltage
+from kuchka import Ampere
+from kuchka import Milliampere
+from kuchka import Volt
+from kuchka import Voltage
 
 supply = Volt(5)
 load = Milliampere(150)
@@ -178,7 +179,10 @@ Area * Length -> Volume
 That means a calculation can move through a chain such as:
 
 ```python
-from kuchka import Centimetre, Kilogram, MetrePerSecondSquared, SquareCentimetre
+from kuchka import Centimetre
+from kuchka import Kilogram
+from kuchka import MetrePerSecondSquared
+from kuchka import SquareCentimetre
 
 mass = Kilogram(1000)
 acceleration = MetrePerSecondSquared(0.5)
@@ -209,7 +213,9 @@ A hardware driver may naturally return a plain integer or float.
 Give that value a physical type at the hardware boundary, then keep the control logic typed:
 
 ```python
-from kuchka import Ampere, Milliohm, Millivolt
+from kuchka import Ampere
+from kuchka import Milliohm
+from kuchka import Millivolt
 
 SHUNT_RESISTANCE = Milliohm(100)
 OVERCURRENT_LIMIT = Ampere(1.5)
@@ -239,7 +245,8 @@ Most engineering quantities are linear: their units differ by a scale factor.
 Addition, subtraction, scalar multiplication, and ordering behave like ordinary numbers.
 
 ```python
-from kuchka import Millivolt, Volt
+from kuchka import Millivolt
+from kuchka import Volt
 
 Volt(1) + Millivolt(200) == Volt(1.2)
 # True
@@ -256,7 +263,8 @@ A reading minus a reading gives a linear delta, and adding a delta shifts the re
 Adding two readings is rejected.
 
 ```python
-from kuchka import Celsius, DeltaCelsius
+from kuchka import Celsius
+from kuchka import DeltaCelsius
 
 Celsius(25) - Celsius(20) == DeltaCelsius(5)
 Celsius(20) + DeltaCelsius(5) == Celsius(25)
@@ -266,7 +274,8 @@ Celsius(20) + Celsius(5)  # rejected
 Temperatures below absolute zero are rejected as invalid measurements:
 
 ```python
-from kuchka import Celsius, Kelvin
+from kuchka import Celsius
+from kuchka import Kelvin
 
 Kelvin(-1)  # raises InvalidMeasurementError
 Celsius(-274)  # raises InvalidMeasurementError
@@ -408,7 +417,8 @@ period = 1 / rate  # -> SamplingPeriod
 For APIs that can accept either a `Frequency` or a `SampleRate`, `ConvertibleToFrequency` provides an explicit common protocol:
 
 ```python
-from kuchka import ConvertibleToFrequency, Frequency
+from kuchka import ConvertibleToFrequency
+from kuchka import Frequency
 
 
 def nyquist_ok(signal: ConvertibleToFrequency, sample_rate: Frequency) -> bool:
