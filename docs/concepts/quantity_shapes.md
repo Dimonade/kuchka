@@ -27,6 +27,7 @@ Adding two readings is rejected.
 Celsius(25) - Celsius(20) == DeltaCelsius(5)
 Celsius(20) + DeltaCelsius(5) == Celsius(25)
 Celsius(20) + Celsius(5)  # rejected
+Celsius(20) * 2  # rejected: no `__mul__` implemented at all.
 ```
 
 Absolute zero is enforced for temperature readings.
@@ -44,6 +45,8 @@ Degree(300).difference(Degree(350)) == Degree(-50)
 Degree(10) < Degree(20)  # rejected
 ```
 
-`+` and `-` are ordinary wraparound group arithmetic over `[0, period)`. `difference()` is a separate shortest-signed-path operation over `(-period/2, +period/2]`.
+`+` and `-` are ordinary wraparound group arithmetic over `[0, period)`. `difference()` is a separate shortest-signed-path operation over `(-period/2, +period/2]`. Scalar multiplication and division wrap their result the same way.
+
+Construction does **not** normalize: `Degree(370)` is stored as-is and stays distinct from `Degree(10)` until it's compared (equality normalizes both sides) or explicitly wrapped with `.normalize()`.
 
 There is deliberately no total order for modular quantities: a cyclic value has no universal `greater than` relationship without choosing a direction of travel.

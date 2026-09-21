@@ -8,16 +8,15 @@ A product or quotient is reduced to a resulting dimension, and the registry dete
 Examples of registered relationships include:
 
 ```text
-Voltage * Current              -> Power
-Mass * Acceleration            -> Force
-Force / Area                   -> Pressure
-Pressure * Volume              -> Energy
-Mass / Volume                 -> Density
-Length * Length                -> Area
-Area * Length                 -> Volume
-Resistance^-1                 -> Conductance
-Time^-1                        -> Frequency
-SamplingPeriod^-1              -> SampleRate
+Voltage * Current   -> Power
+Mass * Acceleration -> Force
+Force / Area        -> Pressure
+Pressure * Volume   -> Energy
+Mass / Volume       -> Density
+Length * Length     -> Area
+Area * Length       -> Volume
+1 / Resistance      -> Conductance
+1 / Time            -> Frequency
 ```
 
 ## Type-checker support
@@ -55,4 +54,4 @@ rate = 1 / SecondSamplingPeriod(2)  # SampleRate
 period = 1 / rate  # SamplingPeriod
 ```
 
-`BaudRate` has no automatic reciprocal relationship because baud counts symbols per second as symbols per second, not cycles or bits.
+`BaudRate` has no automatic reciprocal relationship because baud counts symbols per second, not bits or cycles.

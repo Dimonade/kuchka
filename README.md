@@ -2,44 +2,30 @@
 
 A small pile of strongly-typed physical quantities and engineering units for Python.
 
-`kuchka` models engineering values as first-class Python types.
-Each quantity has a physical identity, a defined set of units, and explicit arithmetic rules.
-`Volt(5)` produces a `Voltage`, `Kilogram(1000)` produces a `Mass`, and calculations such as `Mass * Acceleration` produce a typed `Force` automatically.
-Physical meaning stays attached to the value as it moves through application code.
+`kuchka` turns engineering values into first-class Python types instead of raw numbers.
+`Volt(5)` returns a `Voltage`; `Kilogram(1000)` returns a `Mass`; `Mass * Acceleration` returns a `Force` automatically, and that physical meaning travels with the value through the rest of your code.
+`mypy`/`ty` can catch a `Current` passed where a `Voltage` is expected before the program ever runs, and runtime checks cover the boundaries static analysis can't see: configuration data, hardware readings, unit conversion, dimensional arithmetic.
+Existing projects can adopt this incrementally, by typing the values and interfaces that matter first.
 
-The type system becomes especially useful with `mypy` and `ty`.
-A function can require `Voltage` in its signature, and the type checker can catch a `Current` being passed to it before the program runs.
-Runtime validation covers the boundaries and operations that static analysis cannot fully see: configuration data, hardware measurements, unit conversion, and dimensional arithmetic.
-This makes physical quantities part of the same development workflow as the rest of a typed Python codebase.
-Older projects can adopt the model incrementally by typing the measurements and interfaces that matter first.
-
-A calculation can cross several engineering domains while retaining that meaning.
-Here is a small mechanical example: a load acts through a piston, so the same values carry through force, pressure, swept volume, and work:
+Here's a small example that goes from an electrical measurement straight to a duration, using Ohm's law and a battery's rated charge capacity:
 
 ```python
-from kuchka import Centimetre,
-from kuchka import Kilogram
-from kuchka import MetrePerSecondSquared
-from kuchka import SquareCentimetre
+from kuchka import AmpereHour
+from kuchka import Ohm
+from kuchka import Volt
+from kuchka.units import HOUR
 
-mass = Kilogram(1000)
-acceleration = MetrePerSecondSquared(0.5)
-piston_area = SquareCentimetre(20)
-stroke = Centimetre(10)
+supply = Volt(3.7)
+load = Ohm(148)
+battery = AmpereHour(2)
 
-force = mass * acceleration
-pressure = force / piston_area
-volume = piston_area * stroke
-energy = pressure * volume
+current = supply / load  # Ohm's law -> Current
+runtime = (battery / current).to(HOUR)  # Charge / Current -> Time
 
-print(force)
-# 500 N
-print(pressure)
-# 250000 Pa
-print(volume)
-# 0.002 m^3
-print(energy)
-# 500 J
+print(current)
+# 0.025 A
+print(runtime)
+# 80 h
 ```
 
 The important part is not the arithmetic itself.
@@ -74,6 +60,7 @@ The unit is part of construction, while the resulting object has the physical qu
 ```python
 from kuchka import Ampere
 from kuchka import Milliampere
+from kuchka import Millivolt
 from kuchka import Volt
 from kuchka import Voltage
 
@@ -141,7 +128,7 @@ def parse_voltage(raw: Mapping[str, str]) -> Voltage:
     return constructor(Decimal(raw["value"]))
 
 
-with Path.open("device.toml", "rb") as file:
+with Path("device.toml").open("rb") as file:
     raw = tomllib.load(file)
 
 config = DeviceConfig(led_critical_voltage=parse_voltage(raw["led_critical_voltage"]))

@@ -54,7 +54,7 @@ analyse_voltage(Volt(4.2))
 should be required.
 
 The system should make it possible to enforce this distinction both statically, through type checking, and dynamically, at runtime boundaries where values enter the system.
-A raw numeric value may exist at an external boundary — for example, a sensor API, CSV file, database driver, or network message — but it should be converted into a measurement immediately.
+A raw numeric value may exist at an external boundary - for example, a sensor API, CSV file, database driver, or network message - but it should be converted into a measurement immediately.
 Once inside the measurement domain, naked numeric values should not be permitted to silently propagate.
 
 ### 2. Engineering concepts should be represented by named types

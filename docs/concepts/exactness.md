@@ -27,7 +27,8 @@ A finite `Fraction` cannot represent the mathematical value of pi.
 Rejecting angular units or pretending that a finite decimal is mathematically exact would both be poor fits for the library's model.
 
 `Radian` is the canonical angle unit.
-The non-radian angular scales are defined from a fixed rational internal representation of pi, so `Degree`, `Turn`, `Gradian`, `ArcMinute`, and `ArcSecond` remain mutually exact relative to that constant.
+The non-radian angular scales are defined from a fixed rational internal representation of pi - fifteen significant digits, the precision commonly cited by NASA/JPL.
+Thus, `Degree`, `Turn`, `Gradian`, `ArcMinute`, and `ArcSecond` remain mutually exact relative to that constant, importable as `kuchka.units.angular._PI` if you need to compare against it directly.
 
 The finite approximation becomes observable when an angle crosses into `Radian`:
 
