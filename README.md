@@ -499,7 +499,7 @@ The construction is still exact: `5/18` litre becomes `5/18 * 1/1000 = 1/3600` c
 `float` input is parsed through its string representation, so `Volt(4.2)` preserves the digits written by the programmer instead of storing the binary floating-point representation of the float.
 
 Angular units are the deliberate exception to mathematical exactness because pi is irrational.
-`Radian` is canonical, while the other angular scales use kuchka's fixed rational internal representation of pi.
+`Radian` is canonical, while the other angular scales use `kuchka`'s fixed rational internal representation of pi.
 See [Exactness and angular units](docs/concepts/exactness.md) for the full rationale.
 
 ## Physical constants
