@@ -1,8 +1,8 @@
 """Construction and arithmetic throughput, measured with the standard library.
 
-This script prints both a human-readable table and the interpreter/platform
-info needed to make the numbers reproducible, since throughput numbers
-without that context are not comparable between machines.
+This script prints both a human-readable table and the interpreter/platform info needed
+to make the numbers reproducible, since throughput numbers without that context are not
+comparable between machines.
 """
 
 from __future__ import annotations
@@ -14,14 +14,17 @@ from dataclasses import dataclass
 from decimal import Decimal
 
 SAMPLE_COUNT = 200_000
-"""Iterations per timed case. Large enough that per-call overhead in
-`timeit` itself is negligible relative to the measured work, small enough
-that the whole script runs in a few seconds.
+"""Iterations per timed case.
+
+Large enough that per-call overhead in `timeit` itself is negligible relative to the
+measured work, small enough that the whole script runs in a few seconds.
 """
 
 BATCH_SIZE = 1000
-"""Size of the list used in the batch-construction case, to approximate a
-burst read from an acquisition buffer rather than one sample at a time.
+"""Size of the list used in the batch-construction case.
+
+Used to approximate a burst read from an acquisition buffer rather than one sample at
+a time.
 """
 
 
@@ -35,9 +38,9 @@ class BenchmarkCase:
     iterations_per_call: int = 1
     """How many samples one `stmt` execution represents.
 
-    1 for a single construction/arithmetic call; `BATCH_SIZE` for the batch
-    case, so its MSa/s figure is directly comparable to the single-call
-    cases instead of reporting "batches per second".
+    1 for a single construction/arithmetic call;
+    `BATCH_SIZE` for the batch case, so its MSa/s figure is directly comparable to the
+    single-call cases instead of reporting "batches per second".
     """
 
 
@@ -48,9 +51,18 @@ CASES: list[BenchmarkCase] = [
         setup="raw = 2350.0",
     ),
     BenchmarkCase(
-        label="Decimal(str(x)) * scale (kuchka's own cost, no wrapper)",
-        stmt="Decimal(str(raw)) * SCALE",
-        setup="from decimal import Decimal; raw = 2350.0; SCALE = Decimal('0.001')",
+        label="Fraction(x) * scale (kuchka's own construction cost, no wrapper)",
+        stmt="Fraction(raw) * SCALE",
+        setup=("from fractions import Fraction\nraw = 2350\nSCALE = Fraction(1, 1000)"),
+    ),
+    BenchmarkCase(
+        label="to_decimal(Fraction) (kuchka's display/repr cost, not construction)",
+        stmt="Decimal(value.numerator) / Decimal(value.denominator)",
+        setup=(
+            "from decimal import Decimal\n"
+            "from fractions import Fraction\n"
+            "value = Fraction(47, 20)"
+        ),
     ),
     BenchmarkCase(
         label="Millivolt(x): a single kuchka construction",
