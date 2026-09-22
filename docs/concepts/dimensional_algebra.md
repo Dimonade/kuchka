@@ -40,7 +40,10 @@ See the repository example [Working around an unrepresentable intermediate dimen
 `Frequency`, `SampleRate`, and `BaudRate` all have physical dimension T^-1, but they are intentionally separate concepts.
 
 ```python
-Hertz(50) + SamplesPerSecond(50)  # rejected.
+from kuchka import Hertz
+from kuchka import SamplesPerSecond
+
+Hertz(50) + SamplesPerSecond(50)  # rejected: `IncompatibleDimensionError`.
 ```
 
 Canonical generic arithmetic produces the canonical type for a dimension.

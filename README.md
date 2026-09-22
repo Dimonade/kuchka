@@ -391,8 +391,10 @@ The same principle applies to `Litre` and `Liter`, and others.
 `Frequency`, `SampleRate`, and `BaudRate` all have physical dimension T^-1, but they remain separate types because they describe different concepts.
 
 ```python
-Hertz(50) + SamplesPerSecond(50)
-# rejected: incompatible concepts
+from kuchka import Hertz
+from kuchka import SamplesPerSecond
+
+Hertz(50) + SamplesPerSecond(50)  # rejected: `IncompatibleDimensionError`.
 ```
 
 Genuine reciprocal pairs remain reciprocal:
