@@ -54,7 +54,7 @@ analyse_voltage(Volt(4.2))
 should be required.
 
 The system should make it possible to enforce this distinction both statically, through type checking, and dynamically, at runtime boundaries where values enter the system.
-A raw numeric value may exist at an external boundary — for example, a sensor API, CSV file, database driver, or network message — but it should be converted into a measurement immediately.
+A raw numeric value may exist at an external boundary - for example, a sensor API, CSV file, database driver, or network message - but it should be converted into a measurement immediately.
 Once inside the measurement domain, naked numeric values should not be permitted to silently propagate.
 
 ### 2. Engineering concepts should be represented by named types
@@ -72,7 +72,7 @@ Length
 Time
 ```
 
-These types describe the physical quantity rather than its storage representation.
+These types describe the physical quantity and not its storage representation.
 
 For example:
 
@@ -174,7 +174,7 @@ voltage.to(Millivolt)
 
 or an equivalent typed API.
 
-The normal arithmetic path should be concerned with physical quantities rather than forcing users to manually normalise units.
+The normal arithmetic path should be concerned with physical quantities and avoiding forcing users to manually normalise units.
 
 ### 7. Derived dimensions must emerge naturally from arithmetic
 
@@ -340,7 +340,7 @@ It is responsible for:
 - normalization;
 - numeric representation.
 
-The public measurement classes should delegate to this machinery rather than reimplementing unit mathematics independently.
+The public measurement classes should delegate to this machinery instead of reimplementing unit mathematics independently.
 
 ## Dimension System
 
@@ -359,9 +359,9 @@ Velocity
     = Length / Time
 ```
 
-The dimension system should work in terms of canonical dimensional identities rather than strings.
+The dimension system should work in terms of canonical dimensional identities.
 
-Units such as `Volt` and `Millivolt` should therefore represent different scales of the same dimension rather than separate arbitrary concepts.
+Units such as `Volt` and `Millivolt` should therefore represent different scales of the same dimension and not separate arbitrary concepts.
 
 ## Unit Definitions
 
@@ -654,7 +654,7 @@ Volt(5) + Ampere(2)
 
 should raise a dedicated dimensional exception.
 
-Multiplication and division should use a central dimension algebra rather than a large collection of hand-written pairwise special cases.
+Multiplication and division should use a central dimension algebra instead of a large collection of hand-written pairwise special cases.
 
 For example, dimensions can be represented internally as exponent maps:
 
@@ -672,7 +672,7 @@ Named domain types can then map those dimension signatures to engineering concep
 
 Normal arithmetic should convert compatible units automatically.
 
-Explicit conversion should use types rather than strings:
+Explicit conversion should use types and completely avoid strings:
 
 ```python
 voltage = Volt(4.2)

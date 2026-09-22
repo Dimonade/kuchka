@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import POWER
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.prefixes import KILO
 from kuchka.prefixes import MICRO
 from kuchka.prefixes import MILLI
@@ -44,22 +44,22 @@ Power._canonical_unit = WATT  # noqa: SLF001 -- this module owns Power's canonic
 
 def Microwatt(value: Numeric) -> Power:
     """Construct a Power from a magnitude expressed in microwatts."""
-    return Power(to_decimal(value) * MICROWATT.scale, MICROWATT)
+    return Power(to_exact(value) * MICROWATT.scale, MICROWATT)
 
 
 def Milliwatt(value: Numeric) -> Power:
     """Construct a Power from a magnitude expressed in milliwatts."""
-    return Power(to_decimal(value) * MILLIWATT.scale, MILLIWATT)
+    return Power(to_exact(value) * MILLIWATT.scale, MILLIWATT)
 
 
 def Watt(value: Numeric) -> Power:
     """Construct a Power from a magnitude expressed in watts."""
-    return Power(to_decimal(value) * WATT.scale, WATT)
+    return Power(to_exact(value) * WATT.scale, WATT)
 
 
 def Kilowatt(value: Numeric) -> Power:
     """Construct a Power from a magnitude expressed in kilowatts."""
-    return Power(to_decimal(value) * KILOWATT.scale, KILOWATT)
+    return Power(to_exact(value) * KILOWATT.scale, KILOWATT)
 
 
 POWER_UNITS: Mapping[str, Callable[[Numeric], Power]] = MappingProxyType(

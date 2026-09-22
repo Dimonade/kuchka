@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import RESISTANCE
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.prefixes import KILO
 from kuchka.prefixes import MEGA
 from kuchka.prefixes import MILLI
@@ -46,22 +46,22 @@ Resistance._canonical_unit = OHM  # noqa: SLF001 -- this module owns Resistance'
 
 def Milliohm(value: Numeric) -> Resistance:
     """Construct a Resistance from a magnitude expressed in milliohms."""
-    return Resistance(to_decimal(value) * MILLIOHM.scale, MILLIOHM)
+    return Resistance(to_exact(value) * MILLIOHM.scale, MILLIOHM)
 
 
 def Ohm(value: Numeric) -> Resistance:
     """Construct a Resistance from a magnitude expressed in ohms."""
-    return Resistance(to_decimal(value) * OHM.scale, OHM)
+    return Resistance(to_exact(value) * OHM.scale, OHM)
 
 
 def Kiloohm(value: Numeric) -> Resistance:
     """Construct a Resistance from a magnitude expressed in kiloohms."""
-    return Resistance(to_decimal(value) * KILOOHM.scale, KILOOHM)
+    return Resistance(to_exact(value) * KILOOHM.scale, KILOOHM)
 
 
 def Megaohm(value: Numeric) -> Resistance:
     """Construct a Resistance from a magnitude expressed in megaohms."""
-    return Resistance(to_decimal(value) * MEGAOHM.scale, MEGAOHM)
+    return Resistance(to_exact(value) * MEGAOHM.scale, MEGAOHM)
 
 
 RESISTANCE_UNITS: Mapping[str, Callable[[Numeric], Resistance]] = MappingProxyType(

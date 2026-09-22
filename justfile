@@ -8,6 +8,12 @@ format-all:
     taplo fmt
     prettier --write '**/*.md'
 
+# Type-check with mypy --strict and ty.
+check:
+    uv run mypy --strict src/kuchka
+    uv run ty check src/kuchka
+
+
 alias dfp := develop-fetch-pull
 # Switch to develop, fetch, and pull changes.
 develop-fetch-pull:
@@ -17,7 +23,7 @@ develop-fetch-pull:
 
 alias ct := covtest
 # Run coverage on tests and present results.
-covtest:
+covtest: check
     cd tests
     clear
     coverage erase

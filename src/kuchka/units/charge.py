@@ -13,12 +13,13 @@ unit as a string from outside the application.
 
 from __future__ import annotations
 
+from decimal import Decimal
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import CHARGE
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.prefixes import MICRO
 from kuchka.prefixes import MILLI
 from kuchka.prefixes import NANO
@@ -26,6 +27,7 @@ from kuchka.prefixes import PICO
 from kuchka.prefixes import UNIT
 from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Charge
+from kuchka.quantities import UnitDef
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -45,27 +47,51 @@ Charge._canonical_unit = COULOMB  # noqa: SLF001 -- this module owns Charge's ca
 
 def Picocoulomb(value: Numeric) -> Charge:
     """Construct a Charge from a magnitude expressed in picocoulomb."""
-    return Charge(to_decimal(value) * PICOCOULOMB.scale, PICOCOULOMB)
+    return Charge(to_exact(value) * PICOCOULOMB.scale, PICOCOULOMB)
 
 
 def Nanocoulomb(value: Numeric) -> Charge:
     """Construct a Charge from a magnitude expressed in nanocoulomb."""
-    return Charge(to_decimal(value) * NANOCOULOMB.scale, NANOCOULOMB)
+    return Charge(to_exact(value) * NANOCOULOMB.scale, NANOCOULOMB)
 
 
 def Microcoulomb(value: Numeric) -> Charge:
     """Construct a Charge from a magnitude expressed in microcoulombs."""
-    return Charge(to_decimal(value) * MICROCOULOMB.scale, MICROCOULOMB)
+    return Charge(to_exact(value) * MICROCOULOMB.scale, MICROCOULOMB)
 
 
 def Millicoulomb(value: Numeric) -> Charge:
     """Construct a Charge from a magnitude expressed in millicoulombs."""
-    return Charge(to_decimal(value) * MILLICOULOMB.scale, MILLICOULOMB)
+    return Charge(to_exact(value) * MILLICOULOMB.scale, MILLICOULOMB)
 
 
 def Coulomb(value: Numeric) -> Charge:
     """Construct a Charge from a magnitude expressed in coulombs."""
-    return Charge(to_decimal(value) * COULOMB.scale, COULOMB)
+    return Charge(to_exact(value) * COULOMB.scale, COULOMB)
+
+
+# Ampere times Time.
+
+MILLIAMPERE_SECOND = UnitDef("milliampere_second", "mAs", Decimal("0.001"), CHARGE)
+MILLIAMPERE_HOUR = UnitDef("milliampere_hour", "mAh", Decimal("3.6"), CHARGE)
+AMPERE_HOUR = UnitDef("ampere_hour", "Ah", Decimal(3600), CHARGE)
+AmpereSecond = Coulomb
+"""An ampere-second by definition is a coulomb."""
+
+
+def MilliampereSecond(value: Numeric) -> Charge:
+    """Construct a Charge from a magnitude expressed in milliampere-seconds."""
+    return Charge(to_exact(value) * MILLIAMPERE_SECOND.scale, MILLIAMPERE_SECOND)
+
+
+def MilliampereHour(value: Numeric) -> Charge:
+    """Construct a Charge from a magnitude expressed in milliampere-hours."""
+    return Charge(to_exact(value) * MILLIAMPERE_HOUR.scale, MILLIAMPERE_HOUR)
+
+
+def AmpereHour(value: Numeric) -> Charge:
+    """Construct a Charge from a magnitude expressed in ampere-hours."""
+    return Charge(to_exact(value) * AMPERE_HOUR.scale, AMPERE_HOUR)
 
 
 CHARGE_UNITS: Mapping[str, Callable[[Numeric], Charge]] = MappingProxyType(
@@ -75,18 +101,29 @@ CHARGE_UNITS: Mapping[str, Callable[[Numeric], Charge]] = MappingProxyType(
         MICROCOULOMB.symbol: Microcoulomb,
         MILLICOULOMB.symbol: Millicoulomb,
         COULOMB.symbol: Coulomb,
+        "As": AmpereSecond,
+        MILLIAMPERE_SECOND.symbol: MilliampereSecond,
+        MILLIAMPERE_HOUR.symbol: MilliampereHour,
+        AMPERE_HOUR.symbol: AmpereHour,
     }
 )
 
 __all__ = [
+    "AMPERE_HOUR",
     "CHARGE_UNITS",
     "COULOMB",
     "MICROCOULOMB",
+    "MILLIAMPERE_HOUR",
+    "MILLIAMPERE_SECOND",
     "MILLICOULOMB",
     "NANOCOULOMB",
     "PICOCOULOMB",
+    "AmpereHour",
+    "AmpereSecond",
     "Coulomb",
     "Microcoulomb",
+    "MilliampereHour",
+    "MilliampereSecond",
     "Millicoulomb",
     "Nanocoulomb",
     "Picocoulomb",

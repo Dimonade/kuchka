@@ -69,7 +69,7 @@ def test_rejects_a_variety_of_non_numeric_inputs(bad_value):
 def test_measurements_are_immutable():
     voltage = Volt(5)
     with pytest.raises(AttributeError):
-        voltage._magnitude = Decimal(10)  # noqa: SLF001
+        voltage._magnitude = Decimal(10)  # ty: ignore[invalid-assignment]  # noqa: SLF001
 
 
 def test_isinstance_of_the_semantic_type_not_the_constructor():

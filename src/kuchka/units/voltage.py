@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import VOLTAGE
 from kuchka.numeric import Numeric
-from kuchka.numeric import to_decimal
+from kuchka.numeric import to_exact
 from kuchka.prefixes import KILO
 from kuchka.prefixes import MICRO
 from kuchka.prefixes import MILLI
@@ -50,22 +50,22 @@ Voltage._canonical_unit = VOLT  # noqa: SLF001 -- this module owns Voltage's can
 
 def Microvolt(value: Numeric) -> Voltage:
     """Construct a Voltage from a magnitude expressed in microvolts."""
-    return Voltage(to_decimal(value) * MICROVOLT.scale, MICROVOLT)
+    return Voltage(to_exact(value) * MICROVOLT.scale, MICROVOLT)
 
 
 def Millivolt(value: Numeric) -> Voltage:
     """Construct a Voltage from a magnitude expressed in millivolts."""
-    return Voltage(to_decimal(value) * MILLIVOLT.scale, MILLIVOLT)
+    return Voltage(to_exact(value) * MILLIVOLT.scale, MILLIVOLT)
 
 
 def Volt(value: Numeric) -> Voltage:
     """Construct a Voltage from a magnitude expressed in volts."""
-    return Voltage(to_decimal(value) * VOLT.scale, VOLT)
+    return Voltage(to_exact(value) * VOLT.scale, VOLT)
 
 
 def Kilovolt(value: Numeric) -> Voltage:
     """Construct a Voltage from a magnitude expressed in kilovolts."""
-    return Voltage(to_decimal(value) * KILOVOLT.scale, KILOVOLT)
+    return Voltage(to_exact(value) * KILOVOLT.scale, KILOVOLT)
 
 
 VOLTAGE_UNITS: Mapping[str, Callable[[Numeric], Voltage]] = MappingProxyType(

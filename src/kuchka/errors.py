@@ -23,7 +23,16 @@ class InvalidMeasurementError(MeasurementError):
 
 
 class IncompatibleDimensionError(MeasurementError):
-    """An operation was attempted between two incompatible dimensions."""
+    """An operation was attempted between two incompatible dimensions or types.
+
+    Every raise site for this error tests for a *type* mismatch
+    (`type(self) is not type(other)`), not a dimension mismatch directly, since two
+    different types can share a dimension on purpose.
+
+    The message below is built accordingly:
+    - when the operands' dimensions actually differ, it names both.
+    - when they coincide, names them as different concepts within identical dimension.
+    """
 
     def __init__(self, operation: str, left: object, right: object) -> None:
         """Build the error message from the operands' runtime types and dimensions."""
@@ -31,11 +40,19 @@ class IncompatibleDimensionError(MeasurementError):
         right_name = type(right).__name__
         left_dim = getattr(left, "dimension", None)
         right_dim = getattr(right, "dimension", None)
-        message = (
-            f"Cannot {operation} {left_name} and {right_name}.\n"
-            f"{left_name} has dimension [{left_dim!r}].\n"
-            f"{right_name} has dimension [{right_dim!r}]."
-        )
+        if left_dim == right_dim:
+            message = (
+                f"Cannot {operation} `{left_name}` and `{right_name}`.\n"
+                f"Both share dimension [{left_dim!r}], but `kuchka` treats them as "
+                f"distinct concepts, not interchangeable quantities.\n"
+                f"Convert explicitly if you mean to treat one as the other."
+            )
+        else:
+            message = (
+                f"Cannot {operation} `{left_name}` and `{right_name}`.\n"
+                f"`{left_name}` has dimension [{left_dim!r}].\n"
+                f"`{right_name}` has dimension [{right_dim!r}]."
+            )
         super().__init__(message)
         self.operation = operation
         self.left = left

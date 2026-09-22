@@ -1,7 +1,16 @@
-"""Velocity: a rate of change of position.
+"""Velocity, Acceleration, and Force: rates and interactions of mechanical motion.
 
-Defined alongside its one relationship to `Length` and `Time`
-(`Length / Time -> Velocity`, and its inverse, `Velocity * Time -> Length`).
+A number of related relationships defined as:
+
+- `Length / Time -> Velocity`, and its inverse, `Velocity * Time -> Length`.
+- `Velocity / Time -> Acceleration`, and its inverse,
+    `Acceleration * Time -> Velocity` -- the rate of change of a rate of change.
+- `Mass * Acceleration -> Force`, Newton's second law, and its two inverses,
+  `Force / Mass -> Acceleration` and `Force / Acceleration -> Mass`.
+
+`Force` also carries the other overload half of `Force / Area -> Pressure` and its
+two inverses, `Pressure * Area -> Force` and `Force / Pressure -> Area` (see
+`Pressure`).
 """
 
 from __future__ import annotations
@@ -10,16 +19,23 @@ from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import overload
 
+from typing_extensions import override
+
+from kuchka.dimensions import ACCELERATION
+from kuchka.dimensions import FORCE
 from kuchka.dimensions import VELOCITY
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import register
 
 if TYPE_CHECKING:
-    from decimal import Decimal
+    from fractions import Fraction
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.area import Area
     from kuchka.quantities.length import Length
+    from kuchka.quantities.mass import Mass
+    from kuchka.quantities.pressure import Pressure
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -34,22 +50,90 @@ class Velocity(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Velocity: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __mul__(self, other: object) -> LinearQuantity | Decimal:
+    @override
+    def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
     def __truediv__(self, other: Frequency) -> Length: ...
     @overload
+    def __truediv__(self, other: Time) -> Acceleration: ...
+    @overload
+    def __truediv__(self, other: Acceleration) -> Time: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Velocity: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Decimal: ...
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
 
-    def __truediv__(self, other: object) -> LinearQuantity | Decimal:
+    @override
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+        return super().__truediv__(other)
+
+
+class Acceleration(LinearQuantity):
+    """A rate of change of velocity: how quickly speed or direction changes."""
+
+    dimension: ClassVar[Dimension] = ACCELERATION
+
+    @overload
+    def __mul__(self, other: Time) -> Velocity: ...
+    @overload
+    def __mul__(self, other: Mass) -> Force: ...
+    @overload
+    def __mul__(self, other: Numeric) -> Acceleration: ...
+    @overload
+    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+        return super().__mul__(other)
+
+    @overload
+    def __truediv__(self, other: Numeric) -> Acceleration: ...
+    @overload
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+        return super().__truediv__(other)
+
+
+class Force(LinearQuantity):
+    """A push or a pull: the interaction that changes a mass's motion."""
+
+    dimension: ClassVar[Dimension] = FORCE
+
+    @overload
+    def __mul__(self, other: Numeric) -> Force: ...
+    @overload
+    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+        return super().__mul__(other)
+
+    @overload
+    def __truediv__(self, other: Mass) -> Acceleration: ...
+    @overload
+    def __truediv__(self, other: Acceleration) -> Mass: ...
+    @overload
+    def __truediv__(self, other: Area) -> Pressure: ...
+    @overload
+    def __truediv__(self, other: Pressure) -> Area: ...
+    @overload
+    def __truediv__(self, other: Numeric) -> Force: ...
+    @overload
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 
 register(VELOCITY, Velocity)
+register(ACCELERATION, Acceleration)
+register(FORCE, Force)
 
-__all__ = ["Velocity"]
+__all__ = ["Acceleration", "Force", "Velocity"]

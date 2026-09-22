@@ -11,6 +11,7 @@ from decimal import Decimal
 import pytest
 
 from kuchka import Ampere
+from kuchka import AmpereSecond
 from kuchka import Charge
 from kuchka import Coulomb
 from kuchka import Current
@@ -57,3 +58,26 @@ def test_charge_is_incompatible_with_voltage():
 
 def test_isinstance_of_charge():
     assert isinstance(Coulomb(1), Charge)
+
+
+def test_ampere_second_and_coulomb_are_the_same_function():
+    """Test AmpereSecond and Coulomb not merely equal-behaving -- the same object."""
+    assert AmpereSecond is Coulomb
+
+
+def test_ampere_second_is_coulomb():
+    assert AmpereSecond(1) == Coulomb(1)
+    assert AmpereSecond(5) == Coulomb(5)
+
+
+def test_ampere_second_displays_as_coulomb():
+    """AmpereSecond is a plain alias, so it carries Coulomb's symbol, not its own."""
+    assert AmpereSecond(1).unit is Coulomb(1).unit
+    assert repr(AmpereSecond(1)) == "1 C"
+
+
+def test_ampere_second_is_resolvable_at_the_charge_units_boundary():
+    from kuchka.units import CHARGE_UNITS
+
+    assert CHARGE_UNITS["As"] is AmpereSecond
+    assert CHARGE_UNITS["As"](5) == Coulomb(5)

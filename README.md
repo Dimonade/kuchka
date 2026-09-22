@@ -1,14 +1,36 @@
 # kuchka
 
-A small pile of physically-typed engineering units for Python.
+A small pile of strongly-typed physical quantities and engineering units for Python.
+
+`kuchka` turns engineering values into first-class Python types instead of raw numbers.
+`Volt(5)` returns a `Voltage`; `Kilogram(1000)` returns a `Mass`; `Mass * Acceleration` returns a `Force` automatically, and that physical meaning travels with the value through the rest of your code.
+`mypy`/`ty` can catch a `Current` passed where a `Voltage` is expected before the program ever runs, and runtime checks cover the boundaries static analysis can't see: configuration data, hardware readings, unit conversion, dimensional arithmetic.
+Existing projects can adopt this incrementally, by typing the values and interfaces that matter first.
+
+Here's a small example that goes from an electrical measurement straight to a duration, using Ohm's law and a battery's rated charge capacity:
 
 ```python
-from kuchka import Volt, Milliampere
+from kuchka import AmpereHour
+from kuchka import Ohm
+from kuchka import Volt
+from kuchka.units import HOUR
 
-voltage = Volt(4.2)
-current = Milliampere(150)
-power = voltage * current  # -> Power(0.63 W), typed and computed automatically.
+supply = Volt(3.7)
+load = Ohm(148)
+battery = AmpereHour(2)
+
+current = supply / load  # Ohm's law -> Current.
+runtime = (battery / current).to(HOUR)  # Charge / Current -> Time.
+
+print(current)
+# 0.025 A
+print(runtime)
+# 80 h
 ```
+
+The important part is not the arithmetic itself.
+Each result is a real `kuchka` quantity, and the relationships between the inputs determine the resulting physical type.
+The same dimensional machinery is used whether the calculation is mechanical, electrical, geometric, or signal-related.
 
 ## Installation
 
@@ -16,247 +38,555 @@ power = voltage * current  # -> Power(0.63 W), typed and computed automatically.
 uv add kuchka
 ```
 
-or, with pip:
+or:
 
 ```bash
 pip install kuchka
 ```
 
-That's the only install step needed to use kuchka in application code.
-The `Development` section below covers the separate, larger set of tools (ruff, mypy, ty, pytest, hypothesis, ...) needed to work on `kuchka`.
+Application code should normally import from the top-level `kuchka` package.
+The development toolchain described later is separate from the package's runtime dependencies.
 
-## Stability
+## Quick start
 
-`kuchka` is `0.1.0`: pre-1.0, and versioned accordingly.
-Breaking changes are expected between `0.1.x` releases while the API settles.
-From `0.2.0` onward, `kuchka` follows ordinary semantic versioning:
-a minor version bump won't break existing code, and a breaking change always comes with a major version bump.
+The useful part of `kuchka` is not just unit conversion.
+Values acquire a physical type, typed quantities can cross application boundaries, and ordinary arithmetic can produce other physical quantities.
 
-## Why
+### 1. Type the values your application is already using
 
-A raw `float` doesn't remember what it means.
-Passing floats through an engineering pipeline makes unit mistakes easy to write and hard to catch:
-the code stays syntactically valid even when it's semantically wrong.
-
-`kuchka` makes the physically-typed version of the code no harder to write than the untyped one.
-There's no reason left to reach for a naked `float`.
+A unit constructor such as `Volt` creates a `Voltage`; `Milliampere` creates a `Current`.
+The unit is part of construction, while the resulting object has the physical quantity type.
 
 ```python
-def analyse_voltage(voltage: Voltage) -> Report: ...
+from kuchka import Ampere
+from kuchka import Milliampere
+from kuchka import Millivolt
+from kuchka import Volt
+from kuchka import Voltage
+
+supply = Volt(5)
+load = Milliampere(150)
+power = supply * load
+
+print(power)
+# 0.75 W
 
 
-analyse_voltage(4.2)  # rejected by mypy/ty, and again at runtime.
-analyse_voltage(Ampere(2))  # rejected by mypy/ty, and again at runtime.
-analyse_voltage(Volt(4.2))  # one example of a valid type check.
-analyse_voltage(Millivolt(4200))  # another example of a valid type check.
+def check_supply(voltage: Voltage) -> bool:
+    return voltage >= Volt(3)
+
+
+check_supply(Volt(5))  # valid.
+check_supply(Millivolt(4200))  # valid.
+check_supply(Ampere(2))  # static type error (`IncompatibleDimensionError`).
+check_supply(4.2)  # static type error (`IncompatibleDimensionError`).
 ```
 
-## What's in v0.1
+The type annotation gives static tools the contract.
+The comparison inside the function also exercises `kuchka`'s runtime dimensional checks when the function is called with an incompatible value.
+Python function annotations themselves remain ordinary annotations; `kuchka` does not add a runtime annotation enforcement mechanism.
 
-| Quantity            | Constructors                                                                                     |
-| ------------------- | ------------------------------------------------------------------------------------------------ |
-| `Voltage`           | `Volt`, `Millivolt`, `Microvolt`, `Kilovolt`                                                     |
-| `Current`           | `Ampere`, `Milliampere`, `Microampere`, `Kiloampere`                                             |
-| `Charge`            | `Coulomb`, `Millicoulomb`, `Microcoulomb`, `Nanocoulomb`, `Picocoulomb`                          |
-| `Power`             | `Watt`, `Milliwatt`, `Kilowatt`                                                                  |
-| `Energy`            | `Joule`, `Millijoule`, `Microjoule`, `Nanojoule`, `Picojoule`, `Kilojoule`, `Megajoule`          |
-| `Resistance`        | `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`                                                          |
-| `Temperature`       | `Celsius`, `Kelvin`                                                                              |
-| `TemperatureDelta`  | `DeltaCelsius`, `DeltaKelvin`                                                                    |
-| `Time`              | `Second`, `Millisecond`, `Microsecond`                                                           |
-| `Frequency`         | `Hertz`, `Kilohertz`, `Megahertz`                                                                |
-| `SamplingPeriod`    | `SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod`                 |
-| `SampleRate`        | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`                               |
-| `BaudRate`          | `Baud`, `Kilobaud`                                                                               |
-| `Length`            | `Nanometer`, `Micrometer`, `Millimeter`, `Centimeter`, `Decimeter`, `Meter`, `Kilometer`, `Inch` |
-| `Velocity`          | `MetrePerSecond` (`MeterPerSecond`)                                                              |
-| `Mass`              | `Nanogram`, `Microgram`, `Milligram`, `Gram`, `Kilogram`, `Megagram`, `Tonne`                    |
-| `AmountOfSubstance` | `Micromole`, `Millimole`, `Mole`                                                                 |
-| `LuminousIntensity` | `Candela`                                                                                        |
-| `Proportion`        | `Ratio`, `Percent`                                                                               |
+This is the basic idea: application functions can name the physical quantity they expect instead of accepting an unqualified `float`.
 
-Deliberately nothing else yet.
-See "What this is not (yet)" below.
+### 2. Validate units when data enters from configuration
 
-## Design choices, and why
+Configuration formats have to represent units as data.
+That does not mean the rest of the application has to become stringly typed.
+Resolve the unit once at the boundary, then construct a typed value.
 
-- **`Decimal`, not `float`.**
-  SI prefixes are powers of ten, and those are exact in `Decimal` but usually not in binary `float`.
-  `Volt(1) + Millivolt(500) == Volt(1.5)` is true by construction, and not by lucky rounding.
-- **Unit constructors are plain functions, not classes.**
-  `Volt(4.2)` returns a `Voltage`.
-  There's no `Volt` type to accidentally `isinstance()`-check against, and no subclass/`__new__` surprise where `isinstance(Volt(5), Volt)` is `False`.
-- **`.to(Unit)` uses Python names, never unit strings.**
-  There's no `voltage.to("mV")` anywhere in this library.
-- **Boundary code that must resolve a unit from a string has a maintained table to use.**
-  `kuchka.units` exports a `*_UNITS` mapping per dimension (`VOLTAGE_UNITS`, `CURRENT_UNITS`, `FREQUENCY_UNITS`, and so on), closed to that dimension's own constructors and immutable.
-  This is not a second construction path: `Volt(5)` is still how application code builds a `Voltage`.
-  It exists for the one place a unit is expected to arrive as a string -- a config file, a CSV header, a hardware descriptor.
-  The intention is so that place doesn't have to hand-roll the same table every other application resolving `kuchka` units already needed.
-- **Cross-type arithmetic is rejected statically, not just at runtime.**
-  `Volt(5) + Ampere(2)` and `Volt(5) + 4.2` are both mypy errors, not only runtime ones.
-  This falls out of typing the base arithmetic methods against `Self` instead of `object`, so every quantity type only ever type-checks arithmetic against its own kind.
-  See "Known limitations" for where `ty` doesn't (yet) enforce this the same way.
-- **A hand-written overload table.**
-  The runtime arithmetic derives any product or quotient from general exponent-vector algebra.
-  Type checkers can't infer "Voltage times Current is Power" from that algebra on their own, so each pairing is spelled out as an explicit `@overload`.
-- **`Temperature` is a separate, smaller type from everything else.**
-  Absolute temperature is affine, not linear:
-  `20 degC + 5 degC` isn't meaningful the way `5V + 3V` is.
-  It supports `Temperature +/- TemperatureDelta` and `Temperature - Temperature`, but not `Temperature  - Temperature`, and no scalar multiplication at all.
-  See the module docstring next to `Temperature` for the full reasoning.
-- **Scope gaps are curated, not generic, where the gap has a name.**
-  `Resistance * Resistance` raises `UnrepresentableDimensionError`: dimensionally valid, no registered type, and no plan to add one.
-  Planned to be implemented dimensions raise a `PlannedDimensionError` instead, a subclass of the same error, because some calculations are planned to be implemented soon.
-  The error message is explicitly different, and not leaving the reader to reverse-engineer the physics from an exponent vector.
+For example:
 
-### Same dimension, different concepts
-
-`Frequency`, `SampleRate`, and `BaudRate` all share the same physical dimension (T^-1), but they are not the same thing, and `kuchka` keeps them as separate types on purpose:
-
-```python
-# IncompatibleDimensionError, even though both are dimensionally T^-1.
-Hertz(50) + SamplesPerSecond(50)
+```toml
+# device.toml
+led_critical_voltage = { value = "2800", unit = "mV" }
 ```
 
-Only one type per dimension is ever the _canonical_ one -- the type generic arithmetic produces automatically.
-That's always the plain SI name (`Frequency` for T^-1, `Time` for T^1), never a domain-specific type like `SampleRate` or `BaudRate`.
-Those stay reachable only by explicit construction, the same way `Temperature` already works.
-
-Genuine reciprocal pairs convert into each other directly:
+The corresponding loader can use `VOLTAGE_UNITS`, which contains only voltage units:
 
 ```python
-rate = 1 / SecondSamplingPeriod(2)  # -> SampleRate, not Frequency.
-period = 1 / rate  # -> SamplingPeriod again.
+from collections.abc import Mapping
+from dataclasses import dataclass
+from decimal import Decimal
+from pathlib import Path
+import tomllib
+
+from kuchka import Voltage
+from kuchka.units import VOLTAGE_UNITS
+
+
+@dataclass(frozen=True)
+class DeviceConfig:
+    led_critical_voltage: Voltage
+
+
+def parse_voltage(raw: Mapping[str, str]) -> Voltage:
+    try:
+        constructor = VOLTAGE_UNITS[raw["unit"]]
+    except KeyError as exc:
+        raise ValueError(f"invalid voltage unit: {raw['unit']!r}") from exc
+
+    return constructor(Decimal(raw["value"]))
+
+
+with Path("device.toml").open("rb") as file:
+    raw = tomllib.load(file)
+
+config = DeviceConfig(led_critical_voltage=parse_voltage(raw["led_critical_voltage"]))
 ```
 
-`BaudRate` gets no reciprocal at all: baud counts symbols per second, not bits or cycles, so a default equivalence with `Frequency` would be wrong for any encoding other than exactly one bit per symbol.
-Silently guessing here is worse than refusing.
+This is accepted:
 
-For code that wants to accept "a Frequency or a SampleRate, interchangeably", there's a `ConvertibleToFrequency` protocol:
+```toml
+led_critical_voltage = { value = "2800", unit = "mV" }
+```
+
+This is rejected while loading because `mA` is not a member of the voltage unit table:
+
+```toml
+led_critical_voltage = { value = "150", unit = "mA" }
+```
+
+The same boundary pattern exists for the other quantity families through their corresponding `*_UNITS` mappings.
+`kuchka` therefore allows strings where the data format requires them without making strings the normal application API.
+
+### 3. Compose real engineering relationships
+
+The library is useful when a calculation crosses more than one physical domain. For example, an actuator calculation can derive several quantities in sequence:
+
+```text
+Voltage * Current -> Power
+Mass * Acceleration -> Force
+Force / Area -> Pressure
+Pressure * Volume -> Energy
+Mass / Volume -> Density
+Length * Length -> Area
+Area * Length -> Volume
+```
+
+That means a calculation can move through a chain such as:
 
 ```python
-from kuchka import ConvertibleToFrequency, Frequency
+from kuchka import Centimetre
+from kuchka import Kilogram
+from kuchka import MetrePerSecondSquared
+from kuchka import SquareCentimetre
+
+mass = Kilogram(1000)
+acceleration = MetrePerSecondSquared(0.5)
+piston_area = SquareCentimetre(20)
+stroke = Centimetre(10)
+
+force = mass * acceleration
+pressure = force / piston_area
+volume = piston_area * stroke
+energy = pressure * volume
+
+print(force)
+# 500 N
+print(pressure)
+# 250000 Pa
+print(volume)
+# 0.0002 m³
+print(energy)
+# 50 J
+```
+
+No unit strings or manual conversion factors are needed in the calculation.
+The operators determine the physical result types.
+
+### 4. Bring raw sensor data into a control path
+
+A hardware driver may naturally return a plain integer or float.
+Give that value a physical type at the hardware boundary, then keep the control logic typed:
+
+```python
+from kuchka import Ampere
+from kuchka import Milliohm
+from kuchka import Millivolt
+
+SHUNT_RESISTANCE = Milliohm(100)
+OVERCURRENT_LIMIT = Ampere(1.5)
+
+
+def handle_adc_sample(raw_shunt_voltage_mv: int) -> None:
+    shunt_voltage = Millivolt(raw_shunt_voltage_mv)
+    current = shunt_voltage / SHUNT_RESISTANCE
+
+    if current >= OVERCURRENT_LIMIT:
+        emergency_shutoff()
+```
+
+For a raw sample of `187 mV`, the calculation produces `1.87 A`.
+The control decision compares a typed `Current` with a typed current limit, so the two values carry explicit engineering meaning instead of relying on unrelated numbers such as `187` and `1.5`.
+
+This is the intended boundary pattern for `kuchka`: attach physical meaning when data enters the application, then let Python typing and dimensional arithmetic carry that meaning through the rest of the code.
+
+## Take a tour
+
+The examples above use linear engineering quantities, but `kuchka` is broader than a unit-conversion helper.
+Quantities have different arithmetic shapes, and the shape determines which operations make physical sense.
+
+### Linear quantities
+
+Most engineering quantities are linear: their units differ by a scale factor.
+Addition, subtraction, scalar multiplication, and ordering behave like ordinary numbers.
+
+```python
+from kuchka import Millivolt
+from kuchka import Volt
+
+Volt(1) + Millivolt(200) == Volt(1.2)
+# True
+```
+
+This includes quantities such as `Voltage`, `Current`, `Length`, `Mass`, `Time`, and many others.
+
+### Affine quantities
+
+Some values represent readings on a scale.
+`Temperature` is the current example.
+
+A reading minus a reading gives a linear delta, and adding a delta shifts the reading.
+Adding two readings is rejected.
+
+```python
+from kuchka import Celsius
+from kuchka import DeltaCelsius
+
+Celsius(25) - Celsius(20) == DeltaCelsius(5)
+Celsius(20) + DeltaCelsius(5) == Celsius(25)
+Celsius(20) + Celsius(5)  # rejected: `MeasurementError`.
+5 * Celsius(5)  # rejected: there is no `__mul__` defined (`TypeError`).
+```
+
+Temperatures below absolute zero are rejected as invalid measurements:
+
+```python
+from kuchka import Celsius
+from kuchka import Kelvin
+
+Kelvin(-1)  # raises `InvalidMeasurementError`.
+Celsius(-274)  # raises `InvalidMeasurementError`.
+Kelvin(0)  # valid.
+```
+
+### Modular quantities
+
+Some quantities wrap around after a fixed period.
+`Angle` is the current example.
+
+```python
+from kuchka import Degree
+
+Degree(350) + Degree(20) == Degree(10)
+Degree(300).difference(Degree(350)) == Degree(-50)
+Degree(10) < Degree(20)  # rejected: no total order on a circle (`TypeError`).
+```
+
+`+` and `-` use ordinary wraparound arithmetic.
+`difference()` is the separate shortest-signed-path operation.
+
+See [Quantity shapes and semantics](docs/concepts/quantity_shapes.md) for the full semantics.
+
+## Why `kuchka`?
+
+A raw `float` does not remember what it means.
+Passing floats through an engineering pipeline makes unit mistakes easy to write and hard to catch because the code remains syntactically valid even when it is semantically wrong.
+
+The useful distinction is not between "numbers" and "numbers with prettier printing".
+It is between application code where physical meaning is carried by convention:
+
+```python
+voltage_mv = 4200
+current_ma = 150
+power_w = voltage_mv * current_ma
+```
+
+and application code where physical meaning is part of the value itself:
+
+```python
+voltage = Millivolt(4200)
+current = Milliampere(150)
+power = voltage * current
+```
+
+The second form gives the application something ordinary Python can work with: a function can require `Voltage`, a configuration loader can construct a `Voltage`, and an engineering formula can produce a `Power`.
+The unit does not have to be carried in a variable name, a comment, or an application-specific string convention.
+
+That is the niche `kuchka` is aiming for: a curated set of engineering quantities that behave as ordinary Python types and are checked by ordinary Python type checkers, with runtime validation still available at untyped boundaries.
+
+This is deliberately narrower than a general-purpose unit language.
+`kuchka` does not try to accept arbitrary unit expressions, provide a mutable application-wide unit registry, or make every physical quantity array-native.
+Those are useful capabilities, but they optimize for a different problem.
+See [Comparison with existing tools](docs/comparison.md) for the trade-offs.
+
+## Where `kuchka` fits
+
+`kuchka` is aimed at engineering application code where the physical vocabulary is known ahead of time and correctness matters more than arbitrary unit flexibility.
+Typical examples include device configuration, hardware interfaces, control logic, protocol handling, test infrastructure, and reports.
+
+It is less suited to scientific workloads where quantities are primarily NumPy arrays, units are user-defined or discovered at runtime, or arbitrary compound units need to be parsed.
+In those cases, an established general-purpose library may fit the problem better.
+
+The point is not to replace every unit library.
+The point is to make one particular style of engineering code feel natural: ordinary Python functions taking and returning ordinary Python types that happen to carry physical meaning.
+
+## What's included in 0.1.2
+
+The current vocabulary spans several engineering domains.
+
+**Electrical**
+
+- **Voltage:** `Volt`, `Millivolt`, `Microvolt`, `Kilovolt`
+- **Current:** `Ampere`, `Milliampere`, `Microampere`, `Kiloampere`
+- **Power:** `Watt`, `Milliwatt`, `Kilowatt`
+- **Resistance:** `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`
+- **Conductance:** `Siemens`, `Microsiemens`, `Millisiemens`, `Kilosiemens`
+- **Charge:** `Coulomb`, `Millicoulomb`, `Microcoulomb`, `Nanocoulomb`, `Picocoulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`
+- **Energy:** `Joule`, `Millijoule`, `Microjoule`, `Nanojoule`, `Picojoule`, `Kilojoule`, `Megajoule`, `MilliwattHour`, `WattHour`
+
+**Time and signal**
+
+- **Temperature:** `Celsius`, `Kelvin`
+- **Temperature Delta:** `DeltaCelsius`, `DeltaKelvin`
+- **Time:** `Second`, `Millisecond`, `Microsecond`, `Minute`, `Hour`
+- **Frequency:** `Hertz`, `Kilohertz`, `Megahertz`
+- **Sampling Period:** `SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod`
+- **Sample Rate:** `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`
+- **Baud Rate:** `Baud`, `Kilobaud`
+
+**Geometry and mechanics**
+
+- **Length:** `Nanometre`, `Micrometre`, `Millimetre`, `Centimetre`, `Decimetre`, `Metre`, `Kilometre`, `Inch`
+- **Area:** `SquareMillimetre`, `SquareCentimetre`, `SquareMetre`, `SquareKilometre`, `Hectare`, `Acre`, `SquareInch`
+- **Volume:** `CubicMillimetre`, `CubicCentimetre`, `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`
+- **Velocity:** `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`
+- **Acceleration:** `MetrePerSecondSquared`
+- **Mass:** `Nanogram`, `Microgram`, `Milligram`, `Gram`, `Kilogram`, `Megagram`, `Tonne`
+- **Force:** `Newton`, `Millinewton`, `Kilonewton`, `Dyne`, `PoundForce`
+- **Density:** `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`
+- **Pressure:** `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`
+
+**Angle**
+
+- **Angle:** `Radian`, `Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond`
+
+**Chemistry and light**
+
+- **Amount of Substance:** `Micromole`, `Millimole`, `Mole`
+- **Luminous Intensity:** `Candela`
+
+**Dimensionless**
+
+- **Proportion:** `Ratio`, `Percent`
+
+The canonical spelling of the SI unit of length is `metre`.
+`kuchka` aliases `*meter` names to the corresponding `*metre` names.
+The same principle applies to `Litre` and `Liter`, and others.
+
+## A few important distinctions
+
+### Same dimension does not always mean the same concept
+
+`Frequency`, `SampleRate`, and `BaudRate` all have physical dimension T^-1, but they remain separate types because they describe different concepts.
+
+```python
+from kuchka import Hertz
+from kuchka import SamplesPerSecond
+
+Hertz(50) + SamplesPerSecond(50)  # rejected: `IncompatibleDimensionError`.
+```
+
+Genuine reciprocal pairs remain reciprocal:
+
+```python
+rate = 1 / SecondSamplingPeriod(2)  # -> SampleRate
+period = 1 / rate  # -> SamplingPeriod
+```
+
+For APIs that can accept either a `Frequency` or a `SampleRate`, `ConvertibleToFrequency` provides an explicit common protocol:
+
+```python
+from kuchka import ConvertibleToFrequency
+from kuchka import Frequency
 
 
 def nyquist_ok(signal: ConvertibleToFrequency, sample_rate: Frequency) -> bool:
     return signal.as_frequency() * 2 <= sample_rate
 ```
 
-`BaudRate` deliberately does not satisfy this protocol, since it has no `as_frequency()`.
+### Canonical types and domain-specific types
 
-### Percent and Ratio are the same quantity, not different concepts
+For a physical dimension, one type is canonical: the type produced by generic dimensional arithmetic.
+Domain-specific types such as `SampleRate` and `BaudRate` remain available through explicit construction when the distinction matters to the application.
 
-`Proportion` is the dimensionless quantity: `Ratio` is its coherent, unscaled unit (a bare fraction), and `Percent` is a hundredth of that.
-Unlike `Frequency`/`SampleRate`/`BaudRate`, these are not different concepts sharing a dimension -- `5%` and `0.05` are the same quantity at different scale, the same relationship `Volt`/`Millivolt` has:
+## Conversions
 
-```python
-Percent(5) == Ratio(Decimal("0.05"))  # True
-Percent(5) + Ratio(Decimal("0.05")) == Percent(10)  # True
-```
-
-`Proportion` is never registered for `DIMENSIONLESS`, and could not usefully be even if it wanted to: `Ohm(5) / Ohm(2)` already returns a bare `Decimal` for any dimensionless result, before the registry is even consulted, and that does not change.
-`Percent`/`Ratio` stay reachable only by explicit construction, the same way `SampleRate`/`BaudRate` do.
-
-What does change: multiplying or dividing any existing quantity by a `Proportion` already produces the correctly-typed result, with no new arithmetic added anywhere.
+Use a unit definition when a value needs to be displayed or handed to a boundary in another unit:
 
 ```python
-Volt(5) * Ratio(Decimal("0.1")) == Volt(Decimal("0.5"))  # True, a tolerance band.
+from kuchka import Volt
+from kuchka.units import MILLIVOLT
+
+voltage = Volt(5)
+
+print(voltage.to(MILLIVOLT))
+# 5000 mV
+
+print(voltage)
+# 5 V
 ```
 
-This falls out of the same general dimension algebra that already derives `Power` from `Voltage * Current`: multiplying by the dimensionless identity leaves the other operand's dimension, and therefore its type, unchanged.
+There is no `voltage.to("mV")`.
+Application code uses Python unit definitions.
+String resolution belongs at boundaries such as configuration and import code, where the maintained `*_UNITS` mappings provide the bridge.
+
+A conversion to another physical dimension is rejected:
+
+```python
+from kuchka import Volt
+from kuchka.units import MILLIAMPERE
+
+Volt(5).to(MILLIAMPERE)  # raises `InvalidConversionError`.
+```
+
+## Exact arithmetic
+
+Every magnitude is stored as an exact `Fraction`, not a rounded floating-point approximation.
+`Decimal` is materialized when a value needs decimal display.
+
+Compare
+
+```python
+battery_a_volts = 0.1
+battery_b_volts = 0.2
+v_total = battery_a_volts + battery_b_volts
+
+print(v_total)
+# 0.30000000000000004, not 0.3.
+```
+
+with
+
+```python
+from kuchka import Volt
+
+v_total = Volt(0.1) + Volt(0.2)
+print(v_total)
+# 0.3 V
+
+v_total == Volt(0.3)
+# True
+```
+
+or
+
+```python
+from fractions import Fraction
+from kuchka import Litre
+from kuchka.units import LITRE
+
+q = Litre(Fraction(5, 18))
+q.magnitude
+# Fraction(1, 3600)
+
+q.value_in(LITRE)
+# Fraction(5, 18)
+```
+
+`.magnitude` always reads out in the quantity's canonical unit - `CubicMetre` for `Volume`, here - not the unit it was constructed with.
+The construction is still exact: `5/18` litre becomes `5/18 * 1/1000 = 1/3600` cubic metre with no rounding at any step.
+`.value_in(unit)` is what recovers the value in a specific unit, litres in this case.
+
+`float` input is parsed through its string representation, so `Volt(4.2)` preserves the digits written by the programmer instead of storing the binary floating-point representation of the float.
+
+Angular units are the deliberate exception to mathematical exactness because pi is irrational.
+`Radian` is canonical, while the other angular scales use `kuchka`'s fixed rational internal representation of pi.
+See [Exactness and angular units](docs/concepts/exactness.md) for the full rationale.
 
 ## Physical constants
 
-`kuchka.constants` provides a small set of physical constants as ordinary `kuchka` quantities.
+`kuchka.constants` provides curated sets of `kuchka`-typed physical constants.
+The initial implementation of one such set is `kuchka.constants.codata_2022`.
 
 ```python
 from kuchka import Hertz
-from kuchka.constants import SPEED_OF_LIGHT
+import kuchka.constants.codata_2022 as kc
 
-wifi_wavelength = SPEED_OF_LIGHT / Hertz(2_400_000_000)  # -> Length, ~0.1249 m
+wifi_wavelength = kc.SPEED_OF_LIGHT_IN_VACUUM / Hertz(2_400_000_000)
+# Length: about 0.1249 m
 ```
 
-`SPEED_OF_LIGHT` and `ELEMENTARY_CHARGE` are exact by SI definition.
-`ELECTRON_MASS`, `PROTON_MASS`, and `NEUTRON_MASS` are CODATA 2022 recommended values, carrying exactly as many significant digits as CODATA publishes for each.
-The module docstring states which category each constant belongs to.
-
-The set grows as concrete needs come up, the same way the unit vocabulary itself does.
+Some constants are exact by definition; others are CODATA 2022 recommended values.
+Each constant documents its own status and published precision.
 
 ## Errors
 
-Every error kuchka raises for a mistake in application code is a `MeasurementError`; catch that to handle the whole family at once.
+Application-level measurement errors derive from `MeasurementError`:
 
-| Error                           | Raised when                                                                                                                      |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `InvalidMeasurementError`       | a unit constructor got a non-numeric value, a `bool`, or an incompatible measurement                                             |
-| `IncompatibleDimensionError`    | an operation was attempted between two incompatible dimensions or types                                                          |
-| `InvalidConversionError`        | `.to(...)` was given something that isn't a valid unit for that dimension                                                        |
-| `UnrepresentableDimensionError` | arithmetic produced a dimension with no registered engineering type                                                              |
-| `PlannedDimensionError`         | same as above, but for a dimension already named and intended for a future release (subclass of `UnrepresentableDimensionError`) |
+| Error                           | Raised when                                                                                                     |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `InvalidMeasurementError`       | a constructor receives a non-numeric value, a `bool`, or an invalid measurement such as a temperature below 0 K |
+| `IncompatibleDimensionError`    | incompatible quantities or concepts are combined                                                                |
+| `InvalidConversionError`        | `.to(...)` receives a unit that is not valid for the quantity                                                   |
+| `UnrepresentableDimensionError` | arithmetic produces a dimension without a registered engineering type                                           |
+| `PlannedDimensionError`         | an unregistered dimension already has a named future type                                                       |
+
+Catching `MeasurementError` handles the whole family at once.
 
 ## Formatting
 
-Every quantity supports Python's format mini-language through `__format__`, applied to the magnitude in its current display unit.
+Quantities support Python's format mini-language.
+The specification is applied to the magnitude materialized in the current display unit, and the unit symbol is appended afterwards.
 
 ```python
 from kuchka import Volt
 
 voltage = Volt(1234.5)
 
-f"{voltage}"  # "1234.5 V"   -- matches repr()
+f"{voltage}"  # "1234.5 V"
 f"{voltage:.2f}"  # "1234.50 V"
 f"{voltage:.2e}"  # "1.23e+3 V"
 f"{voltage:,.2f}"  # "1,234.50 V"
 ```
 
-An empty format spec matches `repr()`.
-A non-empty spec applies to the underlying `Decimal`, and the unit symbol is appended after.
-
 ## Examples
 
-- **[Migrating a config from unit-suffixed keys to kuchka](docs/examples/config_migration/README.md)** --
-  a worked example: an old `.ini` file where units live in the key name (`accepted_voltage_min_mv`), migrated to a `.toml` file where units are data, parsed through a boundary layer into typed dataclasses.
-  Covers closed per-dimension unit resolution, `Decimal`-exact parsing, and three concrete failure modes the boundary layer catches at load time.
+The repository contains longer, task-oriented examples:
 
-## Package layout
+- **[Migrating a config from unit-suffixed keys to `kuchka`](docs/examples/config_migration/README.md)** - moves units from names such as `accepted_voltage_min_mv` into TOML data and resolves them into typed dataclasses at the boundary.
+- **[Working around an unrepresentable intermediate dimension](docs/examples/unrepresentable_dimensions/README.md)** - shows how to handle formulas such as `P = V^2/R` and parallel resistor networks when an intermediate dimension has no registered type.
 
-_subject to change as the design and architecture bounces around and settles down._
+These examples show `kuchka` in application code, with arithmetic serving the larger engineering task.
 
-```text
-ssrc/kuchka/
-    constants.py            a handful of physical constants
-    dimensions.py           exponent-vector dimensional algebra
-    prefixes.py             SI prefix definitions and the prefixed_unit() helper
-    numeric.py              strict coercion of int/float/Decimal/Fraction into Decimal
-    errors.py               the exception hierarchy
-    quantities/
-        base.py                 the quantity engine: LinearQuantity, UnitDef, the dimension registry
-        electrical.py           Voltage, Current, Power, Resistance and their overload tables
-        charge.py               Charge
-        energy.py               Energy
-        kinematics.py           Velocity
-        temporal.py             Time, Frequency, SamplingPeriod, SampleRate, BaudRate
-        thermal.py              TemperatureDelta, and the affine Temperature type
-        length.py               Length
-        mass.py                 Mass
-        amount.py               AmountOfSubstance
-        luminous_intensity.py   LuminousIntensity
-        proportion.py           Proportion
-    units/
-        voltage.py, current.py, resistance.py, power.py, charge.py, energy.py,
-        kinematics.py, temporal.py, length.py, mass.py, amount.py,
-        luminous_intensity.py, proportion.py, thermal.py, ...
-                                 one module per dimension's prefix constructors
-tests/                          All tests in the module.
-```
+## Performance
 
-Application code should only ever need the top-level `kuchka` package.
-Everything under `quantities/`, `units/`, and the internals of `temperature.py` is implementation detail, re-exported for convenience but not meant to be imported piecemeal.
+`kuchka` uses exact rational arithmetic (`Fraction`) for correctness.
+The intended use is at configuration, application, control, and reporting boundaries, not inside a per-sample hot loop processing live streams at very high rates.
+
+See [`benchmarks`](benchmarks/README.md) for current measurements.
+
+## What this is not yet
+
+The vocabulary is intentionally curated and will remain finite. Current gaps include:
+
+- `Length` has metric prefixes and `Inch`, but not `Foot`, `Yard`, or `Mile`.
+- There is no NumPy/Pandas integration.
+- There is no JSON/DB persistence layer.
+- There is no point-in-time type; `Time` represents a span such as a duration, timeout, or sample period.
+
+A future persistence layer may use a representation such as `{"value": 4.2, "unit": "V"}` at the serialization boundary while reconstructing a typed quantity when data enters application code.
+
+## Stability
+
+`kuchka` is currently `0.1.x`.
+Breaking changes are expected while the API settles.
+
+From `0.2.0` onward, `kuchka` follows ordinary semantic versioning: a minor release will not break existing code, and a breaking change comes with a major version bump.
 
 ## Development
 
-`uv sync` installs the `dev` dependency group (ruff, mypy, ty, pytest, hypothesis, coverage, and editor tooling) alongside `kuchka` itself.
+`uv sync` installs the `dev` dependency group (`ruff`, `mypy`, `ty`, `pytest`, `hypothesis`, `coverage`, and editor tooling) alongside `kuchka` itself.
 
 ```bash
 uv sync
@@ -267,109 +597,21 @@ uv run ty check src/kuchka tests
 uv run coverage run -m pytest && uv run coverage report
 ```
 
-Alternatively, one can leverage the `justfile`'s `just ct` or `just covtest` to execute the whole testbench and additional statistics.
+`just ct` (or `just covtest`) runs the full testbench with coverage.
+`just check` runs `mypy --strict` and `ty` alone and gates `covtest` so a type error fails before the slower coverage run.
 
-`tests/test_typing.py` runs mypy against `tests/typing_fixtures/should_fail.py`, a file that mixes lines that must type-check with lines marked `# type: ignore[...]` that must not.
-Under `--strict`, an _unused_ `type: ignore` is itself an error.
-A clean run of that test is only possible if mypy's static verdict matches the fixture's claim on every single line -- that's the thing that actually proves the type story works, not just that it looks plausible.
+`tests/test_typing.py` exercises negative typing fixtures under `--strict`.
+Ruff is configured with `select = ["ALL"]`; disabled rules in `pyproject.toml` carry inline explanations for why they do not fit the codebase.
 
-Ruff runs with `select = ["ALL"]`.
-Every disabled rule in `pyproject.toml` carries an inline comment explaining why it doesn't fit this codebase.
-This mostly includes dunder-per-dunder docstrings, the deliberately capitalized unit-constructor names, and the exception hierarchy's inline-message style.
-Worth reading before adding a new blanket ignore.
+## Further reading
 
-## Performance
+The README intentionally gives the usage model before the implementation story.
+Deeper design material is kept separately:
 
-`kuchka` deliberately uses `Decimal` under the hood for correctness.
-The design philosophy is to utilize `kuchka` for unit correctness as values come from configuration files, through permutations and checks flow into reports.
-Running `kuchka` in a hot loop transforming values in a vector of mega-samples-per-second live is not really the intended use case of it.
+- **[Quantity shapes and semantics](docs/concepts/quantity_shapes.md)** - Linear, Affine, and Modular quantities, including temperature and angle semantics.
+- **[Dimensional algebra and derived quantities](docs/concepts/dimensional_algebra.md)** - exponent-vector arithmetic, registered results, reciprocal relationships, and the boundary between runtime algebra and static overloads.
+- **[Exactness and angular units](docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, and the fixed internal representation used for angular scales.
+- **[Design choices](docs/design_choices.md)** - constructor functions, unit definitions, canonical types, string-resolution boundaries, and the reasons for a curated vocabulary.
+- **[Comparison with existing tools](docs/comparison.md)** - the deliberate trade-offs versus Pint, physipy, impunity, and related libraries.
 
-For more see [`benchmarks`](benchmarks/README.md).
-
-## Comparison to existing tools
-
-`kuchka` isn't the first attempt at physical quantities in Python.
-A non-exhaustive list of prior art: `Pint`, `astropy.units`, `physipy`, `unyt`, `forallpeople`, `numericalunits`, `Unum`, `quantities`, `units`, `unitpy`, and `impunity`.
-
-**The uncomfortable starting point.** Pint has existed since roughly 2012.
-Despite that, more than a decade of engineering work across healthcare, finance, and secure embedded devices has produced (for me) essentially zero sightings of any of these libraries in Python code.
-What actually gets written instead is `voltage_mv`, `temperature_c`, `time_ms`, or a small home-grown newtype.
-
-I assume that's not because engineers don't know these libraries exist.
-None of them seem to have made the safe path more comfortable than the naming-convention path.
-That's the problem `kuchka` is trying to solve -- and it's worth being honest that `kuchka` hasn't proven it solves it either.
-It has no adoption history of its own to point to.
-The claim here is about mechanism, not a guarantee.
-
-**Where the existing libraries put the friction:**
-
-```python
-# Pint / physipy: a registry, and a unit looked up on or from it.
-ureg = pint.UnitRegistry()
-voltage = 3 * ureg.volt + 40 * ureg.millivolt
-
-# kuchka: the unit is the constructor.
-voltage = Volt(3) + Millivolt(40)
-```
-
-| Library        | Unit is...                                                | Result type                           |
-| -------------- | --------------------------------------------------------- | ------------------------------------- |
-| Pint           | looked up on a registry (`ureg.meter`, `"3 m"`)           | one generic `Quantity` for everything |
-| physipy        | looked up in a dict (`units["nm"]`)                       | one generic `Quantity` for everything |
-| units / unitpy | a string (`unit("m")`, `U("km")`)                         | --                                    |
-| impunity       | a string in a function annotation, checked at import time | none at runtime -- rewritten away     |
-| kuchka         | an ordinary Python name (`Meter`)                         | a distinct Python type per quantity   |
-
-Pint is the mature, general-purpose default: a huge unit vocabulary, NumPy/Pandas integration, unit parsing from strings.
-That generality is the whole point of Pint, and `kuchka` isn't trying to replicate it.
-
-impunity is the closest in spirit to `kuchka`'s static-first goal, and worth knowing about specifically for that reason.
-It's a genuinely different, and in some ways more efficient, trade-off:
-zero runtime cost once the check has run, at the cost of the "unit" being a string inside an annotation rather than an ordinary object you can construct, return, and pass around.
-
-`kuchka`'s bet: `isinstance(Volt(5), Voltage)` should work with no registry, no plugin, and no decorator rewriting your function body.
-`mypy`/`ty` should understand the arithmetic because it's ordinary overloads on an ordinary class, not a new annotation vocabulary.
-The trade-off: a deliberately small, hand-maintained unit vocabulary, and no array/NumPy support yet.
-
-**The gap this is aimed at.** Not "Python has no unit libraries" -- it obviously does.
-The narrower claim: physical quantities should be ordinary, boring Python types that a type checker already understands, without an engineer ever carrying a registry or spelling a unit as a string.
-Whether that's _also_ the missing ingredient for adoption, versus adoption needing something else entirely (habit, deadlines, nobody
-asking), is genuinely open.
-`kuchka` is a bet on the first explanation, not proof of it.
-
-## What this is not (yet)
-
-- `Length` was added, `Foot`/`Yard`/`Mile` were not.
-- No NumPy/Pandas integration.
-  `Decimal` doesn't vectorize into `ndarray` cleanly, and per-sample scalar wrapping is the wrong shape for high-rate acquisition.
-  Intended pattern for now: buffer raw floats at the acquisition boundary, convert once there is a value worth reasoning about.
-- No JSON/DB persistence layer. When it's added:
-  - the _storage_ format may use a unit string (`{"value": 4.2, "unit": "V"}`), since that's not the application-facing API.
-    Loading it back must reconstruct a typed measurement, never hand back a bare number.
-- No point-in-time type.
-  `Time` is a span (a duration, a timeout, a sample period), not a timestamp.
-  A timestamp would need the same affine treatment `Temperature` gets, and isn't modelled yet.
-
-## Known limitations
-
-- **`ty` doesn't yet enforce `Self`-narrowed arithmetic across sibling quantity types the way `mypy --strict` does.**
-  `Volt(5) + Ampere(2)` is a `mypy --strict` error but is currently accepted by `ty`.
-  Both tools agree on naked-number arithmetic (`Volt(5) + 4.2`) and on the `Temperature` cases.
-  Search the test suite for "not (yet) flagged by ty" for the exact cases.
-- **The dimension vocabulary is small on purpose.**
-  `Resistance * Resistance` and similar mathematically-valid-but-unregistered products raise `UnrepresentableDimensionError` at runtime rather than returning a typed result.
-  Neither mypy nor ty catch this ahead of time, since the fallback overload on each quantity type has to accept `object` to stay compatible with the base class.
-- No special array, NumPy/Pandas support.
-
-## Open questions for the upcoming iterations / next versions
-
-- Whether Kelvin should get a distinct, scalar-multipliable type (see the design note next to `Temperature`).
-- Whether a point-in-time type (`Instant`, most likely) is ever worth adding, and what its "you can't add two timestamps" rule should look like.
-- NumPy/Pandas integration strategy, once vectorized acquisition is actually needed, not just anticipated.
-- Better `AffineQuantity` representation.
-- `Modular` or `Cyclic` - for angles, compass values, etc.
-- `dB` family.
-
-## History
-
-The original pre-implementation design proposal lives at [`docs/introduction/design_proposal.md`](docs/introduction/design_proposal.md), kept as a record of the initial thinking.
+The original pre-implementation design proposal lives at [`docs/introduction/design_proposal.md`](docs/introduction/design_proposal.md). It is retained as historical design material.
