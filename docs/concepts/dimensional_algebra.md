@@ -40,18 +40,19 @@ See the repository example [Working around an unrepresentable intermediate dimen
 `Frequency`, `SampleRate`, and `BaudRate` all have physical dimension T^-1, but they are intentionally separate concepts.
 
 ```python
-Hertz(50) + SamplesPerSecond(50)
-# rejected
+Hertz(50) + SamplesPerSecond(50)  # rejected.
 ```
 
 Canonical generic arithmetic produces the canonical type for a dimension.
-Domain-specific types remain available by explicit construction.
-
-Genuine reciprocal pairs retain reciprocal behavior:
+Domain-specific types remain available by explicit construction, and stay the domain type even through a reciprocal:
 
 ```python
-rate = 1 / SecondSamplingPeriod(2)  # SampleRate
-period = 1 / rate  # SamplingPeriod
+rate = 1 / SecondSamplingPeriod(2)
+
+isinstance(rate, SampleRate)
+# True
+isinstance(rate, Frequency)
+# False
 ```
 
 `BaudRate` has no automatic reciprocal relationship because baud counts symbols per second, not bits or cycles.

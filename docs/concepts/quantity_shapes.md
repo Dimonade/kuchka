@@ -11,7 +11,11 @@ Addition, subtraction, scalar multiplication, and ordering follow ordinary numer
 Examples include `Voltage`, `Current`, `Length`, `Mass`, and `Time`.
 
 ```python
-Volt(1) + Millivolt(200) == Volt(1.2)
+from kuchka import Gram, Kilogram
+
+Kilogram(2) + Gram(500) == Kilogram(2.5)
+Kilogram(10) * 3 == Kilogram(30)
+Kilogram(2) < Kilogram(3)
 ```
 
 ## Affine
@@ -24,10 +28,16 @@ Subtracting two readings produces a linear temperature delta; adding a delta to 
 Adding two readings is rejected.
 
 ```python
-Celsius(25) - Celsius(20) == DeltaCelsius(5)
-Celsius(20) + DeltaCelsius(5) == Celsius(25)
-Celsius(20) + Celsius(5)  # rejected
-Celsius(20) * 2  # rejected: no `__mul__` implemented at all.
+from kuchka import DeltaKelvin, Kelvin
+
+setpoint = Kelvin(350)
+reading = Kelvin(352)
+tolerance = DeltaKelvin(5)
+
+abs(reading - setpoint) <= tolerance
+# True
+
+Kelvin(20) * 2  # rejected: no __mul__ on an affine quantity.
 ```
 
 Absolute zero is enforced for temperature readings.
@@ -40,9 +50,15 @@ Modular quantities wrap around after a fixed period.
 `Angle` is the current example.
 
 ```python
-Degree(350) + Degree(20) == Degree(10)
-Degree(300).difference(Degree(350)) == Degree(-50)
-Degree(10) < Degree(20)  # rejected
+from kuchka import Degree
+
+commanded = Degree(370)  # construction never wraps.
+commanded == Degree(10)
+# True -- equality already compares wrapped magnitude.
+commanded.magnitude == Degree(10).magnitude
+# False -- the raw stored value is still 370 degrees worth.
+commanded.normalize().magnitude == Degree(10).magnitude
+# True.
 ```
 
 `+` and `-` are ordinary wraparound group arithmetic over `[0, period)`. `difference()` is a separate shortest-signed-path operation over `(-period/2, +period/2]`. Scalar multiplication and division wrap their result the same way.

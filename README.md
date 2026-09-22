@@ -19,8 +19,8 @@ supply = Volt(3.7)
 load = Ohm(148)
 battery = AmpereHour(2)
 
-current = supply / load  # Ohm's law -> Current
-runtime = (battery / current).to(HOUR)  # Charge / Current -> Time
+current = supply / load  # Ohm's law -> Current.
+runtime = (battery / current).to(HOUR)  # Charge / Current -> Time.
 
 print(current)
 # 0.025 A
@@ -76,10 +76,10 @@ def check_supply(voltage: Voltage) -> bool:
     return voltage >= Volt(3)
 
 
-check_supply(Volt(5))  # valid
-check_supply(Millivolt(4200))  # valid
-check_supply(Ampere(2))  # static type error
-check_supply(4.2)  # static type error
+check_supply(Volt(5))  # valid.
+check_supply(Millivolt(4200))  # valid.
+check_supply(Ampere(2))  # static type error (`IncompatibleDimensionError`).
+check_supply(4.2)  # static type error (`IncompatibleDimensionError`).
 ```
 
 The type annotation gives static tools the contract.
@@ -186,9 +186,9 @@ print(force)
 print(pressure)
 # 250000 Pa
 print(volume)
-# 0.002 m^3
+# 0.0002 m³
 print(energy)
-# 500 J
+# 50 J
 ```
 
 No unit strings or manual conversion factors are needed in the calculation.
@@ -255,7 +255,8 @@ from kuchka import DeltaCelsius
 
 Celsius(25) - Celsius(20) == DeltaCelsius(5)
 Celsius(20) + DeltaCelsius(5) == Celsius(25)
-Celsius(20) + Celsius(5)  # rejected
+Celsius(20) + Celsius(5)  # rejected: `MeasurementError`.
+5 * Celsius(5)  # rejected: there is no `__mul__` defined (`TypeError`).
 ```
 
 Temperatures below absolute zero are rejected as invalid measurements:
@@ -264,9 +265,9 @@ Temperatures below absolute zero are rejected as invalid measurements:
 from kuchka import Celsius
 from kuchka import Kelvin
 
-Kelvin(-1)  # raises InvalidMeasurementError
-Celsius(-274)  # raises InvalidMeasurementError
-Kelvin(0)  # valid
+Kelvin(-1)  # raises `InvalidMeasurementError`.
+Celsius(-274)  # raises `InvalidMeasurementError`.
+Kelvin(0)  # valid.
 ```
 
 ### Modular quantities
@@ -279,7 +280,7 @@ from kuchka import Degree
 
 Degree(350) + Degree(20) == Degree(10)
 Degree(300).difference(Degree(350)) == Degree(-50)
-Degree(10) < Degree(20)  # rejected: no total order on a circle
+Degree(10) < Degree(20)  # rejected: no total order on a circle (`TypeError`).
 ```
 
 `+` and `-` use ordinary wraparound arithmetic.
@@ -444,8 +445,7 @@ A conversion to another physical dimension is rejected:
 from kuchka import Volt
 from kuchka.units import MILLIAMPERE
 
-Volt(5).to(MILLIAMPERE)
-# raises InvalidConversionError
+Volt(5).to(MILLIAMPERE)  # raises `InvalidConversionError`.
 ```
 
 ## Exact arithmetic
@@ -453,14 +453,44 @@ Volt(5).to(MILLIAMPERE)
 Every magnitude is stored as an exact `Fraction`, not a rounded floating-point approximation.
 `Decimal` is materialized when a value needs decimal display.
 
+Compare
+
+```python
+battery_a_volts = 0.1
+battery_b_volts = 0.2
+v_total = battery_a_volts + battery_b_volts
+
+print(v_total)
+# 0.30000000000000004, not 0.3.
+```
+
+with
+
+```python
+from kuchka import Volt
+
+Volt(0.1) + Volt(0.2) == Volt(0.3)
+# True
+```
+
+or
+
 ```python
 from fractions import Fraction
 from kuchka import Litre
+from kuchka.units import LITRE
 
 q = Litre(Fraction(5, 18))
 q.magnitude
+# Fraction(1, 3600)
+
+q.value_in(LITRE)
 # Fraction(5, 18)
 ```
+
+`.magnitude` always reads out in the quantity's canonical unit - `CubicMetre` for `Volume`, here - not the unit it was constructed with.
+The construction is still exact: `5/18` litre becomes `5/18 * 1/1000 = 1/3600` cubic metre with no rounding at any step.
+`.value_in(unit)` is what recovers the value in a specific unit, litres in this case.
 
 `float` input is parsed through its string representation, so `Volt(4.2)` preserves the digits written by the programmer instead of storing the binary floating-point representation of the float.
 

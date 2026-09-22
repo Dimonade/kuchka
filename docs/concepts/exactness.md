@@ -8,11 +8,19 @@ Every magnitude in `kuchka` is stored as an exact `Fraction`.
 ```python
 from fractions import Fraction
 from kuchka import Litre
+from kuchka.units import LITRE
 
 q = Litre(Fraction(5, 18))
 q.magnitude
-# Fraction(5, 18)
+# Fraction(1, 3600) -- Volume's canonical unit is `CubicMetre`, not `Litre`.
+q.value_in(LITRE)
+# Fraction(5, 18) -- exact, recovered in the unit it was constructed with.
 ```
+
+`.magnitude` reads out in the canonical unit.
+`.value_in(unit)` reads out in any compatible unit.
+Both stay exact regardless of which one is summoned.
+The scale factor between litres and cubic metres (`1/1000`) is itself an exact `Fraction`, so nothing is lost converting between them.
 
 `Decimal` is materialized for display:
 
