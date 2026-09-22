@@ -469,7 +469,11 @@ with
 ```python
 from kuchka import Volt
 
-Volt(0.1) + Volt(0.2) == Volt(0.3)
+v_total = Volt(0.1) + Volt(0.2)
+print(v_total)
+# 0.3 V
+
+v_total == Volt(0.3)
 # True
 ```
 
