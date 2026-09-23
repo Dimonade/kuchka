@@ -80,7 +80,7 @@ from kuchka.units import PRESSURE_UNITS
 from kuchka.units import PROPORTION_UNITS
 from kuchka.units import RATIO
 from kuchka.units import RESISTANCE_UNITS
-from kuchka.units import SAMPLE_PER_SECOND
+from kuchka.units import SAMPLES_PER_SECOND
 from kuchka.units import SAMPLE_RATE_UNITS
 from kuchka.units import SAMPLING_PERIOD_SECOND
 from kuchka.units import SAMPLING_PERIOD_UNITS
@@ -138,7 +138,7 @@ FAMILIES: list[QuantityFamily] = [
         SAMPLING_PERIOD_UNITS,
     ),
     QuantityFamily(
-        "sample_rate", SamplesPerSecond, SAMPLE_PER_SECOND, SAMPLE_RATE_UNITS
+        "sample_rate", SamplesPerSecond, SAMPLES_PER_SECOND, SAMPLE_RATE_UNITS
     ),
     QuantityFamily("baud_rate", Baud, BAUD, BAUD_RATE_UNITS),
     QuantityFamily("mass", Kilogram, KILOGRAM, MASS_UNITS),
