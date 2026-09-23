@@ -25,6 +25,7 @@ from kuchka import CubicMillimetre
 from kuchka import Decimeter
 from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
+from kuchka import Gigahertz
 from kuchka import Gram
 from kuchka import Hectare
 from kuchka import Hertz
@@ -87,6 +88,7 @@ from kuchka import Nanojoule
 from kuchka import Nanometer
 from kuchka import Ohm
 from kuchka import Percent
+from kuchka import Petahertz
 from kuchka import Picocoulomb
 from kuchka import Picogram
 from kuchka import Picojoule
@@ -100,6 +102,7 @@ from kuchka import SquareInch
 from kuchka import SquareKilometre
 from kuchka import SquareMetre
 from kuchka import SquareMillimetre
+from kuchka import Terahertz
 from kuchka import Tonne
 from kuchka import Volt
 from kuchka import Watt
@@ -150,7 +153,17 @@ TABLE_CASES = [
             "h": Hour,
         },
     ),
-    (FREQUENCY_UNITS, {"Hz": Hertz, "kHz": Kilohertz, "MHz": Megahertz}),
+    (
+        FREQUENCY_UNITS,
+        {
+            "Hz": Hertz,
+            "kHz": Kilohertz,
+            "MHz": Megahertz,
+            "GHz": Gigahertz,
+            "THz": Terahertz,
+            "PHz": Petahertz,
+        },
+    ),
     (
         SAMPLING_PERIOD_UNITS,
         {

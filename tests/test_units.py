@@ -27,6 +27,7 @@ from kuchka import CubicCentimetre
 from kuchka import CubicMetre
 from kuchka import CubicMillimetre
 from kuchka import Decimeter
+from kuchka import Gigahertz
 from kuchka import Gram
 from kuchka import Hectare
 from kuchka import Hertz
@@ -74,6 +75,7 @@ from kuchka import Minute
 from kuchka import Nanogram
 from kuchka import Nanometer
 from kuchka import Ohm
+from kuchka import Petahertz
 from kuchka import SamplesPerSecond
 from kuchka import Second
 from kuchka import SecondSamplingPeriod
@@ -82,6 +84,7 @@ from kuchka import SquareCentimetre
 from kuchka import SquareKilometre
 from kuchka import SquareMetre
 from kuchka import SquareMillimetre
+from kuchka import Terahertz
 from kuchka import Tonne
 from kuchka import Volt
 from kuchka import Watt
@@ -95,6 +98,7 @@ from kuchka.units import CUBIC_CENTIMETRE
 from kuchka.units import CUBIC_METRE
 from kuchka.units import CUBIC_MILLIMETRE
 from kuchka.units import DECIMETER
+from kuchka.units import GIGAHERTZ
 from kuchka.units import GRAM
 from kuchka.units import HECTARE
 from kuchka.units import HERTZ
@@ -107,7 +111,7 @@ from kuchka.units import KILOHERTZ
 from kuchka.units import KILOLITRE
 from kuchka.units import KILOMETER
 from kuchka.units import KILOOHM
-from kuchka.units import KILOSAMPLE_PER_SECOND
+from kuchka.units import KILOSAMPLES_PER_SECOND
 from kuchka.units import KILOSIEMENS
 from kuchka.units import KILOVOLT
 from kuchka.units import KILOWATT
@@ -115,7 +119,7 @@ from kuchka.units import LITRE
 from kuchka.units import MEGAGRAM
 from kuchka.units import MEGAHERTZ
 from kuchka.units import MEGAOHM
-from kuchka.units import MEGASAMPLE_PER_SECOND
+from kuchka.units import MEGASAMPLES_PER_SECOND
 from kuchka.units import METER
 from kuchka.units import MICROAMPERE
 from kuchka.units import MICROGRAM
@@ -140,7 +144,8 @@ from kuchka.units import MINUTE
 from kuchka.units import NANOGRAM
 from kuchka.units import NANOMETER
 from kuchka.units import OHM
-from kuchka.units import SAMPLE_PER_SECOND
+from kuchka.units import PETAHERTZ
+from kuchka.units import SAMPLES_PER_SECOND
 from kuchka.units import SAMPLING_PERIOD_MICROSECOND
 from kuchka.units import SAMPLING_PERIOD_MILLISECOND
 from kuchka.units import SAMPLING_PERIOD_SECOND
@@ -150,6 +155,7 @@ from kuchka.units import SQUARE_CENTIMETRE
 from kuchka.units import SQUARE_KILOMETRE
 from kuchka.units import SQUARE_METRE
 from kuchka.units import SQUARE_MILLIMETRE
+from kuchka.units import TERAHERTZ
 from kuchka.units import VOLT
 from kuchka.units import WATT
 from kuchka.units import WATT_HOUR
@@ -197,8 +203,11 @@ PREFIX_CASES: list[PrefixCase] = [
     PrefixCase(
         "Millisecond", Millisecond, Second, Decimal("0.001"), MILLISECOND, SECOND
     ),
-    PrefixCase("Kilohertz", Kilohertz, Hertz, Decimal(1000), KILOHERTZ, HERTZ),
+    PrefixCase("Kilohertz", Kilohertz, Hertz, Decimal(1_000), KILOHERTZ, HERTZ),
     PrefixCase("Megahertz", Megahertz, Hertz, Decimal(1_000_000), MEGAHERTZ, HERTZ),
+    PrefixCase("Gigahertz", Gigahertz, Hertz, Decimal(1e9), GIGAHERTZ, HERTZ),
+    PrefixCase("Terahertz", Terahertz, Hertz, Decimal(1e12), TERAHERTZ, HERTZ),
+    PrefixCase("Petahertz", Petahertz, Hertz, Decimal(1e15), PETAHERTZ, HERTZ),
     PrefixCase(
         "MicrosecondSamplingPeriod",
         MicrosecondSamplingPeriod,
@@ -220,16 +229,16 @@ PREFIX_CASES: list[PrefixCase] = [
         KilosamplesPerSecond,
         SamplesPerSecond,
         Decimal(1000),
-        KILOSAMPLE_PER_SECOND,
-        SAMPLE_PER_SECOND,
+        KILOSAMPLES_PER_SECOND,
+        SAMPLES_PER_SECOND,
     ),
     PrefixCase(
         "MegasamplesPerSecond",
         MegasamplesPerSecond,
         SamplesPerSecond,
         Decimal(1_000_000),
-        MEGASAMPLE_PER_SECOND,
-        SAMPLE_PER_SECOND,
+        MEGASAMPLES_PER_SECOND,
+        SAMPLES_PER_SECOND,
     ),
     PrefixCase("Nanometer", Nanometer, Meter, Decimal("0.000000001"), NANOMETER, METER),
     PrefixCase("Micrometer", Micrometer, Meter, Decimal("0.000001"), MICROMETER, METER),
