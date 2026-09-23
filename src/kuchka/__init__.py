@@ -83,6 +83,7 @@ from kuchka.units import Degree
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaKelvin
 from kuchka.units import Dyne
+from kuchka.units import Gigahertz
 from kuchka.units import Gradian
 from kuchka.units import Gram
 from kuchka.units import GramPerCubicCentimeter
@@ -176,6 +177,7 @@ from kuchka.units import Newton
 from kuchka.units import Ohm
 from kuchka.units import Pascal
 from kuchka.units import Percent
+from kuchka.units import Petahertz
 from kuchka.units import Picocoulomb
 from kuchka.units import Picogram
 from kuchka.units import Picojoule
@@ -196,6 +198,7 @@ from kuchka.units import SquareMeter
 from kuchka.units import SquareMetre
 from kuchka.units import SquareMillimeter
 from kuchka.units import SquareMillimetre
+from kuchka.units import Terahertz
 from kuchka.units import Tonne
 from kuchka.units import Turn
 from kuchka.units import Volt
@@ -247,6 +250,7 @@ __all__: list[str] = [
     "Energy",
     "Force",
     "Frequency",
+    "Gigahertz",
     "Gradian",
     "Gram",
     "GramPerCubicCentimeter",
@@ -347,6 +351,7 @@ __all__: list[str] = [
     "Ohm",
     "Pascal",
     "Percent",
+    "Petahertz",
     "Picocoulomb",
     "Picogram",
     "Picojoule",
@@ -376,6 +381,7 @@ __all__: list[str] = [
     "SquareMillimetre",
     "Temperature",
     "TemperatureDelta",
+    "Terahertz",
     "Time",
     "Tonne",
     "Turn",
