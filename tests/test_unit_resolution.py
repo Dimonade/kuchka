@@ -25,6 +25,7 @@ from kuchka import CubicMillimetre
 from kuchka import Decimeter
 from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
+from kuchka import Electronvolt
 from kuchka import Gigahertz
 from kuchka import Gram
 from kuchka import Hectare
@@ -254,6 +255,7 @@ TABLE_CASES = [
             "J": Joule,
             "kJ": Kilojoule,
             "MJ": Megajoule,
+            "eV": Electronvolt,
             "mWh": MilliwattHour,
             "Wh": WattHour,
         },

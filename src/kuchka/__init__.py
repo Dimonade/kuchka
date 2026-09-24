@@ -85,6 +85,7 @@ from kuchka.units import DeltaKelvin
 from kuchka.units import Dyne
 from kuchka.units import Electronvolt
 from kuchka.units import Gigahertz
+from kuchka.units import Gigajoule
 from kuchka.units import Gradian
 from kuchka.units import Gram
 from kuchka.units import GramPerCubicCentimeter
@@ -200,6 +201,7 @@ from kuchka.units import SquareMetre
 from kuchka.units import SquareMillimeter
 from kuchka.units import SquareMillimetre
 from kuchka.units import Terahertz
+from kuchka.units import Terajoule
 from kuchka.units import Tonne
 from kuchka.units import Turn
 from kuchka.units import Volt
@@ -253,6 +255,7 @@ __all__: list[str] = [
     "Force",
     "Frequency",
     "Gigahertz",
+    "Gigajoule",
     "Gradian",
     "Gram",
     "GramPerCubicCentimeter",
@@ -384,6 +387,7 @@ __all__: list[str] = [
     "Temperature",
     "TemperatureDelta",
     "Terahertz",
+    "Terajoule",
     "Time",
     "Tonne",
     "Turn",

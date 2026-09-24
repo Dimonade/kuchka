@@ -331,7 +331,7 @@ In those cases, an established general-purpose library may fit the problem bette
 The point is not to replace every unit library.
 The point is to make one particular style of engineering code feel natural: ordinary Python functions taking and returning ordinary Python types that happen to carry physical meaning.
 
-## What's included in 0.1.2
+## What's included in 0.1.x
 
 The current vocabulary spans several engineering domains.
 
@@ -343,7 +343,7 @@ The current vocabulary spans several engineering domains.
 - **Resistance:** `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`
 - **Conductance:** `Siemens`, `Microsiemens`, `Millisiemens`, `Kilosiemens`
 - **Charge:** `Coulomb`, `Millicoulomb`, `Microcoulomb`, `Nanocoulomb`, `Picocoulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`
-- **Energy:** `Joule`, `Millijoule`, `Microjoule`, `Nanojoule`, `Picojoule`, `Kilojoule`, `Megajoule`, `Electronvolt`, `MilliwattHour`, `WattHour`
+- **Energy:** `Joule`, `Millijoule`, `Microjoule`, `Nanojoule`, `Picojoule`, `Kilojoule`, `Megajoule`, `Gigajoule`, `Terajoule`, `Electronvolt`, `MilliwattHour`, `WattHour`
 
 **Time and signal**
 

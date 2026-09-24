@@ -7,9 +7,9 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ## [0.1.3]
 
-### `Energy` family gets new unit
+### `Energy` family gets new units
 
-`Electronvolt`.
+`Gigajoule`, `Terajoule`, `Electronvolt`.
 
 ### `Frequency` family gets new units
 
