@@ -7,28 +7,16 @@ The symbols include things like:
 and others, to avoid redefining them everywhere.
 """
 
-ANGLE_SYMBOL = "\u2220"
+ANGLE = "\u2220"
 DEGREE = "\u00b0"
 DELTA = "\u0394"
 DOUBLE_PRIME = "\u2033"
 OMEGA = "\u03a9"
-MICRO_SYMBOL = "\u00b5"
+MICRO = "\u00b5"
 SUPERSCRIPT_TWO = "\u00b2"
 SUPERSCRIPT_THREE = "\u00b3"
 SMALL_MICRO = "\u03bc"
 PRIME = "\u2032"
-THETA_SYMBOL = "\u0398"
+THETA = "\u0398"
 
-__all__ = [
-    "ANGLE_SYMBOL",
-    "DEGREE",
-    "DELTA",
-    "DOUBLE_PRIME",
-    "MICRO_SYMBOL",
-    "OMEGA",
-    "PRIME",
-    "SMALL_MICRO",
-    "SUPERSCRIPT_THREE",
-    "SUPERSCRIPT_TWO",
-    "THETA_SYMBOL",
-]
+__all__ = []

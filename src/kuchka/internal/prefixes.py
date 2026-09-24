@@ -15,8 +15,8 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from kuchka.internal import MICRO
-from kuchka.quantities import UnitDef
+from kuchka.internal import symbols
+from kuchka.quantities.base.units import UnitDef
 
 if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
@@ -42,7 +42,7 @@ UNIT = Prefix("", "", 0)
 FEMTO = Prefix("femto", "f", -15)
 PICO = Prefix("pico", "p", -12)
 NANO = Prefix("nano", "n", -9)
-MICRO = Prefix("micro", MICRO, -6)
+MICRO = Prefix("micro", symbols.MICRO, -6)
 MILLI = Prefix("milli", "m", -3)
 CENTI = Prefix("centi", "c", -2)
 DECI = Prefix("deci", "d", -1)
@@ -83,21 +83,6 @@ def prefixed_unit(
 
 
 __all__ = [
-    "CENTI",
-    "DECA",
-    "DECI",
-    "FEMTO",
-    "GIGA",
-    "HECTO",
-    "KILO",
-    "MEGA",
-    "MICRO",
-    "MILLI",
-    "NANO",
-    "PETA",
-    "PICO",
-    "TERA",
-    "UNIT",
     "Prefix",
     "prefixed_unit",
 ]

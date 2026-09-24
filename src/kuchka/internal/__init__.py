@@ -1,6 +1,6 @@
 """Internal values, constructs, constants, and other fluff."""
 
-from kuchka.internal.prefixes import *
-from kuchka.internal.symbols import *
+from kuchka.internal import constants
+from kuchka.internal import symbols
 
-__all__: list[str] = sorted(name for name in globals() if not name.startswith("_"))
+__all__ = ["constants", "symbols"]
