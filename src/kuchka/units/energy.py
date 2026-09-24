@@ -18,16 +18,10 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import ENERGY
+from kuchka.internal import prefixes
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import KILO
-from kuchka.prefixes import MEGA
-from kuchka.prefixes import MICRO
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import NANO
-from kuchka.prefixes import PICO
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Energy
 from kuchka.quantities import UnitDef
 
@@ -39,13 +33,13 @@ if TYPE_CHECKING:
 JOULE_NAME = "joule"
 JOULE_SYMBOL = "J"
 
-PICOJOULE = prefixed_unit(PICO, JOULE_NAME, JOULE_SYMBOL, ENERGY)
-NANOJOULE = prefixed_unit(NANO, JOULE_NAME, JOULE_SYMBOL, ENERGY)
-MICROJOULE = prefixed_unit(MICRO, JOULE_NAME, JOULE_SYMBOL, ENERGY)
-MILLIJOULE = prefixed_unit(MILLI, JOULE_NAME, JOULE_SYMBOL, ENERGY)
-JOULE = prefixed_unit(UNIT, JOULE_NAME, JOULE_SYMBOL, ENERGY)
-KILOJOULE = prefixed_unit(KILO, JOULE_NAME, JOULE_SYMBOL, ENERGY)
-MEGAJOULE = prefixed_unit(MEGA, JOULE_NAME, JOULE_SYMBOL, ENERGY)
+PICOJOULE = prefixed_unit(prefixes.PICO, JOULE_NAME, JOULE_SYMBOL, ENERGY)
+NANOJOULE = prefixed_unit(prefixes.NANO, JOULE_NAME, JOULE_SYMBOL, ENERGY)
+MICROJOULE = prefixed_unit(prefixes.MICRO, JOULE_NAME, JOULE_SYMBOL, ENERGY)
+MILLIJOULE = prefixed_unit(prefixes.MILLI, JOULE_NAME, JOULE_SYMBOL, ENERGY)
+JOULE = prefixed_unit(prefixes.UNIT, JOULE_NAME, JOULE_SYMBOL, ENERGY)
+KILOJOULE = prefixed_unit(prefixes.KILO, JOULE_NAME, JOULE_SYMBOL, ENERGY)
+MEGAJOULE = prefixed_unit(prefixes.MEGA, JOULE_NAME, JOULE_SYMBOL, ENERGY)
 
 
 Energy._canonical_unit = JOULE  # noqa: SLF001 -- this module owns Energy's canonical unit

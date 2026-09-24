@@ -26,12 +26,11 @@ from typing import TYPE_CHECKING
 from kuchka.dimensions import ACCELERATION
 from kuchka.dimensions import FORCE
 from kuchka.dimensions import VELOCITY
+from kuchka.internal import prefixes
+from kuchka.internal import symbols
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import KILO
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Acceleration
 from kuchka.quantities import Force
 from kuchka.quantities import UnitDef
@@ -104,7 +103,7 @@ VELOCITY_UNITS: Mapping[str, Callable[[Numeric], Velocity]] = MappingProxyType(
 
 METRE_PER_SECOND_SQUARED = UnitDef(
     "metre_per_second_squared",
-    "m/s\u00b2",
+    f"m/s{symbols.SUPERSCRIPT_TWO}",
     Decimal(1),
     ACCELERATION,
 )
@@ -137,9 +136,9 @@ ACCELERATION_UNITS: Mapping[str, Callable[[Numeric], Acceleration]] = MappingPro
 NEWTON_NAME = "newton"
 NEWTON_SYMBOL = "N"
 
-MILLINEWTON = prefixed_unit(MILLI, NEWTON_NAME, NEWTON_SYMBOL, FORCE)
-NEWTON = prefixed_unit(UNIT, NEWTON_NAME, NEWTON_SYMBOL, FORCE)
-KILONEWTON = prefixed_unit(KILO, NEWTON_NAME, NEWTON_SYMBOL, FORCE)
+MILLINEWTON = prefixed_unit(prefixes.MILLI, NEWTON_NAME, NEWTON_SYMBOL, FORCE)
+NEWTON = prefixed_unit(prefixes.UNIT, NEWTON_NAME, NEWTON_SYMBOL, FORCE)
+KILONEWTON = prefixed_unit(prefixes.KILO, NEWTON_NAME, NEWTON_SYMBOL, FORCE)
 
 Force._canonical_unit = NEWTON  # noqa: SLF001 -- this module owns Force's canonical unit
 

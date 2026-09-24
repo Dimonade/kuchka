@@ -33,16 +33,10 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import MASS
+from kuchka.internal import prefixes
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import KILO
-from kuchka.prefixes import MEGA
-from kuchka.prefixes import MICRO
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import NANO
-from kuchka.prefixes import PICO
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Mass
 
 if TYPE_CHECKING:
@@ -53,13 +47,55 @@ GRAM_NAME = "gram"
 GRAM_SYMBOL = "g"
 
 
-PICOGRAM = prefixed_unit(PICO, GRAM_NAME, GRAM_SYMBOL, MASS, coherent_offset=-3)
-NANOGRAM = prefixed_unit(NANO, GRAM_NAME, GRAM_SYMBOL, MASS, coherent_offset=-3)
-MICROGRAM = prefixed_unit(MICRO, GRAM_NAME, GRAM_SYMBOL, MASS, coherent_offset=-3)
-MILLIGRAM = prefixed_unit(MILLI, GRAM_NAME, GRAM_SYMBOL, MASS, coherent_offset=-3)
-GRAM = prefixed_unit(UNIT, GRAM_NAME, GRAM_SYMBOL, MASS, coherent_offset=-3)
-KILOGRAM = prefixed_unit(KILO, GRAM_NAME, GRAM_SYMBOL, MASS, coherent_offset=-3)
-MEGAGRAM = prefixed_unit(MEGA, GRAM_NAME, GRAM_SYMBOL, MASS, coherent_offset=-3)
+PICOGRAM = prefixed_unit(
+    prefixes.PICO,
+    GRAM_NAME,
+    GRAM_SYMBOL,
+    MASS,
+    coherent_offset=-3,
+)
+NANOGRAM = prefixed_unit(
+    prefixes.NANO,
+    GRAM_NAME,
+    GRAM_SYMBOL,
+    MASS,
+    coherent_offset=-3,
+)
+MICROGRAM = prefixed_unit(
+    prefixes.MICRO,
+    GRAM_NAME,
+    GRAM_SYMBOL,
+    MASS,
+    coherent_offset=-3,
+)
+MILLIGRAM = prefixed_unit(
+    prefixes.MILLI,
+    GRAM_NAME,
+    GRAM_SYMBOL,
+    MASS,
+    coherent_offset=-3,
+)
+GRAM = prefixed_unit(
+    prefixes.UNIT,
+    GRAM_NAME,
+    GRAM_SYMBOL,
+    MASS,
+    coherent_offset=-3,
+)
+KILOGRAM = prefixed_unit(
+    prefixes.KILO,
+    GRAM_NAME,
+    GRAM_SYMBOL,
+    MASS,
+    coherent_offset=-3,
+)
+MEGAGRAM = prefixed_unit(
+    prefixes.MEGA,
+    GRAM_NAME,
+    GRAM_SYMBOL,
+    MASS,
+    coherent_offset=-3,
+)
 
 Mass._canonical_unit = KILOGRAM  # noqa: SLF001 -- this module owns Mass's canonical unit
 

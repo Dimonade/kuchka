@@ -18,14 +18,10 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import CHARGE
+from kuchka.internal import prefixes
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import MICRO
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import NANO
-from kuchka.prefixes import PICO
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Charge
 from kuchka.quantities import UnitDef
 
@@ -36,11 +32,11 @@ if TYPE_CHECKING:
 COULOMB_NAME = "coulomb"
 COULOMB_SYMBOL = "C"
 
-PICOCOULOMB = prefixed_unit(PICO, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
-NANOCOULOMB = prefixed_unit(NANO, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
-MICROCOULOMB = prefixed_unit(MICRO, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
-MILLICOULOMB = prefixed_unit(MILLI, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
-COULOMB = prefixed_unit(UNIT, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
+PICOCOULOMB = prefixed_unit(prefixes.PICO, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
+NANOCOULOMB = prefixed_unit(prefixes.NANO, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
+MICROCOULOMB = prefixed_unit(prefixes.MICRO, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
+MILLICOULOMB = prefixed_unit(prefixes.MILLI, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
+COULOMB = prefixed_unit(prefixes.UNIT, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
 
 Charge._canonical_unit = COULOMB  # noqa: SLF001 -- this module owns Charge's canonical unit
 

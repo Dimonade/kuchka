@@ -33,16 +33,10 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LENGTH
+from kuchka.internal import prefixes
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import CENTI
-from kuchka.prefixes import DECI
-from kuchka.prefixes import KILO
-from kuchka.prefixes import MICRO
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import NANO
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Length
 from kuchka.quantities import UnitDef
 
@@ -53,13 +47,13 @@ if TYPE_CHECKING:
 METRE_NAME = "metre"
 METRE_SYMBOL = "m"
 
-NANOMETRE = prefixed_unit(NANO, METRE_NAME, METRE_SYMBOL, LENGTH)
-MICROMETRE = prefixed_unit(MICRO, METRE_NAME, METRE_SYMBOL, LENGTH)
-MILLIMETRE = prefixed_unit(MILLI, METRE_NAME, METRE_SYMBOL, LENGTH)
-CENTIMETRE = prefixed_unit(CENTI, METRE_NAME, METRE_SYMBOL, LENGTH)
-DECIMETRE = prefixed_unit(DECI, METRE_NAME, METRE_SYMBOL, LENGTH)
-METRE = prefixed_unit(UNIT, METRE_NAME, METRE_SYMBOL, LENGTH)
-KILOMETRE = prefixed_unit(KILO, METRE_NAME, METRE_SYMBOL, LENGTH)
+NANOMETRE = prefixed_unit(prefixes.NANO, METRE_NAME, METRE_SYMBOL, LENGTH)
+MICROMETRE = prefixed_unit(prefixes.MICRO, METRE_NAME, METRE_SYMBOL, LENGTH)
+MILLIMETRE = prefixed_unit(prefixes.MILLI, METRE_NAME, METRE_SYMBOL, LENGTH)
+CENTIMETRE = prefixed_unit(prefixes.CENTI, METRE_NAME, METRE_SYMBOL, LENGTH)
+DECIMETRE = prefixed_unit(prefixes.DECI, METRE_NAME, METRE_SYMBOL, LENGTH)
+METRE = prefixed_unit(prefixes.UNIT, METRE_NAME, METRE_SYMBOL, LENGTH)
+KILOMETRE = prefixed_unit(prefixes.KILO, METRE_NAME, METRE_SYMBOL, LENGTH)
 
 NANOMETER = NANOMETRE
 MICROMETER = MICROMETRE

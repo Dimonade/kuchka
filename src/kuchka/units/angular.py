@@ -44,12 +44,13 @@ as a string from outside the application.
 
 from __future__ import annotations
 
-from decimal import Decimal
 from fractions import Fraction
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import ANGLE
+from kuchka.internal import symbols
+from kuchka.internal.constants import _PI
 from kuchka.numeric import to_exact
 from kuchka.quantities import Angle
 from kuchka.quantities import UnitDef
@@ -60,23 +61,12 @@ if TYPE_CHECKING:
 
     from kuchka.numeric import Numeric
 
-_PI = Fraction(Decimal("3.141592653589793"))
-"""kuchka's own fixed, finite rational representation of pi.
-
-Fifteen significant digits, the precision commonly cited by NASA/JPL for spacecraft
-navigation.
-See: https://www.jpl.nasa.gov/edu/news/how-many-decimals-of-pi-do-we-really-need/
-
-Defines the scales of Degree, Turn, Gradian, ArcMinute, and ArcSecond relative to
-Radian.
-Otherwise, currently not used anywhere else in kuchka.
-"""
 
 RADIAN = UnitDef("radian", "rad", Fraction(1), ANGLE)
-DEGREE = UnitDef("degree", "\u00b0", _PI / 180, ANGLE)
+DEGREE = UnitDef("degree", symbols.DEGREE, _PI / 180, ANGLE)
 GRADIAN = UnitDef("gradian", "gon", _PI / 200, ANGLE)
-ARCMINUTE = UnitDef("arcminute", "\u2032", _PI / 10800, ANGLE)
-ARCSECOND = UnitDef("arcsecond", "\u2033", _PI / 648000, ANGLE)
+ARCMINUTE = UnitDef("arcminute", symbols.PRIME, _PI / 10800, ANGLE)
+ARCSECOND = UnitDef("arcsecond", symbols.DOUBLE_PRIME, _PI / 648000, ANGLE)
 TURN = UnitDef("turn", "tr", 2 * _PI, ANGLE)
 
 Angle._canonical_unit = RADIAN  # noqa: SLF001 -- this module owns Angle's canonical unit

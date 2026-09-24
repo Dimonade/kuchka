@@ -17,12 +17,10 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import AMOUNT_OF_SUBSTANCE
+from kuchka.internal import prefixes
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import MICRO
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import AmountOfSubstance
 
 if TYPE_CHECKING:
@@ -32,9 +30,9 @@ if TYPE_CHECKING:
 MOLE_NAME = "mole"
 MOLE_SYMBOL = "mol"
 
-MICROMOLE = prefixed_unit(MICRO, MOLE_NAME, MOLE_SYMBOL, AMOUNT_OF_SUBSTANCE)
-MILLIMOLE = prefixed_unit(MILLI, MOLE_NAME, MOLE_SYMBOL, AMOUNT_OF_SUBSTANCE)
-MOLE = prefixed_unit(UNIT, MOLE_NAME, MOLE_SYMBOL, AMOUNT_OF_SUBSTANCE)
+MICROMOLE = prefixed_unit(prefixes.MICRO, MOLE_NAME, MOLE_SYMBOL, AMOUNT_OF_SUBSTANCE)
+MILLIMOLE = prefixed_unit(prefixes.MILLI, MOLE_NAME, MOLE_SYMBOL, AMOUNT_OF_SUBSTANCE)
+MOLE = prefixed_unit(prefixes.UNIT, MOLE_NAME, MOLE_SYMBOL, AMOUNT_OF_SUBSTANCE)
 
 
 AmountOfSubstance._canonical_unit = MOLE  # noqa: SLF001 -- this module owns AmountOfSubstance's canonical unit

@@ -30,13 +30,11 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import AREA
+from kuchka.internal import prefixes
+from kuchka.internal import symbols
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import CENTI
-from kuchka.prefixes import KILO
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Area
 from kuchka.quantities import UnitDef
 
@@ -45,7 +43,7 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
 SQUARE_METRE_NAME = "square_metre"
-SQUARE_METRE_SYMBOL = "m\u00b2"
+SQUARE_METRE_SYMBOL = f"m{symbols.SUPERSCRIPT_TWO}"
 
 # NOTE: `prefixed_unit()` is built for linear dimensions, where a prefix scales the
 # coherent unit once.
@@ -54,21 +52,23 @@ SQUARE_METRE_SYMBOL = "m\u00b2"
 # directly, as `prefixed_unit()` does not supply this construction.
 SQUARE_MILLIMETRE = UnitDef(
     "square_millimetre",
-    "mm\u00b2",
-    MILLI.factor * MILLI.factor,
+    f"mm{symbols.SUPERSCRIPT_TWO}",
+    prefixes.MILLI.factor * prefixes.MILLI.factor,
     AREA,
 )
 SQUARE_CENTIMETRE = UnitDef(
     "square_centimetre",
-    "cm\u00b2",
-    CENTI.factor * CENTI.factor,
+    f"cm{symbols.SUPERSCRIPT_TWO}",
+    prefixes.CENTI.factor * prefixes.CENTI.factor,
     AREA,
 )
-SQUARE_METRE = prefixed_unit(UNIT, SQUARE_METRE_NAME, SQUARE_METRE_SYMBOL, AREA)
+SQUARE_METRE = prefixed_unit(
+    prefixes.UNIT, SQUARE_METRE_NAME, SQUARE_METRE_SYMBOL, AREA
+)
 SQUARE_KILOMETRE = UnitDef(
     "square_kilometre",
-    "km\u00b2",
-    KILO.factor * KILO.factor,
+    f"km{symbols.SUPERSCRIPT_TWO}",
+    prefixes.KILO.factor * prefixes.KILO.factor,
     AREA,
 )
 
@@ -110,7 +110,9 @@ SquareKilometer = SquareKilometre
 
 HECTARE = UnitDef("hectare", "ha", Decimal(10_000), AREA)
 ACRE = UnitDef("acre", "ac", Decimal("4046.8564224"), AREA)
-SQUARE_INCH = UnitDef("square_inch", "in\u00b2", Decimal("0.00064516"), AREA)
+SQUARE_INCH = UnitDef(
+    "square_inch", f"in{symbols.SUPERSCRIPT_TWO}", Decimal("0.00064516"), AREA
+)
 
 
 def Hectare(value: Numeric) -> Area:
