@@ -27,10 +27,13 @@ instead of a hand-written table of every possible pairwise combination.
 """
 
 from __future__ import annotations
+from kuchka.internal.symbols import get_superscript
 
 from dataclasses import dataclass
 
 from typing_extensions import override
+
+from kuchka.internal import symbols
 
 
 @dataclass(frozen=True, slots=True)
@@ -82,17 +85,19 @@ class Dimension:
             ("length", "L"),
             ("mass", "M"),
             ("current", "I"),
-            ("temperature", "\u0398"),
+            ("temperature", symbols.THETA),
             ("amount", "N"),
             ("luminous_intensity", "J"),
-            ("angle", "\u2220"),
+            ("angle", symbols.ANGLE),
         )
+
         parts = []
         for field, label in labels:
             exponent = getattr(self, field)
             if exponent == 0:
                 continue
-            parts.append(label if exponent == 1 else f"{label}^{exponent}")
+            parts.append(f"{label}{get_superscript(exponent)}")
+
         return " ".join(parts) if parts else "dimensionless"
 
 

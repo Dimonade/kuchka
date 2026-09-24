@@ -17,6 +17,7 @@ from kuchka import InvalidMeasurementError
 from kuchka import Kelvin
 from kuchka import MeasurementError
 from kuchka import Temperature
+from kuchka.internal import symbols
 from kuchka.units import CELSIUS
 from kuchka.units import KELVIN
 
@@ -159,7 +160,7 @@ def test_subtraction_with_an_unsupported_operand_raises_type_error():
 
 
 def test_repr_shows_the_display_unit_symbol():
-    assert repr(Celsius(20)) == "20 \u00b0C"
+    assert repr(Celsius(20)) == f"20 {symbols.DEGREE}C"
     assert repr(Kelvin(20)) == "20 K"
 
 

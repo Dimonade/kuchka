@@ -30,13 +30,11 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import VOLUME
+from kuchka.internal import prefixes
+from kuchka.internal import symbols
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import KILO
-from kuchka.prefixes import MICRO
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import UnitDef
 from kuchka.quantities import Volume
 
@@ -45,19 +43,21 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
 CUBIC_METRE_NAME = "cubic_metre"
-CUBIC_METRE_SYMBOL = "m\u00b3"
+CUBIC_METRE_SYMBOL = f"m{symbols.SUPERSCRIPT_THREE}"
 
 # NOTE: same reasoning as kuchka.units.area -- a cubed unit needs the linear prefix's
 # scale applied three times, not once, so `prefixed_unit()`'s constructor is not
 # flexible enough for it as defined now.
 CUBIC_MILLIMETRE = UnitDef(
     "cubic_millimetre",
-    "mm\u00b3",
-    MILLI.factor * MILLI.factor * MILLI.factor,
+    f"mm{symbols.SUPERSCRIPT_THREE}",
+    prefixes.MILLI.factor * prefixes.MILLI.factor * prefixes.MILLI.factor,
     VOLUME,
 )
-CUBIC_CENTIMETRE = UnitDef("cubic_centimetre", "cm\u00b3", Decimal("0.000001"), VOLUME)
-CUBIC_METRE = prefixed_unit(UNIT, CUBIC_METRE_NAME, CUBIC_METRE_SYMBOL, VOLUME)
+CUBIC_CENTIMETRE = UnitDef(
+    "cubic_centimetre", f"cm{symbols.SUPERSCRIPT_THREE}", Decimal("0.000001"), VOLUME
+)
+CUBIC_METRE = prefixed_unit(prefixes.UNIT, CUBIC_METRE_NAME, CUBIC_METRE_SYMBOL, VOLUME)
 
 CUBIC_MILLIMETER = CUBIC_MILLIMETRE
 CUBIC_CENTIMETER = CUBIC_CENTIMETRE
@@ -92,10 +92,18 @@ CubicMeter = CubicMetre
 LITRE_NAME = "litre"
 LITRE_SYMBOL = "L"
 
-MICROLITRE = prefixed_unit(MICRO, LITRE_NAME, LITRE_SYMBOL, VOLUME, coherent_offset=-3)
-MILLILITRE = prefixed_unit(MILLI, LITRE_NAME, LITRE_SYMBOL, VOLUME, coherent_offset=-3)
-LITRE = prefixed_unit(UNIT, LITRE_NAME, LITRE_SYMBOL, VOLUME, coherent_offset=-3)
-KILOLITRE = prefixed_unit(KILO, LITRE_NAME, LITRE_SYMBOL, VOLUME, coherent_offset=-3)
+MICROLITRE = prefixed_unit(
+    prefixes.MICRO, LITRE_NAME, LITRE_SYMBOL, VOLUME, coherent_offset=-3
+)
+MILLILITRE = prefixed_unit(
+    prefixes.MILLI, LITRE_NAME, LITRE_SYMBOL, VOLUME, coherent_offset=-3
+)
+LITRE = prefixed_unit(
+    prefixes.UNIT, LITRE_NAME, LITRE_SYMBOL, VOLUME, coherent_offset=-3
+)
+KILOLITRE = prefixed_unit(
+    prefixes.KILO, LITRE_NAME, LITRE_SYMBOL, VOLUME, coherent_offset=-3
+)
 
 
 def Microlitre(value: Numeric) -> Volume:

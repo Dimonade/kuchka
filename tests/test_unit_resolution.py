@@ -107,6 +107,7 @@ from kuchka import Tonne
 from kuchka import Volt
 from kuchka import Watt
 from kuchka import WattHour
+from kuchka.internal import symbols
 from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
 from kuchka.units import AREA_UNITS
 from kuchka.units import BAUD_RATE_UNITS
@@ -131,22 +132,38 @@ from kuchka.units import VOLUME_UNITS
 
 # (table, {expected symbol: expected constructor})
 TABLE_CASES = [
-    (VOLTAGE_UNITS, {"\u00b5V": Microvolt, "mV": Millivolt, "V": Volt, "kV": Kilovolt}),
+    (
+        VOLTAGE_UNITS,
+        {f"{symbols.MICRO}V": Microvolt, "mV": Millivolt, "V": Volt, "kV": Kilovolt},
+    ),
     (
         CURRENT_UNITS,
-        {"\u00b5A": Microampere, "mA": Milliampere, "A": Ampere, "kA": Kiloampere},
+        {
+            f"{symbols.MICRO}A": Microampere,
+            "mA": Milliampere,
+            "A": Ampere,
+            "kA": Kiloampere,
+        },
     ),
     (
         RESISTANCE_UNITS,
-        {"m\u03a9": Milliohm, "\u03a9": Ohm, "k\u03a9": Kiloohm, "M\u03a9": Megaohm},
+        {
+            f"m{symbols.OMEGA}": Milliohm,
+            symbols.OMEGA: Ohm,
+            f"k{symbols.OMEGA}": Kiloohm,
+            f"M{symbols.OMEGA}": Megaohm,
+        },
     ),
-    (POWER_UNITS, {"\u00b5W": Microwatt, "mW": Milliwatt, "W": Watt, "kW": Kilowatt}),
+    (
+        POWER_UNITS,
+        {f"{symbols.MICRO}W": Microwatt, "mW": Milliwatt, "W": Watt, "kW": Kilowatt},
+    ),
     (TEMPERATURE_UNITS, {"K": Kelvin, "C": Celsius}),
     (TEMPERATURE_DELTA_UNITS, {"dK": DeltaKelvin, "dC": DeltaCelsius}),
     (
         TIME_UNITS,
         {
-            "\u00b5s": Microsecond,
+            f"{symbols.MICRO}s": Microsecond,
             "ms": Millisecond,
             "s": Second,
             "min": Minute,
@@ -167,7 +184,7 @@ TABLE_CASES = [
     (
         SAMPLING_PERIOD_UNITS,
         {
-            "\u00b5s": MicrosecondSamplingPeriod,
+            f"{symbols.MICRO}s": MicrosecondSamplingPeriod,
             "ms": MillisecondSamplingPeriod,
             "s": SecondSamplingPeriod,
         },
@@ -185,7 +202,7 @@ TABLE_CASES = [
         LENGTH_UNITS,
         {
             "nm": Nanometer,
-            "\u00b5m": Micrometer,
+            f"{symbols.MICRO}m": Micrometer,
             "mm": Millimeter,
             "cm": Centimeter,
             "dm": Decimeter,
@@ -200,7 +217,7 @@ TABLE_CASES = [
         {
             "pg": Picogram,
             "ng": Nanogram,
-            "\u00b5g": Microgram,
+            f"{symbols.MICRO}g": Microgram,
             "mg": Milligram,
             "g": Gram,
             "kg": Kilogram,
@@ -210,7 +227,7 @@ TABLE_CASES = [
     ),
     (
         AMOUNT_OF_SUBSTANCE_UNITS,
-        {"\u00b5mol": Micromole, "mmol": Millimole, "mol": Mole},
+        {f"{symbols.MICRO}mol": Micromole, "mmol": Millimole, "mol": Mole},
     ),
     (LUMINOUS_INTENSITY_UNITS, {"cd": Candela}),
     (
@@ -218,7 +235,7 @@ TABLE_CASES = [
         {
             "pC": Picocoulomb,
             "nC": Nanocoulomb,
-            "\u00b5C": Microcoulomb,
+            f"{symbols.MICRO}C": Microcoulomb,
             "mC": Millicoulomb,
             "C": Coulomb,
             "As": AmpereSecond,
@@ -232,7 +249,7 @@ TABLE_CASES = [
         {
             "pJ": Picojoule,
             "nJ": Nanojoule,
-            "\u00b5J": Microjoule,
+            f"{symbols.MICRO}J": Microjoule,
             "mJ": Millijoule,
             "J": Joule,
             "kJ": Kilojoule,
@@ -244,22 +261,22 @@ TABLE_CASES = [
     (
         AREA_UNITS,
         {
-            "mm\u00b2": SquareMillimetre,
-            "cm\u00b2": SquareCentimetre,
-            "m\u00b2": SquareMetre,
-            "km\u00b2": SquareKilometre,
+            f"mm{symbols.SUPERSCRIPT_TWO}": SquareMillimetre,
+            f"cm{symbols.SUPERSCRIPT_TWO}": SquareCentimetre,
+            f"m{symbols.SUPERSCRIPT_TWO}": SquareMetre,
+            f"km{symbols.SUPERSCRIPT_TWO}": SquareKilometre,
             "ha": Hectare,
             "ac": Acre,
-            "in\u00b2": SquareInch,
+            f"in{symbols.SUPERSCRIPT_TWO}": SquareInch,
         },
     ),
     (
         VOLUME_UNITS,
         {
-            "mm\u00b3": CubicMillimetre,
-            "cm\u00b3": CubicCentimetre,
-            "m\u00b3": CubicMetre,
-            "\u00b5L": Microlitre,
+            f"mm{symbols.SUPERSCRIPT_THREE}": CubicMillimetre,
+            f"cm{symbols.SUPERSCRIPT_THREE}": CubicCentimetre,
+            f"m{symbols.SUPERSCRIPT_THREE}": CubicMetre,
+            f"{symbols.MICRO}L": Microlitre,
             "mL": Millilitre,
             "L": Litre,
             "kL": Kilolitre,
@@ -268,7 +285,7 @@ TABLE_CASES = [
     (
         CONDUCTANCE_UNITS,
         {
-            "\u00b5S": Microsiemens,
+            f"{symbols.MICRO}S": Microsiemens,
             "mS": Millisiemens,
             "S": Siemens,
             "kS": Kilosiemens,

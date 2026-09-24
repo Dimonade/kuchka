@@ -350,7 +350,7 @@ The current vocabulary spans several engineering domains.
 - **Temperature:** `Celsius`, `Kelvin`
 - **Temperature Delta:** `DeltaCelsius`, `DeltaKelvin`
 - **Time:** `Second`, `Millisecond`, `Microsecond`, `Minute`, `Hour`
-- **Frequency:** `Hertz`, `Kilohertz`, `Megahertz`
+- **Frequency:** `Hertz`, `Kilohertz`, `Megahertz`, `Gigahertz`, `Terahertz`, `Petahertz`
 - **Sampling Period:** `SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod`
 - **Sample Rate:** `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`
 - **Baud Rate:** `Baud`, `Kilobaud`

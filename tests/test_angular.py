@@ -16,6 +16,7 @@ from kuchka import Gradian
 from kuchka import InvalidMeasurementError
 from kuchka import Radian
 from kuchka import Turn
+from kuchka.internal import symbols
 from kuchka.units import ANGLE_UNITS
 from kuchka.units.angular import _PI
 
@@ -93,7 +94,7 @@ def test_to_between_any_pair_is_exact():
 
 def test_no_ordering():
     with pytest.raises(TypeError):
-        Degree(10) < Degree(20)  # noqa: B015
+        Degree(10) < Degree(20)  # noqa: B015  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 
 
 def test_units_mix_freely_since_they_are_all_angle():
@@ -106,11 +107,11 @@ def test_units_mix_freely_since_they_are_all_angle():
 
 def test_naked_number_addition_is_rejected():
     with pytest.raises(InvalidMeasurementError, match="wrap it in a unit constructor"):
-        Degree(10) + 5
+        Degree(10) + 5  # ty: ignore[unsupported-operator]  # type: ignore[operator]
 
 
 def test_angle_units_table_resolves_every_symbol():
     assert ANGLE_UNITS["rad"](1) == Radian(1)
-    assert ANGLE_UNITS["\u00b0"](45) == Degree(45)
+    assert ANGLE_UNITS[symbols.DEGREE](45) == Degree(45)
     assert ANGLE_UNITS["tr"](1) == Turn(1)
     assert ANGLE_UNITS["gon"](100) == Gradian(100)

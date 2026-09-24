@@ -29,13 +29,10 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import PRESSURE
+from kuchka.internal import prefixes
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import HECTO
-from kuchka.prefixes import KILO
-from kuchka.prefixes import MEGA
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Pressure
 from kuchka.quantities import UnitDef
 from kuchka.units.area import SQUARE_INCH
@@ -48,10 +45,10 @@ if TYPE_CHECKING:
 PASCAL_NAME = "pascal"
 PASCAL_SYMBOL = "Pa"
 
-PASCAL = prefixed_unit(UNIT, PASCAL_NAME, PASCAL_SYMBOL, PRESSURE)
-HECTOPASCAL = prefixed_unit(HECTO, PASCAL_NAME, PASCAL_SYMBOL, PRESSURE)
-KILOPASCAL = prefixed_unit(KILO, PASCAL_NAME, PASCAL_SYMBOL, PRESSURE)
-MEGAPASCAL = prefixed_unit(MEGA, PASCAL_NAME, PASCAL_SYMBOL, PRESSURE)
+PASCAL = prefixed_unit(prefixes.UNIT, PASCAL_NAME, PASCAL_SYMBOL, PRESSURE)
+HECTOPASCAL = prefixed_unit(prefixes.HECTO, PASCAL_NAME, PASCAL_SYMBOL, PRESSURE)
+KILOPASCAL = prefixed_unit(prefixes.KILO, PASCAL_NAME, PASCAL_SYMBOL, PRESSURE)
+MEGAPASCAL = prefixed_unit(prefixes.MEGA, PASCAL_NAME, PASCAL_SYMBOL, PRESSURE)
 
 Pressure._canonical_unit = PASCAL  # noqa: SLF001 -- this module owns Pressure's canonical unit
 

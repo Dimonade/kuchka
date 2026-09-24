@@ -18,15 +18,10 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import FREQUENCY
+from kuchka.internal import prefixes
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import GIGA
-from kuchka.prefixes import KILO
-from kuchka.prefixes import MEGA
-from kuchka.prefixes import PETA
-from kuchka.prefixes import TERA
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Frequency
 
 if TYPE_CHECKING:
@@ -36,12 +31,12 @@ if TYPE_CHECKING:
 HERTZ_NAME = "hertz"
 HERTZ_SYMBOL = "Hz"
 
-HERTZ = prefixed_unit(UNIT, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
-KILOHERTZ = prefixed_unit(KILO, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
-MEGAHERTZ = prefixed_unit(MEGA, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
-GIGAHERTZ = prefixed_unit(GIGA, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
-TERAHERTZ = prefixed_unit(TERA, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
-PETAHERTZ = prefixed_unit(PETA, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
+HERTZ = prefixed_unit(prefixes.UNIT, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
+KILOHERTZ = prefixed_unit(prefixes.KILO, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
+MEGAHERTZ = prefixed_unit(prefixes.MEGA, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
+GIGAHERTZ = prefixed_unit(prefixes.GIGA, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
+TERAHERTZ = prefixed_unit(prefixes.TERA, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
+PETAHERTZ = prefixed_unit(prefixes.PETA, HERTZ_NAME, HERTZ_SYMBOL, FREQUENCY)
 
 
 Frequency._canonical_unit = HERTZ  # noqa: SLF001 -- this module owns Frequency's canonical unit

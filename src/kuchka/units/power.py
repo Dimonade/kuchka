@@ -17,13 +17,10 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import POWER
+from kuchka.internal import prefixes
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import KILO
-from kuchka.prefixes import MICRO
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Power
 
 if TYPE_CHECKING:
@@ -33,10 +30,10 @@ if TYPE_CHECKING:
 WATT_NAME = "watt"
 WATT_SYMBOL = "W"
 
-MICROWATT = prefixed_unit(MICRO, WATT_NAME, WATT_SYMBOL, POWER)
-MILLIWATT = prefixed_unit(MILLI, WATT_NAME, WATT_SYMBOL, POWER)
-WATT = prefixed_unit(UNIT, WATT_NAME, WATT_SYMBOL, POWER)
-KILOWATT = prefixed_unit(KILO, WATT_NAME, WATT_SYMBOL, POWER)
+MICROWATT = prefixed_unit(prefixes.MICRO, WATT_NAME, WATT_SYMBOL, POWER)
+MILLIWATT = prefixed_unit(prefixes.MILLI, WATT_NAME, WATT_SYMBOL, POWER)
+WATT = prefixed_unit(prefixes.UNIT, WATT_NAME, WATT_SYMBOL, POWER)
+KILOWATT = prefixed_unit(prefixes.KILO, WATT_NAME, WATT_SYMBOL, POWER)
 
 
 Power._canonical_unit = WATT  # noqa: SLF001 -- this module owns Power's canonical unit

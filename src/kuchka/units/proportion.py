@@ -45,8 +45,8 @@ def Percent(value: Numeric) -> Proportion:
 
 PROPORTION_UNITS: Mapping[str, Callable[[Numeric], Proportion]] = MappingProxyType(
     {
-        "1": Ratio,
-        "%": Percent,
+        RATIO.symbol: Ratio,
+        PERCENT.symbol: Percent,
     }
 )
 

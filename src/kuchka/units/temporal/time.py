@@ -22,12 +22,10 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import TIME
+from kuchka.internal import prefixes
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import MICRO
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Time
 from kuchka.quantities import UnitDef
 
@@ -38,9 +36,9 @@ if TYPE_CHECKING:
 SECOND_NAME = "second"
 SECOND_SYMBOL = "s"
 
-MICROSECOND = prefixed_unit(MICRO, SECOND_NAME, SECOND_SYMBOL, TIME)
-MILLISECOND = prefixed_unit(MILLI, SECOND_NAME, SECOND_SYMBOL, TIME)
-SECOND = prefixed_unit(UNIT, SECOND_NAME, SECOND_SYMBOL, TIME)
+MICROSECOND = prefixed_unit(prefixes.MICRO, SECOND_NAME, SECOND_SYMBOL, TIME)
+MILLISECOND = prefixed_unit(prefixes.MILLI, SECOND_NAME, SECOND_SYMBOL, TIME)
+SECOND = prefixed_unit(prefixes.UNIT, SECOND_NAME, SECOND_SYMBOL, TIME)
 
 Time._canonical_unit = SECOND  # noqa: SLF001 -- this module owns Time's canonical unit
 

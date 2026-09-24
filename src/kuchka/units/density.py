@@ -22,6 +22,7 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import DENSITY
+from kuchka.internal import symbols
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Density
@@ -33,13 +34,13 @@ if TYPE_CHECKING:
 
 KILOGRAM_PER_CUBIC_METRE = UnitDef(
     "kilogram_per_cubic_metre",
-    "kg/m\u00b3",
+    f"kg/m{symbols.SUPERSCRIPT_THREE}",
     Decimal(1),
     DENSITY,
 )
 GRAM_PER_CUBIC_CENTIMETRE = UnitDef(
     "gram_per_cubic_centimetre",
-    "g/cm\u00b3",
+    f"g/cm{symbols.SUPERSCRIPT_THREE}",
     Decimal(1000),
     DENSITY,
 )

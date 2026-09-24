@@ -17,13 +17,11 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import RESISTANCE
+from kuchka.internal import prefixes
+from kuchka.internal import symbols
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import KILO
-from kuchka.prefixes import MEGA
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Resistance
 
 if TYPE_CHECKING:
@@ -32,13 +30,13 @@ if TYPE_CHECKING:
 
 
 OHM_NAME = "Ohm"
-OHM_SYMBOL = "\u03a9"
+OHM_SYMBOL = symbols.OMEGA
 
 
-MILLIOHM = prefixed_unit(MILLI, OHM_NAME, OHM_SYMBOL, RESISTANCE)
-OHM = prefixed_unit(UNIT, OHM_NAME, OHM_SYMBOL, RESISTANCE)
-KILOOHM = prefixed_unit(KILO, OHM_NAME, OHM_SYMBOL, RESISTANCE)
-MEGAOHM = prefixed_unit(MEGA, OHM_NAME, OHM_SYMBOL, RESISTANCE)
+MILLIOHM = prefixed_unit(prefixes.MILLI, OHM_NAME, OHM_SYMBOL, RESISTANCE)
+OHM = prefixed_unit(prefixes.UNIT, OHM_NAME, OHM_SYMBOL, RESISTANCE)
+KILOOHM = prefixed_unit(prefixes.KILO, OHM_NAME, OHM_SYMBOL, RESISTANCE)
+MEGAOHM = prefixed_unit(prefixes.MEGA, OHM_NAME, OHM_SYMBOL, RESISTANCE)
 
 
 Resistance._canonical_unit = OHM  # noqa: SLF001 -- this module owns Resistance's canonical unit

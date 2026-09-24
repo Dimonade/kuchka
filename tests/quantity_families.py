@@ -43,6 +43,7 @@ from kuchka import Siemens
 from kuchka import SquareMetre
 from kuchka import Volt
 from kuchka import Watt
+from kuchka.internal import symbols
 from kuchka.quantities import LinearQuantity
 from kuchka.units import ACCELERATION_UNITS
 from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
@@ -80,8 +81,8 @@ from kuchka.units import PRESSURE_UNITS
 from kuchka.units import PROPORTION_UNITS
 from kuchka.units import RATIO
 from kuchka.units import RESISTANCE_UNITS
-from kuchka.units import SAMPLES_PER_SECOND
 from kuchka.units import SAMPLE_RATE_UNITS
+from kuchka.units import SAMPLES_PER_SECOND
 from kuchka.units import SAMPLING_PERIOD_SECOND
 from kuchka.units import SAMPLING_PERIOD_UNITS
 from kuchka.units import SECOND
@@ -183,7 +184,7 @@ ALL_UNIT_CASE_IDS: list[str] = [
 
 EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
     "length": frozenset({"in"}),
-    "area": frozenset({"ac", "in\u00b2"}),
+    "area": frozenset({"ac", f"in{symbols.SUPERSCRIPT_TWO}"}),
     "time": frozenset({"min", "h"}),
     "energy": frozenset({"mWh", "Wh"}),
     "charge": frozenset({"mAh", "Ah"}),
@@ -196,7 +197,7 @@ EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
 `in` (inch) is excluded because its scale (0.0254) produces a non-terminating
 decimal reciprocal, making exact `Decimal` comparison impossible in those cases.
 
-`ac` (acre, 4046.8564224) and `in\u00b2` (square inch, 0.00064516) are excluded for
+`ac` (acre, 4046.8564224) and `in²` (square inch, 0.00064516) are excluded for
 the same reason, since neither derives from a power of ten either.
 
 `min`/`h` (60, 3600), `Wh`/`mWh` (3600, 3.6), and `mAh`/`Ah` (3.6, 3600) are excluded
