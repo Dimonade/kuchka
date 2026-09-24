@@ -18,6 +18,7 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import TIME
+from kuchka.internal import MICRO
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import SamplingPeriod
@@ -29,7 +30,7 @@ if TYPE_CHECKING:
 
 SAMPLING_PERIOD_MICROSECOND = UnitDef(
     "sampling_period_microsecond",
-    "\u00b5s",
+    f"{MICRO}s",
     Decimal("0.000001"),
     TIME,
 )

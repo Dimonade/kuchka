@@ -24,10 +24,10 @@ from typing import TYPE_CHECKING
 from kuchka.dimensions import TIME
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import MICRO
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
+from kuchka.internal.prefixes import MICRO
+from kuchka.internal.prefixes import MILLI
+from kuchka.internal.prefixes import UNIT
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.quantities import Time
 from kuchka.quantities import UnitDef
 

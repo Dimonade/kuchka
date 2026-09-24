@@ -20,13 +20,13 @@ from typing import TYPE_CHECKING
 from kuchka.dimensions import FREQUENCY
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import GIGA
-from kuchka.prefixes import KILO
-from kuchka.prefixes import MEGA
-from kuchka.prefixes import PETA
-from kuchka.prefixes import TERA
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
+from kuchka.internal.prefixes import GIGA
+from kuchka.internal.prefixes import KILO
+from kuchka.internal.prefixes import MEGA
+from kuchka.internal.prefixes import PETA
+from kuchka.internal.prefixes import TERA
+from kuchka.internal.prefixes import UNIT
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.quantities import Frequency
 
 if TYPE_CHECKING:
