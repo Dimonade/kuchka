@@ -107,6 +107,9 @@ force-single-line = true
 "src/kuchka/units/__init__.py" = [
   "PLE0605",
 ] # Every leaf file maintains their own __all__.
+"src/kuchka/units/temporal/__init__.py" = [
+  "PLE0605",
+] # Same: mid-level package aggregating its own family of leaf modules.
 "src/kuchka/quantities/__init__.py" = ["PLE0605"] # Same.
 
 "tests/*" = [
