@@ -205,9 +205,9 @@ PREFIX_CASES: list[PrefixCase] = [
     ),
     PrefixCase("Kilohertz", Kilohertz, Hertz, Decimal(1_000), KILOHERTZ, HERTZ),
     PrefixCase("Megahertz", Megahertz, Hertz, Decimal(1_000_000), MEGAHERTZ, HERTZ),
-    PrefixCase("Gigahertz", Gigahertz, Hertz, Decimal(1e9), GIGAHERTZ, HERTZ),
-    PrefixCase("Terahertz", Terahertz, Hertz, Decimal(1e12), TERAHERTZ, HERTZ),
-    PrefixCase("Petahertz", Petahertz, Hertz, Decimal(1e15), PETAHERTZ, HERTZ),
+    PrefixCase("Gigahertz", Gigahertz, Hertz, Decimal("1e9"), GIGAHERTZ, HERTZ),
+    PrefixCase("Terahertz", Terahertz, Hertz, Decimal("1e12"), TERAHERTZ, HERTZ),
+    PrefixCase("Petahertz", Petahertz, Hertz, Decimal("1e15"), PETAHERTZ, HERTZ),
     PrefixCase(
         "MicrosecondSamplingPeriod",
         MicrosecondSamplingPeriod,
