@@ -83,6 +83,7 @@ from kuchka.units import Degree
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaKelvin
 from kuchka.units import Dyne
+from kuchka.units import Electronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gradian
 from kuchka.units import Gram
@@ -247,6 +248,7 @@ __all__: list[str] = [
     "DeltaKelvin",
     "Density",
     "Dyne",
+    "Electronvolt",
     "Energy",
     "Force",
     "Frequency",

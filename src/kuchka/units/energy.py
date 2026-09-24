@@ -80,6 +80,16 @@ def Megajoule(value: Numeric) -> Energy:
     return Energy(to_exact(value) * MEGAJOULE.scale, MEGAJOULE)
 
 
+# Electronvolt
+
+ELECTRONVOLT = UnitDef("electronvolt", "eV", Decimal("1.602176634e-19"), ENERGY)
+
+
+def Electronvolt(value: Numeric) -> Energy:
+    """Construct an Energy from a magnitude expressed in electronvolts."""
+    return Energy(to_exact(value) * ELECTRONVOLT.scale, ELECTRONVOLT)
+
+
 # Watt times Time.
 
 MILLIWATT_HOUR = UnitDef("milliwatt_hour", "mWh", Decimal("3.6"), ENERGY)
@@ -105,12 +115,14 @@ ENERGY_UNITS: Mapping[str, Callable[[Numeric], Energy]] = MappingProxyType(
         JOULE.symbol: Joule,
         KILOJOULE.symbol: Kilojoule,
         MEGAJOULE.symbol: Megajoule,
+        ELECTRONVOLT.symbol: Electronvolt,
         MILLIWATT_HOUR.symbol: MilliwattHour,
         WATT_HOUR.symbol: WattHour,
     }
 )
 
 __all__ = [
+    "ELECTRONVOLT",
     "ENERGY_UNITS",
     "JOULE",
     "KILOJOULE",
@@ -121,6 +133,7 @@ __all__ = [
     "NANOJOULE",
     "PICOJOULE",
     "WATT_HOUR",
+    "Electronvolt",
     "Joule",
     "Kilojoule",
     "Megajoule",
