@@ -343,17 +343,17 @@ The current vocabulary spans several engineering domains.
 - **Resistance:** `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`
 - **Conductance:** `Siemens`, `Microsiemens`, `Millisiemens`, `Kilosiemens`
 - **Charge:** `Coulomb`, `Millicoulomb`, `Microcoulomb`, `Nanocoulomb`, `Picocoulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`
-- **Energy:** `Joule`, `Millijoule`, `Microjoule`, `Nanojoule`, `Picojoule`, `Kilojoule`, `Megajoule`, `MilliwattHour`, `WattHour`
+- **Energy:** `Joule`, `Millijoule`, `Microjoule`, `Nanojoule`, `Picojoule`, `Kilojoule`, `Megajoule`, `Electronvolt`, `MilliwattHour`, `WattHour`
 
 **Time and signal**
 
-- **Temperature:** `Celsius`, `Kelvin`
-- **Temperature Delta:** `DeltaCelsius`, `DeltaKelvin`
 - **Time:** `Second`, `Millisecond`, `Microsecond`, `Minute`, `Hour`
 - **Frequency:** `Hertz`, `Kilohertz`, `Megahertz`, `Gigahertz`, `Terahertz`, `Petahertz`
 - **Sampling Period:** `SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod`
 - **Sample Rate:** `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`
 - **Baud Rate:** `Baud`, `Kilobaud`
+- **Temperature:** `Celsius`, `Kelvin`
+- **Temperature Delta:** `DeltaCelsius`, `DeltaKelvin`
 
 **Geometry and mechanics**
 

@@ -7,6 +7,10 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ## [0.1.3]
 
+### `Energy` family gets new unit
+
+`Electronvolt`.
+
 ### `Frequency` family gets new units
 
 `Gigahertz`, `Terahertz`, and `Petahertz`.
