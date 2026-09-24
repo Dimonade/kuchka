@@ -3,4 +3,4 @@
 from kuchka.internal import constants
 from kuchka.internal import symbols
 
-__all__ = ["constants", "symbols"]
+__all__ = ["constants", "get_superscript", "symbols"]
