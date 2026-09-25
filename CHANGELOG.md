@@ -12,7 +12,7 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - `Joule` units expanded.
 - `Electronvolt` family added.
 - `Erg` unit added.
-- Nutritional units - `Calorie`, `Kilocalorie`, and ThermochemicalCalorie`.
+- Nutritional units - `Calorie`, `Kilocalorie`, and `ThermochemicalCalorie`.
 
 ### `Frequency` family gets new units
 
