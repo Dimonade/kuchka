@@ -10,7 +10,21 @@ an I/O boundary such as a config file, CSV header, or hardware descriptor.
 
 import pytest
 
-from kuchka import Acre
+from kuchka import (
+    Acre,
+    Gigajoule,
+    Terajoule,
+    Microelectronvolt,
+    Millielectronvolt,
+    Kiloelectronvolt,
+    Megaelectronvolt,
+    Gigaelectronvolt,
+    Teraelectronvolt,
+    Petaelectronvolt,
+    Erg,
+    ThermochemicalCalorie,
+    Calorie,
+)
 from kuchka import Ampere
 from kuchka import AmpereHour
 from kuchka import AmpereSecond
@@ -25,6 +39,7 @@ from kuchka import CubicMillimetre
 from kuchka import Decimeter
 from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
+from kuchka import Electronvolt
 from kuchka import Gigahertz
 from kuchka import Gram
 from kuchka import Hectare
@@ -254,8 +269,21 @@ TABLE_CASES = [
             "J": Joule,
             "kJ": Kilojoule,
             "MJ": Megajoule,
+            "GJ": Gigajoule,
+            "TJ": Terajoule,
+            f"{symbols.MICRO}eV": Microelectronvolt,
+            "meV": Millielectronvolt,
+            "eV": Electronvolt,
+            "keV": Kiloelectronvolt,
+            "MeV": Megaelectronvolt,
+            "GeV": Gigaelectronvolt,
+            "TeV": Teraelectronvolt,
+            "PeV": Petaelectronvolt,
             "mWh": MilliwattHour,
             "Wh": WattHour,
+            "erg": Erg,
+            f"cal{symbols.SUBSCRIPT_T}{symbols.SUBSCRIPT_H}": ThermochemicalCalorie,
+            "kcal": Calorie,
         },
     ),
     (
