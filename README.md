@@ -333,56 +333,76 @@ The point is to make one particular style of engineering code feel natural: ordi
 
 ## What's included in 0.1.x
 
-The current vocabulary spans several engineering domains.
+`kuchka` currently covers a growing vocabulary of engineering and scientific quantities.
+Units are represented as typed values, with exact conversions where the unit definition permits them.
 
-**Electrical**
+The tables below show a number of representative units per field or domain.
+The complete unit vocabulary is available in the API reference.
 
-- **Voltage:** `Volt`, `Millivolt`, `Microvolt`, `Kilovolt`
-- **Current:** `Ampere`, `Milliampere`, `Microampere`, `Kiloampere`
-- **Power:** `Watt`, `Milliwatt`, `Kilowatt`
-- **Resistance:** `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`
-- **Conductance:** `Siemens`, `Microsiemens`, `Millisiemens`, `Kilosiemens`
-- **Charge:** `Coulomb`, `Millicoulomb`, `Microcoulomb`, `Nanocoulomb`, `Picocoulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`
-- **Energy:** `Joule`, `Millijoule`, `Microjoule`, `Nanojoule`, `Picojoule`, `Kilojoule`, `Megajoule`, `Gigajoule`, `Terajoule`, `Electronvolt`, `MilliwattHour`, `WattHour`
+### Electrical
 
-**Time and signal**
+| Quantity    | Representative units                                                                                                                                     |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Voltage     | `Microvolt`, `Millivolt`, `Volt`, `Kilovolt`                                                                                                             |
+| Current     | `Microampere`, `Milliampere`, `Ampere`, `Kiloampere`                                                                                                     |
+| Power       | `Milliwatt`, `Watt`, `Kilowatt`                                                                                                                          |
+| Resistance  | `Milliohm`, `Ohm`, `Kiloohm`, `Megaohm`                                                                                                                  |
+| Conductance | `Microsiemens`, `Millisiemens`, `Siemens`, `Kilosiemens`                                                                                                 |
+| Charge      | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                                                                    |
+| Energy      | `Picojoule` through `Terajoule`, `Electronvolt` through `Teraelectronvolt`, `Erg`, `MilliwattHour`, `WattHour`, `KilowattHour`, `Calorie`, `Kilocalorie` |
 
-- **Time:** `Second`, `Millisecond`, `Microsecond`, `Minute`, `Hour`
-- **Frequency:** `Hertz`, `Kilohertz`, `Megahertz`, `Gigahertz`, `Terahertz`, `Petahertz`
-- **Sampling Period:** `SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod`
-- **Sample Rate:** `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`
-- **Baud Rate:** `Baud`, `Kilobaud`
-- **Temperature:** `Celsius`, `Kelvin`
-- **Temperature Delta:** `DeltaCelsius`, `DeltaKelvin`
+### Time and signals
 
-**Geometry and mechanics**
+| Quantity          | Representative units                                                             |
+| ----------------- | -------------------------------------------------------------------------------- |
+| Time              | `Millisecond`, `Second`, `Minute`, `Hour`                                        |
+| Frequency         | `Hertz` through `Petahertz`                                                      |
+| Sampling Period   | `MicrosecondSamplingPeriod`, `MillisecondSamplingPeriod`, `SecondSamplingPeriod` |
+| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`               |
+| Baud Rate         | `Baud`, `Kilobaud`                                                               |
+| Temperature       | `Celsius`, `Kelvin`                                                              |
+| Temperature Delta | `DeltaCelsius`, `DeltaKelvin`                                                    |
 
-- **Length:** `Nanometre`, `Micrometre`, `Millimetre`, `Centimetre`, `Decimetre`, `Metre`, `Kilometre`, `Inch`
-- **Area:** `SquareMillimetre`, `SquareCentimetre`, `SquareMetre`, `SquareKilometre`, `Hectare`, `Acre`, `SquareInch`
-- **Volume:** `CubicMillimetre`, `CubicCentimetre`, `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`
-- **Velocity:** `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`
-- **Acceleration:** `MetrePerSecondSquared`
-- **Mass:** `Nanogram`, `Microgram`, `Milligram`, `Gram`, `Kilogram`, `Megagram`, `Tonne`
-- **Force:** `Newton`, `Millinewton`, `Kilonewton`, `Dyne`, `PoundForce`
-- **Density:** `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`
-- **Pressure:** `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`
+### Geometry and mechanics
 
-**Angle**
+| Quantity     | Representative units                                                                                       |
+| ------------ | ---------------------------------------------------------------------------------------------------------- |
+| Length       | `Nanometre` through `Kilometre`, `Inch` and other exact imperial units                                     |
+| Area         | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                            |
+| Volume       | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                   |
+| Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`                                                        |
+| Acceleration | `MetrePerSecondSquared`                                                                                    |
+| Mass         | `Nanogram` through `Megagram`, `Tonne`                                                                     |
+| Force        | `Millinewton`, `Newton`, `Kilonewton`, `Dyne`, `PoundForce`                                                |
+| Density      | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                      |
+| Pressure     | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch` |
 
-- **Angle:** `Radian`, `Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond`
+### Angle
 
-**Chemistry and light**
+| Quantity | Units                                                           |
+| -------- | --------------------------------------------------------------- |
+| Angle    | `Radian`, `Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond` |
 
-- **Amount of Substance:** `Micromole`, `Millimole`, `Mole`
-- **Luminous Intensity:** `Candela`
+### Chemistry and light
 
-**Dimensionless**
+| Quantity            | Units                            |
+| ------------------- | -------------------------------- |
+| Amount of Substance | `Micromole`, `Millimole`, `Mole` |
+| Luminous Intensity  | `Candela`                        |
 
-- **Proportion:** `Ratio`, `Percent`
+### Dimensionless quantities
 
-The canonical spelling of the SI unit of length is `metre`.
-`kuchka` aliases `*meter` names to the corresponding `*metre` names.
-The same principle applies to `Litre` and `Liter`, and others.
+| Quantity   | Units              |
+| ---------- | ------------------ |
+| Proportion | `Ratio`, `Percent` |
+
+Most SI-derived families expose a selected set of SI prefixes appropriate to their engineering use.
+The README does not list every prefix individually;the API reference contains the complete constructor and unit vocabulary.
+
+The canonical spelling of SI `metre` is used throughout `kuchka`.
+American-English `*meter` names are aliases of the corresponding `*metre`
+constructors, not separate unit implementations. The same principle applies
+to `Litre`/`Liter` and other spelling aliases.
 
 ## A few important distinctions
 
