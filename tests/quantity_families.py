@@ -186,7 +186,22 @@ EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
     "length": frozenset({"in"}),
     "area": frozenset({"ac", f"in{symbols.SUPERSCRIPT_TWO}"}),
     "time": frozenset({"min", "h"}),
-    "energy": frozenset({"mWh", "Wh"}),
+    "energy": frozenset(
+        {
+            "mWh",
+            "Wh",
+            f"{symbols.MICRO}eV",
+            "meV",
+            "eV",
+            "keV",
+            "MeV",
+            "GeV",
+            "TeV",
+            "PeV",
+            "kcal",
+            "cal_th",
+        }
+    ),
     "charge": frozenset({"mAh", "Ah"}),
     "velocity": frozenset({"km/h"}),
     "force": frozenset({"lbf"}),

@@ -160,6 +160,7 @@ from kuchka.units import MilliampereHour
 from kuchka.units import MilliampereSecond
 from kuchka.units import Millibar
 from kuchka.units import Millicoulomb
+from kuchka.units import Millielectronvolt
 from kuchka.units import Milligram
 from kuchka.units import Millijoule
 from kuchka.units import Milliliter
