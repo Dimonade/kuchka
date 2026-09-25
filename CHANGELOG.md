@@ -9,11 +9,18 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### `Energy` family gets new units
 
-`Gigajoule`, `Terajoule`, `Electronvolt`.
+- `Joule` units expanded.
+- `Electronvolt` family added.
+- `Erg` unit added.
+- Nutritional units - `Calorie`, `Kilocalorie`, and ThermochemicalCalorie`.
 
 ### `Frequency` family gets new units
 
 `Gigahertz`, `Terahertz`, and `Petahertz`.
+
+### Dimensions get unicode superscripts
+
+Instead of `T^a L^b M ^c ...` it uses now proper signed superscripts, like: `T⁻¹⁷ M⁻⁴²⁰ I¹⁰²⁴ Θ⁻⁵¹² J⁻⁹⁰⁰⁰ ∠¹⁹⁹¹`.
 
 ## [0.1.2] - 2026.09.22
 
