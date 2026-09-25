@@ -66,6 +66,7 @@ from kuchka.units import ArcSecond
 from kuchka.units import Atmosphere
 from kuchka.units import Bar
 from kuchka.units import Baud
+from kuchka.units import Calorie
 from kuchka.units import Candela
 from kuchka.units import Celsius
 from kuchka.units import Centimeter
@@ -84,6 +85,8 @@ from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaKelvin
 from kuchka.units import Dyne
 from kuchka.units import Electronvolt
+from kuchka.units import Erg
+from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gigajoule
 from kuchka.units import Gradian
@@ -99,6 +102,8 @@ from kuchka.units import Joule
 from kuchka.units import Kelvin
 from kuchka.units import Kiloampere
 from kuchka.units import Kilobaud
+from kuchka.units import Kilocalorie
+from kuchka.units import Kiloelectronvolt
 from kuchka.units import Kilogram
 from kuchka.units import KilogramPerCubicMeter
 from kuchka.units import KilogramPerCubicMetre
@@ -121,6 +126,7 @@ from kuchka.units import Kilovolt
 from kuchka.units import Kilowatt
 from kuchka.units import Liter
 from kuchka.units import Litre
+from kuchka.units import Megaelectronvolt
 from kuchka.units import Megagram
 from kuchka.units import Megahertz
 from kuchka.units import Megajoule
@@ -135,6 +141,7 @@ from kuchka.units import MetrePerSecond
 from kuchka.units import MetrePerSecondSquared
 from kuchka.units import Microampere
 from kuchka.units import Microcoulomb
+from kuchka.units import Microelectronvolt
 from kuchka.units import Microgram
 from kuchka.units import Microjoule
 from kuchka.units import Microliter
@@ -179,6 +186,7 @@ from kuchka.units import Newton
 from kuchka.units import Ohm
 from kuchka.units import Pascal
 from kuchka.units import Percent
+from kuchka.units import Petaelectronvolt
 from kuchka.units import Petahertz
 from kuchka.units import Picocoulomb
 from kuchka.units import Picogram
@@ -200,8 +208,10 @@ from kuchka.units import SquareMeter
 from kuchka.units import SquareMetre
 from kuchka.units import SquareMillimeter
 from kuchka.units import SquareMillimetre
+from kuchka.units import Teraelectronvolt
 from kuchka.units import Terahertz
 from kuchka.units import Terajoule
+from kuchka.units import ThermochemicalCalorie
 from kuchka.units import Tonne
 from kuchka.units import Turn
 from kuchka.units import Volt
@@ -228,6 +238,7 @@ __all__: list[str] = [
     "Bar",
     "Baud",
     "BaudRate",
+    "Calorie",
     "Candela",
     "Celsius",
     "Centimeter",
@@ -252,8 +263,10 @@ __all__: list[str] = [
     "Dyne",
     "Electronvolt",
     "Energy",
+    "Erg",
     "Force",
     "Frequency",
+    "Gigaelectronvolt",
     "Gigahertz",
     "Gigajoule",
     "Gradian",
@@ -272,6 +285,8 @@ __all__: list[str] = [
     "Kelvin",
     "Kiloampere",
     "Kilobaud",
+    "Kilocalorie",
+    "Kiloelectronvolt",
     "Kilogram",
     "KilogramPerCubicMeter",
     "KilogramPerCubicMetre",
@@ -298,6 +313,7 @@ __all__: list[str] = [
     "LuminousIntensity",
     "Mass",
     "MeasurementError",
+    "Megaelectronvolt",
     "Megagram",
     "Megahertz",
     "Megajoule",
@@ -312,6 +328,7 @@ __all__: list[str] = [
     "MetrePerSecondSquared",
     "Microampere",
     "Microcoulomb",
+    "Microelectronvolt",
     "Microgram",
     "Microjoule",
     "Microliter",
@@ -330,6 +347,7 @@ __all__: list[str] = [
     "MilliampereSecond",
     "Millibar",
     "Millicoulomb",
+    "Millielectronvolt",
     "Milligram",
     "Millijoule",
     "Milliliter",
@@ -356,6 +374,7 @@ __all__: list[str] = [
     "Ohm",
     "Pascal",
     "Percent",
+    "Petaelectronvolt",
     "Petahertz",
     "Picocoulomb",
     "Picogram",
@@ -386,8 +405,10 @@ __all__: list[str] = [
     "SquareMillimetre",
     "Temperature",
     "TemperatureDelta",
+    "Teraelectronvolt",
     "Terahertz",
     "Terajoule",
+    "ThermochemicalCalorie",
     "Time",
     "Tonne",
     "Turn",
