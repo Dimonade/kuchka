@@ -10,7 +10,7 @@ an I/O boundary such as a config file, CSV header, or hardware descriptor.
 
 import pytest
 
-from kuchka import Acre, Foot, Yard, Mile, NauticalMile
+from kuchka import Acre
 from kuchka import Ampere
 from kuchka import AmpereHour
 from kuchka import AmpereSecond
@@ -23,14 +23,17 @@ from kuchka import Coulomb
 from kuchka import CubicCentimetre
 from kuchka import CubicMetre
 from kuchka import CubicMillimetre
+from kuchka import Dalton
 from kuchka import Decimeter
 from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
 from kuchka import Electronvolt
 from kuchka import Erg
+from kuchka import Foot
 from kuchka import Gigaelectronvolt
 from kuchka import Gigahertz
 from kuchka import Gigajoule
+from kuchka import Grain
 from kuchka import Gram
 from kuchka import Hectare
 from kuchka import Hertz
@@ -72,6 +75,7 @@ from kuchka import MicrosecondSamplingPeriod
 from kuchka import Microsiemens
 from kuchka import Microvolt
 from kuchka import Microwatt
+from kuchka import Mile
 from kuchka import Milliampere
 from kuchka import MilliampereHour
 from kuchka import MilliampereSecond
@@ -95,6 +99,7 @@ from kuchka import Nanocoulomb
 from kuchka import Nanogram
 from kuchka import Nanojoule
 from kuchka import Nanometer
+from kuchka import NauticalMile
 from kuchka import Ohm
 from kuchka import Percent
 from kuchka import Petaelectronvolt
@@ -103,11 +108,13 @@ from kuchka import Picocoulomb
 from kuchka import Picogram
 from kuchka import Picojoule
 from kuchka import Picometer
+from kuchka import Pound
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
 from kuchka import SecondSamplingPeriod
 from kuchka import Siemens
+from kuchka import SolarMass
 from kuchka import SquareCentimetre
 from kuchka import SquareInch
 from kuchka import SquareKilometre
@@ -121,6 +128,7 @@ from kuchka import Tonne
 from kuchka import Volt
 from kuchka import Watt
 from kuchka import WattHour
+from kuchka import Yard
 from kuchka.internal import symbols
 from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
 from kuchka.units import AREA_UNITS
@@ -242,6 +250,10 @@ TABLE_CASES = [
             "kg": Kilogram,
             "Mg": Megagram,
             "t": Tonne,
+            "Da": Dalton,
+            "gr": Grain,
+            "lb": Pound,
+            "M☉": SolarMass,
         },
     ),
     (
