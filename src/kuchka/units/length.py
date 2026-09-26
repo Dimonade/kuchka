@@ -43,7 +43,7 @@ Flying 120 NM corresponds to exactly 222.24 km:
 
 >>> flight_leg = NauticalMile(120)
 >>> equivalent = Kilometre(222.24)
->>> flight_leg == quivalent
+>>> flight_leg == equivalent
 True
 
 The Apollo 11 landing site is about 384,400 km from Earth on average:
@@ -208,6 +208,7 @@ def Millimetre(value: Numeric) -> Length:
     >>> shaft = Millimetre(12)
     >>> bore = Millimetre(12.2)
     >>> clearance = bore - shaft
+    >>> clearance
     0.2 mm
 
     """
@@ -345,6 +346,7 @@ def Inch(value: Numeric) -> Length:
     >>> screw_spacing = Inch(2)
     >>> panel_width = Millimetre(80)
     >>> usable_width = panel_width - screw_spacing
+    >>> usable_width
     29.2 mm
 
     """
@@ -425,7 +427,7 @@ def Mile(value: Numeric) -> Length:
 
     >>> morning_run = Mile(5)
     >>> race_distance = Kilometre(8)
-    >>> sorted(morning_run, race_distance)
+    >>> sorted([morning_run, race_distance])
     [8 km, 5 mi.]
 
     """
