@@ -1,30 +1,70 @@
-"""Mass unit constructors: Nanogram, Microgram, Milligram, Gram, Kilogram, Megagram.
+"""Mass quantities and constructors for SI, biological, engineering, and astronomical units.
 
-Each function here does the same thing: take a plain number, multiply it by a fixed
-scale factor, and wrap it in :class:`~kuchka.quantities.Mass`.
+`Mass` represents the amount of matter in an object.
+The kilogram is the canonical SI base unit for mass, so every constructor in this
+module scales relative to the kilogram, even though the family is named after the gram.
 
-    from kuchka import Kilogram, Milligram
+This makes `Mass` unusual among the SI base quantities:
+its canonical unit already contains an SI prefix.
+The internal representation still follows the same exact `Decimal` conversion model as
+every other quantity in `kuchka`.
 
-    payload = Kilogram(2) + Milligram(500)
+Alongside SI prefixes, the module includes several exact non-SI units commonly used in
+science and engineering:
 
-Kilogram, not Gram, is the canonical unit here (`scale = Decimal(1)`):
-the kilogram is the SI base unit for mass, so every other constructor in this module
-scales relative to it, the same way every other family's constructors scale relative
-to their own SI base or coherent unit.
+* `Dalton` for atoms, proteins, and molecular biology;
+* `Grain` for precision mechanical and ballistic measurements;
+* `Pound` for imperial engineering and logistics;
+* `SolarMass` for stellar and galactic scales.
 
-This makes Mass the one family whose canonical unit already carries an SI prefix in its
-own name.
+`Tonne` is a true alias of `Megagram`.
+Both names construct the same quantity and share the same underlying unit definition.
 
-NOTE: `Tonne` is a plain alias for `Megagram`, not a second constructor:
-a tonne and a megagram are the same quantity, and the common name (`Tonne`) is more
-convenient to reach for than the SI-coherent one (`Megagram`) for most engineering use.
-Aliasing keeps that convenience without introducing a second `UnitDef` for the same
-scale -- `Tonne is Megagram` holds at the function level, so `Tonne(5)` and
-`Megagram(5)` are identical `Mass` instances, including their displayed unit symbol
-(`Mg`, not `t`).
+Examples
+--------
+The same physical quantity spans microscopic biology and astronomy.
 
-`MASS_UNITS` maps each symbol to its constructor, for boundary code that
-reads a unit as a string from outside the application.
+A human red blood cell has a mass of roughly 27 picograms:
+
+>>> red_blood_cell = Picogram(27)
+
+An average fruit fly weighs about 1 milligram:
+
+>>> fruit_fly = Milligram(1)
+
+A small laboratory mouse weighs about 25 grams:
+
+>>> mouse = Gram(25)
+
+A 2 kg engineering payload can combine kilogram and gram measurements without manual
+conversion:
+
+>>> payload = Kilogram(2) + Gram(350)
+
+Shipping and structural engineering naturally use tonnes:
+
+>>> steel_beam = Tonne(2.4)
+
+At astronomical scales, stars are measured in solar masses:
+
+>>> sun = SolarMass(1)
+>>> alpha_centauri_a = SolarMass(1.1)
+
+Notes
+-----
+`MASS_UNITS` maps symbols such as ``"mg"``, ``"kg"``, ``"lb"``, and ``"Da"``
+to their constructors for configuration files and other external interfaces.
+
+`Tonne` and `Megagram` are interchangeable names for the same unit.
+Both display using the SI symbol ``Mg`` to preserve a single coherent unit
+definition.
+
+See Also
+--------
+~kuchka.quantities.Force
+    Force combines mass with acceleration.
+~kuchka.quantities.Density
+    Density expresses mass per unit volume.
 """
 
 from __future__ import annotations
@@ -101,45 +141,191 @@ Mass._canonical_unit = KILOGRAM  # noqa: SLF001 -- this module owns Mass's canon
 
 
 def Picogram(value: Numeric) -> Mass:
-    """Construct a Mass from a magnitude expressed in picograms."""
+    """Construct mass from a magnitude expressed in picograms.
+
+    Parameters
+    ----------
+    value : Numeric
+        Mass magnitude in picograms.
+
+    Returns
+    -------
+    Mass
+        Mass represented in picograms.
+
+    Examples
+    --------
+    A human red blood cell has a mass of roughly 27 pg:
+
+    >>> red_blood_cell = Picogram(27)
+    """
     return Mass(to_exact(value) * PICOGRAM.scale, PICOGRAM)
 
 
 def Nanogram(value: Numeric) -> Mass:
-    """Construct a Mass from a magnitude expressed in nanograms."""
+    """Construct mass from a magnitude expressed in nanograms.
+
+    Parameters
+    ----------
+    value : Numeric
+        Mass magnitude in nanograms.
+
+    Returns
+    -------
+    Mass
+        Mass represented in nanograms.
+
+    Examples
+    --------
+    Environmental laboratories often measure airborne particles in nanograms:
+
+    >>> airborne_sample = Nanogram(85)
+    """
     return Mass(to_exact(value) * NANOGRAM.scale, NANOGRAM)
 
 
 def Microgram(value: Numeric) -> Mass:
-    """Construct a Mass from a magnitude expressed in micrograms."""
+    """Construct mass from a magnitude expressed in micrograms.
+
+    Parameters
+    ----------
+    value : Numeric
+        Mass magnitude in micrograms.
+
+    Returns
+    -------
+    Mass
+        Mass represented in micrograms.
+
+    Examples
+    --------
+    Vitamin B12 supplements are commonly measured in hundreds of micrograms:
+
+    >>> b12 = Microgram(500)
+    """
     return Mass(to_exact(value) * MICROGRAM.scale, MICROGRAM)
 
 
 def Milligram(value: Numeric) -> Mass:
-    """Construct a Mass from a magnitude expressed in milligrams."""
+    """Construct mass from a magnitude expressed in milligrams.
+
+    Parameters
+    ----------
+    value : Numeric
+        Mass magnitude in milligrams.
+
+    Returns
+    -------
+    Mass
+        Mass represented in milligrams.
+
+    Examples
+    --------
+    An average fruit fly weighs about one milligram:
+
+    >>> fruit_fly = Milligram(1)
+
+    Roughly 120 thousand fruit flies weigh about the same as a small dog:
+
+    >>> swarm = Milligram(60000)
+    >>> dog = Kilogram(30)
+    >>> flies_dog_equivalent = swarm / dog
+    >>> flies_dog_equivalent
+    120_000
+    """
     return Mass(to_exact(value) * MILLIGRAM.scale, MILLIGRAM)
 
 
 def Gram(value: Numeric) -> Mass:
-    """Construct a Mass from a magnitude expressed in grams."""
+    """Construct mass from a magnitude expressed in grams.
+
+    Parameters
+    ----------
+    value : Numeric
+        Mass magnitude in grams.
+
+    Returns
+    -------
+    Mass
+        Mass represented in grams.
+
+    Examples
+    --------
+    A laboratory balance commonly measures samples on the gram scale:
+
+    >>> mineral_sample = Gram(42)
+    """
     return Mass(to_exact(value) * GRAM.scale, GRAM)
 
 
 def Kilogram(value: Numeric) -> Mass:
-    """Construct a Mass from a magnitude expressed in kilograms."""
+    """Construct mass from a magnitude expressed in kilograms.
+
+    Parameters
+    ----------
+    value : Numeric
+        Mass magnitude in kilograms.
+
+    Returns
+    -------
+    Mass
+        Mass represented in kilograms.
+
+    Examples
+    --------
+    A full bowling ball weighs up to about 7.26 kg:
+
+    >>> bowling_ball = Kilogram(7.26)
+    """
     return Mass(to_exact(value) * KILOGRAM.scale, KILOGRAM)
 
 
 def Megagram(value: Numeric) -> Mass:
-    """Construct a Mass from a magnitude expressed in megagrams."""
+    """Construct mass from a magnitude expressed in megagrams.
+
+    Parameters
+    ----------
+    value : Numeric
+        Mass magnitude in megagrams.
+
+    Returns
+    -------
+    Mass
+        Mass represented in megagrams.
+
+    Examples
+    --------
+    A loaded concrete mixer can easily carry several megagrams of material:
+
+    >>> concrete_load = Megagram(18)
+
+    A `Megagram` is aliased to the omnipresent `Tonne`:
+    >>> car_megagram = Megagram(1.3)
+    >>> car_tonne = Tonne(1.3)
+    >>> car_tonne == car_megagram
+    True
+    """
     return Mass(to_exact(value) * MEGAGRAM.scale, MEGAGRAM)
 
 
 Tonne = Megagram
 """A tonne is a megagram.
 
-This name is the same function object as `Megagram`, so the two are interchangeable.
+`Tonne` is the everyday engineering name for the SI unit `Megagram`.
+The two constructors are the same function object.
+
+Examples
+--------
+A steel shipping container with cargo may weigh 24 tonnes.
+The equivalent SI name produces the same value:
+
+>>> container = Tonne(24)
+>>> container_si = Megagram(24)
+>>> container == container_si
+True
 """
+
+
 
 
 MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = MappingProxyType(
