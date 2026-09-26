@@ -10,25 +10,12 @@ an I/O boundary such as a config file, CSV header, or hardware descriptor.
 
 import pytest
 
-from kuchka import (
-    Acre,
-    Gigajoule,
-    Terajoule,
-    Microelectronvolt,
-    Millielectronvolt,
-    Kiloelectronvolt,
-    Megaelectronvolt,
-    Gigaelectronvolt,
-    Teraelectronvolt,
-    Petaelectronvolt,
-    Erg,
-    ThermochemicalCalorie,
-    Calorie,
-)
+from kuchka import Acre, Picometer
 from kuchka import Ampere
 from kuchka import AmpereHour
 from kuchka import AmpereSecond
 from kuchka import Baud
+from kuchka import Calorie
 from kuchka import Candela
 from kuchka import Celsius
 from kuchka import Centimeter
@@ -40,7 +27,10 @@ from kuchka import Decimeter
 from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
 from kuchka import Electronvolt
+from kuchka import Erg
+from kuchka import Gigaelectronvolt
 from kuchka import Gigahertz
+from kuchka import Gigajoule
 from kuchka import Gram
 from kuchka import Hectare
 from kuchka import Hertz
@@ -50,6 +40,7 @@ from kuchka import Joule
 from kuchka import Kelvin
 from kuchka import Kiloampere
 from kuchka import Kilobaud
+from kuchka import Kiloelectronvolt
 from kuchka import Kilogram
 from kuchka import Kilohertz
 from kuchka import Kilojoule
@@ -61,6 +52,7 @@ from kuchka import Kilosiemens
 from kuchka import Kilovolt
 from kuchka import Kilowatt
 from kuchka import Litre
+from kuchka import Megaelectronvolt
 from kuchka import Megagram
 from kuchka import Megahertz
 from kuchka import Megajoule
@@ -69,6 +61,7 @@ from kuchka import MegasamplesPerSecond
 from kuchka import Meter
 from kuchka import Microampere
 from kuchka import Microcoulomb
+from kuchka import Microelectronvolt
 from kuchka import Microgram
 from kuchka import Microjoule
 from kuchka import Microlitre
@@ -83,6 +76,7 @@ from kuchka import Milliampere
 from kuchka import MilliampereHour
 from kuchka import MilliampereSecond
 from kuchka import Millicoulomb
+from kuchka import Millielectronvolt
 from kuchka import Milligram
 from kuchka import Millijoule
 from kuchka import Millilitre
@@ -103,6 +97,7 @@ from kuchka import Nanojoule
 from kuchka import Nanometer
 from kuchka import Ohm
 from kuchka import Percent
+from kuchka import Petaelectronvolt
 from kuchka import Petahertz
 from kuchka import Picocoulomb
 from kuchka import Picogram
@@ -117,7 +112,10 @@ from kuchka import SquareInch
 from kuchka import SquareKilometre
 from kuchka import SquareMetre
 from kuchka import SquareMillimetre
+from kuchka import Teraelectronvolt
 from kuchka import Terahertz
+from kuchka import Terajoule
+from kuchka import ThermochemicalCalorie
 from kuchka import Tonne
 from kuchka import Volt
 from kuchka import Watt
@@ -216,6 +214,7 @@ TABLE_CASES = [
     (
         LENGTH_UNITS,
         {
+            "pm": Picometer,
             "nm": Nanometer,
             f"{symbols.MICRO}m": Micrometer,
             "mm": Millimeter,

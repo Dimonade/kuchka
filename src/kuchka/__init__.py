@@ -192,6 +192,7 @@ from kuchka.units import Petahertz
 from kuchka.units import Picocoulomb
 from kuchka.units import Picogram
 from kuchka.units import Picojoule
+from kuchka.units import Picometer
 from kuchka.units import PoundForce
 from kuchka.units import PoundPerSquareInch
 from kuchka.units import Radian
@@ -380,6 +381,8 @@ __all__: list[str] = [
     "Picocoulomb",
     "Picogram",
     "Picojoule",
+    "Picometer",
+    "Picometre",
     "PlannedDimensionError",
     "PoundForce",
     "PoundPerSquareInch",

@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING
 import pytest
 from hypothesis import given
 
-from kuchka import Acre
+from kuchka import Acre, Picometer
 from kuchka import Ampere
 from kuchka import AmpereHour
 from kuchka import Centimeter
@@ -89,7 +89,7 @@ from kuchka import Tonne
 from kuchka import Volt
 from kuchka import Watt
 from kuchka import WattHour
-from kuchka.units import ACRE
+from kuchka.units import ACRE, PICOMETER
 from kuchka.units import AMPERE
 from kuchka.units import AMPERE_HOUR
 from kuchka.units import CENTIMETER
@@ -239,6 +239,9 @@ PREFIX_CASES: list[PrefixCase] = [
         Decimal(1_000_000),
         MEGASAMPLES_PER_SECOND,
         SAMPLES_PER_SECOND,
+    ),
+    PrefixCase(
+        "Picometer", Picometer, Meter, Decimal("0.000000000001"), PICOMETER, METER
     ),
     PrefixCase("Nanometer", Nanometer, Meter, Decimal("0.000000001"), NANOMETER, METER),
     PrefixCase("Micrometer", Micrometer, Meter, Decimal("0.000001"), MICROMETER, METER),
