@@ -65,10 +65,12 @@ See Also
     Force combines mass with acceleration.
 ~kuchka.quantities.Density
     Density expresses mass per unit volume.
+
 """
 
 from __future__ import annotations
 
+from decimal import Decimal
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
@@ -78,6 +80,7 @@ from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Mass
+from kuchka.quantities import UnitDef
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -158,6 +161,7 @@ def Picogram(value: Numeric) -> Mass:
     A human red blood cell has a mass of roughly 27 pg:
 
     >>> red_blood_cell = Picogram(27)
+
     """
     return Mass(to_exact(value) * PICOGRAM.scale, PICOGRAM)
 
@@ -180,6 +184,7 @@ def Nanogram(value: Numeric) -> Mass:
     Environmental laboratories often measure airborne particles in nanograms:
 
     >>> airborne_sample = Nanogram(85)
+
     """
     return Mass(to_exact(value) * NANOGRAM.scale, NANOGRAM)
 
@@ -202,6 +207,7 @@ def Microgram(value: Numeric) -> Mass:
     Vitamin B12 supplements are commonly measured in hundreds of micrograms:
 
     >>> b12 = Microgram(500)
+
     """
     return Mass(to_exact(value) * MICROGRAM.scale, MICROGRAM)
 
@@ -232,6 +238,7 @@ def Milligram(value: Numeric) -> Mass:
     >>> flies_dog_equivalent = swarm / dog
     >>> flies_dog_equivalent
     120_000
+
     """
     return Mass(to_exact(value) * MILLIGRAM.scale, MILLIGRAM)
 
@@ -254,6 +261,7 @@ def Gram(value: Numeric) -> Mass:
     A laboratory balance commonly measures samples on the gram scale:
 
     >>> mineral_sample = Gram(42)
+
     """
     return Mass(to_exact(value) * GRAM.scale, GRAM)
 
@@ -276,6 +284,7 @@ def Kilogram(value: Numeric) -> Mass:
     A full bowling ball weighs up to about 7.26 kg:
 
     >>> bowling_ball = Kilogram(7.26)
+
     """
     return Mass(to_exact(value) * KILOGRAM.scale, KILOGRAM)
 
@@ -304,6 +313,7 @@ def Megagram(value: Numeric) -> Mass:
     >>> car_tonne = Tonne(1.3)
     >>> car_tonne == car_megagram
     True
+
     """
     return Mass(to_exact(value) * MEGAGRAM.scale, MEGAGRAM)
 
@@ -326,6 +336,99 @@ True
 """
 
 
+# Non-SI units.
+
+DALTON = UnitDef("dalton", "Da", Decimal("1.66053906892e-27"), MASS)
+
+
+def Dalton(value: Numeric) -> Mass:
+    """Construct mass from a magnitude expressed in daltons.
+
+    Parameters
+    ----------
+    value : Numeric
+        Mass magnitude in daltons.
+
+    Returns
+    -------
+    Mass
+        Mass represented in daltons.
+
+    Notes
+    -----
+    The dalton is widely used for atoms, proteins, and molecular biology.
+
+    Examples
+    --------
+    A water molecule has a molecular mass of about 18 Da:
+
+    >>> water = Dalton(18)
+
+    A hemoglobin molecule is roughly 64.5 kDa:
+
+    >>> hemoglobin = Dalton(64500)
+
+    """
+    return Mass(to_exact(value) * DALTON.scale, DALTON)
+
+
+GRAIN = UnitDef("grain", "gr", Milligram(64.79891).to(KILOGRAM), MASS)
+
+def Grain(value: Numeric) -> Mass:
+    """Construct mass from a magnitude expressed in grains.
+
+    Parameters
+    ----------
+    value : Numeric
+        Mass magnitude in grains.
+
+    Returns
+    -------
+    Mass
+        Mass represented in grains.
+
+    Notes
+    -----
+    One grain is exactly 64.79891 milligrams.
+
+    Examples
+    --------
+    Bullet masses are traditionally specified in grains:
+
+    >>> bullet = Grain(147)
+    """
+    return Mass(to_exact(value) * GRAIN.scale, GRAIN)
+
+POUND = UnitDef("pound", "lb", 0.45359237, MASS)
+
+def Pound(value: Numeric) -> Mass:
+    """Construct mass from a magnitude expressed in pounds.
+
+    Parameters
+    ----------
+    value : Numeric
+        Mass magnitude in pounds.
+
+    Returns
+    -------
+    Mass
+        Mass represented in pounds.
+
+    Notes
+    -----
+    One international avoirdupois pound is exactly 0.45359237 kilograms.
+
+    Examples
+    --------
+    Airline baggage limits are often expressed in pounds:
+
+    >>> suitcase = Pound(50)
+    >>> baggage_limit = Kilogram(25)
+    >>> should_fit = baggage_limit > suitcase
+    >>> should_fit
+    True
+    """
+    return Mass(to_exact(value) * POUND.scale, POUND)
 
 
 MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = MappingProxyType(
