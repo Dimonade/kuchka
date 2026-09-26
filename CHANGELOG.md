@@ -7,6 +7,11 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ## [0.1.3]
 
+### `Length` family gets new units
+
+- `Picometre`.
+- Imperial: `Foot`, `Yard`, `Mile`, `NauticalMile`.
+
 ### `Energy` family gets new units
 
 - `Joule` units expanded.

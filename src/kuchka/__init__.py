@@ -86,6 +86,7 @@ from kuchka.units import DeltaKelvin
 from kuchka.units import Dyne
 from kuchka.units import Electronvolt
 from kuchka.units import Erg
+from kuchka.units import Foot
 from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gigajoule
@@ -154,6 +155,7 @@ from kuchka.units import MicrosecondSamplingPeriod
 from kuchka.units import Microsiemens
 from kuchka.units import Microvolt
 from kuchka.units import Microwatt
+from kuchka.units import Mile
 from kuchka.units import MilePerHour
 from kuchka.units import Milliampere
 from kuchka.units import MilliampereHour
@@ -183,6 +185,7 @@ from kuchka.units import Nanogram
 from kuchka.units import Nanojoule
 from kuchka.units import Nanometer
 from kuchka.units import Nanometre
+from kuchka.units import NauticalMile
 from kuchka.units import Newton
 from kuchka.units import Ohm
 from kuchka.units import Pascal
@@ -193,6 +196,7 @@ from kuchka.units import Picocoulomb
 from kuchka.units import Picogram
 from kuchka.units import Picojoule
 from kuchka.units import Picometer
+from kuchka.units import Picometre
 from kuchka.units import PoundForce
 from kuchka.units import PoundPerSquareInch
 from kuchka.units import Radian
@@ -219,6 +223,7 @@ from kuchka.units import Turn
 from kuchka.units import Volt
 from kuchka.units import Watt
 from kuchka.units import WattHour
+from kuchka.units import Yard
 
 try:
     __version__ = version("kuchka")
@@ -266,6 +271,7 @@ __all__: list[str] = [
     "Electronvolt",
     "Energy",
     "Erg",
+    "Foot",
     "Force",
     "Frequency",
     "Gigaelectronvolt",
@@ -343,6 +349,7 @@ __all__: list[str] = [
     "Microsiemens",
     "Microvolt",
     "Microwatt",
+    "Mile",
     "MilePerHour",
     "Milliampere",
     "MilliampereHour",
@@ -372,6 +379,7 @@ __all__: list[str] = [
     "Nanojoule",
     "Nanometer",
     "Nanometre",
+    "NauticalMile",
     "Newton",
     "Ohm",
     "Pascal",
@@ -423,6 +431,7 @@ __all__: list[str] = [
     "Volume",
     "Watt",
     "WattHour",
+    "Yard",
     "__version__",
     "codata_2022",
 ]

@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING
 import pytest
 from hypothesis import given
 
-from kuchka import Acre, Picometer
+from kuchka import Acre
 from kuchka import Ampere
 from kuchka import AmpereHour
 from kuchka import Centimeter
@@ -27,6 +27,7 @@ from kuchka import CubicCentimetre
 from kuchka import CubicMetre
 from kuchka import CubicMillimetre
 from kuchka import Decimeter
+from kuchka import Foot
 from kuchka import Gigahertz
 from kuchka import Gram
 from kuchka import Hectare
@@ -58,6 +59,7 @@ from kuchka import Microsecond
 from kuchka import MicrosecondSamplingPeriod
 from kuchka import Microsiemens
 from kuchka import Microvolt
+from kuchka import Mile
 from kuchka import Milliampere
 from kuchka import MilliampereHour
 from kuchka import MilliampereSecond
@@ -74,8 +76,10 @@ from kuchka import MilliwattHour
 from kuchka import Minute
 from kuchka import Nanogram
 from kuchka import Nanometer
+from kuchka import NauticalMile
 from kuchka import Ohm
 from kuchka import Petahertz
+from kuchka import Picometer
 from kuchka import SamplesPerSecond
 from kuchka import Second
 from kuchka import SecondSamplingPeriod
@@ -89,7 +93,8 @@ from kuchka import Tonne
 from kuchka import Volt
 from kuchka import Watt
 from kuchka import WattHour
-from kuchka.units import ACRE, PICOMETER
+from kuchka import Yard
+from kuchka.units import ACRE
 from kuchka.units import AMPERE
 from kuchka.units import AMPERE_HOUR
 from kuchka.units import CENTIMETER
@@ -98,6 +103,7 @@ from kuchka.units import CUBIC_CENTIMETRE
 from kuchka.units import CUBIC_METRE
 from kuchka.units import CUBIC_MILLIMETRE
 from kuchka.units import DECIMETER
+from kuchka.units import FOOT
 from kuchka.units import GIGAHERTZ
 from kuchka.units import GRAM
 from kuchka.units import HECTARE
@@ -128,6 +134,7 @@ from kuchka.units import MICROMETER
 from kuchka.units import MICROSECOND
 from kuchka.units import MICROSIEMENS
 from kuchka.units import MICROVOLT
+from kuchka.units import MILE
 from kuchka.units import MILLIAMPERE
 from kuchka.units import MILLIAMPERE_HOUR
 from kuchka.units import MILLIAMPERE_SECOND
@@ -143,8 +150,10 @@ from kuchka.units import MILLIWATT_HOUR
 from kuchka.units import MINUTE
 from kuchka.units import NANOGRAM
 from kuchka.units import NANOMETER
+from kuchka.units import NAUTICAL_MILE
 from kuchka.units import OHM
 from kuchka.units import PETAHERTZ
+from kuchka.units import PICOMETER
 from kuchka.units import SAMPLES_PER_SECOND
 from kuchka.units import SAMPLING_PERIOD_MICROSECOND
 from kuchka.units import SAMPLING_PERIOD_MILLISECOND
@@ -159,6 +168,7 @@ from kuchka.units import TERAHERTZ
 from kuchka.units import VOLT
 from kuchka.units import WATT
 from kuchka.units import WATT_HOUR
+from kuchka.units import YARD
 from tests.quantity_families import FINITE_DECIMALS
 
 if TYPE_CHECKING:
@@ -250,6 +260,12 @@ PREFIX_CASES: list[PrefixCase] = [
     PrefixCase("Decimeter", Decimeter, Meter, Decimal("0.1"), DECIMETER, METER),
     PrefixCase("Kilometer", Kilometer, Meter, Decimal(1000), KILOMETER, METER),
     PrefixCase("Inch", Inch, Meter, Decimal("0.0254"), INCH, METER),
+    PrefixCase("Foot", Foot, Meter, Decimal("0.3048"), FOOT, METER),
+    PrefixCase("Yard", Yard, Meter, Decimal("0.9144"), YARD, METER),
+    PrefixCase("Mile", Mile, Meter, Decimal("1_609.344"), MILE, METER),
+    PrefixCase(
+        "Nautical Mile", NauticalMile, Meter, Decimal(1_852), NAUTICAL_MILE, METER
+    ),
     PrefixCase(
         "Nanogram", Nanogram, Kilogram, Decimal("0.000000000001"), NANOGRAM, KILOGRAM
     ),

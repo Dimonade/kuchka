@@ -293,8 +293,7 @@ See [Quantity shapes and semantics](docs/concepts/quantity_shapes.md) for the fu
 A raw `float` does not remember what it means.
 Passing floats through an engineering pipeline makes unit mistakes easy to write and hard to catch because the code remains syntactically valid even when it is semantically wrong.
 
-The useful distinction is not between "numbers" and "numbers with prettier printing".
-It is between application code where physical meaning is carried by convention:
+Consider:
 
 ```python
 voltage_mv = 4200
@@ -302,15 +301,21 @@ current_ma = 150
 power_w = voltage_mv * current_ma
 ```
 
-and application code where physical meaning is part of the value itself:
+This looks reasonable at first glance, but `4200 mV * 150 mA` is `630 mW`, not `630000 W`.
+The mistake is hidden because the units exist only in variable names.
+
+With `kuchka`, physical meaning is part of the value itself:
 
 ```python
 voltage = Millivolt(4200)
 current = Milliampere(150)
 power = voltage * current
+
+power  # 630 mW
+type(power)  # `<class 'kuchka.quantities.electrical.Power'>`
 ```
 
-The second form gives the application something ordinary Python can work with: a function can require `Voltage`, a configuration loader can construct a `Voltage`, and an engineering formula can produce a `Power`.
+A function can require `Voltage`, a configuration loader can construct a `Voltage`, and an engineering formula can produce a `Power`.
 The unit does not have to be carried in a variable name, a comment, or an application-specific string convention.
 
 That is the niche `kuchka` is aiming for: a curated set of engineering quantities that behave as ordinary Python types and are checked by ordinary Python type checkers, with runtime validation still available at untyped boundaries.
@@ -367,7 +372,7 @@ The complete unit vocabulary is available in the API reference.
 
 | Quantity     | Representative units                                                                                       |
 | ------------ | ---------------------------------------------------------------------------------------------------------- |
-| Length       | `Nanometre` through `Kilometre`, `Inch` and other exact imperial units                                     |
+| Length       | `Picometre` through `Kilometre`, `Inch` and other exact imperial units                                     |
 | Area         | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                            |
 | Volume       | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                   |
 | Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`                                                        |
@@ -590,7 +595,6 @@ See [`benchmarks`](benchmarks/README.md) for current measurements.
 
 The vocabulary is intentionally curated and will remain finite. Current gaps include:
 
-- `Length` has metric prefixes and `Inch`, but not `Foot`, `Yard`, or `Mile`.
 - There is no NumPy/Pandas integration.
 - There is no JSON/DB persistence layer.
 - There is no point-in-time type; `Time` represents a span such as a duration, timeout, or sample period.

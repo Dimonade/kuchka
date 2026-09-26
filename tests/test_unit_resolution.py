@@ -10,7 +10,7 @@ an I/O boundary such as a config file, CSV header, or hardware descriptor.
 
 import pytest
 
-from kuchka import Acre, Picometer
+from kuchka import Acre, Foot, Yard, Mile, NauticalMile
 from kuchka import Ampere
 from kuchka import AmpereHour
 from kuchka import AmpereSecond
@@ -102,6 +102,7 @@ from kuchka import Petahertz
 from kuchka import Picocoulomb
 from kuchka import Picogram
 from kuchka import Picojoule
+from kuchka import Picometer
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
@@ -223,6 +224,10 @@ TABLE_CASES = [
             "m": Meter,
             "km": Kilometer,
             "in": Inch,
+            "ft": Foot,
+            "yd": Yard,
+            "mi.": Mile,
+            "M": NauticalMile,
         },
     ),
     (PROPORTION_UNITS, {"1": Ratio, "%": Percent}),

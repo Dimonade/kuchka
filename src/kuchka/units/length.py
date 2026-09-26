@@ -58,6 +58,7 @@ Imperial units implemented by this module are exact by definition, not measured
 approximations. This means comparisons such as
 
 >>> Inch(1) == Millimetre(25.4)
+True
 
 hold exactly.
 
@@ -136,6 +137,7 @@ def Picometre(value: Numeric) -> Length:
     A typical covalent bond is about 154 pm long:
 
     >>> carbon_bond = Picometre(154)
+
     """
     return Length(to_exact(value) * PICOMETRE.scale, PICOMETRE)
 
@@ -158,6 +160,7 @@ def Nanometre(value: Numeric) -> Length:
     A modern 3 nm transistor process is measured on the nanometre scale:
 
     >>> process_node = Nanometre(3)
+
     """
     return Length(to_exact(value) * NANOMETRE.scale, NANOMETRE)
 
@@ -180,6 +183,7 @@ def Micrometre(value: Numeric) -> Length:
     A human hair is approximately 70 µm thick:
 
     >>> hair = Micrometre(70)
+
     """
     return Length(to_exact(value) * MICROMETRE.scale, MICROMETRE)
 
@@ -205,6 +209,7 @@ def Millimetre(value: Numeric) -> Length:
     >>> bore = Millimetre(12.2)
     >>> clearance = bore - shaft
     0.2 mm
+
     """
     return Length(to_exact(value) * MILLIMETRE.scale, MILLIMETRE)
 
@@ -227,6 +232,7 @@ def Centimetre(value: Numeric) -> Length:
     A postcard is about 15 cm wide:
 
     >>> postcard_width = Centimetre(15)
+
     """
     return Length(to_exact(value) * CENTIMETRE.scale, CENTIMETRE)
 
@@ -249,6 +255,7 @@ def Decimetre(value: Numeric) -> Length:
     A 6 dm ruler is exactly 60 cm long:
 
     >>> drafting_ruler = Decimetre(6)
+
     """
     return Length(to_exact(value) * DECIMETRE.scale, DECIMETRE)
 
@@ -271,6 +278,7 @@ def Metre(value: Numeric) -> Length:
     The high jump world-class bar height is around two and a half metres:
 
     >>> high_jump_bar = Metre(2.45)
+
     """
     return Length(to_exact(value) * METRE.scale, METRE)
 
@@ -293,6 +301,7 @@ def Kilometre(value: Numeric) -> Length:
     The official marathon distance is 42.195 km:
 
     >>> marathon = Kilometre(42.195)
+
     """
     return Length(to_exact(value) * KILOMETRE.scale, KILOMETRE)
 
@@ -337,12 +346,128 @@ def Inch(value: Numeric) -> Length:
     >>> panel_width = Millimetre(80)
     >>> usable_width = panel_width - screw_spacing
     29.2 mm
+
     """
     return Length(to_exact(value) * INCH.scale, INCH)
 
 
+FOOT = UnitDef("foot", "ft", Decimal("0.3048"), LENGTH)
+
+
+def Foot(value: Numeric) -> Length:
+    """Construct length from a magnitude expressed in feet.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in feet.
+
+    Returns
+    -------
+    Length
+        Length represented in feet.
+
+    Examples
+    --------
+    A standard basketball hoop is 10 ft above the floor:
+
+    >>> hoop_height = Foot(10)
+
+    """
+    return Length(to_exact(value) * FOOT.scale, FOOT)
+
+
+YARD = UnitDef("yard", "yd", Decimal("0.9144"), LENGTH)
+
+
+def Yard(value: Numeric) -> Length:
+    """Construct length from a magnitude expressed in yards.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in yards.
+
+    Returns
+    -------
+    Length
+        Length represented in yards.
+
+    Examples
+    --------
+    The width of an American football field is 53 and 1/3 yards:
+
+    >>> field_width = Yard(53.3333333333)
+
+    """
+    return Length(to_exact(value) * YARD.scale, YARD)
+
+
+MILE = UnitDef("mile", "mi.", Decimal("1_609.344"), LENGTH)
+
+
+def Mile(value: Numeric) -> Length:
+    """Construct length from a magnitude expressed in miles.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in miles.
+
+    Returns
+    -------
+    Length
+        Length represented in miles.
+
+    Examples
+    --------
+    A 5-mile training run can be compared directly with metric distances:
+
+    >>> morning_run = Mile(5)
+    >>> race_distance = Kilometre(8)
+    >>> sorted(morning_run, race_distance)
+    [8 km, 5 mi.]
+
+    """
+    return Length(to_exact(value) * MILE.scale, MILE)
+
+
+NAUTICAL_MILE = UnitDef("nautical mile", "M", 1_852, LENGTH)
+
+
+def NauticalMile(value: Numeric) -> Length:
+    """Construct length from a magnitude expressed in nautical miles.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in nautical miles.
+
+    Returns
+    -------
+    Length
+        Length represented in nautical miles.
+
+    Notes
+    -----
+    One nautical mile is defined as exactly 1852 metres.
+
+    Examples
+    --------
+    A ship travelling 120 nautical miles covers exactly 222.24 km:
+
+    >>> voyage = NauticalMile(120)
+    >>> equivalent = Kilometre(222.24)
+    >>> voyage == equivalent
+    True
+
+    """
+    return Length(to_exact(value) * NAUTICAL_MILE.scale, NAUTICAL_MILE)
+
+
 LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
     {
+        PICOMETRE.symbol: Picometre,
         NANOMETRE.symbol: Nanometre,
         MICROMETRE.symbol: Micrometre,
         MILLIMETRE.symbol: Millimetre,
@@ -350,7 +475,11 @@ LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
         DECIMETRE.symbol: Decimetre,
         METRE.symbol: Metre,
         KILOMETRE.symbol: Kilometre,
-        "in": Inch,
+        INCH.symbol: Inch,
+        FOOT.symbol: Foot,
+        YARD.symbol: Yard,
+        MILE.symbol: Mile,
+        NAUTICAL_MILE.symbol: NauticalMile,
     }
 )
 
@@ -359,6 +488,7 @@ __all__ = [
     "CENTIMETRE",
     "DECIMETER",
     "DECIMETRE",
+    "FOOT",
     "INCH",
     "KILOMETER",
     "KILOMETRE",
@@ -367,16 +497,20 @@ __all__ = [
     "METRE",
     "MICROMETER",
     "MICROMETRE",
+    "MILE",
     "MILLIMETER",
     "MILLIMETRE",
     "NANOMETER",
     "NANOMETRE",
+    "NAUTICAL_MILE",
     "PICOMETER",
     "PICOMETRE",
+    "YARD",
     "Centimeter",
     "Centimetre",
     "Decimeter",
     "Decimetre",
+    "Foot",
     "Inch",
     "Kilometer",
     "Kilometre",
@@ -384,10 +518,13 @@ __all__ = [
     "Metre",
     "Micrometer",
     "Micrometre",
+    "Mile",
     "Millimeter",
     "Millimetre",
     "Nanometer",
     "Nanometre",
+    "NauticalMile",
     "Picometer",
     "Picometre",
+    "Yard",
 ]
