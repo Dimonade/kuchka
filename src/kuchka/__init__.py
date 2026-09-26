@@ -42,6 +42,7 @@ from kuchka.quantities import Density
 from kuchka.quantities import Energy
 from kuchka.quantities import Force
 from kuchka.quantities import Frequency
+from kuchka.quantities import Instant
 from kuchka.quantities import Length
 from kuchka.quantities import LuminousIntensity
 from kuchka.quantities import Mass
@@ -151,7 +152,6 @@ from kuchka.units import Micrometer
 from kuchka.units import Micrometre
 from kuchka.units import Micromole
 from kuchka.units import Microsecond
-from kuchka.units import MicrosecondSamplingPeriod
 from kuchka.units import Microsiemens
 from kuchka.units import Microvolt
 from kuchka.units import Microwatt
@@ -173,7 +173,6 @@ from kuchka.units import Millimole
 from kuchka.units import Millinewton
 from kuchka.units import Milliohm
 from kuchka.units import Millisecond
-from kuchka.units import MillisecondSamplingPeriod
 from kuchka.units import Millisiemens
 from kuchka.units import Millivolt
 from kuchka.units import Milliwatt
@@ -203,7 +202,6 @@ from kuchka.units import Radian
 from kuchka.units import Ratio
 from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
-from kuchka.units import SecondSamplingPeriod
 from kuchka.units import Siemens
 from kuchka.units import SquareCentimeter
 from kuchka.units import SquareCentimetre
@@ -345,7 +343,6 @@ __all__: list[str] = [
     "Micrometre",
     "Micromole",
     "Microsecond",
-    "MicrosecondSamplingPeriod",
     "Microsiemens",
     "Microvolt",
     "Microwatt",
@@ -367,7 +364,6 @@ __all__: list[str] = [
     "Millinewton",
     "Milliohm",
     "Millisecond",
-    "MillisecondSamplingPeriod",
     "Millisiemens",
     "Millivolt",
     "Milliwatt",
@@ -404,7 +400,6 @@ __all__: list[str] = [
     "SamplesPerSecond",
     "SamplingPeriod",
     "Second",
-    "SecondSamplingPeriod",
     "Siemens",
     "SquareCentimeter",
     "SquareCentimetre",

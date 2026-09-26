@@ -56,7 +56,6 @@ from kuchka import Microgram
 from kuchka import Microlitre
 from kuchka import Micrometer
 from kuchka import Microsecond
-from kuchka import MicrosecondSamplingPeriod
 from kuchka import Microsiemens
 from kuchka import Microvolt
 from kuchka import Mile
@@ -68,7 +67,6 @@ from kuchka import Millilitre
 from kuchka import Millimeter
 from kuchka import Milliohm
 from kuchka import Millisecond
-from kuchka import MillisecondSamplingPeriod
 from kuchka import Millisiemens
 from kuchka import Millivolt
 from kuchka import Milliwatt
@@ -218,22 +216,6 @@ PREFIX_CASES: list[PrefixCase] = [
     PrefixCase("Gigahertz", Gigahertz, Hertz, Decimal("1e9"), GIGAHERTZ, HERTZ),
     PrefixCase("Terahertz", Terahertz, Hertz, Decimal("1e12"), TERAHERTZ, HERTZ),
     PrefixCase("Petahertz", Petahertz, Hertz, Decimal("1e15"), PETAHERTZ, HERTZ),
-    PrefixCase(
-        "MicrosecondSamplingPeriod",
-        MicrosecondSamplingPeriod,
-        SecondSamplingPeriod,
-        Decimal("0.000001"),
-        SAMPLING_PERIOD_MICROSECOND,
-        SAMPLING_PERIOD_SECOND,
-    ),
-    PrefixCase(
-        "MillisecondSamplingPeriod",
-        MillisecondSamplingPeriod,
-        SecondSamplingPeriod,
-        Decimal("0.001"),
-        SAMPLING_PERIOD_MILLISECOND,
-        SAMPLING_PERIOD_SECOND,
-    ),
     PrefixCase(
         "KilosamplesPerSecond",
         KilosamplesPerSecond,

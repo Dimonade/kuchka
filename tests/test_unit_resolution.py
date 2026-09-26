@@ -68,7 +68,6 @@ from kuchka import Microlitre
 from kuchka import Micrometer
 from kuchka import Micromole
 from kuchka import Microsecond
-from kuchka import MicrosecondSamplingPeriod
 from kuchka import Microsiemens
 from kuchka import Microvolt
 from kuchka import Microwatt
@@ -84,7 +83,6 @@ from kuchka import Millimeter
 from kuchka import Millimole
 from kuchka import Milliohm
 from kuchka import Millisecond
-from kuchka import MillisecondSamplingPeriod
 from kuchka import Millisiemens
 from kuchka import Millivolt
 from kuchka import Milliwatt
@@ -106,7 +104,6 @@ from kuchka import Picometer
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
-from kuchka import SecondSamplingPeriod
 from kuchka import Siemens
 from kuchka import SquareCentimetre
 from kuchka import SquareInch
@@ -193,14 +190,6 @@ TABLE_CASES = [
             "GHz": Gigahertz,
             "THz": Terahertz,
             "PHz": Petahertz,
-        },
-    ),
-    (
-        SAMPLING_PERIOD_UNITS,
-        {
-            f"{symbols.MICRO}s": MicrosecondSamplingPeriod,
-            "ms": MillisecondSamplingPeriod,
-            "s": SecondSamplingPeriod,
         },
     ),
     (

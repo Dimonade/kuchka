@@ -29,7 +29,6 @@ from kuchka import SampleRate
 from kuchka import SamplesPerSecond
 from kuchka import SamplingPeriod
 from kuchka import Second
-from kuchka import SecondSamplingPeriod
 from kuchka import Siemens
 from kuchka import Time
 from kuchka import Volt
@@ -75,9 +74,9 @@ wrong_temporal_reciprocal: SampleRate = 1 / Second(2)  # type: ignore[assignment
 
 # SamplingPeriod and SampleRate are reciprocals of each other specifically, not of
 # Time/Frequency, even though they share the same dimensions.
-reciprocal_of_sampling_period: SampleRate = 1 / SecondSamplingPeriod(2)  # OK
+reciprocal_of_sampling_period: SampleRate = 1 / Second(2).as_sampling_period()  # OK
 reciprocal_of_sample_rate: SamplingPeriod = 1 / SamplesPerSecond(500)  # OK
-wrong_sampling_reciprocal: SamplingPeriod = 1 / SecondSamplingPeriod(2)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+wrong_sampling_reciprocal: SamplingPeriod = 1 / Second(2).as_sampling_period()  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
 
 # BaudRate has no reciprocal and no as_frequency(): both are deliberately unmodelled,
 # so neither should exist as an attribute at all.
