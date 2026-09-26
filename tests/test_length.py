@@ -13,6 +13,7 @@ from decimal import Decimal
 import pytest
 
 from kuchka import Area
+from kuchka import Foot
 from kuchka import Inch
 from kuchka import InvalidMeasurementError
 from kuchka import Kilometer
@@ -22,13 +23,18 @@ from kuchka import Meter
 from kuchka import Metre
 from kuchka import Micrometer
 from kuchka import Micrometre
+from kuchka import Mile
 from kuchka import Millimeter
 from kuchka import Millimetre
 from kuchka import Nanometer
 from kuchka import Nanometre
+from kuchka import NauticalMile
+from kuchka import Picometre
 from kuchka import SquareMeter
+from kuchka import Yard
 from kuchka.units import KILOMETER
 from kuchka.units import KILOMETRE
+from kuchka.units import LENGTH_UNITS
 from kuchka.units import METER
 from kuchka.units import METRE
 from kuchka.units import MICROMETER
@@ -174,3 +180,66 @@ def test_metre_is_canonical():
 
 def test_metre_and_millimetre_scale_exactly():
     assert Metre(1) == Millimetre(1000)
+
+
+def test_picometre_scales_correctly():
+    assert Picometre(1000) == Nanometre(1)
+
+
+def test_foot_is_exact():
+    """A foot has been exactly 0.3048 m since the 1959 international yard agreement."""
+    assert Foot(1) == Millimetre(Decimal("304.8"))
+
+
+def test_yard_is_exact():
+    assert Yard(1) == Millimetre(Decimal("914.4"))
+
+
+def test_three_feet_make_a_yard_exactly():
+    assert Foot(3) == Yard(1)
+
+
+def test_seventeen_sixty_yards_make_a_mile_exactly():
+    """The classic imperial identity, both sides exact multiples of the metre."""
+    assert Yard(1760) == Mile(1)
+
+
+def test_mile_is_exact():
+    assert Mile(1) == Metre(Decimal("1609.344"))
+
+
+def test_nautical_mile_is_exact():
+    """One nautical mile is exactly 1852 m, by international definition."""
+    assert NauticalMile(1) == Metre(1852)
+
+
+def test_nautical_mile_is_not_the_statute_mile():
+    assert NauticalMile(1) != Mile(1)
+
+
+def test_flight_leg_matches_kilometres_exactly():
+    assert NauticalMile(120) == Kilometre(Decimal("222.24"))
+
+
+def test_isinstance_of_the_new_imperial_units():
+    assert isinstance(Foot(5), Length)
+    assert isinstance(Yard(5), Length)
+    assert isinstance(Mile(5), Length)
+    assert isinstance(NauticalMile(5), Length)
+
+
+def test_ordering_across_the_imperial_ladder():
+    assert Foot(1) < Yard(1) < Mile(1)
+
+
+def test_love_you_to_the_moon_and_back():
+    distance_to_moon = Kilometre(384_400)
+    assert 2 * distance_to_moon == Kilometre(768_800)
+
+
+def test_length_units_table_resolves_the_new_symbols():
+    assert LENGTH_UNITS["pm"] is Picometre
+    assert LENGTH_UNITS["ft"] is Foot
+    assert LENGTH_UNITS["yd"] is Yard
+    assert LENGTH_UNITS["mi"] is Mile
+    assert LENGTH_UNITS["M"] is NauticalMile

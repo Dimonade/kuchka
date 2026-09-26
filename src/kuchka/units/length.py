@@ -50,6 +50,13 @@ The Apollo 11 landing site is about 384,400 km from Earth on average:
 
 >>> earth_to_moon = Kilometre(384400)
 
+It is also possible to be cheesy and correct at the same time.
+"I love you to the moon and back" is, at least dimensionally, a well-formed `Length`:
+
+>>> distance_to_moon = Kilometre(384_400)
+>>> 2 * distance_to_moon
+768800 km
+
 Notes
 -----
 Metric prefixes represent exact powers of ten.
@@ -405,7 +412,7 @@ def Yard(value: Numeric) -> Length:
     return Length(to_exact(value) * YARD.scale, YARD)
 
 
-MILE = UnitDef("mile", "mi.", Decimal("1_609.344"), LENGTH)
+MILE = UnitDef("mile", "mi", Decimal("1_609.344"), LENGTH)
 
 
 def Mile(value: Numeric) -> Length:
@@ -428,13 +435,13 @@ def Mile(value: Numeric) -> Length:
     >>> morning_run = Mile(5)
     >>> race_distance = Kilometre(8)
     >>> sorted([morning_run, race_distance])
-    [8 km, 5 mi.]
+    [8 km, 5 mi]
 
     """
     return Length(to_exact(value) * MILE.scale, MILE)
 
 
-NAUTICAL_MILE = UnitDef("nautical mile", "M", 1_852, LENGTH)
+NAUTICAL_MILE = UnitDef("nautical_mile", "M", 1_852, LENGTH)
 
 
 def NauticalMile(value: Numeric) -> Length:

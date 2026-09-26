@@ -226,7 +226,7 @@ TABLE_CASES = [
             "in": Inch,
             "ft": Foot,
             "yd": Yard,
-            "mi.": Mile,
+            "mi": Mile,
             "M": NauticalMile,
         },
     ),
