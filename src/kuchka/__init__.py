@@ -78,6 +78,7 @@ from kuchka.units import CubicMeter
 from kuchka.units import CubicMetre
 from kuchka.units import CubicMillimeter
 from kuchka.units import CubicMillimetre
+from kuchka.units import Dalton
 from kuchka.units import Decimeter
 from kuchka.units import Decimetre
 from kuchka.units import Degree
@@ -91,6 +92,7 @@ from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gigajoule
 from kuchka.units import Gradian
+from kuchka.units import Grain
 from kuchka.units import Gram
 from kuchka.units import GramPerCubicCentimeter
 from kuchka.units import GramPerCubicCentimetre
@@ -197,6 +199,7 @@ from kuchka.units import Picogram
 from kuchka.units import Picojoule
 from kuchka.units import Picometer
 from kuchka.units import Picometre
+from kuchka.units import Pound
 from kuchka.units import PoundForce
 from kuchka.units import PoundPerSquareInch
 from kuchka.units import Radian
@@ -205,6 +208,7 @@ from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
 from kuchka.units import SecondSamplingPeriod
 from kuchka.units import Siemens
+from kuchka.units import SolarMass
 from kuchka.units import SquareCentimeter
 from kuchka.units import SquareCentimetre
 from kuchka.units import SquareInch
@@ -231,6 +235,10 @@ except PackageNotFoundError:  # pragma: no cover -- running from an uninstalled 
     __version__ = "0.0.0+unknown"
 
 __all__: list[str] = [
+    "Dalton",
+    "Grain",
+    "Pound",
+    "SolarMass",
     "Acceleration",
     "Acre",
     "AmountOfSubstance",

@@ -1,19 +1,14 @@
-"""Mass quantities and constructors for SI, biological, engineering, and astronomical units.
+"""Mass quantities and constructors for SI and selected scientific units.
 
 `Mass` represents the amount of matter in an object.
 The kilogram is the canonical SI base unit for mass, so every constructor in this
 module scales relative to the kilogram, even though the family is named after the gram.
 
-This makes `Mass` unusual among the SI base quantities:
-its canonical unit already contains an SI prefix.
-The internal representation still follows the same exact `Decimal` conversion model as
-every other quantity in `kuchka`.
+Alongside SI prefixes, the module provides several non-SI units useful in science and
+engineering:
 
-Alongside SI prefixes, the module includes several exact non-SI units commonly used in
-science and engineering:
-
-* `Dalton` for atoms, proteins, and molecular biology;
-* `Grain` for precision mechanical and ballistic measurements;
+* `Dalton` for atoms, molecules, and molecular biology;
+* `Grain` for small (and perhaps, obscure) precision masses;
 * `Pound` for imperial engineering and logistics;
 * `SolarMass` for stellar and galactic scales.
 
@@ -22,42 +17,75 @@ Both names construct the same quantity and share the same underlying unit defini
 
 Examples
 --------
-The same physical quantity spans microscopic biology and astronomy.
+Mass spans an absurd range of scales without changing what the quantity is.
 
 A human red blood cell has a mass of roughly 27 picograms:
 
 >>> red_blood_cell = Picogram(27)
 
-An average fruit fly weighs about 1 milligram:
+A fruit fly is about a milligram.
+You would need roughly six billion of them to reach the mass of a six-tonne elephant:
 
 >>> fruit_fly = Milligram(1)
+>>> elephant = Tonne(6)
+>>> elephant_to_fly_equivalent = round(elephant / fruit_fly)
+>>> elephant_to_fly_equivalent
+6000000000
 
-A small laboratory mouse weighs about 25 grams:
+At molecular scales, daltons are much more useful than kilograms.
+Water has a molecular mass of about 18 Da, while a hemoglobin molecule is roughly
+64.5 kDa:
 
->>> mouse = Gram(25)
+>>> water = Dalton(18)
+>>> hemoglobin = Dalton(64_500)
 
-A 2 kg engineering payload can combine kilogram and gram measurements without manual
-conversion:
+On the engineering scale, the same arithmetic works without converting everything to
+kilograms first:
 
 >>> payload = Kilogram(2) + Gram(350)
+>>> payload
+2.35 kg
 
-Shipping and structural engineering naturally use tonnes:
+A car is naturally described in tonnes or kilograms:
 
->>> steel_beam = Tonne(2.4)
+>>> small_car = Tonne(1)
 
-At astronomical scales, stars are measured in solar masses:
+Now jump to astronomy.
+Sagittarius A*, the supermassive black hole at the centre of the Milky Way, has a mass
+of about 4.3 million Suns.
+Even if a Toyota Yaris is represented by a deliberately round one-tonne mass, replacing
+that black hole with cars would require an utterly unreasonable fleet:
 
->>> sun = SolarMass(1)
->>> alpha_centauri_a = SolarMass(1.1)
+>>> yaris = Kilogram(1_000)
+>>> sagittarius_a = SolarMass(4_300_000)
+>>> yaris_per_sagittarius_a = round(sagittarius_a / yaris)
+>>> yaris_per_sagittarius_a
+8550188800000000000000000000000000
+
+Phew.
+That is...
+Eighty-five nonillion, five hundred eighteen octillion, eight hundred eighty septillion
+Toyota Yaris cars.
+I hope I got it right.
+
+The point is not the car model or the precision of the estimate.
+The same `Mass` type that handled a picogram-scale cell can represent a microscopic
+molecule, a tonne-scale vehicle, or millions of solar masses without changing the
+arithmetic model.
 
 Notes
 -----
-`MASS_UNITS` maps symbols such as ``"mg"``, ``"kg"``, ``"lb"``, and ``"Da"``
-to their constructors for configuration files and other external interfaces.
+The kilogram is the canonical unit of `Mass`.
+This is unusual among SI base quantities because the base unit itself contains a prefix.
 
-`Tonne` and `Megagram` are interchangeable names for the same unit.
-Both display using the SI symbol ``Mg`` to preserve a single coherent unit
-definition.
+`Tonne` is an alias of `Megagram`, not a separate unit definition:
+
+>>> Tonne is Megagram
+True
+
+`MASS_UNITS` maps unit symbols such as ``"mg"``, ``"kg"``, ``"Da"``, and
+``"lb"`` to their constructors for configuration files and other external
+interfaces.
 
 See Also
 --------
@@ -76,6 +104,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import MASS
 from kuchka.internal import prefixes
+from kuchka.internal import symbols
 from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
@@ -231,13 +260,13 @@ def Milligram(value: Numeric) -> Mass:
 
     >>> fruit_fly = Milligram(1)
 
-    Roughly 120 thousand fruit flies weigh about the same as a small dog:
+    Roughly 300 thousand fruit flies weigh about the same as a dog:
 
-    >>> swarm = Milligram(60000)
+    >>> fly = Gram(0.1)
     >>> dog = Kilogram(30)
-    >>> flies_dog_equivalent = swarm / dog
-    >>> flies_dog_equivalent
-    120_000
+    >>> swarm = round(dog / fly)
+    >>> swarm
+    300000
 
     """
     return Mass(to_exact(value) * MILLIGRAM.scale, MILLIGRAM)
@@ -318,6 +347,8 @@ def Megagram(value: Numeric) -> Mass:
     return Mass(to_exact(value) * MEGAGRAM.scale, MEGAGRAM)
 
 
+TONNE = MEGAGRAM
+
 Tonne = Megagram
 """A tonne is a megagram.
 
@@ -372,7 +403,8 @@ def Dalton(value: Numeric) -> Mass:
     return Mass(to_exact(value) * DALTON.scale, DALTON)
 
 
-GRAIN = UnitDef("grain", "gr", Milligram(64.79891).to(KILOGRAM), MASS)
+GRAIN = UnitDef("grain", "gr", Milligram(64.79891).to(KILOGRAM).magnitude, MASS)
+
 
 def Grain(value: Numeric) -> Mass:
     """Construct mass from a magnitude expressed in grains.
@@ -396,10 +428,13 @@ def Grain(value: Numeric) -> Mass:
     Bullet masses are traditionally specified in grains:
 
     >>> bullet = Grain(147)
+
     """
     return Mass(to_exact(value) * GRAIN.scale, GRAIN)
 
+
 POUND = UnitDef("pound", "lb", 0.45359237, MASS)
+
 
 def Pound(value: Numeric) -> Mass:
     """Construct mass from a magnitude expressed in pounds.
@@ -427,8 +462,47 @@ def Pound(value: Numeric) -> Mass:
     >>> should_fit = baggage_limit > suitcase
     >>> should_fit
     True
+
     """
     return Mass(to_exact(value) * POUND.scale, POUND)
+
+
+SOLAR_MASS = UnitDef("solar_mass", f"M{symbols.SUN}", 1.988416e30, MASS)
+
+
+def SolarMass(value: Numeric) -> Mass:
+    """Construct mass from a magnitude expressed in solar masses.
+
+    Parameters
+    ----------
+    value : Numeric
+        Mass magnitude in solar masses.
+
+    Returns
+    -------
+    Mass
+        Mass represented in solar masses.
+
+    Notes
+    -----
+    The solar mass is defined using the CODATA 2022 solar mass constant.
+
+    Examples
+    --------
+    The Milky Way's central black hole has a mass of about 4.3 million Suns:
+
+    >>> sagittarius_a = SolarMass(4_300_000)
+
+    A binary system can be represented naturally in the same unit:
+
+    >>> primary = SolarMass(1.4)
+    >>> secondary = SolarMass(0.8)
+    >>> total = primary + secondary
+    >>> total
+    2.2 M☉
+
+    """
+    return Mass(to_exact(value) * SOLAR_MASS.scale, SOLAR_MASS)
 
 
 MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = MappingProxyType(
@@ -440,11 +514,17 @@ MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = MappingProxyType(
         GRAM.symbol: Gram,
         KILOGRAM.symbol: Kilogram,
         MEGAGRAM.symbol: Megagram,
-        "t": Tonne,
+        TONNE.symbol: Tonne,
+        DALTON.symbol: Dalton,
+        GRAIN.symbol: Grain,
+        POUND.symbol: Pound,
+        SOLAR_MASS.symbol: SolarMass,
     }
 )
 
 __all__ = [
+    "DALTON",
+    "GRAIN",
     "GRAM",
     "KILOGRAM",
     "MASS_UNITS",
@@ -453,6 +533,11 @@ __all__ = [
     "MILLIGRAM",
     "NANOGRAM",
     "PICOGRAM",
+    "POUND",
+    "SOLAR_MASS",
+    "TONNE",
+    "Dalton",
+    "Grain",
     "Gram",
     "Kilogram",
     "Megagram",
@@ -460,5 +545,7 @@ __all__ = [
     "Milligram",
     "Nanogram",
     "Picogram",
+    "Pound",
+    "SolarMass",
     "Tonne",
 ]
