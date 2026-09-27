@@ -7,6 +7,10 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ## [0.1.3]
 
+### `Mass` family gets new units
+
+`Dalton`, `Grain`, `Pound`, `Ounce`, `SolarMass`, and `EarthMass`.
+
 ### `Length` family gets new units
 
 - `Picometre`.
