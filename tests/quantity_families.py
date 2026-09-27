@@ -130,7 +130,12 @@ FAMILIES: list[QuantityFamily] = [
     QuantityFamily(
         "temperature_delta", DeltaKelvin, DELTA_KELVIN, TEMPERATURE_DELTA_UNITS
     ),
-    QuantityFamily("sampling_period", lambda v: Second(v).as_sampling_period(), SECOND, SAMPLING_PERIOD_UNITS),
+    QuantityFamily(
+        "sampling_period",
+        lambda v: Second(v).as_sampling_period(),
+        SECOND,
+        SAMPLING_PERIOD_UNITS,
+    ),
     QuantityFamily(
         "sample_rate", SamplesPerSecond, SAMPLES_PER_SECOND, SAMPLE_RATE_UNITS
     ),

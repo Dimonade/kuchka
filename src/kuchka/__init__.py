@@ -294,6 +294,7 @@ __all__: list[str] = [
     "Hour",
     "Inch",
     "IncompatibleDimensionError",
+    "Instant",
     "InvalidConversionError",
     "InvalidMeasurementError",
     "Joule",

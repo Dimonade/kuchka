@@ -37,7 +37,7 @@ from kuchka import Volume
 from kuchka import Watt
 
 
-def analyse_voltage(voltage: Voltage) -> None: ...
+def analyse_voltage(_voltage: Voltage) -> None: ...
 
 
 # Naked numerics must be statically rejected.

@@ -21,7 +21,6 @@ from kuchka import Kilohertz
 from kuchka import Millisecond
 from kuchka import SampleRate
 from kuchka import SamplesPerSecond
-from kuchka import SamplingPeriod
 from kuchka import Second
 from kuchka import UnrepresentableDimensionError
 from kuchka import Volt

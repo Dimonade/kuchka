@@ -7,8 +7,9 @@
     checkpoint = Hour(1).as_instant()    # an hour past whatever the caller calls zero
 
 `INSTANT_SECOND` is the affine counterpart of `Time`'s own `SECOND`:
-same scale (1 second per unit), zero offset, so it sits alongside `Time`'s canonical
-unit the way `Temperature`'s `KELVIN` sits alongside `TemperatureDelta`'s canonical unit.
+Same scale (1 second per unit), zero offset, so it sits alongside `Time`'s canonical
+unit the way `Temperature`'s `KELVIN` sits alongside `TemperatureDelta`'s canonical
+unit.
 This is the plain, unshifted reference every reading is ultimately expressed against.
 `Time.as_instant()` is what turns a `Time` value into the distinct `Instant` type, at
 whichever prefix the value already carries.
