@@ -96,7 +96,6 @@ from kuchka import Picometer
 from kuchka import Pound
 from kuchka import SamplesPerSecond
 from kuchka import Second
-from kuchka import SecondSamplingPeriod
 from kuchka import Siemens
 from kuchka import SolarMass
 from kuchka import SquareCentimetre
@@ -189,9 +188,6 @@ from kuchka.units import PICOGRAM
 from kuchka.units import PICOMETER
 from kuchka.units import POUND
 from kuchka.units import SAMPLES_PER_SECOND
-from kuchka.units import SAMPLING_PERIOD_MICROSECOND
-from kuchka.units import SAMPLING_PERIOD_MILLISECOND
-from kuchka.units import SAMPLING_PERIOD_SECOND
 from kuchka.units import SECOND
 from kuchka.units import SIEMENS
 from kuchka.units import SOLAR_MASS

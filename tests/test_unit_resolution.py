@@ -144,7 +144,6 @@ from kuchka.units import POWER_UNITS
 from kuchka.units import PROPORTION_UNITS
 from kuchka.units import RESISTANCE_UNITS
 from kuchka.units import SAMPLE_RATE_UNITS
-from kuchka.units import SAMPLING_PERIOD_UNITS
 from kuchka.units import TEMPERATURE_DELTA_UNITS
 from kuchka.units import TEMPERATURE_UNITS
 from kuchka.units import TIME_UNITS
@@ -339,7 +338,6 @@ TABLE_CASE_IDS = [
     "temperature_delta",
     "time",
     "frequency",
-    "sampling_period",
     "sample_rate",
     "baud_rate",
     "length",

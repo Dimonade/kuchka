@@ -370,17 +370,17 @@ The complete unit vocabulary is available in the API reference.
 
 ### Geometry and mechanics
 
-| Quantity     | Representative units                                                                                       |
-| ------------ | ---------------------------------------------------------------------------------------------------------- |
-| Length       | `Picometre` through `Kilometre`, `Inch` and other exact imperial units                                     |
-| Area         | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                            |
-| Volume       | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                   |
-| Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`                                                        |
-| Acceleration | `MetrePerSecondSquared`                                                                                    |
-| Mass         | `Nanogram` through `Megagram`, `Tonne`                                                                     |
-| Force        | `Millinewton`, `Newton`, `Kilonewton`, `Dyne`, `PoundForce`                                                |
-| Density      | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                      |
-| Pressure     | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch` |
+| Quantity     | Representative units                                                                                           |
+| ------------ | -------------------------------------------------------------------------------------------------------------- |
+| Length       | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, along with `SolarMass` and `EarthMass` |
+| Area         | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                                |
+| Volume       | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                       |
+| Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`                                                            |
+| Acceleration | `MetrePerSecondSquared`                                                                                        |
+| Mass         | `Nanogram` through `Megagram`, `Tonne`                                                                         |
+| Force        | `Millinewton`, `Newton`, `Kilonewton`, `Dyne`, `PoundForce`                                                    |
+| Density      | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                          |
+| Pressure     | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`     |
 
 ### Angle
 
