@@ -79,12 +79,14 @@ from kuchka.units import CubicMeter
 from kuchka.units import CubicMetre
 from kuchka.units import CubicMillimeter
 from kuchka.units import CubicMillimetre
+from kuchka.units import Dalton
 from kuchka.units import Decimeter
 from kuchka.units import Decimetre
 from kuchka.units import Degree
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaKelvin
 from kuchka.units import Dyne
+from kuchka.units import EarthMass
 from kuchka.units import Electronvolt
 from kuchka.units import Erg
 from kuchka.units import Foot
@@ -92,6 +94,7 @@ from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gigajoule
 from kuchka.units import Gradian
+from kuchka.units import Grain
 from kuchka.units import Gram
 from kuchka.units import GramPerCubicCentimeter
 from kuchka.units import GramPerCubicCentimetre
@@ -187,6 +190,7 @@ from kuchka.units import Nanometre
 from kuchka.units import NauticalMile
 from kuchka.units import Newton
 from kuchka.units import Ohm
+from kuchka.units import Ounce
 from kuchka.units import Pascal
 from kuchka.units import Percent
 from kuchka.units import Petaelectronvolt
@@ -196,6 +200,7 @@ from kuchka.units import Picogram
 from kuchka.units import Picojoule
 from kuchka.units import Picometer
 from kuchka.units import Picometre
+from kuchka.units import Pound
 from kuchka.units import PoundForce
 from kuchka.units import PoundPerSquareInch
 from kuchka.units import Radian
@@ -203,6 +208,7 @@ from kuchka.units import Ratio
 from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
 from kuchka.units import Siemens
+from kuchka.units import SolarMass
 from kuchka.units import SquareCentimeter
 from kuchka.units import SquareCentimetre
 from kuchka.units import SquareInch
@@ -259,6 +265,7 @@ __all__: list[str] = [
     "CubicMillimeter",
     "CubicMillimetre",
     "Current",
+    "Dalton",
     "Decimeter",
     "Decimetre",
     "Degree",
@@ -266,6 +273,7 @@ __all__: list[str] = [
     "DeltaKelvin",
     "Density",
     "Dyne",
+    "EarthMass",
     "Electronvolt",
     "Energy",
     "Erg",
@@ -276,6 +284,7 @@ __all__: list[str] = [
     "Gigahertz",
     "Gigajoule",
     "Gradian",
+    "Grain",
     "Gram",
     "GramPerCubicCentimeter",
     "GramPerCubicCentimetre",
@@ -378,6 +387,7 @@ __all__: list[str] = [
     "NauticalMile",
     "Newton",
     "Ohm",
+    "Ounce",
     "Pascal",
     "Percent",
     "Petaelectronvolt",
@@ -388,6 +398,7 @@ __all__: list[str] = [
     "Picometer",
     "Picometre",
     "PlannedDimensionError",
+    "Pound",
     "PoundForce",
     "PoundPerSquareInch",
     "Power",
@@ -401,6 +412,7 @@ __all__: list[str] = [
     "SamplingPeriod",
     "Second",
     "Siemens",
+    "SolarMass",
     "SquareCentimeter",
     "SquareCentimetre",
     "SquareInch",
