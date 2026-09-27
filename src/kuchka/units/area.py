@@ -1,26 +1,67 @@
-"""Area unit constructors: metric prefixes, and imperial Hectare, Acre, and SquareInch.
+"""Area unit constructors: metric prefixes, hectare, acre, and imperial area units.
 
     from kuchka import SquareMetre, Hectare
 
     plot = Hectare(2) + SquareMetre(500)
 
-Area follows the `Length`'s naming convension -- `Metre` is canonical, `Meter` and its
-prefixed forms are plain aliases for American English use, the exact same objects,
-aliased.
+Area follows the `Length`'s naming convention -- `Metre` is canonical, with `Meter` and
+its prefixed forms provided as aliases for American English use.
 
-`Hectare` (`10 000 m^2` exactly) and `Acre` are the two non-SI area units that actually
-show up in the wild often enough to be worth naming.
+Metric area prefixes apply to both dimensions.
+A millimetre is `10⁻³ m`, so a square millimetre is `10⁻⁶ m²`.
+The same rule gives square centimetres at `10⁻⁴ m²` and square kilometres at `10⁶ m²`.
 
-`Acre` derives from the same 1959 international yard definition that makes `Inch` and
-`SquareInch` exact:
-- `1 acre = 4840 yd^2`, and,
-- a yard has been exactly `0.9144 m` since 1959,
+`Hectare` and `Acre` provide the two named land-area units that commonly occur
+alongside SI area measurements.
+A hectare is exactly `10 000 m²`.
 
-Therefore,  `Acre`'s scale (`4046.8564224 m^2`) carries no rounding error, following
-the same guarantee `Inch` already gives `Length`.
+`Acre` is defined as `4840 yd²`.
+The international yard has been exactly `0.9144 m` since 1959, giving an exact acre
+scale of `4046.8564224 m²`.
 
-`AREA_UNITS` maps each symbol to its constructor, for boundary code that reads a unit
-as a string from outside the application.
+The common imperial square units form a useful progression:
+
+    SquareInch(1) -> SquareFoot(1) -> SquareYard(1) -> SquareMile(1)
+
+with each unit retaining its exact conversion to square metres.
+
+For example, a square foot contains exactly 144 square inches:
+
+>>> SquareFoot(1) == SquareInch(144)
+True
+
+and a square mile contains exactly 27_878_400 square feet:
+
+>>> SquareMile(1) == SquareFoot(27_878_400)
+True
+
+Area arithmetic combines units directly. A two-hectare plot with another
+500 m² added to it remains an `Area`:
+
+>>> plot = Hectare(2) + SquareMetre(500)
+>>> plot
+2.05 ha
+
+Metric prefixes scale both dimensions.
+One square kilometre therefore contains one million square metres:
+
+>>> SquareKilometre(1) == SquareMetre(1_000_000)
+True
+
+The same squared scaling makes small units useful for engineering dimensions:
+
+>>> SquareCentimetre(1) == SquareMetre(Decimal("0.0001"))
+True
+
+`AREA_UNITS` maps each unit symbol to its constructor, for boundary code that reads a
+unit as a string from outside the application.
+
+See Also
+--------
+~kuchka.quantities.Area
+    Quantity type representing area.
+~kuchka.quantities.Length
+    Linear dimensions underlying the metric area units.
 """
 
 from __future__ import annotations
@@ -47,9 +88,10 @@ SQUARE_METRE_SYMBOL = f"m{symbols.SUPERSCRIPT_TWO}"
 
 # NOTE: `prefixed_unit()` is built for linear dimensions, where a prefix scales the
 # coherent unit once.
-# A squared unit like `mm^2` needs the *linear* millimetre's scale applied twice
-# (mm^2 relative to m^2 is `(10^-3)^2`, not `10^-3`), so these `UnitDefs`` are built
+# A squared unit like `mm²` needs the *linear* millimetre's scale applied twice
+# (mm² relative to m² is `(10⁻³)²`, not `10⁻³`), so these `UnitDefs`` are built
 # directly, as `prefixed_unit()` does not supply this construction.
+
 SQUARE_MILLIMETRE = UnitDef(
     "square_millimetre",
     f"mm{symbols.SUPERSCRIPT_TWO}",
