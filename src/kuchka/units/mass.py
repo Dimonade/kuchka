@@ -9,8 +9,8 @@ engineering:
 
 * `Dalton` for atoms, molecules, and molecular biology;
 * `Grain` for small (and perhaps, obscure) precision masses;
-* `Pound` for imperial engineering and logistics;
-* `SolarMass` for stellar and galactic scales.
+* `Pound` and `Ounce` for imperial engineering and logistics;
+* `SolarMass` and `EarthMass` for planetary, stellar, and galactic scales.
 
 `Tonne` is a true alias of `Megagram`.
 Both names construct the same quantity and share the same underlying unit definition.
@@ -347,8 +347,6 @@ def Megagram(value: Numeric) -> Mass:
     return Mass(to_exact(value) * MEGAGRAM.scale, MEGAGRAM)
 
 
-TONNE = MEGAGRAM
-
 Tonne = Megagram
 """A tonne is a megagram.
 
@@ -403,7 +401,7 @@ def Dalton(value: Numeric) -> Mass:
     return Mass(to_exact(value) * DALTON.scale, DALTON)
 
 
-GRAIN = UnitDef("grain", "gr", Milligram(64.79891).to(KILOGRAM).magnitude, MASS)
+GRAIN = UnitDef("grain", "gr", Decimal("0.00006479891"), MASS)
 
 
 def Grain(value: Numeric) -> Mass:
@@ -433,7 +431,7 @@ def Grain(value: Numeric) -> Mass:
     return Mass(to_exact(value) * GRAIN.scale, GRAIN)
 
 
-POUND = UnitDef("pound", "lb", 0.45359237, MASS)
+POUND = UnitDef("pound", "lb", Decimal("0.45359237"), MASS)
 
 
 def Pound(value: Numeric) -> Mass:
@@ -467,7 +465,44 @@ def Pound(value: Numeric) -> Mass:
     return Mass(to_exact(value) * POUND.scale, POUND)
 
 
-SOLAR_MASS = UnitDef("solar_mass", f"M{symbols.SUN}", 1.988416e30, MASS)
+OUNCE = UnitDef("ounce", "oz", Decimal("0.028349523125"), MASS)
+
+
+def Ounce(value: Numeric) -> Mass:
+    """Construct mass from a magnitude expressed in ounces.
+
+    Parameters
+    ----------
+    value : Numeric
+        Mass magnitude in ounces.
+
+    Returns
+    -------
+    Mass
+        Mass represented in ounces.
+
+    Notes
+    -----
+    One ounce is exactly 1/16 pound, i.e. exactly 0.028349523125 kilograms.
+
+    Examples
+    --------
+    A first-class letter sits within the one-ounce postage limit:
+
+    >>> letter = Ounce(1)
+    >>> letter <= Pound(1)
+    True
+
+    Sixteen ounces make a pound exactly:
+
+    >>> Ounce(16) == Pound(1)
+    True
+
+    """
+    return Mass(to_exact(value) * OUNCE.scale, OUNCE)
+
+
+SOLAR_MASS = UnitDef("solar_mass", f"M{symbols.SUN}", Decimal("1.988416e30"), MASS)
 
 
 def SolarMass(value: Numeric) -> Mass:
@@ -505,6 +540,44 @@ def SolarMass(value: Numeric) -> Mass:
     return Mass(to_exact(value) * SOLAR_MASS.scale, SOLAR_MASS)
 
 
+EARTH_MASS = UnitDef("earth_mass", f"M{symbols.EARTH}", Decimal("5.972168e24"), MASS)
+
+
+def EarthMass(value: Numeric) -> Mass:
+    """Construct mass from a magnitude expressed in Earth masses.
+
+    Parameters
+    ----------
+    value : Numeric
+        Mass magnitude in Earth masses.
+
+    Returns
+    -------
+    Mass
+        Mass represented in Earth masses.
+
+    Notes
+    -----
+    Derived from the IAU 2015 nominal terrestrial mass parameter and the CODATA 2022
+    gravitational constant, the same way `SolarMass` derives from the nominal solar
+    mass parameter.
+
+    Examples
+    --------
+    Exoplanet masses are conventionally reported in Earth masses:
+
+    >>> super_earth = EarthMass(Decimal("1.6"))
+
+    Jupiter, at roughly 318 Earth masses, is still a fraction of a Sun:
+
+    >>> jupiter = EarthMass(318)
+    >>> jupiter <= SolarMass(1)
+    True
+
+    """
+    return Mass(to_exact(value) * EARTH_MASS.scale, EARTH_MASS)
+
+
 MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = MappingProxyType(
     {
         PICOGRAM.symbol: Picogram,
@@ -514,16 +587,19 @@ MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = MappingProxyType(
         GRAM.symbol: Gram,
         KILOGRAM.symbol: Kilogram,
         MEGAGRAM.symbol: Megagram,
-        TONNE.symbol: Tonne,
+        "t": Tonne,
         DALTON.symbol: Dalton,
         GRAIN.symbol: Grain,
         POUND.symbol: Pound,
+        OUNCE.symbol: Ounce,
         SOLAR_MASS.symbol: SolarMass,
+        EARTH_MASS.symbol: EarthMass,
     }
 )
 
 __all__ = [
     "DALTON",
+    "EARTH_MASS",
     "GRAIN",
     "GRAM",
     "KILOGRAM",
@@ -532,11 +608,12 @@ __all__ = [
     "MICROGRAM",
     "MILLIGRAM",
     "NANOGRAM",
+    "OUNCE",
     "PICOGRAM",
     "POUND",
     "SOLAR_MASS",
-    "TONNE",
     "Dalton",
+    "EarthMass",
     "Grain",
     "Gram",
     "Kilogram",
@@ -544,6 +621,7 @@ __all__ = [
     "Microgram",
     "Milligram",
     "Nanogram",
+    "Ounce",
     "Picogram",
     "Pound",
     "SolarMass",

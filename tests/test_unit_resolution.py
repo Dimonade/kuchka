@@ -27,6 +27,7 @@ from kuchka import Dalton
 from kuchka import Decimeter
 from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
+from kuchka import EarthMass
 from kuchka import Electronvolt
 from kuchka import Erg
 from kuchka import Foot
@@ -101,6 +102,7 @@ from kuchka import Nanojoule
 from kuchka import Nanometer
 from kuchka import NauticalMile
 from kuchka import Ohm
+from kuchka import Ounce
 from kuchka import Percent
 from kuchka import Petaelectronvolt
 from kuchka import Petahertz
@@ -253,7 +255,9 @@ TABLE_CASES = [
             "Da": Dalton,
             "gr": Grain,
             "lb": Pound,
+            "oz": Ounce,
             "M☉": SolarMass,
+            "M♁": EarthMass,
         },
     ),
     (

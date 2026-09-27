@@ -85,6 +85,7 @@ from kuchka.units import Degree
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaKelvin
 from kuchka.units import Dyne
+from kuchka.units import EarthMass
 from kuchka.units import Electronvolt
 from kuchka.units import Erg
 from kuchka.units import Foot
@@ -190,6 +191,7 @@ from kuchka.units import Nanometre
 from kuchka.units import NauticalMile
 from kuchka.units import Newton
 from kuchka.units import Ohm
+from kuchka.units import Ounce
 from kuchka.units import Pascal
 from kuchka.units import Percent
 from kuchka.units import Petaelectronvolt
@@ -235,10 +237,6 @@ except PackageNotFoundError:  # pragma: no cover -- running from an uninstalled 
     __version__ = "0.0.0+unknown"
 
 __all__: list[str] = [
-    "Dalton",
-    "Grain",
-    "Pound",
-    "SolarMass",
     "Acceleration",
     "Acre",
     "AmountOfSubstance",
@@ -269,6 +267,7 @@ __all__: list[str] = [
     "CubicMillimeter",
     "CubicMillimetre",
     "Current",
+    "Dalton",
     "Decimeter",
     "Decimetre",
     "Degree",
@@ -276,6 +275,7 @@ __all__: list[str] = [
     "DeltaKelvin",
     "Density",
     "Dyne",
+    "EarthMass",
     "Electronvolt",
     "Energy",
     "Erg",
@@ -286,6 +286,7 @@ __all__: list[str] = [
     "Gigahertz",
     "Gigajoule",
     "Gradian",
+    "Grain",
     "Gram",
     "GramPerCubicCentimeter",
     "GramPerCubicCentimetre",
@@ -390,6 +391,7 @@ __all__: list[str] = [
     "NauticalMile",
     "Newton",
     "Ohm",
+    "Ounce",
     "Pascal",
     "Percent",
     "Petaelectronvolt",
@@ -400,6 +402,7 @@ __all__: list[str] = [
     "Picometer",
     "Picometre",
     "PlannedDimensionError",
+    "Pound",
     "PoundForce",
     "PoundPerSquareInch",
     "Power",
@@ -414,6 +417,7 @@ __all__: list[str] = [
     "Second",
     "SecondSamplingPeriod",
     "Siemens",
+    "SolarMass",
     "SquareCentimeter",
     "SquareCentimetre",
     "SquareInch",
