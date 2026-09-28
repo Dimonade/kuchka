@@ -35,7 +35,7 @@ lint = [
   "ty>=0.0.72",
 ]
 
-dev = [{ include-group = "test" }, { include-group = "lint" }]
+dev = [{ include-group = "test" }, { include-group = "lint" }, "tox>=4.64.4"]
 
 [tool.coverage.run]
 branch = true
@@ -149,6 +149,14 @@ force-single-line = true
   # Same reasoning as demo.py above: a benchmark script's entire job is to print a results table to a terminal.
   "T201",
 ]
+
+[tool.tox]
+requires = ["tox>=4.64"]
+env_list = ["3.11", "3.12", "3.13", "3.14", "3.15"]
+
+[tool.tox.env_run_base]
+dependency_groups = ["test"]
+commands = [["pytest", "-q"]]
 
 [tool.ty.rules]
 all = "warn"

@@ -33,15 +33,3 @@ covtest: check
     coverage report --show-missing
     coverage html
     firefox htmlcov/ &
-
-
-test-python PYTHON:
-    UV_PROJECT_ENVIRONMENT=".venv-test-{{PYTHON}}" uv sync --locked --python {{PYTHON}} --no-dev --group test
-    UV_PROJECT_ENVIRONMENT=".venv-test-{{PYTHON}}" uv run --no-sync --no-dev --group test pytest -q
-
-test:
-    just test-python 3.11
-    just test-python 3.12
-    just test-python 3.13
-    just test-python 3.14
-    just test-python 3.15
