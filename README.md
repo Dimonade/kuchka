@@ -437,7 +437,7 @@ to `Litre`/`Liter` and other spelling aliases.
 
 ### Same dimension does not always mean the same concept
 
-`Frequency`, `SampleRate`, and `BaudRate` all have physical dimension T^-1, but they remain separate types because they describe different concepts.
+`Frequency`, `SampleRate`, and `BaudRate` all have physical dimension T⁻¹, but they remain separate types because they describe different concepts.
 
 ```python
 from kuchka import Hertz
@@ -606,7 +606,7 @@ f"{voltage:,.2f}"  # "1,234.50 V"
 The repository contains longer, task-oriented examples:
 
 - **[Migrating a config from unit-suffixed keys to `kuchka`](docs/examples/config_migration/README.md)** - moves units from names such as `accepted_voltage_min_mv` into TOML data and resolves them into typed dataclasses at the boundary.
-- **[Working around an unrepresentable intermediate dimension](docs/examples/unrepresentable_dimensions/README.md)** - shows how to handle formulas such as `P = V^2/R` and parallel resistor networks when an intermediate dimension has no registered type.
+- **[Working around an unrepresentable intermediate dimension](docs/examples/unrepresentable_dimensions/README.md)** - shows how to handle formulas such as `P = V²/R` and parallel resistor networks when an intermediate dimension has no registered type.
 
 These examples show `kuchka` in application code, with arithmetic serving the larger engineering task.
 
