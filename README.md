@@ -270,6 +270,29 @@ Celsius(-274)  # raises `InvalidMeasurementError`.
 Kelvin(0)  # valid.
 ```
 
+`Instant` follows the same shape, reached from any `Time` value:
+
+```python
+from kuchka import Second, Millisecond
+
+reading = Second(1_700_000_000).as_instant()
+reading + Millisecond(500)  # -> Instant, 500 ms later
+reading - Second(100).as_instant()  # -> Time(1_699_999_900)
+reading + reading  # rejected: `MeasurementError`.
+```
+
+`Time.as_instant()` and `Time.as_sampling_period()` work at whatever prefix the `Time` value was already constructed with:
+
+```python
+from kuchka import Hour, Minute
+
+Hour(1).as_instant() == Second(3600).as_instant()
+Minute(1).as_sampling_period() == Second(60).as_sampling_period()
+```
+
+An `Instant` carries no calendar or epoch of its own.
+Where its zero point falls is up to whatever the value is being used to represent.
+
 ### Modular quantities
 
 Some quantities wrap around after a fixed period.
@@ -358,15 +381,16 @@ The complete unit vocabulary is available in the API reference.
 
 ### Time and signals
 
-| Quantity          | Representative units                                                             |
-| ----------------- | -------------------------------------------------------------------------------- |
-| Time              | `Millisecond`, `Second`, `Minute`, `Hour`                                        |
-| Frequency         | `Hertz` through `Petahertz`                                                      |
-| Sampling Period   | `MicrosecondSamplingPeriod`, `MillisecondSamplingPeriod`, `SecondSamplingPeriod` |
-| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`               |
-| Baud Rate         | `Baud`, `Kilobaud`                                                               |
-| Temperature       | `Celsius`, `Kelvin`                                                              |
-| Temperature Delta | `DeltaCelsius`, `DeltaKelvin`                                                    |
+| Quantity          | Representative units                                               |
+| ----------------- | ------------------------------------------------------------------ |
+| Time              | `Millisecond`, `Second`, `Minute`, `Hour`                          |
+| Instant           | reached via `Time.as_instant()`                                    |
+| Frequency         | `Hertz` through `Petahertz`                                        |
+| Sampling Period   | reached via `Time.as_sampling_period()`                            |
+| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond` |
+| Baud Rate         | `Baud`, `Kilobaud`                                                 |
+| Temperature       | `Celsius`, `Kelvin`                                                |
+| Temperature Delta | `DeltaCelsius`, `DeltaKelvin`                                      |
 
 ### Geometry and mechanics
 
@@ -425,7 +449,9 @@ Hertz(50) + SamplesPerSecond(50)  # rejected: `IncompatibleDimensionError`.
 Genuine reciprocal pairs remain reciprocal:
 
 ```python
-rate = 1 / SecondSamplingPeriod(2)  # -> SampleRate
+from kuchka import Second
+
+rate = 1 / Second(2).as_sampling_period()  # -> SampleRate
 period = 1 / rate  # -> SamplingPeriod
 ```
 
@@ -597,7 +623,6 @@ The vocabulary is intentionally curated and will remain finite. Current gaps inc
 
 - There is no NumPy/Pandas integration.
 - There is no JSON/DB persistence layer.
-- There is no point-in-time type; `Time` represents a span such as a duration, timeout, or sample period.
 
 A future persistence layer may use a representation such as `{"value": 4.2, "unit": "V"}` at the serialization boundary while reconstructing a typed quantity when data enters application code.
 

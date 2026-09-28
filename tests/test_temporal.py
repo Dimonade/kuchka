@@ -173,7 +173,13 @@ def test_register_is_idempotent_for_the_same_type():
     [
         pytest.param(Second, 2, 3, 6, id="Second"),
         pytest.param(Hertz, 2, 3, 6, id="Hertz"),
-        # pytest.param(SecondSamplingPeriod, 2, 3, 6, id="SecondSamplingPeriod"),  TODO: Needs better dispatcher.
+        pytest.param(
+            lambda v: Second(v).as_sampling_period(),
+            2,
+            3,
+            6,
+            id="Time.as_sampling_period",
+        ),
         pytest.param(SamplesPerSecond, 2, 3, 6, id="SamplesPerSecond"),
         pytest.param(Baud, 2, 3, 6, id="Baud"),
     ],
