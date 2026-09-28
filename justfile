@@ -8,8 +8,9 @@ format-all:
     taplo fmt
     prettier --write '**/*.md'
 
-# Type-check with mypy --strict and ty.
+# Check the repository against the current code standards.
 check:
+    uv run ruff check
     uv run mypy --strict src/kuchka
     uv run ty check src/kuchka
 

@@ -14,6 +14,7 @@ Notes
 `LUMINOUS_INTENSITY_UNITS` maps each unit symbol to its constructor.
 This is intended for boundary code that receives a unit as a string from outside the
 application.
+
 """
 
 from __future__ import annotations
@@ -62,6 +63,7 @@ def Candela(value: Numeric) -> LuminousIntensity:
     CANDELA : Definition of the candela unit.
     LUMINOUS_INTENSITY_UNITS : Available luminous intensity units.
     LuminousIntensity : Quantity type represented by this constructor.
+
     """
     return LuminousIntensity(to_exact(value) * CANDELA.scale, CANDELA)
 

@@ -38,7 +38,6 @@ from kuchka import Pascal
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
-from kuchka import SecondSamplingPeriod
 from kuchka import Siemens
 from kuchka import SquareMetre
 from kuchka import Volt
@@ -83,7 +82,6 @@ from kuchka.units import RATIO
 from kuchka.units import RESISTANCE_UNITS
 from kuchka.units import SAMPLE_RATE_UNITS
 from kuchka.units import SAMPLES_PER_SECOND
-from kuchka.units import SAMPLING_PERIOD_SECOND
 from kuchka.units import SAMPLING_PERIOD_UNITS
 from kuchka.units import SECOND
 from kuchka.units import SIEMENS
@@ -134,8 +132,8 @@ FAMILIES: list[QuantityFamily] = [
     ),
     QuantityFamily(
         "sampling_period",
-        SecondSamplingPeriod,
-        SAMPLING_PERIOD_SECOND,
+        lambda v: Second(v).as_sampling_period(),
+        SECOND,
         SAMPLING_PERIOD_UNITS,
     ),
     QuantityFamily(

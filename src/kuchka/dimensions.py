@@ -27,13 +27,13 @@ instead of a hand-written table of every possible pairwise combination.
 """
 
 from __future__ import annotations
-from kuchka.internal.symbols import get_superscript
 
 from dataclasses import dataclass
 
 from typing_extensions import override
 
 from kuchka.internal import symbols
+from kuchka.internal.symbols import get_superscript
 
 
 @dataclass(frozen=True, slots=True)

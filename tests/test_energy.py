@@ -6,37 +6,34 @@ this module covers what is specific to Energy:
 the `Power * Time` relationship, its inverses, and pulse-scale prefix arithmetic.
 """
 
-from kuchka.units import Millielectronvolt
-
 from decimal import Decimal
 
-from kuchka import (
-    Energy,
-    Microelectronvolt,
-    Electronvolt,
-    Kiloelectronvolt,
-    Megaelectronvolt,
-    Gigaelectronvolt,
-    Teraelectronvolt,
-    Petaelectronvolt,
-    Erg,
-    Kilocalorie,
-    Calorie,
-    ThermochemicalCalorie,
-    Gigajoule,
-    Terajoule,
-    Megajoule,
-)
+from kuchka import Calorie
+from kuchka import Electronvolt
+from kuchka import Energy
+from kuchka import Erg
+from kuchka import Gigaelectronvolt
+from kuchka import Gigajoule
 from kuchka import Joule
+from kuchka import Kilocalorie
+from kuchka import Kiloelectronvolt
 from kuchka import Kilojoule
+from kuchka import Megaelectronvolt
+from kuchka import Megajoule
+from kuchka import Microelectronvolt
 from kuchka import Microjoule
 from kuchka import Millijoule
 from kuchka import Nanojoule
+from kuchka import Petaelectronvolt
 from kuchka import Picojoule
 from kuchka import Power
 from kuchka import Second
+from kuchka import Teraelectronvolt
+from kuchka import Terajoule
+from kuchka import ThermochemicalCalorie
 from kuchka import Time
 from kuchka import Watt
+from kuchka.units import Millielectronvolt
 
 
 def test_power_times_time_is_energy():
@@ -91,7 +88,10 @@ def test_electronvolt_scale_is_exact_from_elementary_charge():
 
 
 def test_teraelectronvolt_is_not_an_alias_of_gigaelectronvolt():
-    """Regression test: TERAELECTRONVOLT used to carry GIGAELECTRONVOLT's name/symbol."""
+    """Test that TERAELECTRONVOLT used to carry GIGAELECTRONVOLT's name/symbol.
+
+    This is a regression test.
+    """
     assert repr(Teraelectronvolt(1)) == "1 TeV"
 
 

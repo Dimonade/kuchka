@@ -72,7 +72,6 @@ from kuchka import Microlitre
 from kuchka import Micrometer
 from kuchka import Micromole
 from kuchka import Microsecond
-from kuchka import MicrosecondSamplingPeriod
 from kuchka import Microsiemens
 from kuchka import Microvolt
 from kuchka import Microwatt
@@ -89,7 +88,6 @@ from kuchka import Millimeter
 from kuchka import Millimole
 from kuchka import Milliohm
 from kuchka import Millisecond
-from kuchka import MillisecondSamplingPeriod
 from kuchka import Millisiemens
 from kuchka import Millivolt
 from kuchka import Milliwatt
@@ -114,7 +112,6 @@ from kuchka import Pound
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
-from kuchka import SecondSamplingPeriod
 from kuchka import Siemens
 from kuchka import SolarMass
 from kuchka import SquareCentimetre
@@ -147,7 +144,6 @@ from kuchka.units import POWER_UNITS
 from kuchka.units import PROPORTION_UNITS
 from kuchka.units import RESISTANCE_UNITS
 from kuchka.units import SAMPLE_RATE_UNITS
-from kuchka.units import SAMPLING_PERIOD_UNITS
 from kuchka.units import TEMPERATURE_DELTA_UNITS
 from kuchka.units import TEMPERATURE_UNITS
 from kuchka.units import TIME_UNITS
@@ -203,14 +199,6 @@ TABLE_CASES = [
             "GHz": Gigahertz,
             "THz": Terahertz,
             "PHz": Petahertz,
-        },
-    ),
-    (
-        SAMPLING_PERIOD_UNITS,
-        {
-            f"{symbols.MICRO}s": MicrosecondSamplingPeriod,
-            "ms": MillisecondSamplingPeriod,
-            "s": SecondSamplingPeriod,
         },
     ),
     (
@@ -350,7 +338,6 @@ TABLE_CASE_IDS = [
     "temperature_delta",
     "time",
     "frequency",
-    "sampling_period",
     "sample_rate",
     "baud_rate",
     "length",

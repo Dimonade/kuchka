@@ -270,6 +270,29 @@ Celsius(-274)  # raises `InvalidMeasurementError`.
 Kelvin(0)  # valid.
 ```
 
+`Instant` follows the same shape, reached from any `Time` value:
+
+```python
+from kuchka import Second, Millisecond
+
+reading = Second(1_700_000_000).as_instant()
+reading + Millisecond(500)  # -> Instant, 500 ms later
+reading - Second(100).as_instant()  # -> Time(1_699_999_900)
+reading + reading  # rejected: `MeasurementError`.
+```
+
+`Time.as_instant()` and `Time.as_sampling_period()` work at whatever prefix the `Time` value was already constructed with:
+
+```python
+from kuchka import Hour, Minute
+
+Hour(1).as_instant() == Second(3600).as_instant()
+Minute(1).as_sampling_period() == Second(60).as_sampling_period()
+```
+
+An `Instant` carries no calendar or epoch of its own.
+Where its zero point falls is up to whatever the value is being used to represent.
+
 ### Modular quantities
 
 Some quantities wrap around after a fixed period.
@@ -358,29 +381,30 @@ The complete unit vocabulary is available in the API reference.
 
 ### Time and signals
 
-| Quantity          | Representative units                                                             |
-| ----------------- | -------------------------------------------------------------------------------- |
-| Time              | `Millisecond`, `Second`, `Minute`, `Hour`                                        |
-| Frequency         | `Hertz` through `Petahertz`                                                      |
-| Sampling Period   | `MicrosecondSamplingPeriod`, `MillisecondSamplingPeriod`, `SecondSamplingPeriod` |
-| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`               |
-| Baud Rate         | `Baud`, `Kilobaud`                                                               |
-| Temperature       | `Celsius`, `Kelvin`                                                              |
-| Temperature Delta | `DeltaCelsius`, `DeltaKelvin`                                                    |
+| Quantity          | Representative units                                               |
+| ----------------- | ------------------------------------------------------------------ |
+| Time              | `Millisecond`, `Second`, `Minute`, `Hour`                          |
+| Instant           | reached via `Time.as_instant()`                                    |
+| Frequency         | `Hertz` through `Petahertz`                                        |
+| Sampling Period   | reached via `Time.as_sampling_period()`                            |
+| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond` |
+| Baud Rate         | `Baud`, `Kilobaud`                                                 |
+| Temperature       | `Celsius`, `Kelvin`                                                |
+| Temperature Delta | `DeltaCelsius`, `DeltaKelvin`                                      |
 
 ### Geometry and mechanics
 
-| Quantity     | Representative units                                                                                       |
-| ------------ | ---------------------------------------------------------------------------------------------------------- |
-| Length       | `Picometre` through `Kilometre`, `Inch` and other exact imperial units                                     |
-| Area         | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                            |
-| Volume       | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                   |
-| Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`                                                        |
-| Acceleration | `MetrePerSecondSquared`                                                                                    |
-| Mass         | `Nanogram` through `Megagram`, `Tonne`                                                                     |
-| Force        | `Millinewton`, `Newton`, `Kilonewton`, `Dyne`, `PoundForce`                                                |
-| Density      | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                      |
-| Pressure     | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch` |
+| Quantity     | Representative units                                                                                           |
+| ------------ | -------------------------------------------------------------------------------------------------------------- |
+| Length       | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, along with `SolarMass` and `EarthMass` |
+| Area         | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                                |
+| Volume       | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                       |
+| Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`                                                            |
+| Acceleration | `MetrePerSecondSquared`                                                                                        |
+| Mass         | `Nanogram` through `Megagram`, `Tonne`                                                                         |
+| Force        | `Millinewton`, `Newton`, `Kilonewton`, `Dyne`, `PoundForce`                                                    |
+| Density      | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                          |
+| Pressure     | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`     |
 
 ### Angle
 
@@ -413,7 +437,7 @@ to `Litre`/`Liter` and other spelling aliases.
 
 ### Same dimension does not always mean the same concept
 
-`Frequency`, `SampleRate`, and `BaudRate` all have physical dimension T^-1, but they remain separate types because they describe different concepts.
+`Frequency`, `SampleRate`, and `BaudRate` all have physical dimension T⁻¹, but they remain separate types because they describe different concepts.
 
 ```python
 from kuchka import Hertz
@@ -425,7 +449,9 @@ Hertz(50) + SamplesPerSecond(50)  # rejected: `IncompatibleDimensionError`.
 Genuine reciprocal pairs remain reciprocal:
 
 ```python
-rate = 1 / SecondSamplingPeriod(2)  # -> SampleRate
+from kuchka import Second
+
+rate = 1 / Second(2).as_sampling_period()  # -> SampleRate
 period = 1 / rate  # -> SamplingPeriod
 ```
 
@@ -580,7 +606,7 @@ f"{voltage:,.2f}"  # "1,234.50 V"
 The repository contains longer, task-oriented examples:
 
 - **[Migrating a config from unit-suffixed keys to `kuchka`](docs/examples/config_migration/README.md)** - moves units from names such as `accepted_voltage_min_mv` into TOML data and resolves them into typed dataclasses at the boundary.
-- **[Working around an unrepresentable intermediate dimension](docs/examples/unrepresentable_dimensions/README.md)** - shows how to handle formulas such as `P = V^2/R` and parallel resistor networks when an intermediate dimension has no registered type.
+- **[Working around an unrepresentable intermediate dimension](docs/examples/unrepresentable_dimensions/README.md)** - shows how to handle formulas such as `P = V²/R` and parallel resistor networks when an intermediate dimension has no registered type.
 
 These examples show `kuchka` in application code, with arithmetic serving the larger engineering task.
 
@@ -597,7 +623,6 @@ The vocabulary is intentionally curated and will remain finite. Current gaps inc
 
 - There is no NumPy/Pandas integration.
 - There is no JSON/DB persistence layer.
-- There is no point-in-time type; `Time` represents a span such as a duration, timeout, or sample period.
 
 A future persistence layer may use a representation such as `{"value": 4.2, "unit": "V"}` at the serialization boundary while reconstructing a typed quantity when data enters application code.
 

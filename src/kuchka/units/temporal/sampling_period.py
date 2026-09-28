@@ -1,90 +1,58 @@
-"""Unit constructors for SamplingPeriod: the interval between two samples.
+"""`SamplingPeriod`'s canonical unit, reached from `Time`.
 
-    from kuchka import MillisecondSamplingPeriod
+    from kuchka import Millisecond, Second
 
-    period = MillisecondSamplingPeriod(2)
+    period = Millisecond(2).as_sampling_period()
+    rate = 1 / period               # -> SampleRate(500)
+    round_trip = 1 / rate           # -> SamplingPeriod, back to 2 ms
 
-`SamplingPeriod` is dimensionally identical to `Time` and shares its display symbols,
-but is never produced by generic arithmetic.
+A sampling period is measured in seconds the same way a duration is.
+`Time`'s own `SECOND`, `MICROSECOND`, and `MILLISECOND` already say that, so
+`SamplingPeriod` reuses them as its own canonical unit avoiding minting a lookalike.
+`Time.as_sampling_period()` is what turns a `Time` value into the distinct
+`SamplingPeriod` type, at whichever prefix the value already carries.
+`Minute(1).as_sampling_period()` and `Second(60).as_sampling_period()` produce the
+same reading.
 
-`SAMPLING_PERIOD_UNITS` maps each symbol to its constructor, for boundary code that
-reads a unit as a string from outside the application.
+`SAMPLING_PERIOD_UNITS` maps each symbol to a callable that reads a Time value as a
+SamplingPeriod, for boundary code that reads a unit as a string from outside the
+application.
 """
 
 from __future__ import annotations
 
-from decimal import Decimal
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
-from kuchka.dimensions import TIME
-from kuchka.internal import symbols
-from kuchka.numeric import Numeric
-from kuchka.numeric import to_exact
 from kuchka.quantities import SamplingPeriod
-from kuchka.quantities import UnitDef
+from kuchka.units.temporal.time import SECOND
+from kuchka.units.temporal.time import TIME_UNITS
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
-SAMPLING_PERIOD_MICROSECOND = UnitDef(
-    "sampling_period_microsecond",
-    f"{symbols.MICRO}s",
-    Decimal("0.000001"),
-    TIME,
-)
-SAMPLING_PERIOD_MILLISECOND = UnitDef(
-    "sampling_period_millisecond",
-    "ms",
-    Decimal("0.001"),
-    TIME,
-)
-SAMPLING_PERIOD_SECOND = UnitDef("sampling_period_second", "s", Decimal(1), TIME)
+    from kuchka.numeric import Numeric
+    from kuchka.quantities import Time
 
-SamplingPeriod._canonical_unit = SAMPLING_PERIOD_SECOND  # noqa: SLF001 -- this module owns SamplingPeriod's canonical unit
+SamplingPeriod._canonical_unit = SECOND  # noqa: SLF001 -- reused from Time's own SECOND
 
 
-def MicrosecondSamplingPeriod(value: Numeric) -> SamplingPeriod:
-    """Construct a SamplingPeriod from a magnitude expressed in microseconds."""
-    return SamplingPeriod(
-        to_exact(value) * SAMPLING_PERIOD_MICROSECOND.scale,
-        SAMPLING_PERIOD_MICROSECOND,
-    )
+def _via_time(
+    constructor: Callable[[Numeric], Time],
+) -> Callable[[Numeric], SamplingPeriod]:
+    """Wrap a `Time` constructor so it reads its result as a `SamplingPeriod`."""
 
+    def read_as_sampling_period(value: Numeric) -> SamplingPeriod:
+        return constructor(value).as_sampling_period()
 
-def MillisecondSamplingPeriod(value: Numeric) -> SamplingPeriod:
-    """Construct a SamplingPeriod from a magnitude expressed in milliseconds."""
-    return SamplingPeriod(
-        to_exact(value) * SAMPLING_PERIOD_MILLISECOND.scale,
-        SAMPLING_PERIOD_MILLISECOND,
-    )
-
-
-def SecondSamplingPeriod(value: Numeric) -> SamplingPeriod:
-    """Construct a SamplingPeriod from a magnitude expressed in seconds."""
-    return SamplingPeriod(
-        to_exact(value) * SAMPLING_PERIOD_SECOND.scale,
-        SAMPLING_PERIOD_SECOND,
-    )
+    return read_as_sampling_period
 
 
 SAMPLING_PERIOD_UNITS: Mapping[str, Callable[[Numeric], SamplingPeriod]] = (
     MappingProxyType(
-        {
-            SAMPLING_PERIOD_MICROSECOND.symbol: MicrosecondSamplingPeriod,
-            SAMPLING_PERIOD_MILLISECOND.symbol: MillisecondSamplingPeriod,
-            SAMPLING_PERIOD_SECOND.symbol: SecondSamplingPeriod,
-        }
+        {symbol: _via_time(constructor) for symbol, constructor in TIME_UNITS.items()}
     )
 )
 
-__all__ = [
-    "SAMPLING_PERIOD_MICROSECOND",
-    "SAMPLING_PERIOD_MILLISECOND",
-    "SAMPLING_PERIOD_SECOND",
-    "SAMPLING_PERIOD_UNITS",
-    "MicrosecondSamplingPeriod",
-    "MillisecondSamplingPeriod",
-    "SecondSamplingPeriod",
-]
+__all__ = ["SAMPLING_PERIOD_UNITS"]
