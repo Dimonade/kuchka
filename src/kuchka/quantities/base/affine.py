@@ -14,11 +14,10 @@ from typing import Self
 from typing import TypeVar
 from typing import overload
 
-from typing_extensions import override
-
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import MeasurementError
+from kuchka.internal.typing import override
 from kuchka.quantities.base.linear import LinearQuantity
 from kuchka.quantities.base.ordering import _OrderedScalarMixin
 from kuchka.quantities.base.storage import _ScalarStorage

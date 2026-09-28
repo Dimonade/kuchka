@@ -14,13 +14,12 @@ from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import Self
 
-from typing_extensions import override
-
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import Dimension
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
+from kuchka.internal.typing import override
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities.base.ordering import _OrderedScalarMixin

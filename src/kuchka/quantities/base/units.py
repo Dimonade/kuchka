@@ -14,8 +14,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from typing import Protocol
 
-from typing_extensions import override
-
+from kuchka.internal.typing import override
 from kuchka.numeric import to_exact
 
 if TYPE_CHECKING:

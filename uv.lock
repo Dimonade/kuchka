@@ -376,6 +376,9 @@ wheels = [
 name = "kuchka"
 version = "0.1.2"
 source = { editable = "." }
+dependencies = [
+    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -389,8 +392,22 @@ dev = [
     { name = "ruff" },
     { name = "ty" },
 ]
+lint = [
+    { name = "mccabe" },
+    { name = "mypy" },
+    { name = "pylsp-mypy" },
+    { name = "python-lsp-server" },
+    { name = "ruff" },
+    { name = "ty" },
+]
+test = [
+    { name = "coverage" },
+    { name = "hypothesis" },
+    { name = "pytest" },
+]
 
 [package.metadata]
+requires-dist = [{ name = "typing-extensions", marker = "python_full_version < '3.12'", specifier = ">=4.4" }]
 
 [package.metadata.requires-dev]
 dev = [
@@ -403,6 +420,19 @@ dev = [
     { name = "python-lsp-server", specifier = ">=1.15.0" },
     { name = "ruff", specifier = ">=0.16.3" },
     { name = "ty", specifier = ">=0.0.72" },
+]
+lint = [
+    { name = "mccabe", specifier = ">=0.7.0" },
+    { name = "mypy", specifier = ">=2.3.1" },
+    { name = "pylsp-mypy", specifier = ">=0.8.0" },
+    { name = "python-lsp-server", specifier = ">=1.15.0" },
+    { name = "ruff", specifier = ">=0.16.3" },
+    { name = "ty", specifier = ">=0.0.72" },
+]
+test = [
+    { name = "coverage", specifier = ">=7.15.4" },
+    { name = "hypothesis", specifier = ">=6.165.10" },
+    { name = "pytest", specifier = ">=9.1.1" },
 ]
 
 [[package]]

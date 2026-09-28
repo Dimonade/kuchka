@@ -40,10 +40,9 @@ from typing import Protocol
 from typing import overload
 from typing import runtime_checkable
 
-from typing_extensions import override
-
 from kuchka.dimensions import FREQUENCY
 from kuchka.dimensions import TIME
+from kuchka.internal.typing import override
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities.base import AffineQuantity
