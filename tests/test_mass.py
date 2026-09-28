@@ -178,14 +178,16 @@ def test_sagittarius_a_dwarfs_an_ordinary_car():
     """Pins the module docstring's own worked example as a regression test."""
     yaris = Kilogram(1_000)
     sagittarius_a = SolarMass(4_300_000)
-    assert round(sagittarius_a / yaris) == 8_550_188_800_000_000_000_000_000_000_000_000
+    assert round(sagittarius_a / yaris) == 8_550_188_800_000_000_000_000_000_000_000_000  # noqa: PLR2004  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
 
 def test_megagram_and_tonne_have_distinct_boundary_symbols():
-    """Regression test: `MASS_UNITS` must expose "Mg" and "t" as separate keys.
+    """Test `MASS_UNITS` must expose "Mg" and "t" as separate keys.
 
     A draft once set `TONNE = MEGAGRAM` and used `TONNE.symbol` as the dict key --
     since that symbol is "Mg", not "t", it silently dropped the "t" entry.
+
+    This is a regression test.
     """
     assert MASS_UNITS["Mg"] is Megagram
     assert MASS_UNITS["t"] is Tonne
@@ -193,7 +195,10 @@ def test_megagram_and_tonne_have_distinct_boundary_symbols():
 
 
 def test_solar_and_earth_mass_symbols_are_defined():
-    """Regression test: both astronomical symbols must exist for this module to import."""
+    """Test both astronomical symbols must exist for this module to import.
+
+    This is a regression test.
+    """
     assert symbols.SUN == "\u2609"
     assert symbols.EARTH == "\u2641"
     assert repr(SolarMass(1)) == f"1 M{symbols.SUN}"
