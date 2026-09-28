@@ -30,10 +30,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from typing_extensions import override
-
 from kuchka.internal import symbols
 from kuchka.internal.symbols import get_superscript
+from kuchka.internal.typing import override
 
 
 @dataclass(frozen=True, slots=True)

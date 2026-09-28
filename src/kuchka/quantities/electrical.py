@@ -29,13 +29,12 @@ from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import overload
 
-from typing_extensions import override
-
 from kuchka.dimensions import CONDUCTANCE
 from kuchka.dimensions import CURRENT
 from kuchka.dimensions import POWER
 from kuchka.dimensions import RESISTANCE
 from kuchka.dimensions import VOLTAGE
+from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import register
 

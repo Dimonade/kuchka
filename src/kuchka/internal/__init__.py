@@ -2,5 +2,6 @@
 
 from kuchka.internal import constants
 from kuchka.internal import symbols
+from kuchka.internal import typing
 
-__all__ = ["constants", "get_superscript", "symbols"]
+__all__ = ["constants", "symbols", "typing"]

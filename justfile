@@ -11,7 +11,7 @@ format-all:
 # Check the repository against the current code standards.
 check:
     uv run ruff check
-    uv run mypy --strict src/kuchka
+    uv run mypy --strict --python-version 3.11 src/kuchka
     uv run ty check src/kuchka
 
 

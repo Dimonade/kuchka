@@ -11,9 +11,8 @@ from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import overload
 
-from typing_extensions import override
-
 from kuchka.dimensions import CHARGE
+from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import register
 
