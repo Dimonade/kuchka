@@ -7,4 +7,4 @@ if sys.version_info >= (3, 12):
 else:
     from typing_extensions import override
 
-__all__ = []
+__all__ = ["override"]

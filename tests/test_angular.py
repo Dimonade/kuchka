@@ -5,6 +5,8 @@
 kuchka's own fixed rational representation of pi.
 """
 
+import math
+from decimal import Decimal
 from fractions import Fraction
 
 import pytest
@@ -27,6 +29,14 @@ def test_degree_construction_is_exact():
 
 def test_radian_is_canonical():
     assert Radian(1).magnitude == Fraction(1)
+
+
+def test_radian_built_from_math_pi_equals_a_half_turn():
+    assert Radian(math.pi) == Degree(180)
+
+
+def test_radian_built_from_a_longer_pi_differs_from_a_half_turn():
+    assert Radian(Decimal("3.14159265358979323846")) != Degree(180)
 
 
 def test_radian_construction_stores_the_value_exactly():
