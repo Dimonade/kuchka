@@ -8,8 +8,12 @@ from kuchka.constants.codata_2022.fundamental import ALPHA_PARTICLE_MASS
 from kuchka.constants.codata_2022.fundamental import ELECTRON_MASS
 from kuchka.constants.codata_2022.fundamental import ELEMENTARY_CHARGE
 from kuchka.constants.codata_2022.fundamental import NEUTRON_MASS
+from kuchka.constants.codata_2022.fundamental import PLANCK_ENERGY
 from kuchka.constants.codata_2022.fundamental import PLANCK_LENGTH
 from kuchka.constants.codata_2022.fundamental import PLANCK_MASS
+from kuchka.constants.codata_2022.fundamental import (
+    PLANCK_MASS_ENERGY_EQUIVALENT_IN_GEV,
+)
 from kuchka.constants.codata_2022.fundamental import PLANCK_TEMPERATURE
 from kuchka.constants.codata_2022.fundamental import PLANCK_TIME
 from kuchka.constants.codata_2022.fundamental import PROTON_MASS
@@ -21,8 +25,10 @@ __all__ = [
     "ELECTRON_MASS",
     "ELEMENTARY_CHARGE",
     "NEUTRON_MASS",
+    "PLANCK_ENERGY",
     "PLANCK_LENGTH",
     "PLANCK_MASS",
+    "PLANCK_MASS_ENERGY_EQUIVALENT_IN_GEV",
     "PLANCK_TEMPERATURE",
     "PLANCK_TIME",
     "PROTON_MASS",
