@@ -18,7 +18,9 @@ from kuchka import units as units_pkg
 from kuchka.quantities.base import AffineQuantity
 from kuchka.quantities.base import AffineUnitDef
 from kuchka.quantities.base import LinearQuantity
+from kuchka.quantities.base import LogarithmicUnitDef
 from kuchka.quantities.base import ModularQuantity
+from kuchka.quantities.base import PureLogarithmicQuantity
 from kuchka.quantities.base import UnitDef
 
 
@@ -29,7 +31,9 @@ def _is_unit_constructor(name: str, value: object) -> bool:
 
 def _is_boundary_only(name: str, value: object) -> bool:
     """`*UnitDef` constant or a *_UNITS table: kuchka.units-level, never top-level."""
-    return isinstance(value, (UnitDef, AffineUnitDef)) or name.endswith("_UNITS")
+    return isinstance(
+        value, (UnitDef, AffineUnitDef, LogarithmicUnitDef)
+    ) or name.endswith("_UNITS")
 
 
 def test_every_unit_constructor_is_reachable_from_top_level() -> None:
@@ -50,13 +54,20 @@ _QUANTITY_TYPE_EXTRAS = {"ConvertibleToFrequency"}
 It is not a subclass of any of the three quantity bases, and named explicitly since
 it's currently the only exception this policy has.
 """
-_QUANTITY_BASES = (LinearQuantity, AffineQuantity, ModularQuantity)
+_QUANTITY_BASES = (
+    LinearQuantity,
+    AffineQuantity,
+    ModularQuantity,
+    PureLogarithmicQuantity,
+)
 _INTERNAL_MACHINERY = (
     LinearQuantity,
     AffineQuantity,
     ModularQuantity,
+    PureLogarithmicQuantity,
     UnitDef,
     AffineUnitDef,
+    LogarithmicUnitDef,
 )
 
 
@@ -80,9 +91,8 @@ def test_no_unitdef_or_units_table_leaks_to_top_level() -> None:
         if name.startswith("_"):
             continue
         value = getattr(kuchka, name)
-        assert not isinstance(value, (UnitDef, AffineUnitDef)), (
-            f"{name} is a UnitDef/AffineUnitDef constant; it belongs at "
-            f"kuchka.units only."
+        assert not isinstance(value, (UnitDef, AffineUnitDef, LogarithmicUnitDef)), (
+            f"{name} is a unit-definition constant; it belongs at kuchka.units only."
         )
         assert not name.endswith("_UNITS"), (
             f"{name} is a boundary table; it belongs at kuchka.units only."
