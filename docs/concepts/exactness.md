@@ -35,13 +35,23 @@ A finite `Fraction` cannot represent the mathematical value of pi.
 Rejecting angular units or pretending that a finite decimal is mathematically exact would both be poor fits for the library's model.
 
 `Radian` is the canonical angle unit.
-The non-radian angular scales are defined from a fixed rational internal representation of pi - fifteen significant digits, the precision commonly cited by NASA/JPL.
+The non-radian angular scales are defined from a fixed rational internal representation of pi - fifteen decimal places, the precision commonly cited by NASA/JPL.
 Thus, `Degree`, `Turn`, `Gradian`, `ArcMinute`, and `ArcSecond` remain mutually exact relative to that constant, importable as `kuchka.units.angular._PI` if you need to compare against it directly.
 
 The finite approximation becomes observable when an angle crosses into `Radian`:
 
 ```python
-Radian(_PI) == Degree(180)
-```
+import math
+from decimal import Decimal
 
-where `_PI` is kuchka's own fixed internal constant.
+from kuchka import Degree
+from kuchka import Radian
+from kuchka.units.angular import _PI
+
+ Radian(_PI) == Degree(180)
+# True -- `_PI` is kuchka's own fixed internal constant.
+Radian(math.pi) == Degree(180)
+# True -- `math.pi` is read as its shortest decimal string, 3.141592653589793, which is `_PI`.
+Radian(Decimal("3.14159265358979323846")) == Degree(180)
+# False -- a pi with more digits differs from `_PI`.
+```

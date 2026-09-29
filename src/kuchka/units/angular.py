@@ -28,15 +28,14 @@ value).
 A `Radian`-built value compares exactly to kuchka's own `_PI`, and to nothing more or
 less precise than that.
 
-Concretely: `Radian(math.pi) == Degree(180)` is `False`.
-Python's `math.pi` is a binary-float approximation of pi at roughly 17 significant
-digits.
-kuchka's `_PI` is a separately chosen decimal value at 15.
-The two numbers are close but not identical, and exact `Fraction` equality reports
-exactly that.
-This is correct behavior under this design, not a bug: to build a `Radian` value that
-is guaranteed to compare equal to a `Degree`-family value, construct it from
-`kuchka.units.angular._PI` itself, not from an independently sourced pi.
+Concretely: `Radian(math.pi) == Degree(180)` is `True`.
+A `float` enters kuchka through its shortest decimal string, and for `math.pi` that
+string is `3.141592653589793`, the fifteen-decimal value `_PI` holds.
+A pi carrying more digits, such as `Decimal("3.14159265358979323846")`, differs from
+`_PI`, and exact `Fraction` equality reports exactly that:
+comparing a `Radian` built from it with `Degree(180)` gives `False`.
+To build a `Radian` value that compares equal to a `Degree`-family value at any
+precision, construct it from `kuchka.units.angular._PI` itself.
 
 `ANGLE_UNITS` maps each symbol to its constructor, for boundary code that reads a unit
 as a string from outside the application.

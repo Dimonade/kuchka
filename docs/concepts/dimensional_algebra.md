@@ -37,7 +37,7 @@ See the repository example [Working around an unrepresentable intermediate dimen
 
 ## Same physical dimension, different concepts
 
-`Frequency`, `SampleRate`, and `BaudRate` all have physical dimension T^-1, but they are intentionally separate concepts.
+`Frequency`, `SampleRate`, and `BaudRate` all have physical dimension T⁻¹, but they are intentionally separate concepts.
 
 ```python
 from kuchka import Hertz
@@ -50,7 +50,11 @@ Canonical generic arithmetic produces the canonical type for a dimension.
 Domain-specific types remain available by explicit construction, and stay the domain type even through a reciprocal:
 
 ```python
-rate = 1 / SecondSamplingPeriod(2)
+from kuchka import Frequency
+from kuchka import SampleRate
+from kuchka import Second
+
+rate = 1 / Second(2).as_sampling_period()
 
 isinstance(rate, SampleRate)
 # True

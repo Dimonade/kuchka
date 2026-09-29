@@ -334,7 +334,7 @@ voltage = Millivolt(4200)
 current = Milliampere(150)
 power = voltage * current
 
-power  # 630 mW
+power  # 0.63 W
 type(power)  # `<class 'kuchka.quantities.electrical.Power'>`
 ```
 
