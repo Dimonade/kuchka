@@ -17,13 +17,10 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import CURRENT
+from kuchka.internal import prefixes
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import KILO
-from kuchka.prefixes import MICRO
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Current
 
 if TYPE_CHECKING:
@@ -34,10 +31,10 @@ if TYPE_CHECKING:
 AMPERE_NAME = "ampere"
 AMPERE_SYMBOL = "A"
 
-MICROAMPERE = prefixed_unit(MICRO, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
-MILLIAMPERE = prefixed_unit(MILLI, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
-AMPERE = prefixed_unit(UNIT, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
-KILOAMPERE = prefixed_unit(KILO, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
+MICROAMPERE = prefixed_unit(prefixes.MICRO, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
+MILLIAMPERE = prefixed_unit(prefixes.MILLI, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
+AMPERE = prefixed_unit(prefixes.UNIT, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
+KILOAMPERE = prefixed_unit(prefixes.KILO, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
 
 Current._canonical_unit = AMPERE  # noqa: SLF001 -- this module owns Current's canonical unit
 

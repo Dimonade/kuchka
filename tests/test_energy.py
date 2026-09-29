@@ -8,17 +8,32 @@ the `Power * Time` relationship, its inverses, and pulse-scale prefix arithmetic
 
 from decimal import Decimal
 
+from kuchka import Calorie
+from kuchka import Electronvolt
 from kuchka import Energy
+from kuchka import Erg
+from kuchka import Gigaelectronvolt
+from kuchka import Gigajoule
 from kuchka import Joule
+from kuchka import Kilocalorie
+from kuchka import Kiloelectronvolt
 from kuchka import Kilojoule
+from kuchka import Megaelectronvolt
+from kuchka import Megajoule
+from kuchka import Microelectronvolt
 from kuchka import Microjoule
 from kuchka import Millijoule
 from kuchka import Nanojoule
+from kuchka import Petaelectronvolt
 from kuchka import Picojoule
 from kuchka import Power
 from kuchka import Second
+from kuchka import Teraelectronvolt
+from kuchka import Terajoule
+from kuchka import ThermochemicalCalorie
 from kuchka import Time
 from kuchka import Watt
+from kuchka.units import Millielectronvolt
 
 
 def test_power_times_time_is_energy():
@@ -59,3 +74,45 @@ def test_laser_pulse_energy_arithmetic():
 
 def test_isinstance_of_energy():
     assert isinstance(Joule(1), Energy)
+
+
+def test_electronvolt_scale_is_exact_from_elementary_charge():
+    """Regression test: the old code computed 10e-6 (=1e-5) instead of 1e-6."""
+    assert Microelectronvolt(1) == Electronvolt(Decimal("1e-6"))
+    assert Millielectronvolt(1) == Electronvolt(Decimal("1e-3"))
+    assert Kiloelectronvolt(1) == Electronvolt(1000)
+    assert Megaelectronvolt(1) == Electronvolt(Decimal("1e6"))
+    assert Gigaelectronvolt(1) == Electronvolt(Decimal("1e9"))
+    assert Teraelectronvolt(1) == Electronvolt(Decimal("1e12"))
+    assert Petaelectronvolt(1) == Electronvolt(Decimal("1e15"))
+
+
+def test_teraelectronvolt_is_not_an_alias_of_gigaelectronvolt():
+    """Test that TERAELECTRONVOLT used to carry GIGAELECTRONVOLT's name/symbol.
+
+    This is a regression test.
+    """
+    assert repr(Teraelectronvolt(1)) == "1 TeV"
+
+
+def test_erg_is_exact():
+    assert Erg(10_000_000) == Joule(1)
+
+
+def test_calorie_and_kilocalorie_are_the_same_function():
+    assert Kilocalorie is Calorie
+    assert Kilocalorie(650) == Calorie(650)
+
+
+def test_calorie_matches_joules():
+    assert Calorie(1) == Joule(4184)
+
+
+def test_thermochemical_calorie_is_smaller_than_the_food_calorie():
+    assert ThermochemicalCalorie(1) == Joule(Decimal("4.184"))
+    assert ThermochemicalCalorie(1000) == Calorie(1)
+
+
+def test_gigajoule_and_terajoule_scale_correctly():
+    assert Gigajoule(1) == Megajoule(1000)
+    assert Terajoule(1) == Gigajoule(1000)

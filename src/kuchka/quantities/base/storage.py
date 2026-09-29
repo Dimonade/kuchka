@@ -12,8 +12,7 @@ from typing import TYPE_CHECKING
 from typing import Generic
 from typing import TypeVar
 
-from typing_extensions import override
-
+from kuchka.internal.typing import override
 from kuchka.numeric import to_decimal
 from kuchka.quantities.base.units import _DisplayUnit
 

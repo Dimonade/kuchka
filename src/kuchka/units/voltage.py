@@ -23,13 +23,10 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import VOLTAGE
+from kuchka.internal import prefixes
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import KILO
-from kuchka.prefixes import MICRO
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Voltage
 
 if TYPE_CHECKING:
@@ -39,10 +36,10 @@ if TYPE_CHECKING:
 VOLT_NAME = "volt"
 VOLT_SYMBOL = "V"
 
-MICROVOLT = prefixed_unit(MICRO, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
-MILLIVOLT = prefixed_unit(MILLI, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
-VOLT = prefixed_unit(UNIT, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
-KILOVOLT = prefixed_unit(KILO, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
+MICROVOLT = prefixed_unit(prefixes.MICRO, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
+MILLIVOLT = prefixed_unit(prefixes.MILLI, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
+VOLT = prefixed_unit(prefixes.UNIT, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
+KILOVOLT = prefixed_unit(prefixes.KILO, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
 
 
 Voltage._canonical_unit = VOLT  # noqa: SLF001 -- this module owns Voltage's canonical unit

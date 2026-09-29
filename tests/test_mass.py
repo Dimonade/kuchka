@@ -11,6 +11,9 @@ from decimal import Decimal
 
 import pytest
 
+from kuchka import Dalton
+from kuchka import EarthMass
+from kuchka import Grain
 from kuchka import Gram
 from kuchka import InvalidMeasurementError
 from kuchka import Kilogram
@@ -19,8 +22,14 @@ from kuchka import Megagram
 from kuchka import Microgram
 from kuchka import Milligram
 from kuchka import Nanogram
+from kuchka import Ounce
+from kuchka import Picogram
+from kuchka import Pound
+from kuchka import SolarMass
 from kuchka import Tonne
+from kuchka.internal import symbols
 from kuchka.units import KILOGRAM
+from kuchka.units import MASS_UNITS
 from kuchka.units import MEGAGRAM
 
 
@@ -107,3 +116,90 @@ def test_scalar_multiplication_and_division():
 def test_ordering_within_mass():
     assert Gram(500) < Kilogram(1)
     assert Kilogram(1) < Tonne(1)
+
+
+def test_picogram_scales_correctly():
+    assert Picogram(1000) == Nanogram(1)
+
+
+def test_picogram_is_a_mass():
+    assert isinstance(Picogram(5), Mass)
+
+
+def test_grain_is_exact():
+    """One grain is exactly 1/7000 of the international avoirdupois pound."""
+    assert Grain(7000) == Pound(1)
+
+
+def test_grain_is_a_mass():
+    assert isinstance(Grain(147), Mass)
+
+
+def test_pound_is_a_mass():
+    assert isinstance(Pound(50), Mass)
+
+
+def test_sixteen_ounces_make_a_pound_exactly():
+    assert Ounce(16) == Pound(1)
+
+
+def test_four_hundred_thirty_seven_point_five_grains_make_an_ounce():
+    assert Grain(Decimal("437.5")) == Ounce(1)
+
+
+def test_isinstance_of_the_imperial_mass_units():
+    assert isinstance(Pound(5), Mass)
+    assert isinstance(Ounce(5), Mass)
+
+
+def test_ordering_across_the_imperial_mass_ladder():
+    assert Ounce(1) < Pound(1)
+
+
+def test_dalton_is_a_mass():
+    assert isinstance(Dalton(18), Mass)
+
+
+def test_hemoglobin_is_heavier_than_water_in_daltons():
+    assert Dalton(64_500) > Dalton(18)
+
+
+def test_earth_is_lighter_than_the_sun():
+    assert EarthMass(1) < SolarMass(1)
+    assert EarthMass(318) < SolarMass(1)  # roughly Jupiter's mass
+
+
+def test_isinstance_of_the_astronomical_mass_units():
+    assert isinstance(SolarMass(1), Mass)
+    assert isinstance(EarthMass(1), Mass)
+
+
+def test_sagittarius_a_dwarfs_an_ordinary_car():
+    """Pins the module docstring's own worked example as a regression test."""
+    yaris = Kilogram(1_000)
+    sagittarius_a = SolarMass(4_300_000)
+    assert round(sagittarius_a / yaris) == 8_550_188_800_000_000_000_000_000_000_000_000  # noqa: PLR2004  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
+
+
+def test_megagram_and_tonne_have_distinct_boundary_symbols():
+    """Test `MASS_UNITS` must expose "Mg" and "t" as separate keys.
+
+    A draft once set `TONNE = MEGAGRAM` and used `TONNE.symbol` as the dict key --
+    since that symbol is "Mg", not "t", it silently dropped the "t" entry.
+
+    This is a regression test.
+    """
+    assert MASS_UNITS["Mg"] is Megagram
+    assert MASS_UNITS["t"] is Tonne
+    assert MASS_UNITS["t"] is MASS_UNITS["Mg"]
+
+
+def test_solar_and_earth_mass_symbols_are_defined():
+    """Test both astronomical symbols must exist for this module to import.
+
+    This is a regression test.
+    """
+    assert symbols.SUN == "\u2609"
+    assert symbols.EARTH == "\u2641"
+    assert repr(SolarMass(1)) == f"1 M{symbols.SUN}"
+    assert repr(EarthMass(1)) == f"1 M{symbols.EARTH}"

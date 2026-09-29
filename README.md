@@ -270,6 +270,29 @@ Celsius(-274)  # raises `InvalidMeasurementError`.
 Kelvin(0)  # valid.
 ```
 
+`Instant` follows the same shape, reached from any `Time` value:
+
+```python
+from kuchka import Second, Millisecond
+
+reading = Second(1_700_000_000).as_instant()
+reading + Millisecond(500)  # -> Instant, 500 ms later
+reading - Second(100).as_instant()  # -> Time(1_699_999_900)
+reading + reading  # rejected: `MeasurementError`.
+```
+
+`Time.as_instant()` and `Time.as_sampling_period()` work at whatever prefix the `Time` value was already constructed with:
+
+```python
+from kuchka import Hour, Minute
+
+Hour(1).as_instant() == Second(3600).as_instant()
+Minute(1).as_sampling_period() == Second(60).as_sampling_period()
+```
+
+An `Instant` carries no calendar or epoch of its own.
+Where its zero point falls is up to whatever the value is being used to represent.
+
 ### Modular quantities
 
 Some quantities wrap around after a fixed period.
@@ -293,8 +316,7 @@ See [Quantity shapes and semantics](docs/concepts/quantity_shapes.md) for the fu
 A raw `float` does not remember what it means.
 Passing floats through an engineering pipeline makes unit mistakes easy to write and hard to catch because the code remains syntactically valid even when it is semantically wrong.
 
-The useful distinction is not between "numbers" and "numbers with prettier printing".
-It is between application code where physical meaning is carried by convention:
+Consider:
 
 ```python
 voltage_mv = 4200
@@ -302,15 +324,21 @@ current_ma = 150
 power_w = voltage_mv * current_ma
 ```
 
-and application code where physical meaning is part of the value itself:
+This looks reasonable at first glance, but `4200 mV * 150 mA` is `630 mW`, not `630000 W`.
+The mistake is hidden because the units exist only in variable names.
+
+With `kuchka`, physical meaning is part of the value itself:
 
 ```python
 voltage = Millivolt(4200)
 current = Milliampere(150)
 power = voltage * current
+
+power  # 0.63 W
+type(power)  # `<class 'kuchka.quantities.electrical.Power'>`
 ```
 
-The second form gives the application something ordinary Python can work with: a function can require `Voltage`, a configuration loader can construct a `Voltage`, and an engineering formula can produce a `Power`.
+A function can require `Voltage`, a configuration loader can construct a `Voltage`, and an engineering formula can produce a `Power`.
 The unit does not have to be carried in a variable name, a comment, or an application-specific string convention.
 
 That is the niche `kuchka` is aiming for: a curated set of engineering quantities that behave as ordinary Python types and are checked by ordinary Python type checkers, with runtime validation still available at untyped boundaries.
@@ -331,64 +359,85 @@ In those cases, an established general-purpose library may fit the problem bette
 The point is not to replace every unit library.
 The point is to make one particular style of engineering code feel natural: ordinary Python functions taking and returning ordinary Python types that happen to carry physical meaning.
 
-## What's included in 0.1.2
+## What's included in 0.1.x
 
-The current vocabulary spans several engineering domains.
+`kuchka` currently covers a growing vocabulary of engineering and scientific quantities.
+Units are represented as typed values, with exact conversions where the unit definition permits them.
 
-**Electrical**
+The tables below show a number of representative units per field or domain.
+The complete unit vocabulary is available in the API reference.
 
-- **Voltage:** `Volt`, `Millivolt`, `Microvolt`, `Kilovolt`
-- **Current:** `Ampere`, `Milliampere`, `Microampere`, `Kiloampere`
-- **Power:** `Watt`, `Milliwatt`, `Kilowatt`
-- **Resistance:** `Ohm`, `Milliohm`, `Kiloohm`, `Megaohm`
-- **Conductance:** `Siemens`, `Microsiemens`, `Millisiemens`, `Kilosiemens`
-- **Charge:** `Coulomb`, `Millicoulomb`, `Microcoulomb`, `Nanocoulomb`, `Picocoulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`
-- **Energy:** `Joule`, `Millijoule`, `Microjoule`, `Nanojoule`, `Picojoule`, `Kilojoule`, `Megajoule`, `MilliwattHour`, `WattHour`
+### Electrical
 
-**Time and signal**
+| Quantity    | Representative units                                                                                                                                     |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Voltage     | `Microvolt`, `Millivolt`, `Volt`, `Kilovolt`                                                                                                             |
+| Current     | `Microampere`, `Milliampere`, `Ampere`, `Kiloampere`                                                                                                     |
+| Power       | `Milliwatt`, `Watt`, `Kilowatt`                                                                                                                          |
+| Resistance  | `Milliohm`, `Ohm`, `Kiloohm`, `Megaohm`                                                                                                                  |
+| Conductance | `Microsiemens`, `Millisiemens`, `Siemens`, `Kilosiemens`                                                                                                 |
+| Charge      | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                                                                    |
+| Energy      | `Picojoule` through `Terajoule`, `Electronvolt` through `Teraelectronvolt`, `Erg`, `MilliwattHour`, `WattHour`, `KilowattHour`, `Calorie`, `Kilocalorie` |
 
-- **Temperature:** `Celsius`, `Kelvin`
-- **Temperature Delta:** `DeltaCelsius`, `DeltaKelvin`
-- **Time:** `Second`, `Millisecond`, `Microsecond`, `Minute`, `Hour`
-- **Frequency:** `Hertz`, `Kilohertz`, `Megahertz`
-- **Sampling Period:** `SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod`
-- **Sample Rate:** `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`
-- **Baud Rate:** `Baud`, `Kilobaud`
+### Time and signals
 
-**Geometry and mechanics**
+| Quantity          | Representative units                                               |
+| ----------------- | ------------------------------------------------------------------ |
+| Time              | `Millisecond`, `Second`, `Minute`, `Hour`                          |
+| Instant           | reached via `Time.as_instant()`                                    |
+| Frequency         | `Hertz` through `Petahertz`                                        |
+| Sampling Period   | reached via `Time.as_sampling_period()`                            |
+| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond` |
+| Baud Rate         | `Baud`, `Kilobaud`                                                 |
+| Temperature       | `Celsius`, `Kelvin`                                                |
+| Temperature Delta | `DeltaCelsius`, `DeltaKelvin`                                      |
 
-- **Length:** `Nanometre`, `Micrometre`, `Millimetre`, `Centimetre`, `Decimetre`, `Metre`, `Kilometre`, `Inch`
-- **Area:** `SquareMillimetre`, `SquareCentimetre`, `SquareMetre`, `SquareKilometre`, `Hectare`, `Acre`, `SquareInch`
-- **Volume:** `CubicMillimetre`, `CubicCentimetre`, `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`
-- **Velocity:** `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`
-- **Acceleration:** `MetrePerSecondSquared`
-- **Mass:** `Nanogram`, `Microgram`, `Milligram`, `Gram`, `Kilogram`, `Megagram`, `Tonne`
-- **Force:** `Newton`, `Millinewton`, `Kilonewton`, `Dyne`, `PoundForce`
-- **Density:** `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`
-- **Pressure:** `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`
+### Geometry and mechanics
 
-**Angle**
+| Quantity     | Representative units                                                                                           |
+| ------------ | -------------------------------------------------------------------------------------------------------------- |
+| Length       | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, along with `SolarMass` and `EarthMass` |
+| Area         | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                                |
+| Volume       | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                       |
+| Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`                                                            |
+| Acceleration | `MetrePerSecondSquared`                                                                                        |
+| Mass         | `Nanogram` through `Megagram`, `Tonne`                                                                         |
+| Force        | `Millinewton`, `Newton`, `Kilonewton`, `Dyne`, `PoundForce`                                                    |
+| Density      | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                          |
+| Pressure     | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`     |
 
-- **Angle:** `Radian`, `Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond`
+### Angle
 
-**Chemistry and light**
+| Quantity | Units                                                           |
+| -------- | --------------------------------------------------------------- |
+| Angle    | `Radian`, `Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond` |
 
-- **Amount of Substance:** `Micromole`, `Millimole`, `Mole`
-- **Luminous Intensity:** `Candela`
+### Chemistry and light
 
-**Dimensionless**
+| Quantity            | Units                            |
+| ------------------- | -------------------------------- |
+| Amount of Substance | `Micromole`, `Millimole`, `Mole` |
+| Luminous Intensity  | `Candela`                        |
 
-- **Proportion:** `Ratio`, `Percent`
+### Dimensionless quantities
 
-The canonical spelling of the SI unit of length is `metre`.
-`kuchka` aliases `*meter` names to the corresponding `*metre` names.
-The same principle applies to `Litre` and `Liter`, and others.
+| Quantity   | Units              |
+| ---------- | ------------------ |
+| Proportion | `Ratio`, `Percent` |
+
+Most SI-derived families expose a selected set of SI prefixes appropriate to their engineering use.
+The README does not list every prefix individually;the API reference contains the complete constructor and unit vocabulary.
+
+The canonical spelling of SI `metre` is used throughout `kuchka`.
+American-English `*meter` names are aliases of the corresponding `*metre`
+constructors, not separate unit implementations. The same principle applies
+to `Litre`/`Liter` and other spelling aliases.
 
 ## A few important distinctions
 
 ### Same dimension does not always mean the same concept
 
-`Frequency`, `SampleRate`, and `BaudRate` all have physical dimension T^-1, but they remain separate types because they describe different concepts.
+`Frequency`, `SampleRate`, and `BaudRate` all have physical dimension T⁻¹, but they remain separate types because they describe different concepts.
 
 ```python
 from kuchka import Hertz
@@ -400,7 +449,9 @@ Hertz(50) + SamplesPerSecond(50)  # rejected: `IncompatibleDimensionError`.
 Genuine reciprocal pairs remain reciprocal:
 
 ```python
-rate = 1 / SecondSamplingPeriod(2)  # -> SampleRate
+from kuchka import Second
+
+rate = 1 / Second(2).as_sampling_period()  # -> SampleRate
 period = 1 / rate  # -> SamplingPeriod
 ```
 
@@ -555,7 +606,7 @@ f"{voltage:,.2f}"  # "1,234.50 V"
 The repository contains longer, task-oriented examples:
 
 - **[Migrating a config from unit-suffixed keys to `kuchka`](docs/examples/config_migration/README.md)** - moves units from names such as `accepted_voltage_min_mv` into TOML data and resolves them into typed dataclasses at the boundary.
-- **[Working around an unrepresentable intermediate dimension](docs/examples/unrepresentable_dimensions/README.md)** - shows how to handle formulas such as `P = V^2/R` and parallel resistor networks when an intermediate dimension has no registered type.
+- **[Working around an unrepresentable intermediate dimension](docs/examples/unrepresentable_dimensions/README.md)** - shows how to handle formulas such as `P = V²/R` and parallel resistor networks when an intermediate dimension has no registered type.
 
 These examples show `kuchka` in application code, with arithmetic serving the larger engineering task.
 
@@ -570,10 +621,8 @@ See [`benchmarks`](benchmarks/README.md) for current measurements.
 
 The vocabulary is intentionally curated and will remain finite. Current gaps include:
 
-- `Length` has metric prefixes and `Inch`, but not `Foot`, `Yard`, or `Mile`.
 - There is no NumPy/Pandas integration.
 - There is no JSON/DB persistence layer.
-- There is no point-in-time type; `Time` represents a span such as a duration, timeout, or sample period.
 
 A future persistence layer may use a representation such as `{"value": 4.2, "unit": "V"}` at the serialization boundary while reconstructing a typed quantity when data enters application code.
 

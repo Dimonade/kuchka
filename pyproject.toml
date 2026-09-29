@@ -1,11 +1,11 @@
 [project]
 name = "kuchka"
-version = "0.1.2"
+version = "0.1.3"
 description = "A small pile of strongly-typed engineering units for Python."
 readme = "README.md"
 authors = [{ name = "dimonade", email = "dimonade@protonmail.com" }]
 requires-python = ">=3.11"
-dependencies = []
+dependencies = ['typing_extensions>=4.4; python_version < "3.12"']
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Programming Language :: Python :: 3",
@@ -24,17 +24,18 @@ requires = ["uv_build>=0.12.5,<0.13.0"]
 build-backend = "uv_build"
 
 [dependency-groups]
-dev = [
-  "coverage>=7.15.4",
-  "hypothesis>=6.165.10",
+test = ["coverage>=7.15.4", "hypothesis>=6.165.10", "pytest>=9.1.1"]
+
+lint = [
   "mccabe>=0.7.0",
   "mypy>=2.3.1",
   "pylsp-mypy>=0.8.0",
-  "pytest>=9.1.1",
   "python-lsp-server>=1.15.0",
   "ruff>=0.16.3",
   "ty>=0.0.72",
 ]
+
+dev = [{ include-group = "test" }, { include-group = "lint" }, "tox>=4.64.4"]
 
 [tool.coverage.run]
 branch = true
@@ -107,6 +108,9 @@ force-single-line = true
 "src/kuchka/units/__init__.py" = [
   "PLE0605",
 ] # Every leaf file maintains their own __all__.
+"src/kuchka/units/temporal/__init__.py" = [
+  "PLE0605",
+] # Same: mid-level package aggregating its own family of leaf modules.
 "src/kuchka/quantities/__init__.py" = ["PLE0605"] # Same.
 
 "tests/*" = [
@@ -145,6 +149,14 @@ force-single-line = true
   # Same reasoning as demo.py above: a benchmark script's entire job is to print a results table to a terminal.
   "T201",
 ]
+
+[tool.tox]
+requires = ["tox>=4.64"]
+env_list = ["3.11", "3.12", "3.13", "3.14", "3.15"]
+
+[tool.tox.env_run_base]
+dependency_groups = ["test"]
+commands = [["pytest", "-q"]]
 
 [tool.ty.rules]
 all = "warn"

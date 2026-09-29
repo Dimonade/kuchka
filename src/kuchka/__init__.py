@@ -42,6 +42,7 @@ from kuchka.quantities import Density
 from kuchka.quantities import Energy
 from kuchka.quantities import Force
 from kuchka.quantities import Frequency
+from kuchka.quantities import Instant
 from kuchka.quantities import Length
 from kuchka.quantities import LuminousIntensity
 from kuchka.quantities import Mass
@@ -66,6 +67,7 @@ from kuchka.units import ArcSecond
 from kuchka.units import Atmosphere
 from kuchka.units import Bar
 from kuchka.units import Baud
+from kuchka.units import Calorie
 from kuchka.units import Candela
 from kuchka.units import Celsius
 from kuchka.units import Centimeter
@@ -77,13 +79,22 @@ from kuchka.units import CubicMeter
 from kuchka.units import CubicMetre
 from kuchka.units import CubicMillimeter
 from kuchka.units import CubicMillimetre
+from kuchka.units import Dalton
 from kuchka.units import Decimeter
 from kuchka.units import Decimetre
 from kuchka.units import Degree
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaKelvin
 from kuchka.units import Dyne
+from kuchka.units import EarthMass
+from kuchka.units import Electronvolt
+from kuchka.units import Erg
+from kuchka.units import Foot
+from kuchka.units import Gigaelectronvolt
+from kuchka.units import Gigahertz
+from kuchka.units import Gigajoule
 from kuchka.units import Gradian
+from kuchka.units import Grain
 from kuchka.units import Gram
 from kuchka.units import GramPerCubicCentimeter
 from kuchka.units import GramPerCubicCentimetre
@@ -96,6 +107,8 @@ from kuchka.units import Joule
 from kuchka.units import Kelvin
 from kuchka.units import Kiloampere
 from kuchka.units import Kilobaud
+from kuchka.units import Kilocalorie
+from kuchka.units import Kiloelectronvolt
 from kuchka.units import Kilogram
 from kuchka.units import KilogramPerCubicMeter
 from kuchka.units import KilogramPerCubicMetre
@@ -118,6 +131,7 @@ from kuchka.units import Kilovolt
 from kuchka.units import Kilowatt
 from kuchka.units import Liter
 from kuchka.units import Litre
+from kuchka.units import Megaelectronvolt
 from kuchka.units import Megagram
 from kuchka.units import Megahertz
 from kuchka.units import Megajoule
@@ -132,6 +146,7 @@ from kuchka.units import MetrePerSecond
 from kuchka.units import MetrePerSecondSquared
 from kuchka.units import Microampere
 from kuchka.units import Microcoulomb
+from kuchka.units import Microelectronvolt
 from kuchka.units import Microgram
 from kuchka.units import Microjoule
 from kuchka.units import Microliter
@@ -140,16 +155,17 @@ from kuchka.units import Micrometer
 from kuchka.units import Micrometre
 from kuchka.units import Micromole
 from kuchka.units import Microsecond
-from kuchka.units import MicrosecondSamplingPeriod
 from kuchka.units import Microsiemens
 from kuchka.units import Microvolt
 from kuchka.units import Microwatt
+from kuchka.units import Mile
 from kuchka.units import MilePerHour
 from kuchka.units import Milliampere
 from kuchka.units import MilliampereHour
 from kuchka.units import MilliampereSecond
 from kuchka.units import Millibar
 from kuchka.units import Millicoulomb
+from kuchka.units import Millielectronvolt
 from kuchka.units import Milligram
 from kuchka.units import Millijoule
 from kuchka.units import Milliliter
@@ -160,7 +176,6 @@ from kuchka.units import Millimole
 from kuchka.units import Millinewton
 from kuchka.units import Milliohm
 from kuchka.units import Millisecond
-from kuchka.units import MillisecondSamplingPeriod
 from kuchka.units import Millisiemens
 from kuchka.units import Millivolt
 from kuchka.units import Milliwatt
@@ -172,21 +187,28 @@ from kuchka.units import Nanogram
 from kuchka.units import Nanojoule
 from kuchka.units import Nanometer
 from kuchka.units import Nanometre
+from kuchka.units import NauticalMile
 from kuchka.units import Newton
 from kuchka.units import Ohm
+from kuchka.units import Ounce
 from kuchka.units import Pascal
 from kuchka.units import Percent
+from kuchka.units import Petaelectronvolt
+from kuchka.units import Petahertz
 from kuchka.units import Picocoulomb
 from kuchka.units import Picogram
 from kuchka.units import Picojoule
+from kuchka.units import Picometer
+from kuchka.units import Picometre
+from kuchka.units import Pound
 from kuchka.units import PoundForce
 from kuchka.units import PoundPerSquareInch
 from kuchka.units import Radian
 from kuchka.units import Ratio
 from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
-from kuchka.units import SecondSamplingPeriod
 from kuchka.units import Siemens
+from kuchka.units import SolarMass
 from kuchka.units import SquareCentimeter
 from kuchka.units import SquareCentimetre
 from kuchka.units import SquareInch
@@ -196,11 +218,16 @@ from kuchka.units import SquareMeter
 from kuchka.units import SquareMetre
 from kuchka.units import SquareMillimeter
 from kuchka.units import SquareMillimetre
+from kuchka.units import Teraelectronvolt
+from kuchka.units import Terahertz
+from kuchka.units import Terajoule
+from kuchka.units import ThermochemicalCalorie
 from kuchka.units import Tonne
 from kuchka.units import Turn
 from kuchka.units import Volt
 from kuchka.units import Watt
 from kuchka.units import WattHour
+from kuchka.units import Yard
 
 try:
     __version__ = version("kuchka")
@@ -222,6 +249,7 @@ __all__: list[str] = [
     "Bar",
     "Baud",
     "BaudRate",
+    "Calorie",
     "Candela",
     "Celsius",
     "Centimeter",
@@ -237,6 +265,7 @@ __all__: list[str] = [
     "CubicMillimeter",
     "CubicMillimetre",
     "Current",
+    "Dalton",
     "Decimeter",
     "Decimetre",
     "Degree",
@@ -244,10 +273,18 @@ __all__: list[str] = [
     "DeltaKelvin",
     "Density",
     "Dyne",
+    "EarthMass",
+    "Electronvolt",
     "Energy",
+    "Erg",
+    "Foot",
     "Force",
     "Frequency",
+    "Gigaelectronvolt",
+    "Gigahertz",
+    "Gigajoule",
     "Gradian",
+    "Grain",
     "Gram",
     "GramPerCubicCentimeter",
     "GramPerCubicCentimetre",
@@ -257,12 +294,15 @@ __all__: list[str] = [
     "Hour",
     "Inch",
     "IncompatibleDimensionError",
+    "Instant",
     "InvalidConversionError",
     "InvalidMeasurementError",
     "Joule",
     "Kelvin",
     "Kiloampere",
     "Kilobaud",
+    "Kilocalorie",
+    "Kiloelectronvolt",
     "Kilogram",
     "KilogramPerCubicMeter",
     "KilogramPerCubicMetre",
@@ -289,6 +329,7 @@ __all__: list[str] = [
     "LuminousIntensity",
     "Mass",
     "MeasurementError",
+    "Megaelectronvolt",
     "Megagram",
     "Megahertz",
     "Megajoule",
@@ -303,6 +344,7 @@ __all__: list[str] = [
     "MetrePerSecondSquared",
     "Microampere",
     "Microcoulomb",
+    "Microelectronvolt",
     "Microgram",
     "Microjoule",
     "Microliter",
@@ -311,16 +353,17 @@ __all__: list[str] = [
     "Micrometre",
     "Micromole",
     "Microsecond",
-    "MicrosecondSamplingPeriod",
     "Microsiemens",
     "Microvolt",
     "Microwatt",
+    "Mile",
     "MilePerHour",
     "Milliampere",
     "MilliampereHour",
     "MilliampereSecond",
     "Millibar",
     "Millicoulomb",
+    "Millielectronvolt",
     "Milligram",
     "Millijoule",
     "Milliliter",
@@ -331,7 +374,6 @@ __all__: list[str] = [
     "Millinewton",
     "Milliohm",
     "Millisecond",
-    "MillisecondSamplingPeriod",
     "Millisiemens",
     "Millivolt",
     "Milliwatt",
@@ -343,14 +385,21 @@ __all__: list[str] = [
     "Nanojoule",
     "Nanometer",
     "Nanometre",
+    "NauticalMile",
     "Newton",
     "Ohm",
+    "Ounce",
     "Pascal",
     "Percent",
+    "Petaelectronvolt",
+    "Petahertz",
     "Picocoulomb",
     "Picogram",
     "Picojoule",
+    "Picometer",
+    "Picometre",
     "PlannedDimensionError",
+    "Pound",
     "PoundForce",
     "PoundPerSquareInch",
     "Power",
@@ -363,8 +412,8 @@ __all__: list[str] = [
     "SamplesPerSecond",
     "SamplingPeriod",
     "Second",
-    "SecondSamplingPeriod",
     "Siemens",
+    "SolarMass",
     "SquareCentimeter",
     "SquareCentimetre",
     "SquareInch",
@@ -376,6 +425,10 @@ __all__: list[str] = [
     "SquareMillimetre",
     "Temperature",
     "TemperatureDelta",
+    "Teraelectronvolt",
+    "Terahertz",
+    "Terajoule",
+    "ThermochemicalCalorie",
     "Time",
     "Tonne",
     "Turn",
@@ -386,6 +439,7 @@ __all__: list[str] = [
     "Volume",
     "Watt",
     "WattHour",
+    "Yard",
     "__version__",
     "codata_2022",
 ]

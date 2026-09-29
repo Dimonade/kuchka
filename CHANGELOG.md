@@ -5,7 +5,68 @@ All notable changes to kuchka are documented here.
 The format tries to follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 See the `Stability` section in `README.md` for what versioning means before `0.2.0`.
 
-## [0.1.2] - Unreleased, available on `develop`
+## [0.1.3] - 2026-09-29
+
+### Added
+
+#### `Mass` family gets new units
+
+`Dalton`, `Grain`, `Pound`, `Ounce`, `SolarMass`, and `EarthMass`.
+
+#### `Length` family gets new units
+
+- `Picometre`.
+- Imperial: `Foot`, `Yard`, `Mile`, `NauticalMile`.
+
+#### `Energy` family gets new units
+
+- `Joule` units expanded.
+- `Electronvolt` family added.
+- `Erg` unit added.
+- Nutritional units - `Calorie`, `Kilocalorie`, and `ThermochemicalCalorie`.
+
+#### `Frequency` family gets new units
+
+`Gigahertz`, `Terahertz`, and `Petahertz`.
+
+#### Dimensions get unicode superscripts
+
+Instead of `T^a L^b M ^c ...` it uses now proper signed superscripts, like: `T⁻¹⁷ M⁻⁴²⁰ I¹⁰²⁴ Θ⁻⁵¹² J⁻⁹⁰⁰⁰ ∠¹⁹⁹¹`.
+
+### Changed
+
+#### `SamplingPeriod` and `Instant` are reached from `Time`, not their own constructors
+
+```python
+from kuchka import Second, Millisecond, Hour
+
+period = Millisecond(2).as_sampling_period()
+rate = 1 / period  # -> SampleRate(500)
+
+reading = Second(1_700_000_000).as_instant()
+later = reading + Millisecond(500)  # -> Instant
+checkpoint = Hour(1).as_instant()  # an hour past whatever the caller calls zero
+```
+
+`SamplingPeriod` and `Instant` are measured in the same seconds `Time` already is.
+There is no separate "sampling-period-second" or "instant-second" out in the world, so there is no separate constructor for one either.
+Every `Time` constructor (`Second`, `Millisecond`, `Microsecond`, `Minute`, `Hour`) reaches both types this way, at whatever prefix it was already built with.
+
+### Removed
+
+#### `SamplingPeriod`s unique synthetic units
+
+`SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod`, `SecondInstant`, and the `SAMPLING_PERIOD_MICROSECOND` / `SAMPLING_PERIOD_MILLISECOND` / `SAMPLING_PERIOD_SECOND` `UnitDef` constants.
+`SAMPLING_PERIOD_UNITS` and `INSTANT_UNITS` stay, now built directly from `TIME_UNITS`.
+
+### Fixed
+
+#### `typing_extensions` import missing
+
+Was missed because `typing_extensions` is a transient dependency of `mypy` which was used in dev-dependencies.
+Fixed with import guard in `kuchka.internal.typing` for all affected Python versions.
+
+## [0.1.2] - 2026.09.22
 
 ### Added
 

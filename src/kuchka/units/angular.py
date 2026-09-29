@@ -28,15 +28,14 @@ value).
 A `Radian`-built value compares exactly to kuchka's own `_PI`, and to nothing more or
 less precise than that.
 
-Concretely: `Radian(math.pi) == Degree(180)` is `False`.
-Python's `math.pi` is a binary-float approximation of pi at roughly 17 significant
-digits.
-kuchka's `_PI` is a separately chosen decimal value at 15.
-The two numbers are close but not identical, and exact `Fraction` equality reports
-exactly that.
-This is correct behavior under this design, not a bug: to build a `Radian` value that
-is guaranteed to compare equal to a `Degree`-family value, construct it from
-`kuchka.units.angular._PI` itself, not from an independently sourced pi.
+Concretely: `Radian(math.pi) == Degree(180)` is `True`.
+A `float` enters kuchka through its shortest decimal string, and for `math.pi` that
+string is `3.141592653589793`, the fifteen-decimal value `_PI` holds.
+A pi carrying more digits, such as `Decimal("3.14159265358979323846")`, differs from
+`_PI`, and exact `Fraction` equality reports exactly that:
+comparing a `Radian` built from it with `Degree(180)` gives `False`.
+To build a `Radian` value that compares equal to a `Degree`-family value at any
+precision, construct it from `kuchka.units.angular._PI` itself.
 
 `ANGLE_UNITS` maps each symbol to its constructor, for boundary code that reads a unit
 as a string from outside the application.
@@ -44,12 +43,13 @@ as a string from outside the application.
 
 from __future__ import annotations
 
-from decimal import Decimal
 from fractions import Fraction
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import ANGLE
+from kuchka.internal import symbols
+from kuchka.internal.constants import _PI
 from kuchka.numeric import to_exact
 from kuchka.quantities import Angle
 from kuchka.quantities import UnitDef
@@ -60,23 +60,12 @@ if TYPE_CHECKING:
 
     from kuchka.numeric import Numeric
 
-_PI = Fraction(Decimal("3.141592653589793"))
-"""kuchka's own fixed, finite rational representation of pi.
-
-Fifteen significant digits, the precision commonly cited by NASA/JPL for spacecraft
-navigation.
-See: https://www.jpl.nasa.gov/edu/news/how-many-decimals-of-pi-do-we-really-need/
-
-Defines the scales of Degree, Turn, Gradian, ArcMinute, and ArcSecond relative to
-Radian.
-Otherwise, currently not used anywhere else in kuchka.
-"""
 
 RADIAN = UnitDef("radian", "rad", Fraction(1), ANGLE)
-DEGREE = UnitDef("degree", "\u00b0", _PI / 180, ANGLE)
+DEGREE = UnitDef("degree", symbols.DEGREE, _PI / 180, ANGLE)
 GRADIAN = UnitDef("gradian", "gon", _PI / 200, ANGLE)
-ARCMINUTE = UnitDef("arcminute", "\u2032", _PI / 10800, ANGLE)
-ARCSECOND = UnitDef("arcsecond", "\u2033", _PI / 648000, ANGLE)
+ARCMINUTE = UnitDef("arcminute", symbols.PRIME, _PI / 10800, ANGLE)
+ARCSECOND = UnitDef("arcsecond", symbols.DOUBLE_PRIME, _PI / 648000, ANGLE)
 TURN = UnitDef("turn", "tr", 2 * _PI, ANGLE)
 
 Angle._canonical_unit = RADIAN  # noqa: SLF001 -- this module owns Angle's canonical unit

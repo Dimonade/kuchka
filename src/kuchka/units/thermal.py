@@ -21,6 +21,7 @@ from decimal import Decimal
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
+from kuchka.internal import symbols
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import AffineUnitDef
@@ -34,13 +35,17 @@ if TYPE_CHECKING:
 
 from kuchka.dimensions import TEMPERATURE_DELTA
 
-DELTA_KELVIN = UnitDef("kelvin_delta", "\u0394K", Decimal(1), TEMPERATURE_DELTA)
+DELTA_KELVIN = UnitDef(
+    "kelvin_delta", f"{symbols.DELTA}K", Decimal(1), TEMPERATURE_DELTA
+)
 """A one-degree temperature change.
 
 It is the same size in Celsius and Kelvin:
 only the absolute zero point differs, and a delta has no zero point.
 """
-DELTA_CELSIUS = UnitDef("celsius_delta", "\u0394\u00b0C", Decimal(1), TEMPERATURE_DELTA)
+DELTA_CELSIUS = UnitDef(
+    "celsius_delta", f"{symbols.DELTA}{symbols.DEGREE}C", Decimal(1), TEMPERATURE_DELTA
+)
 
 TemperatureDelta._canonical_unit = DELTA_KELVIN  # noqa: SLF001 -- this module owns TemperatureDelta's canonical unit
 
@@ -56,11 +61,16 @@ def DeltaCelsius(value: Numeric) -> TemperatureDelta:
 
 
 TEMPERATURE_DELTA_UNITS: Mapping[str, Callable[[Numeric], TemperatureDelta]] = (
-    MappingProxyType({"dK": DeltaKelvin, "dC": DeltaCelsius})
+    MappingProxyType(
+        {
+            "dK": DeltaKelvin,
+            "dC": DeltaCelsius,
+        }
+    )
 )
 
 KELVIN = AffineUnitDef("kelvin", "K", Decimal(1), Decimal(0))
-CELSIUS = AffineUnitDef("celsius", "\u00b0C", Decimal(1), Decimal("273.15"))
+CELSIUS = AffineUnitDef("celsius", f"{symbols.DEGREE}C", Decimal(1), Decimal("273.15"))
 
 
 def Kelvin(value: Numeric) -> Temperature:
@@ -76,7 +86,10 @@ def Celsius(value: Numeric) -> Temperature:
 
 
 TEMPERATURE_UNITS: Mapping[str, Callable[[Numeric], Temperature]] = MappingProxyType(
-    {"K": Kelvin, "C": Celsius}
+    {
+        "K": Kelvin,
+        "C": Celsius,
+    }
 )
 
 __all__ = [

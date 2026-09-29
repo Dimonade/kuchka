@@ -21,12 +21,22 @@ from hypothesis import given
 from kuchka import Acre
 from kuchka import Ampere
 from kuchka import AmpereHour
+from kuchka import Calorie
 from kuchka import Centimeter
 from kuchka import Coulomb
 from kuchka import CubicCentimetre
 from kuchka import CubicMetre
 from kuchka import CubicMillimetre
+from kuchka import Dalton
 from kuchka import Decimeter
+from kuchka import EarthMass
+from kuchka import Electronvolt
+from kuchka import Erg
+from kuchka import Foot
+from kuchka import Gigaelectronvolt
+from kuchka import Gigahertz
+from kuchka import Gigajoule
+from kuchka import Grain
 from kuchka import Gram
 from kuchka import Hectare
 from kuchka import Hertz
@@ -34,6 +44,7 @@ from kuchka import Hour
 from kuchka import Inch
 from kuchka import Joule
 from kuchka import Kiloampere
+from kuchka import Kiloelectronvolt
 from kuchka import Kilogram
 from kuchka import Kilohertz
 from kuchka import Kilolitre
@@ -44,28 +55,30 @@ from kuchka import Kilosiemens
 from kuchka import Kilovolt
 from kuchka import Kilowatt
 from kuchka import Litre
+from kuchka import Megaelectronvolt
 from kuchka import Megagram
 from kuchka import Megahertz
 from kuchka import Megaohm
 from kuchka import MegasamplesPerSecond
 from kuchka import Meter
 from kuchka import Microampere
+from kuchka import Microelectronvolt
 from kuchka import Microgram
 from kuchka import Microlitre
 from kuchka import Micrometer
 from kuchka import Microsecond
-from kuchka import MicrosecondSamplingPeriod
 from kuchka import Microsiemens
 from kuchka import Microvolt
+from kuchka import Mile
 from kuchka import Milliampere
 from kuchka import MilliampereHour
 from kuchka import MilliampereSecond
+from kuchka import Millielectronvolt
 from kuchka import Milligram
 from kuchka import Millilitre
 from kuchka import Millimeter
 from kuchka import Milliohm
 from kuchka import Millisecond
-from kuchka import MillisecondSamplingPeriod
 from kuchka import Millisiemens
 from kuchka import Millivolt
 from kuchka import Milliwatt
@@ -73,19 +86,31 @@ from kuchka import MilliwattHour
 from kuchka import Minute
 from kuchka import Nanogram
 from kuchka import Nanometer
+from kuchka import NauticalMile
 from kuchka import Ohm
+from kuchka import Ounce
+from kuchka import Petaelectronvolt
+from kuchka import Petahertz
+from kuchka import Picogram
+from kuchka import Picometer
+from kuchka import Pound
 from kuchka import SamplesPerSecond
 from kuchka import Second
-from kuchka import SecondSamplingPeriod
 from kuchka import Siemens
+from kuchka import SolarMass
 from kuchka import SquareCentimetre
 from kuchka import SquareKilometre
 from kuchka import SquareMetre
 from kuchka import SquareMillimetre
+from kuchka import Teraelectronvolt
+from kuchka import Terahertz
+from kuchka import Terajoule
+from kuchka import ThermochemicalCalorie
 from kuchka import Tonne
 from kuchka import Volt
 from kuchka import Watt
 from kuchka import WattHour
+from kuchka import Yard
 from kuchka.units import ACRE
 from kuchka.units import AMPERE
 from kuchka.units import AMPERE_HOUR
@@ -94,7 +119,16 @@ from kuchka.units import COULOMB
 from kuchka.units import CUBIC_CENTIMETRE
 from kuchka.units import CUBIC_METRE
 from kuchka.units import CUBIC_MILLIMETRE
+from kuchka.units import DALTON
 from kuchka.units import DECIMETER
+from kuchka.units import EARTH_MASS
+from kuchka.units import ELECTRONVOLT
+from kuchka.units import ERG
+from kuchka.units import FOOT
+from kuchka.units import GIGAELECTRONVOLT
+from kuchka.units import GIGAHERTZ
+from kuchka.units import GIGAJOULE
+from kuchka.units import GRAIN
 from kuchka.units import GRAM
 from kuchka.units import HECTARE
 from kuchka.units import HERTZ
@@ -102,31 +136,37 @@ from kuchka.units import HOUR
 from kuchka.units import INCH
 from kuchka.units import JOULE
 from kuchka.units import KILOAMPERE
+from kuchka.units import KILOCALORIE
+from kuchka.units import KILOELECTRONVOLT
 from kuchka.units import KILOGRAM
 from kuchka.units import KILOHERTZ
 from kuchka.units import KILOLITRE
 from kuchka.units import KILOMETER
 from kuchka.units import KILOOHM
-from kuchka.units import KILOSAMPLE_PER_SECOND
+from kuchka.units import KILOSAMPLES_PER_SECOND
 from kuchka.units import KILOSIEMENS
 from kuchka.units import KILOVOLT
 from kuchka.units import KILOWATT
 from kuchka.units import LITRE
+from kuchka.units import MEGAELECTRONVOLT
 from kuchka.units import MEGAGRAM
 from kuchka.units import MEGAHERTZ
 from kuchka.units import MEGAOHM
-from kuchka.units import MEGASAMPLE_PER_SECOND
+from kuchka.units import MEGASAMPLES_PER_SECOND
 from kuchka.units import METER
 from kuchka.units import MICROAMPERE
+from kuchka.units import MICROELECTRONVOLT
 from kuchka.units import MICROGRAM
 from kuchka.units import MICROLITRE
 from kuchka.units import MICROMETER
 from kuchka.units import MICROSECOND
 from kuchka.units import MICROSIEMENS
 from kuchka.units import MICROVOLT
+from kuchka.units import MILE
 from kuchka.units import MILLIAMPERE
 from kuchka.units import MILLIAMPERE_HOUR
 from kuchka.units import MILLIAMPERE_SECOND
+from kuchka.units import MILLIELECTRONVOLT
 from kuchka.units import MILLIGRAM
 from kuchka.units import MILLILITRE
 from kuchka.units import MILLIMETER
@@ -139,20 +179,30 @@ from kuchka.units import MILLIWATT_HOUR
 from kuchka.units import MINUTE
 from kuchka.units import NANOGRAM
 from kuchka.units import NANOMETER
+from kuchka.units import NAUTICAL_MILE
 from kuchka.units import OHM
-from kuchka.units import SAMPLE_PER_SECOND
-from kuchka.units import SAMPLING_PERIOD_MICROSECOND
-from kuchka.units import SAMPLING_PERIOD_MILLISECOND
-from kuchka.units import SAMPLING_PERIOD_SECOND
+from kuchka.units import OUNCE
+from kuchka.units import PETAELECTRONVOLT
+from kuchka.units import PETAHERTZ
+from kuchka.units import PICOGRAM
+from kuchka.units import PICOMETER
+from kuchka.units import POUND
+from kuchka.units import SAMPLES_PER_SECOND
 from kuchka.units import SECOND
 from kuchka.units import SIEMENS
+from kuchka.units import SOLAR_MASS
 from kuchka.units import SQUARE_CENTIMETRE
 from kuchka.units import SQUARE_KILOMETRE
 from kuchka.units import SQUARE_METRE
 from kuchka.units import SQUARE_MILLIMETRE
+from kuchka.units import TERAELECTRONVOLT
+from kuchka.units import TERAHERTZ
+from kuchka.units import TERAJOULE
+from kuchka.units import THERMOCHEMICAL_CALORIE
 from kuchka.units import VOLT
 from kuchka.units import WATT
 from kuchka.units import WATT_HOUR
+from kuchka.units import YARD
 from tests.quantity_families import FINITE_DECIMALS
 
 if TYPE_CHECKING:
@@ -197,39 +247,29 @@ PREFIX_CASES: list[PrefixCase] = [
     PrefixCase(
         "Millisecond", Millisecond, Second, Decimal("0.001"), MILLISECOND, SECOND
     ),
-    PrefixCase("Kilohertz", Kilohertz, Hertz, Decimal(1000), KILOHERTZ, HERTZ),
+    PrefixCase("Kilohertz", Kilohertz, Hertz, Decimal(1_000), KILOHERTZ, HERTZ),
     PrefixCase("Megahertz", Megahertz, Hertz, Decimal(1_000_000), MEGAHERTZ, HERTZ),
-    PrefixCase(
-        "MicrosecondSamplingPeriod",
-        MicrosecondSamplingPeriod,
-        SecondSamplingPeriod,
-        Decimal("0.000001"),
-        SAMPLING_PERIOD_MICROSECOND,
-        SAMPLING_PERIOD_SECOND,
-    ),
-    PrefixCase(
-        "MillisecondSamplingPeriod",
-        MillisecondSamplingPeriod,
-        SecondSamplingPeriod,
-        Decimal("0.001"),
-        SAMPLING_PERIOD_MILLISECOND,
-        SAMPLING_PERIOD_SECOND,
-    ),
+    PrefixCase("Gigahertz", Gigahertz, Hertz, Decimal("1e9"), GIGAHERTZ, HERTZ),
+    PrefixCase("Terahertz", Terahertz, Hertz, Decimal("1e12"), TERAHERTZ, HERTZ),
+    PrefixCase("Petahertz", Petahertz, Hertz, Decimal("1e15"), PETAHERTZ, HERTZ),
     PrefixCase(
         "KilosamplesPerSecond",
         KilosamplesPerSecond,
         SamplesPerSecond,
         Decimal(1000),
-        KILOSAMPLE_PER_SECOND,
-        SAMPLE_PER_SECOND,
+        KILOSAMPLES_PER_SECOND,
+        SAMPLES_PER_SECOND,
     ),
     PrefixCase(
         "MegasamplesPerSecond",
         MegasamplesPerSecond,
         SamplesPerSecond,
         Decimal(1_000_000),
-        MEGASAMPLE_PER_SECOND,
-        SAMPLE_PER_SECOND,
+        MEGASAMPLES_PER_SECOND,
+        SAMPLES_PER_SECOND,
+    ),
+    PrefixCase(
+        "Picometer", Picometer, Meter, Decimal("0.000000000001"), PICOMETER, METER
     ),
     PrefixCase("Nanometer", Nanometer, Meter, Decimal("0.000000001"), NANOMETER, METER),
     PrefixCase("Micrometer", Micrometer, Meter, Decimal("0.000001"), MICROMETER, METER),
@@ -238,6 +278,15 @@ PREFIX_CASES: list[PrefixCase] = [
     PrefixCase("Decimeter", Decimeter, Meter, Decimal("0.1"), DECIMETER, METER),
     PrefixCase("Kilometer", Kilometer, Meter, Decimal(1000), KILOMETER, METER),
     PrefixCase("Inch", Inch, Meter, Decimal("0.0254"), INCH, METER),
+    PrefixCase("Foot", Foot, Meter, Decimal("0.3048"), FOOT, METER),
+    PrefixCase("Yard", Yard, Meter, Decimal("0.9144"), YARD, METER),
+    PrefixCase("Mile", Mile, Meter, Decimal("1_609.344"), MILE, METER),
+    PrefixCase(
+        "Nautical Mile", NauticalMile, Meter, Decimal(1_852), NAUTICAL_MILE, METER
+    ),
+    PrefixCase(
+        "Picogram", Picogram, Kilogram, Decimal("0.000000000000001"), PICOGRAM, KILOGRAM
+    ),
     PrefixCase(
         "Nanogram", Nanogram, Kilogram, Decimal("0.000000000001"), NANOGRAM, KILOGRAM
     ),
@@ -250,6 +299,18 @@ PREFIX_CASES: list[PrefixCase] = [
     PrefixCase("Gram", Gram, Kilogram, Decimal("0.001"), GRAM, KILOGRAM),
     PrefixCase("Megagram", Megagram, Kilogram, Decimal(1000), MEGAGRAM, KILOGRAM),
     PrefixCase("Tonne", Tonne, Kilogram, Decimal(1000), MEGAGRAM, KILOGRAM),
+    PrefixCase("Grain", Grain, Kilogram, Decimal("0.00006479891"), GRAIN, KILOGRAM),
+    PrefixCase("Pound", Pound, Kilogram, Decimal("0.45359237"), POUND, KILOGRAM),
+    PrefixCase("Ounce", Ounce, Kilogram, Decimal("0.028349523125"), OUNCE, KILOGRAM),
+    PrefixCase(
+        "Dalton", Dalton, Kilogram, Decimal("1.66053906892e-27"), DALTON, KILOGRAM
+    ),
+    PrefixCase(
+        "SolarMass", SolarMass, Kilogram, Decimal("1.988416e30"), SOLAR_MASS, KILOGRAM
+    ),
+    PrefixCase(
+        "EarthMass", EarthMass, Kilogram, Decimal("5.972168e24"), EARTH_MASS, KILOGRAM
+    ),
     PrefixCase("Minute", Minute, Second, Decimal(60), MINUTE, SECOND),
     PrefixCase("Hour", Hour, Second, Decimal(3600), HOUR, SECOND),
     PrefixCase("WattHour", WattHour, Joule, Decimal(3600), WATT_HOUR, JOULE),
@@ -331,6 +392,84 @@ PREFIX_CASES: list[PrefixCase] = [
     ),
     PrefixCase(
         "Kilosiemens", Kilosiemens, Siemens, Decimal(1000), KILOSIEMENS, SIEMENS
+    ),
+    PrefixCase("Gigajoule", Gigajoule, Joule, Decimal(1_000_000_000), GIGAJOULE, JOULE),
+    PrefixCase(
+        "Terajoule", Terajoule, Joule, Decimal(1_000_000_000_000), TERAJOULE, JOULE
+    ),
+    PrefixCase(
+        "Microelectronvolt",
+        Microelectronvolt,
+        Joule,
+        Decimal("1.602176634e-25"),
+        MICROELECTRONVOLT,
+        JOULE,
+    ),
+    PrefixCase(
+        "Millielectronvolt",
+        Millielectronvolt,
+        Joule,
+        Decimal("1.602176634e-22"),
+        MILLIELECTRONVOLT,
+        JOULE,
+    ),
+    PrefixCase(
+        "Electronvolt",
+        Electronvolt,
+        Joule,
+        Decimal("1.602176634e-19"),
+        ELECTRONVOLT,
+        JOULE,
+    ),
+    PrefixCase(
+        "Kiloelectronvolt",
+        Kiloelectronvolt,
+        Joule,
+        Decimal("1.602176634e-16"),
+        KILOELECTRONVOLT,
+        JOULE,
+    ),
+    PrefixCase(
+        "Megaelectronvolt",
+        Megaelectronvolt,
+        Joule,
+        Decimal("1.602176634e-13"),
+        MEGAELECTRONVOLT,
+        JOULE,
+    ),
+    PrefixCase(
+        "Gigaelectronvolt",
+        Gigaelectronvolt,
+        Joule,
+        Decimal("1.602176634e-10"),
+        GIGAELECTRONVOLT,
+        JOULE,
+    ),
+    PrefixCase(
+        "Teraelectronvolt",
+        Teraelectronvolt,
+        Joule,
+        Decimal("1.602176634e-7"),
+        TERAELECTRONVOLT,
+        JOULE,
+    ),
+    PrefixCase(
+        "Petaelectronvolt",
+        Petaelectronvolt,
+        Joule,
+        Decimal("1.602176634e-4"),
+        PETAELECTRONVOLT,
+        JOULE,
+    ),
+    PrefixCase("Erg", Erg, Joule, Decimal("1E-7"), ERG, JOULE),
+    PrefixCase("Calorie", Calorie, Joule, Decimal(4184), KILOCALORIE, JOULE),
+    PrefixCase(
+        "ThermochemicalCalorie",
+        ThermochemicalCalorie,
+        Joule,
+        Decimal("4.184"),
+        THERMOCHEMICAL_CALORIE,
+        JOULE,
     ),
 ]
 

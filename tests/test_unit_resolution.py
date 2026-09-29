@@ -15,6 +15,7 @@ from kuchka import Ampere
 from kuchka import AmpereHour
 from kuchka import AmpereSecond
 from kuchka import Baud
+from kuchka import Calorie
 from kuchka import Candela
 from kuchka import Celsius
 from kuchka import Centimeter
@@ -22,9 +23,18 @@ from kuchka import Coulomb
 from kuchka import CubicCentimetre
 from kuchka import CubicMetre
 from kuchka import CubicMillimetre
+from kuchka import Dalton
 from kuchka import Decimeter
 from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
+from kuchka import EarthMass
+from kuchka import Electronvolt
+from kuchka import Erg
+from kuchka import Foot
+from kuchka import Gigaelectronvolt
+from kuchka import Gigahertz
+from kuchka import Gigajoule
+from kuchka import Grain
 from kuchka import Gram
 from kuchka import Hectare
 from kuchka import Hertz
@@ -34,6 +44,7 @@ from kuchka import Joule
 from kuchka import Kelvin
 from kuchka import Kiloampere
 from kuchka import Kilobaud
+from kuchka import Kiloelectronvolt
 from kuchka import Kilogram
 from kuchka import Kilohertz
 from kuchka import Kilojoule
@@ -45,6 +56,7 @@ from kuchka import Kilosiemens
 from kuchka import Kilovolt
 from kuchka import Kilowatt
 from kuchka import Litre
+from kuchka import Megaelectronvolt
 from kuchka import Megagram
 from kuchka import Megahertz
 from kuchka import Megajoule
@@ -53,20 +65,22 @@ from kuchka import MegasamplesPerSecond
 from kuchka import Meter
 from kuchka import Microampere
 from kuchka import Microcoulomb
+from kuchka import Microelectronvolt
 from kuchka import Microgram
 from kuchka import Microjoule
 from kuchka import Microlitre
 from kuchka import Micrometer
 from kuchka import Micromole
 from kuchka import Microsecond
-from kuchka import MicrosecondSamplingPeriod
 from kuchka import Microsiemens
 from kuchka import Microvolt
 from kuchka import Microwatt
+from kuchka import Mile
 from kuchka import Milliampere
 from kuchka import MilliampereHour
 from kuchka import MilliampereSecond
 from kuchka import Millicoulomb
+from kuchka import Millielectronvolt
 from kuchka import Milligram
 from kuchka import Millijoule
 from kuchka import Millilitre
@@ -74,7 +88,6 @@ from kuchka import Millimeter
 from kuchka import Millimole
 from kuchka import Milliohm
 from kuchka import Millisecond
-from kuchka import MillisecondSamplingPeriod
 from kuchka import Millisiemens
 from kuchka import Millivolt
 from kuchka import Milliwatt
@@ -85,25 +98,37 @@ from kuchka import Nanocoulomb
 from kuchka import Nanogram
 from kuchka import Nanojoule
 from kuchka import Nanometer
+from kuchka import NauticalMile
 from kuchka import Ohm
+from kuchka import Ounce
 from kuchka import Percent
+from kuchka import Petaelectronvolt
+from kuchka import Petahertz
 from kuchka import Picocoulomb
 from kuchka import Picogram
 from kuchka import Picojoule
+from kuchka import Picometer
+from kuchka import Pound
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
 from kuchka import Second
-from kuchka import SecondSamplingPeriod
 from kuchka import Siemens
+from kuchka import SolarMass
 from kuchka import SquareCentimetre
 from kuchka import SquareInch
 from kuchka import SquareKilometre
 from kuchka import SquareMetre
 from kuchka import SquareMillimetre
+from kuchka import Teraelectronvolt
+from kuchka import Terahertz
+from kuchka import Terajoule
+from kuchka import ThermochemicalCalorie
 from kuchka import Tonne
 from kuchka import Volt
 from kuchka import Watt
 from kuchka import WattHour
+from kuchka import Yard
+from kuchka.internal import symbols
 from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
 from kuchka.units import AREA_UNITS
 from kuchka.units import BAUD_RATE_UNITS
@@ -119,7 +144,6 @@ from kuchka.units import POWER_UNITS
 from kuchka.units import PROPORTION_UNITS
 from kuchka.units import RESISTANCE_UNITS
 from kuchka.units import SAMPLE_RATE_UNITS
-from kuchka.units import SAMPLING_PERIOD_UNITS
 from kuchka.units import TEMPERATURE_DELTA_UNITS
 from kuchka.units import TEMPERATURE_UNITS
 from kuchka.units import TIME_UNITS
@@ -128,35 +152,53 @@ from kuchka.units import VOLUME_UNITS
 
 # (table, {expected symbol: expected constructor})
 TABLE_CASES = [
-    (VOLTAGE_UNITS, {"\u00b5V": Microvolt, "mV": Millivolt, "V": Volt, "kV": Kilovolt}),
+    (
+        VOLTAGE_UNITS,
+        {f"{symbols.MICRO}V": Microvolt, "mV": Millivolt, "V": Volt, "kV": Kilovolt},
+    ),
     (
         CURRENT_UNITS,
-        {"\u00b5A": Microampere, "mA": Milliampere, "A": Ampere, "kA": Kiloampere},
+        {
+            f"{symbols.MICRO}A": Microampere,
+            "mA": Milliampere,
+            "A": Ampere,
+            "kA": Kiloampere,
+        },
     ),
     (
         RESISTANCE_UNITS,
-        {"m\u03a9": Milliohm, "\u03a9": Ohm, "k\u03a9": Kiloohm, "M\u03a9": Megaohm},
+        {
+            f"m{symbols.OMEGA}": Milliohm,
+            symbols.OMEGA: Ohm,
+            f"k{symbols.OMEGA}": Kiloohm,
+            f"M{symbols.OMEGA}": Megaohm,
+        },
     ),
-    (POWER_UNITS, {"\u00b5W": Microwatt, "mW": Milliwatt, "W": Watt, "kW": Kilowatt}),
+    (
+        POWER_UNITS,
+        {f"{symbols.MICRO}W": Microwatt, "mW": Milliwatt, "W": Watt, "kW": Kilowatt},
+    ),
     (TEMPERATURE_UNITS, {"K": Kelvin, "C": Celsius}),
     (TEMPERATURE_DELTA_UNITS, {"dK": DeltaKelvin, "dC": DeltaCelsius}),
     (
         TIME_UNITS,
         {
-            "\u00b5s": Microsecond,
+            f"{symbols.MICRO}s": Microsecond,
             "ms": Millisecond,
             "s": Second,
             "min": Minute,
             "h": Hour,
         },
     ),
-    (FREQUENCY_UNITS, {"Hz": Hertz, "kHz": Kilohertz, "MHz": Megahertz}),
     (
-        SAMPLING_PERIOD_UNITS,
+        FREQUENCY_UNITS,
         {
-            "\u00b5s": MicrosecondSamplingPeriod,
-            "ms": MillisecondSamplingPeriod,
-            "s": SecondSamplingPeriod,
+            "Hz": Hertz,
+            "kHz": Kilohertz,
+            "MHz": Megahertz,
+            "GHz": Gigahertz,
+            "THz": Terahertz,
+            "PHz": Petahertz,
         },
     ),
     (
@@ -171,14 +213,19 @@ TABLE_CASES = [
     (
         LENGTH_UNITS,
         {
+            "pm": Picometer,
             "nm": Nanometer,
-            "\u00b5m": Micrometer,
+            f"{symbols.MICRO}m": Micrometer,
             "mm": Millimeter,
             "cm": Centimeter,
             "dm": Decimeter,
             "m": Meter,
             "km": Kilometer,
             "in": Inch,
+            "ft": Foot,
+            "yd": Yard,
+            "mi": Mile,
+            "M": NauticalMile,
         },
     ),
     (PROPORTION_UNITS, {"1": Ratio, "%": Percent}),
@@ -187,17 +234,23 @@ TABLE_CASES = [
         {
             "pg": Picogram,
             "ng": Nanogram,
-            "\u00b5g": Microgram,
+            f"{symbols.MICRO}g": Microgram,
             "mg": Milligram,
             "g": Gram,
             "kg": Kilogram,
             "Mg": Megagram,
             "t": Tonne,
+            "Da": Dalton,
+            "gr": Grain,
+            "lb": Pound,
+            "oz": Ounce,
+            "M☉": SolarMass,
+            "M♁": EarthMass,
         },
     ),
     (
         AMOUNT_OF_SUBSTANCE_UNITS,
-        {"\u00b5mol": Micromole, "mmol": Millimole, "mol": Mole},
+        {f"{symbols.MICRO}mol": Micromole, "mmol": Millimole, "mol": Mole},
     ),
     (LUMINOUS_INTENSITY_UNITS, {"cd": Candela}),
     (
@@ -205,7 +258,7 @@ TABLE_CASES = [
         {
             "pC": Picocoulomb,
             "nC": Nanocoulomb,
-            "\u00b5C": Microcoulomb,
+            f"{symbols.MICRO}C": Microcoulomb,
             "mC": Millicoulomb,
             "C": Coulomb,
             "As": AmpereSecond,
@@ -219,34 +272,47 @@ TABLE_CASES = [
         {
             "pJ": Picojoule,
             "nJ": Nanojoule,
-            "\u00b5J": Microjoule,
+            f"{symbols.MICRO}J": Microjoule,
             "mJ": Millijoule,
             "J": Joule,
             "kJ": Kilojoule,
             "MJ": Megajoule,
+            "GJ": Gigajoule,
+            "TJ": Terajoule,
+            f"{symbols.MICRO}eV": Microelectronvolt,
+            "meV": Millielectronvolt,
+            "eV": Electronvolt,
+            "keV": Kiloelectronvolt,
+            "MeV": Megaelectronvolt,
+            "GeV": Gigaelectronvolt,
+            "TeV": Teraelectronvolt,
+            "PeV": Petaelectronvolt,
             "mWh": MilliwattHour,
             "Wh": WattHour,
+            "erg": Erg,
+            f"cal{symbols.SUBSCRIPT_T}{symbols.SUBSCRIPT_H}": ThermochemicalCalorie,
+            "kcal": Calorie,
         },
     ),
     (
         AREA_UNITS,
         {
-            "mm\u00b2": SquareMillimetre,
-            "cm\u00b2": SquareCentimetre,
-            "m\u00b2": SquareMetre,
-            "km\u00b2": SquareKilometre,
+            f"mm{symbols.SUPERSCRIPT_TWO}": SquareMillimetre,
+            f"cm{symbols.SUPERSCRIPT_TWO}": SquareCentimetre,
+            f"m{symbols.SUPERSCRIPT_TWO}": SquareMetre,
+            f"km{symbols.SUPERSCRIPT_TWO}": SquareKilometre,
             "ha": Hectare,
             "ac": Acre,
-            "in\u00b2": SquareInch,
+            f"in{symbols.SUPERSCRIPT_TWO}": SquareInch,
         },
     ),
     (
         VOLUME_UNITS,
         {
-            "mm\u00b3": CubicMillimetre,
-            "cm\u00b3": CubicCentimetre,
-            "m\u00b3": CubicMetre,
-            "\u00b5L": Microlitre,
+            f"mm{symbols.SUPERSCRIPT_THREE}": CubicMillimetre,
+            f"cm{symbols.SUPERSCRIPT_THREE}": CubicCentimetre,
+            f"m{symbols.SUPERSCRIPT_THREE}": CubicMetre,
+            f"{symbols.MICRO}L": Microlitre,
             "mL": Millilitre,
             "L": Litre,
             "kL": Kilolitre,
@@ -255,7 +321,7 @@ TABLE_CASES = [
     (
         CONDUCTANCE_UNITS,
         {
-            "\u00b5S": Microsiemens,
+            f"{symbols.MICRO}S": Microsiemens,
             "mS": Millisiemens,
             "S": Siemens,
             "kS": Kilosiemens,
@@ -272,7 +338,6 @@ TABLE_CASE_IDS = [
     "temperature_delta",
     "time",
     "frequency",
-    "sampling_period",
     "sample_rate",
     "baud_rate",
     "length",

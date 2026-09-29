@@ -6,7 +6,7 @@
     sensor_reading = Millisiemens(5) + Microsiemens(200)
 
 `Microsiemens` and `Millisiemens` are the two that actually show up most often in the
-wild -- conductivity meters (water, soil) report in `\u00b5S/cm`, and general
+wild -- conductivity meters (water, soil) report in `µS/cm`, and general
 electronics leakage/output-admittance figures land in the micro-to-milli range.
 
 `Kilosiemens` is included for symmetry with `Resistance`'s own prefix span (a
@@ -25,13 +25,10 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import CONDUCTANCE
+from kuchka.internal import prefixes
+from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
-from kuchka.prefixes import KILO
-from kuchka.prefixes import MICRO
-from kuchka.prefixes import MILLI
-from kuchka.prefixes import UNIT
-from kuchka.prefixes import prefixed_unit
 from kuchka.quantities import Conductance
 
 if TYPE_CHECKING:
@@ -41,10 +38,10 @@ if TYPE_CHECKING:
 SIEMENS_NAME = "siemens"
 SIEMENS_SYMBOL = "S"
 
-MICROSIEMENS = prefixed_unit(MICRO, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE)
-MILLISIEMENS = prefixed_unit(MILLI, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE)
-SIEMENS = prefixed_unit(UNIT, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE)
-KILOSIEMENS = prefixed_unit(KILO, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE)
+MICROSIEMENS = prefixed_unit(prefixes.MICRO, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE)
+MILLISIEMENS = prefixed_unit(prefixes.MILLI, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE)
+SIEMENS = prefixed_unit(prefixes.UNIT, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE)
+KILOSIEMENS = prefixed_unit(prefixes.KILO, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE)
 
 
 Conductance._canonical_unit = SIEMENS  # noqa: SLF001 -- this module owns Conductance's canonical unit

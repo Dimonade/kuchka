@@ -14,11 +14,10 @@ from typing import Self
 from typing import TypeVar
 from typing import overload
 
-from typing_extensions import override
-
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
 from kuchka.errors import MeasurementError
+from kuchka.internal.typing import override
 from kuchka.quantities.base.linear import LinearQuantity
 from kuchka.quantities.base.ordering import _OrderedScalarMixin
 from kuchka.quantities.base.storage import _ScalarStorage
@@ -119,12 +118,12 @@ class AffineQuantity(
             if type(self) is not type(other):
                 raise IncompatibleDimensionError("add", self, other)
             msg = (
-                f"Cannot add two `{type(self).__name__}` values: a "
-                f"`{type(self).__name__}` reading is a point on a scale, so "
-                "'a + a' has no physical reading. Use (a - b) to get a "
-                f"`{self._delta_type.__name__}`, or add a "
-                f"`{self._delta_type.__name__}` to a `{type(self).__name__}` "
-                "instead."
+                f"Cannot add two `{type(self).__name__}` values: "
+                f"`{type(self).__name__}` is a point on a scale, so two readings "
+                f"don't sum to a third reading. Subtract one `{type(self).__name__}` "
+                f"from another to get `{self._delta_type.__name__}`, or add "
+                f"`{self._delta_type.__name__}` to `{type(self).__name__}` to shift "
+                "the reading."
             )
             raise MeasurementError(msg)
         if isinstance(other, self._delta_type):

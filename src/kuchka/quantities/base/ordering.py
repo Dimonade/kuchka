@@ -5,9 +5,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from typing import ClassVar
 
-from typing_extensions import override
-
 from kuchka.errors import IncompatibleDimensionError
+from kuchka.internal.typing import override
 
 if TYPE_CHECKING:
     from fractions import Fraction

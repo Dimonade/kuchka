@@ -5,6 +5,8 @@
 kuchka's own fixed rational representation of pi.
 """
 
+import math
+from decimal import Decimal
 from fractions import Fraction
 
 import pytest
@@ -16,6 +18,7 @@ from kuchka import Gradian
 from kuchka import InvalidMeasurementError
 from kuchka import Radian
 from kuchka import Turn
+from kuchka.internal import symbols
 from kuchka.units import ANGLE_UNITS
 from kuchka.units.angular import _PI
 
@@ -26,6 +29,14 @@ def test_degree_construction_is_exact():
 
 def test_radian_is_canonical():
     assert Radian(1).magnitude == Fraction(1)
+
+
+def test_radian_built_from_math_pi_equals_a_half_turn():
+    assert Radian(math.pi) == Degree(180)
+
+
+def test_radian_built_from_a_longer_pi_differs_from_a_half_turn():
+    assert Radian(Decimal("3.14159265358979323846")) != Degree(180)
 
 
 def test_radian_construction_stores_the_value_exactly():
@@ -93,7 +104,7 @@ def test_to_between_any_pair_is_exact():
 
 def test_no_ordering():
     with pytest.raises(TypeError):
-        Degree(10) < Degree(20)  # noqa: B015
+        Degree(10) < Degree(20)  # noqa: B015  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 
 
 def test_units_mix_freely_since_they_are_all_angle():
@@ -106,11 +117,11 @@ def test_units_mix_freely_since_they_are_all_angle():
 
 def test_naked_number_addition_is_rejected():
     with pytest.raises(InvalidMeasurementError, match="wrap it in a unit constructor"):
-        Degree(10) + 5
+        Degree(10) + 5  # ty: ignore[unsupported-operator]  # type: ignore[operator]
 
 
 def test_angle_units_table_resolves_every_symbol():
     assert ANGLE_UNITS["rad"](1) == Radian(1)
-    assert ANGLE_UNITS["\u00b0"](45) == Degree(45)
+    assert ANGLE_UNITS[symbols.DEGREE](45) == Degree(45)
     assert ANGLE_UNITS["tr"](1) == Turn(1)
     assert ANGLE_UNITS["gon"](100) == Gradian(100)
