@@ -9,6 +9,7 @@ from fractions import Fraction
 
 from kuchka import Acceleration
 from kuchka import Charge
+from kuchka import Energy
 from kuchka import Frequency
 from kuchka import Hertz
 from kuchka import Kilogram
@@ -18,16 +19,18 @@ from kuchka import MetrePerSecondSquared
 from kuchka import Temperature
 from kuchka import Time
 from kuchka import Velocity
-from kuchka.constants.codata_2022.fundamental import ELECTRON_MASS
-from kuchka.constants.codata_2022.fundamental import ELEMENTARY_CHARGE
-from kuchka.constants.codata_2022.fundamental import NEUTRON_MASS
-from kuchka.constants.codata_2022.fundamental import PLANCK_LENGTH
-from kuchka.constants.codata_2022.fundamental import PLANCK_MASS
-from kuchka.constants.codata_2022.fundamental import PLANCK_TEMPERATURE
-from kuchka.constants.codata_2022.fundamental import PLANCK_TIME
-from kuchka.constants.codata_2022.fundamental import PROTON_MASS
-from kuchka.constants.codata_2022.fundamental import SPEED_OF_LIGHT_IN_VACUUM
-from kuchka.constants.codata_2022.fundamental import STANDARD_ACCELERATION_OF_GRAVITY
+from kuchka.constants.codata_2022 import ELECTRON_MASS
+from kuchka.constants.codata_2022 import ELEMENTARY_CHARGE
+from kuchka.constants.codata_2022 import NEUTRON_MASS
+from kuchka.constants.codata_2022 import PLANCK_ENERGY
+from kuchka.constants.codata_2022 import PLANCK_LENGTH
+from kuchka.constants.codata_2022 import PLANCK_MASS
+from kuchka.constants.codata_2022 import PLANCK_MASS_ENERGY_EQUIVALENT_IN_GEV
+from kuchka.constants.codata_2022 import PLANCK_TEMPERATURE
+from kuchka.constants.codata_2022 import PLANCK_TIME
+from kuchka.constants.codata_2022 import PROTON_MASS
+from kuchka.constants.codata_2022 import SPEED_OF_LIGHT_IN_VACUUM
+from kuchka.constants.codata_2022 import STANDARD_ACCELERATION_OF_GRAVITY
 from kuchka.units import METRE_PER_SECOND
 
 
@@ -82,6 +85,8 @@ def test_frequency_from_speed_of_light_and_wavelength_round_trips() -> None:
 
 
 def test_planck_units_are_the_right_quantity_types() -> None:
+    assert isinstance(PLANCK_ENERGY, Energy)
+    assert isinstance(PLANCK_MASS_ENERGY_EQUIVALENT_IN_GEV, Energy)
     assert isinstance(PLANCK_LENGTH, Length)
     assert isinstance(PLANCK_MASS, Mass)
     assert isinstance(PLANCK_TEMPERATURE, Temperature)
