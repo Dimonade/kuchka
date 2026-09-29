@@ -59,6 +59,13 @@ Every `Time` constructor (`Second`, `Millisecond`, `Microsecond`, `Minute`, `Hou
 `SecondSamplingPeriod`, `MillisecondSamplingPeriod`, `MicrosecondSamplingPeriod`, `SecondInstant`, and the `SAMPLING_PERIOD_MICROSECOND` / `SAMPLING_PERIOD_MILLISECOND` / `SAMPLING_PERIOD_SECOND` `UnitDef` constants.
 `SAMPLING_PERIOD_UNITS` and `INSTANT_UNITS` stay, now built directly from `TIME_UNITS`.
 
+### Fixed
+
+#### `typing_extensions` import missing
+
+Was missed because `typing_extensions` is a transient dependency of `mypy` which was used in dev-dependencies.
+Fixed with import guard in `kuchka.internal.typing` for all affected Python versions.
+
 ## [0.1.2] - 2026.09.22
 
 ### Added
