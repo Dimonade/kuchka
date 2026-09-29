@@ -7,6 +7,16 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ## [0.1.4] - `develop`
 
+### Added
+
+#### `LogarithmicRatio`, the first logarithmic quantity
+
+- `Decibel` and `Bel` constructors, with `LOGARITHMIC_RATIO_UNITS`.
+- `PureLogarithmicQuantity`, the base for a ratio expressed as a logarithm, and `LogarithmicUnitDef`, the unit-definition type for it.
+- Levels add, subtract, scale by a plain number, negate, take `abs()`, and compare, all exactly.
+- `as_power_ratio()` / `as_field_ratio()` and `from_power_ratio()` / `from_field_ratio()` convert to and from a linear `Proportion`.
+  They are evaluated in `Decimal` at the active context precision; whole multiples of 10 dB (power) or 20 dB (field) are exact.
+
 ## [0.1.3] - 2026-09-29
 
 ### Added

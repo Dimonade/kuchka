@@ -55,3 +55,10 @@ Radian(math.pi) == Degree(180)
 Radian(Decimal("3.14159265358979323846")) == Degree(180)
 # False -- a pi with more digits differs from `_PI`.
 ```
+
+## Logarithmic conversions
+
+Levels (`LogarithmicRatio`) store an exact `Fraction` and every combination of levels is exact.
+Converting a level to or from a linear ratio evaluates a logarithm, which is irrational for a general ratio.
+That conversion runs in `Decimal` at the active context precision and stores the exact `Fraction` of the resulting `Decimal`.
+Whole multiples of 10 dB (power) or 20 dB (field) convert to exact powers of ten.
