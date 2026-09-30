@@ -335,6 +335,7 @@ TABLE_CASES = [
     (
         CONDUCTANCE_UNITS,
         {
+            "nS": Nanosiemens,
             f"{symbols.MICRO}S": Microsiemens,
             "mS": Millisiemens,
             "S": Siemens,

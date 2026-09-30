@@ -234,6 +234,7 @@ from kuchka.units import Volt
 from kuchka.units import Watt
 from kuchka.units import WattHour
 from kuchka.units import Yard
+from kuchka.units import Nanosiemens
 
 try:
     __version__ = version("kuchka")
@@ -243,6 +244,7 @@ except PackageNotFoundError:  # pragma: no cover -- running from an uninstalled 
 __all__: list[str] = [
     "Acceleration",
     "Acre",
+    "Nanosiemens",
     "AmountOfSubstance",
     "Ampere",
     "AmpereHour",
