@@ -299,7 +299,7 @@ def Kilosiemens(value: Numeric) -> Conductance:
 
     One kilosiemens is exactly one million microsiemens:
 
-    >>> Kilosiemens(1) == Microsiemens(1_000_000)
+    >>> Kilosiemens(1) == Microsiemens(1_000_000_000)
     True
 
     """
