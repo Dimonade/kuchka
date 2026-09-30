@@ -399,7 +399,7 @@ The complete unit vocabulary is available in the API reference.
 
 | Quantity    | Representative units                                                                                                                                     |
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Voltage     | `Microvolt`, `Millivolt`, `Volt`, `Kilovolt`                                                                                                             |
+| Voltage     | `Nanovolt` though `Petavolt`                                                                                                                             |
 | Current     | `Microampere`, `Milliampere`, `Ampere`, `Kiloampere`                                                                                                     |
 | Power       | `Milliwatt`, `Watt`, `Kilowatt`                                                                                                                          |
 | Resistance  | `Milliohm`, `Ohm`, `Kiloohm`, `Megaohm`                                                                                                                  |
