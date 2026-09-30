@@ -36,6 +36,7 @@ from kuchka import Foot
 from kuchka import Gigaelectronvolt
 from kuchka import Gigahertz
 from kuchka import Gigajoule
+from kuchka import Gigaohm
 from kuchka import Grain
 from kuchka import Gram
 from kuchka import Hectare
@@ -74,6 +75,7 @@ from kuchka import Microjoule
 from kuchka import Microlitre
 from kuchka import Micrometer
 from kuchka import Micromole
+from kuchka import Microohm
 from kuchka import Microsecond
 from kuchka import Microsiemens
 from kuchka import Microvolt
@@ -101,6 +103,7 @@ from kuchka import Nanocoulomb
 from kuchka import Nanogram
 from kuchka import Nanojoule
 from kuchka import Nanometer
+from kuchka import Nanosiemens
 from kuchka import Nanovolt
 from kuchka import NauticalMile
 from kuchka import Ohm
@@ -182,10 +185,12 @@ TABLE_CASES = [
     (
         RESISTANCE_UNITS,
         {
+            f"{symbols.MICRO}{symbols.OMEGA}": Microohm,
             f"m{symbols.OMEGA}": Milliohm,
             symbols.OMEGA: Ohm,
             f"k{symbols.OMEGA}": Kiloohm,
             f"M{symbols.OMEGA}": Megaohm,
+            f"G{symbols.OMEGA}": Gigaohm,
         },
     ),
     (

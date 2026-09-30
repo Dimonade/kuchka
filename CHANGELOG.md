@@ -9,6 +9,14 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
+#### `Resistance` family gets new units
+
+`Microohm` and `Gigaohm`.
+
+#### `Conductance` family gets a new unit
+
+`Nanosiemens`.
+
 #### `Voltage` family gets new units
 
 `Nanovolt`, `Megavolt`, and `Petavolt`.

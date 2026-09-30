@@ -113,6 +113,7 @@ See Also
     Electric current quantities related to voltage and conductance.
 ~kuchka.quantities.Voltage
     Electric potential difference.
+
 """
 
 from __future__ import annotations
@@ -204,7 +205,6 @@ def Microsiemens(value: Numeric) -> Conductance:
     return Conductance(to_exact(value) * MICROSIEMENS.scale, MICROSIEMENS)
 
 
-
 def Millisiemens(value: Numeric) -> Conductance:
     """Construct a Conductance from a magnitude expressed in millisiemens.
 
@@ -275,7 +275,6 @@ def Siemens(value: Numeric) -> Conductance:
     return Conductance(to_exact(value) * SIEMENS.scale, SIEMENS)
 
 
-
 def Kilosiemens(value: Numeric) -> Conductance:
     """Construct a Conductance from a magnitude expressed in kilosiemens.
 
@@ -319,13 +318,14 @@ CONDUCTANCE_UNITS: Mapping[str, Callable[[Numeric], Conductance]] = MappingProxy
 
 __all__ = [
     "CONDUCTANCE_UNITS",
-    "NANOSIEMENS", "Nanosiemens",
     "KILOSIEMENS",
     "MICROSIEMENS",
     "MILLISIEMENS",
+    "NANOSIEMENS",
     "SIEMENS",
     "Kilosiemens",
     "Microsiemens",
     "Millisiemens",
+    "Nanosiemens",
     "Siemens",
 ]

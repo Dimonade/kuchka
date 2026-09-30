@@ -96,6 +96,7 @@ from kuchka.units import Foot
 from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gigajoule
+from kuchka.units import Gigaohm
 from kuchka.units import Gradian
 from kuchka.units import Grain
 from kuchka.units import Gram
@@ -158,6 +159,7 @@ from kuchka.units import Microlitre
 from kuchka.units import Micrometer
 from kuchka.units import Micrometre
 from kuchka.units import Micromole
+from kuchka.units import Microohm
 from kuchka.units import Microsecond
 from kuchka.units import Microsiemens
 from kuchka.units import Microvolt
@@ -191,6 +193,7 @@ from kuchka.units import Nanogram
 from kuchka.units import Nanojoule
 from kuchka.units import Nanometer
 from kuchka.units import Nanometre
+from kuchka.units import Nanosiemens
 from kuchka.units import Nanovolt
 from kuchka.units import NauticalMile
 from kuchka.units import Newton
@@ -234,7 +237,6 @@ from kuchka.units import Volt
 from kuchka.units import Watt
 from kuchka.units import WattHour
 from kuchka.units import Yard
-from kuchka.units import Nanosiemens
 
 try:
     __version__ = version("kuchka")
@@ -244,7 +246,6 @@ except PackageNotFoundError:  # pragma: no cover -- running from an uninstalled 
 __all__: list[str] = [
     "Acceleration",
     "Acre",
-    "Nanosiemens",
     "AmountOfSubstance",
     "Ampere",
     "AmpereHour",
@@ -293,6 +294,7 @@ __all__: list[str] = [
     "Gigaelectronvolt",
     "Gigahertz",
     "Gigajoule",
+    "Gigaohm",
     "Gradian",
     "Grain",
     "Gram",
@@ -364,6 +366,7 @@ __all__: list[str] = [
     "Micrometer",
     "Micrometre",
     "Micromole",
+    "Microohm",
     "Microsecond",
     "Microsiemens",
     "Microvolt",
@@ -397,6 +400,7 @@ __all__: list[str] = [
     "Nanojoule",
     "Nanometer",
     "Nanometre",
+    "Nanosiemens",
     "Nanovolt",
     "NauticalMile",
     "Newton",
