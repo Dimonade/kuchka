@@ -141,6 +141,7 @@ from kuchka.units import Megajoule
 from kuchka.units import Megaohm
 from kuchka.units import Megapascal
 from kuchka.units import MegasamplesPerSecond
+from kuchka.units import Megavolt
 from kuchka.units import Meter
 from kuchka.units import MeterPerSecond
 from kuchka.units import MeterPerSecondSquared
@@ -190,6 +191,7 @@ from kuchka.units import Nanogram
 from kuchka.units import Nanojoule
 from kuchka.units import Nanometer
 from kuchka.units import Nanometre
+from kuchka.units import Nanovolt
 from kuchka.units import NauticalMile
 from kuchka.units import Newton
 from kuchka.units import Ohm
@@ -198,6 +200,7 @@ from kuchka.units import Pascal
 from kuchka.units import Percent
 from kuchka.units import Petaelectronvolt
 from kuchka.units import Petahertz
+from kuchka.units import Petavolt
 from kuchka.units import Picocoulomb
 from kuchka.units import Picogram
 from kuchka.units import Picojoule
@@ -342,6 +345,7 @@ __all__: list[str] = [
     "Megaohm",
     "Megapascal",
     "MegasamplesPerSecond",
+    "Megavolt",
     "Meter",
     "MeterPerSecond",
     "MeterPerSecondSquared",
@@ -391,6 +395,7 @@ __all__: list[str] = [
     "Nanojoule",
     "Nanometer",
     "Nanometre",
+    "Nanovolt",
     "NauticalMile",
     "Newton",
     "Ohm",
@@ -399,6 +404,7 @@ __all__: list[str] = [
     "Percent",
     "Petaelectronvolt",
     "Petahertz",
+    "Petavolt",
     "Picocoulomb",
     "Picogram",
     "Picojoule",
