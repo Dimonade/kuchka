@@ -105,7 +105,7 @@ See Also
 ~kuchka.quantities.Current
     Electric current quantities.
 ~kuchka.quantities.Power
-    Power quantities derived from voltage and current.
+    Rate of energy transfer.
 ~kuchka.quantities.Resistance
     Electrical resistance quantities.
 ~kuchka.quantities.Charge

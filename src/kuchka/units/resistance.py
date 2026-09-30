@@ -112,7 +112,7 @@ See Also
 ~kuchka.quantities.Current
     Electric current.
 ~kuchka.quantities.Power
-    Electrical power.
+    Rate of energy transfer.
 
 """
 

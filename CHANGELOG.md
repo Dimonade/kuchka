@@ -9,17 +9,12 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
-#### `Resistance` family gets new units
+#### Electrical families got more units
 
-`Microohm` and `Gigaohm`.
-
-#### `Conductance` family gets a new unit
-
-`Nanosiemens`.
-
-#### `Voltage` family gets new units
-
-`Nanovolt`, `Megavolt`, and `Petavolt`.
+- `Current` family gets new units: `Picoampere`, `Nanoampere`, and `Megaampere`.
+- `Resistance` family gets new units: `Microohm` and `Gigaohm`.
+- `Conductance` family gets a new unit: `Nanosiemens`.
+- `Voltage` family gets new units: `Nanovolt`, `Megavolt`, and `Petavolt`.
 
 #### `LogarithmicRatio`, the first logarithmic quantity
 

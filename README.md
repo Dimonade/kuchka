@@ -400,7 +400,7 @@ The complete unit vocabulary is available in the API reference.
 | Quantity    | Representative units                                                                                                                                     |
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Voltage     | `Nanovolt` though `Petavolt`                                                                                                                             |
-| Current     | `Microampere`, `Milliampere`, `Ampere`, `Kiloampere`                                                                                                     |
+| Current     | `Picoampere`, through `Megaampere`                                                                                                                       |
 | Power       | `Milliwatt`, `Watt`, `Kilowatt`                                                                                                                          |
 | Resistance  | `Microohm`, thnough `Gigaohm`                                                                                                                            |
 | Conductance | `Nanosiemens` through `Kilosiemens`                                                                                                                      |

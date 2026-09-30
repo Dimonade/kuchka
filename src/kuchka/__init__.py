@@ -135,6 +135,7 @@ from kuchka.units import Kilovolt
 from kuchka.units import Kilowatt
 from kuchka.units import Liter
 from kuchka.units import Litre
+from kuchka.units import Megaampere
 from kuchka.units import Megaelectronvolt
 from kuchka.units import Megagram
 from kuchka.units import Megahertz
@@ -188,6 +189,7 @@ from kuchka.units import Milliwatt
 from kuchka.units import MilliwattHour
 from kuchka.units import Minute
 from kuchka.units import Mole
+from kuchka.units import Nanoampere
 from kuchka.units import Nanocoulomb
 from kuchka.units import Nanogram
 from kuchka.units import Nanojoule
@@ -204,6 +206,7 @@ from kuchka.units import Percent
 from kuchka.units import Petaelectronvolt
 from kuchka.units import Petahertz
 from kuchka.units import Petavolt
+from kuchka.units import Picoampere
 from kuchka.units import Picocoulomb
 from kuchka.units import Picogram
 from kuchka.units import Picojoule
@@ -342,6 +345,7 @@ __all__: list[str] = [
     "LuminousIntensity",
     "Mass",
     "MeasurementError",
+    "Megaampere",
     "Megaelectronvolt",
     "Megagram",
     "Megahertz",
@@ -395,6 +399,7 @@ __all__: list[str] = [
     "MilliwattHour",
     "Minute",
     "Mole",
+    "Nanoampere",
     "Nanocoulomb",
     "Nanogram",
     "Nanojoule",
@@ -411,6 +416,7 @@ __all__: list[str] = [
     "Petaelectronvolt",
     "Petahertz",
     "Petavolt",
+    "Picoampere",
     "Picocoulomb",
     "Picogram",
     "Picojoule",
