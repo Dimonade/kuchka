@@ -59,6 +59,7 @@ from kuchka import Kilosiemens
 from kuchka import Kilovolt
 from kuchka import Kilowatt
 from kuchka import Litre
+from kuchka import Megaampere
 from kuchka import Megaelectronvolt
 from kuchka import Megagram
 from kuchka import Megahertz
@@ -99,6 +100,7 @@ from kuchka import Milliwatt
 from kuchka import MilliwattHour
 from kuchka import Minute
 from kuchka import Mole
+from kuchka import Nanoampere
 from kuchka import Nanocoulomb
 from kuchka import Nanogram
 from kuchka import Nanojoule
@@ -112,6 +114,7 @@ from kuchka import Percent
 from kuchka import Petaelectronvolt
 from kuchka import Petahertz
 from kuchka import Petavolt
+from kuchka import Picoampere
 from kuchka import Picocoulomb
 from kuchka import Picogram
 from kuchka import Picojoule
@@ -176,10 +179,13 @@ TABLE_CASES = [
     (
         CURRENT_UNITS,
         {
+            "pA": Picoampere,
+            "nA": Nanoampere,
             f"{symbols.MICRO}A": Microampere,
             "mA": Milliampere,
             "A": Ampere,
             "kA": Kiloampere,
+            "MA": Megaampere,
         },
     ),
     (

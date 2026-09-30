@@ -56,6 +56,7 @@ from kuchka import Kilosiemens
 from kuchka import Kilovolt
 from kuchka import Kilowatt
 from kuchka import Litre
+from kuchka import Megaampere
 from kuchka import Megaelectronvolt
 from kuchka import Megagram
 from kuchka import Megahertz
@@ -87,6 +88,7 @@ from kuchka import Millivolt
 from kuchka import Milliwatt
 from kuchka import MilliwattHour
 from kuchka import Minute
+from kuchka import Nanoampere
 from kuchka import Nanogram
 from kuchka import Nanometer
 from kuchka import Nanosiemens
@@ -97,6 +99,7 @@ from kuchka import Ounce
 from kuchka import Petaelectronvolt
 from kuchka import Petahertz
 from kuchka import Petavolt
+from kuchka import Picoampere
 from kuchka import Picogram
 from kuchka import Picometer
 from kuchka import Pound
@@ -155,6 +158,7 @@ from kuchka.units import KILOSIEMENS
 from kuchka.units import KILOVOLT
 from kuchka.units import KILOWATT
 from kuchka.units import LITRE
+from kuchka.units import MEGAAMPERE
 from kuchka.units import MEGAELECTRONVOLT
 from kuchka.units import MEGAGRAM
 from kuchka.units import MEGAHERTZ
@@ -186,6 +190,7 @@ from kuchka.units import MILLIVOLT
 from kuchka.units import MILLIWATT
 from kuchka.units import MILLIWATT_HOUR
 from kuchka.units import MINUTE
+from kuchka.units import NANOAMPERE
 from kuchka.units import NANOGRAM
 from kuchka.units import NANOMETER
 from kuchka.units import NANOSIEMENS
@@ -196,6 +201,7 @@ from kuchka.units import OUNCE
 from kuchka.units import PETAELECTRONVOLT
 from kuchka.units import PETAHERTZ
 from kuchka.units import PETAVOLT
+from kuchka.units import PICOAMPERE
 from kuchka.units import PICOGRAM
 from kuchka.units import PICOMETER
 from kuchka.units import POUND
@@ -245,12 +251,21 @@ PREFIX_CASES: list[PrefixCase] = [
     PrefixCase("Megavolt", Megavolt, Volt, Decimal(1_000_000), MEGAVOLT, VOLT),
     PrefixCase("Petavolt", Petavolt, Volt, Decimal("1e15"), PETAVOLT, VOLT),
     PrefixCase(
+        "Picoampere", Picoampere, Ampere, Decimal("0.000000000001"), PICOAMPERE, AMPERE
+    ),
+    PrefixCase(
+        "Nanoampere", Nanoampere, Ampere, Decimal("0.000000001"), NANOAMPERE, AMPERE
+    ),
+    PrefixCase(
         "Microampere", Microampere, Ampere, Decimal("0.000001"), MICROAMPERE, AMPERE
     ),
     PrefixCase(
         "Milliampere", Milliampere, Ampere, Decimal("0.001"), MILLIAMPERE, AMPERE
     ),
     PrefixCase("Kiloampere", Kiloampere, Ampere, Decimal(1000), KILOAMPERE, AMPERE),
+    PrefixCase(
+        "Megaampere", Megaampere, Ampere, Decimal(1_000_000), MEGAAMPERE, AMPERE
+    ),
     PrefixCase("Microohm", Microohm, Ohm, Decimal("0.000001"), MICROOHM, OHM),
     PrefixCase("Milliohm", Milliohm, Ohm, Decimal("0.001"), MILLIOHM, OHM),
     PrefixCase("Kiloohm", Kiloohm, Ohm, Decimal(1000), KILOOHM, OHM),
