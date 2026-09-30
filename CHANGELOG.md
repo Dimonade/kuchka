@@ -9,6 +9,10 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
+#### `Voltage` family gets new units
+
+`Nanovolt`, `Megavolt`, and `Petavolt`.
+
 #### `LogarithmicRatio`, the first logarithmic quantity
 
 - `Decibel` and `Bel` constructors, with `LOGARITHMIC_RATIO_UNITS`.

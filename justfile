@@ -24,8 +24,7 @@ develop-fetch-pull:
 
 alias ct := covtest
 # Run coverage on tests and present results.
-covtest:
-    check
+covtest: check 
     cd tests
     clear
     coverage erase

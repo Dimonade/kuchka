@@ -64,6 +64,7 @@ from kuchka import Megahertz
 from kuchka import Megajoule
 from kuchka import Megaohm
 from kuchka import MegasamplesPerSecond
+from kuchka import Megavolt
 from kuchka import Meter
 from kuchka import Microampere
 from kuchka import Microcoulomb
@@ -100,12 +101,14 @@ from kuchka import Nanocoulomb
 from kuchka import Nanogram
 from kuchka import Nanojoule
 from kuchka import Nanometer
+from kuchka import Nanovolt
 from kuchka import NauticalMile
 from kuchka import Ohm
 from kuchka import Ounce
 from kuchka import Percent
 from kuchka import Petaelectronvolt
 from kuchka import Petahertz
+from kuchka import Petavolt
 from kuchka import Picocoulomb
 from kuchka import Picogram
 from kuchka import Picojoule
@@ -157,7 +160,15 @@ from kuchka.units import VOLUME_UNITS
 TABLE_CASES = [
     (
         VOLTAGE_UNITS,
-        {f"{symbols.MICRO}V": Microvolt, "mV": Millivolt, "V": Volt, "kV": Kilovolt},
+        {
+            "nV": Nanovolt,
+            f"{symbols.MICRO}V": Microvolt,
+            "mV": Millivolt,
+            "V": Volt,
+            "kV": Kilovolt,
+            "MV": Megavolt,
+            "PV": Petavolt,
+        },
     ),
     (
         CURRENT_UNITS,
