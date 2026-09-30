@@ -36,6 +36,7 @@ from kuchka import Foot
 from kuchka import Gigaelectronvolt
 from kuchka import Gigahertz
 from kuchka import Gigajoule
+from kuchka import Gigaohm
 from kuchka import Grain
 from kuchka import Gram
 from kuchka import Hectare
@@ -60,12 +61,14 @@ from kuchka import Megagram
 from kuchka import Megahertz
 from kuchka import Megaohm
 from kuchka import MegasamplesPerSecond
+from kuchka import Megavolt
 from kuchka import Meter
 from kuchka import Microampere
 from kuchka import Microelectronvolt
 from kuchka import Microgram
 from kuchka import Microlitre
 from kuchka import Micrometer
+from kuchka import Microohm
 from kuchka import Microsecond
 from kuchka import Microsiemens
 from kuchka import Microvolt
@@ -86,11 +89,14 @@ from kuchka import MilliwattHour
 from kuchka import Minute
 from kuchka import Nanogram
 from kuchka import Nanometer
+from kuchka import Nanosiemens
+from kuchka import Nanovolt
 from kuchka import NauticalMile
 from kuchka import Ohm
 from kuchka import Ounce
 from kuchka import Petaelectronvolt
 from kuchka import Petahertz
+from kuchka import Petavolt
 from kuchka import Picogram
 from kuchka import Picometer
 from kuchka import Pound
@@ -128,6 +134,7 @@ from kuchka.units import FOOT
 from kuchka.units import GIGAELECTRONVOLT
 from kuchka.units import GIGAHERTZ
 from kuchka.units import GIGAJOULE
+from kuchka.units import GIGAOHM
 from kuchka.units import GRAIN
 from kuchka.units import GRAM
 from kuchka.units import HECTARE
@@ -153,12 +160,14 @@ from kuchka.units import MEGAGRAM
 from kuchka.units import MEGAHERTZ
 from kuchka.units import MEGAOHM
 from kuchka.units import MEGASAMPLES_PER_SECOND
+from kuchka.units import MEGAVOLT
 from kuchka.units import METER
 from kuchka.units import MICROAMPERE
 from kuchka.units import MICROELECTRONVOLT
 from kuchka.units import MICROGRAM
 from kuchka.units import MICROLITRE
 from kuchka.units import MICROMETER
+from kuchka.units import MICROOHM
 from kuchka.units import MICROSECOND
 from kuchka.units import MICROSIEMENS
 from kuchka.units import MICROVOLT
@@ -179,11 +188,14 @@ from kuchka.units import MILLIWATT_HOUR
 from kuchka.units import MINUTE
 from kuchka.units import NANOGRAM
 from kuchka.units import NANOMETER
+from kuchka.units import NANOSIEMENS
+from kuchka.units import NANOVOLT
 from kuchka.units import NAUTICAL_MILE
 from kuchka.units import OHM
 from kuchka.units import OUNCE
 from kuchka.units import PETAELECTRONVOLT
 from kuchka.units import PETAHERTZ
+from kuchka.units import PETAVOLT
 from kuchka.units import PICOGRAM
 from kuchka.units import PICOMETER
 from kuchka.units import POUND
@@ -226,9 +238,12 @@ class PrefixCase:
 
 
 PREFIX_CASES: list[PrefixCase] = [
+    PrefixCase("Nanovolt", Nanovolt, Volt, Decimal("0.000000001"), NANOVOLT, VOLT),
     PrefixCase("Microvolt", Microvolt, Volt, Decimal("0.000001"), MICROVOLT, VOLT),
     PrefixCase("Millivolt", Millivolt, Volt, Decimal("0.001"), MILLIVOLT, VOLT),
     PrefixCase("Kilovolt", Kilovolt, Volt, Decimal(1000), KILOVOLT, VOLT),
+    PrefixCase("Megavolt", Megavolt, Volt, Decimal(1_000_000), MEGAVOLT, VOLT),
+    PrefixCase("Petavolt", Petavolt, Volt, Decimal("1e15"), PETAVOLT, VOLT),
     PrefixCase(
         "Microampere", Microampere, Ampere, Decimal("0.000001"), MICROAMPERE, AMPERE
     ),
@@ -236,9 +251,11 @@ PREFIX_CASES: list[PrefixCase] = [
         "Milliampere", Milliampere, Ampere, Decimal("0.001"), MILLIAMPERE, AMPERE
     ),
     PrefixCase("Kiloampere", Kiloampere, Ampere, Decimal(1000), KILOAMPERE, AMPERE),
+    PrefixCase("Microohm", Microohm, Ohm, Decimal("0.000001"), MICROOHM, OHM),
     PrefixCase("Milliohm", Milliohm, Ohm, Decimal("0.001"), MILLIOHM, OHM),
     PrefixCase("Kiloohm", Kiloohm, Ohm, Decimal(1000), KILOOHM, OHM),
     PrefixCase("Megaohm", Megaohm, Ohm, Decimal(1_000_000), MEGAOHM, OHM),
+    PrefixCase("Gigaohm", Gigaohm, Ohm, Decimal("1e9"), GIGAOHM, OHM),
     PrefixCase("Milliwatt", Milliwatt, Watt, Decimal("0.001"), MILLIWATT, WATT),
     PrefixCase("Kilowatt", Kilowatt, Watt, Decimal(1000), KILOWATT, WATT),
     PrefixCase(
@@ -379,6 +396,14 @@ PREFIX_CASES: list[PrefixCase] = [
     PrefixCase("Microlitre", Microlitre, Litre, Decimal("0.000001"), MICROLITRE, LITRE),
     PrefixCase("Millilitre", Millilitre, Litre, Decimal("0.001"), MILLILITRE, LITRE),
     PrefixCase("Kilolitre", Kilolitre, Litre, Decimal(1000), KILOLITRE, LITRE),
+    PrefixCase(
+        "Nanosiemens",
+        Nanosiemens,
+        Siemens,
+        Decimal("0.000000001"),
+        NANOSIEMENS,
+        SIEMENS,
+    ),
     PrefixCase(
         "Microsiemens",
         Microsiemens,
