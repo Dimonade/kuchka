@@ -44,6 +44,7 @@ from kuchka.quantities import Force
 from kuchka.quantities import Frequency
 from kuchka.quantities import Instant
 from kuchka.quantities import Length
+from kuchka.quantities import LogarithmicRatio
 from kuchka.quantities import LuminousIntensity
 from kuchka.quantities import Mass
 from kuchka.quantities import Power
@@ -67,6 +68,7 @@ from kuchka.units import ArcSecond
 from kuchka.units import Atmosphere
 from kuchka.units import Bar
 from kuchka.units import Baud
+from kuchka.units import Bel
 from kuchka.units import Calorie
 from kuchka.units import Candela
 from kuchka.units import Celsius
@@ -80,6 +82,7 @@ from kuchka.units import CubicMetre
 from kuchka.units import CubicMillimeter
 from kuchka.units import CubicMillimetre
 from kuchka.units import Dalton
+from kuchka.units import Decibel
 from kuchka.units import Decimeter
 from kuchka.units import Decimetre
 from kuchka.units import Degree
@@ -249,6 +252,7 @@ __all__: list[str] = [
     "Bar",
     "Baud",
     "BaudRate",
+    "Bel",
     "Calorie",
     "Candela",
     "Celsius",
@@ -266,6 +270,7 @@ __all__: list[str] = [
     "CubicMillimetre",
     "Current",
     "Dalton",
+    "Decibel",
     "Decimeter",
     "Decimetre",
     "Degree",
@@ -326,6 +331,7 @@ __all__: list[str] = [
     "Length",
     "Liter",
     "Litre",
+    "LogarithmicRatio",
     "LuminousIntensity",
     "Mass",
     "MeasurementError",

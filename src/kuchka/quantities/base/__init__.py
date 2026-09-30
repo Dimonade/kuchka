@@ -21,6 +21,9 @@ extracting new features into modules:
   the quantity is a point on a scale and not a vector (`Temperature`).
 - `modular.py` -- `ModularQuantity`: the quantity wraps around after a fixed
   period, so it is a position on a circle and not a point on a line (`Angle`).
+- `logarithmic.py` -- `PureLogarithmicQuantity`: the quantity is the logarithm of a
+  ratio, so combining two of them multiplies the ratios they describe
+  (`LogarithmicRatio`).
 
 Every name below is re-exported here so existing imports
 (``from kuchka.quantities.base import LinearQuantity``) keep working exactly as
@@ -40,15 +43,19 @@ from __future__ import annotations
 
 from kuchka.quantities.base.affine import AffineQuantity
 from kuchka.quantities.base.linear import LinearQuantity
+from kuchka.quantities.base.logarithmic import PureLogarithmicQuantity
 from kuchka.quantities.base.modular import ModularQuantity
 from kuchka.quantities.base.registry import register as register
 from kuchka.quantities.base.units import AffineUnitDef
+from kuchka.quantities.base.units import LogarithmicUnitDef
 from kuchka.quantities.base.units import UnitDef
 
 __all__ = [
     "AffineQuantity",
     "AffineUnitDef",
     "LinearQuantity",
+    "LogarithmicUnitDef",
     "ModularQuantity",
+    "PureLogarithmicQuantity",
     "UnitDef",
 ]

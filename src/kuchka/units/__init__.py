@@ -29,6 +29,7 @@ from kuchka.units.density import *
 from kuchka.units.energy import *
 from kuchka.units.kinematics import *
 from kuchka.units.length import *
+from kuchka.units.logarithmic import *
 from kuchka.units.luminous_intensity import *
 from kuchka.units.mass import *
 from kuchka.units.power import *

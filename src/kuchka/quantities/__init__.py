@@ -27,6 +27,7 @@ from kuchka.quantities.electrical import *
 from kuchka.quantities.energy import *
 from kuchka.quantities.kinematics import *
 from kuchka.quantities.length import *
+from kuchka.quantities.logarithmic import *
 from kuchka.quantities.luminous_intensity import *
 from kuchka.quantities.mass import *
 from kuchka.quantities.pressure import *

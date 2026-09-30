@@ -1,7 +1,8 @@
 """Unit-definition types: the data behind every unit constructor.
 
-`UnitDef` and `AffineUnitDef` are internal machinery.
-Application code never constructs either directly -- see each class's own docstring.
+`UnitDef`, `AffineUnitDef`, and `LogarithmicUnitDef` are internal machinery.
+Application code never constructs any of them directly -- see each class's own
+docstring.
 
 `_DisplayUnit` is the structural shape a `_ScalarStorage` display unit must have
 (`kuchka.quantities.base.storage`).
@@ -83,14 +84,40 @@ class AffineUnitDef:
         return f"AffineUnitDef({self.name!r}, {self.symbol!r})"
 
 
+class LogarithmicUnitDef:
+    """A named unit of logarithmic level, e.g. the decibel or the bel.
+
+    The logarithmic counterpart to `UnitDef`.
+    `scale` is the size of one of these units in decibels (10 for the bel), normalized
+    to an exact `Fraction` at construction.
+    Being its own type makes a logarithmic unit the only thing
+    `PureLogarithmicQuantity.to()` accepts.
+    Application code never constructs one directly.
+    It imports the unit constants (`DECIBEL`, `BEL`) from `kuchka.units`.
+    """
+
+    __slots__ = ("name", "scale", "symbol")
+
+    def __init__(self, name: str, symbol: str, scale: Numeric) -> None:
+        """Store name, symbol, and scale, the scale normalized to ``Fraction``."""
+        self.name = name
+        self.symbol = symbol
+        self.scale: Fraction = to_exact(scale)
+
+    @override
+    def __repr__(self) -> str:
+        return f"LogarithmicUnitDef({self.name!r}, {self.symbol!r})"
+
+
 class _DisplayUnit(Protocol):  # noqa: PYI046 -- bound for the scalar-storage generic parameter, not used within this file.
     """Structural shape a scalar-storage display unit must have: name and symbol.
 
-    Both `UnitDef` and `AffineUnitDef` satisfy this without declaring it explicitly.
+    `UnitDef`, `AffineUnitDef`, and `LogarithmicUnitDef` satisfy this without declaring
+    it explicitly.
     """
 
     name: str
     symbol: str
 
 
-__all__ = ["AffineUnitDef", "UnitDef"]
+__all__ = ["AffineUnitDef", "LogarithmicUnitDef", "UnitDef"]

@@ -6,6 +6,7 @@ not just a runtime one.
 """
 
 from decimal import Decimal
+from fractions import Fraction
 
 from kuchka import Ampere
 from kuchka import Area
@@ -15,9 +16,11 @@ from kuchka import Celsius
 from kuchka import Conductance
 from kuchka import ConvertibleToFrequency
 from kuchka import Current
+from kuchka import Decibel
 from kuchka import Frequency
 from kuchka import Hertz
 from kuchka import Length
+from kuchka import LogarithmicRatio
 from kuchka import Meter
 from kuchka import Ohm
 from kuchka import Percent
@@ -139,3 +142,17 @@ voltage_via_conductance: Voltage = Ampere(5) / Siemens(Decimal("0.5"))  # OK: Vo
 # The reciprocal only narrows for the two registered canonical types -- a plain
 # assignment mismatch between them is still statically rejected.
 wrong_conductance_reciprocal: Resistance = 1 / Ohm(5)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+
+# Levels add, subtract, and scale; they neither multiply each other nor mix with
+# linear ratios or naked numbers.
+_bad_level_mul = Decibel(3) * Decibel(3)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+_bad_level_add_ratio = Decibel(3) + Ratio(2)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+_bad_level_add_number = Decibel(3) + 3  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+_bad_level_reciprocal = 2 / Decibel(3)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+
+cascade: LogarithmicRatio = Decibel(20) + Decibel(-3)  # OK: statically a level.
+loss: LogarithmicRatio = Decibel(-0.2) * 30  # OK: scaling a level gives a level.
+steps: Fraction = Decibel(6) / Decibel(3)  # OK: level over level is a plain fraction.
+scaled_down: LogarithmicRatio = Decibel(6) / 3  # OK: level over a number is a level.
+linear: Proportion = Decibel(3).as_power_ratio()  # OK: a linear ratio.
+wrong_steps: LogarithmicRatio = Decibel(6) / Decibel(3)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]

@@ -15,6 +15,7 @@ from kuchka import Ampere
 from kuchka import AmpereHour
 from kuchka import AmpereSecond
 from kuchka import Baud
+from kuchka import Bel
 from kuchka import Calorie
 from kuchka import Candela
 from kuchka import Celsius
@@ -24,6 +25,7 @@ from kuchka import CubicCentimetre
 from kuchka import CubicMetre
 from kuchka import CubicMillimetre
 from kuchka import Dalton
+from kuchka import Decibel
 from kuchka import Decimeter
 from kuchka import DeltaCelsius
 from kuchka import DeltaKelvin
@@ -138,6 +140,7 @@ from kuchka.units import CURRENT_UNITS
 from kuchka.units import ENERGY_UNITS
 from kuchka.units import FREQUENCY_UNITS
 from kuchka.units import LENGTH_UNITS
+from kuchka.units import LOGARITHMIC_RATIO_UNITS
 from kuchka.units import LUMINOUS_INTENSITY_UNITS
 from kuchka.units import MASS_UNITS
 from kuchka.units import POWER_UNITS
@@ -327,6 +330,7 @@ TABLE_CASES = [
             "kS": Kilosiemens,
         },
     ),
+    (LOGARITHMIC_RATIO_UNITS, {"dB": Decibel, "B": Bel}),
 ]
 
 TABLE_CASE_IDS = [
@@ -350,6 +354,7 @@ TABLE_CASE_IDS = [
     "area",
     "volume",
     "conductance",
+    "logarithmic_ratio",
 ]
 
 

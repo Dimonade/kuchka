@@ -309,6 +309,34 @@ Degree(10) < Degree(20)  # rejected: no total order on a circle (`TypeError`).
 `+` and `-` use ordinary wraparound arithmetic.
 `difference()` is the separate shortest-signed-path operation.
 
+### Logarithmic quantities
+
+Ratios that engineers quote on a logarithmic scale are levels.
+`LogarithmicRatio` is the current example: a gain, an attenuation, a signal-to-noise ratio.
+
+Multiplying two ratios adds their levels, so stages in series combine by plain addition, exactly:
+
+```python
+from kuchka import Decibel
+
+Decibel(20) + Decibel(-3.5) + Decibel(-1.5) == Decibel(15)
+Decibel(-0.2) * 30 == Decibel(-6)  # 0.2 dB per metre over 30 metres.
+abs(Decibel(20.3) - Decibel(20)) <= Decibel(0.5)  # a gain tolerance check.
+Decibel(3) * Decibel(3)  # rejected: two levels do not multiply (`TypeError`).
+```
+
+Converting to or from the linear ratio a level describes goes through a logarithm, so it comes in two flavours: `10 ** (level / 10)` for power quantities and `10 ** (level / 20)` for field quantities such as voltage.
+
+```python
+from kuchka import Decibel, LogarithmicRatio, Ratio
+
+Decibel(30).as_power_ratio() == Ratio(1000)  # whole decades are exact.
+Decibel(40).as_field_ratio() == Ratio(100)
+LogarithmicRatio.from_power_ratio(Ratio(100)) == Decibel(20)
+```
+
+Levels that are not whole decades convert to the precision of the active `decimal` context.
+
 See [Quantity shapes and semantics](docs/concepts/quantity_shapes.md) for the full semantics.
 
 ## Why `kuchka`?
@@ -421,9 +449,10 @@ The complete unit vocabulary is available in the API reference.
 
 ### Dimensionless quantities
 
-| Quantity   | Units              |
-| ---------- | ------------------ |
-| Proportion | `Ratio`, `Percent` |
+| Quantity         | Units              |
+| ---------------- | ------------------ |
+| Proportion       | `Ratio`, `Percent` |
+| LogarithmicRatio | `Decibel`, `Bel`   |
 
 Most SI-derived families expose a selected set of SI prefixes appropriate to their engineering use.
 The README does not list every prefix individually;the API reference contains the complete constructor and unit vocabulary.
@@ -657,7 +686,7 @@ Ruff is configured with `select = ["ALL"]`; disabled rules in `pyproject.toml` c
 The README intentionally gives the usage model before the implementation story.
 Deeper design material is kept separately:
 
-- **[Quantity shapes and semantics](docs/concepts/quantity_shapes.md)** - Linear, Affine, and Modular quantities, including temperature and angle semantics.
+- **[Quantity shapes and semantics](docs/concepts/quantity_shapes.md)** - Linear, Affine, Modular, and Logarithmic quantities, including temperature, angle, and decibel semantics.
 - **[Dimensional algebra and derived quantities](docs/concepts/dimensional_algebra.md)** - exponent-vector arithmetic, registered results, reciprocal relationships, and the boundary between runtime algebra and static overloads.
 - **[Exactness and angular units](docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, and the fixed internal representation used for angular scales.
 - **[Design choices](docs/design_choices.md)** - constructor functions, unit definitions, canonical types, string-resolution boundaries, and the reasons for a curated vocabulary.
