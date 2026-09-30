@@ -24,12 +24,11 @@ develop-fetch-pull:
 
 alias ct := covtest
 # Run coverage on tests and present results.
-covtest: check 
-    cd tests
+covtest: check
     clear
     coverage erase
-    rm -rf htmlcov/
-    coverage run --branch -m pytest -s -vv
+    coverage run --branch -m pytest --doctest-modules src/kuchka
+    coverage run --branch --append -m pytest -s -vv
     coverage report --show-missing
     coverage html
     firefox htmlcov/ &

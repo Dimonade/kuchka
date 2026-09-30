@@ -58,7 +58,7 @@ remaining area:
 >>> parcel = Hectare(2)
 >>> remaining = parcel - house_footprint - garden
 >>> remaining
-19380 m²
+1.938 ha
 
 A hectare also has a memorable geometric interpretation:
 it is exactly the area of a 100 m by 100 m square.
@@ -104,9 +104,18 @@ True
 
 Two acres can be combined with a metric parcel without losing their common meaning:
 
->>> total_land = Acre(2) + SquareMetre(500)
+>>> total_land = SquareMetre(500) + Acre(2)
 >>> total_land
 8593.7128448 m²
+
+Note, that the opposite
+
+>>> total_land = Acre(2) + SquareMetre(500)
+>>> total_land
+2.123552690733582671124121965 ac
+
+Gives a long decimal tail due the way the library normalizes interal calculations.
+In this case, this is due to conversion factors of `Fraction` to avoid rounding errors.
 
 Area is therefore a single quantity spanning the scale of a small component surface, a
 house, a garden, a field, and a rural property.
