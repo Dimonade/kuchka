@@ -399,15 +399,15 @@ The complete unit vocabulary is available in the API reference.
 
 ### Electrical
 
-| Quantity    | Representative units                                                                                                                                     |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Voltage     | `Nanovolt` though `Petavolt`                                                                                                                             |
-| Current     | `Picoampere`, through `Megaampere`                                                                                                                       |
-| Power       | `Milliwatt`, `Watt`, `Kilowatt`                                                                                                                          |
-| Resistance  | `Microohm`, thnough `Gigaohm`                                                                                                                            |
-| Conductance | `Nanosiemens` through `Kilosiemens`                                                                                                                      |
-| Charge      | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                                                                    |
-| Energy      | `Picojoule` through `Terajoule`, `Electronvolt` through `Teraelectronvolt`, `Erg`, `MilliwattHour`, `WattHour`, `KilowattHour`, `Calorie`, `Kilocalorie` |
+| Quantity    | Representative units                                                                                                                     |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Voltage     | `Nanovolt` though `Petavolt`                                                                                                             |
+| Current     | `Picoampere`, through `Megaampere`                                                                                                       |
+| Power       | `Milliwatt`, `Watt`, `Kilowatt`                                                                                                          |
+| Resistance  | `Microohm`, through `Gigaohm`                                                                                                            |
+| Conductance | `Nanosiemens` through `Kilosiemens`                                                                                                      |
+| Charge      | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                                                    |
+| Energy      | `Picojoule` through `Terajoule`, `Electronvolt` through `Teraelectronvolt`, `Erg`, `MilliwattHour`, `WattHour`, `Calorie`, `Kilocalorie` |
 
 ### Time and signals
 

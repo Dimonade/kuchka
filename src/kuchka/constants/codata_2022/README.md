@@ -14,9 +14,9 @@ curl https://physics.nist.gov/cuu/Constants/Table/allascii.txt -o src/kuchka/con
 
 ```python
 from kuchka import Hertz
-from kuchka.constants import SPEED_OF_LIGHT
+from kuchka.constants import SPEED_OF_LIGHT_IN_VACUUM
 
-wifi_wavelength = SPEED_OF_LIGHT / Hertz(2_400_000_000)
+wifi_wavelength = SPEED_OF_LIGHT_IN_VACUUM / Hertz(2_400_000_000)
 ```
 
 To get a fully typed `kuchka` object back.

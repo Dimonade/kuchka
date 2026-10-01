@@ -119,7 +119,7 @@ Additional units are: `Atmosphere`, `Bar`, `Hectopascal`, `Kilopascal`, `Megapas
 #### `Density` family
 
 `KilogramPerCubicMetre` is the canonical unit.
-Additional units are: `GramPerCubicCentimetre`, `KilogramPerCubicLitre`.
+Additional units are: `GramPerCubicCentimetre`, `KilogramPerLitre`.
 
 #### Expanded kinematics
 

@@ -63,7 +63,7 @@ def prefixed_unit(
     *,
     coherent_offset: int = 0,
 ) -> UnitDef:
-    """Build a `UnitDef` for `prefix` applied to a dimenion's coherent SI unit.
+    """Build a `UnitDef` for `prefix` applied to a dimension's coherent SI unit.
 
     `coherent_offset` corrects for a dimension whose canonical unit, namely, what
     `UnitDef.scale` is expressed relative to, is not itself the coherent SI unit.
