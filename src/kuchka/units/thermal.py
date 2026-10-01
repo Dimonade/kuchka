@@ -344,7 +344,9 @@ def Fahrenheit(value: Numeric) -> Temperature:
     True
 
     """
-    return Temperature(to_exact(value) * FAHRENHEIT.scale + FAHRENHEIT.offset, FAHRENHEIT)
+    return Temperature(
+        to_exact(value) * FAHRENHEIT.scale + FAHRENHEIT.offset, FAHRENHEIT
+    )
 
 
 TEMPERATURE_UNITS: Mapping[str, Callable[[Numeric], Temperature]] = MappingProxyType(
