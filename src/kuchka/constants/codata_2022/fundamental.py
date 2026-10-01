@@ -99,7 +99,7 @@ Link: https://en.wikipedia.org/wiki/Neutron#Mass
 PLANCK_ENERGY: Final[Energy] = _Gigaelectronvolt(_Decimal("1.220890e19"))
 """The Planck energy, E_p.
 
-Accuracy: Meauserd.
+Accuracy: Measured.
 Value: 1.220 890 e19 GeV.
 Uncertainty: 0.000 014 e19 GeV.
 Link: https://en.wikipedia.org/wiki/Planck_units#Planck_energy
