@@ -62,6 +62,7 @@ class PureLogarithmicQuantity(_OrderedScalarMixin, _ScalarStorage[LogarithmicUni
 
     dimension: ClassVar[Dimension]
     _canonical_unit: ClassVar[LogarithmicUnitDef]
+    _unit_type: ClassVar[type] = LogarithmicUnitDef
     __slots__ = ()
 
     @property

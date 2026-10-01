@@ -8,16 +8,19 @@ of this package.
 
 from __future__ import annotations
 
+from fractions import Fraction
 from typing import TYPE_CHECKING
+from typing import ClassVar
 from typing import Generic
 from typing import TypeVar
 
+from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.typing import override
 from kuchka.numeric import to_decimal
 from kuchka.quantities.base.units import _DisplayUnit
 
 if TYPE_CHECKING:
-    from fractions import Fraction
+    from kuchka.dimensions import Dimension
 
 _UnitT = TypeVar("_UnitT", bound=_DisplayUnit)
 
@@ -30,13 +33,57 @@ class _ScalarStorage(Generic[_UnitT]):
     `Fraction`, not `Decimal`: an exact rational input (`Litre(Fraction(5, 18))`) stays
     exact through storage; approximation happens only at `repr()`/`__format__`, via
     `to_decimal`.
+
+    The class itself is part of the public surface (`Voltage`, ...), so its constructor
+    is a validation boundary just like the unit constructors are:
+    it accepts only an exact `Fraction` and a display unit of the right kind and
+    dimension, and rejects everything else instead of storing it.
+    Plain numbers in a particular unit are what the unit constructors (`Volt`,
+    `Celsius`, ...) are for.
     """
 
     _magnitude: Fraction
     _display_unit: _UnitT
+    dimension: ClassVar[Dimension]
+    _unit_type: ClassVar[type]
+    """The kind of unit definition this algebraic shape displays in.
+
+    Assigned by each algebraic base (`LinearQuantity`, `AffineQuantity`, ...).
+    """
     __slots__ = ("_display_unit", "_magnitude")
 
     def __init__(self, magnitude: Fraction, display_unit: _UnitT) -> None:
+        """Store `magnitude` (canonical unit) and `display_unit`, validating both."""
+        cls = type(self)
+        if not isinstance(magnitude, Fraction):
+            msg = (
+                f"{cls.__name__} takes an exact `Fraction` magnitude in its "
+                f"canonical unit, got {type(magnitude).__name__} ({magnitude!r}). "
+                "To build a measurement from a plain number, use one of the unit "
+                "constructors in `kuchka.units` instead."
+            )
+            raise InvalidMeasurementError(msg)
+        if not isinstance(display_unit, cls._unit_type):
+            msg = (
+                f"{cls.__name__} needs a {cls._unit_type.__name__} as its display "
+                f"unit, got {display_unit!r}."
+            )
+            raise InvalidMeasurementError(msg)
+        # NOTE: Affine and logarithmic unit definitions carry no dimension of
+        # their own; their `_unit_type` check above is the whole contract.
+        unit_dimension = getattr(display_unit, "dimension", None)
+        if (
+            unit_dimension is not None
+            and unit_dimension is not cls.dimension
+            and unit_dimension != cls.dimension
+        ):
+            msg = (
+                f"cannot construct a {cls.__name__} displayed in "
+                f"{display_unit.name} ({display_unit.symbol}): "
+                f"incompatible dimensions - "
+                f"[{cls.dimension!r}] and [{unit_dimension!r}]."
+            )
+            raise InvalidMeasurementError(msg)
         object.__setattr__(self, "_magnitude", magnitude)
         object.__setattr__(self, "_display_unit", display_unit)
 

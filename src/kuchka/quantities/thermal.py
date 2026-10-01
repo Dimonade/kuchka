@@ -77,13 +77,15 @@ class Temperature(AffineQuantity[TemperatureDelta]):
 
     def __init__(self, magnitude: Fraction, display_unit: AffineUnitDef) -> None:
         """Store `magnitude`, rejecting a reading below absolute zero (0 K)."""
+        # NOTE: Validate type and unit first (the base class does it), so the
+        # comparison below only ever sees a real `Fraction`.
+        super().__init__(magnitude, display_unit)
         if magnitude < 0:
             msg = (
                 f"cannot construct a Temperature of {float(magnitude)} K: physical "
                 "temperature cannot be below absolute zero (0 K)."
             )
             raise InvalidMeasurementError(msg)
-        super().__init__(magnitude, display_unit)
 
     @property
     def kelvin(self) -> Fraction:

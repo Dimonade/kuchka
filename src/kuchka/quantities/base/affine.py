@@ -86,6 +86,7 @@ class AffineQuantity(
     dimension: ClassVar[Dimension]
     _delta_type: ClassVar[type[LinearQuantity]]
     _conversion_target_hint: ClassVar[str] = "a matching affine unit"
+    _unit_type: ClassVar[type] = AffineUnitDef
     __slots__ = ()
 
     def to(self, unit: AffineUnitDef) -> Self:
