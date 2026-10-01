@@ -57,6 +57,7 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
     dimension: ClassVar[Dimension]
     _period: ClassVar[Fraction]
     _canonical_unit: ClassVar[UnitDef]
+    _unit_type: ClassVar[type] = UnitDef
     __slots__ = ()
 
     @property
