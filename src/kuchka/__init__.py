@@ -87,11 +87,13 @@ from kuchka.units import Decimeter
 from kuchka.units import Decimetre
 from kuchka.units import Degree
 from kuchka.units import DeltaCelsius
+from kuchka.units import DeltaFahrenheit
 from kuchka.units import DeltaKelvin
 from kuchka.units import Dyne
 from kuchka.units import EarthMass
 from kuchka.units import Electronvolt
 from kuchka.units import Erg
+from kuchka.units import Fahrenheit
 from kuchka.units import Foot
 from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
@@ -284,6 +286,7 @@ __all__: list[str] = [
     "Decimetre",
     "Degree",
     "DeltaCelsius",
+    "DeltaFahrenheit",
     "DeltaKelvin",
     "Density",
     "Dyne",
@@ -291,6 +294,7 @@ __all__: list[str] = [
     "Electronvolt",
     "Energy",
     "Erg",
+    "Fahrenheit",
     "Foot",
     "Force",
     "Frequency",

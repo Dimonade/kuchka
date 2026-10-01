@@ -204,6 +204,7 @@ EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
     "velocity": frozenset({"km/h"}),
     "force": frozenset({"lbf"}),
     "pressure": frozenset({"psi"}),
+    "temperature_delta": frozenset({"dF"}),
 }
 """Units excluded from properties that require exact decimal reciprocals.
 
@@ -226,6 +227,9 @@ reciprocal (~0.224809...) is not, so it sits out the same properties `in` does.
 `mph` (mile per hour, 0.44704) needs no exclusion: both it and its reciprocal
 terminate exactly, since a mile-per-hour's scale factor has only 2 and 5 as prime
 factors in its denominator.
+
+`dF` (Fahrenheit degree of temperature difference, `5/9`) is excluded for the same
+reason as `km/h`: its exact `Fraction` scale has no finite `Decimal` representation.
 
 `psi` (pound per square inch) is excluded for the same shape of reason as `lbf`:
 it is computed exactly as `POUND_FORCE.scale / SQUARE_INCH.scale`, but that exact

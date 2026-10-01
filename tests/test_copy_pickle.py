@@ -17,6 +17,7 @@ import pickle
 import pytest
 
 from kuchka import Celsius
+from kuchka import Fahrenheit
 from kuchka import Kelvin
 from kuchka import Volt
 from kuchka.units import MILLIVOLT
@@ -57,6 +58,12 @@ def test_temperature_deepcopy_round_trips() -> None:
 
 def test_temperature_pickle_round_trips() -> None:
     original = Kelvin(300)
+    assert pickle.loads(pickle.dumps(original)) == original
+
+
+def test_fahrenheit_copy_and_pickle_round_trip() -> None:
+    original = Fahrenheit(68)
+    assert copy.deepcopy(original) == original
     assert pickle.loads(pickle.dumps(original)) == original
 
 

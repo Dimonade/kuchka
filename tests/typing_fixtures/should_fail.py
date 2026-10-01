@@ -17,6 +17,7 @@ from kuchka import Conductance
 from kuchka import ConvertibleToFrequency
 from kuchka import Current
 from kuchka import Decibel
+from kuchka import Fahrenheit
 from kuchka import Frequency
 from kuchka import Hertz
 from kuchka import Length
@@ -52,10 +53,13 @@ analyse_voltage(Ampere(2))  # type: ignore[arg-type]  # ty: ignore[invalid-argum
 # Temperature cannot be scaled as no __mul__ exists on it at all.
 _scale_temp_a = Celsius(20) * 2  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 _scale_temp_b = 2 * Celsius(20)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+_scale_temp_c = Fahrenheit(68) * 2  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+_scale_temp_d = 2 * Fahrenheit(68)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 
 _bad_add = Volt(5) + Ampere(2)  # type: ignore[operator]  # not (yet) flagged by ty across sibling quantity types
 _bad_sub = Volt(5) - Ampere(2)  # type: ignore[operator]  # not (yet) flagged by ty across sibling quantity types
 _bad_temp_add = Celsius(20) + Celsius(5)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+_bad_fahrenheit_add = Fahrenheit(68) + Fahrenheit(9)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 
 # Things that are OK to do.
 power: Power = Volt(5) * Ampere(2)  # OK: statically known to be Power.

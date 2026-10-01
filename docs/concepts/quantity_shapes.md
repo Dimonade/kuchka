@@ -40,6 +40,27 @@ abs(reading - setpoint) <= tolerance
 Kelvin(20) * 2  # rejected: no __mul__ on an affine quantity.
 ```
 
+Kelvin, Celsius, and Fahrenheit readings are all `Temperature`.
+Their units differ by a scale and an offset, and kuchka keeps both exact: a Fahrenheit degree is exactly 5/9 of a kelvin, and 0 °F sits at exactly 459.67 x 5/9 K.
+
+```python
+from kuchka import Celsius, DeltaCelsius, DeltaFahrenheit, Fahrenheit, Kelvin
+
+Fahrenheit(32) == Celsius(0)
+# True
+
+Fahrenheit(-459.67) == Kelvin(0)
+# True
+
+Fahrenheit(77) - Fahrenheit(68) == DeltaFahrenheit(9)
+# True
+
+DeltaFahrenheit(9) == DeltaCelsius(5)
+# True
+```
+
+A temperature difference is a size, not a position, so `DeltaFahrenheit` and `DeltaCelsius` differ by scale only (9 °F of difference is 5 °C of difference).
+
 Absolute zero is enforced for temperature readings.
 
 `AffineQuantity` is generic so that a future point-in-time type can reuse the same semantics without making `Temperature` special.
