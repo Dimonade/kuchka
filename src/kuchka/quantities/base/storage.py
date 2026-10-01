@@ -24,6 +24,9 @@ if TYPE_CHECKING:
 
 _UnitT = TypeVar("_UnitT", bound=_DisplayUnit)
 
+_STATE_LENGTH = 2
+"""A pickled state is a (magnitude, display unit) pair."""
+
 
 class _ScalarStorage(Generic[_UnitT]):
     """State every scalar quantity needs, independent of algebraic shape.
@@ -34,8 +37,8 @@ class _ScalarStorage(Generic[_UnitT]):
     exact through storage; approximation happens only at `repr()`/`__format__`, via
     `to_decimal`.
 
-    The class itself is part of the public surface (`Voltage`, ...), so its constructor
-    is a validation boundary just like the unit constructors are:
+    The class itself is part of the public surface (`Voltage`, ...), so its
+    constructor is a validation boundary just like the unit constructors are:
     it accepts only an exact `Fraction` and a display unit of the right kind and
     dimension, and rejects everything else instead of storing it.
     Plain numbers in a particular unit are what the unit constructors (`Volt`,
@@ -54,7 +57,15 @@ class _ScalarStorage(Generic[_UnitT]):
 
     def __init__(self, magnitude: Fraction, display_unit: _UnitT) -> None:
         """Store `magnitude` (canonical unit) and `display_unit`, validating both."""
-        cls = type(self)
+        self._store(magnitude, display_unit)
+
+    @classmethod
+    def _validate(cls, magnitude: object, display_unit: object) -> None:
+        """Raise `InvalidMeasurementError` unless the pair is a valid state.
+
+        Construction, unpickling, and copying all pass through this check.
+        A concrete type with a domain restriction of its own extends it.
+        """
         if not isinstance(magnitude, Fraction):
             msg = (
                 f"{cls.__name__} takes an exact `Fraction` magnitude in its "
@@ -77,18 +88,33 @@ class _ScalarStorage(Generic[_UnitT]):
             and unit_dimension is not cls.dimension
             and unit_dimension != cls.dimension
         ):
+            name = getattr(display_unit, "name", "?")
+            symbol = getattr(display_unit, "symbol", "?")
             msg = (
                 f"cannot construct a {cls.__name__} displayed in "
-                f"{display_unit.name} ({display_unit.symbol}): "
+                f"{name} ({symbol}): "
                 f"incompatible dimensions - "
                 f"[{cls.dimension!r}] and [{unit_dimension!r}]."
             )
             raise InvalidMeasurementError(msg)
+
+    def _store(self, magnitude: Fraction, display_unit: _UnitT) -> None:
+        """Validate and set the state of a value that has none yet.
+
+        The only place state is written: a value is born with its state and keeps it.
+        """
+        if hasattr(self, "_magnitude"):
+            raise AttributeError(f"{type(self).__name__} is immutable")
+        self._validate(magnitude, display_unit)
         object.__setattr__(self, "_magnitude", magnitude)
         object.__setattr__(self, "_display_unit", display_unit)
 
     @override
     def __setattr__(self, name: str, value: object) -> None:
+        raise AttributeError(f"{type(self).__name__} is immutable")
+
+    @override
+    def __delattr__(self, name: str) -> None:
         raise AttributeError(f"{type(self).__name__} is immutable")
 
     @property
@@ -108,10 +134,15 @@ class _ScalarStorage(Generic[_UnitT]):
         return (self._magnitude, self._display_unit)
 
     def __setstate__(self, state: tuple[Fraction, _UnitT]) -> None:
-        """Restore a pickled/copied instance without going through `__setattr__`."""
+        """Restore a pickled/copied instance, validating it like construction."""
+        if not isinstance(state, tuple) or len(state) != _STATE_LENGTH:
+            msg = (
+                f"cannot restore a {type(self).__name__} from {state!r}: "
+                "expected a (magnitude, display unit) pair."
+            )
+            raise InvalidMeasurementError(msg)
         magnitude, display_unit = state
-        object.__setattr__(self, "_magnitude", magnitude)
-        object.__setattr__(self, "_display_unit", display_unit)
+        self._store(magnitude, display_unit)
 
     def value_in(self, unit: _UnitT) -> Fraction:
         """Exact magnitude expressed in `unit`.

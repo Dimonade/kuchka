@@ -20,20 +20,19 @@ vocabulary this library currently targets.
 
 from __future__ import annotations
 
+from fractions import Fraction
 from typing import TYPE_CHECKING
 from typing import ClassVar
 
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.errors import InvalidMeasurementError
+from kuchka.internal.typing import override
 from kuchka.quantities.base import AffineQuantity
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import register
 
 if TYPE_CHECKING:
-    from fractions import Fraction
-
     from kuchka.dimensions import Dimension
-    from kuchka.quantities.base import AffineUnitDef
 
 
 class TemperatureDelta(LinearQuantity):
@@ -75,12 +74,12 @@ class Temperature(AffineQuantity[TemperatureDelta]):
     )
     __slots__ = ()
 
-    def __init__(self, magnitude: Fraction, display_unit: AffineUnitDef) -> None:
-        """Store `magnitude`, rejecting a reading below absolute zero (0 K)."""
-        # NOTE: Validate type and unit first (the base class does it), so the
-        # comparison below only ever sees a real `Fraction`.
-        super().__init__(magnitude, display_unit)
-        if magnitude < 0:
+    @classmethod
+    @override
+    def _validate(cls, magnitude: object, display_unit: object) -> None:
+        """Validate the pair, and reject a reading below absolute zero (0 K)."""
+        super()._validate(magnitude, display_unit)
+        if isinstance(magnitude, Fraction) and magnitude < 0:
             msg = (
                 f"cannot construct a Temperature of {float(magnitude)} K: physical "
                 "temperature cannot be below absolute zero (0 K)."

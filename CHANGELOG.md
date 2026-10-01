@@ -28,6 +28,24 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - `as_power_ratio()` / `as_field_ratio()` and `from_power_ratio()` / `from_field_ratio()` convert to and from a linear `Proportion`.
   They are evaluated in `Decimal` at the active context precision; whole multiples of 10 dB (power) or 20 dB (field) are exact.
 
+### Fixed
+
+#### Quantity class constructors validate their arguments
+
+- `Voltage`, `Temperature`, `Angle`, `LogarithmicRatio`, and every other quantity class are exported for annotations and `isinstance`, but their own constructors used to store whatever they were given.
+- `Voltage(0.5, AMPERE)` kept a raw `float` and a unit of the wrong dimension, which defeated the exact-`Fraction` guarantee and failed later, far from the cause, with an unrelated `AttributeError`.
+- The class constructors now accept only an exact `Fraction` magnitude (in the quantity's canonical unit) and a display unit of the right kind and dimension, and raise `InvalidMeasurementError` otherwise.
+
+*NOTE:* This changes nothing for code that builds values through the unit constructors (`Volt(5)`, `Celsius(20)`, ...), which is the supported way to do it.
+
+#### A quantity keeps the state it was built with
+
+A quantity's magnitude and display unit are written once, when it is built or restored, and cannot change afterwards.
+Deleting an attribute, calling `__init__` again, and calling `__setstate__` on a live value all raise `AttributeError`, the same as assigning an attribute does.
+
+Restoring a value from `pickle` or `copy` data now runs the same validation as construction.
+A forged or corrupt payload (a `float` magnitude, a unit of another dimension, a `Temperature` below absolute zero, a state that is not a `(magnitude, display unit)` pair) raises `InvalidMeasurementError` on load instead of producing a value construction would have refused.
+
 ## [0.1.3] - 2026-09-29
 
 ### Added
