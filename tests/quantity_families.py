@@ -14,6 +14,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import Decimal
+from fractions import Fraction
 from typing import TYPE_CHECKING
 
 from hypothesis import strategies as st
@@ -44,6 +45,7 @@ from kuchka import Volt
 from kuchka import Watt
 from kuchka.internal import symbols
 from kuchka.quantities import LinearQuantity
+from kuchka.quantities.base.storage import _ScalarStorage
 from kuchka.units import ACCELERATION_UNITS
 from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
 from kuchka.units import AMPERE
@@ -63,6 +65,7 @@ from kuchka.units import FORCE_UNITS
 from kuchka.units import FREQUENCY_UNITS
 from kuchka.units import HERTZ
 from kuchka.units import JOULE
+from kuchka.units import KELVIN
 from kuchka.units import KILOGRAM
 from kuchka.units import KILOGRAM_PER_CUBIC_METRE
 from kuchka.units import LENGTH_UNITS
@@ -96,6 +99,7 @@ from kuchka.units import WATT
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from collections.abc import Iterator
     from collections.abc import Mapping
 
     from kuchka.numeric import Numeric
@@ -328,3 +332,26 @@ BINARY_IMPRECISE_TRIPLES: list[tuple[Decimal, Decimal, Decimal]] = [
 
 0.1 + 0.2 prints as 0.30000000000000004 in `float`, exactly 0.3 in `Decimal`.
 """
+
+
+def _concrete_quantity_types(base: type = _ScalarStorage) -> Iterator[type]:
+    """Yield every quantity type that declares its own dimension."""
+    for subclass in base.__subclasses__():
+        if "dimension" in vars(subclass):
+            yield subclass
+        yield from _concrete_quantity_types(subclass)
+
+
+CONCRETE_QUANTITY_TYPES: list[type] = sorted(
+    _concrete_quantity_types(), key=lambda cls: cls.__name__
+)
+"""Every concrete quantity type, discovered from the class hierarchy.
+
+A type added later joins the list without any edit here.
+"""
+
+
+def sample_of(cls: type) -> _ScalarStorage:
+    """Build one valid value of a concrete quantity type, in its canonical unit."""
+    unit = getattr(cls, "_canonical_unit", KELVIN)
+    return cls(Fraction(5), unit)  # type: ignore[no-any-return]
