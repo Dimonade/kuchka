@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from kuchka import Celsius
+from kuchka import Fahrenheit
 from kuchka import Volt
 from kuchka.dimensions import Dimension
 from kuchka.internal import symbols
@@ -24,6 +25,7 @@ def test_format_spec_respects_display_unit() -> None:
 
 def test_temperature_format_spec() -> None:
     assert f"{Celsius(20.5):.1f}" == f"20.5 {symbols.DEGREE}C"
+    assert f"{Fahrenheit(68.5):.1f}" == f"68.5 {symbols.DEGREE}F"
 
 
 def test_format_spec_of_zero() -> None:

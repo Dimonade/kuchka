@@ -28,10 +28,12 @@ from kuchka import Dalton
 from kuchka import Decibel
 from kuchka import Decimeter
 from kuchka import DeltaCelsius
+from kuchka import DeltaFahrenheit
 from kuchka import DeltaKelvin
 from kuchka import EarthMass
 from kuchka import Electronvolt
 from kuchka import Erg
+from kuchka import Fahrenheit
 from kuchka import Foot
 from kuchka import Gigaelectronvolt
 from kuchka import Gigahertz
@@ -203,8 +205,11 @@ TABLE_CASES = [
         POWER_UNITS,
         {f"{symbols.MICRO}W": Microwatt, "mW": Milliwatt, "W": Watt, "kW": Kilowatt},
     ),
-    (TEMPERATURE_UNITS, {"K": Kelvin, "C": Celsius}),
-    (TEMPERATURE_DELTA_UNITS, {"dK": DeltaKelvin, "dC": DeltaCelsius}),
+    (TEMPERATURE_UNITS, {"K": Kelvin, "C": Celsius, "F": Fahrenheit}),
+    (
+        TEMPERATURE_DELTA_UNITS,
+        {"dK": DeltaKelvin, "dC": DeltaCelsius, "dF": DeltaFahrenheit},
+    ),
     (
         TIME_UNITS,
         {

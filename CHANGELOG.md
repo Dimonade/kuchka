@@ -9,6 +9,10 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
+#### Temperature gets `Fahrenheit`
+
+`Fahrenheit`, and the usual `Fahrenheit(32) == Celsius(0)`, `Fahrenheit(-459.67) == Kelvin(0)`.
+
 #### Electrical families got more units
 
 - `Current` family gets new units: `Picoampere`, `Nanoampere`, and `Megaampere`.

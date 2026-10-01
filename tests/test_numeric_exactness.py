@@ -9,6 +9,7 @@ from fractions import Fraction
 import pytest
 
 from kuchka import Celsius
+from kuchka import Fahrenheit
 from kuchka import Hertz
 from kuchka import InvalidMeasurementError
 from kuchka import Kelvin
@@ -165,6 +166,21 @@ def test_celsius_to_kelvin_offset_stays_exact():
 def test_celsius_from_a_fraction_stays_exact():
     reading = Celsius(Fraction(1, 3))
     assert reading.kelvin == Fraction(1, 3) + Fraction(27315, 100)
+
+
+def test_fahrenheit_to_kelvin_offset_stays_exact():
+    assert Fahrenheit(0).kelvin == Fraction(45967, 180)
+    assert Fahrenheit(Decimal("-459.67")).kelvin == 0
+
+
+def test_fahrenheit_from_a_fraction_stays_exact():
+    reading = Fahrenheit(Fraction(1, 3))
+    assert reading.kelvin == (Fraction(1, 3) + Fraction(45967, 100)) * Fraction(5, 9)
+
+
+def test_fahrenheit_equals_celsius_across_representations():
+    assert Fahrenheit(Decimal("33.8")) == Celsius(Decimal(1))
+    assert Fahrenheit(33.8) == Celsius(1)
 
 
 def test_kelvin_equals_celsius_across_representations():

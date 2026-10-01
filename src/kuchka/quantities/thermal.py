@@ -9,8 +9,8 @@ while :class:`Temperature` is a :class:`~kuchka.quantities.base.AffineQuantity`
 instead -- see that class's docstring for the operations a point on a scale supports
 and the ones it deliberately omits, and why.
 
-This module treats Celsius and Kelvin identically:
-both construct the same ``Temperature`` type, and neither supports scalar
+This module treats Kelvin, Celsius, and Fahrenheit identically:
+all three construct the same ``Temperature`` type, and none supports scalar
 multiplication, even though "2 x 300 K" has a defensible thermodynamic reading that
 "2 x 20 degC" does not.
 Giving Kelvin its own multiplicable type would be a reasonable extension for a use case
@@ -71,7 +71,7 @@ class Temperature(AffineQuantity[TemperatureDelta]):
     dimension: ClassVar[Dimension] = TEMPERATURE_DELTA
     _delta_type: ClassVar[type[LinearQuantity]] = TemperatureDelta
     _conversion_target_hint: ClassVar[str] = (
-        "a temperature unit such as Kelvin or Celsius"
+        "a temperature unit such as Kelvin, Celsius, or Fahrenheit"
     )
     __slots__ = ()
 
