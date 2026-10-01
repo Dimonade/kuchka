@@ -36,7 +36,7 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - `Voltage(0.5, AMPERE)` kept a raw `float` and a unit of the wrong dimension, which defeated the exact-`Fraction` guarantee and failed later, far from the cause, with an unrelated `AttributeError`.
 - The class constructors now accept only an exact `Fraction` magnitude (in the quantity's canonical unit) and a display unit of the right kind and dimension, and raise `InvalidMeasurementError` otherwise.
 
-*NOTE:* This changes nothing for code that builds values through the unit constructors (`Volt(5)`, `Celsius(20)`, ...), which is the supported way to do it.
+_NOTE:_ This changes nothing for code that builds values through the unit constructors (`Volt(5)`, `Celsius(20)`, ...), which is the supported way to do it.
 
 #### A quantity keeps the state it was built with
 
