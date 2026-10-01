@@ -86,7 +86,6 @@ class Temperature(AffineQuantity[TemperatureDelta]):
                 "temperature cannot be below absolute zero (0 K)."
             )
             raise InvalidMeasurementError(msg)
-        super().__init__(magnitude, display_unit)
 
     @property
     def kelvin(self) -> Fraction:
