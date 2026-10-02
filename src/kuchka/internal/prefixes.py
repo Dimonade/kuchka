@@ -39,6 +39,7 @@ class Prefix:
 UNIT = Prefix("", "", 0)
 """No prefix to let the unprefixed unit to go through the same helper."""
 
+ATTO = Prefix("atto", "a", -18)
 FEMTO = Prefix("femto", "f", -15)
 PICO = Prefix("pico", "p", -12)
 NANO = Prefix("nano", "n", -9)
@@ -53,6 +54,7 @@ MEGA = Prefix("mega", "M", 6)
 GIGA = Prefix("giga", "G", 9)
 TERA = Prefix("tera", "T", 12)
 PETA = Prefix("peta", "P", 15)
+EXA = Prefix("exa", "E")
 
 
 def prefixed_unit(

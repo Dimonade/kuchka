@@ -25,6 +25,7 @@ if TYPE_CHECKING:
     from kuchka.internal.prefixes import Prefix
 
 PREFIX_TABLE_CASES = [
+    (prefixes.ATTO, -18, Decimal("0.000000000000000001"), "atto", "a"),
     (prefixes.FEMTO, -15, Decimal("0.000000000000001"), "femto", "f"),
     (prefixes.PICO, -12, Decimal("0.000000000001"), "pico", "p"),
     (prefixes.NANO, -9, Decimal("0.000000001"), "nano", "n"),
@@ -40,6 +41,7 @@ PREFIX_TABLE_CASES = [
     (prefixes.GIGA, 9, Decimal(1_000_000_000), "giga", "G"),
     (prefixes.TERA, 12, Decimal(1_000_000_000_000), "tera", "T"),
     (prefixes.PETA, 15, Decimal(1_000_000_000_000_000), "peta", "P"),
+    (prefixes.EXA, 18, Decimal(1_000_000_000_000_000_000), "exa", "E"),
 ]
 
 PREFIX_TABLE_IDS = [name for _, _, _, name, _ in PREFIX_TABLE_CASES]
