@@ -52,6 +52,16 @@ Deleting an attribute, calling `__init__` again, and calling `__setstate__` on a
 Restoring a value from `pickle` or `copy` data now runs the same validation as construction.
 A forged or corrupt payload (a `float` magnitude, a unit of another dimension, a `Temperature` below absolute zero, a state that is not a `(magnitude, display unit)` pair) raises `InvalidMeasurementError` on load instead of producing a value construction would have refused.
 
+#### Numeric input has a bounded size
+
+Every plain number turned into a measurement is first converted to an exact `Fraction`, whose cost grows with its digits.
+A value such as `Decimal("1E+1000000")` was accepted and then took seconds to display, or never finished, so a single config value could hang a process.
+
+Numbers entering the library are now limited to a `Decimal` exponent of +/-1000, 1000 significant digits, and 8192 bits for an `int` or for each part of a `Fraction`.
+That is far beyond every `float` and every physical constant.
+Anything larger raises `InvalidMeasurementError` immediately, with a message that describes the value by its size.
+The limits live in `kuchka.internal.limits`.
+
 ## [0.1.3] - 2026-09-29
 
 ### Added
