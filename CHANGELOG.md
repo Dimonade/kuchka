@@ -9,6 +9,12 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
+#### `Time` gets new units
+
+- `Femtosecond`, `Picosecond`, and `Nanosecond`.
+- `Day`, `Week`, `Fortnight`, and `JulianYear`. All exact scales of a `Second`.
+- `Jiffy`.
+
 #### Temperature gets `Fahrenheit`
 
 `Fahrenheit`, and the usual `Fahrenheit(32) == Celsius(0)`, `Fahrenheit(-459.67) == Kelvin(0)`.

@@ -187,7 +187,6 @@ ALL_UNIT_CASE_IDS: list[str] = [
 EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
     "length": frozenset({"in"}),
     "area": frozenset({"ac", f"in{symbols.SUPERSCRIPT_TWO}"}),
-    "time": frozenset({"min", "h"}),
     "energy": frozenset(
         {
             "mWh",
@@ -209,36 +208,39 @@ EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
     "force": frozenset({"lbf"}),
     "pressure": frozenset({"psi"}),
     "temperature_delta": frozenset({"dF"}),
+    "time": frozenset(
+        {
+            "min",
+            "h",
+            "d",
+            "wk",
+            "fortnight",
+            "a",
+        }
+    ),
 }
-"""Units excluded from properties that require exact decimal reciprocals.
+"""Units excluded from properties that require finite Decimal reciprocals.
 
-`in` (inch) is excluded because its scale (0.0254) produces a non-terminating
-decimal reciprocal, making exact `Decimal` comparison impossible in those cases.
+A unit is excluded when its exact scale factor has a reciprocal whose denominator
+contains a prime factor other than 2 or 5.
+Such a reciprocal cannot be represented by a finite `Decimal`.
 
-`ac` (acre, 4046.8564224) and `in²` (square inch, 0.00064516) are excluded for
-the same reason, since neither derives from a power of ten either.
+`in` (inch), `ac` (acre), and `in²` (square inch) are excluded because their exact
+reciprocal scales are non-terminating decimals.
 
-`min`/`h` (60, 3600), `Wh`/`mWh` (3600, 3.6), and `mAh`/`Ah` (3.6, 3600) are excluded
-for the identical reason: none of those scale factors are powers of ten, so dividing
-by them does not always terminate exactly in `Decimal`, the same way dividing by 0.0254
-does not.
+`min`, `h`, `d`, `wk`, `fortnight`, and `a` are excluded for the same reason:
+their exact scales in seconds contain factors other than 2 and 5.
 
-`km/h` (kilometre per hour, `5/18`) is excluded for the same reason: its exact
-`Fraction` scale has no finite `Decimal` representation at all.
+`km/h`, `dF`, and similar rational scales are excluded when their reduced fractional
+representation itself has a denominator containing a prime factor other than 2 or 5.
 
-`lbf` (pound-force, 4.4482216152605) is a terminating decimal itself, but its
-reciprocal (~0.224809...) is not, so it sits out the same properties `in` does.
-`mph` (mile per hour, 0.44704) needs no exclusion: both it and its reciprocal
-terminate exactly, since a mile-per-hour's scale factor has only 2 and 5 as prime
-factors in its denominator.
+A unit does not need to have a power-of-ten scale to be accepted.
+For example, `mph` has an exact scale of `0.44704`, and its reciprocal also terminates,
+so it does not require an exclusion.
 
-`dF` (Fahrenheit degree of temperature difference, `5/9`) is excluded for the same
-reason as `km/h`: its exact `Fraction` scale has no finite `Decimal` representation.
-
-`psi` (pound per square inch) is excluded for the same shape of reason as `lbf`:
-it is computed exactly as `POUND_FORCE.scale / SQUARE_INCH.scale`, but that exact
-`Fraction`'s denominator has a prime factor other than 2 and 5, so it has no finite
-`Decimal` representation.
+The physics `jiffy` is another example of a non-power-of-ten scale that does not
+require exclusion: its exact scale is the reciprocal of an integer, so its own
+reciprocal is an integer.
 """
 
 EXACT_DIVISION_UNIT_CASES: list[

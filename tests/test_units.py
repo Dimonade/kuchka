@@ -32,6 +32,7 @@ from kuchka import Decimeter
 from kuchka import EarthMass
 from kuchka import Electronvolt
 from kuchka import Erg
+from kuchka import Femtosecond
 from kuchka import Foot
 from kuchka import Gigaelectronvolt
 from kuchka import Gigahertz
@@ -91,6 +92,7 @@ from kuchka import Minute
 from kuchka import Nanoampere
 from kuchka import Nanogram
 from kuchka import Nanometer
+from kuchka import Nanosecond
 from kuchka import Nanosiemens
 from kuchka import Nanovolt
 from kuchka import NauticalMile
@@ -102,6 +104,7 @@ from kuchka import Petavolt
 from kuchka import Picoampere
 from kuchka import Picogram
 from kuchka import Picometer
+from kuchka import Picosecond
 from kuchka import Pound
 from kuchka import SamplesPerSecond
 from kuchka import Second
@@ -221,6 +224,9 @@ from kuchka.units import VOLT
 from kuchka.units import WATT
 from kuchka.units import WATT_HOUR
 from kuchka.units import YARD
+from kuchka.units.temporal.time import FEMTOSECOND
+from kuchka.units.temporal.time import NANOSECOND
+from kuchka.units.temporal.time import PICOSECOND
 from tests.quantity_families import FINITE_DECIMALS
 
 if TYPE_CHECKING:
@@ -273,6 +279,20 @@ PREFIX_CASES: list[PrefixCase] = [
     PrefixCase("Gigaohm", Gigaohm, Ohm, Decimal("1e9"), GIGAOHM, OHM),
     PrefixCase("Milliwatt", Milliwatt, Watt, Decimal("0.001"), MILLIWATT, WATT),
     PrefixCase("Kilowatt", Kilowatt, Watt, Decimal(1000), KILOWATT, WATT),
+    PrefixCase(
+        "Femtosecond",
+        Femtosecond,
+        Second,
+        Decimal("0.000000000000001"),
+        FEMTOSECOND,
+        SECOND,
+    ),
+    PrefixCase(
+        "Picosecond", Picosecond, Second, Decimal("0.000000000001"), PICOSECOND, SECOND
+    ),
+    PrefixCase(
+        "Nanosecond", Nanosecond, Second, Decimal("0.000000001"), NANOSECOND, SECOND
+    ),
     PrefixCase(
         "Microsecond", Microsecond, Second, Decimal("0.000001"), MICROSECOND, SECOND
     ),
