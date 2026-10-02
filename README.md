@@ -411,16 +411,16 @@ The complete unit vocabulary is available in the API reference.
 
 ### Time and signals
 
-| Quantity          | Representative units                                               |
-| ----------------- | ------------------------------------------------------------------ |
-| Time              | `Millisecond`, `Second`, `Minute`, `Hour`                          |
-| Instant           | reached via `Time.as_instant()`                                    |
-| Frequency         | `Hertz` through `Petahertz`                                        |
-| Sampling Period   | reached via `Time.as_sampling_period()`                            |
-| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond` |
-| Baud Rate         | `Baud`, `Kilobaud`                                                 |
-| Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                  |
-| Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`                   |
+| Quantity          | Representative units                                                       |
+| ----------------- | -------------------------------------------------------------------------- |
+| Time              | `Femtosecond` through `Second`, `Minute` through `JulianYear`, and `Jiffy` |
+| Instant           | reached via `Time.as_instant()`                                            |
+| Frequency         | `Hertz` through `Petahertz`                                                |
+| Sampling Period   | reached via `Time.as_sampling_period()`                                    |
+| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`         |
+| Baud Rate         | `Baud`, `Kilobaud`                                                         |
+| Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                          |
+| Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`                           |
 
 ### Geometry and mechanics
 
