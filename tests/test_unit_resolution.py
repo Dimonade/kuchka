@@ -25,6 +25,7 @@ from kuchka import CubicCentimetre
 from kuchka import CubicMetre
 from kuchka import CubicMillimetre
 from kuchka import Dalton
+from kuchka import Day
 from kuchka import Decibel
 from kuchka import Decimeter
 from kuchka import DeltaCelsius
@@ -34,7 +35,9 @@ from kuchka import EarthMass
 from kuchka import Electronvolt
 from kuchka import Erg
 from kuchka import Fahrenheit
+from kuchka import Femtosecond
 from kuchka import Foot
+from kuchka import Fortnight
 from kuchka import Gigaelectronvolt
 from kuchka import Gigahertz
 from kuchka import Gigajoule
@@ -45,7 +48,9 @@ from kuchka import Hectare
 from kuchka import Hertz
 from kuchka import Hour
 from kuchka import Inch
+from kuchka import Jiffy
 from kuchka import Joule
+from kuchka import JulianYear
 from kuchka import Kelvin
 from kuchka import Kiloampere
 from kuchka import Kilobaud
@@ -107,6 +112,7 @@ from kuchka import Nanocoulomb
 from kuchka import Nanogram
 from kuchka import Nanojoule
 from kuchka import Nanometer
+from kuchka import Nanosecond
 from kuchka import Nanosiemens
 from kuchka import Nanovolt
 from kuchka import NauticalMile
@@ -121,6 +127,7 @@ from kuchka import Picocoulomb
 from kuchka import Picogram
 from kuchka import Picojoule
 from kuchka import Picometer
+from kuchka import Picosecond
 from kuchka import Pound
 from kuchka import Ratio
 from kuchka import SamplesPerSecond
@@ -140,6 +147,7 @@ from kuchka import Tonne
 from kuchka import Volt
 from kuchka import Watt
 from kuchka import WattHour
+from kuchka import Week
 from kuchka import Yard
 from kuchka.internal import symbols
 from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
@@ -213,11 +221,19 @@ TABLE_CASES = [
     (
         TIME_UNITS,
         {
+            "fs": Femtosecond,
+            "ps": Picosecond,
+            "ns": Nanosecond,
             f"{symbols.MICRO}s": Microsecond,
             "ms": Millisecond,
             "s": Second,
             "min": Minute,
             "h": Hour,
+            "d": Day,
+            "wk": Week,
+            "fortnight": Fortnight,
+            "a": JulianYear,
+            "jiffy": Jiffy,
         },
     ),
     (

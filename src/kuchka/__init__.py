@@ -82,6 +82,7 @@ from kuchka.units import CubicMetre
 from kuchka.units import CubicMillimeter
 from kuchka.units import CubicMillimetre
 from kuchka.units import Dalton
+from kuchka.units import Day
 from kuchka.units import Decibel
 from kuchka.units import Decimeter
 from kuchka.units import Decimetre
@@ -94,7 +95,9 @@ from kuchka.units import EarthMass
 from kuchka.units import Electronvolt
 from kuchka.units import Erg
 from kuchka.units import Fahrenheit
+from kuchka.units import Femtosecond
 from kuchka.units import Foot
+from kuchka.units import Fortnight
 from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gigajoule
@@ -109,7 +112,9 @@ from kuchka.units import Hectopascal
 from kuchka.units import Hertz
 from kuchka.units import Hour
 from kuchka.units import Inch
+from kuchka.units import Jiffy
 from kuchka.units import Joule
+from kuchka.units import JulianYear
 from kuchka.units import Kelvin
 from kuchka.units import Kiloampere
 from kuchka.units import Kilobaud
@@ -197,6 +202,7 @@ from kuchka.units import Nanogram
 from kuchka.units import Nanojoule
 from kuchka.units import Nanometer
 from kuchka.units import Nanometre
+from kuchka.units import Nanosecond
 from kuchka.units import Nanosiemens
 from kuchka.units import Nanovolt
 from kuchka.units import NauticalMile
@@ -214,6 +220,7 @@ from kuchka.units import Picogram
 from kuchka.units import Picojoule
 from kuchka.units import Picometer
 from kuchka.units import Picometre
+from kuchka.units import Picosecond
 from kuchka.units import Pound
 from kuchka.units import PoundForce
 from kuchka.units import PoundPerSquareInch
@@ -241,6 +248,7 @@ from kuchka.units import Turn
 from kuchka.units import Volt
 from kuchka.units import Watt
 from kuchka.units import WattHour
+from kuchka.units import Week
 from kuchka.units import Yard
 
 try:
@@ -249,6 +257,14 @@ except PackageNotFoundError:  # pragma: no cover -- running from an uninstalled 
     __version__ = "0.0.0+unknown"
 
 __all__: list[str] = [
+    "DAY",
+    "FEMTOSECOND",
+    "FORTNIGHT",
+    "JIFFY",
+    "JULIAN_YEAR",
+    "NANOSECOND",
+    "PICOSECOND",
+    "WEEK",
     "Acceleration",
     "Acre",
     "AmountOfSubstance",
@@ -281,6 +297,7 @@ __all__: list[str] = [
     "CubicMillimetre",
     "Current",
     "Dalton",
+    "Day",
     "Decibel",
     "Decimeter",
     "Decimetre",
@@ -295,8 +312,10 @@ __all__: list[str] = [
     "Energy",
     "Erg",
     "Fahrenheit",
+    "Femtosecond",
     "Foot",
     "Force",
+    "Fortnight",
     "Frequency",
     "Gigaelectronvolt",
     "Gigahertz",
@@ -316,7 +335,9 @@ __all__: list[str] = [
     "Instant",
     "InvalidConversionError",
     "InvalidMeasurementError",
+    "Jiffy",
     "Joule",
+    "JulianYear",
     "Kelvin",
     "Kiloampere",
     "Kilobaud",
@@ -409,6 +430,7 @@ __all__: list[str] = [
     "Nanojoule",
     "Nanometer",
     "Nanometre",
+    "Nanosecond",
     "Nanosiemens",
     "Nanovolt",
     "NauticalMile",
@@ -426,6 +448,7 @@ __all__: list[str] = [
     "Picojoule",
     "Picometer",
     "Picometre",
+    "Picosecond",
     "PlannedDimensionError",
     "Pound",
     "PoundForce",
@@ -467,6 +490,7 @@ __all__: list[str] = [
     "Volume",
     "Watt",
     "WattHour",
+    "Week",
     "Yard",
     "__version__",
     "codata_2022",

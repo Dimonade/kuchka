@@ -1,4 +1,4 @@
-"""Time quantities and constructors from attoseconds to astronomical years.
+"""Time quantities and constructors from femtoseconds to astronomical years.
 
 `Time` represents a duration.
 The second is the canonical SI base unit of time, and the unit in which derived
@@ -8,8 +8,8 @@ The constructors in this module cover exact SI decimal scales together with a sm
 of exact non-SI duration units that are useful in engineering, science, and everyday
 measurement.
 
-The SI-prefix constructors span nanoseconds, picoseconds, femtoseconds,
-attoseconds, microseconds, milliseconds, and seconds.
+The SI-prefix constructors span nanoseconds, picoseconds, femtoseconds, microseconds,
+milliseconds, and seconds.
 `Minute`, `Hour`, and `Day` provide exact human-scale durations.
 `Week` and `Fortnight` are defined as exact integer numbers of 24-hour days.
 
@@ -59,12 +59,6 @@ Ultrafast laser physics operates in the femtosecond regime:
 >>> laser_pulse = Femtosecond(100)
 >>> laser_pulse
 100 fs
-
-Attosecond pulses reach the timescale of electron dynamics in atoms and molecules:
-
->>> electron_dynamics = Attosecond(250)
->>> electron_dynamics
-250 as
 
 The SI second itself has an unusually concrete physical definition.
 One second contains exactly 9,192,631,770 periods of the radiation corresponding to the
@@ -149,9 +143,6 @@ True
 >>> Picosecond(1) == Femtosecond(1000)
 True
 
->>> Femtosecond(1) == Attosecond(1000)
-True
-
 Notes
 -----
 The second is an SI base unit.
@@ -220,6 +211,7 @@ See Also
 from __future__ import annotations
 
 from decimal import Decimal
+from fractions import Fraction
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
@@ -463,7 +455,7 @@ def Minute(value: Numeric) -> Time:
 
     >>> timeout = Minute(1) + Second(30)
     >>> timeout
-    90 s
+    1.5 min
 
     """
     return Time(to_exact(value) * MINUTE.scale, MINUTE)
@@ -665,24 +657,48 @@ def Jiffy(value: Numeric) -> Time:
 
 TIME_UNITS: Mapping[str, Callable[[Numeric], Time]] = MappingProxyType(
     {
+        FEMTOSECOND.symbol: Femtosecond,
+        PICOSECOND.symbol: Picosecond,
+        NANOSECOND.symbol: Nanosecond,
         MICROSECOND.symbol: Microsecond,
         MILLISECOND.symbol: Millisecond,
         SECOND.symbol: Second,
         MINUTE.symbol: Minute,
         HOUR.symbol: Hour,
+        DAY.symbol: Day,
+        WEEK.symbol: Week,
+        FORTNIGHT.symbol: Fortnight,
+        JULIAN_YEAR.symbol: JulianYear,
+        JIFFY.symbol: Jiffy,
     }
 )
 
 __all__ = [
+    "DAY",
+    "FEMTOSECOND",
+    "FORTNIGHT",
     "HOUR",
+    "JIFFY",
+    "JULIAN_YEAR",
     "MICROSECOND",
     "MILLISECOND",
     "MINUTE",
+    "NANOSECOND",
+    "PICOSECOND",
     "SECOND",
     "TIME_UNITS",
+    "WEEK",
+    "Day",
+    "Femtosecond",
+    "Fortnight",
     "Hour",
+    "Jiffy",
+    "JulianYear",
     "Microsecond",
     "Millisecond",
     "Minute",
+    "Nanosecond",
+    "Picosecond",
     "Second",
+    "Week",
 ]

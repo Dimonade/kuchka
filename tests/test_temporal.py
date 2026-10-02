@@ -12,21 +12,33 @@ import pytest
 
 from kuchka import Baud
 from kuchka import ConvertibleToFrequency
+from kuchka import Day
+from kuchka import Femtosecond
+from kuchka import Fortnight
 from kuchka import Frequency
 from kuchka import Hertz
+from kuchka import Hour
 from kuchka import IncompatibleDimensionError
 from kuchka import InvalidMeasurementError
+from kuchka import Jiffy
+from kuchka import JulianYear
 from kuchka import Kilobaud
 from kuchka import Kilohertz
+from kuchka import Microsecond
 from kuchka import Millisecond
+from kuchka import Minute
+from kuchka import Nanosecond
+from kuchka import Picosecond
 from kuchka import SampleRate
 from kuchka import SamplesPerSecond
 from kuchka import Second
 from kuchka import UnrepresentableDimensionError
 from kuchka import Volt
+from kuchka import Week
 from kuchka.dimensions import FREQUENCY
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import register
+from kuchka.units import SECOND
 
 
 def test_time_addition_and_prefix_conversion():
@@ -199,3 +211,61 @@ def test_sampling_period_and_sample_rate_reject_unsupported_reflected_operands()
 
     with pytest.raises(TypeError):
         object() / SamplesPerSecond(500)
+
+
+def test_subsecond_si_prefixes_are_exact():
+    assert Femtosecond(1000) == Picosecond(1)
+    assert Picosecond(1000) == Nanosecond(1)
+    assert Nanosecond(1000) == Microsecond(1)
+    assert Microsecond(1000) == Millisecond(1)
+    assert Millisecond(1000) == Second(1)
+
+
+def test_day_is_exactly_86400_seconds():
+    assert Day(1) == Second(86_400)
+
+
+def test_week_is_exactly_seven_days():
+    assert Week(1) == Day(7)
+    assert Week(1) == Second(604_800)
+
+
+def test_fortnight_is_exactly_two_weeks():
+    assert Fortnight(1) == Week(2)
+    assert Fortnight(1) == Day(14)
+    assert Fortnight(1) == Second(1_209_600)
+
+
+def test_julian_year_is_exactly_365_25_days():
+    assert JulianYear(1) == Day(Decimal("365.25"))
+    assert JulianYear(1) == Second(31_557_600)
+
+
+def test_physics_jiffy_is_light_crossing_one_femtometre():
+    speed_of_light = 299_792_458_000_000_000_000_000
+    assert Jiffy(1) * speed_of_light == Second(1)
+
+
+def test_jiffy_reciprocal_is_exact():
+    speed_of_light = 299_792_458_000_000_000_000_000
+    assert 1 / Jiffy(1) == Hertz(speed_of_light)
+
+
+@pytest.mark.parametrize(
+    ("constructor", "expected_seconds"),
+    [
+        pytest.param(Minute, Decimal(60), id="Minute"),
+        pytest.param(Hour, Decimal(3600), id="Hour"),
+        pytest.param(Day, Decimal(86_400), id="Day"),
+        pytest.param(Week, Decimal(604_800), id="Week"),
+        pytest.param(Fortnight, Decimal(1_209_600), id="Fortnight"),
+        pytest.param(JulianYear, Decimal(31_557_600), id="JulianYear"),
+    ],
+)
+def test_exact_long_duration_scales(constructor, expected_seconds):
+    assert constructor(1) == Second(expected_seconds)
+
+
+def test_human_scale_durations_compose_exactly():
+    duration = Fortnight(1) + Day(1) + Hour(6) + Minute(30) + Second(15)
+    assert duration.to(SECOND) == Second(1_319_415)
