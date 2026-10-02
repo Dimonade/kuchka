@@ -4,8 +4,9 @@ Two functions, two directions:
 
 - `to_exact`: raw input at a construction boundary -> `Fraction`.
     Every unit constructor (`Volt`, `Ampere`, `Celsius`, ...) routes through this.
-    Rejects anything that is not `int`, `float`, `Decimal`, or `Fraction`, plus `bool`
-    and non-finite `float`/`Decimal` values.
+    Rejects anything that is not `int`, `float`, `Decimal`, or `Fraction`, plus `bool`,
+    non-finite `float`/`Decimal` values, and numbers larger than
+    `kuchka.internal.limits.NUMERIC_LIMITS` allows.
 - `to_decimal`: an already-exact `Fraction` -> `Decimal`, for display
     (`__repr__`, `__format__`) and explicit materialization.
     Exact when the denominator's prime factors are 2 and 5;
@@ -24,8 +25,47 @@ from decimal import Decimal
 from fractions import Fraction
 
 from kuchka.errors import InvalidMeasurementError
+from kuchka.internal.limits import NUMERIC_LIMITS
 
 Numeric = int | float | Decimal | Fraction
+
+
+def _too_large(subject: str, detail: str) -> InvalidMeasurementError:
+    # NOTE: `subject` describes the value by its size.
+    # The value itself is never rendered, because rendering a number of this size is
+    # the cost being avoided.
+    return InvalidMeasurementError(
+        f"cannot construct a measurement from {subject}: {detail}.",
+    )
+
+
+def _check_integer(value: int, subject: str) -> None:
+    limit = NUMERIC_LIMITS.max_exact_bits
+    if value.bit_length() > limit:
+        raise _too_large(subject, f"it needs more than {limit} bits to store exactly")
+
+
+def _check_fraction(value: Fraction) -> None:
+    subject = (
+        f"a Fraction with a {value.numerator.bit_length()}-bit numerator and a "
+        f"{value.denominator.bit_length()}-bit denominator"
+    )
+    _check_integer(value.numerator, subject)
+    _check_integer(value.denominator, subject)
+
+
+def _check_decimal(value: Decimal) -> None:
+    limits = NUMERIC_LIMITS
+    _, digits, exponent = value.as_tuple()
+    subject = f"a Decimal with {len(digits)} digits and exponent {exponent}"
+    if abs(int(exponent)) > limits.max_decimal_exponent:
+        raise _too_large(
+            subject, f"the exponent must be within +/-{limits.max_decimal_exponent}"
+        )
+    if len(digits) > limits.max_decimal_digits:
+        raise _too_large(
+            subject, f"at most {limits.max_decimal_digits} digits are accepted"
+        )
 
 
 def to_exact(value: object) -> Fraction:
@@ -38,16 +78,18 @@ def to_exact(value: object) -> Fraction:
             "expected int, float, Decimal, or Fraction",
         )
     if isinstance(value, Fraction):
+        _check_fraction(value)
         return value
     if isinstance(value, int):
+        _check_integer(value, f"an int of {value.bit_length()} bits")
         return Fraction(value)
     if isinstance(value, Decimal):
-        try:
-            return Fraction(value)
-        except (ValueError, OverflowError) as exc:
+        if not value.is_finite():
             raise InvalidMeasurementError(
                 f"cannot construct a measurement from {value!r}: not finite.",
-            ) from exc
+            )
+        _check_decimal(value)
+        return Fraction(value)
     if isinstance(value, float):
         try:
             return Fraction(str(value))
