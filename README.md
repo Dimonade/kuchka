@@ -632,6 +632,11 @@ f"{voltage:.2e}"  # "1.23e+3 V"
 f"{voltage:,.2f}"  # "1,234.50 V"
 ```
 
+The text depends on the value and the specification alone.
+The precision, rounding mode, and traps of the active `decimal` context do not affect it.
+The magnitude is rounded once, from its exact value, and a tie rounds away from zero: `f"{Volt(2.665):.2f}"` is `"2.67 V"`.
+Without a precision, a value that has no finite decimal form shows 28 significant digits, so `repr(Volt(Fraction(1, 3)))` is `"0.3333333333333333333333333333 V"`.
+
 ## Examples
 
 The repository contains longer, task-oriented examples:

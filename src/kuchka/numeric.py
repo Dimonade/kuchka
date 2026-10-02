@@ -7,10 +7,12 @@ Two functions, two directions:
     Rejects anything that is not `int`, `float`, `Decimal`, or `Fraction`, plus `bool`,
     non-finite `float`/`Decimal` values, and numbers larger than
     `kuchka.internal.limits.NUMERIC_LIMITS` allows.
-- `to_decimal`: an already-exact `Fraction` -> `Decimal`, for display
-    (`__repr__`, `__format__`) and explicit materialization.
+- `to_decimal`: an already-exact `Fraction` -> `Decimal`, for computations that run
+    in `Decimal` (logarithms and powers).
     Exact when the denominator's prime factors are 2 and 5;
-    rounded to the current `Decimal` context precision otherwise.
+    rounded to the active `Decimal` context precision otherwise.
+    Display has its own path, `kuchka.internal.display.render`, which does not read
+    the active context.
 
 `int` and `Decimal` convert to `Fraction` exactly, with no rounding, in either
 direction.
@@ -31,9 +33,8 @@ Numeric = int | float | Decimal | Fraction
 
 
 def _too_large(subject: str, detail: str) -> InvalidMeasurementError:
-    # NOTE: `subject` describes the value by its size.
-    # The value itself is never rendered, because rendering a number of this size is
-    # the cost being avoided.
+    # NOTE: `subject` describes the value by its size; the value itself is never
+    # rendered, because rendering a number of this size is the cost being avoided.
     return InvalidMeasurementError(
         f"cannot construct a measurement from {subject}: {detail}.",
     )
@@ -113,7 +114,7 @@ def to_exact(value: object) -> Fraction:
 
 
 def to_decimal(value: Fraction) -> Decimal:
-    """Materialize an exact `Fraction` into a `Decimal`. Display only."""
+    """Materialize an exact `Fraction` as a `Decimal` at the active precision."""
     return Decimal(value.numerator) / Decimal(value.denominator)
 
 

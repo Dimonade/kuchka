@@ -62,6 +62,18 @@ That is far beyond every `float` and every physical constant.
 Anything larger raises `InvalidMeasurementError` immediately, with a message that describes the value by its size.
 The limits live in `kuchka.internal.limits`.
 
+#### Display no longer depends on the active `Decimal` context
+
+`repr()`, `str()`, and `format()` rendered a magnitude with whatever precision, rounding mode, and traps the caller's `decimal` context had set.
+Lowering `prec`, trapping `Inexact`, or setting `ROUND_DOWN` changed the text, and trapping `Inexact` made `repr()` raise.
+The value was also rounded twice, first to 28 digits and then to the requested precision.
+
+A measurement is now rendered in a context of its own and rounded once, from its exact value.
+Ties round away from zero: `f"{Volt(2.665):.2f}"` is `2.67 V`, and `0.125` is `0.13 V` (previously `2.66 V` and `0.12 V`).
+Output for values that were exact before is unchanged.
+The caller's context and its flags are left untouched.
+The rules live in `kuchka.internal.display`.
+
 ## [0.1.3] - 2026-09-29
 
 ### Added
