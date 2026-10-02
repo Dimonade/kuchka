@@ -15,8 +15,8 @@ from typing import Generic
 from typing import TypeVar
 
 from kuchka.errors import InvalidMeasurementError
+from kuchka.internal.display import render
 from kuchka.internal.typing import override
-from kuchka.numeric import to_decimal
 from kuchka.quantities.base.units import _DisplayUnit
 
 if TYPE_CHECKING:
@@ -35,7 +35,7 @@ class _ScalarStorage(Generic[_UnitT]):
     kelvin for Temperature, ...), plus the unit it currently displays as.
     `Fraction`, not `Decimal`: an exact rational input (`Litre(Fraction(5, 18))`) stays
     exact through storage; approximation happens only at `repr()`/`__format__`, via
-    `to_decimal`.
+    `kuchka.internal.display.render`.
 
     The class itself is part of the public surface (`Voltage`, ...), so its
     constructor is a validation boundary just like the unit constructors are:
@@ -154,21 +154,23 @@ class _ScalarStorage(Generic[_UnitT]):
 
     @override
     def __repr__(self) -> str:
-        value = to_decimal(self.value_in(self._display_unit))
-        return f"{format(value, 'f')} {self._display_unit.symbol}"
+        return (
+            f"{render(self.value_in(self._display_unit))} {self._display_unit.symbol}"
+        )
 
     @override
     def __format__(self, format_spec: str) -> str:
         """Format the magnitude in the display unit, e.g. `f"{Volt(4.2):.2f}"`.
 
         Empty `format_spec` (`f"{voltage}"`, `str(voltage)`) matches `repr()`.
-        Non-empty spec applies to the materialized `Decimal`; unit symbol appended
-        after -- `f"{Volt(4.2):.2f}"` reads `"4.20 V"`.
+        A non-empty spec is a `Decimal` format spec applied to the exact value, rounded
+        once and independent of the active `Decimal` context; the unit symbol follows:
+        `f"{Volt(4.2):.2f}"` reads `"4.20 V"`.
         """
         if not format_spec:
             return repr(self)
-        value = to_decimal(self.value_in(self._display_unit))
-        return f"{format(value, format_spec)} {self._display_unit.symbol}"
+        text = render(self.value_in(self._display_unit), format_spec)
+        return f"{text} {self._display_unit.symbol}"
 
 
 __all__ = ["_ScalarStorage"]
