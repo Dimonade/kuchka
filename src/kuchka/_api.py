@@ -99,6 +99,7 @@ from kuchka.units import Kilobaud
 from kuchka.units import Kilocalorie
 from kuchka.units import Kiloelectronvolt
 from kuchka.units import Kilogram
+from kuchka.units import KilogramForce
 from kuchka.units import KilogramPerCubicMeter
 from kuchka.units import KilogramPerCubicMetre
 from kuchka.units import KilogramPerLiter
@@ -125,6 +126,7 @@ from kuchka.units import Megaelectronvolt
 from kuchka.units import Megagram
 from kuchka.units import Megahertz
 from kuchka.units import Megajoule
+from kuchka.units import Meganewton
 from kuchka.units import Megaohm
 from kuchka.units import Megapascal
 from kuchka.units import MegasamplesPerSecond
@@ -147,6 +149,7 @@ from kuchka.units import Microlitre
 from kuchka.units import Micrometer
 from kuchka.units import Micrometre
 from kuchka.units import Micromole
+from kuchka.units import Micronewton
 from kuchka.units import Microohm
 from kuchka.units import Microsecond
 from kuchka.units import Microsiemens
@@ -314,6 +317,7 @@ __all__ = [
     "Kilocalorie",
     "Kiloelectronvolt",
     "Kilogram",
+    "KilogramForce",
     "KilogramPerCubicMeter",
     "KilogramPerCubicMetre",
     "KilogramPerLiter",
@@ -344,6 +348,7 @@ __all__ = [
     "Megagram",
     "Megahertz",
     "Megajoule",
+    "Meganewton",
     "Megaohm",
     "Megapascal",
     "MegasamplesPerSecond",
@@ -366,6 +371,7 @@ __all__ = [
     "Micrometer",
     "Micrometre",
     "Micromole",
+    "Micronewton",
     "Microohm",
     "Microsecond",
     "Microsiemens",

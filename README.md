@@ -431,7 +431,7 @@ The complete unit vocabulary is available in the API reference.
 | Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`                                                        |
 | Acceleration | `MetrePerSecondSquared`                                                                                    |
 | Mass         | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                             |
-| Force        | `Millinewton`, `Newton`, `Kilonewton`, `Dyne`, `PoundForce`                                                |
+| Force        | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                              |
 | Density      | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                      |
 | Pressure     | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch` |
 

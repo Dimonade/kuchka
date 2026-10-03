@@ -18,6 +18,7 @@ from kuchka.units import charge
 from kuchka.units import conductance
 from kuchka.units import current
 from kuchka.units import energy
+from kuchka.units import force
 from kuchka.units import frequency
 from kuchka.units import length
 from kuchka.units import logarithmic
@@ -286,6 +287,19 @@ TABLE_CASES = [
             "B": logarithmic.Bel,
         },
     ),
+    (
+        force.FORCE_UNITS,
+        {
+            f"{symbols.MICRO}N": force.Micronewton,
+            "mN": force.Millinewton,
+            "N": force.Newton,
+            "kN": force.Kilonewton,
+            "MN": force.Meganewton,
+            "dyn": force.Dyne,
+            "lbf": force.PoundForce,
+            "kgf": force.KilogramForce,
+        },
+    ),
 ]
 
 TABLE_CASE_IDS = [
@@ -310,6 +324,7 @@ TABLE_CASE_IDS = [
     "volume",
     "conductance",
     "logarithmic_ratio",
+    "force",
 ]
 
 

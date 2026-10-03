@@ -23,6 +23,7 @@ from kuchka.units import charge
 from kuchka.units import conductance
 from kuchka.units import current
 from kuchka.units import energy
+from kuchka.units import force
 from kuchka.units import frequency
 from kuchka.units import length
 from kuchka.units import mass
@@ -774,6 +775,38 @@ PREFIX_CASES: list[PrefixCase] = [
         Decimal("4.184"),
         energy.THERMOCHEMICAL_CALORIE,
         energy.JOULE,
+    ),
+    PrefixCase(
+        "Micronewton",
+        force.Micronewton,
+        force.Newton,
+        Decimal("0.000001"),
+        force.MICRONEWTON,
+        force.NEWTON,
+    ),
+    PrefixCase(
+        "Millinewton",
+        force.Millinewton,
+        force.Newton,
+        Decimal("0.001"),
+        force.MILLINEWTON,
+        force.NEWTON,
+    ),
+    PrefixCase(
+        "Kilonewton",
+        force.Kilonewton,
+        force.Newton,
+        Decimal(1000),
+        force.KILONEWTON,
+        force.NEWTON,
+    ),
+    PrefixCase(
+        "Meganewton",
+        force.Meganewton,
+        force.Newton,
+        Decimal(1_000_000),
+        force.MEGANEWTON,
+        force.NEWTON,
     ),
 ]
 

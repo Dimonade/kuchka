@@ -9,29 +9,25 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
+#### New units added
+
+- Time:
+  - `Femtosecond`, `Picosecond`, and `Nanosecond`.
+  - `Day`, `Week`, `Fortnight`, and `JulianYear`. All exact scales of a `Second`.
+  - `Jiffy`.
+- Temperature: `Fahrenheit`: the usual `Fahrenheit(32) == Celsius(0)`, `Fahrenheit(-459.67) == Kelvin(0)`.
+- Current: `Picoampere`, `Nanoampere`, and `Megaampere`.
+- Resistance: `Microohm` and `Gigaohm`.
+- Conductance: `Nanosiemens`.
+- Voltage: `Nanovolt`, `Megavolt`, and `Petavolt`.
+- Power: `Picowatt`, `Nanowatt`, `Megawatt` to `Petawatt`, `Horsepower`, and `MetricHorsepower`.
+- Force: `KilogramForce`, `Meganewton`, `Micronewton`,.
+
 #### `is_close` compares with an explicit tolerance
 
 `a.is_close(b, tolerance=...)` on every quantity shape.
 The tolerance is a required keyword-only quantity (a `TemperatureDelta` for `Temperature`, a `Time` for `Instant`), and the test is exact and inclusive.
 Angles measure the short way round the circle.
-
-#### `Time` gets new units
-
-- `Femtosecond`, `Picosecond`, and `Nanosecond`.
-- `Day`, `Week`, `Fortnight`, and `JulianYear`. All exact scales of a `Second`.
-- `Jiffy`.
-
-#### Temperature gets `Fahrenheit`
-
-`Fahrenheit`, and the usual `Fahrenheit(32) == Celsius(0)`, `Fahrenheit(-459.67) == Kelvin(0)`.
-
-#### Electrical families got more units
-
-- `Current` family gets new units: `Picoampere`, `Nanoampere`, and `Megaampere`.
-- `Resistance` family gets new units: `Microohm` and `Gigaohm`.
-- `Conductance` family gets a new unit: `Nanosiemens`.
-- `Voltage` family gets new units: `Nanovolt`, `Megavolt`, and `Petavolt`.
-- `Power` family gets new units: `Picowatt`, `Nanowatt`, `Megawatt` to `Petawatt`, `Horsepower`, and `MetricHorsepower`.
 
 #### `LogarithmicRatio`, the first logarithmic quantity
 
