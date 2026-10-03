@@ -25,6 +25,7 @@ from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.typing import override
 from kuchka.numeric import Numeric
+from kuchka.numeric import exact_quotient
 from kuchka.numeric import to_exact
 from kuchka.quantities.base.ordering import _OrderedScalarMixin
 from kuchka.quantities.base.storage import _ScalarStorage
@@ -151,9 +152,14 @@ class PureLogarithmicQuantity(_OrderedScalarMixin, _ScalarStorage[LogarithmicUni
         if isinstance(other, PureLogarithmicQuantity):
             if type(self) is not type(other):
                 raise IncompatibleDimensionError("divide", self, other)
-            return self._magnitude / other._magnitude
+            return exact_quotient(
+                self._magnitude, other._magnitude, left=self, right=other
+            )
         if isinstance(other, Numeric):
-            return type(self)(self._magnitude / to_exact(other), self._display_unit)
+            magnitude = exact_quotient(
+                self._magnitude, to_exact(other), left=self, right=other
+            )
+            return type(self)(magnitude, self._display_unit)
         return NotImplemented
 
     def __neg__(self) -> Self:
