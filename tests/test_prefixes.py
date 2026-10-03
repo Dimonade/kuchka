@@ -25,11 +25,10 @@ if TYPE_CHECKING:
     from kuchka.internal.prefixes import Prefix
 
 PREFIX_TABLE_CASES = [
-    (prefixes.QUECTO, -30, Decimal("0.00000000000000000000000000001"), "quecto", "q"),
+    (prefixes.QUECTO, -30, Decimal("0.000000000000000000000000000001"), "quecto", "q"),
     (prefixes.RONTO, -27, Decimal("0.000000000000000000000000001"), "ronto", "r"),
-    (prefixes.YOCTO, -24, Decimal("0.000000000000000000000001"), "yocto", "y")(
-        prefixes.ZEPTO, -21, Decimal("0.000000000000000000001"), "zepto", "z"
-    ),
+    (prefixes.YOCTO, -24, Decimal("0.000000000000000000000001"), "yocto", "y"),
+    (prefixes.ZEPTO, -21, Decimal("0.000000000000000000001"), "zepto", "z"),
     (prefixes.ATTO, -18, Decimal("0.000000000000000001"), "atto", "a"),
     (prefixes.FEMTO, -15, Decimal("0.000000000000001"), "femto", "f"),
     (prefixes.PICO, -12, Decimal("0.000000000001"), "pico", "p"),
