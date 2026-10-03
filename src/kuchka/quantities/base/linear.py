@@ -21,6 +21,7 @@ from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.typing import override
 from kuchka.numeric import Numeric
+from kuchka.numeric import exact_quotient
 from kuchka.numeric import to_exact
 from kuchka.quantities.base.ordering import _OrderedScalarMixin
 from kuchka.quantities.base.registry import _DIMENSION_REGISTRY
@@ -167,10 +168,15 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
     def __truediv__(self, other: object) -> LinearQuantity | Fraction:
         if isinstance(other, LinearQuantity):
             result_dimension = self.dimension / other.dimension
-            result_magnitude = self._magnitude / other._magnitude
+            result_magnitude = exact_quotient(
+                self._magnitude, other._magnitude, left=self, right=other
+            )
             return _promote(result_dimension, result_magnitude)
         if isinstance(other, Numeric):
-            return type(self)(self._magnitude / to_exact(other), self._display_unit)
+            magnitude = exact_quotient(
+                self._magnitude, to_exact(other), left=self, right=other
+            )
+            return type(self)(magnitude, self._display_unit)
         return NotImplemented
 
     def __rtruediv__(self, other: object) -> LinearQuantity | Fraction:
@@ -191,7 +197,9 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
             if _DIMENSION_REGISTRY.get(self.dimension) is not type(self):
                 return NotImplemented
             result_dimension = DIMENSIONLESS / self.dimension
-            result_magnitude = to_exact(other) / self._magnitude
+            result_magnitude = exact_quotient(
+                to_exact(other), self._magnitude, left=other, right=self
+            )
             return _promote(result_dimension, result_magnitude)
         return NotImplemented
 

@@ -15,6 +15,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from typing import Protocol
 
+from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.typing import override
 from kuchka.numeric import to_exact
 
@@ -23,6 +24,19 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+
+
+def _positive_scale(kind: str, name: str, scale: Numeric) -> Fraction:
+    """Return `scale` as an exact `Fraction`, which must be positive.
+
+    A unit's scale divides every value read back in that unit, so zero would make
+    each reading a division by zero.
+    """
+    exact = to_exact(scale)
+    if exact <= 0:
+        msg = f"{kind} {name!r} needs a positive scale, got {scale!r}."
+        raise InvalidMeasurementError(msg)
+    return exact
 
 
 class UnitDef:
@@ -47,7 +61,7 @@ class UnitDef:
         """Store name, symbol, scale, and dimension."""
         self.name = name
         self.symbol = symbol
-        self.scale: Fraction = to_exact(scale)
+        self.scale: Fraction = _positive_scale("unit", name, scale)
         self.dimension = dimension
 
     @override
@@ -76,7 +90,7 @@ class AffineUnitDef:
         """Store name, symbol, and scale/offset, both normalized to ``Fraction``."""
         self.name = name
         self.symbol = symbol
-        self.scale: Fraction = to_exact(scale)
+        self.scale: Fraction = _positive_scale("unit", name, scale)
         self.offset: Fraction = to_exact(offset)
 
     @override
@@ -102,7 +116,7 @@ class LogarithmicUnitDef:
         """Store name, symbol, and scale, the scale normalized to ``Fraction``."""
         self.name = name
         self.symbol = symbol
-        self.scale: Fraction = to_exact(scale)
+        self.scale: Fraction = _positive_scale("unit", name, scale)
 
     @override
     def __repr__(self) -> str:

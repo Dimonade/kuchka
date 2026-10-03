@@ -642,6 +642,7 @@ Application-level measurement errors derive from `MeasurementError`:
 | `InvalidMeasurementError`       | a constructor receives a non-numeric value, a `bool`, or an invalid measurement such as a temperature below 0 K |
 | `IncompatibleDimensionError`    | incompatible quantities or concepts are combined                                                                |
 | `InvalidConversionError`        | `.to(...)` receives a unit that is not valid for the quantity                                                   |
+| `DivisionByZeroError`           | a measurement is divided by zero, or the reciprocal of zero is taken; also a `ZeroDivisionError`                |
 | `UnrepresentableDimensionError` | arithmetic produces a dimension without a registered engineering type                                           |
 | `PlannedDimensionError`         | an unregistered dimension already has a named future type                                                       |
 
