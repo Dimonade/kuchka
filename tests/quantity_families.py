@@ -194,7 +194,7 @@ EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
     ),
     "charge": frozenset({"mAh", "Ah"}),
     "velocity": frozenset({"km/h"}),
-    "force": frozenset({"lbf"}),
+    "force": frozenset({"lbf", "kgf"}),
     "pressure": frozenset({"psi"}),
     "temperature_delta": frozenset({"dF"}),
     "time": frozenset(

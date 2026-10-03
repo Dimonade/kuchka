@@ -17,9 +17,12 @@ from kuchka import Force
 from kuchka import IncompatibleDimensionError
 from kuchka import InvalidMeasurementError
 from kuchka import Kilogram
+from kuchka import KilogramForce
 from kuchka import Kilonewton
 from kuchka import Mass
+from kuchka import Meganewton
 from kuchka import MetrePerSecondSquared
+from kuchka import Micronewton
 from kuchka import Millinewton
 from kuchka import Newton
 from kuchka import PoundForce
@@ -34,6 +37,10 @@ def test_force_prefixes_scale_correctly():
 def test_dyne_is_exact():
     """The CGS unit of force: exactly 1e-5 N by definition."""
     assert Dyne(100_000) == Newton(1)
+
+
+def test_kilogram_force_converts_exactly_to_newtons() -> None:
+    assert KilogramForce(1) == Newton(Decimal("9.80665"))
 
 
 def test_pound_force_is_exact():
@@ -77,3 +84,8 @@ def test_naked_number_addition_is_rejected():
 def test_force_is_incompatible_with_voltage():
     with pytest.raises(IncompatibleDimensionError):
         Newton(1) + Volt(1)  # type: ignore[operator]  # not (yet) flagged by ty across sibling quantity types
+
+
+def test_micronewton_and_meganewton_span_six_orders_of_magnitude() -> None:
+    assert Micronewton(1_000_000) == Newton(1)
+    assert Meganewton(1) == Newton(1_000_000)
