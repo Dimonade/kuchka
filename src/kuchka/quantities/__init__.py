@@ -9,14 +9,33 @@ they share one implementation (:class:`LinearQuantity`, in ``base.py``) and diff
 in their :class:`~kuchka.dimensions.Dimension` and, where relevant, their
 multiplication and division overloads (``electrical.py``, ``thermal.py``).
 
-Each leaf module owns a hand-written ``__all__`` naming exactly what it defines;
-this package aggregates them with a wildcard import and derives its own ``__all__``
-from whatever that leaves in scope, so adding a unit to an existing dimension never
-requires touching this file.
+Each leaf module owns one hand-written ``__all__`` naming exactly what it defines.
+This package imports each leaf and composes its own ``__all__`` from theirs, so adding
+a unit to an existing dimension never requires touching this file.
+A new leaf module needs three lines here (its module import, its wildcard import, and
+its ``__all__ +=``), and ``tests/test_public_api_surface.py`` fails if one is missing.
 """
 
 from __future__ import annotations
 
+from kuchka.quantities import amount
+from kuchka.quantities import angular
+from kuchka.quantities import area
+from kuchka.quantities import base
+from kuchka.quantities import charge
+from kuchka.quantities import density
+from kuchka.quantities import electrical
+from kuchka.quantities import energy
+from kuchka.quantities import kinematics
+from kuchka.quantities import length
+from kuchka.quantities import logarithmic
+from kuchka.quantities import luminous_intensity
+from kuchka.quantities import mass
+from kuchka.quantities import pressure
+from kuchka.quantities import proportion
+from kuchka.quantities import temporal
+from kuchka.quantities import thermal
+from kuchka.quantities import volume
 from kuchka.quantities.amount import *
 from kuchka.quantities.angular import *
 from kuchka.quantities.area import *
@@ -36,4 +55,22 @@ from kuchka.quantities.temporal import *
 from kuchka.quantities.thermal import *
 from kuchka.quantities.volume import *
 
-__all__: list[str] = sorted(name for name in globals() if not name.startswith("_"))
+__all__: list[str] = []
+__all__ += amount.__all__
+__all__ += angular.__all__
+__all__ += area.__all__
+__all__ += base.__all__
+__all__ += charge.__all__
+__all__ += density.__all__
+__all__ += electrical.__all__
+__all__ += energy.__all__
+__all__ += kinematics.__all__
+__all__ += length.__all__
+__all__ += logarithmic.__all__
+__all__ += luminous_intensity.__all__
+__all__ += mass.__all__
+__all__ += pressure.__all__
+__all__ += proportion.__all__
+__all__ += temporal.__all__
+__all__ += thermal.__all__
+__all__ += volume.__all__
