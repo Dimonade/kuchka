@@ -244,7 +244,6 @@ This includes quantities such as `Voltage`, `Current`, `Length`, `Mass`, `Time`,
 ### Affine quantities
 
 Some values represent readings on a scale.
-`Temperature` is the current example.
 
 A reading minus a reading gives a linear delta, and adding a delta shifts the reading.
 Adding two readings is rejected.
