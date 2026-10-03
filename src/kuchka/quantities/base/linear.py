@@ -117,6 +117,17 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
             self._reject_naked_number("subtract", other)
         return NotImplemented
 
+    def is_close(self, other: Self, *, tolerance: Self) -> bool:
+        """Return whether `other` is within `tolerance` of `self`, inclusive.
+
+        The comparison is exact, and the tolerance is a quantity of the same type with
+        no default: what counts as close is always written down by the caller.
+        Closeness is not transitive: `a` can be close to `b`, and `b` to `c`, while
+        `a` is not close to `c`.
+        """
+        limit = self._tolerance_limit(other, tolerance, type(self))
+        return abs(self._magnitude - other._magnitude) <= limit
+
     def _reject_naked_number(self, operation: str, other: object) -> None:
         unit_name = self._canonical_unit.name.capitalize()
         msg = (

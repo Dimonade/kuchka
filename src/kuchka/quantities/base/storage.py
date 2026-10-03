@@ -14,6 +14,7 @@ from typing import ClassVar
 from typing import Generic
 from typing import TypeVar
 
+from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.display import render
 from kuchka.internal.typing import override
@@ -116,6 +117,31 @@ class _ScalarStorage(Generic[_UnitT]):
     @override
     def __delattr__(self, name: str) -> None:
         raise AttributeError(f"{type(self).__name__} is immutable")
+
+    def _tolerance_limit(
+        self, other: object, tolerance: object, tolerance_type: type
+    ) -> Fraction:
+        """Validate the operands of `is_close` and return the tolerance's magnitude.
+
+        `other` must be the same type as `self`, and `tolerance` an instance of
+        `tolerance_type` that is not negative.
+        A plain number is no tolerance: it has no unit to say what is being allowed.
+        """
+        if type(other) is not type(self):
+            raise IncompatibleDimensionError("compare", self, other)
+        if type(tolerance) is not tolerance_type or not isinstance(
+            tolerance, _ScalarStorage
+        ):
+            msg = (
+                f"the tolerance for comparing {type(self).__name__} values must be a "
+                f"{tolerance_type.__name__}, got {tolerance!r}."
+            )
+            raise InvalidMeasurementError(msg)
+        limit = tolerance._magnitude  # noqa: SLF001 -- same class family, same storage
+        if limit < 0:
+            msg = f"the tolerance must not be negative, got {tolerance!r}."
+            raise InvalidMeasurementError(msg)
+        return limit
 
     @property
     def unit(self) -> _UnitT:
