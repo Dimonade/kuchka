@@ -116,6 +116,15 @@ class PureLogarithmicQuantity(_OrderedScalarMixin, _ScalarStorage[LogarithmicUni
             self._reject_naked_number("subtract", other)
         return NotImplemented
 
+    def is_close(self, other: Self, *, tolerance: Self) -> bool:
+        """Return whether `other` is within `tolerance` of `self`, inclusive.
+
+        The tolerance is a level of the same type, e.g. ``Decibel(0.1)``, and has no
+        default.
+        """
+        limit = self._tolerance_limit(other, tolerance, type(self))
+        return abs(self._magnitude - other._magnitude) <= limit
+
     def _reject_naked_number(self, operation: str, other: object) -> None:
         unit_name = self._canonical_unit.name.capitalize()
         msg = (

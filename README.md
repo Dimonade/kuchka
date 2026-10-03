@@ -322,7 +322,7 @@ from kuchka import Decibel
 
 Decibel(20) + Decibel(-3.5) + Decibel(-1.5) == Decibel(15)
 Decibel(-0.2) * 30 == Decibel(-6)  # 0.2 dB per metre over 30 metres.
-abs(Decibel(20.3) - Decibel(20)) <= Decibel(0.5)  # a gain tolerance check.
+Decibel(20.3).is_close(Decibel(20), tolerance=Decibel(0.5))  # a gain tolerance check.
 Decibel(3) * Decibel(3)  # rejected: two levels do not multiply (`TypeError`).
 ```
 
@@ -581,9 +581,41 @@ The construction is still exact: `5/18` litre becomes `5/18 * 1/1000 = 1/3600` c
 
 `float` input is parsed through its string representation, so `Volt(4.2)` preserves the digits written by the programmer instead of storing the binary floating-point representation of the float.
 
-Angular units are the deliberate exception to mathematical exactness because pi is irrational.
-`Radian` is canonical, while the other angular scales use `kuchka`'s fixed rational internal representation of pi.
-See [Exactness and angular units](docs/concepts/exactness.md) for the full rationale.
+### Angles and pi
+
+`Turn` is the canonical angle unit, and `Degree`, `Gradian`, `ArcMinute`, and `ArcSecond` are exact fractions of a turn, so none of them involves pi.
+Only `Radian` does: it converts with pi held as an exact rational to 100 decimal places, so every digit a conversion displays is correct.
+
+```python
+import math
+
+from kuchka import Degree
+from kuchka import Radian
+
+Degree(90) + Degree(45) == Degree(135)  # exact.
+Radian(math.pi) == Degree(180)  # False: a float is not exactly pi.
+```
+
+### Comparing with a tolerance
+
+`==` asks whether two values are the same number, so a float that carries rounding error is never equal to its ideal value.
+`is_close` asks whether two values are near enough, with the tolerance written down as a quantity:
+
+```python
+import math
+
+from kuchka import Degree
+from kuchka import Millivolt
+from kuchka import Radian
+from kuchka import Volt
+
+Volt(0.1 + 0.2) == Volt(0.3)  # False
+Volt(0.1 + 0.2).is_close(Volt(0.3), tolerance=Millivolt(1))  # True
+Radian(math.pi).is_close(Degree(180), tolerance=Radian(1e-12))  # True
+```
+
+The tolerance has no default and is a quantity of the right type (a `TemperatureDelta` for a `Temperature`), so a bare number is rejected.
+See [Exactness, angles, and tolerance](docs/concepts/exactness.md) for why equality stays exact and how each shape measures distance.
 
 ## Physical constants
 
@@ -694,7 +726,7 @@ Deeper design material is kept separately:
 
 - **[Quantity shapes and semantics](docs/concepts/quantity_shapes.md)** - Linear, Affine, Modular, and Logarithmic quantities, including temperature, angle, and decibel semantics.
 - **[Dimensional algebra and derived quantities](docs/concepts/dimensional_algebra.md)** - exponent-vector arithmetic, registered results, reciprocal relationships, and the boundary between runtime algebra and static overloads.
-- **[Exactness and angular units](docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, and the fixed internal representation used for angular scales.
+- **[Exactness, angles, and tolerance](docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, angles and pi, and comparing with a tolerance.
 - **[Design choices](docs/design_choices.md)** - constructor functions, unit definitions, canonical types, string-resolution boundaries, and the reasons for a curated vocabulary.
 - **[Comparison with existing tools](docs/comparison.md)** - the deliberate trade-offs versus Pint, physipy, impunity, and related libraries.
 

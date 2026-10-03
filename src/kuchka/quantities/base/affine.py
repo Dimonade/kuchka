@@ -150,6 +150,16 @@ class AffineQuantity(
             return type(self)(self._magnitude - other.magnitude, self._display_unit)
         return NotImplemented
 
+    def is_close(self, other: Self, *, tolerance: _DeltaT) -> bool:
+        """Return whether `other` is within `tolerance` of `self`, inclusive.
+
+        The tolerance is the delta type, what a difference of two readings is:
+        a `TemperatureDelta` for `Temperature`, a `Time` for `Instant`.
+        It has no default.
+        """
+        limit = self._tolerance_limit(other, tolerance, self._delta_type)
+        return abs(self._magnitude - other._magnitude) <= limit
+
     # NOTE: Deliberately no __mul__ / __rmul__ / __truediv__ by a scalar:
     # see the class docstring for why scaling a point on a scale is left undefined
     # rather than implemented.

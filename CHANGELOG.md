@@ -9,6 +9,12 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
+#### `is_close` compares with an explicit tolerance
+
+`a.is_close(b, tolerance=...)` on every quantity shape.
+The tolerance is a required keyword-only quantity (a `TemperatureDelta` for `Temperature`, a `Time` for `Instant`), and the test is exact and inclusive.
+Angles measure the short way round the circle.
+
 #### `Time` gets new units
 
 - `Femtosecond`, `Picosecond`, and `Nanosecond`.
@@ -74,6 +80,21 @@ Ties round away from zero: `f"{Volt(2.665):.2f}"` is `2.67 V`, and `0.125` is `0
 Output for values that were exact before is unchanged.
 The caller's context and its flags are left untouched.
 The rules live in `kuchka.internal.display`.
+
+#### Angles are exact in turns, and radians use a precise pi
+
+`Turn` is now the canonical angle unit.
+`Degree`, `Gradian`, `ArcMinute`, and `ArcSecond` are plain fractions of a turn (`Degree` is 1/360), so pi no longer appears in them.
+`Radian` converts with pi held as an exact rational to 100 decimal places, which replaces a constant truncated at 15 decimals.
+Previously `Radian(1).to(DEGREE)` displayed 28 digits of which only the first 15 were correct, and every digit it shows is now correct.
+
+Values compare differently across the radian boundary.
+`Radian(math.pi) == Degree(180)` was `True` only because a float's shortest string happens to match the old 15-decimal constant, and it is now `False`, like every other float radian value against its degree equivalent.
+The new `Angle.is_close(other, tolerance=...)` is the way to compare them: the tolerance is an angle, distance is measured the short way round the circle, and there is no default.
+A value built from the library's own pi, or from degrees, turns, gradians, or arcseconds, still compares exactly.
+
+`Angle.magnitude` is now in turns, so `Degree(90).magnitude` is `Fraction(1, 4)`.
+`kuchka.units.angular._PI` is replaced by `kuchka.internal.constants.PI`.
 
 ## [0.1.3] - 2026-09-29
 
