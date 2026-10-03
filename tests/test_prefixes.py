@@ -25,6 +25,11 @@ if TYPE_CHECKING:
     from kuchka.internal.prefixes import Prefix
 
 PREFIX_TABLE_CASES = [
+    (prefixes.QUECTO, -30, Decimal("0.00000000000000000000000000001"), "quecto", "q"),
+    (prefixes.RONTO, -27, Decimal("0.000000000000000000000000001"), "ronto", "r"),
+    (prefixes.YOCTO, -24, Decimal("0.000000000000000000000001"), "yocto", "y")(
+        prefixes.ZEPTO, -21, Decimal("0.000000000000000000001"), "zepto", "z"
+    ),
     (prefixes.ATTO, -18, Decimal("0.000000000000000001"), "atto", "a"),
     (prefixes.FEMTO, -15, Decimal("0.000000000000001"), "femto", "f"),
     (prefixes.PICO, -12, Decimal("0.000000000001"), "pico", "p"),
@@ -42,6 +47,16 @@ PREFIX_TABLE_CASES = [
     (prefixes.TERA, 12, Decimal(1_000_000_000_000), "tera", "T"),
     (prefixes.PETA, 15, Decimal(1_000_000_000_000_000), "peta", "P"),
     (prefixes.EXA, 18, Decimal(1_000_000_000_000_000_000), "exa", "E"),
+    (prefixes.ZETTA, 21, Decimal(1_000_000_000_000_000_000_000), "zetta", "Z"),
+    (prefixes.YOTTA, 24, Decimal(1_000_000_000_000_000_000_000_000), "yotta", "Y"),
+    (prefixes.RONNA, 27, Decimal(1_000_000_000_000_000_000_000_000_000), "ronna", "R"),
+    (
+        prefixes.QUETTA,
+        30,
+        Decimal(1_000_000_000_000_000_000_000_000_000_000),
+        "quetta",
+        "Q",
+    ),
 ]
 
 PREFIX_TABLE_IDS = [name for _, _, _, name, _ in PREFIX_TABLE_CASES]
