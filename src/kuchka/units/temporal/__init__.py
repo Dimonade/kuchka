@@ -32,14 +32,19 @@ defines, reached through `.as_sampling_period()` / `.as_instant()`.
 its own type.
 `BaudRate` gets its own symbol, `Bd`, as that is how it actually appears in the wild.
 
-Each leaf module owns a hand-written ``__all__`` naming exactly what it defines, and
-this package's own ``__all__`` is hand-written the same way, keeping
-`kuchka.units`'s own ``from kuchka.units.temporal import *`` fully inspectable through
-this package's own wildcard imports below.
+Each leaf module owns one hand-written ``__all__`` naming exactly what it defines.
+The enclosing `kuchka.units` package imports these leaves directly and composes its own
+``__all__`` from theirs, so this package carries no export list of its own.
 """
 
 from __future__ import annotations
 
+from kuchka.units.temporal import baud_rate
+from kuchka.units.temporal import frequency
+from kuchka.units.temporal import instant
+from kuchka.units.temporal import sample_rate
+from kuchka.units.temporal import sampling_period
+from kuchka.units.temporal import time
 from kuchka.units.temporal.baud_rate import *
 from kuchka.units.temporal.frequency import *
 from kuchka.units.temporal.instant import *
@@ -47,60 +52,10 @@ from kuchka.units.temporal.sample_rate import *
 from kuchka.units.temporal.sampling_period import *
 from kuchka.units.temporal.time import *
 
-__all__ = [
-    "BAUD",
-    "BAUD_RATE_UNITS",
-    "DAY",
-    "FEMTOSECOND",
-    "FORTNIGHT",
-    "FREQUENCY_UNITS",
-    "GIGAHERTZ",
-    "HERTZ",
-    "HOUR",
-    "INSTANT_SECOND",
-    "INSTANT_UNITS",
-    "JIFFY",
-    "JULIAN_YEAR",
-    "KILOBAUD",
-    "KILOHERTZ",
-    "KILOSAMPLES_PER_SECOND",
-    "MEGAHERTZ",
-    "MEGASAMPLES_PER_SECOND",
-    "MICROSECOND",
-    "MILLISECOND",
-    "MINUTE",
-    "NANOSECOND",
-    "PETAHERTZ",
-    "PICOSECOND",
-    "SAMPLES_PER_SECOND",
-    "SAMPLE_RATE_UNITS",
-    "SAMPLING_PERIOD_UNITS",
-    "SECOND",
-    "TERAHERTZ",
-    "TIME_UNITS",
-    "WEEK",
-    "Baud",
-    "Day",
-    "Femtosecond",
-    "Fortnight",
-    "Gigahertz",
-    "Hertz",
-    "Hour",
-    "Jiffy",
-    "JulianYear",
-    "Kilobaud",
-    "Kilohertz",
-    "KilosamplesPerSecond",
-    "Megahertz",
-    "MegasamplesPerSecond",
-    "Microsecond",
-    "Millisecond",
-    "Minute",
-    "Nanosecond",
-    "Petahertz",
-    "Picosecond",
-    "SamplesPerSecond",
-    "Second",
-    "Terahertz",
-    "Week",
-]
+__all__: list[str] = []
+__all__ += baud_rate.__all__
+__all__ += frequency.__all__
+__all__ += instant.__all__
+__all__ += sample_rate.__all__
+__all__ += sampling_period.__all__
+__all__ += time.__all__

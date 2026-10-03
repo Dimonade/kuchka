@@ -21,35 +21,14 @@ number of physical dimensions, making them closely related:
 
 from __future__ import annotations
 
+from kuchka.units.kinematics import acceleration
+from kuchka.units.kinematics import force
+from kuchka.units.kinematics import velocity
 from kuchka.units.kinematics.acceleration import *
 from kuchka.units.kinematics.force import *
 from kuchka.units.kinematics.velocity import *
 
-__all__ = [
-    "ACCELERATION_UNITS",
-    "DYNE",
-    "FORCE_UNITS",
-    "KILOMETRE_PER_HOUR",
-    "KILONEWTON",
-    "METER_PER_SECOND",
-    "METER_PER_SECOND_SQUARED",
-    "METRE_PER_SECOND",
-    "METRE_PER_SECOND_SQUARED",
-    "MILE_PER_HOUR",
-    "MILLINEWTON",
-    "NEWTON",
-    "POUND_FORCE",
-    "VELOCITY_UNITS",
-    "Dyne",
-    "KilometerPerHour",
-    "KilometrePerHour",
-    "Kilonewton",
-    "MeterPerSecond",
-    "MeterPerSecondSquared",
-    "MetrePerSecond",
-    "MetrePerSecondSquared",
-    "MilePerHour",
-    "Millinewton",
-    "Newton",
-    "PoundForce",
-]
+__all__: list[str] = []
+__all__ += acceleration.__all__
+__all__ += force.__all__
+__all__ += velocity.__all__
