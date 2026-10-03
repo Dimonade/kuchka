@@ -17,4 +17,4 @@ turn by an irrational number (one turn is 2 pi radians).
 Every other angular unit is a plain rational fraction of a turn.
 """
 
-__all__ = ["_PI"]
+__all__ = ["PI"]
