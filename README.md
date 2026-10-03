@@ -244,7 +244,6 @@ This includes quantities such as `Voltage`, `Current`, `Length`, `Mass`, `Time`,
 ### Affine quantities
 
 Some values represent readings on a scale.
-`Temperature` is the current example.
 
 A reading minus a reading gives a linear delta, and adding a delta shifts the reading.
 Adding two readings is rejected.
@@ -403,7 +402,7 @@ The complete unit vocabulary is available in the API reference.
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | Voltage     | `Nanovolt` though `Petavolt`                                                                                                             |
 | Current     | `Picoampere`, through `Megaampere`                                                                                                       |
-| Power       | `Milliwatt`, `Watt`, `Kilowatt`                                                                                                          |
+| Power       | `Picowatt` through `Petawatt`, `Horsepower` and `MetricHorsepower`                                                                       |
 | Resistance  | `Microohm`, through `Gigaohm`                                                                                                            |
 | Conductance | `Nanosiemens` through `Kilosiemens`                                                                                                      |
 | Charge      | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                                                    |

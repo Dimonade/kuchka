@@ -63,8 +63,6 @@ from kuchka import Kilometer
 from kuchka import Kiloohm
 from kuchka import KilosamplesPerSecond
 from kuchka import Kilosiemens
-from kuchka import Kilovolt
-from kuchka import Kilowatt
 from kuchka import Litre
 from kuchka import Megaampere
 from kuchka import Megaelectronvolt
@@ -73,7 +71,6 @@ from kuchka import Megahertz
 from kuchka import Megajoule
 from kuchka import Megaohm
 from kuchka import MegasamplesPerSecond
-from kuchka import Megavolt
 from kuchka import Meter
 from kuchka import Microampere
 from kuchka import Microcoulomb
@@ -86,8 +83,6 @@ from kuchka import Micromole
 from kuchka import Microohm
 from kuchka import Microsecond
 from kuchka import Microsiemens
-from kuchka import Microvolt
-from kuchka import Microwatt
 from kuchka import Mile
 from kuchka import Milliampere
 from kuchka import MilliampereHour
@@ -102,8 +97,6 @@ from kuchka import Millimole
 from kuchka import Milliohm
 from kuchka import Millisecond
 from kuchka import Millisiemens
-from kuchka import Millivolt
-from kuchka import Milliwatt
 from kuchka import MilliwattHour
 from kuchka import Minute
 from kuchka import Mole
@@ -114,14 +107,12 @@ from kuchka import Nanojoule
 from kuchka import Nanometer
 from kuchka import Nanosecond
 from kuchka import Nanosiemens
-from kuchka import Nanovolt
 from kuchka import NauticalMile
 from kuchka import Ohm
 from kuchka import Ounce
 from kuchka import Percent
 from kuchka import Petaelectronvolt
 from kuchka import Petahertz
-from kuchka import Petavolt
 from kuchka import Picoampere
 from kuchka import Picocoulomb
 from kuchka import Picogram
@@ -144,8 +135,6 @@ from kuchka import Terahertz
 from kuchka import Terajoule
 from kuchka import ThermochemicalCalorie
 from kuchka import Tonne
-from kuchka import Volt
-from kuchka import Watt
 from kuchka import WattHour
 from kuchka import Week
 from kuchka import Yard
@@ -171,19 +160,21 @@ from kuchka.units import TEMPERATURE_UNITS
 from kuchka.units import TIME_UNITS
 from kuchka.units import VOLTAGE_UNITS
 from kuchka.units import VOLUME_UNITS
+from kuchka.units import power
+from kuchka.units import voltage
 
 # (table, {expected symbol: expected constructor})
 TABLE_CASES = [
     (
         VOLTAGE_UNITS,
         {
-            "nV": Nanovolt,
-            f"{symbols.MICRO}V": Microvolt,
-            "mV": Millivolt,
-            "V": Volt,
-            "kV": Kilovolt,
-            "MV": Megavolt,
-            "PV": Petavolt,
+            "nV": voltage.Nanovolt,
+            f"{symbols.MICRO}V": voltage.Microvolt,
+            "mV": voltage.Millivolt,
+            "V": voltage.Volt,
+            "kV": voltage.Kilovolt,
+            "MV": voltage.Megavolt,
+            "PV": voltage.Petavolt,
         },
     ),
     (
@@ -211,7 +202,20 @@ TABLE_CASES = [
     ),
     (
         POWER_UNITS,
-        {f"{symbols.MICRO}W": Microwatt, "mW": Milliwatt, "W": Watt, "kW": Kilowatt},
+        {
+            "pW": power.Picowatt,
+            "nW": power.Nanowatt,
+            f"{symbols.MICRO}W": power.Microwatt,
+            "mW": power.Milliwatt,
+            "W": power.Watt,
+            "kW": power.Kilowatt,
+            "MW": power.Megawatt,
+            "GW": power.Gigawatt,
+            "TW": power.Terawatt,
+            "PW": power.Petawatt,
+            "hp": power.Horsepower,
+            "PS": power.MetricHorsepower,
+        },
     ),
     (TEMPERATURE_UNITS, {"K": Kelvin, "C": Celsius, "F": Fahrenheit}),
     (

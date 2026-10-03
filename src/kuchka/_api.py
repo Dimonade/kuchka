@@ -78,6 +78,7 @@ from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gigajoule
 from kuchka.units import Gigaohm
+from kuchka.units import Gigawatt
 from kuchka.units import Gradian
 from kuchka.units import Grain
 from kuchka.units import Gram
@@ -86,6 +87,7 @@ from kuchka.units import GramPerCubicCentimetre
 from kuchka.units import Hectare
 from kuchka.units import Hectopascal
 from kuchka.units import Hertz
+from kuchka.units import Horsepower
 from kuchka.units import Hour
 from kuchka.units import Inch
 from kuchka.units import Jiffy
@@ -127,12 +129,14 @@ from kuchka.units import Megaohm
 from kuchka.units import Megapascal
 from kuchka.units import MegasamplesPerSecond
 from kuchka.units import Megavolt
+from kuchka.units import Megawatt
 from kuchka.units import Meter
 from kuchka.units import MeterPerSecond
 from kuchka.units import MeterPerSecondSquared
 from kuchka.units import Metre
 from kuchka.units import MetrePerSecond
 from kuchka.units import MetrePerSecondSquared
+from kuchka.units import MetricHorsepower
 from kuchka.units import Microampere
 from kuchka.units import Microcoulomb
 from kuchka.units import Microelectronvolt
@@ -181,6 +185,7 @@ from kuchka.units import Nanometre
 from kuchka.units import Nanosecond
 from kuchka.units import Nanosiemens
 from kuchka.units import Nanovolt
+from kuchka.units import Nanowatt
 from kuchka.units import NauticalMile
 from kuchka.units import Newton
 from kuchka.units import Ohm
@@ -190,6 +195,7 @@ from kuchka.units import Percent
 from kuchka.units import Petaelectronvolt
 from kuchka.units import Petahertz
 from kuchka.units import Petavolt
+from kuchka.units import Petawatt
 from kuchka.units import Picoampere
 from kuchka.units import Picocoulomb
 from kuchka.units import Picogram
@@ -197,6 +203,7 @@ from kuchka.units import Picojoule
 from kuchka.units import Picometer
 from kuchka.units import Picometre
 from kuchka.units import Picosecond
+from kuchka.units import Picowatt
 from kuchka.units import Pound
 from kuchka.units import PoundForce
 from kuchka.units import PoundPerSquareInch
@@ -218,6 +225,7 @@ from kuchka.units import SquareMillimetre
 from kuchka.units import Teraelectronvolt
 from kuchka.units import Terahertz
 from kuchka.units import Terajoule
+from kuchka.units import Terawatt
 from kuchka.units import ThermochemicalCalorie
 from kuchka.units import Tonne
 from kuchka.units import Turn
@@ -284,6 +292,7 @@ __all__ = [
     "Gigahertz",
     "Gigajoule",
     "Gigaohm",
+    "Gigawatt",
     "Gradian",
     "Grain",
     "Gram",
@@ -292,6 +301,7 @@ __all__ = [
     "Hectare",
     "Hectopascal",
     "Hertz",
+    "Horsepower",
     "Hour",
     "Inch",
     "Instant",
@@ -338,12 +348,14 @@ __all__ = [
     "Megapascal",
     "MegasamplesPerSecond",
     "Megavolt",
+    "Megawatt",
     "Meter",
     "MeterPerSecond",
     "MeterPerSecondSquared",
     "Metre",
     "MetrePerSecond",
     "MetrePerSecondSquared",
+    "MetricHorsepower",
     "Microampere",
     "Microcoulomb",
     "Microelectronvolt",
@@ -392,6 +404,7 @@ __all__ = [
     "Nanosecond",
     "Nanosiemens",
     "Nanovolt",
+    "Nanowatt",
     "NauticalMile",
     "Newton",
     "Ohm",
@@ -401,6 +414,7 @@ __all__ = [
     "Petaelectronvolt",
     "Petahertz",
     "Petavolt",
+    "Petawatt",
     "Picoampere",
     "Picocoulomb",
     "Picogram",
@@ -408,6 +422,7 @@ __all__ = [
     "Picometer",
     "Picometre",
     "Picosecond",
+    "Picowatt",
     "Pound",
     "PoundForce",
     "PoundPerSquareInch",
@@ -437,6 +452,7 @@ __all__ = [
     "Teraelectronvolt",
     "Terahertz",
     "Terajoule",
+    "Terawatt",
     "ThermochemicalCalorie",
     "Time",
     "Tonne",
