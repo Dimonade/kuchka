@@ -218,6 +218,7 @@ EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
             "a",
         }
     ),
+    "power": frozenset({"hp", "PS"}),
 }
 """Units excluded from properties that require finite Decimal reciprocals.
 

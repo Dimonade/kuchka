@@ -89,6 +89,9 @@ Electrical power follows the familiar relationship
 
 A 12 V circuit carrying 2 A therefore transfers power at exactly 24 W:
 
+>>> from kuchka.units.voltage import Volt
+>>> from kuchka.units.current import Ampere
+>>>
 >>> supply_voltage = Volt(12)
 >>> supply_current = Ampere(2)
 >>> supply_voltage * supply_current
@@ -98,7 +101,7 @@ The same principle works at much larger scales.
 A 400 V industrial circuit carrying 250 A carries exactly 100 kW:
 
 >>> Volt(400) * Ampere(250)
-100 kW
+100000 W
 
 Mechanical systems commonly reach the kilowatt and megawatt ranges.
 A 5 MW machine has the same physical dimension as a 5 W sensor.
@@ -139,12 +142,12 @@ One mechanical horsepower is exactly 745.69987158227022 W:
 
 Its value in watts is exact under the definitions used to construct the unit:
 
->>> engine_power == Watt(745.69987158227022)
+>>> engine_power.to(WATT) == Watt(Decimal("745.69987158227022"))
 True
 
 A 100 hp engine therefore corresponds to exactly 74,569.987158227022 W:
 
->>> Horsepower(100) == Watt(74569.987158227022)
+>>> Horsepower(100).to(WATT) == Watt(Decimal("74569.987158227022"))
 True
 
 Continental metric horsepower is a different unit:
@@ -167,6 +170,8 @@ True
 Power can also be understood through time.
 If an ideal 100 W load runs for ten seconds, it transfers exactly 1000 J of energy:
 
+>>> from kuchka import Second
+>>>
 >>> energy = Watt(100) * Second(10)
 >>> energy
 1000 J
@@ -250,10 +255,12 @@ See Also
     Translational velocity associated with mechanical power.
 ~kuchka.quantities.Torque
     Rotational moment associated with rotational power.
+
 """
 
 from __future__ import annotations
 
+from decimal import Decimal
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
@@ -263,6 +270,7 @@ from kuchka.internal.prefixes import prefixed_unit
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Power
+from kuchka.quantities import UnitDef
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -641,29 +649,29 @@ POWER_UNITS: Mapping[str, Callable[[Numeric], Power]] = MappingProxyType(
 )
 
 __all__ = [
-    "PICOWATT",
-    "NANOWATT",
-    "MEGAWATT",
     "GIGAWATT",
-    "TERAWATT",
-    "PETAWATT",
     "HORSEPOWER",
-    "METRIC_HORSEPOWER",
-    "Picowatt",
-    "Nanowatt",
-    "Megawatt",
-    "Gigawatt",
-    "Terawatt",
-    "Petawatt",
-    "Horsepower",
-    "MetricHorsepower",
     "KILOWATT",
+    "MEGAWATT",
+    "METRIC_HORSEPOWER",
     "MICROWATT",
     "MILLIWATT",
+    "NANOWATT",
+    "PETAWATT",
+    "PICOWATT",
     "POWER_UNITS",
+    "TERAWATT",
     "WATT",
+    "Gigawatt",
+    "Horsepower",
     "Kilowatt",
+    "Megawatt",
+    "MetricHorsepower",
     "Microwatt",
     "Milliwatt",
+    "Nanowatt",
+    "Petawatt",
+    "Picowatt",
+    "Terawatt",
     "Watt",
 ]
