@@ -10,10 +10,17 @@ format-all:
 
 # Check the repository against the current code standards.
 check:
+    uv run python tools/generate_api.py --check
     uv run ruff check
     uv run mypy --strict --python-version 3.11 src/kuchka
     uv run ty check src/kuchka
 
+
+alias ga := generate-api
+# Regenerate `src/kuchka/_api.py`, the names promoted to the top level, after changing a leaf `__all__`.
+generate-api:
+    uv run python tools/generate_api.py
+    uv run ruff format src/kuchka/_api.py
 
 alias dfp := develop-fetch-pull
 # Switch to develop, fetch, and pull changes.
