@@ -19,83 +19,34 @@ from typing import TYPE_CHECKING
 
 from hypothesis import strategies as st
 
-from kuchka import Ampere
-from kuchka import Baud
-from kuchka import Candela
-from kuchka import Coulomb
-from kuchka import CubicMetre
-from kuchka import DeltaKelvin
-from kuchka import Hertz
-from kuchka import Joule
-from kuchka import Kilogram
-from kuchka import KilogramPerCubicMetre
-from kuchka import Metre
-from kuchka import MetrePerSecond
-from kuchka import MetrePerSecondSquared
-from kuchka import Mole
-from kuchka import Newton
-from kuchka import Ohm
-from kuchka import Pascal
-from kuchka import Ratio
-from kuchka import SamplesPerSecond
-from kuchka import Second
-from kuchka import Siemens
-from kuchka import SquareMetre
-from kuchka import Volt
-from kuchka import Watt
 from kuchka.internal import symbols
 from kuchka.quantities import LinearQuantity
 from kuchka.quantities.base.storage import _ScalarStorage
-from kuchka.units import ACCELERATION_UNITS
-from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
-from kuchka.units import AMPERE
-from kuchka.units import AREA_UNITS
-from kuchka.units import BAUD
-from kuchka.units import BAUD_RATE_UNITS
-from kuchka.units import CANDELA
-from kuchka.units import CHARGE_UNITS
-from kuchka.units import CONDUCTANCE_UNITS
-from kuchka.units import COULOMB
-from kuchka.units import CUBIC_METRE
-from kuchka.units import CURRENT_UNITS
-from kuchka.units import DELTA_KELVIN
-from kuchka.units import DENSITY_UNITS
-from kuchka.units import ENERGY_UNITS
-from kuchka.units import FORCE_UNITS
-from kuchka.units import FREQUENCY_UNITS
-from kuchka.units import HERTZ
-from kuchka.units import JOULE
-from kuchka.units import KELVIN
-from kuchka.units import KILOGRAM
-from kuchka.units import KILOGRAM_PER_CUBIC_METRE
-from kuchka.units import LENGTH_UNITS
-from kuchka.units import LUMINOUS_INTENSITY_UNITS
-from kuchka.units import MASS_UNITS
-from kuchka.units import METRE
-from kuchka.units import METRE_PER_SECOND
-from kuchka.units import METRE_PER_SECOND_SQUARED
-from kuchka.units import MOLE
-from kuchka.units import NEWTON
-from kuchka.units import OHM
-from kuchka.units import PASCAL
-from kuchka.units import POWER_UNITS
-from kuchka.units import PRESSURE_UNITS
-from kuchka.units import PROPORTION_UNITS
-from kuchka.units import RATIO
-from kuchka.units import RESISTANCE_UNITS
-from kuchka.units import SAMPLE_RATE_UNITS
-from kuchka.units import SAMPLES_PER_SECOND
-from kuchka.units import SAMPLING_PERIOD_UNITS
-from kuchka.units import SECOND
-from kuchka.units import SIEMENS
-from kuchka.units import SQUARE_METRE
-from kuchka.units import TEMPERATURE_DELTA_UNITS
-from kuchka.units import TIME_UNITS
-from kuchka.units import VELOCITY_UNITS
-from kuchka.units import VOLT
-from kuchka.units import VOLTAGE_UNITS
-from kuchka.units import VOLUME_UNITS
-from kuchka.units import WATT
+from kuchka.units import acceleration
+from kuchka.units import amount
+from kuchka.units import area
+from kuchka.units import baud_rate
+from kuchka.units import charge
+from kuchka.units import conductance
+from kuchka.units import current
+from kuchka.units import density
+from kuchka.units import energy
+from kuchka.units import force
+from kuchka.units import frequency
+from kuchka.units import length
+from kuchka.units import luminous_intensity
+from kuchka.units import mass
+from kuchka.units import power
+from kuchka.units import pressure
+from kuchka.units import proportion
+from kuchka.units import resistance
+from kuchka.units import sample_rate
+from kuchka.units import sampling_period
+from kuchka.units import thermal
+from kuchka.units import time
+from kuchka.units import velocity
+from kuchka.units import voltage
+from kuchka.units import volume
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -123,50 +74,88 @@ class QuantityFamily:
 
 
 FAMILIES: list[QuantityFamily] = [
-    QuantityFamily("voltage", Volt, VOLT, VOLTAGE_UNITS),
-    QuantityFamily("current", Ampere, AMPERE, CURRENT_UNITS),
-    QuantityFamily("power", Watt, WATT, POWER_UNITS),
-    QuantityFamily("resistance", Ohm, OHM, RESISTANCE_UNITS),
-    QuantityFamily("time", Second, SECOND, TIME_UNITS),
-    QuantityFamily("frequency", Hertz, HERTZ, FREQUENCY_UNITS),
-    QuantityFamily("length", Metre, METRE, LENGTH_UNITS),
-    QuantityFamily("proportion", Ratio, RATIO, PROPORTION_UNITS),
+    QuantityFamily("voltage", voltage.Volt, voltage.VOLT, voltage.VOLTAGE_UNITS),
+    QuantityFamily("current", current.Ampere, current.AMPERE, current.CURRENT_UNITS),
+    QuantityFamily("power", power.Watt, power.WATT, power.POWER_UNITS),
     QuantityFamily(
-        "temperature_delta", DeltaKelvin, DELTA_KELVIN, TEMPERATURE_DELTA_UNITS
+        "resistance", resistance.Ohm, resistance.OHM, resistance.RESISTANCE_UNITS
+    ),
+    QuantityFamily("time", time.Second, time.SECOND, time.TIME_UNITS),
+    QuantityFamily(
+        "frequency", frequency.Hertz, frequency.HERTZ, frequency.FREQUENCY_UNITS
+    ),
+    QuantityFamily("length", length.Metre, length.METRE, length.LENGTH_UNITS),
+    QuantityFamily(
+        "proportion", proportion.Ratio, proportion.RATIO, proportion.PROPORTION_UNITS
+    ),
+    QuantityFamily(
+        "temperature_delta",
+        thermal.DeltaKelvin,
+        thermal.DELTA_KELVIN,
+        thermal.TEMPERATURE_DELTA_UNITS,
     ),
     QuantityFamily(
         "sampling_period",
-        lambda v: Second(v).as_sampling_period(),
-        SECOND,
-        SAMPLING_PERIOD_UNITS,
+        lambda v: time.Second(v).as_sampling_period(),
+        time.SECOND,
+        sampling_period.SAMPLING_PERIOD_UNITS,
     ),
     QuantityFamily(
-        "sample_rate", SamplesPerSecond, SAMPLES_PER_SECOND, SAMPLE_RATE_UNITS
+        "sample_rate",
+        sample_rate.SamplesPerSecond,
+        sample_rate.SAMPLES_PER_SECOND,
+        sample_rate.SAMPLE_RATE_UNITS,
     ),
-    QuantityFamily("baud_rate", Baud, BAUD, BAUD_RATE_UNITS),
-    QuantityFamily("mass", Kilogram, KILOGRAM, MASS_UNITS),
-    QuantityFamily("amount_of_substance", Mole, MOLE, AMOUNT_OF_SUBSTANCE_UNITS),
-    QuantityFamily("luminous_intensity", Candela, CANDELA, LUMINOUS_INTENSITY_UNITS),
-    QuantityFamily("velocity", MetrePerSecond, METRE_PER_SECOND, VELOCITY_UNITS),
-    QuantityFamily("charge", Coulomb, COULOMB, CHARGE_UNITS),
-    QuantityFamily("energy", Joule, JOULE, ENERGY_UNITS),
-    QuantityFamily("area", SquareMetre, SQUARE_METRE, AREA_UNITS),
-    QuantityFamily("volume", CubicMetre, CUBIC_METRE, VOLUME_UNITS),
-    QuantityFamily("conductance", Siemens, SIEMENS, CONDUCTANCE_UNITS),
+    QuantityFamily(
+        "baud_rate", baud_rate.Baud, baud_rate.BAUD, baud_rate.BAUD_RATE_UNITS
+    ),
+    QuantityFamily("mass", mass.Kilogram, mass.KILOGRAM, mass.MASS_UNITS),
+    QuantityFamily(
+        "amount_of_substance",
+        amount.Mole,
+        amount.MOLE,
+        amount.AMOUNT_OF_SUBSTANCE_UNITS,
+    ),
+    QuantityFamily(
+        "luminous_intensity",
+        luminous_intensity.Candela,
+        luminous_intensity.CANDELA,
+        luminous_intensity.LUMINOUS_INTENSITY_UNITS,
+    ),
+    QuantityFamily(
+        "velocity",
+        velocity.MetrePerSecond,
+        velocity.METRE_PER_SECOND,
+        velocity.VELOCITY_UNITS,
+    ),
+    QuantityFamily("charge", charge.Coulomb, charge.COULOMB, charge.CHARGE_UNITS),
+    QuantityFamily("energy", energy.Joule, energy.JOULE, energy.ENERGY_UNITS),
+    QuantityFamily("area", area.SquareMetre, area.SQUARE_METRE, area.AREA_UNITS),
+    QuantityFamily(
+        "volume", volume.CubicMetre, volume.CUBIC_METRE, volume.VOLUME_UNITS
+    ),
+    QuantityFamily(
+        "conductance",
+        conductance.Siemens,
+        conductance.SIEMENS,
+        conductance.CONDUCTANCE_UNITS,
+    ),
     QuantityFamily(
         "acceleration",
-        MetrePerSecondSquared,
-        METRE_PER_SECOND_SQUARED,
-        ACCELERATION_UNITS,
+        acceleration.MetrePerSecondSquared,
+        acceleration.METRE_PER_SECOND_SQUARED,
+        acceleration.ACCELERATION_UNITS,
     ),
-    QuantityFamily("force", Newton, NEWTON, FORCE_UNITS),
+    QuantityFamily("force", force.Newton, force.NEWTON, force.FORCE_UNITS),
     QuantityFamily(
         "density",
-        KilogramPerCubicMetre,
-        KILOGRAM_PER_CUBIC_METRE,
-        DENSITY_UNITS,
+        density.KilogramPerCubicMetre,
+        density.KILOGRAM_PER_CUBIC_METRE,
+        density.DENSITY_UNITS,
     ),
-    QuantityFamily("pressure", Pascal, PASCAL, PRESSURE_UNITS),
+    QuantityFamily(
+        "pressure", pressure.Pascal, pressure.PASCAL, pressure.PRESSURE_UNITS
+    ),
 ]
 
 FAMILY_IDS: list[str] = [family.id for family in FAMILIES]
@@ -356,5 +345,5 @@ A type added later joins the list without any edit here.
 
 def sample_of(cls: type) -> _ScalarStorage:
     """Build one valid value of a concrete quantity type, in its canonical unit."""
-    unit = getattr(cls, "_canonical_unit", KELVIN)
+    unit = getattr(cls, "_canonical_unit", thermal.KELVIN)
     return cls(Fraction(5), unit)  # type: ignore[no-any-return]
