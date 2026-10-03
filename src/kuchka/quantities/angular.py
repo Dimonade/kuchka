@@ -1,8 +1,7 @@
 """Angle: a plane angle -- a bearing, a phase, a joint rotation.
 
-Radian is the canonical unit: the SI-coherent unit for plane angle.
-See `kuchka.units.angular` for how kuchka represents pi and what that means for
-comparing a `Radian`-built value against the rest of the family.
+Turn is the canonical unit.
+See `kuchka.units.angular` for how Radian relates to it.
 """
 
 from __future__ import annotations

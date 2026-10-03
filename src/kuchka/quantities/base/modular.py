@@ -87,6 +87,21 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
         """Exact magnitude expressed in ``unit``."""
         return self._magnitude / unit.scale
 
+    def is_close(self, other: Self, *, tolerance: Self) -> bool:
+        """Return whether `other` is within `tolerance` of `self`, the short way round.
+
+        The distance is the size of `difference()`, so readings either side of the wrap
+        point are close: ``Angle(359.9999).is_close(Angle(0.0001), ...)``.
+        The tolerance is an explicit quantity of the same type and is never defaulted,
+        so what counts as close is always written down by the caller.
+        """
+        if type(other) is not type(self) or type(tolerance) is not type(self):
+            raise IncompatibleDimensionError("compare", self, other)
+        if tolerance._magnitude < 0:
+            msg = f"the tolerance must not be negative, got {tolerance!r}."
+            raise InvalidMeasurementError(msg)
+        return abs(self.difference(other).magnitude) <= tolerance.magnitude
+
     def _wrap(self, magnitude: Fraction) -> Fraction:
         """Reduce `magnitude` into ``[0, period)``.
 
