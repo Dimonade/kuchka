@@ -45,56 +45,43 @@ Angles measure the short way round the circle.
 
 #### Quantity class constructors validate their arguments
 
-- `Voltage`, `Temperature`, `Angle`, `LogarithmicRatio`, and every other quantity class are exported for annotations and `isinstance`, but their own constructors used to store whatever they were given.
-- `Voltage(0.5, AMPERE)` kept a raw `float` and a unit of the wrong dimension, which defeated the exact-`Fraction` guarantee and failed later, far from the cause, with an unrelated `AttributeError`.
-- The class constructors now accept only an exact `Fraction` magnitude (in the quantity's canonical unit) and a display unit of the right kind and dimension, and raise `InvalidMeasurementError` otherwise.
+`Voltage(0.5, AMPERE)` and the other quantity classes used to store whatever they were given.
+They now accept only an exact `Fraction` magnitude and a display unit of the right kind and dimension, and raise `InvalidMeasurementError` otherwise.
+The unit constructors (`Volt(5)`) are unchanged.
 
-_NOTE:_ This changes nothing for code that builds values through the unit constructors (`Volt(5)`, `Celsius(20)`, ...), which is the supported way to do it.
+#### A quantity keeps its state
 
-#### A quantity keeps the state it was built with
-
-A quantity's magnitude and display unit are written once, when it is built or restored, and cannot change afterwards.
-Deleting an attribute, calling `__init__` again, and calling `__setstate__` on a live value all raise `AttributeError`, the same as assigning an attribute does.
-
-Restoring a value from `pickle` or `copy` data now runs the same validation as construction.
-A forged or corrupt payload (a `float` magnitude, a unit of another dimension, a `Temperature` below absolute zero, a state that is not a `(magnitude, display unit)` pair) raises `InvalidMeasurementError` on load instead of producing a value construction would have refused.
+Deleting an attribute, calling `__init__` again, or calling `__setstate__` on a live value raises `AttributeError`.
+Restoring from `pickle` or `copy` data runs the same validation as construction.
 
 #### Numeric input has a bounded size
 
-Every plain number turned into a measurement is first converted to an exact `Fraction`, whose cost grows with its digits.
-A value such as `Decimal("1E+1000000")` was accepted and then took seconds to display, or never finished, so a single config value could hang a process.
-
-Numbers entering the library are now limited to a `Decimal` exponent of +/-1000, 1000 significant digits, and 8192 bits for an `int` or for each part of a `Fraction`.
-That is far beyond every `float` and every physical constant.
-Anything larger raises `InvalidMeasurementError` immediately, with a message that describes the value by its size.
+`Decimal("1E+1000000")` was accepted and then took seconds to display.
+Input is limited to a `Decimal` exponent of +/-1000, 1000 digits, and 8192 bits for an `int` or each part of a `Fraction`; larger values raise `InvalidMeasurementError`.
 The limits live in `kuchka.internal.limits`.
 
-#### Display no longer depends on the active `Decimal` context
+#### Display ignores the active `Decimal` context
 
-`repr()`, `str()`, and `format()` rendered a magnitude with whatever precision, rounding mode, and traps the caller's `decimal` context had set.
-Lowering `prec`, trapping `Inexact`, or setting `ROUND_DOWN` changed the text, and trapping `Inexact` made `repr()` raise.
-The value was also rounded twice, first to 28 digits and then to the requested precision.
+`repr()` and `format()` no longer depend on the caller's precision, rounding mode, or traps, and round once, from the exact value.
+Ties round away from zero: `f"{Volt(2.665):.2f}"` is `2.67 V` (it was `2.66 V`).
 
-A measurement is now rendered in a context of its own and rounded once, from its exact value.
-Ties round away from zero: `f"{Volt(2.665):.2f}"` is `2.67 V`, and `0.125` is `0.13 V` (previously `2.66 V` and `0.12 V`).
-Output for values that were exact before is unchanged.
-The caller's context and its flags are left untouched.
-The rules live in `kuchka.internal.display`.
+#### `__all__` lists only real exports
 
-#### Angles are exact in turns, and radians use a precise pi
+`kuchka.units.__all__` and `kuchka.quantities.__all__` no longer include submodule names or `annotations`.
+`kuchka/__init__.py` shrinks to 42 lines: the promoted names are generated into `kuchka/_api.py` by `tools/generate_api.py` (`just generate-api`).
 
-`Turn` is now the canonical angle unit.
-`Degree`, `Gradian`, `ArcMinute`, and `ArcSecond` are plain fractions of a turn (`Degree` is 1/360), so pi no longer appears in them.
-`Radian` converts with pi held as an exact rational to 100 decimal places, which replaces a constant truncated at 15 decimals.
-Previously `Radian(1).to(DEGREE)` displayed 28 digits of which only the first 15 were correct, and every digit it shows is now correct.
+#### Division by zero raises `DivisionByZeroError`
 
-Values compare differently across the radian boundary.
-`Radian(math.pi) == Degree(180)` was `True` only because a float's shortest string happens to match the old 15-decimal constant, and it is now `False`, like every other float radian value against its degree equivalent.
-The new `Angle.is_close(other, tolerance=...)` is the way to compare them: the tolerance is an angle, distance is measured the short way round the circle, and there is no default.
-A value built from the library's own pi, or from degrees, turns, gradians, or arcseconds, still compares exactly.
+`Volt(1) / 0`, `Volt(1) / Volt(0)`, and `1 / Second(0)` raised a bare `ZeroDivisionError` with the message `Fraction(1, 0)`.
+They raise `DivisionByZeroError`, a `MeasurementError` that is also a `ZeroDivisionError`, so existing handlers keep working.
+A unit definition with a zero or negative scale is rejected when it is created.
 
-`Angle.magnitude` is now in turns, so `Degree(90).magnitude` is `Fraction(1, 4)`.
-`kuchka.units.angular._PI` is replaced by `kuchka.internal.constants.PI`.
+#### Angles are exact in turns
+
+`Turn` is the canonical angle unit, and `Degree`, `Gradian`, `ArcMinute`, and `ArcSecond` are exact fractions of it.
+`Radian` converts with pi to 100 decimals (it was 15), so every displayed digit of a conversion is correct.
+`Radian(math.pi) == Degree(180)` is now `False`; compare with `is_close`.
+`Angle.magnitude` is now in turns.
 
 ## [0.1.3] - 2026-09-29
 
