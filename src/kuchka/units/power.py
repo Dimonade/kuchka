@@ -271,45 +271,392 @@ if TYPE_CHECKING:
 WATT_NAME = "watt"
 WATT_SYMBOL = "W"
 
+PICOWATT = prefixed_unit(prefixes.PICO, WATT_NAME, WATT_SYMBOL, POWER)
+NANOWATT = prefixed_unit(prefixes.NANO, WATT_NAME, WATT_SYMBOL, POWER)
 MICROWATT = prefixed_unit(prefixes.MICRO, WATT_NAME, WATT_SYMBOL, POWER)
 MILLIWATT = prefixed_unit(prefixes.MILLI, WATT_NAME, WATT_SYMBOL, POWER)
 WATT = prefixed_unit(prefixes.UNIT, WATT_NAME, WATT_SYMBOL, POWER)
 KILOWATT = prefixed_unit(prefixes.KILO, WATT_NAME, WATT_SYMBOL, POWER)
+MEGAWATT = prefixed_unit(prefixes.MEGA, WATT_NAME, WATT_SYMBOL, POWER)
+GIGAWATT = prefixed_unit(prefixes.GIGA, WATT_NAME, WATT_SYMBOL, POWER)
+TERAWATT = prefixed_unit(prefixes.TERA, WATT_NAME, WATT_SYMBOL, POWER)
+PETAWATT = prefixed_unit(prefixes.PETA, WATT_NAME, WATT_SYMBOL, POWER)
 
 
 Power._canonical_unit = WATT  # noqa: SLF001 -- this module owns Power's canonical unit
 
 
+def Picowatt(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in picowatts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in picowatts.
+
+    Returns
+    -------
+    Power
+        Power represented in picowatts.
+
+    Examples
+    --------
+    Very small optical and electronic signals can be measured in picowatts:
+
+    >>> signal = Picowatt(10)
+    >>> signal
+    10 pW
+
+    """
+    return Power(to_exact(value) * PICOWATT.scale, PICOWATT)
+
+
+def Nanowatt(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in nanowatts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in nanowatts.
+
+    Returns
+    -------
+    Power
+        Power represented in nanowatts.
+
+    Examples
+    --------
+    A 250 nW signal represents a very small rate of energy transfer:
+
+    >>> signal = Nanowatt(250)
+    >>> signal
+    250 nW
+
+    """
+    return Power(to_exact(value) * NANOWATT.scale, NANOWATT)
+
+
 def Microwatt(value: Numeric) -> Power:
-    """Construct a Power from a magnitude expressed in microwatts."""
+    """Construct a Power from a magnitude expressed in microwatts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in microwatts.
+
+    Returns
+    -------
+    Power
+        Power represented in microwatts.
+
+    Examples
+    --------
+    A low-power sensor or embedded circuit can operate at only a few tens of
+    microwatts:
+
+    >>> sleep_power = Microwatt(40)
+    >>> sleep_power
+    40 µW
+
+    """
     return Power(to_exact(value) * MICROWATT.scale, MICROWATT)
 
 
 def Milliwatt(value: Numeric) -> Power:
-    """Construct a Power from a magnitude expressed in milliwatts."""
+    """Construct a Power from a magnitude expressed in milliwatts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in milliwatts.
+
+    Returns
+    -------
+    Power
+        Power represented in milliwatts.
+
+    Examples
+    --------
+    Small electronic and optical components commonly use milliwatts as a natural power
+    scale:
+
+    >>> optical_output = Milliwatt(5)
+    >>> optical_output
+    5 mW
+
+    """
     return Power(to_exact(value) * MILLIWATT.scale, MILLIWATT)
 
 
 def Watt(value: Numeric) -> Power:
-    """Construct a Power from a magnitude expressed in watts."""
+    """Construct a Power from a magnitude expressed in watts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in watts.
+
+    Returns
+    -------
+    Power
+        Power represented in watts.
+
+    Examples
+    --------
+    One watt is one joule transferred every second:
+
+    >>> power = Watt(1)
+    >>> power
+    1 W
+
+    A 100 W load transfers energy at one hundred joules per second:
+
+    >>> load = Watt(100)
+    >>> load
+    100 W
+
+    """
     return Power(to_exact(value) * WATT.scale, WATT)
 
 
 def Kilowatt(value: Numeric) -> Power:
-    """Construct a Power from a magnitude expressed in kilowatts."""
+    """Construct a Power from a magnitude expressed in kilowatts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in kilowatts.
+
+    Returns
+    -------
+    Power
+        Power represented in kilowatts.
+
+    Examples
+    --------
+    A 2 kW heater is a familiar household-scale power load:
+
+    >>> heater = Kilowatt(2)
+    >>> heater
+    2 kW
+
+    """
     return Power(to_exact(value) * KILOWATT.scale, KILOWATT)
+
+
+def Megawatt(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in megawatts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in megawatts.
+
+    Returns
+    -------
+    Power
+        Power represented in megawatts.
+
+    Examples
+    --------
+    Large industrial machines and electrical generators reach the megawatt scale:
+
+    >>> machine = Megawatt(5)
+    >>> machine
+    5 MW
+
+    """
+    return Power(to_exact(value) * MEGAWATT.scale, MEGAWATT)
+
+
+def Gigawatt(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in gigawatts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in gigawatts.
+
+    Returns
+    -------
+    Power
+        Power represented in gigawatts.
+
+    Examples
+    --------
+    Gigawatts are a natural scale for large generating stations and power systems:
+
+    >>> generating_station = Gigawatt(1)
+    >>> generating_station
+    1 GW
+
+    """
+    return Power(to_exact(value) * GIGAWATT.scale, GIGAWATT)
+
+
+def Terawatt(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in terawatts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in terawatts.
+
+    Returns
+    -------
+    Power
+        Power represented in terawatts.
+
+    Examples
+    --------
+    Terawatts describe power on a scale far beyond an individual machine:
+
+    >>> large_scale_power = Terawatt(1)
+    >>> large_scale_power
+    1 TW
+
+    """
+    return Power(to_exact(value) * TERAWATT.scale, TERAWATT)
+
+
+def Petawatt(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in petawatts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in petawatts.
+
+    Returns
+    -------
+    Power
+        Power represented in petawatts.
+
+    Examples
+    --------
+    Petawatt peak powers occur in ultrashort laser systems:
+
+    >>> laser_peak_power = Petawatt(5)
+    >>> laser_peak_power
+    5 PW
+
+    """
+    return Power(to_exact(value) * PETAWATT.scale, PETAWATT)
+
+
+# Horses.
+
+HORSEPOWER = UnitDef(
+    "horsepower",
+    "hp",
+    Decimal("745.69987158227022"),
+    POWER,
+)
+
+METRIC_HORSEPOWER = UnitDef(
+    "metric_horsepower",
+    "PS",
+    Decimal("735.49875"),
+    POWER,
+)
+
+
+def Horsepower(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in mechanical horsepower.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in mechanical horsepower.
+
+    Returns
+    -------
+    Power
+        Power represented in mechanical horsepower.
+
+    Notes
+    -----
+    One mechanical horsepower is exactly 550 foot-pound-force per second, equivalent
+    to 745.69987158227022 W.
+
+    Examples
+    --------
+    A nominal 100 hp engine is represented directly:
+
+    >>> engine = Horsepower(100)
+    >>> engine
+    100 hp
+
+    """
+    return Power(to_exact(value) * HORSEPOWER.scale, HORSEPOWER)
+
+
+def MetricHorsepower(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in metric horsepower.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in metric horsepower.
+
+    Returns
+    -------
+    Power
+        Power represented in metric horsepower.
+
+    Notes
+    -----
+    One metric horsepower is exactly 735.49875 W.
+
+    Examples
+    --------
+    Automotive specifications in continental Europe may use metric horsepower:
+
+    >>> engine = MetricHorsepower(100)
+    >>> engine
+    100 PS
+
+    """
+    return Power(
+        to_exact(value) * METRIC_HORSEPOWER.scale,
+        METRIC_HORSEPOWER,
+    )
 
 
 POWER_UNITS: Mapping[str, Callable[[Numeric], Power]] = MappingProxyType(
     {
+        PICOWATT.symbol: Picowatt,
+        NANOWATT.symbol: Nanowatt,
         MICROWATT.symbol: Microwatt,
         MILLIWATT.symbol: Milliwatt,
         WATT.symbol: Watt,
         KILOWATT.symbol: Kilowatt,
+        MEGAWATT.symbol: Megawatt,
+        GIGAWATT.symbol: Gigawatt,
+        TERAWATT.symbol: Terawatt,
+        PETAWATT.symbol: Petawatt,
+        HORSEPOWER.symbol: Horsepower,
+        METRIC_HORSEPOWER.symbol: MetricHorsepower,
     }
 )
 
 __all__ = [
+    "PICOWATT",
+    "NANOWATT",
+    "MEGAWATT",
+    "GIGAWATT",
+    "TERAWATT",
+    "PETAWATT",
+    "HORSEPOWER",
+    "METRIC_HORSEPOWER",
+    "Picowatt",
+    "Nanowatt",
+    "Megawatt",
+    "Gigawatt",
+    "Terawatt",
+    "Petawatt",
+    "Horsepower",
+    "MetricHorsepower",
     "KILOWATT",
     "MICROWATT",
     "MILLIWATT",
