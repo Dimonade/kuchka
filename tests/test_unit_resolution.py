@@ -10,163 +10,32 @@ an I/O boundary such as a config file, CSV header, or hardware descriptor.
 
 import pytest
 
-from kuchka import Acre
-from kuchka import Ampere
-from kuchka import AmpereHour
-from kuchka import AmpereSecond
-from kuchka import Baud
-from kuchka import Bel
-from kuchka import Calorie
-from kuchka import Candela
-from kuchka import Celsius
-from kuchka import Centimeter
-from kuchka import Coulomb
-from kuchka import CubicCentimetre
-from kuchka import CubicMetre
-from kuchka import CubicMillimetre
-from kuchka import Dalton
-from kuchka import Day
-from kuchka import Decibel
-from kuchka import Decimeter
-from kuchka import DeltaCelsius
-from kuchka import DeltaFahrenheit
-from kuchka import DeltaKelvin
-from kuchka import EarthMass
-from kuchka import Electronvolt
-from kuchka import Erg
-from kuchka import Fahrenheit
-from kuchka import Femtosecond
-from kuchka import Foot
-from kuchka import Fortnight
-from kuchka import Gigaelectronvolt
-from kuchka import Gigahertz
-from kuchka import Gigajoule
-from kuchka import Gigaohm
-from kuchka import Grain
-from kuchka import Gram
-from kuchka import Hectare
-from kuchka import Hertz
-from kuchka import Hour
-from kuchka import Inch
-from kuchka import Jiffy
-from kuchka import Joule
-from kuchka import JulianYear
-from kuchka import Kelvin
-from kuchka import Kiloampere
-from kuchka import Kilobaud
-from kuchka import Kiloelectronvolt
-from kuchka import Kilogram
-from kuchka import Kilohertz
-from kuchka import Kilojoule
-from kuchka import Kilolitre
-from kuchka import Kilometer
-from kuchka import Kiloohm
-from kuchka import KilosamplesPerSecond
-from kuchka import Kilosiemens
-from kuchka import Litre
-from kuchka import Megaampere
-from kuchka import Megaelectronvolt
-from kuchka import Megagram
-from kuchka import Megahertz
-from kuchka import Megajoule
-from kuchka import Megaohm
-from kuchka import MegasamplesPerSecond
-from kuchka import Meter
-from kuchka import Microampere
-from kuchka import Microcoulomb
-from kuchka import Microelectronvolt
-from kuchka import Microgram
-from kuchka import Microjoule
-from kuchka import Microlitre
-from kuchka import Micrometer
-from kuchka import Micromole
-from kuchka import Microohm
-from kuchka import Microsecond
-from kuchka import Microsiemens
-from kuchka import Mile
-from kuchka import Milliampere
-from kuchka import MilliampereHour
-from kuchka import MilliampereSecond
-from kuchka import Millicoulomb
-from kuchka import Millielectronvolt
-from kuchka import Milligram
-from kuchka import Millijoule
-from kuchka import Millilitre
-from kuchka import Millimeter
-from kuchka import Millimole
-from kuchka import Milliohm
-from kuchka import Millisecond
-from kuchka import Millisiemens
-from kuchka import MilliwattHour
-from kuchka import Minute
-from kuchka import Mole
-from kuchka import Nanoampere
-from kuchka import Nanocoulomb
-from kuchka import Nanogram
-from kuchka import Nanojoule
-from kuchka import Nanometer
-from kuchka import Nanosecond
-from kuchka import Nanosiemens
-from kuchka import NauticalMile
-from kuchka import Ohm
-from kuchka import Ounce
-from kuchka import Percent
-from kuchka import Petaelectronvolt
-from kuchka import Petahertz
-from kuchka import Picoampere
-from kuchka import Picocoulomb
-from kuchka import Picogram
-from kuchka import Picojoule
-from kuchka import Picometer
-from kuchka import Picosecond
-from kuchka import Pound
-from kuchka import Ratio
-from kuchka import SamplesPerSecond
-from kuchka import Second
-from kuchka import Siemens
-from kuchka import SolarMass
-from kuchka import SquareCentimetre
-from kuchka import SquareInch
-from kuchka import SquareKilometre
-from kuchka import SquareMetre
-from kuchka import SquareMillimetre
-from kuchka import Teraelectronvolt
-from kuchka import Terahertz
-from kuchka import Terajoule
-from kuchka import ThermochemicalCalorie
-from kuchka import Tonne
-from kuchka import WattHour
-from kuchka import Week
-from kuchka import Yard
 from kuchka.internal import symbols
-from kuchka.units import AMOUNT_OF_SUBSTANCE_UNITS
-from kuchka.units import AREA_UNITS
-from kuchka.units import BAUD_RATE_UNITS
-from kuchka.units import CHARGE_UNITS
-from kuchka.units import CONDUCTANCE_UNITS
-from kuchka.units import CURRENT_UNITS
-from kuchka.units import ENERGY_UNITS
-from kuchka.units import FREQUENCY_UNITS
-from kuchka.units import LENGTH_UNITS
-from kuchka.units import LOGARITHMIC_RATIO_UNITS
-from kuchka.units import LUMINOUS_INTENSITY_UNITS
-from kuchka.units import MASS_UNITS
-from kuchka.units import POWER_UNITS
-from kuchka.units import PROPORTION_UNITS
-from kuchka.units import RESISTANCE_UNITS
-from kuchka.units import SAMPLE_RATE_UNITS
-from kuchka.units import TEMPERATURE_DELTA_UNITS
-from kuchka.units import TEMPERATURE_UNITS
-from kuchka.units import TIME_UNITS
-from kuchka.units import VOLTAGE_UNITS
-from kuchka.units import VOLUME_UNITS
+from kuchka.units import amount
+from kuchka.units import area
+from kuchka.units import baud_rate
+from kuchka.units import charge
+from kuchka.units import conductance
+from kuchka.units import current
+from kuchka.units import energy
+from kuchka.units import frequency
+from kuchka.units import length
+from kuchka.units import logarithmic
+from kuchka.units import luminous_intensity
+from kuchka.units import mass
 from kuchka.units import power
+from kuchka.units import proportion
+from kuchka.units import resistance
+from kuchka.units import sample_rate
+from kuchka.units import thermal
+from kuchka.units import time
 from kuchka.units import voltage
+from kuchka.units import volume
 
 # (table, {expected symbol: expected constructor})
 TABLE_CASES = [
     (
-        VOLTAGE_UNITS,
+        voltage.VOLTAGE_UNITS,
         {
             "nV": voltage.Nanovolt,
             f"{symbols.MICRO}V": voltage.Microvolt,
@@ -178,30 +47,30 @@ TABLE_CASES = [
         },
     ),
     (
-        CURRENT_UNITS,
+        current.CURRENT_UNITS,
         {
-            "pA": Picoampere,
-            "nA": Nanoampere,
-            f"{symbols.MICRO}A": Microampere,
-            "mA": Milliampere,
-            "A": Ampere,
-            "kA": Kiloampere,
-            "MA": Megaampere,
+            "pA": current.Picoampere,
+            "nA": current.Nanoampere,
+            f"{symbols.MICRO}A": current.Microampere,
+            "mA": current.Milliampere,
+            "A": current.Ampere,
+            "kA": current.Kiloampere,
+            "MA": current.Megaampere,
         },
     ),
     (
-        RESISTANCE_UNITS,
+        resistance.RESISTANCE_UNITS,
         {
-            f"{symbols.MICRO}{symbols.OMEGA}": Microohm,
-            f"m{symbols.OMEGA}": Milliohm,
-            symbols.OMEGA: Ohm,
-            f"k{symbols.OMEGA}": Kiloohm,
-            f"M{symbols.OMEGA}": Megaohm,
-            f"G{symbols.OMEGA}": Gigaohm,
+            f"{symbols.MICRO}{symbols.OMEGA}": resistance.Microohm,
+            f"m{symbols.OMEGA}": resistance.Milliohm,
+            symbols.OMEGA: resistance.Ohm,
+            f"k{symbols.OMEGA}": resistance.Kiloohm,
+            f"M{symbols.OMEGA}": resistance.Megaohm,
+            f"G{symbols.OMEGA}": resistance.Gigaohm,
         },
     ),
     (
-        POWER_UNITS,
+        power.POWER_UNITS,
         {
             "pW": power.Picowatt,
             "nW": power.Nanowatt,
@@ -217,168 +86,206 @@ TABLE_CASES = [
             "PS": power.MetricHorsepower,
         },
     ),
-    (TEMPERATURE_UNITS, {"K": Kelvin, "C": Celsius, "F": Fahrenheit}),
     (
-        TEMPERATURE_DELTA_UNITS,
-        {"dK": DeltaKelvin, "dC": DeltaCelsius, "dF": DeltaFahrenheit},
-    ),
-    (
-        TIME_UNITS,
+        thermal.TEMPERATURE_UNITS,
         {
-            "fs": Femtosecond,
-            "ps": Picosecond,
-            "ns": Nanosecond,
-            f"{symbols.MICRO}s": Microsecond,
-            "ms": Millisecond,
-            "s": Second,
-            "min": Minute,
-            "h": Hour,
-            "d": Day,
-            "wk": Week,
-            "fortnight": Fortnight,
-            "a": JulianYear,
-            "jiffy": Jiffy,
+            "K": thermal.Kelvin,
+            "C": thermal.Celsius,
+            "F": thermal.Fahrenheit,
         },
     ),
     (
-        FREQUENCY_UNITS,
+        thermal.TEMPERATURE_DELTA_UNITS,
         {
-            "Hz": Hertz,
-            "kHz": Kilohertz,
-            "MHz": Megahertz,
-            "GHz": Gigahertz,
-            "THz": Terahertz,
-            "PHz": Petahertz,
+            "dK": thermal.DeltaKelvin,
+            "dC": thermal.DeltaCelsius,
+            "dF": thermal.DeltaFahrenheit,
         },
     ),
     (
-        SAMPLE_RATE_UNITS,
+        time.TIME_UNITS,
         {
-            "Sa/s": SamplesPerSecond,
-            "kSa/s": KilosamplesPerSecond,
-            "MSa/s": MegasamplesPerSecond,
-        },
-    ),
-    (BAUD_RATE_UNITS, {"Bd": Baud, "kBd": Kilobaud}),
-    (
-        LENGTH_UNITS,
-        {
-            "pm": Picometer,
-            "nm": Nanometer,
-            f"{symbols.MICRO}m": Micrometer,
-            "mm": Millimeter,
-            "cm": Centimeter,
-            "dm": Decimeter,
-            "m": Meter,
-            "km": Kilometer,
-            "in": Inch,
-            "ft": Foot,
-            "yd": Yard,
-            "mi": Mile,
-            "M": NauticalMile,
-        },
-    ),
-    (PROPORTION_UNITS, {"1": Ratio, "%": Percent}),
-    (
-        MASS_UNITS,
-        {
-            "pg": Picogram,
-            "ng": Nanogram,
-            f"{symbols.MICRO}g": Microgram,
-            "mg": Milligram,
-            "g": Gram,
-            "kg": Kilogram,
-            "Mg": Megagram,
-            "t": Tonne,
-            "Da": Dalton,
-            "gr": Grain,
-            "lb": Pound,
-            "oz": Ounce,
-            "M☉": SolarMass,
-            "M♁": EarthMass,
+            "fs": time.Femtosecond,
+            "ps": time.Picosecond,
+            "ns": time.Nanosecond,
+            f"{symbols.MICRO}s": time.Microsecond,
+            "ms": time.Millisecond,
+            "s": time.Second,
+            "min": time.Minute,
+            "h": time.Hour,
+            "d": time.Day,
+            "wk": time.Week,
+            "fortnight": time.Fortnight,
+            "a": time.JulianYear,
+            "jiffy": time.Jiffy,
         },
     ),
     (
-        AMOUNT_OF_SUBSTANCE_UNITS,
-        {f"{symbols.MICRO}mol": Micromole, "mmol": Millimole, "mol": Mole},
-    ),
-    (LUMINOUS_INTENSITY_UNITS, {"cd": Candela}),
-    (
-        CHARGE_UNITS,
+        frequency.FREQUENCY_UNITS,
         {
-            "pC": Picocoulomb,
-            "nC": Nanocoulomb,
-            f"{symbols.MICRO}C": Microcoulomb,
-            "mC": Millicoulomb,
-            "C": Coulomb,
-            "As": AmpereSecond,
-            "mAs": MilliampereSecond,
-            "mAh": MilliampereHour,
-            "Ah": AmpereHour,
+            "Hz": frequency.Hertz,
+            "kHz": frequency.Kilohertz,
+            "MHz": frequency.Megahertz,
+            "GHz": frequency.Gigahertz,
+            "THz": frequency.Terahertz,
+            "PHz": frequency.Petahertz,
         },
     ),
     (
-        ENERGY_UNITS,
+        sample_rate.SAMPLE_RATE_UNITS,
         {
-            "pJ": Picojoule,
-            "nJ": Nanojoule,
-            f"{symbols.MICRO}J": Microjoule,
-            "mJ": Millijoule,
-            "J": Joule,
-            "kJ": Kilojoule,
-            "MJ": Megajoule,
-            "GJ": Gigajoule,
-            "TJ": Terajoule,
-            f"{symbols.MICRO}eV": Microelectronvolt,
-            "meV": Millielectronvolt,
-            "eV": Electronvolt,
-            "keV": Kiloelectronvolt,
-            "MeV": Megaelectronvolt,
-            "GeV": Gigaelectronvolt,
-            "TeV": Teraelectronvolt,
-            "PeV": Petaelectronvolt,
-            "mWh": MilliwattHour,
-            "Wh": WattHour,
-            "erg": Erg,
-            f"cal{symbols.SUBSCRIPT_T}{symbols.SUBSCRIPT_H}": ThermochemicalCalorie,
-            "kcal": Calorie,
+            "Sa/s": sample_rate.SamplesPerSecond,
+            "kSa/s": sample_rate.KilosamplesPerSecond,
+            "MSa/s": sample_rate.MegasamplesPerSecond,
         },
     ),
     (
-        AREA_UNITS,
+        baud_rate.BAUD_RATE_UNITS,
         {
-            f"mm{symbols.SUPERSCRIPT_TWO}": SquareMillimetre,
-            f"cm{symbols.SUPERSCRIPT_TWO}": SquareCentimetre,
-            f"m{symbols.SUPERSCRIPT_TWO}": SquareMetre,
-            f"km{symbols.SUPERSCRIPT_TWO}": SquareKilometre,
-            "ha": Hectare,
-            "ac": Acre,
-            f"in{symbols.SUPERSCRIPT_TWO}": SquareInch,
+            "Bd": baud_rate.Baud,
+            "kBd": baud_rate.Kilobaud,
         },
     ),
     (
-        VOLUME_UNITS,
+        length.LENGTH_UNITS,
         {
-            f"mm{symbols.SUPERSCRIPT_THREE}": CubicMillimetre,
-            f"cm{symbols.SUPERSCRIPT_THREE}": CubicCentimetre,
-            f"m{symbols.SUPERSCRIPT_THREE}": CubicMetre,
-            f"{symbols.MICRO}L": Microlitre,
-            "mL": Millilitre,
-            "L": Litre,
-            "kL": Kilolitre,
+            "pm": length.Picometer,
+            "nm": length.Nanometer,
+            f"{symbols.MICRO}m": length.Micrometer,
+            "mm": length.Millimeter,
+            "cm": length.Centimeter,
+            "dm": length.Decimeter,
+            "m": length.Meter,
+            "km": length.Kilometer,
+            "in": length.Inch,
+            "ft": length.Foot,
+            "yd": length.Yard,
+            "mi": length.Mile,
+            "M": length.NauticalMile,
         },
     ),
     (
-        CONDUCTANCE_UNITS,
+        proportion.PROPORTION_UNITS,
         {
-            "nS": Nanosiemens,
-            f"{symbols.MICRO}S": Microsiemens,
-            "mS": Millisiemens,
-            "S": Siemens,
-            "kS": Kilosiemens,
+            "1": proportion.Ratio,
+            "%": proportion.Percent,
         },
     ),
-    (LOGARITHMIC_RATIO_UNITS, {"dB": Decibel, "B": Bel}),
+    (
+        mass.MASS_UNITS,
+        {
+            "pg": mass.Picogram,
+            "ng": mass.Nanogram,
+            f"{symbols.MICRO}g": mass.Microgram,
+            "mg": mass.Milligram,
+            "g": mass.Gram,
+            "kg": mass.Kilogram,
+            "Mg": mass.Megagram,
+            "t": mass.Tonne,
+            "Da": mass.Dalton,
+            "gr": mass.Grain,
+            "lb": mass.Pound,
+            "oz": mass.Ounce,
+            "M☉": mass.SolarMass,
+            "M♁": mass.EarthMass,
+        },
+    ),
+    (
+        amount.AMOUNT_OF_SUBSTANCE_UNITS,
+        {
+            f"{symbols.MICRO}mol": amount.Micromole,
+            "mmol": amount.Millimole,
+            "mol": amount.Mole,
+        },
+    ),
+    (
+        luminous_intensity.LUMINOUS_INTENSITY_UNITS,
+        {
+            "cd": luminous_intensity.Candela,
+        },
+    ),
+    (
+        charge.CHARGE_UNITS,
+        {
+            "pC": charge.Picocoulomb,
+            "nC": charge.Nanocoulomb,
+            f"{symbols.MICRO}C": charge.Microcoulomb,
+            "mC": charge.Millicoulomb,
+            "C": charge.Coulomb,
+            "As": charge.AmpereSecond,
+            "mAs": charge.MilliampereSecond,
+            "mAh": charge.MilliampereHour,
+            "Ah": charge.AmpereHour,
+        },
+    ),
+    (
+        energy.ENERGY_UNITS,
+        {
+            "pJ": energy.Picojoule,
+            "nJ": energy.Nanojoule,
+            f"{symbols.MICRO}J": energy.Microjoule,
+            "mJ": energy.Millijoule,
+            "J": energy.Joule,
+            "kJ": energy.Kilojoule,
+            "MJ": energy.Megajoule,
+            "GJ": energy.Gigajoule,
+            "TJ": energy.Terajoule,
+            f"{symbols.MICRO}eV": energy.Microelectronvolt,
+            "meV": energy.Millielectronvolt,
+            "eV": energy.Electronvolt,
+            "keV": energy.Kiloelectronvolt,
+            "MeV": energy.Megaelectronvolt,
+            "GeV": energy.Gigaelectronvolt,
+            "TeV": energy.Teraelectronvolt,
+            "PeV": energy.Petaelectronvolt,
+            "mWh": energy.MilliwattHour,
+            "Wh": energy.WattHour,
+            "erg": energy.Erg,
+            f"cal{symbols.SUBSCRIPT_T}{symbols.SUBSCRIPT_H}": energy.ThermochemicalCalorie,  # noqa: E501
+            "kcal": energy.Calorie,
+        },
+    ),
+    (
+        area.AREA_UNITS,
+        {
+            f"mm{symbols.SUPERSCRIPT_TWO}": area.SquareMillimetre,
+            f"cm{symbols.SUPERSCRIPT_TWO}": area.SquareCentimetre,
+            f"m{symbols.SUPERSCRIPT_TWO}": area.SquareMetre,
+            f"km{symbols.SUPERSCRIPT_TWO}": area.SquareKilometre,
+            "ha": area.Hectare,
+            "ac": area.Acre,
+            f"in{symbols.SUPERSCRIPT_TWO}": area.SquareInch,
+        },
+    ),
+    (
+        volume.VOLUME_UNITS,
+        {
+            f"mm{symbols.SUPERSCRIPT_THREE}": volume.CubicMillimetre,
+            f"cm{symbols.SUPERSCRIPT_THREE}": volume.CubicCentimetre,
+            f"m{symbols.SUPERSCRIPT_THREE}": volume.CubicMetre,
+            f"{symbols.MICRO}L": volume.Microlitre,
+            "mL": volume.Millilitre,
+            "L": volume.Litre,
+            "kL": volume.Kilolitre,
+        },
+    ),
+    (
+        conductance.CONDUCTANCE_UNITS,
+        {
+            "nS": conductance.Nanosiemens,
+            f"{symbols.MICRO}S": conductance.Microsiemens,
+            "mS": conductance.Millisiemens,
+            "S": conductance.Siemens,
+            "kS": conductance.Kilosiemens,
+        },
+    ),
+    (
+        logarithmic.LOGARITHMIC_RATIO_UNITS,
+        {
+            "dB": logarithmic.Decibel,
+            "B": logarithmic.Bel,
+        },
+    ),
 ]
 
 TABLE_CASE_IDS = [
