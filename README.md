@@ -403,7 +403,7 @@ The complete unit vocabulary is available in the API reference.
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | Voltage     | `Nanovolt` though `Petavolt`                                                                                                             |
 | Current     | `Picoampere`, through `Megaampere`                                                                                                       |
-| Power       | `Milliwatt`, `Watt`, `Kilowatt`                                                                                                          |
+| Power       | `Picowatt` through `Petawatt`, `Horsepower` and `MetricHorsepower`                                                                       |
 | Resistance  | `Microohm`, through `Gigaohm`                                                                                                            |
 | Conductance | `Nanosiemens` through `Kilosiemens`                                                                                                      |
 | Charge      | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                                                    |
