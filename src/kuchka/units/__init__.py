@@ -11,14 +11,34 @@ Each quantity's canonical unit (the one arithmetic results come back in, e.g.
 corresponding domain class from ``kuchka.quantities`` at the bottom of the module that
 owns that dimension.
 
-Each leaf module owns a hand-written ``__all__`` naming exactly what it defines;
-this package aggregates them with a wildcard import and derives its own ``__all__``
-from whatever that leaves in scope, so adding a unit to an existing dimension never
-requires touching this file.
+Each leaf module owns one hand-written ``__all__`` naming exactly what it defines.
+This package imports each leaf and composes its own ``__all__`` from theirs, so adding
+a unit to an existing dimension never requires touching this file.
+A new leaf module needs three lines here (its module import, its wildcard import, and
+its ``__all__ +=``), and ``tests/test_public_api_surface.py`` fails if one is missing.
 """
 
 from __future__ import annotations
 
+from kuchka.units import amount
+from kuchka.units import angular
+from kuchka.units import area
+from kuchka.units import charge
+from kuchka.units import conductance
+from kuchka.units import current
+from kuchka.units import density
+from kuchka.units import energy
+from kuchka.units import length
+from kuchka.units import logarithmic
+from kuchka.units import luminous_intensity
+from kuchka.units import mass
+from kuchka.units import power
+from kuchka.units import pressure
+from kuchka.units import proportion
+from kuchka.units import resistance
+from kuchka.units import thermal
+from kuchka.units import voltage
+from kuchka.units import volume
 from kuchka.units.amount import *
 from kuchka.units.angular import *
 from kuchka.units.area import *
@@ -27,7 +47,12 @@ from kuchka.units.conductance import *
 from kuchka.units.current import *
 from kuchka.units.density import *
 from kuchka.units.energy import *
-from kuchka.units.kinematics import *
+from kuchka.units.kinematics import acceleration
+from kuchka.units.kinematics import force
+from kuchka.units.kinematics import velocity
+from kuchka.units.kinematics.acceleration import *
+from kuchka.units.kinematics.force import *
+from kuchka.units.kinematics.velocity import *
 from kuchka.units.length import *
 from kuchka.units.logarithmic import *
 from kuchka.units.luminous_intensity import *
@@ -36,9 +61,48 @@ from kuchka.units.power import *
 from kuchka.units.pressure import *
 from kuchka.units.proportion import *
 from kuchka.units.resistance import *
-from kuchka.units.temporal import *
+from kuchka.units.temporal import baud_rate
+from kuchka.units.temporal import frequency
+from kuchka.units.temporal import instant
+from kuchka.units.temporal import sample_rate
+from kuchka.units.temporal import sampling_period
+from kuchka.units.temporal import time
+from kuchka.units.temporal.baud_rate import *
+from kuchka.units.temporal.frequency import *
+from kuchka.units.temporal.instant import *
+from kuchka.units.temporal.sample_rate import *
+from kuchka.units.temporal.sampling_period import *
+from kuchka.units.temporal.time import *
 from kuchka.units.thermal import *
 from kuchka.units.voltage import *
 from kuchka.units.volume import *
 
-__all__: list[str] = sorted(name for name in globals() if not name.startswith("_"))
+__all__: list[str] = []
+__all__ += amount.__all__
+__all__ += angular.__all__
+__all__ += area.__all__
+__all__ += charge.__all__
+__all__ += conductance.__all__
+__all__ += current.__all__
+__all__ += density.__all__
+__all__ += energy.__all__
+__all__ += length.__all__
+__all__ += logarithmic.__all__
+__all__ += luminous_intensity.__all__
+__all__ += mass.__all__
+__all__ += power.__all__
+__all__ += pressure.__all__
+__all__ += proportion.__all__
+__all__ += resistance.__all__
+__all__ += thermal.__all__
+__all__ += voltage.__all__
+__all__ += volume.__all__
+__all__ += acceleration.__all__
+__all__ += force.__all__
+__all__ += velocity.__all__
+__all__ += baud_rate.__all__
+__all__ += frequency.__all__
+__all__ += instant.__all__
+__all__ += sample_rate.__all__
+__all__ += sampling_period.__all__
+__all__ += time.__all__

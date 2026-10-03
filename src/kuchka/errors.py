@@ -59,6 +59,20 @@ class IncompatibleDimensionError(MeasurementError):
         self.right = right
 
 
+class DivisionByZeroError(MeasurementError, ZeroDivisionError):
+    """A measurement was divided by zero, or the reciprocal of zero was taken.
+
+    Also a `ZeroDivisionError`, so code that catches either one handles it.
+    `dividend` and `divisor` are the operands as given.
+    """
+
+    def __init__(self, dividend: object, divisor: object) -> None:
+        """Build the message from both operands."""
+        super().__init__(f"cannot divide {dividend} by {divisor}: the divisor is zero.")
+        self.dividend = dividend
+        self.divisor = divisor
+
+
 class InvalidConversionError(MeasurementError):
     """``.to(...)`` was given something that is not a valid conversion target."""
 
@@ -107,6 +121,7 @@ class PlannedDimensionError(UnrepresentableDimensionError):
 
 
 __all__ = [
+    "DivisionByZeroError",
     "IncompatibleDimensionError",
     "InvalidConversionError",
     "InvalidMeasurementError",

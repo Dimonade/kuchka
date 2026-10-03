@@ -25,6 +25,7 @@ from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.typing import override
 from kuchka.numeric import Numeric
+from kuchka.numeric import exact_quotient
 from kuchka.numeric import to_exact
 from kuchka.quantities.base.ordering import _OrderedScalarMixin
 from kuchka.quantities.base.storage import _ScalarStorage
@@ -116,6 +117,15 @@ class PureLogarithmicQuantity(_OrderedScalarMixin, _ScalarStorage[LogarithmicUni
             self._reject_naked_number("subtract", other)
         return NotImplemented
 
+    def is_close(self, other: Self, *, tolerance: Self) -> bool:
+        """Return whether `other` is within `tolerance` of `self`, inclusive.
+
+        The tolerance is a level of the same type, e.g. ``Decibel(0.1)``, and has no
+        default.
+        """
+        limit = self._tolerance_limit(other, tolerance, type(self))
+        return abs(self._magnitude - other._magnitude) <= limit
+
     def _reject_naked_number(self, operation: str, other: object) -> None:
         unit_name = self._canonical_unit.name.capitalize()
         msg = (
@@ -142,9 +152,14 @@ class PureLogarithmicQuantity(_OrderedScalarMixin, _ScalarStorage[LogarithmicUni
         if isinstance(other, PureLogarithmicQuantity):
             if type(self) is not type(other):
                 raise IncompatibleDimensionError("divide", self, other)
-            return self._magnitude / other._magnitude
+            return exact_quotient(
+                self._magnitude, other._magnitude, left=self, right=other
+            )
         if isinstance(other, Numeric):
-            return type(self)(self._magnitude / to_exact(other), self._display_unit)
+            magnitude = exact_quotient(
+                self._magnitude, to_exact(other), left=self, right=other
+            )
+            return type(self)(magnitude, self._display_unit)
         return NotImplemented
 
     def __neg__(self) -> Self:

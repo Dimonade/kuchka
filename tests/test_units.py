@@ -18,215 +18,20 @@ from typing import TYPE_CHECKING
 import pytest
 from hypothesis import given
 
-from kuchka import Acre
-from kuchka import Ampere
-from kuchka import AmpereHour
-from kuchka import Calorie
-from kuchka import Centimeter
-from kuchka import Coulomb
-from kuchka import CubicCentimetre
-from kuchka import CubicMetre
-from kuchka import CubicMillimetre
-from kuchka import Dalton
-from kuchka import Decimeter
-from kuchka import EarthMass
-from kuchka import Electronvolt
-from kuchka import Erg
-from kuchka import Femtosecond
-from kuchka import Foot
-from kuchka import Gigaelectronvolt
-from kuchka import Gigahertz
-from kuchka import Gigajoule
-from kuchka import Gigaohm
-from kuchka import Grain
-from kuchka import Gram
-from kuchka import Hectare
-from kuchka import Hertz
-from kuchka import Hour
-from kuchka import Inch
-from kuchka import Joule
-from kuchka import Kiloampere
-from kuchka import Kiloelectronvolt
-from kuchka import Kilogram
-from kuchka import Kilohertz
-from kuchka import Kilolitre
-from kuchka import Kilometer
-from kuchka import Kiloohm
-from kuchka import KilosamplesPerSecond
-from kuchka import Kilosiemens
-from kuchka import Kilovolt
-from kuchka import Kilowatt
-from kuchka import Litre
-from kuchka import Megaampere
-from kuchka import Megaelectronvolt
-from kuchka import Megagram
-from kuchka import Megahertz
-from kuchka import Megaohm
-from kuchka import MegasamplesPerSecond
-from kuchka import Megavolt
-from kuchka import Meter
-from kuchka import Microampere
-from kuchka import Microelectronvolt
-from kuchka import Microgram
-from kuchka import Microlitre
-from kuchka import Micrometer
-from kuchka import Microohm
-from kuchka import Microsecond
-from kuchka import Microsiemens
-from kuchka import Microvolt
-from kuchka import Mile
-from kuchka import Milliampere
-from kuchka import MilliampereHour
-from kuchka import MilliampereSecond
-from kuchka import Millielectronvolt
-from kuchka import Milligram
-from kuchka import Millilitre
-from kuchka import Millimeter
-from kuchka import Milliohm
-from kuchka import Millisecond
-from kuchka import Millisiemens
-from kuchka import Millivolt
-from kuchka import Milliwatt
-from kuchka import MilliwattHour
-from kuchka import Minute
-from kuchka import Nanoampere
-from kuchka import Nanogram
-from kuchka import Nanometer
-from kuchka import Nanosecond
-from kuchka import Nanosiemens
-from kuchka import Nanovolt
-from kuchka import NauticalMile
-from kuchka import Ohm
-from kuchka import Ounce
-from kuchka import Petaelectronvolt
-from kuchka import Petahertz
-from kuchka import Petavolt
-from kuchka import Picoampere
-from kuchka import Picogram
-from kuchka import Picometer
-from kuchka import Picosecond
-from kuchka import Pound
-from kuchka import SamplesPerSecond
-from kuchka import Second
-from kuchka import Siemens
-from kuchka import SolarMass
-from kuchka import SquareCentimetre
-from kuchka import SquareKilometre
-from kuchka import SquareMetre
-from kuchka import SquareMillimetre
-from kuchka import Teraelectronvolt
-from kuchka import Terahertz
-from kuchka import Terajoule
-from kuchka import ThermochemicalCalorie
-from kuchka import Tonne
-from kuchka import Volt
-from kuchka import Watt
-from kuchka import WattHour
-from kuchka import Yard
-from kuchka.units import ACRE
-from kuchka.units import AMPERE
-from kuchka.units import AMPERE_HOUR
-from kuchka.units import CENTIMETER
-from kuchka.units import COULOMB
-from kuchka.units import CUBIC_CENTIMETRE
-from kuchka.units import CUBIC_METRE
-from kuchka.units import CUBIC_MILLIMETRE
-from kuchka.units import DALTON
-from kuchka.units import DECIMETER
-from kuchka.units import EARTH_MASS
-from kuchka.units import ELECTRONVOLT
-from kuchka.units import ERG
-from kuchka.units import FOOT
-from kuchka.units import GIGAELECTRONVOLT
-from kuchka.units import GIGAHERTZ
-from kuchka.units import GIGAJOULE
-from kuchka.units import GIGAOHM
-from kuchka.units import GRAIN
-from kuchka.units import GRAM
-from kuchka.units import HECTARE
-from kuchka.units import HERTZ
-from kuchka.units import HOUR
-from kuchka.units import INCH
-from kuchka.units import JOULE
-from kuchka.units import KILOAMPERE
-from kuchka.units import KILOCALORIE
-from kuchka.units import KILOELECTRONVOLT
-from kuchka.units import KILOGRAM
-from kuchka.units import KILOHERTZ
-from kuchka.units import KILOLITRE
-from kuchka.units import KILOMETER
-from kuchka.units import KILOOHM
-from kuchka.units import KILOSAMPLES_PER_SECOND
-from kuchka.units import KILOSIEMENS
-from kuchka.units import KILOVOLT
-from kuchka.units import KILOWATT
-from kuchka.units import LITRE
-from kuchka.units import MEGAAMPERE
-from kuchka.units import MEGAELECTRONVOLT
-from kuchka.units import MEGAGRAM
-from kuchka.units import MEGAHERTZ
-from kuchka.units import MEGAOHM
-from kuchka.units import MEGASAMPLES_PER_SECOND
-from kuchka.units import MEGAVOLT
-from kuchka.units import METER
-from kuchka.units import MICROAMPERE
-from kuchka.units import MICROELECTRONVOLT
-from kuchka.units import MICROGRAM
-from kuchka.units import MICROLITRE
-from kuchka.units import MICROMETER
-from kuchka.units import MICROOHM
-from kuchka.units import MICROSECOND
-from kuchka.units import MICROSIEMENS
-from kuchka.units import MICROVOLT
-from kuchka.units import MILE
-from kuchka.units import MILLIAMPERE
-from kuchka.units import MILLIAMPERE_HOUR
-from kuchka.units import MILLIAMPERE_SECOND
-from kuchka.units import MILLIELECTRONVOLT
-from kuchka.units import MILLIGRAM
-from kuchka.units import MILLILITRE
-from kuchka.units import MILLIMETER
-from kuchka.units import MILLIOHM
-from kuchka.units import MILLISECOND
-from kuchka.units import MILLISIEMENS
-from kuchka.units import MILLIVOLT
-from kuchka.units import MILLIWATT
-from kuchka.units import MILLIWATT_HOUR
-from kuchka.units import MINUTE
-from kuchka.units import NANOAMPERE
-from kuchka.units import NANOGRAM
-from kuchka.units import NANOMETER
-from kuchka.units import NANOSIEMENS
-from kuchka.units import NANOVOLT
-from kuchka.units import NAUTICAL_MILE
-from kuchka.units import OHM
-from kuchka.units import OUNCE
-from kuchka.units import PETAELECTRONVOLT
-from kuchka.units import PETAHERTZ
-from kuchka.units import PETAVOLT
-from kuchka.units import PICOAMPERE
-from kuchka.units import PICOGRAM
-from kuchka.units import PICOMETER
-from kuchka.units import POUND
-from kuchka.units import SAMPLES_PER_SECOND
-from kuchka.units import SECOND
-from kuchka.units import SIEMENS
-from kuchka.units import SOLAR_MASS
-from kuchka.units import SQUARE_CENTIMETRE
-from kuchka.units import SQUARE_KILOMETRE
-from kuchka.units import SQUARE_METRE
-from kuchka.units import SQUARE_MILLIMETRE
-from kuchka.units import TERAELECTRONVOLT
-from kuchka.units import TERAHERTZ
-from kuchka.units import TERAJOULE
-from kuchka.units import THERMOCHEMICAL_CALORIE
-from kuchka.units import VOLT
-from kuchka.units import WATT
-from kuchka.units import WATT_HOUR
-from kuchka.units import YARD
-from kuchka.units.temporal.time import FEMTOSECOND
-from kuchka.units.temporal.time import NANOSECOND
-from kuchka.units.temporal.time import PICOSECOND
+from kuchka.units import area
+from kuchka.units import charge
+from kuchka.units import conductance
+from kuchka.units import current
+from kuchka.units import energy
+from kuchka.units import frequency
+from kuchka.units import length
+from kuchka.units import mass
+from kuchka.units import power
+from kuchka.units import resistance
+from kuchka.units import sample_rate
+from kuchka.units import time
+from kuchka.units import voltage
+from kuchka.units import volume
 from tests.quantity_families import FINITE_DECIMALS
 
 if TYPE_CHECKING:
@@ -250,286 +55,725 @@ class PrefixCase:
 
 
 PREFIX_CASES: list[PrefixCase] = [
-    PrefixCase("Nanovolt", Nanovolt, Volt, Decimal("0.000000001"), NANOVOLT, VOLT),
-    PrefixCase("Microvolt", Microvolt, Volt, Decimal("0.000001"), MICROVOLT, VOLT),
-    PrefixCase("Millivolt", Millivolt, Volt, Decimal("0.001"), MILLIVOLT, VOLT),
-    PrefixCase("Kilovolt", Kilovolt, Volt, Decimal(1000), KILOVOLT, VOLT),
-    PrefixCase("Megavolt", Megavolt, Volt, Decimal(1_000_000), MEGAVOLT, VOLT),
-    PrefixCase("Petavolt", Petavolt, Volt, Decimal("1e15"), PETAVOLT, VOLT),
     PrefixCase(
-        "Picoampere", Picoampere, Ampere, Decimal("0.000000000001"), PICOAMPERE, AMPERE
+        "Nanovolt",
+        voltage.Nanovolt,
+        voltage.Volt,
+        Decimal("0.000000001"),
+        voltage.NANOVOLT,
+        voltage.VOLT,
     ),
     PrefixCase(
-        "Nanoampere", Nanoampere, Ampere, Decimal("0.000000001"), NANOAMPERE, AMPERE
+        "Microvolt",
+        voltage.Microvolt,
+        voltage.Volt,
+        Decimal("0.000001"),
+        voltage.MICROVOLT,
+        voltage.VOLT,
     ),
     PrefixCase(
-        "Microampere", Microampere, Ampere, Decimal("0.000001"), MICROAMPERE, AMPERE
+        "Millivolt",
+        voltage.Millivolt,
+        voltage.Volt,
+        Decimal("0.001"),
+        voltage.MILLIVOLT,
+        voltage.VOLT,
     ),
     PrefixCase(
-        "Milliampere", Milliampere, Ampere, Decimal("0.001"), MILLIAMPERE, AMPERE
+        "Kilovolt",
+        voltage.Kilovolt,
+        voltage.Volt,
+        Decimal(1000),
+        voltage.KILOVOLT,
+        voltage.VOLT,
     ),
-    PrefixCase("Kiloampere", Kiloampere, Ampere, Decimal(1000), KILOAMPERE, AMPERE),
     PrefixCase(
-        "Megaampere", Megaampere, Ampere, Decimal(1_000_000), MEGAAMPERE, AMPERE
+        "Megavolt",
+        voltage.Megavolt,
+        voltage.Volt,
+        Decimal(1_000_000),
+        voltage.MEGAVOLT,
+        voltage.VOLT,
     ),
-    PrefixCase("Microohm", Microohm, Ohm, Decimal("0.000001"), MICROOHM, OHM),
-    PrefixCase("Milliohm", Milliohm, Ohm, Decimal("0.001"), MILLIOHM, OHM),
-    PrefixCase("Kiloohm", Kiloohm, Ohm, Decimal(1000), KILOOHM, OHM),
-    PrefixCase("Megaohm", Megaohm, Ohm, Decimal(1_000_000), MEGAOHM, OHM),
-    PrefixCase("Gigaohm", Gigaohm, Ohm, Decimal("1e9"), GIGAOHM, OHM),
-    PrefixCase("Milliwatt", Milliwatt, Watt, Decimal("0.001"), MILLIWATT, WATT),
-    PrefixCase("Kilowatt", Kilowatt, Watt, Decimal(1000), KILOWATT, WATT),
+    PrefixCase(
+        "Petavolt",
+        voltage.Petavolt,
+        voltage.Volt,
+        Decimal("1e15"),
+        voltage.PETAVOLT,
+        voltage.VOLT,
+    ),
+    PrefixCase(
+        "Picoampere",
+        current.Picoampere,
+        current.Ampere,
+        Decimal("0.000000000001"),
+        current.PICOAMPERE,
+        current.AMPERE,
+    ),
+    PrefixCase(
+        "Nanoampere",
+        current.Nanoampere,
+        current.Ampere,
+        Decimal("0.000000001"),
+        current.NANOAMPERE,
+        current.AMPERE,
+    ),
+    PrefixCase(
+        "Microampere",
+        current.Microampere,
+        current.Ampere,
+        Decimal("0.000001"),
+        current.MICROAMPERE,
+        current.AMPERE,
+    ),
+    PrefixCase(
+        "Milliampere",
+        current.Milliampere,
+        current.Ampere,
+        Decimal("0.001"),
+        current.MILLIAMPERE,
+        current.AMPERE,
+    ),
+    PrefixCase(
+        "Kiloampere",
+        current.Kiloampere,
+        current.Ampere,
+        Decimal(1000),
+        current.KILOAMPERE,
+        current.AMPERE,
+    ),
+    PrefixCase(
+        "Megaampere",
+        current.Megaampere,
+        current.Ampere,
+        Decimal(1_000_000),
+        current.MEGAAMPERE,
+        current.AMPERE,
+    ),
+    PrefixCase(
+        "Microohm",
+        resistance.Microohm,
+        resistance.Ohm,
+        Decimal("0.000001"),
+        resistance.MICROOHM,
+        resistance.OHM,
+    ),
+    PrefixCase(
+        "Milliohm",
+        resistance.Milliohm,
+        resistance.Ohm,
+        Decimal("0.001"),
+        resistance.MILLIOHM,
+        resistance.OHM,
+    ),
+    PrefixCase(
+        "Kiloohm",
+        resistance.Kiloohm,
+        resistance.Ohm,
+        Decimal(1000),
+        resistance.KILOOHM,
+        resistance.OHM,
+    ),
+    PrefixCase(
+        "Megaohm",
+        resistance.Megaohm,
+        resistance.Ohm,
+        Decimal(1_000_000),
+        resistance.MEGAOHM,
+        resistance.OHM,
+    ),
+    PrefixCase(
+        "Gigaohm",
+        resistance.Gigaohm,
+        resistance.Ohm,
+        Decimal("1e9"),
+        resistance.GIGAOHM,
+        resistance.OHM,
+    ),
+    PrefixCase(
+        "Milliwatt",
+        power.Milliwatt,
+        power.Watt,
+        Decimal("0.001"),
+        power.MILLIWATT,
+        power.WATT,
+    ),
+    PrefixCase(
+        "Kilowatt",
+        power.Kilowatt,
+        power.Watt,
+        Decimal(1000),
+        power.KILOWATT,
+        power.WATT,
+    ),
     PrefixCase(
         "Femtosecond",
-        Femtosecond,
-        Second,
+        time.Femtosecond,
+        time.Second,
         Decimal("0.000000000000001"),
-        FEMTOSECOND,
-        SECOND,
+        time.FEMTOSECOND,
+        time.SECOND,
     ),
     PrefixCase(
-        "Picosecond", Picosecond, Second, Decimal("0.000000000001"), PICOSECOND, SECOND
+        "Picosecond",
+        time.Picosecond,
+        time.Second,
+        Decimal("0.000000000001"),
+        time.PICOSECOND,
+        time.SECOND,
     ),
     PrefixCase(
-        "Nanosecond", Nanosecond, Second, Decimal("0.000000001"), NANOSECOND, SECOND
+        "Nanosecond",
+        time.Nanosecond,
+        time.Second,
+        Decimal("0.000000001"),
+        time.NANOSECOND,
+        time.SECOND,
     ),
     PrefixCase(
-        "Microsecond", Microsecond, Second, Decimal("0.000001"), MICROSECOND, SECOND
+        "Microsecond",
+        time.Microsecond,
+        time.Second,
+        Decimal("0.000001"),
+        time.MICROSECOND,
+        time.SECOND,
     ),
     PrefixCase(
-        "Millisecond", Millisecond, Second, Decimal("0.001"), MILLISECOND, SECOND
+        "Millisecond",
+        time.Millisecond,
+        time.Second,
+        Decimal("0.001"),
+        time.MILLISECOND,
+        time.SECOND,
     ),
-    PrefixCase("Kilohertz", Kilohertz, Hertz, Decimal(1_000), KILOHERTZ, HERTZ),
-    PrefixCase("Megahertz", Megahertz, Hertz, Decimal(1_000_000), MEGAHERTZ, HERTZ),
-    PrefixCase("Gigahertz", Gigahertz, Hertz, Decimal("1e9"), GIGAHERTZ, HERTZ),
-    PrefixCase("Terahertz", Terahertz, Hertz, Decimal("1e12"), TERAHERTZ, HERTZ),
-    PrefixCase("Petahertz", Petahertz, Hertz, Decimal("1e15"), PETAHERTZ, HERTZ),
+    PrefixCase(
+        "Kilohertz",
+        frequency.Kilohertz,
+        frequency.Hertz,
+        Decimal(1_000),
+        frequency.KILOHERTZ,
+        frequency.HERTZ,
+    ),
+    PrefixCase(
+        "Megahertz",
+        frequency.Megahertz,
+        frequency.Hertz,
+        Decimal(1_000_000),
+        frequency.MEGAHERTZ,
+        frequency.HERTZ,
+    ),
+    PrefixCase(
+        "Gigahertz",
+        frequency.Gigahertz,
+        frequency.Hertz,
+        Decimal("1e9"),
+        frequency.GIGAHERTZ,
+        frequency.HERTZ,
+    ),
+    PrefixCase(
+        "Terahertz",
+        frequency.Terahertz,
+        frequency.Hertz,
+        Decimal("1e12"),
+        frequency.TERAHERTZ,
+        frequency.HERTZ,
+    ),
+    PrefixCase(
+        "Petahertz",
+        frequency.Petahertz,
+        frequency.Hertz,
+        Decimal("1e15"),
+        frequency.PETAHERTZ,
+        frequency.HERTZ,
+    ),
     PrefixCase(
         "KilosamplesPerSecond",
-        KilosamplesPerSecond,
-        SamplesPerSecond,
+        sample_rate.KilosamplesPerSecond,
+        sample_rate.SamplesPerSecond,
         Decimal(1000),
-        KILOSAMPLES_PER_SECOND,
-        SAMPLES_PER_SECOND,
+        sample_rate.KILOSAMPLES_PER_SECOND,
+        sample_rate.SAMPLES_PER_SECOND,
     ),
     PrefixCase(
         "MegasamplesPerSecond",
-        MegasamplesPerSecond,
-        SamplesPerSecond,
+        sample_rate.MegasamplesPerSecond,
+        sample_rate.SamplesPerSecond,
         Decimal(1_000_000),
-        MEGASAMPLES_PER_SECOND,
-        SAMPLES_PER_SECOND,
+        sample_rate.MEGASAMPLES_PER_SECOND,
+        sample_rate.SAMPLES_PER_SECOND,
     ),
     PrefixCase(
-        "Picometer", Picometer, Meter, Decimal("0.000000000001"), PICOMETER, METER
-    ),
-    PrefixCase("Nanometer", Nanometer, Meter, Decimal("0.000000001"), NANOMETER, METER),
-    PrefixCase("Micrometer", Micrometer, Meter, Decimal("0.000001"), MICROMETER, METER),
-    PrefixCase("Millimeter", Millimeter, Meter, Decimal("0.001"), MILLIMETER, METER),
-    PrefixCase("Centimeter", Centimeter, Meter, Decimal("0.01"), CENTIMETER, METER),
-    PrefixCase("Decimeter", Decimeter, Meter, Decimal("0.1"), DECIMETER, METER),
-    PrefixCase("Kilometer", Kilometer, Meter, Decimal(1000), KILOMETER, METER),
-    PrefixCase("Inch", Inch, Meter, Decimal("0.0254"), INCH, METER),
-    PrefixCase("Foot", Foot, Meter, Decimal("0.3048"), FOOT, METER),
-    PrefixCase("Yard", Yard, Meter, Decimal("0.9144"), YARD, METER),
-    PrefixCase("Mile", Mile, Meter, Decimal("1_609.344"), MILE, METER),
-    PrefixCase(
-        "Nautical Mile", NauticalMile, Meter, Decimal(1_852), NAUTICAL_MILE, METER
+        "Picometer",
+        length.Picometer,
+        length.Meter,
+        Decimal("0.000000000001"),
+        length.PICOMETER,
+        length.METER,
     ),
     PrefixCase(
-        "Picogram", Picogram, Kilogram, Decimal("0.000000000000001"), PICOGRAM, KILOGRAM
+        "Nanometer",
+        length.Nanometer,
+        length.Meter,
+        Decimal("0.000000001"),
+        length.NANOMETER,
+        length.METER,
     ),
     PrefixCase(
-        "Nanogram", Nanogram, Kilogram, Decimal("0.000000000001"), NANOGRAM, KILOGRAM
+        "Micrometer",
+        length.Micrometer,
+        length.Meter,
+        Decimal("0.000001"),
+        length.MICROMETER,
+        length.METER,
     ),
     PrefixCase(
-        "Microgram", Microgram, Kilogram, Decimal("0.000000001"), MICROGRAM, KILOGRAM
+        "Millimeter",
+        length.Millimeter,
+        length.Meter,
+        Decimal("0.001"),
+        length.MILLIMETER,
+        length.METER,
     ),
     PrefixCase(
-        "Milligram", Milligram, Kilogram, Decimal("0.000001"), MILLIGRAM, KILOGRAM
-    ),
-    PrefixCase("Gram", Gram, Kilogram, Decimal("0.001"), GRAM, KILOGRAM),
-    PrefixCase("Megagram", Megagram, Kilogram, Decimal(1000), MEGAGRAM, KILOGRAM),
-    PrefixCase("Tonne", Tonne, Kilogram, Decimal(1000), MEGAGRAM, KILOGRAM),
-    PrefixCase("Grain", Grain, Kilogram, Decimal("0.00006479891"), GRAIN, KILOGRAM),
-    PrefixCase("Pound", Pound, Kilogram, Decimal("0.45359237"), POUND, KILOGRAM),
-    PrefixCase("Ounce", Ounce, Kilogram, Decimal("0.028349523125"), OUNCE, KILOGRAM),
-    PrefixCase(
-        "Dalton", Dalton, Kilogram, Decimal("1.66053906892e-27"), DALTON, KILOGRAM
+        "Centimeter",
+        length.Centimeter,
+        length.Meter,
+        Decimal("0.01"),
+        length.CENTIMETER,
+        length.METER,
     ),
     PrefixCase(
-        "SolarMass", SolarMass, Kilogram, Decimal("1.988416e30"), SOLAR_MASS, KILOGRAM
+        "Decimeter",
+        length.Decimeter,
+        length.Meter,
+        Decimal("0.1"),
+        length.DECIMETER,
+        length.METER,
     ),
     PrefixCase(
-        "EarthMass", EarthMass, Kilogram, Decimal("5.972168e24"), EARTH_MASS, KILOGRAM
+        "Kilometer",
+        length.Kilometer,
+        length.Meter,
+        Decimal(1000),
+        length.KILOMETER,
+        length.METER,
     ),
-    PrefixCase("Minute", Minute, Second, Decimal(60), MINUTE, SECOND),
-    PrefixCase("Hour", Hour, Second, Decimal(3600), HOUR, SECOND),
-    PrefixCase("WattHour", WattHour, Joule, Decimal(3600), WATT_HOUR, JOULE),
     PrefixCase(
-        "MilliwattHour", MilliwattHour, Joule, Decimal("3.6"), MILLIWATT_HOUR, JOULE
+        "Inch",
+        length.Inch,
+        length.Meter,
+        Decimal("0.0254"),
+        length.INCH,
+        length.METER,
+    ),
+    PrefixCase(
+        "Foot",
+        length.Foot,
+        length.Meter,
+        Decimal("0.3048"),
+        length.FOOT,
+        length.METER,
+    ),
+    PrefixCase(
+        "Yard",
+        length.Yard,
+        length.Meter,
+        Decimal("0.9144"),
+        length.YARD,
+        length.METER,
+    ),
+    PrefixCase(
+        "Mile",
+        length.Mile,
+        length.Meter,
+        Decimal("1_609.344"),
+        length.MILE,
+        length.METER,
+    ),
+    PrefixCase(
+        "Nautical Mile",
+        length.NauticalMile,
+        length.Meter,
+        Decimal(1_852),
+        length.NAUTICAL_MILE,
+        length.METER,
+    ),
+    PrefixCase(
+        "Picogram",
+        mass.Picogram,
+        mass.Kilogram,
+        Decimal("0.000000000000001"),
+        mass.PICOGRAM,
+        mass.KILOGRAM,
+    ),
+    PrefixCase(
+        "Nanogram",
+        mass.Nanogram,
+        mass.Kilogram,
+        Decimal("0.000000000001"),
+        mass.NANOGRAM,
+        mass.KILOGRAM,
+    ),
+    PrefixCase(
+        "Microgram",
+        mass.Microgram,
+        mass.Kilogram,
+        Decimal("0.000000001"),
+        mass.MICROGRAM,
+        mass.KILOGRAM,
+    ),
+    PrefixCase(
+        "Milligram",
+        mass.Milligram,
+        mass.Kilogram,
+        Decimal("0.000001"),
+        mass.MILLIGRAM,
+        mass.KILOGRAM,
+    ),
+    PrefixCase(
+        "Gram",
+        mass.Gram,
+        mass.Kilogram,
+        Decimal("0.001"),
+        mass.GRAM,
+        mass.KILOGRAM,
+    ),
+    PrefixCase(
+        "Megagram",
+        mass.Megagram,
+        mass.Kilogram,
+        Decimal(1000),
+        mass.MEGAGRAM,
+        mass.KILOGRAM,
+    ),
+    PrefixCase(
+        "Tonne",
+        mass.Tonne,
+        mass.Kilogram,
+        Decimal(1000),
+        mass.MEGAGRAM,
+        mass.KILOGRAM,
+    ),
+    PrefixCase(
+        "Grain",
+        mass.Grain,
+        mass.Kilogram,
+        Decimal("0.00006479891"),
+        mass.GRAIN,
+        mass.KILOGRAM,
+    ),
+    PrefixCase(
+        "Pound",
+        mass.Pound,
+        mass.Kilogram,
+        Decimal("0.45359237"),
+        mass.POUND,
+        mass.KILOGRAM,
+    ),
+    PrefixCase(
+        "Ounce",
+        mass.Ounce,
+        mass.Kilogram,
+        Decimal("0.028349523125"),
+        mass.OUNCE,
+        mass.KILOGRAM,
+    ),
+    PrefixCase(
+        "Dalton",
+        mass.Dalton,
+        mass.Kilogram,
+        Decimal("1.66053906892e-27"),
+        mass.DALTON,
+        mass.KILOGRAM,
+    ),
+    PrefixCase(
+        "SolarMass",
+        mass.SolarMass,
+        mass.Kilogram,
+        Decimal("1.988416e30"),
+        mass.SOLAR_MASS,
+        mass.KILOGRAM,
+    ),
+    PrefixCase(
+        "EarthMass",
+        mass.EarthMass,
+        mass.Kilogram,
+        Decimal("5.972168e24"),
+        mass.EARTH_MASS,
+        mass.KILOGRAM,
+    ),
+    PrefixCase(
+        "Minute",
+        time.Minute,
+        time.Second,
+        Decimal(60),
+        time.MINUTE,
+        time.SECOND,
+    ),
+    PrefixCase(
+        "Hour",
+        time.Hour,
+        time.Second,
+        Decimal(3600),
+        time.HOUR,
+        time.SECOND,
+    ),
+    PrefixCase(
+        "WattHour",
+        energy.WattHour,
+        energy.Joule,
+        Decimal(3600),
+        energy.WATT_HOUR,
+        energy.JOULE,
+    ),
+    PrefixCase(
+        "MilliwattHour",
+        energy.MilliwattHour,
+        energy.Joule,
+        Decimal("3.6"),
+        energy.MILLIWATT_HOUR,
+        energy.JOULE,
     ),
     PrefixCase(
         "MilliampereSecond",
-        MilliampereSecond,
-        Coulomb,
+        charge.MilliampereSecond,
+        charge.Coulomb,
         Decimal("0.001"),
-        MILLIAMPERE_SECOND,
-        COULOMB,
+        charge.MILLIAMPERE_SECOND,
+        charge.COULOMB,
     ),
     PrefixCase(
         "MilliampereHour",
-        MilliampereHour,
-        Coulomb,
+        charge.MilliampereHour,
+        charge.Coulomb,
         Decimal("3.6"),
-        MILLIAMPERE_HOUR,
-        COULOMB,
+        charge.MILLIAMPERE_HOUR,
+        charge.COULOMB,
     ),
-    PrefixCase("AmpereHour", AmpereHour, Coulomb, Decimal(3600), AMPERE_HOUR, COULOMB),
+    PrefixCase(
+        "AmpereHour",
+        charge.AmpereHour,
+        charge.Coulomb,
+        Decimal(3600),
+        charge.AMPERE_HOUR,
+        charge.COULOMB,
+    ),
     PrefixCase(
         "SquareMillimetre",
-        SquareMillimetre,
-        SquareMetre,
+        area.SquareMillimetre,
+        area.SquareMetre,
         Decimal("0.000001"),
-        SQUARE_MILLIMETRE,
-        SQUARE_METRE,
+        area.SQUARE_MILLIMETRE,
+        area.SQUARE_METRE,
     ),
     PrefixCase(
         "SquareCentimetre",
-        SquareCentimetre,
-        SquareMetre,
+        area.SquareCentimetre,
+        area.SquareMetre,
         Decimal("0.0001"),
-        SQUARE_CENTIMETRE,
-        SQUARE_METRE,
+        area.SQUARE_CENTIMETRE,
+        area.SQUARE_METRE,
     ),
     PrefixCase(
         "SquareKilometre",
-        SquareKilometre,
-        SquareMetre,
+        area.SquareKilometre,
+        area.SquareMetre,
         Decimal(1_000_000),
-        SQUARE_KILOMETRE,
-        SQUARE_METRE,
+        area.SQUARE_KILOMETRE,
+        area.SQUARE_METRE,
     ),
-    PrefixCase("Hectare", Hectare, SquareMetre, Decimal(10_000), HECTARE, SQUARE_METRE),
-    PrefixCase("Acre", Acre, SquareMetre, Decimal("4046.8564224"), ACRE, SQUARE_METRE),
+    PrefixCase(
+        "Hectare",
+        area.Hectare,
+        area.SquareMetre,
+        Decimal(10_000),
+        area.HECTARE,
+        area.SQUARE_METRE,
+    ),
+    PrefixCase(
+        "Acre",
+        area.Acre,
+        area.SquareMetre,
+        Decimal("4046.8564224"),
+        area.ACRE,
+        area.SQUARE_METRE,
+    ),
     PrefixCase(
         "CubicMillimetre",
-        CubicMillimetre,
-        CubicMetre,
+        volume.CubicMillimetre,
+        volume.CubicMetre,
         Decimal("0.000000001"),
-        CUBIC_MILLIMETRE,
-        CUBIC_METRE,
+        volume.CUBIC_MILLIMETRE,
+        volume.CUBIC_METRE,
     ),
     PrefixCase(
         "CubicCentimetre",
-        CubicCentimetre,
-        CubicMetre,
+        volume.CubicCentimetre,
+        volume.CubicMetre,
         Decimal("0.000001"),
-        CUBIC_CENTIMETRE,
-        CUBIC_METRE,
+        volume.CUBIC_CENTIMETRE,
+        volume.CUBIC_METRE,
     ),
-    PrefixCase("Microlitre", Microlitre, Litre, Decimal("0.000001"), MICROLITRE, LITRE),
-    PrefixCase("Millilitre", Millilitre, Litre, Decimal("0.001"), MILLILITRE, LITRE),
-    PrefixCase("Kilolitre", Kilolitre, Litre, Decimal(1000), KILOLITRE, LITRE),
+    PrefixCase(
+        "Microlitre",
+        volume.Microlitre,
+        volume.Litre,
+        Decimal("0.000001"),
+        volume.MICROLITRE,
+        volume.LITRE,
+    ),
+    PrefixCase(
+        "Millilitre",
+        volume.Millilitre,
+        volume.Litre,
+        Decimal("0.001"),
+        volume.MILLILITRE,
+        volume.LITRE,
+    ),
+    PrefixCase(
+        "Kilolitre",
+        volume.Kilolitre,
+        volume.Litre,
+        Decimal(1000),
+        volume.KILOLITRE,
+        volume.LITRE,
+    ),
     PrefixCase(
         "Nanosiemens",
-        Nanosiemens,
-        Siemens,
+        conductance.Nanosiemens,
+        conductance.Siemens,
         Decimal("0.000000001"),
-        NANOSIEMENS,
-        SIEMENS,
+        conductance.NANOSIEMENS,
+        conductance.SIEMENS,
     ),
     PrefixCase(
         "Microsiemens",
-        Microsiemens,
-        Siemens,
+        conductance.Microsiemens,
+        conductance.Siemens,
         Decimal("0.000001"),
-        MICROSIEMENS,
-        SIEMENS,
+        conductance.MICROSIEMENS,
+        conductance.SIEMENS,
     ),
     PrefixCase(
-        "Millisiemens", Millisiemens, Siemens, Decimal("0.001"), MILLISIEMENS, SIEMENS
+        "Millisiemens",
+        conductance.Millisiemens,
+        conductance.Siemens,
+        Decimal("0.001"),
+        conductance.MILLISIEMENS,
+        conductance.SIEMENS,
     ),
     PrefixCase(
-        "Kilosiemens", Kilosiemens, Siemens, Decimal(1000), KILOSIEMENS, SIEMENS
+        "Kilosiemens",
+        conductance.Kilosiemens,
+        conductance.Siemens,
+        Decimal(1000),
+        conductance.KILOSIEMENS,
+        conductance.SIEMENS,
     ),
-    PrefixCase("Gigajoule", Gigajoule, Joule, Decimal(1_000_000_000), GIGAJOULE, JOULE),
     PrefixCase(
-        "Terajoule", Terajoule, Joule, Decimal(1_000_000_000_000), TERAJOULE, JOULE
+        "Gigajoule",
+        energy.Gigajoule,
+        energy.Joule,
+        Decimal(1_000_000_000),
+        energy.GIGAJOULE,
+        energy.JOULE,
+    ),
+    PrefixCase(
+        "Terajoule",
+        energy.Terajoule,
+        energy.Joule,
+        Decimal(1_000_000_000_000),
+        energy.TERAJOULE,
+        energy.JOULE,
     ),
     PrefixCase(
         "Microelectronvolt",
-        Microelectronvolt,
-        Joule,
+        energy.Microelectronvolt,
+        energy.Joule,
         Decimal("1.602176634e-25"),
-        MICROELECTRONVOLT,
-        JOULE,
+        energy.MICROELECTRONVOLT,
+        energy.JOULE,
     ),
     PrefixCase(
         "Millielectronvolt",
-        Millielectronvolt,
-        Joule,
+        energy.Millielectronvolt,
+        energy.Joule,
         Decimal("1.602176634e-22"),
-        MILLIELECTRONVOLT,
-        JOULE,
+        energy.MILLIELECTRONVOLT,
+        energy.JOULE,
     ),
     PrefixCase(
         "Electronvolt",
-        Electronvolt,
-        Joule,
+        energy.Electronvolt,
+        energy.Joule,
         Decimal("1.602176634e-19"),
-        ELECTRONVOLT,
-        JOULE,
+        energy.ELECTRONVOLT,
+        energy.JOULE,
     ),
     PrefixCase(
         "Kiloelectronvolt",
-        Kiloelectronvolt,
-        Joule,
+        energy.Kiloelectronvolt,
+        energy.Joule,
         Decimal("1.602176634e-16"),
-        KILOELECTRONVOLT,
-        JOULE,
+        energy.KILOELECTRONVOLT,
+        energy.JOULE,
     ),
     PrefixCase(
         "Megaelectronvolt",
-        Megaelectronvolt,
-        Joule,
+        energy.Megaelectronvolt,
+        energy.Joule,
         Decimal("1.602176634e-13"),
-        MEGAELECTRONVOLT,
-        JOULE,
+        energy.MEGAELECTRONVOLT,
+        energy.JOULE,
     ),
     PrefixCase(
         "Gigaelectronvolt",
-        Gigaelectronvolt,
-        Joule,
+        energy.Gigaelectronvolt,
+        energy.Joule,
         Decimal("1.602176634e-10"),
-        GIGAELECTRONVOLT,
-        JOULE,
+        energy.GIGAELECTRONVOLT,
+        energy.JOULE,
     ),
     PrefixCase(
         "Teraelectronvolt",
-        Teraelectronvolt,
-        Joule,
+        energy.Teraelectronvolt,
+        energy.Joule,
         Decimal("1.602176634e-7"),
-        TERAELECTRONVOLT,
-        JOULE,
+        energy.TERAELECTRONVOLT,
+        energy.JOULE,
     ),
     PrefixCase(
         "Petaelectronvolt",
-        Petaelectronvolt,
-        Joule,
+        energy.Petaelectronvolt,
+        energy.Joule,
         Decimal("1.602176634e-4"),
-        PETAELECTRONVOLT,
-        JOULE,
+        energy.PETAELECTRONVOLT,
+        energy.JOULE,
     ),
-    PrefixCase("Erg", Erg, Joule, Decimal("1E-7"), ERG, JOULE),
-    PrefixCase("Calorie", Calorie, Joule, Decimal(4184), KILOCALORIE, JOULE),
+    PrefixCase(
+        "Erg",
+        energy.Erg,
+        energy.Joule,
+        Decimal("1E-7"),
+        energy.ERG,
+        energy.JOULE,
+    ),
+    PrefixCase(
+        "Calorie",
+        energy.Calorie,
+        energy.Joule,
+        Decimal(4184),
+        energy.KILOCALORIE,
+        energy.JOULE,
+    ),
     PrefixCase(
         "ThermochemicalCalorie",
-        ThermochemicalCalorie,
-        Joule,
+        energy.ThermochemicalCalorie,
+        energy.Joule,
         Decimal("4.184"),
-        THERMOCHEMICAL_CALORIE,
-        JOULE,
+        energy.THERMOCHEMICAL_CALORIE,
+        energy.JOULE,
     ),
 ]
 
@@ -566,4 +810,4 @@ def test_round_trip_conversion_through_to(case: PrefixCase) -> None:
 
 
 def test_unit_def_repr_shows_name_and_symbol() -> None:
-    assert repr(Volt(1).unit) == "UnitDef('volt', 'V')"
+    assert repr(voltage.Volt(1).unit) == "UnitDef('volt', 'V')"

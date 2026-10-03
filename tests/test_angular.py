@@ -1,12 +1,11 @@
-"""Angle: exact rational units, wraparound arithmetic, and Radian as canonical.
+"""Angle: exact rational units, wraparound arithmetic, and Turn as canonical.
 
-`Radian` is the canonical unit and an ordinary constructor.
-`Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond` are scaled relative to it through
-kuchka's own fixed rational representation of pi.
+`Turn` is the canonical unit.
+`Degree`, `Gradian`, `ArcMinute`, and `ArcSecond` are plain rational fractions of a
+turn, so they and `Turn` convert and compare exactly with no pi involved.
+`Radian` is related to a turn through pi; see the radian conversion tests for that.
 """
 
-import math
-from decimal import Decimal
 from fractions import Fraction
 
 import pytest
@@ -19,29 +18,43 @@ from kuchka import InvalidMeasurementError
 from kuchka import Radian
 from kuchka import Turn
 from kuchka.internal import symbols
+from kuchka.internal.constants import PI
 from kuchka.units import ANGLE_UNITS
-from kuchka.units.angular import _PI
+from kuchka.units import ARCMINUTE
+from kuchka.units import ARCSECOND
+from kuchka.units import DEGREE
+from kuchka.units import GRADIAN
+from kuchka.units import RADIAN
+from kuchka.units import TURN
 
 
 def test_degree_construction_is_exact():
-    assert Degree(90).magnitude == _PI / 2
+    assert Degree(90).magnitude == Fraction(1, 4)
 
 
-def test_radian_is_canonical():
-    assert Radian(1).magnitude == Fraction(1)
+def test_turn_is_canonical():
+    assert Turn(1).magnitude == Fraction(1)
+    assert Turn(Fraction(1, 3)).magnitude == Fraction(1, 3)
 
 
-def test_radian_built_from_math_pi_equals_a_half_turn():
-    assert Radian(math.pi) == Degree(180)
-
-
-def test_radian_built_from_a_longer_pi_differs_from_a_half_turn():
-    assert Radian(Decimal("3.14159265358979323846")) != Degree(180)
+@pytest.mark.parametrize(
+    ("unit", "turns"),
+    [
+        (TURN, Fraction(1)),
+        (DEGREE, Fraction(1, 360)),
+        (GRADIAN, Fraction(1, 400)),
+        (ARCMINUTE, Fraction(1, 21600)),
+        (ARCSECOND, Fraction(1, 1296000)),
+    ],
+    ids=["turn", "degree", "gradian", "arcminute", "arcsecond"],
+)
+def test_every_non_radian_unit_is_a_plain_fraction_of_a_turn(unit, turns):
+    assert unit.scale == turns
 
 
 def test_radian_construction_stores_the_value_exactly():
     reading = Radian(1.5707963)
-    assert reading.magnitude == Fraction("1.5707963")
+    assert reading.value_in(RADIAN) == Fraction("1.5707963")
 
 
 @pytest.mark.parametrize(
@@ -52,8 +65,8 @@ def test_radian_construction_stores_the_value_exactly():
         (ArcSecond(3600), Degree(1)),
         (ArcSecond(60), ArcMinute(1)),
         (Turn(1), Degree(360)),
-        (Radian(_PI), Degree(180)),
-        (Radian(2 * _PI), Turn(1)),
+        (Radian(PI), Degree(180)),
+        (Radian(2 * PI), Turn(1)),
     ],
     ids=[
         "gradian",
@@ -69,11 +82,7 @@ def test_cross_unit_equality_is_exact(a, b):
     assert a == b
 
 
-def test_pi_cancels_between_non_radian_units():
-    """The ratio between any two non-`Radian` angles is exact and rational.
-
-    Independent of kuchka's own choice of pi -- it cancels algebraically.
-    """
+def test_the_ratio_between_two_non_radian_angles_is_rational():
     assert Degree(180).magnitude / Turn(1).magnitude == Fraction(1, 2)
 
 
@@ -90,16 +99,17 @@ def test_difference_gives_shortest_signed_path():
 
 
 def test_construction_does_not_auto_normalize():
-    assert Degree(370).magnitude == 370 * (_PI / 180)
+    assert Degree(370).magnitude == Fraction(370, 360)
 
 
 def test_normalize_wraps():
     assert Degree(370).normalize() == Degree(10)
 
 
-def test_to_between_any_pair_is_exact():
-    assert Degree(90).to(Radian(1).unit).value_in(Radian(1).unit) == _PI / 2
-    assert Degree(90).to(Turn(1).unit).value_in(Turn(1).unit) == Fraction(1, 4)
+def test_to_between_non_radian_units_is_exact():
+    assert Degree(90).to(TURN).value_in(TURN) == Fraction(1, 4)
+    assert Degree(90).to(GRADIAN).value_in(GRADIAN) == Fraction(100)
+    assert Turn(1).to(ARCSECOND).value_in(ARCSECOND) == Fraction(1296000)
 
 
 def test_no_ordering():

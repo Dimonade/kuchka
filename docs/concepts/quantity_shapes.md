@@ -88,6 +88,9 @@ Construction does **not** normalize: `Degree(370)` is stored as-is and stays dis
 
 There is deliberately no total order for modular quantities: a cyclic value has no universal `greater than` relationship without choosing a direction of travel.
 
+`is_close(other, tolerance=...)` asks whether two readings are within a stated tolerance of each other, measured the short way round the circle.
+It exists on every shape; see [Comparing with a tolerance](exactness.md#comparing-with-a-tolerance).
+
 ## Logarithmic
 
 Logarithmic quantities are the logarithm of a ratio.

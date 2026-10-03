@@ -22,6 +22,7 @@ from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.typing import override
 from kuchka.numeric import Numeric
+from kuchka.numeric import exact_quotient
 from kuchka.numeric import to_exact
 from kuchka.quantities.base.storage import _ScalarStorage
 from kuchka.quantities.base.units import UnitDef
@@ -86,6 +87,17 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
     def value_in(self, unit: UnitDef) -> Fraction:
         """Exact magnitude expressed in ``unit``."""
         return self._magnitude / unit.scale
+
+    def is_close(self, other: Self, *, tolerance: Self) -> bool:
+        """Return whether `other` is within `tolerance` of `self`, the short way round.
+
+        The distance is the size of `difference()`, so readings either side of the
+        wrap point are close: ``Angle(359.9999).is_close(Angle(0.0001), ...)``.
+        The tolerance is an explicit quantity of the same type and is never
+        defaulted, so what counts as close is always written down by the caller.
+        """
+        limit = self._tolerance_limit(other, tolerance, type(self))
+        return abs(self.difference(other).magnitude) <= limit
 
     def _wrap(self, magnitude: Fraction) -> Fraction:
         """Reduce `magnitude` into ``[0, period)``.
@@ -176,8 +188,10 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
 
     def __truediv__(self, other: object) -> Self:
         if isinstance(other, Numeric):
-            magnitude = self._wrap(self._magnitude / to_exact(other))
-            return type(self)(magnitude, self._display_unit)
+            quotient = exact_quotient(
+                self._magnitude, to_exact(other), left=self, right=other
+            )
+            return type(self)(self._wrap(quotient), self._display_unit)
         return NotImplemented
 
     def __neg__(self) -> Self:

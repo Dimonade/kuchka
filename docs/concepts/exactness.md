@@ -1,4 +1,4 @@
-# Exactness and angular units
+# Exactness, angles, and tolerance
 
 Every magnitude in `kuchka` is stored as an exact `Fraction`.
 
@@ -29,31 +29,87 @@ repr(q)
 # 0.2777777777777777777777777778 L
 ```
 
-## The boundary at pi
+## Angles and pi
 
-A finite `Fraction` cannot represent the mathematical value of pi.
-Rejecting angular units or pretending that a finite decimal is mathematically exact would both be poor fits for the library's model.
+`Turn` is the canonical angle unit.
+`Degree`, `Gradian`, `ArcMinute`, and `ArcSecond` are plain rational fractions of a turn (a degree is 1/360 of one), so conversions and comparisons among them and `Turn` are exact and pi appears nowhere in them.
 
-`Radian` is the canonical angle unit.
-The non-radian angular scales are defined from a fixed rational internal representation of pi - fifteen decimal places, the precision commonly cited by NASA/JPL.
-Thus, `Degree`, `Turn`, `Gradian`, `ArcMinute`, and `ArcSecond` remain mutually exact relative to that constant, importable as `kuchka.units.angular._PI` if you need to compare against it directly.
+`Radian` is the one unit tied to a turn by an irrational number, because a turn is two pi radians.
+A `Fraction` cannot hold pi, so kuchka holds it as an exact rational to 100 decimal places (`kuchka.internal.constants.PI`) and uses it for the radian scale alone.
+That has three consequences:
 
-The finite approximation becomes observable when an angle crosses into `Radian`:
+- A conversion to or from radians is off by less than one part in 10^100, so every digit that is displayed is correct.
+- A value built in radians reads back exactly what was given, and converting degrees to radians and back returns the original.
+- A radian value built from `PI` itself is exactly a half turn.
 
 ```python
-import math
-from decimal import Decimal
+from fractions import Fraction
 
 from kuchka import Degree
 from kuchka import Radian
-from kuchka.units.angular import _PI
+from kuchka.units import RADIAN
 
- Radian(_PI) == Degree(180)
-# True -- `_PI` is kuchka's own fixed internal constant.
-Radian(math.pi) == Degree(180)
-# True -- `math.pi` is read as its shortest decimal string, 3.141592653589793, which is `_PI`.
-Radian(Decimal("3.14159265358979323846")) == Degree(180)
-# False -- a pi with more digits differs from `_PI`.
+Radian(Fraction(2, 7)).value_in(RADIAN)
+# Fraction(2, 7) -- exact.
+repr(Radian(1).to(Degree(1).unit))
+# '57.29577951308232087679815481 °' -- every digit shown is correct.
+```
+
+### Why `Radian(math.pi) == Degree(180)` is `False`
+
+Equality compares the exact numbers that two values denote, and a `float` is read by its shortest decimal string.
+The rule is the same everywhere in kuchka: `Volt(0.1) + Volt(0.2) == Volt(0.3)` holds because the digits were typed, and `Volt(0.1 + 0.2) == Volt(0.3)` does not, because the float sum denotes `0.30000000000000004`.
+
+`math.pi` denotes `3.141592653589793`, which is about 2.4e-16 short of pi, so `Radian(math.pi)` is that decimal number in radians, or `179.99999999999998634 °`.
+No finite number is pi, which makes any rule that equates a float with 180 degrees a tolerance in disguise.
+A tolerance does not belong inside `==`:
+
+- Equality is used for hashing and set membership, and a tolerance breaks both: a can be close to b, and b to c, while a is not close to c.
+- The right tolerance is a property of the application (a sensor's resolution, a servo's deadband, a specification limit), and `==` has nowhere to take it from.
+- Equality would be the one operation in the library that is approximate.
+
+So the two questions are two operations.
+`==` asks whether two values are the same number, and `is_close` asks whether they are near enough for a purpose.
+
+What this means in practice:
+
+- Angles from configuration or a specification, in degrees, turns, gradians, or arcseconds, compare with `==`.
+- Radians from a sensor or from `math` compare with `is_close`.
+- `float(Degree(180).value_in(RADIAN)) == math.pi`, so an exact angle passes to `math` functions without loss.
+
+## Comparing with a tolerance
+
+Every quantity shape has `is_close(other, *, tolerance)`.
+The tolerance is a quantity, required, with no default and no positional form, so what counts as close is always written down by the caller and a bare number such as `1e-9` is rejected for having no unit.
+
+| Shape                             | `tolerance` is                                                     |
+| --------------------------------- | ------------------------------------------------------------------ |
+| Linear (`Voltage`, `Length`, ...) | the same type                                                      |
+| Affine (`Temperature`, `Instant`) | the delta type: `TemperatureDelta`, `Time`                         |
+| Logarithmic (`LogarithmicRatio`)  | the same type                                                      |
+| Modular (`Angle`)                 | the same type; distance is measured the short way round the circle |
+
+The test is `|a - b| <= tolerance`, evaluated exactly and inclusive, so a value sitting on the boundary is close.
+A negative tolerance, a tolerance of another type, and an `other` of another type raise.
+`is_close` is symmetric and is not transitive.
+
+```python
+import math
+
+from kuchka import Degree
+from kuchka import Millivolt
+from kuchka import Radian
+from kuchka import Volt
+
+Volt(0.1 + 0.2) == Volt(0.3)
+# False
+Volt(0.1 + 0.2).is_close(Volt(0.3), tolerance=Millivolt(1))
+# True
+
+Radian(math.pi / 2).is_close(Degree(90), tolerance=Radian(1e-12))
+# True
+Degree(359.9999).is_close(Degree(0.0001), tolerance=Degree(0.001))
+# True -- the short way round the circle.
 ```
 
 ## Logarithmic conversions
