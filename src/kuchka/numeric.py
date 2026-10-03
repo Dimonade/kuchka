@@ -26,6 +26,7 @@ from __future__ import annotations
 from decimal import Decimal
 from fractions import Fraction
 
+from kuchka.errors import DivisionByZeroError
 from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.limits import NUMERIC_LIMITS
 
@@ -111,6 +112,19 @@ def to_exact(value: object) -> Fraction:
         f"cannot construct a measurement from {type_name}; expected int, "
         f"float, Decimal, or Fraction.{hint}",
     )
+
+
+def exact_quotient(
+    dividend: Fraction, divisor: Fraction, *, left: object, right: object
+) -> Fraction:
+    """Divide exactly, raising `DivisionByZeroError` for a zero `divisor`.
+
+    `left` and `right` are the operands as the caller received them, quoted in the
+    error.
+    """
+    if not divisor:
+        raise DivisionByZeroError(left, right)
+    return dividend / divisor
 
 
 def to_decimal(value: Fraction) -> Decimal:
