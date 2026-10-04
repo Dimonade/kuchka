@@ -21,7 +21,6 @@ application.
 
 from __future__ import annotations
 
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.quantities import SamplingPeriod
@@ -50,9 +49,7 @@ def _via_time(
 
 
 SAMPLING_PERIOD_UNITS: Mapping[str, Callable[[Numeric], SamplingPeriod]] = (
-    MappingProxyType(
-        {symbol: _via_time(constructor) for symbol, constructor in TIME_UNITS.items()}
-    )
+    TIME_UNITS.map("SAMPLING_PERIOD_UNITS", _via_time)
 )
 
 __all__ = ["SAMPLING_PERIOD_UNITS"]

@@ -2,6 +2,8 @@
 
 Each table maps the symbol an engineer would write in a config file (e.g. `"mV"`)
 to the constructor that symbol means (`Millivolt`), closed to one physical dimension.
+Iterating a table yields the display symbols pinned here; the other notations a table
+accepts (`C` for `°C`, `t` for `Mg`) are pinned in `test_unit_spellings`.
 
 These are not the primary construction path -- `Volt(5)` remains that -- they exist
 specifically for the one place a unit is expected to arrive as a string:
@@ -101,16 +103,16 @@ TABLE_CASES = [
         thermal.TEMPERATURE_UNITS,
         {
             "K": thermal.Kelvin,
-            "C": thermal.Celsius,
-            "F": thermal.Fahrenheit,
+            f"{symbols.DEGREE}C": thermal.Celsius,
+            f"{symbols.DEGREE}F": thermal.Fahrenheit,
         },
     ),
     (
         thermal.TEMPERATURE_DELTA_UNITS,
         {
-            "dK": thermal.DeltaKelvin,
-            "dC": thermal.DeltaCelsius,
-            "dF": thermal.DeltaFahrenheit,
+            f"{symbols.DELTA}K": thermal.DeltaKelvin,
+            f"{symbols.DELTA}{symbols.DEGREE}C": thermal.DeltaCelsius,
+            f"{symbols.DELTA}{symbols.DEGREE}F": thermal.DeltaFahrenheit,
         },
     ),
     (
@@ -194,7 +196,6 @@ TABLE_CASES = [
             "g": mass.Gram,
             "kg": mass.Kilogram,
             "Mg": mass.Megagram,
-            "t": mass.Tonne,
             "Da": mass.Dalton,
             "gr": mass.Grain,
             "lb": mass.Pound,
@@ -225,7 +226,6 @@ TABLE_CASES = [
             f"{symbols.MICRO}C": charge.Microcoulomb,
             "mC": charge.Millicoulomb,
             "C": charge.Coulomb,
-            "As": charge.AmpereSecond,
             "mAs": charge.MilliampereSecond,
             "mAh": charge.MilliampereHour,
             "Ah": charge.AmpereHour,
@@ -359,7 +359,7 @@ def test_table_constructors_agree_with_calling_them_directly(table, expected):
 
 @pytest.mark.parametrize(("table", "expected"), TABLE_CASES, ids=TABLE_CASE_IDS)
 def test_table_is_closed_to_symbols_from_other_dimensions(table, expected):
-    foreign_symbols = {"mA", "V", "Hz", "Bd", "m", "C"} - set(expected)
+    foreign_symbols = {"mA", "V", "Hz", "Bd", "m", "kg", "Wb"} - set(expected)
     for symbol in foreign_symbols:
         assert symbol not in table
 
@@ -368,7 +368,7 @@ def test_table_is_closed_to_symbols_from_other_dimensions(table, expected):
 def test_table_is_immutable(table, expected):
     # `table` and `expected` are untyped (parametrized), so mypy sees
     # them as `Any` and raises no static error here to suppress; only
-    # the runtime immutability of `MappingProxyType` rejects the write.
+    # the runtime read-only `UnitTable` rejects the write.
     any_symbol = next(iter(expected))
     with pytest.raises(TypeError):
         table[any_symbol] = expected[any_symbol]

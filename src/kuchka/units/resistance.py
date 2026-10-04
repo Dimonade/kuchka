@@ -118,13 +118,13 @@ See Also
 
 from __future__ import annotations
 
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import RESISTANCE
 from kuchka.internal import prefixes
 from kuchka.internal import symbols
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Resistance
@@ -136,14 +136,28 @@ if TYPE_CHECKING:
 
 OHM_NAME = "ohm"
 OHM_SYMBOL = symbols.OMEGA
+OHM_ALIASES = ("ohm", "Ohm")
+"""Other symbols for the ohm: what a keyboard gives for the omega."""
 
 
-MICROOHM = prefixed_unit(prefixes.MICRO, OHM_NAME, OHM_SYMBOL, RESISTANCE)
-MILLIOHM = prefixed_unit(prefixes.MILLI, OHM_NAME, OHM_SYMBOL, RESISTANCE)
-OHM = prefixed_unit(prefixes.UNIT, OHM_NAME, OHM_SYMBOL, RESISTANCE)
-KILOOHM = prefixed_unit(prefixes.KILO, OHM_NAME, OHM_SYMBOL, RESISTANCE)
-MEGAOHM = prefixed_unit(prefixes.MEGA, OHM_NAME, OHM_SYMBOL, RESISTANCE)
-GIGAOHM = prefixed_unit(prefixes.GIGA, OHM_NAME, OHM_SYMBOL, RESISTANCE)
+MICROOHM = prefixed_unit(
+    prefixes.MICRO, OHM_NAME, OHM_SYMBOL, RESISTANCE, base_aliases=OHM_ALIASES
+)
+MILLIOHM = prefixed_unit(
+    prefixes.MILLI, OHM_NAME, OHM_SYMBOL, RESISTANCE, base_aliases=OHM_ALIASES
+)
+OHM = prefixed_unit(
+    prefixes.UNIT, OHM_NAME, OHM_SYMBOL, RESISTANCE, base_aliases=OHM_ALIASES
+)
+KILOOHM = prefixed_unit(
+    prefixes.KILO, OHM_NAME, OHM_SYMBOL, RESISTANCE, base_aliases=OHM_ALIASES
+)
+MEGAOHM = prefixed_unit(
+    prefixes.MEGA, OHM_NAME, OHM_SYMBOL, RESISTANCE, base_aliases=OHM_ALIASES
+)
+GIGAOHM = prefixed_unit(
+    prefixes.GIGA, OHM_NAME, OHM_SYMBOL, RESISTANCE, base_aliases=OHM_ALIASES
+)
 
 
 Resistance._canonical_unit = OHM  # noqa: SLF001 -- this module owns Resistance's canonical unit
@@ -336,15 +350,16 @@ def Gigaohm(value: Numeric) -> Resistance:
     return Resistance(to_exact(value) * GIGAOHM.scale, GIGAOHM)
 
 
-RESISTANCE_UNITS: Mapping[str, Callable[[Numeric], Resistance]] = MappingProxyType(
+RESISTANCE_UNITS: Mapping[str, Callable[[Numeric], Resistance]] = unit_table(
+    "RESISTANCE_UNITS",
     {
-        MICROOHM.symbol: Microohm,
-        MILLIOHM.symbol: Milliohm,
-        OHM.symbol: Ohm,
-        KILOOHM.symbol: Kiloohm,
-        MEGAOHM.symbol: Megaohm,
-        GIGAOHM.symbol: Gigaohm,
-    }
+        MICROOHM: Microohm,
+        MILLIOHM: Milliohm,
+        OHM: Ohm,
+        KILOOHM: Kiloohm,
+        MEGAOHM: Megaohm,
+        GIGAOHM: Gigaohm,
+    },
 )
 
 __all__ = [

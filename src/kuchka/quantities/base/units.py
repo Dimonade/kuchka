@@ -26,6 +26,18 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
 
 
+def _checked_spellings(
+    kind: str, name: str, spellings: tuple[str, ...]
+) -> tuple[str, ...]:
+    """Return `spellings` unchanged, which must be a tuple of non-empty strings."""
+    if not isinstance(spellings, tuple) or not all(
+        isinstance(spelling, str) and spelling.strip() for spelling in spellings
+    ):
+        msg = f"{kind} {name!r} needs a tuple of non-empty strings, got {spellings!r}."
+        raise InvalidMeasurementError(msg)
+    return spellings
+
+
 def _positive_scale(kind: str, name: str, scale: Numeric) -> Fraction:
     """Return `scale` as an exact `Fraction`, which must be positive.
 
@@ -45,24 +57,32 @@ class UnitDef:
     Builds constructors like `Volt`.
     `scale` is normalized to an exact `Fraction` at construction, regardless of which
     `Numeric` type it is given.
+    `symbol` is the display notation.
+    `aliases` are further symbols the unit is known by, and `words` further names; see
+    `kuchka.internal.unit_table` for how each is matched.
     Application code never constructs one directly, it imports the constructor
     functions instead.
     """
 
-    __slots__ = ("dimension", "name", "scale", "symbol")
+    __slots__ = ("aliases", "dimension", "name", "scale", "symbol", "words")
 
-    def __init__(
+    def __init__(  # noqa: PLR0913 -- the two spelling lists are keyword-only extras
         self,
         name: str,
         symbol: str,
         scale: Numeric,
         dimension: Dimension,
+        *,
+        aliases: tuple[str, ...] = (),
+        words: tuple[str, ...] = (),
     ) -> None:
-        """Store name, symbol, scale, and dimension."""
+        """Store name, symbol, scale, dimension, and the other accepted spellings."""
         self.name = name
         self.symbol = symbol
         self.scale: Fraction = _positive_scale("unit", name, scale)
         self.dimension = dimension
+        self.aliases = _checked_spellings("unit", name, aliases)
+        self.words = _checked_spellings("unit", name, words)
 
     @override
     def __repr__(self) -> str:
@@ -78,20 +98,25 @@ class AffineUnitDef:
     It imports the unit constants (`KELVIN`, `CELSIUS`, ...) from `kuchka.units`.
     """
 
-    __slots__ = ("name", "offset", "scale", "symbol")
+    __slots__ = ("aliases", "name", "offset", "scale", "symbol", "words")
 
-    def __init__(
+    def __init__(  # noqa: PLR0913 -- the two spelling lists are keyword-only extras
         self,
         name: str,
         symbol: str,
         scale: Numeric,
         offset: Numeric,
+        *,
+        aliases: tuple[str, ...] = (),
+        words: tuple[str, ...] = (),
     ) -> None:
-        """Store name, symbol, and scale/offset, both normalized to ``Fraction``."""
+        """Store name, symbol, scale/offset (as ``Fraction``), and other spellings."""
         self.name = name
         self.symbol = symbol
         self.scale: Fraction = _positive_scale("unit", name, scale)
         self.offset: Fraction = to_exact(offset)
+        self.aliases = _checked_spellings("unit", name, aliases)
+        self.words = _checked_spellings("unit", name, words)
 
     @override
     def __repr__(self) -> str:
@@ -110,13 +135,23 @@ class LogarithmicUnitDef:
     It imports the unit constants (`DECIBEL`, `BEL`) from `kuchka.units`.
     """
 
-    __slots__ = ("name", "scale", "symbol")
+    __slots__ = ("aliases", "name", "scale", "symbol", "words")
 
-    def __init__(self, name: str, symbol: str, scale: Numeric) -> None:
-        """Store name, symbol, and scale, the scale normalized to ``Fraction``."""
+    def __init__(
+        self,
+        name: str,
+        symbol: str,
+        scale: Numeric,
+        *,
+        aliases: tuple[str, ...] = (),
+        words: tuple[str, ...] = (),
+    ) -> None:
+        """Store name, symbol, scale (as ``Fraction``), and other spellings."""
         self.name = name
         self.symbol = symbol
         self.scale: Fraction = _positive_scale("unit", name, scale)
+        self.aliases = _checked_spellings("unit", name, aliases)
+        self.words = _checked_spellings("unit", name, words)
 
     @override
     def __repr__(self) -> str:
@@ -124,14 +159,17 @@ class LogarithmicUnitDef:
 
 
 class _DisplayUnit(Protocol):  # noqa: PYI046 -- bound for the scalar-storage generic parameter, not used within this file.
-    """Structural shape a scalar-storage display unit must have: name and symbol.
+    """Structural shape a scalar-storage display unit must have.
 
+    A name, a display symbol, and the other spellings the unit is known by.
     `UnitDef`, `AffineUnitDef`, and `LogarithmicUnitDef` satisfy this without declaring
     it explicitly.
     """
 
     name: str
     symbol: str
+    aliases: tuple[str, ...]
+    words: tuple[str, ...]
 
 
 __all__ = ["AffineUnitDef", "LogarithmicUnitDef", "UnitDef"]

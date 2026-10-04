@@ -149,6 +149,20 @@ led_critical_voltage = { value = "150", unit = "mA" }
 The same boundary pattern exists for the other quantity families through their corresponding `*_UNITS` mappings.
 `kuchka` therefore allows strings where the data format requires them without making strings the normal application API.
 
+The tables accept the notations that real files use, so these all resolve to the same temperature unit:
+
+```python
+from kuchka.units import TEMPERATURE_UNITS
+
+for text in ("°C", "C", "degC", "degrees C", "Degrees Celsius"):
+    constructor = TEMPERATURE_UNITS[text]
+    constructor(21.5)  # 21.5 °C
+```
+
+Symbols such as `mV` are compared exactly, because `mV` and `MV` are different units, and spoken forms such as `degrees celsius` are compared ignoring case.
+A spelling that could mean more than one unit in a table, like `deg` for temperature, is refused rather than guessed.
+See [Unit spellings](docs/concepts/unit_spellings.md).
+
 ### 3. Compose real engineering relationships
 
 The library is useful when a calculation crosses more than one physical domain. For example, an actuator calculation can derive several quantities in sequence:
@@ -728,6 +742,7 @@ Deeper design material is kept separately:
 
 - **[Quantity shapes and semantics](docs/concepts/quantity_shapes.md)** - Linear, Affine, Modular, and Logarithmic quantities, including temperature, angle, and decibel semantics.
 - **[Dimensional algebra and derived quantities](docs/concepts/dimensional_algebra.md)** - exponent-vector arithmetic, registered results, reciprocal relationships, and the boundary between runtime algebra and static overloads.
+- **[Unit spellings](docs/concepts/unit_spellings.md)** - what the `*_UNITS` tables accept, how case and plurals are treated, and why no spelling can mean two units.
 - **[Exactness, angles, and tolerance](docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, angles and pi, and comparing with a tolerance.
 - **[Design choices](docs/design_choices.md)** - constructor functions, unit definitions, canonical types, string-resolution boundaries, and the reasons for a curated vocabulary.
 - **[Comparison with existing tools](docs/comparison.md)** - the deliberate trade-offs versus Pint, physipy, impunity, and related libraries.

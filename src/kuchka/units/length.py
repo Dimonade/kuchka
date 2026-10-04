@@ -113,12 +113,12 @@ See Also
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LENGTH
 from kuchka.internal import prefixes
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Length
@@ -130,15 +130,38 @@ if TYPE_CHECKING:
 
 METRE_NAME = "metre"
 METRE_SYMBOL = "m"
+METRE_WORDS = ("meter",)
+"""The American spelling, which prefixed names follow: `kilometer`."""
 
-PICOMETRE = prefixed_unit(prefixes.PICO, METRE_NAME, METRE_SYMBOL, LENGTH)
-NANOMETRE = prefixed_unit(prefixes.NANO, METRE_NAME, METRE_SYMBOL, LENGTH)
-MICROMETRE = prefixed_unit(prefixes.MICRO, METRE_NAME, METRE_SYMBOL, LENGTH)
-MILLIMETRE = prefixed_unit(prefixes.MILLI, METRE_NAME, METRE_SYMBOL, LENGTH)
-CENTIMETRE = prefixed_unit(prefixes.CENTI, METRE_NAME, METRE_SYMBOL, LENGTH)
-DECIMETRE = prefixed_unit(prefixes.DECI, METRE_NAME, METRE_SYMBOL, LENGTH)
-METRE = prefixed_unit(prefixes.UNIT, METRE_NAME, METRE_SYMBOL, LENGTH)
-KILOMETRE = prefixed_unit(prefixes.KILO, METRE_NAME, METRE_SYMBOL, LENGTH)
+PICOMETRE = prefixed_unit(
+    prefixes.PICO, METRE_NAME, METRE_SYMBOL, LENGTH, base_words=METRE_WORDS
+)
+NANOMETRE = prefixed_unit(
+    prefixes.NANO, METRE_NAME, METRE_SYMBOL, LENGTH, base_words=METRE_WORDS
+)
+MICROMETRE = prefixed_unit(
+    prefixes.MICRO,
+    METRE_NAME,
+    METRE_SYMBOL,
+    LENGTH,
+    base_words=METRE_WORDS,
+    words=("micron",),
+)
+MILLIMETRE = prefixed_unit(
+    prefixes.MILLI, METRE_NAME, METRE_SYMBOL, LENGTH, base_words=METRE_WORDS
+)
+CENTIMETRE = prefixed_unit(
+    prefixes.CENTI, METRE_NAME, METRE_SYMBOL, LENGTH, base_words=METRE_WORDS
+)
+DECIMETRE = prefixed_unit(
+    prefixes.DECI, METRE_NAME, METRE_SYMBOL, LENGTH, base_words=METRE_WORDS
+)
+METRE = prefixed_unit(
+    prefixes.UNIT, METRE_NAME, METRE_SYMBOL, LENGTH, base_words=METRE_WORDS
+)
+KILOMETRE = prefixed_unit(
+    prefixes.KILO, METRE_NAME, METRE_SYMBOL, LENGTH, base_words=METRE_WORDS
+)
 
 PICOMETER = PICOMETRE
 NANOMETER = NANOMETRE
@@ -353,7 +376,14 @@ Kilometer = Kilometre
 
 # Non-SI units.
 
-INCH = UnitDef("inch", "in", Decimal("0.0254"), LENGTH)
+INCH = UnitDef(
+    "inch",
+    "in",
+    Decimal("0.0254"),
+    LENGTH,
+    aliases=('"', "\u2033", "''"),
+    words=("inches",),
+)
 
 
 def Inch(value: Numeric) -> Length:
@@ -387,7 +417,14 @@ def Inch(value: Numeric) -> Length:
     return Length(to_exact(value) * INCH.scale, INCH)
 
 
-FOOT = UnitDef("foot", "ft", Decimal("0.3048"), LENGTH)
+FOOT = UnitDef(
+    "foot",
+    "ft",
+    Decimal("0.3048"),
+    LENGTH,
+    aliases=("'", "\u2032"),
+    words=("feet",),
+)
 
 
 def Foot(value: Numeric) -> Length:
@@ -468,7 +505,7 @@ def Mile(value: Numeric) -> Length:
     return Length(to_exact(value) * MILE.scale, MILE)
 
 
-NAUTICAL_MILE = UnitDef("nautical_mile", "M", 1_852, LENGTH)
+NAUTICAL_MILE = UnitDef("nautical_mile", "M", 1_852, LENGTH, aliases=("nmi",))
 
 
 def NauticalMile(value: Numeric) -> Length:
@@ -503,8 +540,21 @@ def NauticalMile(value: Numeric) -> Length:
 
 # Astronomy and space.
 
-ASTRONOMICAL_UNIT = UnitDef("astronomical_unit", "au", Decimal(149597870700), LENGTH)
-LIGHT_YEAR = UnitDef("light_year", "ly", Decimal(9460730472580800), LENGTH)
+ASTRONOMICAL_UNIT = UnitDef(
+    "astronomical_unit",
+    "au",
+    Decimal(149597870700),
+    LENGTH,
+    aliases=("AU", "ua"),
+)
+LIGHT_YEAR = UnitDef(
+    "light_year",
+    "ly",
+    Decimal(9460730472580800),
+    LENGTH,
+    aliases=("lyr", "l.y."),
+    words=("light-year", "lightyear"),
+)
 
 
 def AstronomicalUnit(value: Numeric) -> Length:
@@ -558,24 +608,25 @@ def LightYear(value: Numeric) -> Length:
     return Length(to_exact(value) * LIGHT_YEAR.scale, LIGHT_YEAR)
 
 
-LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
+LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = unit_table(
+    "LENGTH_UNITS",
     {
-        PICOMETRE.symbol: Picometre,
-        NANOMETRE.symbol: Nanometre,
-        MICROMETRE.symbol: Micrometre,
-        MILLIMETRE.symbol: Millimetre,
-        CENTIMETRE.symbol: Centimetre,
-        DECIMETRE.symbol: Decimetre,
-        METRE.symbol: Metre,
-        KILOMETRE.symbol: Kilometre,
-        INCH.symbol: Inch,
-        FOOT.symbol: Foot,
-        YARD.symbol: Yard,
-        MILE.symbol: Mile,
-        NAUTICAL_MILE.symbol: NauticalMile,
-        ASTRONOMICAL_UNIT.symbol: AstronomicalUnit,
-        LIGHT_YEAR.symbol: LightYear,
-    }
+        PICOMETRE: Picometre,
+        NANOMETRE: Nanometre,
+        MICROMETRE: Micrometre,
+        MILLIMETRE: Millimetre,
+        CENTIMETRE: Centimetre,
+        DECIMETRE: Decimetre,
+        METRE: Metre,
+        KILOMETRE: Kilometre,
+        INCH: Inch,
+        FOOT: Foot,
+        YARD: Yard,
+        MILE: Mile,
+        NAUTICAL_MILE: NauticalMile,
+        ASTRONOMICAL_UNIT: AstronomicalUnit,
+        LIGHT_YEAR: LightYear,
+    },
 )
 
 __all__ = [

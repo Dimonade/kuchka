@@ -3,7 +3,17 @@
 from kuchka.internal import constants
 from kuchka.internal import display
 from kuchka.internal import limits
+from kuchka.internal import spelling
 from kuchka.internal import symbols
 from kuchka.internal import typing
+from kuchka.internal import unit_table
 
-__all__ = ["constants", "display", "limits", "symbols", "typing"]
+__all__ = [
+    "constants",
+    "display",
+    "limits",
+    "spelling",
+    "symbols",
+    "typing",
+    "unit_table",
+]

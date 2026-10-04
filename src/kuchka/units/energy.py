@@ -221,13 +221,13 @@ See Also
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import ENERGY
 from kuchka.internal import prefixes
 from kuchka.internal import symbols
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Energy
@@ -814,9 +814,30 @@ def Petaelectronvolt(value: Numeric) -> Energy:
 
 # Watt times Time.
 
-MILLIWATT_HOUR = UnitDef("milliwatt_hour", "mWh", Decimal("3.6"), ENERGY)
-WATT_HOUR = UnitDef("watt_hour", "Wh", Decimal(3600), ENERGY)
-KILOWATT_HOUR = UnitDef("kilowatt_hour", "kWh", Decimal(3600000), ENERGY)
+MILLIWATT_HOUR = UnitDef(
+    "milliwatt_hour",
+    "mWh",
+    Decimal("3.6"),
+    ENERGY,
+    aliases=("mW\u00b7h", "mW h"),
+    words=("milliwatt-hour",),
+)
+WATT_HOUR = UnitDef(
+    "watt_hour",
+    "Wh",
+    Decimal(3600),
+    ENERGY,
+    aliases=("wh", "W\u00b7h", "W h"),
+    words=("watt-hour",),
+)
+KILOWATT_HOUR = UnitDef(
+    "kilowatt_hour",
+    "kWh",
+    Decimal(3600000),
+    ENERGY,
+    aliases=("kwh", "KWH", "kW\u00b7h", "kW h"),
+    words=("kilowatt-hour", "kilowatthour"),
+)
 
 
 def MilliwattHour(value: Numeric) -> Energy:
@@ -938,8 +959,16 @@ THERMOCHEMICAL_CALORIE = UnitDef(
     f"cal{symbols.SUBSCRIPT_T}{symbols.SUBSCRIPT_H}",
     Decimal("4.184"),
     ENERGY,
+    aliases=("cal", "calth", "cal_th"),
 )
-KILOCALORIE = UnitDef("kilocalorie", "kcal", Decimal(4184), ENERGY)
+KILOCALORIE = UnitDef(
+    "kilocalorie",
+    "kcal",
+    Decimal(4184),
+    ENERGY,
+    aliases=("Cal",),
+    words=("food calorie", "large calorie"),
+)
 
 
 def Calorie(value: Numeric) -> Energy:
@@ -1024,12 +1053,29 @@ def ThermochemicalCalorie(value: Numeric) -> Energy:
 
 # TNT Equivalent.
 
-TONNE_OF_TNT = UnitDef("tonne_of_tnt", "tTNT", Decimal(4184000000), ENERGY)
-
-KILOTONNE_OF_TNT = UnitDef("kilotonne_of_tnt", "ktTNT", Decimal(4184000000000), ENERGY)
-
+TONNE_OF_TNT = UnitDef(
+    "tonne_of_tnt",
+    "tTNT",
+    Decimal(4184000000),
+    ENERGY,
+    aliases=("t TNT", "tonne TNT"),
+    words=("ton of tnt", "tons of tnt", "tonnes of tnt"),
+)
+KILOTONNE_OF_TNT = UnitDef(
+    "kilotonne_of_tnt",
+    "ktTNT",
+    Decimal(4184000000000),
+    ENERGY,
+    aliases=("kt TNT", "kilotonne TNT"),
+    words=("kiloton of tnt", "kilotons of tnt", "kilotonnes of tnt"),
+)
 MEGATONNE_OF_TNT = UnitDef(
-    "megatonne_of_tnt", "MtTNT", Decimal(4184000000000000), ENERGY
+    "megatonne_of_tnt",
+    "MtTNT",
+    Decimal(4184000000000000),
+    ENERGY,
+    aliases=("Mt TNT", "megatonne TNT"),
+    words=("megaton of tnt", "megatons of tnt", "megatonnes of tnt"),
 )
 
 
@@ -1115,36 +1161,37 @@ def MegatonneOfTNT(value: Numeric) -> Energy:
     return Energy(to_exact(value) * MEGATONNE_OF_TNT.scale, MEGATONNE_OF_TNT)
 
 
-ENERGY_UNITS: Mapping[str, Callable[[Numeric], Energy]] = MappingProxyType(
+ENERGY_UNITS: Mapping[str, Callable[[Numeric], Energy]] = unit_table(
+    "ENERGY_UNITS",
     {
-        PICOJOULE.symbol: Picojoule,
-        NANOJOULE.symbol: Nanojoule,
-        MICROJOULE.symbol: Microjoule,
-        MILLIJOULE.symbol: Millijoule,
-        JOULE.symbol: Joule,
-        KILOJOULE.symbol: Kilojoule,
-        MEGAJOULE.symbol: Megajoule,
-        GIGAJOULE.symbol: Gigajoule,
-        TERAJOULE.symbol: Terajoule,
-        PETAJOULE.symbol: Petajoule,
-        MICROELECTRONVOLT.symbol: Microelectronvolt,
-        MILLIELECTRONVOLT.symbol: Millielectronvolt,
-        ELECTRONVOLT.symbol: Electronvolt,
-        KILOELECTRONVOLT.symbol: Kiloelectronvolt,
-        MEGAELECTRONVOLT.symbol: Megaelectronvolt,
-        GIGAELECTRONVOLT.symbol: Gigaelectronvolt,
-        TERAELECTRONVOLT.symbol: Teraelectronvolt,
-        PETAELECTRONVOLT.symbol: Petaelectronvolt,
-        MILLIWATT_HOUR.symbol: MilliwattHour,
-        WATT_HOUR.symbol: WattHour,
-        KILOWATT_HOUR.symbol: KilowattHour,
-        ERG.symbol: Erg,
-        THERMOCHEMICAL_CALORIE.symbol: ThermochemicalCalorie,
-        KILOCALORIE.symbol: Kilocalorie,
-        TONNE_OF_TNT.symbol: TonneOfTNT,
-        KILOTONNE_OF_TNT.symbol: KilotonneOfTNT,
-        MEGATONNE_OF_TNT.symbol: MegatonneOfTNT,
-    }
+        PICOJOULE: Picojoule,
+        NANOJOULE: Nanojoule,
+        MICROJOULE: Microjoule,
+        MILLIJOULE: Millijoule,
+        JOULE: Joule,
+        KILOJOULE: Kilojoule,
+        MEGAJOULE: Megajoule,
+        GIGAJOULE: Gigajoule,
+        TERAJOULE: Terajoule,
+        PETAJOULE: Petajoule,
+        MICROELECTRONVOLT: Microelectronvolt,
+        MILLIELECTRONVOLT: Millielectronvolt,
+        ELECTRONVOLT: Electronvolt,
+        KILOELECTRONVOLT: Kiloelectronvolt,
+        MEGAELECTRONVOLT: Megaelectronvolt,
+        GIGAELECTRONVOLT: Gigaelectronvolt,
+        TERAELECTRONVOLT: Teraelectronvolt,
+        PETAELECTRONVOLT: Petaelectronvolt,
+        MILLIWATT_HOUR: MilliwattHour,
+        WATT_HOUR: WattHour,
+        KILOWATT_HOUR: KilowattHour,
+        ERG: Erg,
+        THERMOCHEMICAL_CALORIE: ThermochemicalCalorie,
+        KILOCALORIE: Kilocalorie,
+        TONNE_OF_TNT: TonneOfTNT,
+        KILOTONNE_OF_TNT: KilotonneOfTNT,
+        MEGATONNE_OF_TNT: MegatonneOfTNT,
+    },
 )
 """Mapping from unit symbol to constructor, for boundary code parsing string units."""
 

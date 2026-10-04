@@ -130,12 +130,12 @@ See Also
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import FORCE
 from kuchka.internal import prefixes
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Force
@@ -295,7 +295,13 @@ DYNE = UnitDef("dyne", "dyn", Decimal("0.00001"), FORCE)
 One dyne is exactly `1e-5` newtons.
 """
 
-POUND_FORCE = UnitDef("pound_force", "lbf", Decimal("4.4482216152605"), FORCE)
+POUND_FORCE = UnitDef(
+    "pound_force",
+    "lbf",
+    Decimal("4.4482216152605"),
+    FORCE,
+    words=("pound-force",),
+)
 """The pound-force unit.
 
 One pound-force is exactly `4.4482216152605` newtons.
@@ -303,7 +309,14 @@ This follows from the international definition of the avoirdupois pound and stan
 acceleration of gravity.
 """
 
-KILOGRAM_FORCE = UnitDef("kilogram_force", "kgf", Decimal("9.80665"), FORCE)
+KILOGRAM_FORCE = UnitDef(
+    "kilogram_force",
+    "kgf",
+    Decimal("9.80665"),
+    FORCE,
+    aliases=("kp",),
+    words=("kilogram-force", "kilopond"),
+)
 """The kilogram-force unit.
 
 One kilogram-force is exactly `9.80665` newtons, based on standard acceleration of
@@ -383,17 +396,18 @@ def KilogramForce(value: Numeric) -> Force:
     return Force(to_exact(value) * KILOGRAM_FORCE.scale, KILOGRAM_FORCE)
 
 
-FORCE_UNITS: Mapping[str, Callable[[Numeric], Force]] = MappingProxyType(
+FORCE_UNITS: Mapping[str, Callable[[Numeric], Force]] = unit_table(
+    "FORCE_UNITS",
     {
-        MICRONEWTON.symbol: Micronewton,
-        MILLINEWTON.symbol: Millinewton,
-        NEWTON.symbol: Newton,
-        KILONEWTON.symbol: Kilonewton,
-        MEGANEWTON.symbol: Meganewton,
-        DYNE.symbol: Dyne,
-        POUND_FORCE.symbol: PoundForce,
-        KILOGRAM_FORCE.symbol: KilogramForce,
-    }
+        MICRONEWTON: Micronewton,
+        MILLINEWTON: Millinewton,
+        NEWTON: Newton,
+        KILONEWTON: Kilonewton,
+        MEGANEWTON: Meganewton,
+        DYNE: Dyne,
+        POUND_FORCE: PoundForce,
+        KILOGRAM_FORCE: KilogramForce,
+    },
 )
 
 __all__ = [

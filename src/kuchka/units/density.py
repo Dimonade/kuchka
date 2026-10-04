@@ -18,11 +18,11 @@ a unit as a string from outside the application.
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import DENSITY
 from kuchka.internal import symbols
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Density
@@ -31,6 +31,7 @@ from kuchka.quantities import UnitDef
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
+
 
 KILOGRAM_PER_CUBIC_METRE = UnitDef(
     "kilogram_per_cubic_metre",
@@ -82,12 +83,13 @@ GramPerCubicCentimeter = GramPerCubicCentimetre
 KilogramPerLiter = KilogramPerLitre
 
 
-DENSITY_UNITS: Mapping[str, Callable[[Numeric], Density]] = MappingProxyType(
+DENSITY_UNITS: Mapping[str, Callable[[Numeric], Density]] = unit_table(
+    "DENSITY_UNITS",
     {
-        KILOGRAM_PER_CUBIC_METRE.symbol: KilogramPerCubicMetre,
-        GRAM_PER_CUBIC_CENTIMETRE.symbol: GramPerCubicCentimetre,
-        KILOGRAM_PER_LITRE.symbol: KilogramPerLitre,
-    }
+        KILOGRAM_PER_CUBIC_METRE: KilogramPerCubicMetre,
+        GRAM_PER_CUBIC_CENTIMETRE: GramPerCubicCentimetre,
+        KILOGRAM_PER_LITRE: KilogramPerLitre,
+    },
 )
 
 __all__ = [

@@ -80,9 +80,9 @@ See Also
 
 from __future__ import annotations
 
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import LogarithmicRatio
@@ -165,11 +165,12 @@ def Bel(value: Numeric) -> LogarithmicRatio:
 
 
 LOGARITHMIC_RATIO_UNITS: Mapping[str, Callable[[Numeric], LogarithmicRatio]] = (
-    MappingProxyType(
+    unit_table(
+        "LOGARITHMIC_RATIO_UNITS",
         {
-            DECIBEL.symbol: Decibel,
-            BEL.symbol: Bel,
-        }
+            DECIBEL: Decibel,
+            BEL: Bel,
+        },
     )
 )
 

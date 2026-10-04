@@ -26,6 +26,13 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Length: `AstronomicalUnit` and `LightYear`.
 - Energy: `Petajoule`, `KilowattHour`, `TonneOfTNT`, `KilotonneOfTNT`, and `MegatonneOfTNT`.
 
+#### Unit tables accept the notations real files use
+
+`TEMPERATURE_UNITS` takes `C`, `degC`, `degrees C`, and `Degrees Celsius`, and the other tables take `u` for micro and the dalton, `Mohm`, `meter`, `sec`, `kwh`, `yr`, `mm2`, `m^3`, `cc`, and similar.
+Symbols stay case-sensitive (`mV` is not `MV`), names and spoken forms ignore case, and a table cannot be built if a spelling could mean two units.
+Iterating a table now yields display symbols (`°C`, `ΔK`), and the earlier keys (`C`, `dK`, `t`, `As`) still resolve.
+See `docs/concepts/unit_spellings.md`.
+
 #### `is_close` compares with an explicit tolerance
 
 `a.is_close(b, tolerance=...)` on every quantity shape.

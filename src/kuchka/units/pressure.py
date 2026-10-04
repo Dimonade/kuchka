@@ -25,12 +25,12 @@ a unit as a string from outside the application.
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import PRESSURE
 from kuchka.internal import prefixes
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Pressure
@@ -118,17 +118,18 @@ def PoundPerSquareInch(value: Numeric) -> Pressure:
     )
 
 
-PRESSURE_UNITS: Mapping[str, Callable[[Numeric], Pressure]] = MappingProxyType(
+PRESSURE_UNITS: Mapping[str, Callable[[Numeric], Pressure]] = unit_table(
+    "PRESSURE_UNITS",
     {
-        PASCAL.symbol: Pascal,
-        HECTOPASCAL.symbol: Hectopascal,
-        KILOPASCAL.symbol: Kilopascal,
-        MEGAPASCAL.symbol: Megapascal,
-        BAR.symbol: Bar,
-        MILLIBAR.symbol: Millibar,
-        ATMOSPHERE.symbol: Atmosphere,
-        POUND_PER_SQUARE_INCH.symbol: PoundPerSquareInch,
-    }
+        PASCAL: Pascal,
+        HECTOPASCAL: Hectopascal,
+        KILOPASCAL: Kilopascal,
+        MEGAPASCAL: Megapascal,
+        BAR: Bar,
+        MILLIBAR: Millibar,
+        ATMOSPHERE: Atmosphere,
+        POUND_PER_SQUARE_INCH: PoundPerSquareInch,
+    },
 )
 
 __all__ = [
