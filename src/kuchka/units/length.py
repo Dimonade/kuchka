@@ -1,5 +1,4 @@
-"""Length quantities and constructors for metric and selected exact imperial and
-astronomical units.
+"""Length quantities and constructors for engineering, science, and space.
 
 `Length` represents one-dimensional distance. The metre is the canonical SI base unit,
 while the constructors in this module provide convenient entry points from metric
@@ -59,15 +58,15 @@ The astronomical unit moves the same quantity into planetary-scale distances.
 One astronomical unit is the conventional Earth-Sun distance scale:
 
 >>> earth_sun_distance = AstronomicalUnit(1)
->>> earth_sun_distance.to(Kilometre)
+>>> earth_sun_distance.to(KILOMETRE)
 149597870.7 km
 
-Light-years take `Length` all the way to interstellar distances.
-A distance of 4.25 light-years is a useful scale for the nearest stellar system:
+Light-years extend `Length` from the Solar System to interstellar space.
+A distance of 4.25 light-years is a useful representative stellar scale:
 
 >>> stellar_neighborhood = LightYear(Decimal("4.25"))
->>> stellar_neighborhood.to(Kilometre)
-40208104534568540 km
+>>> stellar_neighborhood.to(KILOMETRE)
+40208104508468.4 km
 
 It is also possible to be cheesy and correct at the same time.
 "I love you to the moon and back" is, at least dimensionally, a well-formed `Length`:
@@ -108,6 +107,7 @@ See Also
     Volumes derived from cubic length.
 ~kuchka.quantities.Velocity
     Distance travelled per unit time.
+
 """
 
 from __future__ import annotations
@@ -503,12 +503,8 @@ def NauticalMile(value: Numeric) -> Length:
 
 # Astronomy and space.
 
-ASTRONOMICAL_UNIT = UnitDef(
-    "astronomical_unit",
-    "au",
-    Decimal("149597870700"),
-    LENGTH,
-)
+ASTRONOMICAL_UNIT = UnitDef("astronomical_unit", "au", Decimal(149597870700), LENGTH)
+LIGHT_YEAR = UnitDef("light_year", "ly", Decimal(9460730472580800), LENGTH)
 
 
 def AstronomicalUnit(value: Numeric) -> Length:
@@ -526,16 +522,40 @@ def AstronomicalUnit(value: Numeric) -> Length:
 
     Examples
     --------
-    The astronomical unit is the conventional scale of the mean Earth-Sun distance:
+    The astronomical unit is useful for expressing distances within the Solar System:
 
     >>> earth_sun_distance = AstronomicalUnit(1)
+    >>> earth_sun_distance.to(KILOMETRE) == Kilometre(Decimal("149597870.7"))
+    True
 
-    One astronomical unit is exactly 149,597,870,700 metres:
-
-    >>> earth_sun_distance.to(Metre)
-    149597870700 m
     """
     return Length(to_exact(value) * ASTRONOMICAL_UNIT.scale, ASTRONOMICAL_UNIT)
+
+
+def LightYear(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in light-years.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in light-years.
+
+    Returns
+    -------
+    Length
+        Length represented in light-years.
+
+    Examples
+    --------
+    A light-year is the distance travelled by light during one Julian year.
+    Its exact SI conversion is:
+
+    >>> distance = LightYear(1)
+    >>> distance.to(KILOMETRE)
+    9460730472580.8 km
+
+    """
+    return Length(to_exact(value) * LIGHT_YEAR.scale, LIGHT_YEAR)
 
 
 LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
@@ -554,10 +574,12 @@ LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
         MILE.symbol: Mile,
         NAUTICAL_MILE.symbol: NauticalMile,
         ASTRONOMICAL_UNIT.symbol: AstronomicalUnit,
+        LIGHT_YEAR.symbol: LightYear,
     }
 )
 
 __all__ = [
+    "ASTRONOMICAL_UNIT",
     "CENTIMETER",
     "CENTIMETRE",
     "DECIMETER",
@@ -567,6 +589,7 @@ __all__ = [
     "KILOMETER",
     "KILOMETRE",
     "LENGTH_UNITS",
+    "LIGHT_YEAR",
     "METER",
     "METRE",
     "MICROMETER",
@@ -577,11 +600,10 @@ __all__ = [
     "NANOMETER",
     "NANOMETRE",
     "NAUTICAL_MILE",
-    "ASTRONOMICAL_UNIT",
-    "AstronomicalUnit",
     "PICOMETER",
     "PICOMETRE",
     "YARD",
+    "AstronomicalUnit",
     "Centimeter",
     "Centimetre",
     "Decimeter",
@@ -590,6 +612,7 @@ __all__ = [
     "Inch",
     "Kilometer",
     "Kilometre",
+    "LightYear",
     "Meter",
     "Metre",
     "Micrometer",

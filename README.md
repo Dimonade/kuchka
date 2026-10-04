@@ -425,7 +425,7 @@ The complete unit vocabulary is available in the API reference.
 
 | Quantity     | Representative units                                                                                                    |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| Length       | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit` and other astronomical units |
+| Length       | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit` and `LightYear` |
 | Area         | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                                         |
 | Volume       | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                                |
 | Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`                                                                     |

@@ -41,6 +41,7 @@ from kuchka.units import AmpereHour
 from kuchka.units import AmpereSecond
 from kuchka.units import ArcMinute
 from kuchka.units import ArcSecond
+from kuchka.units import AstronomicalUnit
 from kuchka.units import Atmosphere
 from kuchka.units import Bar
 from kuchka.units import Baud
@@ -120,6 +121,7 @@ from kuchka.units import KilosamplesPerSecond
 from kuchka.units import Kilosiemens
 from kuchka.units import Kilovolt
 from kuchka.units import Kilowatt
+from kuchka.units import LightYear
 from kuchka.units import Liter
 from kuchka.units import Litre
 from kuchka.units import Megaampere
@@ -252,6 +254,7 @@ __all__ = [
     "ArcMinute",
     "ArcSecond",
     "Area",
+    "AstronomicalUnit",
     "Atmosphere",
     "Bar",
     "Baud",
@@ -342,6 +345,7 @@ __all__ = [
     "Kilovolt",
     "Kilowatt",
     "Length",
+    "LightYear",
     "Liter",
     "Litre",
     "LogarithmicRatio",

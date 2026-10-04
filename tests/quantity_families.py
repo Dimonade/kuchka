@@ -174,7 +174,7 @@ ALL_UNIT_CASE_IDS: list[str] = [
 ]
 
 EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
-    "length": frozenset({"in", "au"}),
+    "length": frozenset({"in", "au", "ly"}),
     "area": frozenset({"ac", f"in{symbols.SUPERSCRIPT_TWO}"}),
     "energy": frozenset(
         {

@@ -174,6 +174,7 @@ TABLE_CASES = [
             "mi": length.Mile,
             "M": length.NauticalMile,
             "au": length.AstronomicalUnit,
+            "ly": length.LightYear,
         },
     ),
     (
