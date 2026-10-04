@@ -173,6 +173,7 @@ TABLE_CASES = [
             "yd": length.Yard,
             "mi": length.Mile,
             "M": length.NauticalMile,
+            "au": length.AstronomicalUnit,
         },
     ),
     (

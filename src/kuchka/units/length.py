@@ -1,4 +1,5 @@
-"""Length quantities and constructors for metric and selected exact imperial units.
+"""Length quantities and constructors for metric and selected exact imperial and
+astronomical units.
 
 `Length` represents one-dimensional distance. The metre is the canonical SI base unit,
 while the constructors in this module provide convenient entry points from metric
@@ -13,6 +14,10 @@ Every imperial unit implemented here is an **exact** decimal multiple of the met
 Since the 1959 international yard and pound agreement, conversions such as
 `1 in = 25.4 mm` and `1 ft = 0.3048 m` are exact, so they preserve the same `Decimal`
 precision guarantees as SI prefixes.
+
+The astronomical unit and light-year extend the same `Length` quantity to astronomical
+scales. The astronomical unit (`au`) is an exact conventional length, while the
+light-year (`ly`) is the exact distance light travels in a Julian year.
 
 Examples
 --------
@@ -50,6 +55,20 @@ The Apollo 11 landing site is about 384,400 km from Earth on average:
 
 >>> earth_to_moon = Kilometre(384400)
 
+The astronomical unit moves the same quantity into planetary-scale distances.
+One astronomical unit is the conventional Earth-Sun distance scale:
+
+>>> earth_sun_distance = AstronomicalUnit(1)
+>>> earth_sun_distance.to(Kilometre)
+149597870.7 km
+
+Light-years take `Length` all the way to interstellar distances.
+A distance of 4.25 light-years is a useful scale for the nearest stellar system:
+
+>>> stellar_neighborhood = LightYear(Decimal("4.25"))
+>>> stellar_neighborhood.to(Kilometre)
+40208104534568540 km
+
 It is also possible to be cheesy and correct at the same time.
 "I love you to the moon and back" is, at least dimensionally, a well-formed `Length`:
 
@@ -69,8 +88,17 @@ True
 
 hold exactly.
 
-`LENGTH_UNITS` maps symbols such as ``"mm"``, ``"km"``, and ``"in"`` to their
-constructors for configuration files and other external interfaces.
+The astronomical unit is defined exactly as:
+
+    1 au = 149597870700 m
+
+The light-year is defined from the exact speed of light and the Julian year of
+365.25 days:
+
+    1 ly = 9460730472580800 m
+
+`LENGTH_UNITS` maps symbols such as ``"mm"``, ``"km"``, ``"in"``, ``"au"``, and
+``"ly"`` to their constructors for configuration files and other external interfaces.
 
 See Also
 --------
@@ -80,7 +108,6 @@ See Also
     Volumes derived from cubic length.
 ~kuchka.quantities.Velocity
     Distance travelled per unit time.
-
 """
 
 from __future__ import annotations
@@ -474,6 +501,43 @@ def NauticalMile(value: Numeric) -> Length:
     return Length(to_exact(value) * NAUTICAL_MILE.scale, NAUTICAL_MILE)
 
 
+# Astronomy and space.
+
+ASTRONOMICAL_UNIT = UnitDef(
+    "astronomical_unit",
+    "au",
+    Decimal("149597870700"),
+    LENGTH,
+)
+
+
+def AstronomicalUnit(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in astronomical units.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in astronomical units.
+
+    Returns
+    -------
+    Length
+        Length represented in astronomical units.
+
+    Examples
+    --------
+    The astronomical unit is the conventional scale of the mean Earth-Sun distance:
+
+    >>> earth_sun_distance = AstronomicalUnit(1)
+
+    One astronomical unit is exactly 149,597,870,700 metres:
+
+    >>> earth_sun_distance.to(Metre)
+    149597870700 m
+    """
+    return Length(to_exact(value) * ASTRONOMICAL_UNIT.scale, ASTRONOMICAL_UNIT)
+
+
 LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
     {
         PICOMETRE.symbol: Picometre,
@@ -489,6 +553,7 @@ LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
         YARD.symbol: Yard,
         MILE.symbol: Mile,
         NAUTICAL_MILE.symbol: NauticalMile,
+        ASTRONOMICAL_UNIT.symbol: AstronomicalUnit,
     }
 )
 
@@ -512,6 +577,8 @@ __all__ = [
     "NANOMETER",
     "NANOMETRE",
     "NAUTICAL_MILE",
+    "ASTRONOMICAL_UNIT",
+    "AstronomicalUnit",
     "PICOMETER",
     "PICOMETRE",
     "YARD",
