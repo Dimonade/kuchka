@@ -24,11 +24,16 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True, slots=True)
 class Prefix:
-    """SI prefix - its name, display symbol, and power-of-ten exponent."""
+    """SI prefix - its name, display symbol, and power-of-ten exponent.
+
+    `aliases` are other symbols for the same prefix: `u` for micro, which is what a
+    keyboard offers in place of the micro sign.
+    """
 
     name: str
     symbol: str
     exponent: int
+    aliases: tuple[str, ...] = ()
 
     @property
     def factor(self) -> Decimal:
@@ -47,7 +52,7 @@ ATTO = Prefix("atto", "a", -18)
 FEMTO = Prefix("femto", "f", -15)
 PICO = Prefix("pico", "p", -12)
 NANO = Prefix("nano", "n", -9)
-MICRO = Prefix("micro", symbols.MICRO, -6)
+MICRO = Prefix("micro", symbols.MICRO, -6, aliases=("u",))
 MILLI = Prefix("milli", "m", -3)
 CENTI = Prefix("centi", "c", -2)
 DECI = Prefix("deci", "d", -1)
@@ -65,15 +70,19 @@ RONNA = Prefix("ronna", "R", 27)
 QUETTA = Prefix("quetta", "Q", 30)
 
 
-def prefixed_unit(
+def prefixed_unit(  # noqa: PLR0913 -- the spelling extras are keyword-only
     prefix: Prefix,
     base_name: str,
     base_symbol: str,
     dimension: Dimension,
     *,
     coherent_offset: int = 0,
+    base_aliases: tuple[str, ...] = (),
+    base_words: tuple[str, ...] = (),
+    aliases: tuple[str, ...] = (),
+    words: tuple[str, ...] = (),
 ) -> UnitDef:
-    """Build a `UnitDef` for `prefix` applied to a dimension's coherent SI unit.
+    """Build a `UnitDef` for `prefix` applied to a dimenion's coherent SI unit.
 
     `coherent_offset` corrects for a dimension whose canonical unit, namely, what
     `UnitDef.scale` is expressed relative to, is not itself the coherent SI unit.
@@ -83,12 +92,28 @@ def prefixed_unit(
 
     Every other dimension's canonical unit already is its own coherent unit, so the
     default of 0 is correct for them.
+
+    `base_aliases` are other symbols for the base unit (`ohm` for the ohm), and
+    `base_words` other names for it (`meter` for the metre).
+    The prefixed unit is known by every pairing of a prefix symbol, or prefix alias,
+    with a base symbol or base alias, and by the prefix name before each base word.
+    `aliases` and `words` add spellings of this one unit that no pairing produces,
+    such as `t` for the megagram.
     """
+    symbol = f"{prefix.symbol}{base_symbol}"
+    paired = tuple(
+        spelling
+        for prefix_symbol in (prefix.symbol, *prefix.aliases)
+        for base in (base_symbol, *base_aliases)
+        if (spelling := f"{prefix_symbol}{base}") != symbol
+    )
     return UnitDef(
         f"{prefix.name}{base_name}",
-        f"{prefix.symbol}{base_symbol}",
+        symbol,
         Decimal(1).scaleb(prefix.exponent + coherent_offset),
         dimension,
+        aliases=(*paired, *aliases),
+        words=(*(f"{prefix.name}{word}" for word in base_words), *words),
     )
 
 
