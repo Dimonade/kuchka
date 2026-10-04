@@ -15,7 +15,7 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   - `Femtosecond`, `Picosecond`, and `Nanosecond`.
   - `Day`, `Week`, `Fortnight`, and `JulianYear`. All exact scales of a `Second`.
   - `Jiffy`.
-- Temperature: `Fahrenheit`: the usual `Fahrenheit(32) == Celsius(0)`, `Fahrenheit(-459.67) == Kelvin(0)`.
+- Temperature: `Fahrenheit`, the usual `Fahrenheit(32) == Celsius(0)`, `Fahrenheit(-459.67) == Kelvin(0)`.
 - Current: `Picoampere`, `Nanoampere`, and `Megaampere`.
 - Resistance: `Microohm` and `Gigaohm`.
 - Conductance: `Nanosiemens`.
@@ -23,6 +23,8 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Power: `Picowatt`, `Nanowatt`, `Megawatt` to `Petawatt`, `Horsepower`, and `MetricHorsepower`.
 - Force: `KilogramForce`, `Meganewton`, `Micronewton`,.
 - Acceleration: `Gal`, `Milligal`, and `Microgal`.
+- Length: `AstronomicalUnit` and `LightYear`.
+- Energy: `Petajoule`, `KilowattHour`, `TonneOfTNT`, `KilotonneOfTNT`, and `MegatonneOfTNT`.
 
 #### `is_close` compares with an explicit tolerance
 

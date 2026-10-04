@@ -173,6 +173,8 @@ TABLE_CASES = [
             "yd": length.Yard,
             "mi": length.Mile,
             "M": length.NauticalMile,
+            "au": length.AstronomicalUnit,
+            "ly": length.LightYear,
         },
     ),
     (
@@ -241,6 +243,7 @@ TABLE_CASES = [
             "MJ": energy.Megajoule,
             "GJ": energy.Gigajoule,
             "TJ": energy.Terajoule,
+            "PJ": energy.Petajoule,
             f"{symbols.MICRO}eV": energy.Microelectronvolt,
             "meV": energy.Millielectronvolt,
             "eV": energy.Electronvolt,
@@ -251,9 +254,13 @@ TABLE_CASES = [
             "PeV": energy.Petaelectronvolt,
             "mWh": energy.MilliwattHour,
             "Wh": energy.WattHour,
+            "kWh": energy.KilowattHour,
             "erg": energy.Erg,
             f"cal{symbols.SUBSCRIPT_T}{symbols.SUBSCRIPT_H}": energy.ThermochemicalCalorie,  # noqa: E501
             "kcal": energy.Calorie,
+            "tTNT": energy.TonneOfTNT,
+            "ktTNT": energy.KilotonneOfTNT,
+            "MtTNT": energy.MegatonneOfTNT,
         },
     ),
     (

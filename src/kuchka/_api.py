@@ -41,6 +41,7 @@ from kuchka.units import AmpereHour
 from kuchka.units import AmpereSecond
 from kuchka.units import ArcMinute
 from kuchka.units import ArcSecond
+from kuchka.units import AstronomicalUnit
 from kuchka.units import Atmosphere
 from kuchka.units import Bar
 from kuchka.units import Baud
@@ -118,8 +119,10 @@ from kuchka.units import Kiloohm
 from kuchka.units import Kilopascal
 from kuchka.units import KilosamplesPerSecond
 from kuchka.units import Kilosiemens
+from kuchka.units import KilotonneOfTNT
 from kuchka.units import Kilovolt
 from kuchka.units import Kilowatt
+from kuchka.units import LightYear
 from kuchka.units import Liter
 from kuchka.units import Litre
 from kuchka.units import Megaampere
@@ -131,6 +134,7 @@ from kuchka.units import Meganewton
 from kuchka.units import Megaohm
 from kuchka.units import Megapascal
 from kuchka.units import MegasamplesPerSecond
+from kuchka.units import MegatonneOfTNT
 from kuchka.units import Megavolt
 from kuchka.units import Megawatt
 from kuchka.units import Meter
@@ -200,6 +204,7 @@ from kuchka.units import Pascal
 from kuchka.units import Percent
 from kuchka.units import Petaelectronvolt
 from kuchka.units import Petahertz
+from kuchka.units import Petajoule
 from kuchka.units import Petavolt
 from kuchka.units import Petawatt
 from kuchka.units import Picoampere
@@ -234,6 +239,7 @@ from kuchka.units import Terajoule
 from kuchka.units import Terawatt
 from kuchka.units import ThermochemicalCalorie
 from kuchka.units import Tonne
+from kuchka.units import TonneOfTNT
 from kuchka.units import Turn
 from kuchka.units import Volt
 from kuchka.units import Watt
@@ -252,6 +258,7 @@ __all__ = [
     "ArcMinute",
     "ArcSecond",
     "Area",
+    "AstronomicalUnit",
     "Atmosphere",
     "Bar",
     "Baud",
@@ -339,9 +346,11 @@ __all__ = [
     "Kilopascal",
     "KilosamplesPerSecond",
     "Kilosiemens",
+    "KilotonneOfTNT",
     "Kilovolt",
     "Kilowatt",
     "Length",
+    "LightYear",
     "Liter",
     "Litre",
     "LogarithmicRatio",
@@ -356,6 +365,7 @@ __all__ = [
     "Megaohm",
     "Megapascal",
     "MegasamplesPerSecond",
+    "MegatonneOfTNT",
     "Megavolt",
     "Megawatt",
     "Meter",
@@ -425,6 +435,7 @@ __all__ = [
     "Percent",
     "Petaelectronvolt",
     "Petahertz",
+    "Petajoule",
     "Petavolt",
     "Petawatt",
     "Picoampere",
@@ -468,6 +479,7 @@ __all__ = [
     "ThermochemicalCalorie",
     "Time",
     "Tonne",
+    "TonneOfTNT",
     "Turn",
     "Velocity",
     "Volt",

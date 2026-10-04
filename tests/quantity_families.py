@@ -174,12 +174,13 @@ ALL_UNIT_CASE_IDS: list[str] = [
 ]
 
 EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
-    "length": frozenset({"in"}),
+    "length": frozenset({"in", "au", "ly"}),
     "area": frozenset({"ac", f"in{symbols.SUPERSCRIPT_TWO}"}),
     "energy": frozenset(
         {
             "mWh",
             "Wh",
+            "kWh",
             f"{symbols.MICRO}eV",
             "meV",
             "eV",
@@ -190,6 +191,9 @@ EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
             "PeV",
             "kcal",
             "cal_th",
+            "tTNT",
+            "ktTNT",
+            "MtTNT",
         }
     ),
     "charge": frozenset({"mAh", "Ah"}),
