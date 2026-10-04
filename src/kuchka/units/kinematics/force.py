@@ -130,12 +130,12 @@ See Also
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import FORCE
 from kuchka.internal import prefixes
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Force
@@ -383,7 +383,8 @@ def KilogramForce(value: Numeric) -> Force:
     return Force(to_exact(value) * KILOGRAM_FORCE.scale, KILOGRAM_FORCE)
 
 
-FORCE_UNITS: Mapping[str, Callable[[Numeric], Force]] = MappingProxyType(
+FORCE_UNITS: Mapping[str, Callable[[Numeric], Force]] = unit_table(
+    "FORCE_UNITS",
     {
         MICRONEWTON.symbol: Micronewton,
         MILLINEWTON.symbol: Millinewton,
@@ -393,7 +394,7 @@ FORCE_UNITS: Mapping[str, Callable[[Numeric], Force]] = MappingProxyType(
         DYNE.symbol: Dyne,
         POUND_FORCE.symbol: PoundForce,
         KILOGRAM_FORCE.symbol: KilogramForce,
-    }
+    },
 )
 
 __all__ = [

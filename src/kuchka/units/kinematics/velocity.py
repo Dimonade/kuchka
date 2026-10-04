@@ -18,10 +18,10 @@ from __future__ import annotations
 
 from decimal import Decimal
 from fractions import Fraction
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import VELOCITY
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import UnitDef
@@ -32,7 +32,9 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
 
-METRE_PER_SECOND = UnitDef("metre_per_second", "m/s", Decimal(1), VELOCITY)
+METRE_PER_SECOND = UnitDef(
+    "metre_per_second", "m/s", Decimal(1), VELOCITY, aliases=("mps", "m/sec")
+)
 KILOMETRE_PER_HOUR = UnitDef(
     "kilometre_per_hour",
     "km/h",
@@ -80,12 +82,13 @@ def MilePerHour(value: Numeric) -> Velocity:
     return Velocity(to_exact(value) * MILE_PER_HOUR.scale, MILE_PER_HOUR)
 
 
-VELOCITY_UNITS: Mapping[str, Callable[[Numeric], Velocity]] = MappingProxyType(
+VELOCITY_UNITS: Mapping[str, Callable[[Numeric], Velocity]] = unit_table(
+    "VELOCITY_UNITS",
     {
         METRE_PER_SECOND.symbol: MetrePerSecond,
         KILOMETRE_PER_HOUR.symbol: KilometrePerHour,
         MILE_PER_HOUR.symbol: MilePerHour,
-    }
+    },
 )
 
 __all__ = [

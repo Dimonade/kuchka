@@ -211,31 +211,44 @@ See Also
 from __future__ import annotations
 
 from decimal import Decimal
-from fractions import Fraction
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import TIME
 from kuchka.internal import prefixes
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Time
 from kuchka.quantities import UnitDef
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-    from collections.abc import Mapping
+    from kuchka.internal.unit_table import UnitTable
 
 SECOND_NAME = "second"
 SECOND_SYMBOL = "s"
+SECOND_ALIASES = ("sec",)
+"""Another symbol for the second, which prefixes follow: `msec`."""
 
-FEMTOSECOND = prefixed_unit(prefixes.FEMTO, SECOND_NAME, SECOND_SYMBOL, TIME)
-PICOSECOND = prefixed_unit(prefixes.PICO, SECOND_NAME, SECOND_SYMBOL, TIME)
-NANOSECOND = prefixed_unit(prefixes.NANO, SECOND_NAME, SECOND_SYMBOL, TIME)
-MICROSECOND = prefixed_unit(prefixes.MICRO, SECOND_NAME, SECOND_SYMBOL, TIME)
-MILLISECOND = prefixed_unit(prefixes.MILLI, SECOND_NAME, SECOND_SYMBOL, TIME)
-SECOND = prefixed_unit(prefixes.UNIT, SECOND_NAME, SECOND_SYMBOL, TIME)
+FEMTOSECOND = prefixed_unit(
+    prefixes.FEMTO, SECOND_NAME, SECOND_SYMBOL, TIME, base_aliases=SECOND_ALIASES
+)
+PICOSECOND = prefixed_unit(
+    prefixes.PICO, SECOND_NAME, SECOND_SYMBOL, TIME, base_aliases=SECOND_ALIASES
+)
+NANOSECOND = prefixed_unit(
+    prefixes.NANO, SECOND_NAME, SECOND_SYMBOL, TIME, base_aliases=SECOND_ALIASES
+)
+MICROSECOND = prefixed_unit(
+    prefixes.MICRO, SECOND_NAME, SECOND_SYMBOL, TIME, base_aliases=SECOND_ALIASES
+)
+MILLISECOND = prefixed_unit(
+    prefixes.MILLI, SECOND_NAME, SECOND_SYMBOL, TIME, base_aliases=SECOND_ALIASES
+)
+SECOND = prefixed_unit(
+    prefixes.UNIT, SECOND_NAME, SECOND_SYMBOL, TIME, base_aliases=SECOND_ALIASES
+)
+
 
 Time._canonical_unit = SECOND  # noqa: SLF001 -- this module owns Time's canonical unit
 
@@ -423,8 +436,8 @@ def Second(value: Numeric) -> Time:
 
 # Non-SI but omnipresent - Minutes, Hours.
 
-MINUTE = UnitDef("minute", "min", Decimal(60), TIME)
-HOUR = UnitDef("hour", "h", Decimal(3600), TIME)
+MINUTE = UnitDef("minute", "min", Decimal(60), TIME, aliases=("mins",))
+HOUR = UnitDef("hour", "h", Decimal(3600), TIME, aliases=("hr", "hrs"))
 DAY = UnitDef("day", "d", Decimal(86_400), TIME)
 WEEK = UnitDef("week", "wk", Decimal(604_800), TIME)
 FORTNIGHT = UnitDef("fortnight", "fortnight", Decimal(1_209_600), TIME)
@@ -655,7 +668,8 @@ def Jiffy(value: Numeric) -> Time:
     return Time(to_exact(value) * JIFFY.scale, JIFFY)
 
 
-TIME_UNITS: Mapping[str, Callable[[Numeric], Time]] = MappingProxyType(
+TIME_UNITS: Mapping[str, Callable[[Numeric], Time]] = unit_table(
+    "TIME_UNITS",
     {
         FEMTOSECOND.symbol: Femtosecond,
         PICOSECOND.symbol: Picosecond,
@@ -670,7 +684,7 @@ TIME_UNITS: Mapping[str, Callable[[Numeric], Time]] = MappingProxyType(
         FORTNIGHT.symbol: Fortnight,
         JULIAN_YEAR.symbol: JulianYear,
         JIFFY.symbol: Jiffy,
-    }
+    },
 )
 
 __all__ = [

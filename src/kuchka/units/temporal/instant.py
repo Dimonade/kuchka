@@ -21,7 +21,6 @@ for boundary code that reads a unit as a string from outside the application.
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.quantities import AffineUnitDef
@@ -49,8 +48,8 @@ def _via_time(constructor: Callable[[Numeric], Time]) -> Callable[[Numeric], Ins
     return read_as_instant
 
 
-INSTANT_UNITS: Mapping[str, Callable[[Numeric], Instant]] = MappingProxyType(
-    {symbol: _via_time(constructor) for symbol, constructor in TIME_UNITS.items()}
+INSTANT_UNITS: Mapping[str, Callable[[Numeric], Instant]] = TIME_UNITS.map(
+    "INSTANT_UNITS", _via_time
 )
 
 __all__ = ["INSTANT_SECOND", "INSTANT_UNITS"]

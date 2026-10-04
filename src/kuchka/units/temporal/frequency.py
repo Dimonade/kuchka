@@ -14,12 +14,12 @@ unit as a string from outside the application.
 
 from __future__ import annotations
 
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import FREQUENCY
 from kuchka.internal import prefixes
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Frequency
@@ -72,15 +72,16 @@ def Petahertz(value: Numeric) -> Frequency:
     return Frequency(to_exact(value) * PETAHERTZ.scale, PETAHERTZ)
 
 
-FREQUENCY_UNITS: Mapping[str, Callable[[Numeric], Frequency]] = MappingProxyType(
+FREQUENCY_UNITS: Mapping[str, Callable[[Numeric], Frequency]] = unit_table(
+    "FREQUENCY_UNITS",
     {
-        HERTZ.symbol: Hertz,
-        KILOHERTZ.symbol: Kilohertz,
-        MEGAHERTZ.symbol: Megahertz,
-        GIGAHERTZ.symbol: Gigahertz,
-        TERAHERTZ.symbol: Terahertz,
-        PETAHERTZ.symbol: Petahertz,
-    }
+        HERTZ: Hertz,
+        KILOHERTZ: Kilohertz,
+        MEGAHERTZ: Megahertz,
+        GIGAHERTZ: Gigahertz,
+        TERAHERTZ: Terahertz,
+        PETAHERTZ: Petahertz,
+    },
 )
 
 __all__ = [

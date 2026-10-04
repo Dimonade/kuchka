@@ -14,10 +14,10 @@ unit as a string from outside the application.
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import FREQUENCY
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import BaudRate
@@ -43,11 +43,12 @@ def Kilobaud(value: Numeric) -> BaudRate:
     return BaudRate(to_exact(value) * KILOBAUD.scale, KILOBAUD)
 
 
-BAUD_RATE_UNITS: Mapping[str, Callable[[Numeric], BaudRate]] = MappingProxyType(
+BAUD_RATE_UNITS: Mapping[str, Callable[[Numeric], BaudRate]] = unit_table(
+    "BAUD_RATE_UNITS",
     {
-        BAUD.symbol: Baud,
-        KILOBAUD.symbol: Kilobaud,
-    }
+        BAUD: Baud,
+        KILOBAUD: Kilobaud,
+    },
 )
 
 __all__ = [

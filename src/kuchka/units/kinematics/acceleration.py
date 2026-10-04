@@ -150,11 +150,11 @@ See Also
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import ACCELERATION
 from kuchka.internal import symbols
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Acceleration
@@ -296,13 +296,14 @@ def Microgal(value: Numeric) -> Acceleration:
     return Acceleration(to_exact(value) * MICROGAL.scale, MICROGAL)
 
 
-ACCELERATION_UNITS: Mapping[str, Callable[[Numeric], Acceleration]] = MappingProxyType(
+ACCELERATION_UNITS: Mapping[str, Callable[[Numeric], Acceleration]] = unit_table(
+    "ACCELERATION_UNITS",
     {
         METRE_PER_SECOND_SQUARED.symbol: MetrePerSecondSquared,
         GAL.symbol: Gal,
         MILLIGAL.symbol: Milligal,
         MICROGAL.symbol: Microgal,
-    }
+    },
 )
 
 __all__ = [
