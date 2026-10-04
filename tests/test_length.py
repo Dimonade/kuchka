@@ -39,6 +39,7 @@ from kuchka.units import METER
 from kuchka.units import METRE
 from kuchka.units import MICROMETER
 from kuchka.units import MILLIMETER
+from kuchka.units import length
 
 
 @pytest.mark.parametrize(
@@ -246,4 +247,4 @@ def test_length_units_table_resolves_the_new_symbols():
 
 
 def test_astronomical_unit_converts_exactly_to_metres() -> None:
-    assert length.AstronomicalUnit(1) == length.Metre(Decimal("149597870700"))
+    assert length.AstronomicalUnit(1) == length.Metre(Decimal(149597870700))
