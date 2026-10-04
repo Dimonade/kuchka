@@ -29,4 +29,13 @@ def fold(text: str) -> str:
     return normalize(text.replace("_", " ")).casefold()
 
 
-__all__ = ["fold", "normalize"]
+def powered(base: str, exponent: int) -> tuple[str, ...]:
+    """Return the ASCII ways to write `base` raised to `exponent`: `m^2` and `m**2`.
+
+    The superscript form (`m²`) needs no entry, because `normalize` turns it into
+    `m2`, which is the third way to write it.
+    """
+    return (f"{base}^{exponent}", f"{base}**{exponent}")
+
+
+__all__ = ["fold", "normalize", "powered"]

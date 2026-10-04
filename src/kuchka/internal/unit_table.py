@@ -34,8 +34,8 @@ from kuchka.internal.typing import override
 if TYPE_CHECKING:
     from kuchka.numeric import Numeric
 
-_Q = TypeVar("_Q")
-_R = TypeVar("_R")
+_QuantityT = TypeVar("_QuantityT")
+_ResultT = TypeVar("_ResultT")
 _PLURAL = "s"
 
 
@@ -48,7 +48,7 @@ class SpelledUnit(Protocol):
     words: tuple[str, ...]
 
 
-class UnitTable(Mapping[str, Callable[["Numeric"], _Q]]):
+class UnitTable(Mapping[str, Callable[["Numeric"], _QuantityT]]):
     """A read-only mapping from the text of a unit to its constructor."""
 
     __slots__ = ("_entries", "_exact", "_label", "_words")
@@ -56,13 +56,13 @@ class UnitTable(Mapping[str, Callable[["Numeric"], _Q]]):
     def __init__(
         self,
         label: str,
-        entries: Mapping[SpelledUnit, Callable[[Numeric], _Q]],
+        entries: Mapping[SpelledUnit, Callable[[Numeric], _QuantityT]],
     ) -> None:
         """Index `entries`, raising `ValueError` if any spelling is ambiguous."""
         self._label = label
         self._entries = tuple(entries.items())
-        self._exact: dict[str, tuple[SpelledUnit, Callable[[Numeric], _Q]]] = {}
-        self._words: dict[str, tuple[SpelledUnit, Callable[[Numeric], _Q]]] = {}
+        self._exact: dict[str, tuple[SpelledUnit, Callable[[Numeric], _QuantityT]]] = {}
+        self._words: dict[str, tuple[SpelledUnit, Callable[[Numeric], _QuantityT]]] = {}
         for unit, constructor in self._entries:
             for symbol in (unit.symbol, *unit.aliases):
                 self._claim(self._exact, normalize(symbol), unit, constructor)
@@ -73,10 +73,10 @@ class UnitTable(Mapping[str, Callable[["Numeric"], _Q]]):
 
     def _claim(
         self,
-        index: dict[str, tuple[SpelledUnit, Callable[[Numeric], _Q]]],
+        index: dict[str, tuple[SpelledUnit, Callable[[Numeric], _QuantityT]]],
         spelling: str,
         unit: SpelledUnit,
-        constructor: Callable[[Numeric], _Q],
+        constructor: Callable[[Numeric], _QuantityT],
     ) -> None:
         owner = index.setdefault(spelling, (unit, constructor))[0]
         if owner is not unit:
@@ -114,7 +114,7 @@ class UnitTable(Mapping[str, Callable[["Numeric"], _Q]]):
         return tuple(unit for unit, _ in self._entries)
 
     @override
-    def __getitem__(self, spelling: object) -> Callable[[Numeric], _Q]:
+    def __getitem__(self, spelling: object) -> Callable[[Numeric], _QuantityT]:
         """Resolve `spelling` to a constructor, or raise `KeyError`."""
         if isinstance(spelling, str):
             exact = self._exact.get(normalize(spelling))
@@ -141,8 +141,10 @@ class UnitTable(Mapping[str, Callable[["Numeric"], _Q]]):
     def map(
         self,
         label: str,
-        transform: Callable[[Callable[[Numeric], _Q]], Callable[[Numeric], _R]],
-    ) -> UnitTable[_R]:
+        transform: Callable[
+            [Callable[[Numeric], _QuantityT]], Callable[[Numeric], _ResultT]
+        ],
+    ) -> UnitTable[_ResultT]:
         """Return a table of the same units, each constructor passed to `transform`.
 
         The spellings are those of the original, so a table derived from another
@@ -160,8 +162,8 @@ class UnitTable(Mapping[str, Callable[["Numeric"], _Q]]):
 
 
 def unit_table(
-    label: str, entries: Mapping[SpelledUnit, Callable[[Numeric], _Q]]
-) -> UnitTable[_Q]:
+    label: str, entries: Mapping[SpelledUnit, Callable[[Numeric], _QuantityT]]
+) -> UnitTable[_QuantityT]:
     """Build the table `label` from unit definitions and their constructors."""
     return UnitTable(label, entries)
 
