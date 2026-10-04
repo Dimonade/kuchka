@@ -22,6 +22,7 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Voltage: `Nanovolt`, `Megavolt`, and `Petavolt`.
 - Power: `Picowatt`, `Nanowatt`, `Megawatt` to `Petawatt`, `Horsepower`, and `MetricHorsepower`.
 - Force: `KilogramForce`, `Meganewton`, `Micronewton`,.
+- Acceleration: `Gal`, `Milligal`, and `Microgal`.
 
 #### `is_close` compares with an explicit tolerance
 

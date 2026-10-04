@@ -74,6 +74,7 @@ from kuchka.units import Fahrenheit
 from kuchka.units import Femtosecond
 from kuchka.units import Foot
 from kuchka.units import Fortnight
+from kuchka.units import Gal
 from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gigajoule
@@ -142,6 +143,7 @@ from kuchka.units import MetricHorsepower
 from kuchka.units import Microampere
 from kuchka.units import Microcoulomb
 from kuchka.units import Microelectronvolt
+from kuchka.units import Microgal
 from kuchka.units import Microgram
 from kuchka.units import Microjoule
 from kuchka.units import Microliter
@@ -163,6 +165,7 @@ from kuchka.units import MilliampereSecond
 from kuchka.units import Millibar
 from kuchka.units import Millicoulomb
 from kuchka.units import Millielectronvolt
+from kuchka.units import Milligal
 from kuchka.units import Milligram
 from kuchka.units import Millijoule
 from kuchka.units import Milliliter
@@ -291,6 +294,7 @@ __all__ = [
     "Force",
     "Fortnight",
     "Frequency",
+    "Gal",
     "Gigaelectronvolt",
     "Gigahertz",
     "Gigajoule",
@@ -364,6 +368,7 @@ __all__ = [
     "Microampere",
     "Microcoulomb",
     "Microelectronvolt",
+    "Microgal",
     "Microgram",
     "Microjoule",
     "Microliter",
@@ -385,6 +390,7 @@ __all__ = [
     "Millibar",
     "Millicoulomb",
     "Millielectronvolt",
+    "Milligal",
     "Milligram",
     "Millijoule",
     "Milliliter",
