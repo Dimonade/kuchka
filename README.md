@@ -398,15 +398,16 @@ The complete unit vocabulary is available in the API reference.
 
 ### Electrical
 
-| Quantity    | Representative units                                                                                                                     |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| Voltage     | `Nanovolt` though `Petavolt`                                                                                                             |
-| Current     | `Picoampere`, through `Megaampere`                                                                                                       |
-| Power       | `Picowatt` through `Petawatt`, `Horsepower` and `MetricHorsepower`                                                                       |
-| Resistance  | `Microohm`, through `Gigaohm`                                                                                                            |
-| Conductance | `Nanosiemens` through `Kilosiemens`                                                                                                      |
-| Charge      | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                                                    |
-| Energy      | `Picojoule` through `Terajoule`, `Electronvolt` through `Teraelectronvolt`, `Erg`, `MilliwattHour`, `WattHour`, `Calorie`, `Kilocalorie` |
+| Quantity    | Representative units                                                                                               |
+| ----------- | ------------------------------------------------------------------------------------------------------------------ |
+| Voltage     | `Nanovolt` though `Petavolt`                                                                                       |
+| Current     | `Picoampere`, through `Megaampere`                                                                                 |
+| Power       | `Picowatt` through `Petawatt`, `Horsepower` and `MetricHorsepower`                                                 |
+| Resistance  | `Microohm`, through `Gigaohm`                                                                                      |
+| Conductance | `Nanosiemens` through `Kilosiemens`                                                                                |
+| Charge      | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                              |
+| Energy      | `Picojoule` through `Terajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour` |
+|             | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                             |
 
 ### Time and signals
 
@@ -423,17 +424,17 @@ The complete unit vocabulary is available in the API reference.
 
 ### Geometry and mechanics
 
-| Quantity     | Representative units                                                                                                    |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| Quantity     | Representative units                                                                                       |
+| ------------ | ---------------------------------------------------------------------------------------------------------- |
 | Length       | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit` and `LightYear` |
-| Area         | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                                         |
-| Volume       | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                                |
-| Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`                                                                     |
-| Acceleration | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                                       |
-| Mass         | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                                          |
-| Force        | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                                           |
-| Density      | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                                   |
-| Pressure     | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`              |
+| Area         | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                            |
+| Volume       | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                   |
+| Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`                                                        |
+| Acceleration | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                          |
+| Mass         | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                             |
+| Force        | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                              |
+| Density      | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                      |
+| Pressure     | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch` |
 
 ### Angle
 

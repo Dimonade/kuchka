@@ -180,6 +180,7 @@ EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
         {
             "mWh",
             "Wh",
+            "kWh",
             f"{symbols.MICRO}eV",
             "meV",
             "eV",
@@ -190,6 +191,9 @@ EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
             "PeV",
             "kcal",
             "cal_th",
+            "tTNT",
+            "ktTNT",
+            "MtTNT",
         }
     ),
     "charge": frozenset({"mAh", "Ah"}),

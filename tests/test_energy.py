@@ -116,3 +116,15 @@ def test_thermochemical_calorie_is_smaller_than_the_food_calorie():
 def test_gigajoule_and_terajoule_scale_correctly():
     assert Gigajoule(1) == Megajoule(1000)
     assert Terajoule(1) == Gigajoule(1000)
+
+
+def test_tonne_of_tnt_converts_to_joules_exactly() -> None:
+    assert energy.TonneOfTNT(1) == energy.Joule(Decimal("4184000000"))
+
+
+def test_kilotonne_of_tnt_converts_to_joules_exactly() -> None:
+    assert energy.KilotonneOfTNT(1) == energy.Joule(Decimal("4184000000000"))
+
+
+def test_megatonne_of_tnt_converts_to_joules_exactly() -> None:
+    assert energy.MegatonneOfTNT(1) == energy.Joule(Decimal("4184000000000000"))

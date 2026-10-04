@@ -119,6 +119,7 @@ from kuchka.units import Kiloohm
 from kuchka.units import Kilopascal
 from kuchka.units import KilosamplesPerSecond
 from kuchka.units import Kilosiemens
+from kuchka.units import KilotonneOfTNT
 from kuchka.units import Kilovolt
 from kuchka.units import Kilowatt
 from kuchka.units import LightYear
@@ -133,6 +134,7 @@ from kuchka.units import Meganewton
 from kuchka.units import Megaohm
 from kuchka.units import Megapascal
 from kuchka.units import MegasamplesPerSecond
+from kuchka.units import MegatonneOfTNT
 from kuchka.units import Megavolt
 from kuchka.units import Megawatt
 from kuchka.units import Meter
@@ -236,6 +238,7 @@ from kuchka.units import Terajoule
 from kuchka.units import Terawatt
 from kuchka.units import ThermochemicalCalorie
 from kuchka.units import Tonne
+from kuchka.units import TonneOfTNT
 from kuchka.units import Turn
 from kuchka.units import Volt
 from kuchka.units import Watt
@@ -342,6 +345,7 @@ __all__ = [
     "Kilopascal",
     "KilosamplesPerSecond",
     "Kilosiemens",
+    "KilotonneOfTNT",
     "Kilovolt",
     "Kilowatt",
     "Length",
@@ -360,6 +364,7 @@ __all__ = [
     "Megaohm",
     "Megapascal",
     "MegasamplesPerSecond",
+    "MegatonneOfTNT",
     "Megavolt",
     "Megawatt",
     "Meter",
@@ -472,6 +477,7 @@ __all__ = [
     "ThermochemicalCalorie",
     "Time",
     "Tonne",
+    "TonneOfTNT",
     "Turn",
     "Velocity",
     "Volt",

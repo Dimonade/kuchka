@@ -2,9 +2,9 @@
 
 `Energy` represents a scalar energy quantity.
 The module provides SI-prefixed joules for general engineering use, watt-hours for
-stored or consumed electrical energy, electronvolts for microscopic physics, the erg
-for astrophysical and historical CGS literature, and calories for nutrition and
-thermochemistry.
+stored or consumed electrical energy, electronvolts for microscopic physics, the
+erg for astrophysical and historical CGS literature, calories for nutrition and
+thermochemistry, and TNT equivalent for very large energy releases.
 
 Joule is the canonical SI unit used internally by :class:`~kuchka.quantities.Energy`.
 Every constructor here accepts a plain numeric magnitude in its named unit and returns
@@ -18,9 +18,11 @@ The different unit families suit very different physical scales:
 * kilojoules and megajoules cover human-scale work, chemistry, and transport;
 * gigajoules and terajoules suit industrial and geophysical energy budgets;
 * watt-hours describe stored or consumed electrical energy;
+* kilowatt-hours describe household, battery, and grid-scale electrical energy;
 * kilocalories (food Calories) are conventional in nutrition and exercise;
 * electronvolts describe the energy of individual particles and photons;
-* ergs remain common in astrophysical literature.
+* ergs remain common in astrophysical literature;
+* kilotonnes and megatonnes of TNT describe very large energy releases.
 
 Examples
 --------
@@ -50,13 +52,34 @@ gravitational potential energy:
 
 >>> stair_climb = Kilojoule(Decimal("3.92266"))
 
-Electrical energy is often specified in watt-hours.
-A nominal 500 Wh battery from which 125 Wh has been consumed leaves:
+Electrical energy is often specified in watt-hours because battery capacities and
+energy budgets are naturally discussed on that scale.
 
->>> battery = WattHour(500)
->>> remaining = battery - WattHour(125)
+A small spacecraft has an 84 kWh battery.
+During one phase of a mission, its thermal system consumes 7.25 kWh, communications
+consume 1,875 Wh, and the science payload consumes another 2.625 kWh:
+
+>>> battery = KilowattHour(84)
+>>> remaining = (
+...     battery
+...     - KilowattHour(7.25)
+...     - WattHour(1875)
+...     - KilowattHour(2.625)
+... )
 >>> remaining
-375 Wh
+79.5 kWh
+
+The remaining energy is the same quantity regardless of which engineering scale is used
+to report it:
+
+>>> remaining.to(MEGAJOULE)
+286.2 MJ
+
+For comparison, a 25 kWh storage system holds exactly 90 MJ:
+
+>>> storage = KilowattHour(25)
+>>> storage.to(MEGAJOULE)
+90 MJ
 
 For very low-power electronics, milliwatt-hours give a convenient scale.
 A sensor budget of 5 mWh per acquisition cycle needs no unit encoded into the variable
@@ -109,11 +132,32 @@ A canonical supernova-scale energy of 10**51 erg is representable directly, as t
 >>> supernova_energy == Joule(Decimal("1e44"))
 True
 
+TNT equivalent provides another useful scale for very large energy releases.
+A kilotonne of TNT equivalent corresponds to exactly 4.184 TJ:
+
+>>> kilotonne_release = KilotonneOfTNT(1)
+>>> kilotonne_release.to(TERAJOULE)
+4.184 TJ
+
+At the megatonne scale the same convention reaches petajoules:
+
+>>> megatonne_release = MegatonneOfTNT(1)
+>>> megatonne_release.to(PETAJOULE)
+4.184 PJ
+
 Notes
 -----
 The watt-hour is a unit of energy, not power.
 For example, ``500 Wh`` denotes an amount of energy that a 500 W source could deliver
 over one hour.
+
+One watt-hour is exactly:
+
+``1 Wh = 3600 J``
+
+A kilowatt-hour is therefore exactly:
+
+``1 kWh = 3600000 J = 3.6 MJ``
 
 The electronvolt derives from the exact SI value of the elementary charge, so the
 conversion
@@ -136,9 +180,32 @@ for callers who prefer the explicit SI-style name.
 
 ``1 cal_th = 4.184 J``.
 
-`ENERGY_UNITS` maps unit symbols such as ``"J"``, ``"eV"``, and ``"Wh"`` to their
-constructors. It is intended for boundary code that receives units from configuration
-files, protocols, or other external sources.
+TNT equivalent is a convenient way to describe very large energy releases without
+writing unwieldy numbers of joules.
+
+Suppose an impact model starts with 2.4 megatonnes of TNT equivalent.
+The model attributes 350 kilotonnes to atmospheric shock and 0.9 megatonnes to ejecta:
+
+>>> total = MegatonneOfTNT(2.4)
+>>> atmospheric = KilotonneOfTNT(350)
+>>> ejecta = MegatonneOfTNT(0.9)
+>>> remainder = total - atmospheric - ejecta
+>>> remainder
+1.15 Mt TNT
+
+The same remaining energy can be reported in SI units without losing the exact
+relationship between the two descriptions:
+
+>>> remainder.to(PETAJOULE)
+4.8116 PJ
+
+The individual TNT scales are therefore not separate kinds of energy.
+They are different engineering vocabularies for the same `Energy` quantity.
+
+`ENERGY_UNITS` maps unit symbols such as ``"J"``, ``"eV"``, ``"Wh"``, ``"kWh"``, and
+``"ktTNT"`` to their constructors.
+It is intended for boundary code that receives units from configuration files,
+protocols, or other external sources.
 
 See Also
 --------
@@ -618,6 +685,7 @@ def Petaelectronvolt(value: Numeric) -> Energy:
 
 MILLIWATT_HOUR = UnitDef("milliwatt_hour", "mWh", Decimal("3.6"), ENERGY)
 WATT_HOUR = UnitDef("watt_hour", "Wh", Decimal(3600), ENERGY)
+KILOWATT_HOUR = UnitDef("kilowatt_hour", "kWh", Decimal("3600000"), ENERGY)
 
 
 def MilliwattHour(value: Numeric) -> Energy:
@@ -659,13 +727,41 @@ def WattHour(value: Numeric) -> Energy:
 
     Examples
     --------
-    A 500 Wh battery from which 125 Wh has been drawn leaves:
+    A battery test begins with a 1 kWh charge and records three loads:
 
-    >>> WattHour(500) - WattHour(125)
-    375 Wh
-
+    >>> battery = KilowattHour(1)
+    >>> remaining = battery - WattHour(420) - WattHour(185) - WattHour(95)
+    >>> remaining
+    300 Wh
     """
     return Energy(to_exact(value) * WATT_HOUR.scale, WATT_HOUR)
+
+
+def KilowattHour(value: Numeric) -> Energy:
+    """Construct an Energy from a magnitude expressed in kilowatt-hours.
+
+    Parameters
+    ----------
+    value : Numeric
+        Energy magnitude in kilowatt-hours.
+
+    Returns
+    -------
+    Energy
+        Energy represented in kilowatt-hours.
+
+    Examples
+    --------
+    A 6.5 kWh energy budget is split between two systems, leaving the remainder
+    for the propulsion controller:
+
+    >>> budget = KilowattHour(6.5)
+    >>> allocated = KilowattHour(2.75) + KilowattHour(1.25)
+    >>> reserve = budget - allocated
+    >>> reserve
+    2.5 kWh
+    """
+    return Energy(to_exact(value) * KILOWATT_HOUR.scale, KILOWATT_HOUR)
 
 
 # Erg: the CGS unit of energy.
@@ -793,6 +889,98 @@ def ThermochemicalCalorie(value: Numeric) -> Energy:
     )
 
 
+# TNT Equivalent.
+
+TONNE_OF_TNT = UnitDef("tonne_of_tnt", "tTNT", Decimal("4184000000"), ENERGY)
+
+KILOTONNE_OF_TNT = UnitDef(
+    "kilotonne_of_tnt", "ktTNT", Decimal("4184000000000"), ENERGY
+)
+
+MEGATONNE_OF_TNT = UnitDef(
+    "megatonne_of_tnt", "MtTNT", Decimal("4184000000000000"), ENERGY
+)
+
+
+def TonneOfTNT(value: Numeric) -> Energy:
+    """Construct an Energy from a magnitude expressed in tonnes of TNT equivalent.
+
+    Parameters
+    ----------
+    value : Numeric
+        Energy magnitude in tonnes of TNT equivalent.
+
+    Returns
+    -------
+    Energy
+        Energy represented in tonnes of TNT equivalent.
+
+    Examples
+    --------
+    A modeled release contains a 1,200 tonne TNT-equivalent component followed by
+    a smaller 800 tonne component:
+
+    >>> first_stage = TonneOfTNT(1200)
+    >>> second_stage = TonneOfTNT(800)
+    >>> total = first_stage + second_stage
+    >>> total
+    2000 t TNT
+    """
+    return Energy(to_exact(value) * TONNE_OF_TNT.scale, TONNE_OF_TNT)
+
+
+def KilotonneOfTNT(value: Numeric) -> Energy:
+    """Construct an Energy from a magnitude expressed in kilotonnes of TNT equivalent.
+
+    Parameters
+    ----------
+    value : Numeric
+        Energy magnitude in kilotonnes of TNT equivalent.
+
+    Returns
+    -------
+    Energy
+        Energy represented in kilotonnes of TNT equivalent.
+
+    Examples
+    --------
+    An impact model assigns 350 kilotonnes of TNT equivalent to atmospheric effects.
+    Expressing the same energy on the megatonne scale gives:
+
+    >>> atmospheric = KilotonneOfTNT(350)
+    >>> atmospheric.to(MEGATONNE_OF_TNT)
+    0.35 Mt TNT
+    """
+    return Energy(to_exact(value) * KILOTONNE_OF_TNT.scale, KILOTONNE_OF_TNT)
+
+
+def MegatonneOfTNT(value: Numeric) -> Energy:
+    """Construct an Energy from a magnitude expressed in megatonnes of TNT equivalent.
+
+    Parameters
+    ----------
+    value : Numeric
+        Energy magnitude in megatonnes of TNT equivalent.
+
+    Returns
+    -------
+    Energy
+        Energy represented in megatonnes of TNT equivalent.
+
+    Examples
+    --------
+    An impact model begins with 2.4 megatonnes of TNT equivalent and subtracts a
+    350 kilotonne atmospheric component:
+
+    >>> total = MegatonneOfTNT(2.4)
+    >>> atmospheric = KilotonneOfTNT(350)
+    >>> remaining = total - atmospheric
+    >>> remaining
+    2.05 Mt TNT
+    """
+    return Energy(to_exact(value) * MEGATONNE_OF_TNT.scale, MEGATONNE_OF_TNT)
+
+
 ENERGY_UNITS: Mapping[str, Callable[[Numeric], Energy]] = MappingProxyType(
     {
         PICOJOULE.symbol: Picojoule,
@@ -817,12 +1005,21 @@ ENERGY_UNITS: Mapping[str, Callable[[Numeric], Energy]] = MappingProxyType(
         ERG.symbol: Erg,
         THERMOCHEMICAL_CALORIE.symbol: ThermochemicalCalorie,
         KILOCALORIE.symbol: Kilocalorie,
+        TONNE_OF_TNT.symbol: TonneOfTNT,
+        KILOTONNE_OF_TNT.symbol: KilotonneOfTNT,
+        MEGATONNE_OF_TNT.symbol: MegatonneOfTNT,
     }
 )
 """Mapping from unit symbol to constructor, for boundary code parsing string units."""
 
 __all__ = [
     "ELECTRONVOLT",
+    "TONNE_OF_TNT",
+    "KILOTONNE_OF_TNT",
+    "MEGATONNE_OF_TNT",
+    "TonneOfTNT",
+    "KilotonneOfTNT",
+    "MegatonneOfTNT",
     "ENERGY_UNITS",
     "ERG",
     "GIGAELECTRONVOLT",
