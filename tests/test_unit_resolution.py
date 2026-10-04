@@ -11,6 +11,7 @@ an I/O boundary such as a config file, CSV header, or hardware descriptor.
 import pytest
 
 from kuchka.internal import symbols
+from kuchka.units import acceleration
 from kuchka.units import amount
 from kuchka.units import area
 from kuchka.units import baud_rate
@@ -35,6 +36,15 @@ from kuchka.units import volume
 
 # (table, {expected symbol: expected constructor})
 TABLE_CASES = [
+    (
+        acceleration.ACCELERATION_UNITS,
+        {
+            f"m/s{symbols.SUPERSCRIPT_TWO}": acceleration.MetrePerSecondSquared,
+            "Gal": acceleration.Gal,
+            "mGal": acceleration.Milligal,
+            f"{symbols.MICRO}Gal": acceleration.Microgal,
+        },
+    ),
     (
         voltage.VOLTAGE_UNITS,
         {
@@ -303,6 +313,7 @@ TABLE_CASES = [
 ]
 
 TABLE_CASE_IDS = [
+    "acceleration",
     "voltage",
     "current",
     "resistance",

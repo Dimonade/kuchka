@@ -18,6 +18,7 @@ from typing import TYPE_CHECKING
 import pytest
 from hypothesis import given
 
+from kuchka.units import acceleration
 from kuchka.units import area
 from kuchka.units import charge
 from kuchka.units import conductance
@@ -56,6 +57,22 @@ class PrefixCase:
 
 
 PREFIX_CASES: list[PrefixCase] = [
+    PrefixCase(
+        "Milligal",
+        acceleration.Milligal,
+        acceleration.MetrePerSecondSquared,
+        Decimal("0.00001"),
+        acceleration.MILLIGAL,
+        acceleration.METRE_PER_SECOND_SQUARED,
+    ),
+    PrefixCase(
+        "Microgal",
+        acceleration.Microgal,
+        acceleration.MetrePerSecondSquared,
+        Decimal("0.00000001"),
+        acceleration.MICROGAL,
+        acceleration.METRE_PER_SECOND_SQUARED,
+    ),
     PrefixCase(
         "Nanovolt",
         voltage.Nanovolt,

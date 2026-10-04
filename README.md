@@ -429,7 +429,7 @@ The complete unit vocabulary is available in the API reference.
 | Area         | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                            |
 | Volume       | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                   |
 | Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`                                                        |
-| Acceleration | `MetrePerSecondSquared`                                                                                    |
+| Acceleration | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                          |
 | Mass         | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                             |
 | Force        | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                              |
 | Density      | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                      |
