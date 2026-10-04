@@ -26,13 +26,14 @@ as a string from outside the application.
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import VOLUME
 from kuchka.internal import prefixes
 from kuchka.internal import symbols
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.spelling import powered
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import UnitDef
@@ -53,11 +54,25 @@ CUBIC_MILLIMETRE = UnitDef(
     f"mm{symbols.SUPERSCRIPT_THREE}",
     prefixes.MILLI.factor * prefixes.MILLI.factor * prefixes.MILLI.factor,
     VOLUME,
+    aliases=powered("mm", 3),
+    words=("cubic millimeter",),
 )
 CUBIC_CENTIMETRE = UnitDef(
-    "cubic_centimetre", f"cm{symbols.SUPERSCRIPT_THREE}", Decimal("0.000001"), VOLUME
+    "cubic_centimetre",
+    f"cm{symbols.SUPERSCRIPT_THREE}",
+    Decimal("0.000001"),
+    VOLUME,
+    aliases=(*powered("cm", 3), "cc"),
+    words=("cubic centimeter",),
 )
-CUBIC_METRE = prefixed_unit(prefixes.UNIT, CUBIC_METRE_NAME, CUBIC_METRE_SYMBOL, VOLUME)
+CUBIC_METRE = prefixed_unit(
+    prefixes.UNIT,
+    CUBIC_METRE_NAME,
+    CUBIC_METRE_SYMBOL,
+    VOLUME,
+    aliases=powered("m", 3),
+    words=("cubic meter",),
+)
 
 CUBIC_MILLIMETER = CUBIC_MILLIMETRE
 CUBIC_CENTIMETER = CUBIC_CENTIMETRE
@@ -91,18 +106,46 @@ CubicMeter = CubicMetre
 
 LITRE_NAME = "litre"
 LITRE_SYMBOL = "L"
+LITRE_ALIASES = ("l",)
+"""The lower-case symbol, which prefixes follow: `ml`."""
+LITRE_WORDS = ("liter",)
+"""The American spelling, which prefixed names follow: `milliliter`."""
 
 MICROLITRE = prefixed_unit(
-    prefixes.MICRO, LITRE_NAME, LITRE_SYMBOL, VOLUME, coherent_offset=-3
+    prefixes.MICRO,
+    LITRE_NAME,
+    LITRE_SYMBOL,
+    VOLUME,
+    coherent_offset=-3,
+    base_aliases=LITRE_ALIASES,
+    base_words=LITRE_WORDS,
 )
 MILLILITRE = prefixed_unit(
-    prefixes.MILLI, LITRE_NAME, LITRE_SYMBOL, VOLUME, coherent_offset=-3
+    prefixes.MILLI,
+    LITRE_NAME,
+    LITRE_SYMBOL,
+    VOLUME,
+    coherent_offset=-3,
+    base_aliases=LITRE_ALIASES,
+    base_words=LITRE_WORDS,
 )
 LITRE = prefixed_unit(
-    prefixes.UNIT, LITRE_NAME, LITRE_SYMBOL, VOLUME, coherent_offset=-3
+    prefixes.UNIT,
+    LITRE_NAME,
+    LITRE_SYMBOL,
+    VOLUME,
+    coherent_offset=-3,
+    base_aliases=LITRE_ALIASES,
+    base_words=LITRE_WORDS,
 )
 KILOLITRE = prefixed_unit(
-    prefixes.KILO, LITRE_NAME, LITRE_SYMBOL, VOLUME, coherent_offset=-3
+    prefixes.KILO,
+    LITRE_NAME,
+    LITRE_SYMBOL,
+    VOLUME,
+    coherent_offset=-3,
+    base_aliases=LITRE_ALIASES,
+    base_words=LITRE_WORDS,
 )
 
 
@@ -131,16 +174,17 @@ Milliliter = Millilitre
 Liter = Litre
 Kiloliter = Kilolitre
 
-VOLUME_UNITS: Mapping[str, Callable[[Numeric], Volume]] = MappingProxyType(
+VOLUME_UNITS: Mapping[str, Callable[[Numeric], Volume]] = unit_table(
+    "VOLUME_UNITS",
     {
-        CUBIC_MILLIMETRE.symbol: CubicMillimetre,
-        CUBIC_CENTIMETRE.symbol: CubicCentimetre,
-        CUBIC_METRE.symbol: CubicMetre,
-        MICROLITRE.symbol: Microlitre,
-        MILLILITRE.symbol: Millilitre,
-        LITRE.symbol: Litre,
-        KILOLITRE.symbol: Kilolitre,
-    }
+        CUBIC_MILLIMETRE: CubicMillimetre,
+        CUBIC_CENTIMETRE: CubicCentimetre,
+        CUBIC_METRE: CubicMetre,
+        MICROLITRE: Microlitre,
+        MILLILITRE: Millilitre,
+        LITRE: Litre,
+        KILOLITRE: Kilolitre,
+    },
 )
 
 __all__ = [

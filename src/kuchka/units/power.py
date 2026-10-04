@@ -261,12 +261,12 @@ See Also
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import POWER
 from kuchka.internal import prefixes
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Power
@@ -559,6 +559,8 @@ HORSEPOWER = UnitDef(
     "hp",
     Decimal("745.69987158227022"),
     POWER,
+    aliases=("HP",),
+    words=("mechanical horsepower", "imperial horsepower"),
 )
 
 METRIC_HORSEPOWER = UnitDef(
@@ -566,6 +568,8 @@ METRIC_HORSEPOWER = UnitDef(
     "PS",
     Decimal("735.49875"),
     POWER,
+    aliases=("CV", "cv"),
+    words=("pferdestarke", "cheval vapeur"),
 )
 
 
@@ -631,21 +635,22 @@ def MetricHorsepower(value: Numeric) -> Power:
     )
 
 
-POWER_UNITS: Mapping[str, Callable[[Numeric], Power]] = MappingProxyType(
+POWER_UNITS: Mapping[str, Callable[[Numeric], Power]] = unit_table(
+    "POWER_UNITS",
     {
-        PICOWATT.symbol: Picowatt,
-        NANOWATT.symbol: Nanowatt,
-        MICROWATT.symbol: Microwatt,
-        MILLIWATT.symbol: Milliwatt,
-        WATT.symbol: Watt,
-        KILOWATT.symbol: Kilowatt,
-        MEGAWATT.symbol: Megawatt,
-        GIGAWATT.symbol: Gigawatt,
-        TERAWATT.symbol: Terawatt,
-        PETAWATT.symbol: Petawatt,
-        HORSEPOWER.symbol: Horsepower,
-        METRIC_HORSEPOWER.symbol: MetricHorsepower,
-    }
+        PICOWATT: Picowatt,
+        NANOWATT: Nanowatt,
+        MICROWATT: Microwatt,
+        MILLIWATT: Milliwatt,
+        WATT: Watt,
+        KILOWATT: Kilowatt,
+        MEGAWATT: Megawatt,
+        GIGAWATT: Gigawatt,
+        TERAWATT: Terawatt,
+        PETAWATT: Petawatt,
+        HORSEPOWER: Horsepower,
+        METRIC_HORSEPOWER: MetricHorsepower,
+    },
 )
 
 __all__ = [

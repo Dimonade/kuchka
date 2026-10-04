@@ -133,12 +133,12 @@ See Also
 
 from __future__ import annotations
 
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import CURRENT
 from kuchka.internal import prefixes
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Current
@@ -150,14 +150,30 @@ if TYPE_CHECKING:
 
 AMPERE_NAME = "ampere"
 AMPERE_SYMBOL = "A"
+AMPERE_WORDS = ("amp",)
+"""The everyday short name, which prefixed names follow: `milliamp`."""
 
-PICOAMPERE = prefixed_unit(prefixes.PICO, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
-NANOAMPERE = prefixed_unit(prefixes.NANO, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
-MICROAMPERE = prefixed_unit(prefixes.MICRO, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
-MILLIAMPERE = prefixed_unit(prefixes.MILLI, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
-AMPERE = prefixed_unit(prefixes.UNIT, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
-KILOAMPERE = prefixed_unit(prefixes.KILO, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
-MEGAAMPERE = prefixed_unit(prefixes.MEGA, AMPERE_NAME, AMPERE_SYMBOL, CURRENT)
+PICOAMPERE = prefixed_unit(
+    prefixes.PICO, AMPERE_NAME, AMPERE_SYMBOL, CURRENT, base_words=AMPERE_WORDS
+)
+NANOAMPERE = prefixed_unit(
+    prefixes.NANO, AMPERE_NAME, AMPERE_SYMBOL, CURRENT, base_words=AMPERE_WORDS
+)
+MICROAMPERE = prefixed_unit(
+    prefixes.MICRO, AMPERE_NAME, AMPERE_SYMBOL, CURRENT, base_words=AMPERE_WORDS
+)
+MILLIAMPERE = prefixed_unit(
+    prefixes.MILLI, AMPERE_NAME, AMPERE_SYMBOL, CURRENT, base_words=AMPERE_WORDS
+)
+AMPERE = prefixed_unit(
+    prefixes.UNIT, AMPERE_NAME, AMPERE_SYMBOL, CURRENT, base_words=AMPERE_WORDS
+)
+KILOAMPERE = prefixed_unit(
+    prefixes.KILO, AMPERE_NAME, AMPERE_SYMBOL, CURRENT, base_words=AMPERE_WORDS
+)
+MEGAAMPERE = prefixed_unit(
+    prefixes.MEGA, AMPERE_NAME, AMPERE_SYMBOL, CURRENT, base_words=AMPERE_WORDS
+)
 
 Current._canonical_unit = AMPERE  # noqa: SLF001 -- this module owns Current's canonical unit
 
@@ -381,16 +397,17 @@ def Megaampere(value: Numeric) -> Current:
     return Current(to_exact(value) * MEGAAMPERE.scale, MEGAAMPERE)
 
 
-CURRENT_UNITS: Mapping[str, Callable[[Numeric], Current]] = MappingProxyType(
+CURRENT_UNITS: Mapping[str, Callable[[Numeric], Current]] = unit_table(
+    "CURRENT_UNITS",
     {
-        PICOAMPERE.symbol: Picoampere,
-        NANOAMPERE.symbol: Nanoampere,
-        MICROAMPERE.symbol: Microampere,
-        MILLIAMPERE.symbol: Milliampere,
-        AMPERE.symbol: Ampere,
-        KILOAMPERE.symbol: Kiloampere,
-        MEGAAMPERE.symbol: Megaampere,
-    }
+        PICOAMPERE: Picoampere,
+        NANOAMPERE: Nanoampere,
+        MICROAMPERE: Microampere,
+        MILLIAMPERE: Milliampere,
+        AMPERE: Ampere,
+        KILOAMPERE: Kiloampere,
+        MEGAAMPERE: Megaampere,
+    },
 )
 
 __all__ = [

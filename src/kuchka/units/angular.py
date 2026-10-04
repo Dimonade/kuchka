@@ -31,12 +31,12 @@ as a string from outside the application.
 from __future__ import annotations
 
 from fractions import Fraction
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import ANGLE
 from kuchka.internal import symbols
 from kuchka.internal.constants import PI
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import to_exact
 from kuchka.quantities import Angle
 from kuchka.quantities import UnitDef
@@ -48,11 +48,27 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
 
 
-TURN = UnitDef("turn", "tr", Fraction(1), ANGLE)
-DEGREE = UnitDef("degree", symbols.DEGREE, Fraction(1, 360), ANGLE)
-GRADIAN = UnitDef("gradian", "gon", Fraction(1, 400), ANGLE)
-ARCMINUTE = UnitDef("arcminute", symbols.PRIME, Fraction(1, 21600), ANGLE)
-ARCSECOND = UnitDef("arcsecond", symbols.DOUBLE_PRIME, Fraction(1, 1296000), ANGLE)
+TURN = UnitDef(
+    "turn", "tr", Fraction(1), ANGLE, aliases=("rev",), words=("revolution",)
+)
+DEGREE = UnitDef("degree", symbols.DEGREE, Fraction(1, 360), ANGLE, aliases=("deg",))
+GRADIAN = UnitDef("gradian", "gon", Fraction(1, 400), ANGLE, aliases=("grad",))
+ARCMINUTE = UnitDef(
+    "arcminute",
+    symbols.PRIME,
+    Fraction(1, 21600),
+    ANGLE,
+    aliases=("'", "arcmin"),
+    words=("arc minute", "minute of arc"),
+)
+ARCSECOND = UnitDef(
+    "arcsecond",
+    symbols.DOUBLE_PRIME,
+    Fraction(1, 1296000),
+    ANGLE,
+    aliases=('"', "''", f"{symbols.PRIME}{symbols.PRIME}", "arcsec"),
+    words=("arc second", "second of arc"),
+)
 RADIAN = UnitDef("radian", "rad", 1 / (2 * PI), ANGLE)
 
 Angle._canonical_unit = TURN  # noqa: SLF001 -- this module owns Angle's canonical unit
@@ -89,15 +105,16 @@ def ArcSecond(value: Numeric) -> Angle:
     return Angle(to_exact(value) * ARCSECOND.scale, ARCSECOND)
 
 
-ANGLE_UNITS: Mapping[str, Callable[[Numeric], Angle]] = MappingProxyType(
+ANGLE_UNITS: Mapping[str, Callable[[Numeric], Angle]] = unit_table(
+    "ANGLE_UNITS",
     {
-        TURN.symbol: Turn,
-        DEGREE.symbol: Degree,
-        RADIAN.symbol: Radian,
-        GRADIAN.symbol: Gradian,
-        ARCMINUTE.symbol: ArcMinute,
-        ARCSECOND.symbol: ArcSecond,
-    }
+        TURN: Turn,
+        DEGREE: Degree,
+        RADIAN: Radian,
+        GRADIAN: Gradian,
+        ARCMINUTE: ArcMinute,
+        ARCSECOND: ArcSecond,
+    },
 )
 
 __all__ = [

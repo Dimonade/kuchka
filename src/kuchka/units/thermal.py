@@ -90,10 +90,11 @@ from __future__ import annotations
 
 from decimal import Decimal
 from fractions import Fraction
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
+from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.internal import symbols
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import AffineUnitDef
@@ -105,10 +106,43 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
-from kuchka.dimensions import TEMPERATURE_DELTA
+
+def _degree_words(letter: str, name: str) -> tuple[str, ...]:
+    """Spoken forms of a temperature scale: `degC`, `degrees C`, `degree Celsius`.
+
+    Words are compared ignoring case, so one lower-case form of each is enough.
+    """
+    letter = letter.lower()
+    return (
+        f"{symbols.DEGREE}{letter}",
+        f"deg{letter}",
+        f"deg {letter}",
+        f"degree {letter}",
+        f"degrees {letter}",
+        f"degree {name}",
+        f"degrees {name}",
+    )
+
+
+def _delta_words(
+    letter: str, name: str, scale_words: tuple[str, ...]
+) -> tuple[str, ...]:
+    """Spoken forms of a temperature change: `delta C`, `delta degrees Celsius`."""
+    forms = (letter.lower(), name, *scale_words)
+    return (f"delta{letter.lower()}", *(f"delta {form}" for form in forms))
+
+
+_CELSIUS_WORDS = (*_degree_words("C", "celsius"), "celsius", "centigrade")
+_FAHRENHEIT_WORDS = _degree_words("F", "fahrenheit")
+_KELVIN_WORDS = _degree_words("K", "kelvin")
 
 DELTA_KELVIN = UnitDef(
-    "kelvin_delta", f"{symbols.DELTA}K", Decimal(1), TEMPERATURE_DELTA
+    "kelvin_delta",
+    f"{symbols.DELTA}K",
+    Decimal(1),
+    TEMPERATURE_DELTA,
+    aliases=("dK", "deltaK"),
+    words=_delta_words("K", "kelvin", _KELVIN_WORDS),
 )
 """A one-degree temperature change.
 
@@ -116,7 +150,12 @@ It is the same size in Celsius and Kelvin:
 only the absolute zero point differs, and a delta has no zero point.
 """
 DELTA_CELSIUS = UnitDef(
-    "celsius_delta", f"{symbols.DELTA}{symbols.DEGREE}C", Decimal(1), TEMPERATURE_DELTA
+    "celsius_delta",
+    f"{symbols.DELTA}{symbols.DEGREE}C",
+    Decimal(1),
+    TEMPERATURE_DELTA,
+    aliases=("dC", f"{symbols.DELTA}C", "deltaC"),
+    words=_delta_words("C", "celsius", _CELSIUS_WORDS),
 )
 
 DELTA_FAHRENHEIT = UnitDef(
@@ -124,6 +163,8 @@ DELTA_FAHRENHEIT = UnitDef(
     f"{symbols.DELTA}{symbols.DEGREE}F",
     Fraction(5, 9),
     TEMPERATURE_DELTA,
+    aliases=("dF", f"{symbols.DELTA}F", "deltaF"),
+    words=_delta_words("F", "fahrenheit", _FAHRENHEIT_WORDS),
 )
 """A one-degree Fahrenheit temperature change, exactly 5/9 of a kelvin."""
 
@@ -220,24 +261,41 @@ def DeltaFahrenheit(value: Numeric) -> TemperatureDelta:
 
 
 TEMPERATURE_DELTA_UNITS: Mapping[str, Callable[[Numeric], TemperatureDelta]] = (
-    MappingProxyType(
+    unit_table(
+        "TEMPERATURE_DELTA_UNITS",
         {
-            "dK": DeltaKelvin,
-            "dC": DeltaCelsius,
-            "dF": DeltaFahrenheit,
-        }
+            DELTA_KELVIN: DeltaKelvin,
+            DELTA_CELSIUS: DeltaCelsius,
+            DELTA_FAHRENHEIT: DeltaFahrenheit,
+        },
     )
 )
 
-KELVIN = AffineUnitDef("kelvin", "K", Decimal(1), Decimal(0))
+KELVIN = AffineUnitDef(
+    "kelvin",
+    "K",
+    Decimal(1),
+    Decimal(0),
+    aliases=(f"{symbols.DEGREE}K",),
+    words=_KELVIN_WORDS,
+)
 """Kelvin, the canonical temperature unit."""
-CELSIUS = AffineUnitDef("celsius", f"{symbols.DEGREE}C", Decimal(1), Decimal("273.15"))
+CELSIUS = AffineUnitDef(
+    "celsius",
+    f"{symbols.DEGREE}C",
+    Decimal(1),
+    Decimal("273.15"),
+    aliases=("C", f"{symbols.DEGREE} C"),
+    words=_CELSIUS_WORDS,
+)
 """Degrees Celsius: one degree is 1 K, and 0 °C is 273.15 K."""
 FAHRENHEIT = AffineUnitDef(
     "fahrenheit",
     f"{symbols.DEGREE}F",
     Fraction(5, 9),
     Fraction(45967, 100) * Fraction(5, 9),
+    aliases=("F", f"{symbols.DEGREE} F"),
+    words=_FAHRENHEIT_WORDS,
 )
 """Degrees Fahrenheit: one degree is 5/9 K, and 0 degF is 459.67 x 5/9 K."""
 
@@ -349,12 +407,13 @@ def Fahrenheit(value: Numeric) -> Temperature:
     )
 
 
-TEMPERATURE_UNITS: Mapping[str, Callable[[Numeric], Temperature]] = MappingProxyType(
+TEMPERATURE_UNITS: Mapping[str, Callable[[Numeric], Temperature]] = unit_table(
+    "TEMPERATURE_UNITS",
     {
-        "K": Kelvin,
-        "C": Celsius,
-        "F": Fahrenheit,
-    }
+        KELVIN: Kelvin,
+        CELSIUS: Celsius,
+        FAHRENHEIT: Fahrenheit,
+    },
 )
 
 __all__ = [

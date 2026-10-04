@@ -14,12 +14,12 @@ unit as a string from outside the application.
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import CHARGE
 from kuchka.internal import prefixes
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Charge
@@ -36,7 +36,14 @@ PICOCOULOMB = prefixed_unit(prefixes.PICO, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
 NANOCOULOMB = prefixed_unit(prefixes.NANO, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
 MICROCOULOMB = prefixed_unit(prefixes.MICRO, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
 MILLICOULOMB = prefixed_unit(prefixes.MILLI, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
-COULOMB = prefixed_unit(prefixes.UNIT, COULOMB_NAME, COULOMB_SYMBOL, CHARGE)
+COULOMB = prefixed_unit(
+    prefixes.UNIT,
+    COULOMB_NAME,
+    COULOMB_SYMBOL,
+    CHARGE,
+    aliases=("As", "A·s", "A*s"),
+    words=("ampere second", "ampere-second"),
+)
 
 Charge._canonical_unit = COULOMB  # noqa: SLF001 -- this module owns Charge's canonical unit
 
@@ -90,18 +97,18 @@ def AmpereHour(value: Numeric) -> Charge:
     return Charge(to_exact(value) * AMPERE_HOUR.scale, AMPERE_HOUR)
 
 
-CHARGE_UNITS: Mapping[str, Callable[[Numeric], Charge]] = MappingProxyType(
+CHARGE_UNITS: Mapping[str, Callable[[Numeric], Charge]] = unit_table(
+    "CHARGE_UNITS",
     {
-        PICOCOULOMB.symbol: Picocoulomb,
-        NANOCOULOMB.symbol: Nanocoulomb,
-        MICROCOULOMB.symbol: Microcoulomb,
-        MILLICOULOMB.symbol: Millicoulomb,
-        COULOMB.symbol: Coulomb,
-        "As": AmpereSecond,
-        MILLIAMPERE_SECOND.symbol: MilliampereSecond,
-        MILLIAMPERE_HOUR.symbol: MilliampereHour,
-        AMPERE_HOUR.symbol: AmpereHour,
-    }
+        PICOCOULOMB: Picocoulomb,
+        NANOCOULOMB: Nanocoulomb,
+        MICROCOULOMB: Microcoulomb,
+        MILLICOULOMB: Millicoulomb,
+        COULOMB: Coulomb,
+        MILLIAMPERE_SECOND: MilliampereSecond,
+        MILLIAMPERE_HOUR: MilliampereHour,
+        AMPERE_HOUR: AmpereHour,
+    },
 )
 
 __all__ = [

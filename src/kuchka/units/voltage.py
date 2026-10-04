@@ -115,12 +115,12 @@ See Also
 
 from __future__ import annotations
 
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import VOLTAGE
 from kuchka.internal import prefixes
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Voltage
@@ -378,16 +378,17 @@ def Petavolt(value: Numeric) -> Voltage:
     return Voltage(to_exact(value) * PETAVOLT.scale, PETAVOLT)
 
 
-VOLTAGE_UNITS: Mapping[str, Callable[[Numeric], Voltage]] = MappingProxyType(
+VOLTAGE_UNITS: Mapping[str, Callable[[Numeric], Voltage]] = unit_table(
+    "VOLTAGE_UNITS",
     {
-        NANOVOLT.symbol: Nanovolt,
-        MICROVOLT.symbol: Microvolt,
-        MILLIVOLT.symbol: Millivolt,
-        VOLT.symbol: Volt,
-        KILOVOLT.symbol: Kilovolt,
-        MEGAVOLT.symbol: Megavolt,
-        PETAVOLT.symbol: Petavolt,
-    }
+        NANOVOLT: Nanovolt,
+        MICROVOLT: Microvolt,
+        MILLIVOLT: Millivolt,
+        VOLT: Volt,
+        KILOVOLT: Kilovolt,
+        MEGAVOLT: Megavolt,
+        PETAVOLT: Petavolt,
+    },
 )
 
 __all__ = [

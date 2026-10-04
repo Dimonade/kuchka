@@ -13,12 +13,12 @@ reads a unit as a string from outside the application.
 
 from __future__ import annotations
 
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import AMOUNT_OF_SUBSTANCE
 from kuchka.internal import prefixes
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import AmountOfSubstance
@@ -54,12 +54,13 @@ def Mole(value: Numeric) -> AmountOfSubstance:
 
 
 AMOUNT_OF_SUBSTANCE_UNITS: Mapping[str, Callable[[Numeric], AmountOfSubstance]] = (
-    MappingProxyType(
+    unit_table(
+        "AMOUNT_OF_SUBSTANCE_UNITS",
         {
-            MICROMOLE.symbol: Micromole,
-            MILLIMOLE.symbol: Millimole,
-            MOLE.symbol: Mole,
-        }
+            MICROMOLE: Micromole,
+            MILLIMOLE: Millimole,
+            MOLE: Mole,
+        },
     )
 )
 

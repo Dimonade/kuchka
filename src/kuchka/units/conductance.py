@@ -118,12 +118,12 @@ See Also
 
 from __future__ import annotations
 
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import CONDUCTANCE
 from kuchka.internal import prefixes
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Conductance
@@ -134,12 +134,24 @@ if TYPE_CHECKING:
 
 SIEMENS_NAME = "siemens"
 SIEMENS_SYMBOL = "S"
+SIEMENS_WORDS = ("mho",)
+"""The older name, which prefixed names follow: `millimho`."""
 
-NANOSIEMENS = prefixed_unit(prefixes.NANO, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE)
-MICROSIEMENS = prefixed_unit(prefixes.MICRO, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE)
-MILLISIEMENS = prefixed_unit(prefixes.MILLI, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE)
-SIEMENS = prefixed_unit(prefixes.UNIT, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE)
-KILOSIEMENS = prefixed_unit(prefixes.KILO, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE)
+NANOSIEMENS = prefixed_unit(
+    prefixes.NANO, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE, base_words=SIEMENS_WORDS
+)
+MICROSIEMENS = prefixed_unit(
+    prefixes.MICRO, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE, base_words=SIEMENS_WORDS
+)
+MILLISIEMENS = prefixed_unit(
+    prefixes.MILLI, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE, base_words=SIEMENS_WORDS
+)
+SIEMENS = prefixed_unit(
+    prefixes.UNIT, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE, base_words=SIEMENS_WORDS
+)
+KILOSIEMENS = prefixed_unit(
+    prefixes.KILO, SIEMENS_NAME, SIEMENS_SYMBOL, CONDUCTANCE, base_words=SIEMENS_WORDS
+)
 
 
 Conductance._canonical_unit = SIEMENS  # noqa: SLF001 -- this module owns Conductance's canonical unit
@@ -306,14 +318,15 @@ def Kilosiemens(value: Numeric) -> Conductance:
     return Conductance(to_exact(value) * KILOSIEMENS.scale, KILOSIEMENS)
 
 
-CONDUCTANCE_UNITS: Mapping[str, Callable[[Numeric], Conductance]] = MappingProxyType(
+CONDUCTANCE_UNITS: Mapping[str, Callable[[Numeric], Conductance]] = unit_table(
+    "CONDUCTANCE_UNITS",
     {
-        NANOSIEMENS.symbol: Nanosiemens,
-        MICROSIEMENS.symbol: Microsiemens,
-        MILLISIEMENS.symbol: Millisiemens,
-        SIEMENS.symbol: Siemens,
-        KILOSIEMENS.symbol: Kilosiemens,
-    }
+        NANOSIEMENS: Nanosiemens,
+        MICROSIEMENS: Microsiemens,
+        MILLISIEMENS: Millisiemens,
+        SIEMENS: Siemens,
+        KILOSIEMENS: Kilosiemens,
+    },
 )
 
 __all__ = [

@@ -177,13 +177,14 @@ See Also
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import AREA
 from kuchka.internal import prefixes
 from kuchka.internal import symbols
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.spelling import powered
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Area
@@ -207,21 +208,32 @@ SQUARE_MILLIMETRE = UnitDef(
     f"mm{symbols.SUPERSCRIPT_TWO}",
     prefixes.MILLI.factor * prefixes.MILLI.factor,
     AREA,
+    aliases=powered("mm", 2),
+    words=("sq mm", "square millimeter"),
 )
 SQUARE_CENTIMETRE = UnitDef(
     "square_centimetre",
     f"cm{symbols.SUPERSCRIPT_TWO}",
     prefixes.CENTI.factor * prefixes.CENTI.factor,
     AREA,
+    aliases=powered("cm", 2),
+    words=("sq cm", "square centimeter"),
 )
 SQUARE_METRE = prefixed_unit(
-    prefixes.UNIT, SQUARE_METRE_NAME, SQUARE_METRE_SYMBOL, AREA
+    prefixes.UNIT,
+    SQUARE_METRE_NAME,
+    SQUARE_METRE_SYMBOL,
+    AREA,
+    aliases=powered("m", 2),
+    words=("sq m", "square meter"),
 )
 SQUARE_KILOMETRE = UnitDef(
     "square_kilometre",
     f"km{symbols.SUPERSCRIPT_TWO}",
     prefixes.KILO.factor * prefixes.KILO.factor,
     AREA,
+    aliases=powered("km", 2),
+    words=("sq km", "square kilometer"),
 )
 
 SQUARE_MILLIMETER = SQUARE_MILLIMETRE
@@ -361,7 +373,12 @@ SquareKilometer = SquareKilometre
 HECTARE = UnitDef("hectare", "ha", Decimal(10_000), AREA)
 ACRE = UnitDef("acre", "ac", Decimal("4046.8564224"), AREA)
 SQUARE_INCH = UnitDef(
-    "square_inch", f"in{symbols.SUPERSCRIPT_TWO}", Decimal("0.00064516"), AREA
+    "square_inch",
+    f"in{symbols.SUPERSCRIPT_TWO}",
+    Decimal("0.00064516"),
+    AREA,
+    aliases=powered("in", 2),
+    words=("sq in",),
 )
 
 
@@ -464,16 +481,17 @@ def SquareInch(value: Numeric) -> Area:
     return Area(to_exact(value) * SQUARE_INCH.scale, SQUARE_INCH)
 
 
-AREA_UNITS: Mapping[str, Callable[[Numeric], Area]] = MappingProxyType(
+AREA_UNITS: Mapping[str, Callable[[Numeric], Area]] = unit_table(
+    "AREA_UNITS",
     {
-        SQUARE_MILLIMETRE.symbol: SquareMillimetre,
-        SQUARE_CENTIMETRE.symbol: SquareCentimetre,
-        SQUARE_METRE.symbol: SquareMetre,
-        SQUARE_KILOMETRE.symbol: SquareKilometre,
-        HECTARE.symbol: Hectare,
-        ACRE.symbol: Acre,
-        SQUARE_INCH.symbol: SquareInch,
-    }
+        SQUARE_MILLIMETRE: SquareMillimetre,
+        SQUARE_CENTIMETRE: SquareCentimetre,
+        SQUARE_METRE: SquareMetre,
+        SQUARE_KILOMETRE: SquareKilometre,
+        HECTARE: Hectare,
+        ACRE: Acre,
+        SQUARE_INCH: SquareInch,
+    },
 )
 
 __all__ = [

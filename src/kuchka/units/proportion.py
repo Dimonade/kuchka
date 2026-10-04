@@ -14,10 +14,10 @@ ISO 80000 denotes the coherent unit for a dimensionless quantity as `"1"`;
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import DIMENSIONLESS
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Proportion
@@ -28,8 +28,14 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
 RATIO = UnitDef("ratio", "1", Decimal(1), DIMENSIONLESS)
-PERCENT = UnitDef("percent", "%", Decimal("0.01"), DIMENSIONLESS)
-
+PERCENT = UnitDef(
+    "percent",
+    "%",
+    Decimal("0.01"),
+    DIMENSIONLESS,
+    aliases=("pct",),
+    words=("per cent",),
+)
 Proportion._canonical_unit = RATIO  # noqa: SLF001 -- this module owns Proportion's canonical unit
 
 
@@ -43,11 +49,12 @@ def Percent(value: Numeric) -> Proportion:
     return Proportion(to_exact(value) * PERCENT.scale, PERCENT)
 
 
-PROPORTION_UNITS: Mapping[str, Callable[[Numeric], Proportion]] = MappingProxyType(
+PROPORTION_UNITS: Mapping[str, Callable[[Numeric], Proportion]] = unit_table(
+    "PROPORTION_UNITS",
     {
-        RATIO.symbol: Ratio,
-        PERCENT.symbol: Percent,
-    }
+        RATIO: Ratio,
+        PERCENT: Percent,
+    },
 )
 
 __all__ = [

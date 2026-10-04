@@ -20,10 +20,10 @@ application.
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LUMINOUS_INTENSITY
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import LuminousIntensity
@@ -69,10 +69,11 @@ def Candela(value: Numeric) -> LuminousIntensity:
 
 
 LUMINOUS_INTENSITY_UNITS: Mapping[str, Callable[[Numeric], LuminousIntensity]] = (
-    MappingProxyType(
+    unit_table(
+        "LUMINOUS_INTENSITY_UNITS",
         {
-            CANDELA.symbol: Candela,
-        }
+            CANDELA: Candela,
+        },
     )
 )
 """Mappings from unit symbols to their constructors."""
