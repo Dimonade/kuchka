@@ -154,6 +154,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import ACCELERATION
 from kuchka.internal import symbols
+from kuchka.internal.spelling import powered
 from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
@@ -170,6 +171,12 @@ METRE_PER_SECOND_SQUARED = UnitDef(
     f"m/s{symbols.SUPERSCRIPT_TWO}",
     Decimal(1),
     ACCELERATION,
+    aliases=powered("m/s", 2),
+    words=(
+        "meter per second squared",
+        "meters per second squared",
+        "metres per second squared",
+    ),
 )
 
 METER_PER_SECOND_SQUARED = METRE_PER_SECOND_SQUARED
@@ -212,9 +219,15 @@ MeterPerSecondSquared = MetrePerSecondSquared
 # Non-SI.
 
 GAL = UnitDef("gal", "Gal", Decimal("0.01"), ACCELERATION)
-MILLIGAL = UnitDef("milligal", "mGal", Decimal("0.00001"), ACCELERATION)
+MILLIGAL = UnitDef(
+    "milligal", "mGal", Decimal("0.00001"), ACCELERATION, aliases=("mgal",)
+)
 MICROGAL = UnitDef(
-    "microgal", f"{symbols.MICRO}Gal", Decimal("0.00000001"), ACCELERATION
+    "microgal",
+    f"{symbols.MICRO}Gal",
+    Decimal("0.00000001"),
+    ACCELERATION,
+    aliases=("uGal", "ugal", f"{symbols.MICRO}gal"),
 )
 
 
@@ -299,10 +312,10 @@ def Microgal(value: Numeric) -> Acceleration:
 ACCELERATION_UNITS: Mapping[str, Callable[[Numeric], Acceleration]] = unit_table(
     "ACCELERATION_UNITS",
     {
-        METRE_PER_SECOND_SQUARED.symbol: MetrePerSecondSquared,
-        GAL.symbol: Gal,
-        MILLIGAL.symbol: Milligal,
-        MICROGAL.symbol: Microgal,
+        METRE_PER_SECOND_SQUARED: MetrePerSecondSquared,
+        GAL: Gal,
+        MILLIGAL: Milligal,
+        MICROGAL: Microgal,
     },
 )
 

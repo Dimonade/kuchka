@@ -33,13 +33,20 @@ if TYPE_CHECKING:
 
 
 METRE_PER_SECOND = UnitDef(
-    "metre_per_second", "m/s", Decimal(1), VELOCITY, aliases=("mps", "m/sec")
+    "metre_per_second",
+    "m/s",
+    Decimal(1),
+    VELOCITY,
+    aliases=("mps", "m/sec"),
+    words=("meter per second", "meters per second", "metres per second"),
 )
 KILOMETRE_PER_HOUR = UnitDef(
     "kilometre_per_hour",
     "km/h",
     Fraction(1000, 3600),
     VELOCITY,
+    aliases=("kph", "kmh", "kmph", "km/hr"),
+    words=("kilometer per hour", "kilometers per hour", "kilometres per hour"),
 )
 
 METER_PER_SECOND = METRE_PER_SECOND
@@ -70,7 +77,14 @@ KilometerPerHour = KilometrePerHour
 
 # Mile per hour.
 
-MILE_PER_HOUR = UnitDef("mile_per_hour", "mph", Decimal("0.44704"), VELOCITY)
+MILE_PER_HOUR = UnitDef(
+    "mile_per_hour",
+    "mph",
+    Decimal("0.44704"),
+    VELOCITY,
+    aliases=("mi/h", "mi/hr"),
+    words=("miles per hour",),
+)
 
 
 def MilePerHour(value: Numeric) -> Velocity:
@@ -85,9 +99,9 @@ def MilePerHour(value: Numeric) -> Velocity:
 VELOCITY_UNITS: Mapping[str, Callable[[Numeric], Velocity]] = unit_table(
     "VELOCITY_UNITS",
     {
-        METRE_PER_SECOND.symbol: MetrePerSecond,
-        KILOMETRE_PER_HOUR.symbol: KilometrePerHour,
-        MILE_PER_HOUR.symbol: MilePerHour,
+        METRE_PER_SECOND: MetrePerSecond,
+        KILOMETRE_PER_HOUR: KilometrePerHour,
+        MILE_PER_HOUR: MilePerHour,
     },
 )
 

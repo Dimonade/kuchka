@@ -211,6 +211,7 @@ See Also
 from __future__ import annotations
 
 from decimal import Decimal
+from fractions import Fraction
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import TIME
@@ -438,10 +439,12 @@ def Second(value: Numeric) -> Time:
 
 MINUTE = UnitDef("minute", "min", Decimal(60), TIME, aliases=("mins",))
 HOUR = UnitDef("hour", "h", Decimal(3600), TIME, aliases=("hr", "hrs"))
-DAY = UnitDef("day", "d", Decimal(86_400), TIME)
-WEEK = UnitDef("week", "wk", Decimal(604_800), TIME)
+DAY = UnitDef("day", "d", Decimal(86_400), TIME, aliases=("dy",))
+WEEK = UnitDef("week", "wk", Decimal(604_800), TIME, aliases=("wks",))
 FORTNIGHT = UnitDef("fortnight", "fortnight", Decimal(1_209_600), TIME)
-JULIAN_YEAR = UnitDef("julian_year", "a", Decimal(31_557_600), TIME)
+JULIAN_YEAR = UnitDef(
+    "julian_year", "a", Decimal(31_557_600), TIME, aliases=("yr", "yrs")
+)
 
 
 def Minute(value: Numeric) -> Time:
@@ -627,6 +630,7 @@ JIFFY = UnitDef(
     "jiffy",
     Fraction(1, 299_792_458_000_000_000_000_000),
     TIME,
+    words=("jiffies",),
 )
 
 
@@ -668,22 +672,22 @@ def Jiffy(value: Numeric) -> Time:
     return Time(to_exact(value) * JIFFY.scale, JIFFY)
 
 
-TIME_UNITS: Mapping[str, Callable[[Numeric], Time]] = unit_table(
+TIME_UNITS: UnitTable[Time] = unit_table(
     "TIME_UNITS",
     {
-        FEMTOSECOND.symbol: Femtosecond,
-        PICOSECOND.symbol: Picosecond,
-        NANOSECOND.symbol: Nanosecond,
-        MICROSECOND.symbol: Microsecond,
-        MILLISECOND.symbol: Millisecond,
-        SECOND.symbol: Second,
-        MINUTE.symbol: Minute,
-        HOUR.symbol: Hour,
-        DAY.symbol: Day,
-        WEEK.symbol: Week,
-        FORTNIGHT.symbol: Fortnight,
-        JULIAN_YEAR.symbol: JulianYear,
-        JIFFY.symbol: Jiffy,
+        FEMTOSECOND: Femtosecond,
+        PICOSECOND: Picosecond,
+        NANOSECOND: Nanosecond,
+        MICROSECOND: Microsecond,
+        MILLISECOND: Millisecond,
+        SECOND: Second,
+        MINUTE: Minute,
+        HOUR: Hour,
+        DAY: Day,
+        WEEK: Week,
+        FORTNIGHT: Fortnight,
+        JULIAN_YEAR: JulianYear,
+        JIFFY: Jiffy,
     },
 )
 
