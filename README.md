@@ -406,7 +406,7 @@ The complete unit vocabulary is available in the API reference.
 | Resistance  | `Microohm`, through `Gigaohm`                                                                                      |
 | Conductance | `Nanosiemens` through `Kilosiemens`                                                                                |
 | Charge      | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                              |
-| Energy      | `Picojoule` through `Terajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour` |
+| Energy      | `Picojoule` through `Petajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour` |
 |             | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                             |
 
 ### Time and signals

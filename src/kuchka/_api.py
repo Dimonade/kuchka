@@ -204,6 +204,7 @@ from kuchka.units import Pascal
 from kuchka.units import Percent
 from kuchka.units import Petaelectronvolt
 from kuchka.units import Petahertz
+from kuchka.units import Petajoule
 from kuchka.units import Petavolt
 from kuchka.units import Petawatt
 from kuchka.units import Picoampere
@@ -434,6 +435,7 @@ __all__ = [
     "Percent",
     "Petaelectronvolt",
     "Petahertz",
+    "Petajoule",
     "Petavolt",
     "Petawatt",
     "Picoampere",

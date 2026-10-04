@@ -706,6 +706,14 @@ PREFIX_CASES: list[PrefixCase] = [
         energy.JOULE,
     ),
     PrefixCase(
+        "Petajoule",
+        energy.Petajoule,
+        energy.Joule,
+        Decimal(1_000_000_000_000_000),
+        energy.PETAJOULE,
+        energy.JOULE,
+    ),
+    PrefixCase(
         "Microelectronvolt",
         energy.Microelectronvolt,
         energy.Joule,

@@ -243,6 +243,7 @@ TABLE_CASES = [
             "MJ": energy.Megajoule,
             "GJ": energy.Gigajoule,
             "TJ": energy.Terajoule,
+            "PJ": energy.Petajoule,
             f"{symbols.MICRO}eV": energy.Microelectronvolt,
             "meV": energy.Millielectronvolt,
             "eV": energy.Electronvolt,

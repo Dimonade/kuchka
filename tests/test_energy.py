@@ -18,8 +18,10 @@ from kuchka import Joule
 from kuchka import Kilocalorie
 from kuchka import Kiloelectronvolt
 from kuchka import Kilojoule
+from kuchka import KilotonneOfTNT
 from kuchka import Megaelectronvolt
 from kuchka import Megajoule
+from kuchka import MegatonneOfTNT
 from kuchka import Microelectronvolt
 from kuchka import Microjoule
 from kuchka import Millijoule
@@ -32,6 +34,7 @@ from kuchka import Teraelectronvolt
 from kuchka import Terajoule
 from kuchka import ThermochemicalCalorie
 from kuchka import Time
+from kuchka import TonneOfTNT
 from kuchka import Watt
 from kuchka.units import Millielectronvolt
 
@@ -119,12 +122,12 @@ def test_gigajoule_and_terajoule_scale_correctly():
 
 
 def test_tonne_of_tnt_converts_to_joules_exactly() -> None:
-    assert energy.TonneOfTNT(1) == energy.Joule(Decimal("4184000000"))
+    assert TonneOfTNT(1) == Joule(Decimal(4184000000))
 
 
 def test_kilotonne_of_tnt_converts_to_joules_exactly() -> None:
-    assert energy.KilotonneOfTNT(1) == energy.Joule(Decimal("4184000000000"))
+    assert KilotonneOfTNT(1) == Joule(Decimal(4184000000000))
 
 
 def test_megatonne_of_tnt_converts_to_joules_exactly() -> None:
-    assert energy.MegatonneOfTNT(1) == energy.Joule(Decimal("4184000000000000"))
+    assert MegatonneOfTNT(1) == Joule(Decimal(4184000000000000))

@@ -24,7 +24,7 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Force: `KilogramForce`, `Meganewton`, `Micronewton`,.
 - Acceleration: `Gal`, `Milligal`, and `Microgal`.
 - Length: `AstronomicalUnit` and `LightYear`.
-- Energy: `KilowattHour`, `TonneOfTNT`, `KilotonneOfTNT`, and `MegatonneOfTNT`.
+- Energy: `Petajoule`, `KilowattHour`, `TonneOfTNT`, `KilotonneOfTNT`, and `MegatonneOfTNT`.
 
 #### `is_close` compares with an explicit tolerance
 
