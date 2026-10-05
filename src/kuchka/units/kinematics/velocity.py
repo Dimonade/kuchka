@@ -8,7 +8,13 @@ The SI coherent unit is the metre per second.
 
 This module also provides kilometres per hour and miles per hour for terrestrial
 transport, and the knot for navigation and aviation.
-All conversions implemented here are exact.
+
+The different units suit different physical contexts:
+
+* metres per second are canonical in physics and engineering;
+* kilometres per hour are conventional for road vehicles and rail transport;
+* miles per hour remain common in road transport and some aviation contexts;
+* knots are conventional in navigation, shipping, and aviation.
 
 Examples
 --------
@@ -39,6 +45,13 @@ The conversion is exact because the international mile is exactly 1609.344 metre
 >>> highway_speed.to(METRE_PER_SECOND)
 26.8224 m/s
 
+A low-Earth-orbit spacecraft travels at roughly 7.66 km/s.
+Expressed in the canonical unit and then reported on a terrestrial scale:
+
+>>> orbital_velocity = MetrePerSecond(7660)
+>>> orbital_velocity.to(KILOMETRE_PER_HOUR)
+27576 km/h
+
 The knot is defined from the international nautical mile.
 One knot is exactly one nautical mile per hour, or 1852/3600 m/s:
 
@@ -50,6 +63,20 @@ A vessel travelling at 20 knots therefore moves at exactly:
 
 >>> Knot(20).to(METRE_PER_SECOND)  # doctest: +ELLIPSIS
 10.288... m/s
+
+Velocity differences are also handled directly across unit systems.
+A test aircraft increases its speed from 250 knots to 300 knots:
+
+>>> initial_speed = Knot(250)
+>>> final_speed = Knot(300)
+>>> increase = final_speed - initial_speed
+>>> increase
+50 kn
+
+That increase is exactly 92.6 km/h:
+
+>>> increase.to(KILOMETRE_PER_HOUR)
+92.6 km/h
 
 Velocity also connects directly to distance and time.
 At 10 m/s, an object travels 600 metres in one minute:
@@ -110,6 +137,12 @@ their constructors for boundary code that receives units as external data.
 
 Notes
 -----
+Velocity is represented here as a scalar quantity.
+The library does not attach direction to a `Velocity` value.
+_NOTE: At least for now._
+A value such as ``30 m/s`` therefore describes a speed, while direction of motion must
+be represented separately.
+
 The SI coherent unit is
 
     1 m/s
@@ -200,14 +233,56 @@ Velocity._canonical_unit = METRE_PER_SECOND  # noqa: SLF001 -- this module owns 
 
 
 def MetrePerSecond(value: Numeric) -> Velocity:
-    """Construct a Velocity from a magnitude expressed in metres per second."""
+    """Construct a Velocity from a magnitude expressed in metres per second.
+
+    Parameters
+    ----------
+    value : Numeric
+        Velocity magnitude in metres per second.
+
+    Returns
+    -------
+    Velocity
+        Velocity represented in metres per second.
+
+    Examples
+    --------
+    A low-Earth-orbit spacecraft moving at 7.66 km/s has a velocity of 7660 m/s:
+
+    >>> orbital_velocity = MetrePerSecond(7660)
+    >>> orbital_velocity.to(KILOMETRE_PER_HOUR)
+    27576 km/h
+
+    """
     return Velocity(to_exact(value) * METRE_PER_SECOND.scale, METRE_PER_SECOND)
 
 
 def KilometrePerHour(value: Numeric) -> Velocity:
     """Construct a Velocity from a magnitude expressed in kilometres per hour.
 
-    Exact: `1000 / 3600` is stored as the `Fraction` `5/18`.
+    Parameters
+    ----------
+    value : Numeric
+        Velocity magnitude in kilometres per hour.
+
+    Returns
+    -------
+    Velocity
+        Velocity represented in kilometres per hour.
+
+    Examples
+    --------
+    A test vehicle completes a 3 km straight-line run in exactly two minutes at
+    90 km/h:
+
+    >>> from kuchka import Minute
+    >>> from kuchka.units import KILOMETRE
+    >>> speed = KilometrePerHour(90)
+    >>> elapsed = Minute(2)
+    >>> distance = speed * elapsed
+    >>> distance.to(KILOMETRE)
+    3 km
+
     """
     return Velocity(to_exact(value) * KILOMETRE_PER_HOUR.scale, KILOMETRE_PER_HOUR)
 
@@ -234,8 +309,24 @@ MILE_PER_HOUR = UnitDef(
 def MilePerHour(value: Numeric) -> Velocity:
     """Construct a Velocity from a magnitude expressed in miles per hour.
 
-    Exact: a mile has been exactly `1609.344` m, so a mile per hour is exactly
-    `0.44704` m/s.
+    Parameters
+    ----------
+    value : Numeric
+        Velocity magnitude in miles per hour.
+
+    Returns
+    -------
+    Velocity
+        Velocity represented in miles per hour.
+
+    Examples
+    --------
+    A 60 mph wind is equivalent to 96.56064 km/h:
+
+    >>> wind_speed = MilePerHour(60)
+    >>> wind_speed.to(KILOMETRE_PER_HOUR)
+    96.56064 km/h
+
     """
     return Velocity(to_exact(value) * MILE_PER_HOUR.scale, MILE_PER_HOUR)
 
@@ -265,10 +356,19 @@ def Knot(value: Numeric) -> Velocity:
 
     Examples
     --------
-    A vessel travelling at 20 knots has a velocity of exactly 926/90 m/s:
+    A research vessel increases speed from 18 knots to 24 knots while leaving
+    harbour:
 
-    >>> Knot(20).to(METRE_PER_SECOND)  # doctest: +ELLIPSIS
-    10.288... m/s
+    >>> harbour_speed = Knot(18)
+    >>> sea_speed = Knot(24)
+    >>> increase = sea_speed - harbour_speed
+    >>> increase
+    6 kn
+
+    The increase is exactly 11.112 km/h:
+
+    >>> increase.to(KILOMETRE_PER_HOUR)
+    11.112 km/h
 
     """
     return Velocity(to_exact(value) * KNOT.scale, KNOT)
