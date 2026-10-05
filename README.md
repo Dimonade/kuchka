@@ -443,7 +443,7 @@ The complete unit vocabulary is available in the API reference.
 | Length       | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit` and `LightYear` |
 | Area         | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                            |
 | Volume       | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                   |
-| Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`                                                        |
+| Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`, `Knot`                                                |
 | Acceleration | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                          |
 | Mass         | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                             |
 | Force        | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                              |

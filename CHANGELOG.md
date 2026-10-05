@@ -25,6 +25,7 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Acceleration: `Gal`, `Milligal`, and `Microgal`.
 - Length: `AstronomicalUnit` and `LightYear`.
 - Energy: `Petajoule`, `KilowattHour`, `TonneOfTNT`, `KilotonneOfTNT`, and `MegatonneOfTNT`.
+- Velocity: `Knot`.
 
 #### Unit tables accept the notations real files use
 
