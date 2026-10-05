@@ -91,7 +91,6 @@ A 12 V circuit carrying 2 A therefore transfers power at exactly 24 W:
 
 >>> from kuchka.units.voltage import Volt
 >>> from kuchka.units.current import Ampere
->>>
 >>> supply_voltage = Volt(12)
 >>> supply_current = Ampere(2)
 >>> supply_voltage * supply_current
@@ -171,7 +170,6 @@ Power can also be understood through time.
 If an ideal 100 W load runs for ten seconds, it transfers exactly 1000 J of energy:
 
 >>> from kuchka import Second
->>>
 >>> energy = Watt(100) * Second(10)
 >>> energy
 1000 J

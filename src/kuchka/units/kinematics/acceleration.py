@@ -23,7 +23,6 @@ Acceleration becomes useful immediately when combined with time.
 A vehicle accelerating at 3 m/s² gains 3 m/s of velocity every second:
 
 >>> from kuchka import Second
->>>
 >>> acceleration = MetrePerSecondSquared(3)
 >>> acceleration * Second(1)
 3 m/s
@@ -37,7 +36,6 @@ Acceleration also determines how long a uniformly braking vehicle takes to stop.
 Starting at 90 km/h and decelerating at exactly 5 m/s²:
 
 >>> from kuchka import KilometrePerHour
->>>
 >>> initial_speed = KilometrePerHour(90)
 >>> braking = MetrePerSecondSquared(-5)
 >>> stopping_time = -initial_speed / braking
@@ -57,7 +55,6 @@ A 1500 kg vehicle subjected to a 3 kN net force accelerates at exactly 2 m/s²:
 
 >>> from kuchka import Kilogram
 >>> from kuchka import Kilonewton
->>>
 >>> net_force = Kilonewton(3)
 >>> vehicle_mass = Kilogram(1500)
 >>> net_force / vehicle_mass
@@ -99,7 +96,6 @@ A spacecraft maintaining a constant 0.01 m/s² acceleration for one hour changes
 velocity by exactly 36 m/s:
 
 >>> from kuchka import Hour
->>>
 >>> low_thrust = MetrePerSecondSquared(Decimal("0.01"))
 >>> velocity_change = low_thrust * Hour(1)
 >>> velocity_change

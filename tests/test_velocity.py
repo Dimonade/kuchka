@@ -12,15 +12,18 @@ from fractions import Fraction
 
 from kuchka import Acceleration
 from kuchka import KilometrePerHour
+from kuchka import Knot
 from kuchka import Length
 from kuchka import Metre
 from kuchka import MetrePerSecond
 from kuchka import MetrePerSecondSquared
 from kuchka import MilePerHour
+from kuchka import Minute
 from kuchka import Second
 from kuchka import Time
 from kuchka import Velocity
 from kuchka.units import KILOMETRE_PER_HOUR
+from kuchka.units import METRE_PER_SECOND
 from kuchka.units import MILE_PER_HOUR
 from kuchka.units import KilometerPerHour
 
@@ -118,3 +121,24 @@ def test_isinstance_of_kilometre_per_hour_and_mile_per_hour():
 def test_ordering_between_kilometre_per_hour_and_mile_per_hour():
     """1 mph (0.44704 m/s) is faster than 1 km/h (~0.2778 m/s)."""
     assert MilePerHour(1) > KilometrePerHour(1)
+
+
+def test_knot_converts_exactly_to_metres_per_second() -> None:
+    assert Knot(1).to(METRE_PER_SECOND) == Velocity(
+        Fraction(463, 900),
+        METRE_PER_SECOND,
+    )
+
+
+def test_kilometres_per_hour_to_metres_per_second_is_exact() -> None:
+    assert KilometrePerHour(90).to(METRE_PER_SECOND) == (MetrePerSecond(Fraction(25)))
+
+
+def test_miles_per_hour_conversion_is_exact() -> None:
+    assert MilePerHour(60).to(METRE_PER_SECOND) == (MetrePerSecond(Decimal("26.8224")))
+
+
+def test_velocity_times_time_gives_length() -> None:
+    speed = MetrePerSecond(10)
+
+    assert speed * Minute(1) == Metre(600)

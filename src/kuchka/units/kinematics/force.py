@@ -16,7 +16,6 @@ Accelerating a 2 kg camera rig at 3 m/s² requires exactly 6 N:
 
 >>> from kuchka import Kilogram
 >>> from kuchka import MetrePerSecondSquared
->>>
 >>> mass = Kilogram(2)
 >>> acceleration = MetrePerSecondSquared(3)
 >>> force = mass * acceleration
@@ -34,7 +33,6 @@ A pressure of 100 kPa acting over 0.01 m² produces 1000 N:
 
 >>> from kuchka import Kilopascal
 >>> from kuchka import SquareMetre
->>>
 >>> pressure = Kilopascal(100)
 >>> area = SquareMetre(0.01)
 >>> pressure * area
@@ -227,7 +225,6 @@ def Newton(value: Numeric) -> Force:
 
     >>> from kuchka import Kilogram
     >>> from kuchka import MetrePerSecondSquared
-    >>>
     >>> mass = Kilogram(2)
     >>> acceleration = MetrePerSecondSquared(3)
     >>> mass * acceleration
