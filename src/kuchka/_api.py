@@ -122,6 +122,7 @@ from kuchka.units import Kilosiemens
 from kuchka.units import KilotonneOfTNT
 from kuchka.units import Kilovolt
 from kuchka.units import Kilowatt
+from kuchka.units import Knot
 from kuchka.units import LightYear
 from kuchka.units import Liter
 from kuchka.units import Litre
@@ -349,6 +350,7 @@ __all__ = [
     "KilotonneOfTNT",
     "Kilovolt",
     "Kilowatt",
+    "Knot",
     "Length",
     "LightYear",
     "Liter",

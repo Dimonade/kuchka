@@ -33,6 +33,7 @@ from kuchka.units import resistance
 from kuchka.units import sample_rate
 from kuchka.units import thermal
 from kuchka.units import time
+from kuchka.units import velocity
 from kuchka.units import voltage
 from kuchka.units import volume
 
@@ -317,6 +318,15 @@ TABLE_CASES = [
             "kgf": force.KilogramForce,
         },
     ),
+    (
+        velocity.VELOCITY_UNITS,
+        {
+            "m/s": velocity.MetrePerSecond,
+            "km/h": velocity.KilometrePerHour,
+            "mph": velocity.MilePerHour,
+            "kn": velocity.Knot,
+        },
+    ),
 ]
 
 TABLE_CASE_IDS = [
@@ -343,6 +353,7 @@ TABLE_CASE_IDS = [
     "conductance",
     "logarithmic_ratio",
     "force",
+    "velocity",
 ]
 
 
