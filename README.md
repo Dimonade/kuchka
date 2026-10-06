@@ -723,14 +723,15 @@ From `0.2.0` onward, `kuchka` follows ordinary semantic versioning: a minor rele
 ```bash
 uv sync
 
+uv run pytest --doctest-modules src/kuchka
 uv run pytest
 uv run mypy --strict src/kuchka
 uv run ty check src/kuchka tests
 uv run coverage run -m pytest && uv run coverage report
 ```
 
-`just ct` (or `just covtest`) runs the full testbench with coverage.
-`just check` runs `mypy --strict` and `ty` alone and gates `covtest` so a type error fails before the slower coverage run.
+`just test` runs the doctests and the test suite, `just check` runs the generated-API check, `ruff`, `mypy --strict`, and `ty`, and `just ct` (or `just covtest`) runs the full testbench with coverage after `check` passes, so a lint or type error fails before the slower run.
+`just tox` runs the doctests and the test suite on every supported Python version, plus a `lint` environment with the same checks as `just check`.
 
 `tests/test_typing.py` exercises negative typing fixtures under `--strict`.
 Ruff is configured with `select = ["ALL"]`; disabled rules in `pyproject.toml` carry inline explanations for why they do not fit the codebase.
