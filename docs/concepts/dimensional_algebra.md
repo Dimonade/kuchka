@@ -19,6 +19,13 @@ Area * Length       -> Volume
 1 / Time            -> Frequency
 ```
 
+## The registry is closed
+
+The set of named dimensions belongs to the library.
+Each quantity module registers its type while `kuchka` is imported, and the registry closes when that import finishes, so every arithmetic result is one of the library's own types and the same expression gives the same type in every program.
+The registration function is internal (`kuchka.quantities.base.registry._register`), and calling it after the import raises `RuntimeError`.
+A dimension has one registered type, the general SI name for it (`Frequency` for T⁻¹), and a second type that shares the dimension, such as `SampleRate`, is reached by constructing it explicitly.
+
 ## Type-checker support
 
 The runtime engine can derive arbitrary dimensions, but static type checkers cannot infer a semantic mapping such as `Voltage * Current -> Power` from exponent arithmetic alone.
