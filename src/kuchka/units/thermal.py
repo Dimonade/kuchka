@@ -300,6 +300,9 @@ FAHRENHEIT = AffineUnitDef(
 """Degrees Fahrenheit: one degree is 5/9 K, and 0 degF is 459.67 x 5/9 K."""
 
 
+Temperature._canonical_unit = KELVIN  # noqa: SLF001 -- this module owns Temperature's canonical unit
+
+
 def Kelvin(value: Numeric) -> Temperature:
     """Construct a temperature reading from a magnitude expressed in kelvin.
 
