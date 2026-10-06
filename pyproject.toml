@@ -8,9 +8,20 @@ requires-python = ">=3.11"
 dependencies = ['typing_extensions>=4.4; python_version < "3.12"']
 classifiers = [
   "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
 ]
 license = "Apache-2.0"
 
@@ -26,9 +37,11 @@ build-backend = "uv_build"
 [dependency-groups]
 test = ["coverage>=7.15.4", "hypothesis>=6.165.10", "pytest>=9.1.1"]
 
+typing = ["mypy>=2.3.1"]
+
 lint = [
+  { include-group = "typing" },
   "mccabe>=0.7.0",
-  "mypy>=2.3.1",
   "pylsp-mypy>=0.8.0",
   "python-lsp-server>=1.15.0",
   "ruff>=0.16.3",
@@ -152,11 +165,57 @@ force-single-line = true
 
 [tool.tox]
 requires = ["tox>=4.64"]
-env_list = ["3.11", "3.12", "3.13", "3.14", "3.15"]
+env_list = ["3.11", "3.12", "3.13", "3.14", "3.15", "lint"]
 
 [tool.tox.env_run_base]
-dependency_groups = ["test"]
-commands = [["pytest", "-q"]]
+description = "run the doctests and the test suite on Python {base_python}"
+# `typing` brings mypy in for the test that checks the static types agree with the runtime.
+dependency_groups = ["test", "typing"]
+commands = [
+  [
+    "pytest",
+    "-q",
+    "--doctest-modules",
+    "src/kuchka",
+  ],
+  [
+    "pytest",
+    "-q",
+  ],
+]
+
+[tool.tox.env.lint]
+description = "check the code standards: generated API, ruff, mypy, and ty"
+base_python = ["3.11"]
+dependency_groups = ["lint"]
+commands = [
+  [
+    "python",
+    "tools/generate_api.py",
+    "--check",
+  ],
+  [
+    "ruff",
+    "check",
+  ],
+  [
+    "ruff",
+    "format",
+    "--check",
+  ],
+  [
+    "mypy",
+    "--strict",
+    "--python-version",
+    "3.11",
+    "src/kuchka",
+  ],
+  [
+    "ty",
+    "check",
+    "src/kuchka",
+  ],
+]
 
 [tool.ty.rules]
 all = "warn"
