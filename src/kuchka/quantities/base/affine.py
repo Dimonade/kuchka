@@ -66,8 +66,8 @@ class AffineQuantity(
 
     A concrete subclass (`Temperature`) is parametrized with its own delta type
     (``class Temperature(AffineQuantity[TemperatureDelta])``) and assigns two class
-    attributes once, the same way a `LinearQuantity` subclass's owning unit module
-    assigns `_canonical_unit`:
+    attributes once, and its owning unit module assigns `_canonical_unit`, the unit
+    the magnitude is stored in, as for a `LinearQuantity` subclass:
 
     - `_delta_type`: the same type passed as the generic parameter, repeated as a
       plain `ClassVar` so the runtime methods below can construct and `isinstance`-
@@ -85,6 +85,7 @@ class AffineQuantity(
 
     dimension: ClassVar[Dimension]
     _delta_type: ClassVar[type[LinearQuantity]]
+    _canonical_unit: ClassVar[AffineUnitDef]
     _conversion_target_hint: ClassVar[str] = "a matching affine unit"
     _unit_type: ClassVar[type] = AffineUnitDef
     __slots__ = ()

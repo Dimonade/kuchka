@@ -35,9 +35,6 @@ from kuchka import Second
 from kuchka import UnrepresentableDimensionError
 from kuchka import Volt
 from kuchka import Week
-from kuchka.dimensions import FREQUENCY
-from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
 from kuchka.units import SECOND
 
 
@@ -165,19 +162,6 @@ def test_reciprocal_of_an_unregistered_result_dimension_raises():
 def test_naked_number_addition_is_rejected_for_temporal_types_too():
     with pytest.raises(InvalidMeasurementError, match="wrap it in a unit constructor"):
         Second(5) + 4.2  # type: ignore[operator]  # ty: ignore[unsupported-operator]
-
-
-def test_register_rejects_a_second_type_for_an_already_registered_dimension():
-    class RogueFrequency(LinearQuantity):
-        dimension = FREQUENCY
-
-    with pytest.raises(TypeError, match="already registered"):
-        register(FREQUENCY, RogueFrequency)
-
-
-def test_register_is_idempotent_for_the_same_type():
-    """Re-registering the exact same type for the same dimension is not an error."""
-    register(FREQUENCY, Frequency)  # should not raise
 
 
 @pytest.mark.parametrize(

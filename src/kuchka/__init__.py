@@ -31,11 +31,14 @@ from kuchka import errors
 from kuchka._api import *
 from kuchka.constants import codata_2022
 from kuchka.errors import *
+from kuchka.quantities.base.registry import _close
 
 try:
     __version__ = version("kuchka")
 except PackageNotFoundError:  # pragma: no cover -- running from an uninstalled checkout
     __version__ = "0.0.0+unknown"
+
+_close()
 
 __all__: list[str] = ["__version__", "codata_2022"]
 __all__ += _api.__all__

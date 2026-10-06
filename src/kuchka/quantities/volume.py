@@ -22,7 +22,7 @@ from typing import overload
 from kuchka.dimensions import VOLUME
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -41,6 +41,7 @@ class Volume(LinearQuantity):
     """A three-dimensional extent: how much space something occupies or holds."""
 
     dimension: ClassVar[Dimension] = VOLUME
+    __slots__ = ()
 
     @overload
     def __truediv__(self, other: Length) -> Area: ...
@@ -69,6 +70,6 @@ class Volume(LinearQuantity):
         return super().__mul__(other)
 
 
-register(VOLUME, Volume)
+_register(VOLUME, Volume)
 
 __all__ = ["Volume"]

@@ -47,13 +47,12 @@ from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities.base import AffineQuantity
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
 
     from kuchka.dimensions import Dimension
-    from kuchka.quantities.base import AffineUnitDef
     from kuchka.quantities.charge import Charge
     from kuchka.quantities.electrical import Current
     from kuchka.quantities.electrical import Power
@@ -67,6 +66,7 @@ class Time(LinearQuantity):
     """A span of time: a duration, a timeout, an interval between readings."""
 
     dimension: ClassVar[Dimension] = TIME
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Frequency) -> Fraction: ...
@@ -153,7 +153,6 @@ class Instant(AffineQuantity[Time]):
 
     dimension: ClassVar[Dimension] = TIME
     _delta_type: ClassVar[type[LinearQuantity]] = Time
-    _canonical_unit: ClassVar[AffineUnitDef]
     _conversion_target_hint: ClassVar[str] = "a matching affine instant unit"
     __slots__ = ()
 
@@ -162,6 +161,7 @@ class Frequency(LinearQuantity):
     """A rate of repetition: cycles per second, in the ordinary physics sense."""
 
     dimension: ClassVar[Dimension] = FREQUENCY
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Time) -> Fraction: ...
@@ -235,6 +235,7 @@ class SamplingPeriod(LinearQuantity):
     """
 
     dimension: ClassVar[Dimension] = TIME
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: SampleRate) -> Fraction: ...
@@ -285,6 +286,7 @@ class SampleRate(LinearQuantity):
     """
 
     dimension: ClassVar[Dimension] = FREQUENCY
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: SamplingPeriod) -> Fraction: ...
@@ -343,6 +345,7 @@ class BaudRate(LinearQuantity):
     """
 
     dimension: ClassVar[Dimension] = FREQUENCY
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Numeric) -> BaudRate: ...
@@ -363,8 +366,8 @@ class BaudRate(LinearQuantity):
         return super().__truediv__(other)
 
 
-register(TIME, Time)
-register(FREQUENCY, Frequency)
+_register(TIME, Time)
+_register(FREQUENCY, Frequency)
 
 __all__ = [
     "BaudRate",

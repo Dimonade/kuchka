@@ -36,7 +36,7 @@ from kuchka.dimensions import RESISTANCE
 from kuchka.dimensions import VOLTAGE
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -52,6 +52,7 @@ class Voltage(LinearQuantity):
     """An electric potential difference."""
 
     dimension: ClassVar[Dimension] = VOLTAGE
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Current) -> Power: ...
@@ -84,6 +85,7 @@ class Current(LinearQuantity):
     """An electric current."""
 
     dimension: ClassVar[Dimension] = CURRENT
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Voltage) -> Power: ...
@@ -118,6 +120,7 @@ class Power(LinearQuantity):
     """The rate at which electrical energy is transferred or dissipated."""
 
     dimension: ClassVar[Dimension] = POWER
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Time) -> Energy: ...
@@ -148,6 +151,7 @@ class Resistance(LinearQuantity):
     """The opposition a circuit element presents to current flow."""
 
     dimension: ClassVar[Dimension] = RESISTANCE
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Current) -> Voltage: ...
@@ -179,6 +183,7 @@ class Conductance(LinearQuantity):
     """How readily a circuit element passes current: the reciprocal of Resistance."""
 
     dimension: ClassVar[Dimension] = CONDUCTANCE
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Voltage) -> Current: ...
@@ -210,10 +215,10 @@ class Conductance(LinearQuantity):
         return super().__rtruediv__(other)
 
 
-register(VOLTAGE, Voltage)
-register(CURRENT, Current)
-register(POWER, Power)
-register(RESISTANCE, Resistance)
-register(CONDUCTANCE, Conductance)
+_register(VOLTAGE, Voltage)
+_register(CURRENT, Current)
+_register(POWER, Power)
+_register(RESISTANCE, Resistance)
+_register(CONDUCTANCE, Conductance)
 
 __all__ = ["Conductance", "Current", "Power", "Resistance", "Voltage"]

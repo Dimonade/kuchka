@@ -18,7 +18,7 @@ from typing import overload
 from kuchka.dimensions import PRESSURE
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -35,6 +35,7 @@ class Pressure(LinearQuantity):
     """Force per unit area: how concentrated a push or pull is over a surface."""
 
     dimension: ClassVar[Dimension] = PRESSURE
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Area) -> Force: ...
@@ -59,6 +60,6 @@ class Pressure(LinearQuantity):
         return super().__truediv__(other)
 
 
-register(PRESSURE, Pressure)
+_register(PRESSURE, Pressure)
 
 __all__ = ["Pressure"]

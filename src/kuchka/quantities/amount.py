@@ -7,7 +7,7 @@ from typing import ClassVar
 
 from kuchka.dimensions import AMOUNT_OF_SUBSTANCE
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
@@ -17,8 +17,9 @@ class AmountOfSubstance(LinearQuantity):
     """A count of elementary entities, expressed in moles."""
 
     dimension: ClassVar[Dimension] = AMOUNT_OF_SUBSTANCE
+    __slots__ = ()
 
 
-register(AMOUNT_OF_SUBSTANCE, AmountOfSubstance)
+_register(AMOUNT_OF_SUBSTANCE, AmountOfSubstance)
 
 __all__ = ["AmountOfSubstance"]

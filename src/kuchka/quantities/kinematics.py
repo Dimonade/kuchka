@@ -24,7 +24,7 @@ from kuchka.dimensions import FORCE
 from kuchka.dimensions import VELOCITY
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -43,6 +43,7 @@ class Velocity(LinearQuantity):
     """A rate of change of position: distance covered per unit time."""
 
     dimension: ClassVar[Dimension] = VELOCITY
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Time) -> Length: ...
@@ -75,6 +76,7 @@ class Acceleration(LinearQuantity):
     """A rate of change of velocity: how quickly speed or direction changes."""
 
     dimension: ClassVar[Dimension] = ACCELERATION
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Time) -> Velocity: ...
@@ -103,6 +105,7 @@ class Force(LinearQuantity):
     """A push or a pull: the interaction that changes a mass's motion."""
 
     dimension: ClassVar[Dimension] = FORCE
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Numeric) -> Force: ...
@@ -131,8 +134,8 @@ class Force(LinearQuantity):
         return super().__truediv__(other)
 
 
-register(VELOCITY, Velocity)
-register(ACCELERATION, Acceleration)
-register(FORCE, Force)
+_register(VELOCITY, Velocity)
+_register(ACCELERATION, Acceleration)
+_register(FORCE, Force)
 
 __all__ = ["Acceleration", "Force", "Velocity"]

@@ -26,9 +26,10 @@ _DIMENSION_REGISTRY: dict[Dimension, type[LinearQuantity]] = {}
 """Maps a dimension signature back to the named type that represents it, so that e.g.
 ``Volt(5) * Ampere(2)`` produces a real ``Power`` instance.
 
-Each quantity module populates this via ``register`` as a side effect of being
-imported, which is what lets new quantity types be added without this module knowing
-about them in advance.
+Each quantity module populates this via ``_register`` as a side effect of being
+imported, so this module needs no list of the types in advance.
+The registry is closed when the package finishes importing (see ``_close``): the named
+dimensions are part of the library, and arithmetic hands back the library's own types.
 
 NOTE: LOAD-BEARING RULE: at most one type may ever be registered per dimension, and it
 must always be the general SI/physics name for that dimension
@@ -39,7 +40,7 @@ This matters once more than one type can share a dimension:
 ``SampleRate`` and ``BaudRate`` are both T^-1, the same as ``Frequency``, but neither
 of them registers.
 They stay reachable only by explicit construction, exactly like ``Temperature`` --
-``register`` enforces this by refusing a second type for a dimension that already has
+``_register`` enforces this by refusing a second type for a dimension that already has
 one, rather than silently overwriting it.
 """
 
@@ -57,18 +58,26 @@ Emptied out as each named dimension gets a real registered type.
 """
 
 
-def register(dimension: Dimension, quantity_type: type[LinearQuantity]) -> None:
+_closed = False
+
+
+def _register(dimension: Dimension, quantity_type: type[LinearQuantity]) -> None:
     """Associate a dimension signature with the type that represents it.
 
     Called once per quantity type, at import time, by the module that defines that type.
 
-    Application code never needs to call this directly.
-
-    Raises `TypeError` if another type already claimed this dimension:
-    this is a defect in kuchka's own quantity modules, not something a caller of the
-    public API can trigger, so it is not part of the `MeasurementError` hierarchy that
+    Raises `TypeError` if another type already claimed this dimension, and
+    `RuntimeError` once the registry is closed.
+    Both are defects in kuchka's own quantity modules, not something a caller of the
+    public API can trigger, so neither is part of the `MeasurementError` hierarchy that
     application code handles.
     """
+    if _closed:
+        msg = (
+            f"cannot register {quantity_type.__name__}: the dimension registry is "
+            "closed once `kuchka` has finished importing."
+        )
+        raise RuntimeError(msg)
     existing = _DIMENSION_REGISTRY.get(dimension)
     if existing is not None and existing is not quantity_type:
         msg = (
@@ -81,6 +90,15 @@ def register(dimension: Dimension, quantity_type: type[LinearQuantity]) -> None:
         )
         raise TypeError(msg)
     _DIMENSION_REGISTRY[dimension] = quantity_type
+
+
+def _close() -> None:
+    """Close the registry: later registrations raise `RuntimeError`.
+
+    Called once, when the package has imported every quantity module.
+    """
+    global _closed  # noqa: PLW0603 -- one-way switch, set once at the end of the import
+    _closed = True
 
 
 def _promote(dimension: Dimension, magnitude: Fraction) -> LinearQuantity | Fraction:
@@ -101,4 +119,4 @@ def _promote(dimension: Dimension, magnitude: Fraction) -> LinearQuantity | Frac
     return quantity_type(magnitude, quantity_type._canonical_unit)  # noqa: SLF001 -- accessing the registered type's own canonical unit, not a foreign instance's internals
 
 
-__all__ = ["register"]
+__all__: list[str] = []

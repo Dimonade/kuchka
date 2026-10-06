@@ -11,6 +11,7 @@ That is what this test checks.
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -28,7 +29,12 @@ def _mypy_available() -> bool:
     return True
 
 
-@pytest.mark.skipif(not _mypy_available(), reason="mypy is not installed")
+def _skip_without_mypy() -> bool:
+    """Skip for lack of mypy only outside tox, whose environments install it."""
+    return not _mypy_available() and "TOX_ENV_NAME" not in os.environ
+
+
+@pytest.mark.skipif(_skip_without_mypy(), reason="mypy is not installed")
 def test_mypy_agrees_with_runtime_on_the_fixture() -> None:
     result = subprocess.run(
         [sys.executable, "-m", "mypy", "--strict", str(FIXTURE)],

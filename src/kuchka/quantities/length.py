@@ -9,7 +9,7 @@ from typing import overload
 from kuchka.dimensions import LENGTH
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -26,6 +26,7 @@ class Length(LinearQuantity):
     """A distance or a physical extent: how far apart, how long, how wide, how far."""
 
     dimension: ClassVar[Dimension] = LENGTH
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Length) -> Area: ...
@@ -54,6 +55,6 @@ class Length(LinearQuantity):
         return super().__truediv__(other)
 
 
-register(LENGTH, Length)
+_register(LENGTH, Length)
 
 __all__ = ["Length"]
