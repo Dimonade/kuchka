@@ -14,7 +14,7 @@ from typing import overload
 from kuchka.dimensions import DENSITY
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -29,6 +29,7 @@ class Density(LinearQuantity):
     """Mass per unit volume: how tightly packed a material's mass is."""
 
     dimension: ClassVar[Dimension] = DENSITY
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Volume) -> Mass: ...
@@ -51,6 +52,6 @@ class Density(LinearQuantity):
         return super().__truediv__(other)
 
 
-register(DENSITY, Density)
+_register(DENSITY, Density)
 
 __all__ = ["Density"]

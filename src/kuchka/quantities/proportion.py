@@ -2,7 +2,7 @@
 
 Reachable only by explicit construction (`Percent(5)`, `Ratio(0.05)`), the same way
 `SampleRate` and `BaudRate` are:
-this module never calls `register`, so generic arithmetic between two same-dimension
+this module never calls `_register`, so generic arithmetic between two same-dimension
 quantities never silently hands back a `Proportion`.
 
 NOTE: This is also structural, not just a choice -- `_promote` already returns a bare
@@ -26,6 +26,7 @@ class Proportion(LinearQuantity):
     """A dimensionless quantity: how much of something, relative to a whole."""
 
     dimension: ClassVar[Dimension] = DIMENSIONLESS
+    __slots__ = ()
 
 
 __all__ = ["Proportion"]

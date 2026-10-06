@@ -29,7 +29,7 @@ from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.typing import override
 from kuchka.quantities.base import AffineQuantity
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
@@ -39,9 +39,10 @@ class TemperatureDelta(LinearQuantity):
     """A difference between two temperatures, e.g. a tolerance band."""
 
     dimension: ClassVar[Dimension] = TEMPERATURE_DELTA
+    __slots__ = ()
 
 
-register(TEMPERATURE_DELTA, TemperatureDelta)
+_register(TEMPERATURE_DELTA, TemperatureDelta)
 
 
 class Temperature(AffineQuantity[TemperatureDelta]):

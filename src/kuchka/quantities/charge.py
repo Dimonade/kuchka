@@ -14,7 +14,7 @@ from typing import overload
 from kuchka.dimensions import CHARGE
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -29,6 +29,7 @@ class Charge(LinearQuantity):
     """An accumulated flow of electric current: how much charge has moved."""
 
     dimension: ClassVar[Dimension] = CHARGE
+    __slots__ = ()
 
     @overload
     def __truediv__(self, other: Time) -> Current: ...
@@ -44,6 +45,6 @@ class Charge(LinearQuantity):
         return super().__truediv__(other)
 
 
-register(CHARGE, Charge)
+_register(CHARGE, Charge)
 
 __all__ = ["Charge"]

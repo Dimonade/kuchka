@@ -17,7 +17,7 @@ from typing import overload
 from kuchka.dimensions import ENERGY
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -34,6 +34,7 @@ class Energy(LinearQuantity):
     """The capacity to do work: a delivered or dissipated quantity of energy."""
 
     dimension: ClassVar[Dimension] = ENERGY
+    __slots__ = ()
 
     @overload
     def __truediv__(self, other: Time) -> Power: ...
@@ -53,6 +54,6 @@ class Energy(LinearQuantity):
         return super().__truediv__(other)
 
 
-register(ENERGY, Energy)
+_register(ENERGY, Energy)
 
 __all__ = ["Energy"]

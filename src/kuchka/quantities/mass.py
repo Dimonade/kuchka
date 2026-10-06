@@ -16,7 +16,7 @@ from typing import overload
 from kuchka.dimensions import MASS
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -33,6 +33,7 @@ class Mass(LinearQuantity):
     """How much matter something contains."""
 
     dimension: ClassVar[Dimension] = MASS
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Acceleration) -> Force: ...
@@ -59,6 +60,6 @@ class Mass(LinearQuantity):
         return super().__truediv__(other)
 
 
-register(MASS, Mass)
+_register(MASS, Mass)
 
 __all__ = ["Mass"]
