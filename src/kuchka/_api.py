@@ -150,6 +150,7 @@ from kuchka.units import Microcoulomb
 from kuchka.units import Microelectronvolt
 from kuchka.units import Microgal
 from kuchka.units import Microgram
+from kuchka.units import Microhertz
 from kuchka.units import Microjoule
 from kuchka.units import Microliter
 from kuchka.units import Microlitre
@@ -172,6 +173,7 @@ from kuchka.units import Millicoulomb
 from kuchka.units import Millielectronvolt
 from kuchka.units import Milligal
 from kuchka.units import Milligram
+from kuchka.units import Millihertz
 from kuchka.units import Millijoule
 from kuchka.units import Milliliter
 from kuchka.units import Millilitre
@@ -190,6 +192,7 @@ from kuchka.units import Mole
 from kuchka.units import Nanoampere
 from kuchka.units import Nanocoulomb
 from kuchka.units import Nanogram
+from kuchka.units import Nanohertz
 from kuchka.units import Nanojoule
 from kuchka.units import Nanometer
 from kuchka.units import Nanometre
@@ -382,6 +385,7 @@ __all__ = [
     "Microelectronvolt",
     "Microgal",
     "Microgram",
+    "Microhertz",
     "Microjoule",
     "Microliter",
     "Microlitre",
@@ -404,6 +408,7 @@ __all__ = [
     "Millielectronvolt",
     "Milligal",
     "Milligram",
+    "Millihertz",
     "Millijoule",
     "Milliliter",
     "Millilitre",
@@ -422,6 +427,7 @@ __all__ = [
     "Nanoampere",
     "Nanocoulomb",
     "Nanogram",
+    "Nanohertz",
     "Nanojoule",
     "Nanometer",
     "Nanometre",

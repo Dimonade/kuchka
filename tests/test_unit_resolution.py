@@ -137,6 +137,9 @@ TABLE_CASES = [
     (
         frequency.FREQUENCY_UNITS,
         {
+            "nHz": frequency.Nanohertz,
+            f"{symbols.MICRO}Hz": frequency.Microhertz,
+            "mHz": frequency.Millihertz,
             "Hz": frequency.Hertz,
             "kHz": frequency.Kilohertz,
             "MHz": frequency.Megahertz,

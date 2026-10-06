@@ -26,6 +26,7 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Length: `AstronomicalUnit` and `LightYear`.
 - Energy: `Petajoule`, `KilowattHour`, `TonneOfTNT`, `KilotonneOfTNT`, and `MegatonneOfTNT`.
 - Velocity: `Knot`.
+- Frequency: `Nanohertz`, `Microhertz`, and `Millihertz`.
 
 #### Unit tables accept the notations real files use
 

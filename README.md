@@ -429,7 +429,7 @@ The complete unit vocabulary is available in the API reference.
 | ----------------- | -------------------------------------------------------------------------- |
 | Time              | `Femtosecond` through `Second`, `Minute` through `JulianYear`, and `Jiffy` |
 | Instant           | reached via `Time.as_instant()`                                            |
-| Frequency         | `Hertz` through `Petahertz`                                                |
+| Frequency         | `Nanohertz` through `Petahertz`                                            |
 | Sampling Period   | reached via `Time.as_sampling_period()`                                    |
 | Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`         |
 | Baud Rate         | `Baud`, `Kilobaud`                                                         |
