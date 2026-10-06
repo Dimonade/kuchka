@@ -14,7 +14,7 @@ extracting new features into modules:
   Deliberately not part of `_ScalarStorage`, so a shape with no total order, like
   modular/circular quantity, can build on the same storage without inheriting
   comparisons it would have to un-implement.
-- `registry.py` -- the dimension-to-type registry (`register`, `_promote`) that
+- `registry.py` -- the dimension-to-type registry (`_register`, `_promote`) that
   lets e.g. ``Volt(5) * Ampere(2)`` come back as a real `Power` instance.
 - `linear.py` -- `LinearQuantity`: units differ by a pure scale factor.
 - `affine.py` -- `AffineQuantity`: units differ by both a scale and an offset, so
@@ -29,14 +29,6 @@ Every name below is re-exported here so existing imports
 (``from kuchka.quantities.base import LinearQuantity``) keep working exactly as
 before the split -- this package's import surface is unchanged even though its
 internals are now spread across several files.
-
-NOTE: ``register`` is re-exported via the ``import x as x`` form and not by adding
-it to ``__all__``: it needs to stay importable by name for every quantity module
-(``from kuchka.quantities.base import register``), which ``mypy --strict``'s
-``--no-implicit-reexport`` check requires to be spelled out explicitly, but it must
-NOT appear in ``__all__``, since ``kuchka/quantities/__init__.py`` wildcard-imports
-this package's ``__all__`` and would otherwise leak ``register`` -- internal
-machinery -- up into ``kuchka.quantities``'s own public surface.
 """
 
 from __future__ import annotations
@@ -45,7 +37,6 @@ from kuchka.quantities.base.affine import AffineQuantity
 from kuchka.quantities.base.linear import LinearQuantity
 from kuchka.quantities.base.logarithmic import PureLogarithmicQuantity
 from kuchka.quantities.base.modular import ModularQuantity
-from kuchka.quantities.base.registry import register as register
 from kuchka.quantities.base.units import AffineUnitDef
 from kuchka.quantities.base.units import LogarithmicUnitDef
 from kuchka.quantities.base.units import UnitDef
