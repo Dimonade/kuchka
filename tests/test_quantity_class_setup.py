@@ -43,7 +43,7 @@ def _type_id(cls: type) -> str:
     return cls.__name__
 
 
-# --- The guard at class creation ------------------------------------------------------
+# The guard at class creation.
 
 
 @pytest.mark.parametrize("shape", SHAPES, ids=SHAPE_IDS)
@@ -99,7 +99,7 @@ def test_the_guard_passes_extra_class_keywords_on() -> None:
     assert Child.flag is True  # type: ignore[attr-defined]  # ty: ignore[unresolved-attribute]
 
 
-# --- Every concrete type, as assembled ------------------------------------------------
+# Every concrete type, as assembled.
 
 
 def test_the_concrete_types_are_discovered() -> None:
@@ -150,7 +150,7 @@ def test_a_value_in_the_canonical_unit_reads_back_its_magnitude(cls: type[Any]) 
     assert value.unit is cls._canonical_unit
 
 
-# --- Independent of which module is imported first ------------------------------------
+# Independent of which module is imported first.
 
 ENTRY_POINTS = [
     "kuchka",
