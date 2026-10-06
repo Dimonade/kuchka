@@ -9,19 +9,16 @@ of this package.
 from __future__ import annotations
 
 from fractions import Fraction
-from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import Generic
 from typing import TypeVar
 
+from kuchka.dimensions import Dimension
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.display import render
 from kuchka.internal.typing import override
 from kuchka.quantities.base.units import _DisplayUnit
-
-if TYPE_CHECKING:
-    from kuchka.dimensions import Dimension
 
 _UnitT = TypeVar("_UnitT", bound=_DisplayUnit)
 
@@ -55,6 +52,29 @@ class _ScalarStorage(Generic[_UnitT]):
     Assigned by each algebraic base (`LinearQuantity`, `AffineQuantity`, ...).
     """
     __slots__ = ("_display_unit", "_magnitude")
+
+    def __init_subclass__(cls, **kwargs: object) -> None:
+        """Check that a concrete quantity type is set up completely.
+
+        A type that names its own `dimension` is a concrete quantity, and has to be a
+        value object with no `__dict__`: it declares `__slots__` and a `Dimension`.
+        The shape bases (`LinearQuantity`, ...) only annotate `dimension`, so they
+        pass without declaring one.
+        The canonical unit is bound later, by the unit module that defines the unit,
+        so completeness of that binding is a property of the assembled package.
+        """
+        super().__init_subclass__(**kwargs)
+        if "dimension" not in vars(cls):
+            return
+        if not isinstance(vars(cls)["dimension"], Dimension):
+            msg = f"{cls.__name__}.dimension must be a Dimension."
+            raise TypeError(msg)
+        if "__slots__" not in vars(cls):
+            msg = (
+                f"{cls.__name__} must declare `__slots__ = ()`: a quantity is an "
+                "immutable value with no per-instance `__dict__`."
+            )
+            raise TypeError(msg)
 
     def __init__(self, magnitude: Fraction, display_unit: _UnitT) -> None:
         """Store `magnitude` (canonical unit) and `display_unit`, validating both."""
