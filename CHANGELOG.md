@@ -51,6 +51,13 @@ Angles measure the short way round the circle.
 
 ### Fixed
 
+#### Units keep their identity through copy and pickle
+
+`copy.deepcopy(Volt(5)).unit is VOLT` and the same after a pickle round trip were `False`, because a unit was rebuilt by value on the way back.
+Unit definitions are now immutable values with value equality: copying returns the same unit, and pickling stores the name `kuchka.units` publishes it under, so a pickle holds no unit internals.
+A unit that `kuchka.units` does not publish cannot be pickled.
+Pickle is documented as a way to move values between processes of one version, and storage as an exact magnitude plus a unit symbol; see `docs/concepts/persistence.md`.
+
 #### Quantity class constructors validate their arguments
 
 `Voltage(0.5, AMPERE)` and the other quantity classes used to store whatever they were given.
