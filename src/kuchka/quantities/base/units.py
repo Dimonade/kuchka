@@ -12,6 +12,9 @@ dependency on anything else in the `base` package.
 
 from __future__ import annotations
 
+import functools
+import importlib
+import pickle
 from typing import TYPE_CHECKING
 from typing import Protocol
 
@@ -20,6 +23,7 @@ from kuchka.internal.typing import override
 from kuchka.numeric import to_exact
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
     from fractions import Fraction
 
     from kuchka.dimensions import Dimension
@@ -51,7 +55,93 @@ def _positive_scale(kind: str, name: str, scale: Numeric) -> Fraction:
     return exact
 
 
-class UnitDef:
+class _Unit:
+    """Behaviour shared by the unit-definition types.
+
+    A unit definition is an immutable value:
+    two with the same fields are equal and hash alike, and its state is written once,
+    by `__init__`.
+    Copying returns the same object, and pickling stores only the name under which
+    `kuchka.units` publishes an equal unit, so a restored unit is the published
+    constant and a stored reference does not depend on the fields behind it.
+    """
+
+    __slots__ = ()
+
+    def _fields(self) -> tuple[object, ...]:
+        """Return every field that makes this unit what it is."""
+        raise NotImplementedError
+
+    def _store(self, **fields: object) -> None:
+        """Write the fields of a unit that has none yet."""
+        if hasattr(self, "name"):
+            raise AttributeError(f"{type(self).__name__} is immutable")
+        for name, value in fields.items():
+            object.__setattr__(self, name, value)
+
+    @override
+    def __setattr__(self, name: str, value: object) -> None:
+        raise AttributeError(f"{type(self).__name__} is immutable")
+
+    @override
+    def __delattr__(self, name: str) -> None:
+        raise AttributeError(f"{type(self).__name__} is immutable")
+
+    @override
+    def __eq__(self, other: object) -> bool:
+        if type(other) is not type(self):
+            return NotImplemented
+        return self._fields() == other._fields()
+
+    @override
+    def __hash__(self) -> int:
+        return hash((type(self), self._fields()))
+
+    def __copy__(self) -> _Unit:
+        """Return this unit: a unit definition is its own copy."""
+        return self
+
+    def __deepcopy__(self, memo: dict[int, object]) -> _Unit:
+        """Return this unit: a unit definition is its own deep copy."""
+        return self
+
+    @override
+    def __reduce__(self) -> tuple[object, ...]:
+        """Pickle by the name `kuchka.units` publishes an equal unit under."""
+        name = _published()[1].get(self)
+        if name is None:
+            msg = (
+                f"cannot pickle {self!r}: only the units published by kuchka.units "
+                "can be pickled, by name."
+            )
+            raise pickle.PicklingError(msg)
+        return (_published_unit, (name,))
+
+
+@functools.cache
+def _published() -> tuple[Mapping[str, _Unit], Mapping[_Unit, str]]:
+    """Index the unit constants of `kuchka.units`: by name, and by value."""
+    package = importlib.import_module("kuchka.units")
+    by_name: dict[str, _Unit] = {}
+    by_unit: dict[_Unit, str] = {}
+    for name in package.__all__:
+        value = getattr(package, name)
+        if isinstance(value, _Unit):
+            by_name[name] = value
+            by_unit.setdefault(value, name)
+    return by_name, by_unit
+
+
+def _published_unit(name: str) -> _Unit:
+    """Return the unit published as `name` by `kuchka.units`; unpickling calls this."""
+    try:
+        return _published()[0][name]
+    except KeyError:
+        msg = f"{name!r} is not a unit published by kuchka.units."
+        raise pickle.UnpicklingError(msg) from None
+
+
+class UnitDef(_Unit):
     """A named, purely multiplicative unit.
 
     Builds constructors like `Volt`.
@@ -65,6 +155,12 @@ class UnitDef:
     """
 
     __slots__ = ("aliases", "dimension", "name", "scale", "symbol", "words")
+    aliases: tuple[str, ...]
+    dimension: Dimension
+    name: str
+    scale: Fraction
+    symbol: str
+    words: tuple[str, ...]
 
     def __init__(  # noqa: PLR0913 -- the two spelling lists are keyword-only extras
         self,
@@ -77,19 +173,32 @@ class UnitDef:
         words: tuple[str, ...] = (),
     ) -> None:
         """Store name, symbol, scale, dimension, and the other accepted spellings."""
-        self.name = name
-        self.symbol = symbol
-        self.scale: Fraction = _positive_scale("unit", name, scale)
-        self.dimension = dimension
-        self.aliases = _checked_spellings("unit", name, aliases)
-        self.words = _checked_spellings("unit", name, words)
+        self._store(
+            name=name,
+            symbol=symbol,
+            scale=_positive_scale("unit", name, scale),
+            dimension=dimension,
+            aliases=_checked_spellings("unit", name, aliases),
+            words=_checked_spellings("unit", name, words),
+        )
+
+    @override
+    def _fields(self) -> tuple[object, ...]:
+        return (
+            self.name,
+            self.symbol,
+            self.scale,
+            self.dimension,
+            self.aliases,
+            self.words,
+        )
 
     @override
     def __repr__(self) -> str:
         return f"UnitDef({self.name!r}, {self.symbol!r})"
 
 
-class AffineUnitDef:
+class AffineUnitDef(_Unit):
     """A unit with a scale and an offset, e.g. Celsius relative to Kelvin.
 
     The affine counterpart to `UnitDef`.
@@ -99,6 +208,12 @@ class AffineUnitDef:
     """
 
     __slots__ = ("aliases", "name", "offset", "scale", "symbol", "words")
+    aliases: tuple[str, ...]
+    name: str
+    offset: Fraction
+    scale: Fraction
+    symbol: str
+    words: tuple[str, ...]
 
     def __init__(  # noqa: PLR0913 -- the two spelling lists are keyword-only extras
         self,
@@ -111,19 +226,32 @@ class AffineUnitDef:
         words: tuple[str, ...] = (),
     ) -> None:
         """Store name, symbol, scale/offset (as ``Fraction``), and other spellings."""
-        self.name = name
-        self.symbol = symbol
-        self.scale: Fraction = _positive_scale("unit", name, scale)
-        self.offset: Fraction = to_exact(offset)
-        self.aliases = _checked_spellings("unit", name, aliases)
-        self.words = _checked_spellings("unit", name, words)
+        self._store(
+            name=name,
+            symbol=symbol,
+            scale=_positive_scale("unit", name, scale),
+            offset=to_exact(offset),
+            aliases=_checked_spellings("unit", name, aliases),
+            words=_checked_spellings("unit", name, words),
+        )
+
+    @override
+    def _fields(self) -> tuple[object, ...]:
+        return (
+            self.name,
+            self.symbol,
+            self.scale,
+            self.offset,
+            self.aliases,
+            self.words,
+        )
 
     @override
     def __repr__(self) -> str:
         return f"AffineUnitDef({self.name!r}, {self.symbol!r})"
 
 
-class LogarithmicUnitDef:
+class LogarithmicUnitDef(_Unit):
     """A named unit of logarithmic level, e.g. the decibel or the bel.
 
     The logarithmic counterpart to `UnitDef`.
@@ -136,6 +264,11 @@ class LogarithmicUnitDef:
     """
 
     __slots__ = ("aliases", "name", "scale", "symbol", "words")
+    aliases: tuple[str, ...]
+    name: str
+    scale: Fraction
+    symbol: str
+    words: tuple[str, ...]
 
     def __init__(
         self,
@@ -147,11 +280,17 @@ class LogarithmicUnitDef:
         words: tuple[str, ...] = (),
     ) -> None:
         """Store name, symbol, scale (as ``Fraction``), and other spellings."""
-        self.name = name
-        self.symbol = symbol
-        self.scale: Fraction = _positive_scale("unit", name, scale)
-        self.aliases = _checked_spellings("unit", name, aliases)
-        self.words = _checked_spellings("unit", name, words)
+        self._store(
+            name=name,
+            symbol=symbol,
+            scale=_positive_scale("unit", name, scale),
+            aliases=_checked_spellings("unit", name, aliases),
+            words=_checked_spellings("unit", name, words),
+        )
+
+    @override
+    def _fields(self) -> tuple[object, ...]:
+        return (self.name, self.symbol, self.scale, self.aliases, self.words)
 
     @override
     def __repr__(self) -> str:
