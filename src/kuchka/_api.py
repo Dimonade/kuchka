@@ -72,10 +72,12 @@ from kuchka.units import EarthMass
 from kuchka.units import Electronvolt
 from kuchka.units import Erg
 from kuchka.units import Fahrenheit
+from kuchka.units import Femtomole
 from kuchka.units import Femtosecond
 from kuchka.units import Foot
 from kuchka.units import Fortnight
 from kuchka.units import Gal
+from kuchka.units import Gigabaud
 from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gigajoule
@@ -114,6 +116,7 @@ from kuchka.units import Kilometer
 from kuchka.units import KilometerPerHour
 from kuchka.units import Kilometre
 from kuchka.units import KilometrePerHour
+from kuchka.units import Kilomole
 from kuchka.units import Kilonewton
 from kuchka.units import Kiloohm
 from kuchka.units import Kilopascal
@@ -127,6 +130,7 @@ from kuchka.units import LightYear
 from kuchka.units import Liter
 from kuchka.units import Litre
 from kuchka.units import Megaampere
+from kuchka.units import Megabaud
 from kuchka.units import Megaelectronvolt
 from kuchka.units import Megagram
 from kuchka.units import Megahertz
@@ -196,6 +200,7 @@ from kuchka.units import Nanohertz
 from kuchka.units import Nanojoule
 from kuchka.units import Nanometer
 from kuchka.units import Nanometre
+from kuchka.units import Nanomole
 from kuchka.units import Nanosecond
 from kuchka.units import Nanosiemens
 from kuchka.units import Nanovolt
@@ -217,6 +222,7 @@ from kuchka.units import Picogram
 from kuchka.units import Picojoule
 from kuchka.units import Picometer
 from kuchka.units import Picometre
+from kuchka.units import Picomole
 from kuchka.units import Picosecond
 from kuchka.units import Picowatt
 from kuchka.units import Pound
@@ -300,12 +306,14 @@ __all__ = [
     "Energy",
     "Erg",
     "Fahrenheit",
+    "Femtomole",
     "Femtosecond",
     "Foot",
     "Force",
     "Fortnight",
     "Frequency",
     "Gal",
+    "Gigabaud",
     "Gigaelectronvolt",
     "Gigahertz",
     "Gigajoule",
@@ -345,6 +353,7 @@ __all__ = [
     "KilometerPerHour",
     "Kilometre",
     "KilometrePerHour",
+    "Kilomole",
     "Kilonewton",
     "Kiloohm",
     "Kilopascal",
@@ -362,6 +371,7 @@ __all__ = [
     "LuminousIntensity",
     "Mass",
     "Megaampere",
+    "Megabaud",
     "Megaelectronvolt",
     "Megagram",
     "Megahertz",
@@ -431,6 +441,7 @@ __all__ = [
     "Nanojoule",
     "Nanometer",
     "Nanometre",
+    "Nanomole",
     "Nanosecond",
     "Nanosiemens",
     "Nanovolt",
@@ -452,6 +463,7 @@ __all__ = [
     "Picojoule",
     "Picometer",
     "Picometre",
+    "Picomole",
     "Picosecond",
     "Picowatt",
     "Pound",

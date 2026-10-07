@@ -27,6 +27,8 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Energy: `Petajoule`, `KilowattHour`, `TonneOfTNT`, `KilotonneOfTNT`, and `MegatonneOfTNT`.
 - Velocity: `Knot`.
 - Frequency: `Nanohertz`, `Microhertz`, and `Millihertz`.
+- Amount: `Femtomole`, `Picomole`, `Nanomole`, and `Kilomole`.
+- Baud Rate: `Megabaud` and `Gigabaud`.
 
 #### Unit tables accept the notations real files use
 
