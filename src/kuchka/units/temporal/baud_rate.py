@@ -33,6 +33,7 @@ A spacecraft telemetry link is configured for 250 kBd.
 A separate reference oscillator happens to run at 250 kHz, but those numbers describe
 different physical concepts:
 
+>>> from kuchka import Hertz
 >>> telemetry = Kilobaud(250)
 >>> reference = Hertz(250_000)
 >>> telemetry != reference
@@ -48,8 +49,10 @@ A serial instrument is upgraded from 9.6 kBd to 115.2 kBd:
 >>> new_link - old_link
 105.6 kBd
 
->>> new_link / old_link
-100
+This is a much needed upgrade:
+
+>>> int(new_link / old_link)
+12
 
 A communication system can also express the same configured symbol rate at a different
 engineering scale:
@@ -180,8 +183,11 @@ def Kilobaud(value: Numeric) -> BaudRate:
     >>> new_rate - old_rate
     150 kBd
 
+    This is much better than before:
+
+    >>> from fractions import Fraction
     >>> new_rate / old_rate
-    100
+    Fraction(8, 5)
 
     """
     return BaudRate(to_exact(value) * KILOBAUD.scale, KILOBAUD)
