@@ -168,4 +168,14 @@ def unit_table(
     return UnitTable(label, entries)
 
 
-__all__ = ["SpelledUnit", "UnitTable", "unit_table"]
+def units_of(
+    table: Mapping[str, Callable[[Numeric], object]],
+) -> tuple[SpelledUnit, ...]:
+    """Return the unit definitions of a table built by `unit_table`."""
+    if not isinstance(table, UnitTable):
+        msg = f"{table!r} is not a table built by unit_table."
+        raise TypeError(msg)
+    return table.units
+
+
+__all__ = ["SpelledUnit", "UnitTable", "unit_table", "units_of"]

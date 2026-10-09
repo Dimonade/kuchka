@@ -84,6 +84,7 @@ class PureLogarithmicQuantity(_OrderedScalarMixin, _ScalarStorage[LogarithmicUni
                 "such as DECIBEL or BEL"
             )
             raise InvalidConversionError(msg)
+        self._reject_foreign_unit(unit)
         return type(self)(self._magnitude, unit)
 
     @override

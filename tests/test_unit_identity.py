@@ -307,14 +307,6 @@ def test_a_custom_unit_cannot_be_pickled() -> None:
         pickle.dumps(_linear(name="custom", symbol="cu"))
 
 
-def test_a_quantity_in_a_custom_unit_cannot_be_pickled() -> None:
-    custom = _linear(name="custom", symbol="cu")
-    value = type(Volt(1))(Fraction(1), custom)
-    with pytest.raises(pickle.PicklingError):
-        pickle.dumps(value)
-    assert copy.deepcopy(value).unit is custom
-
-
 def test_a_unit_equal_to_a_published_one_pickles_as_the_published_unit() -> None:
     twin = UnitDef(
         VOLT.name,

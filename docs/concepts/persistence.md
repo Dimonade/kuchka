@@ -24,8 +24,7 @@ A pickled quantity holds its class, its exact magnitude, and the name `kuchka.un
 It holds none of the fields behind the unit, so changing how a unit is built does not change what a pickle contains.
 Unpickling accepts only names of published units.
 
-A unit that `kuchka.units` does not publish copies normally and cannot be pickled.
-Pickling a quantity in such a unit raises `pickle.PicklingError`.
+A unit that `kuchka.units` does not publish copies normally and cannot be pickled, and raises `pickle.PicklingError` if pickling is attempted.
 
 ## Pickle is not a storage format
 
@@ -48,7 +47,8 @@ stored = {"value": str(value.value_in(value.unit)), "unit": value.unit.symbol}
 text = json.dumps(stored)  # '{"value": "7/3", "unit": "mV"}'
 
 loaded = json.loads(text)
-restored = VOLTAGE_UNITS[loaded["unit"]](Fraction(loaded["value"]))
+constructor = VOLTAGE_UNITS[loaded["unit"]]
+restored = constructor(Fraction(loaded["value"]))
 restored == value  # True
 ```
 

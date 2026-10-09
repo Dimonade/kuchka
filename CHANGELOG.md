@@ -51,6 +51,12 @@ Angles measure the short way round the circle.
 
 ### Fixed
 
+#### A unit belongs to its quantity types
+
+`Hertz(1).to(BAUD)` displayed `1 Bd`, and `Frequency(Fraction(1), BAUD)` was accepted, because a type took any unit of its dimension.
+Each quantity type now binds the units of its own table and refuses every other, and the error names the type the unit belongs to.
+A unit of `Time` is still a unit of `SamplingPeriod`; `SampleRate` no longer converts to hertz with `.to()`, and `SampleRate.as_frequency()` does.
+
 #### Units keep their identity through copy and pickle
 
 `copy.deepcopy(Volt(5)).unit is VOLT` and the same after a pickle round trip were `False`, because a unit was rebuilt by value on the way back.

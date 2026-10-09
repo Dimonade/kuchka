@@ -19,6 +19,15 @@ Area * Length       -> Volume
 1 / Time            -> Frequency
 ```
 
+## Units belong to quantity types
+
+A quantity type displays in the units of its own `*_UNITS` table, and in no unit of another type, even one with the same dimension.
+`Frequency`, `BaudRate`, and `SampleRate` share the dimension T⁻¹, and each has its own units: the hertz, the baud, and the sample per second.
+`Hertz(1).to(BAUD)` raises `InvalidConversionError`, and `Frequency(Fraction(1), BAUD)` raises `InvalidMeasurementError`, and both name the type the unit belongs to.
+A unit can belong to several types: the second is a unit of `Time` and of `SamplingPeriod`.
+
+Moving a value between quantity types is a separate, explicit step, such as `SampleRate.as_frequency()`.
+
 ## The registry is closed
 
 The set of named dimensions belongs to the library.
