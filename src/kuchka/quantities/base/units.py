@@ -136,7 +136,7 @@ def _published() -> tuple[Mapping[str, _Unit], Mapping[_Unit, str]]:
 
 def bind_units(quantity_type: type[Any], units: Iterable[_Unit]) -> None:
     """Bind the units `quantity_type` displays in.
-    
+
     This is called once per quantity type.
 
     Every unit must be of the kind the type displays (`_unit_type`) and, when it has a
