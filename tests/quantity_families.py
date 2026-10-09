@@ -74,31 +74,58 @@ class QuantityFamily:
 
 
 FAMILIES: list[QuantityFamily] = [
-    QuantityFamily("voltage", voltage.Volt, voltage.VOLT, voltage.VOLTAGE_UNITS),
-    QuantityFamily("current", current.Ampere, current.AMPERE, current.CURRENT_UNITS),
-    QuantityFamily("power", power.Watt, power.WATT, power.POWER_UNITS),
     QuantityFamily(
-        "resistance", resistance.Ohm, resistance.OHM, resistance.RESISTANCE_UNITS
+        "acceleration",
+        acceleration.MetrePerSecondSquared,
+        acceleration.METRE_PER_SECOND_SQUARED,
+        acceleration.ACCELERATION_UNITS,
     ),
-    QuantityFamily("time", time.Second, time.SECOND, time.TIME_UNITS),
+    QuantityFamily(
+        "amount_of_substance",
+        amount.Mole,
+        amount.MOLE,
+        amount.AMOUNT_OF_SUBSTANCE_UNITS,
+    ),
+    QuantityFamily("area", area.SquareMetre, area.SQUARE_METRE, area.AREA_UNITS),
+    QuantityFamily(
+        "baud_rate", baud_rate.Baud, baud_rate.BAUD, baud_rate.BAUD_RATE_UNITS
+    ),
+    QuantityFamily("charge", charge.Coulomb, charge.COULOMB, charge.CHARGE_UNITS),
+    QuantityFamily(
+        "conductance",
+        conductance.Siemens,
+        conductance.SIEMENS,
+        conductance.CONDUCTANCE_UNITS,
+    ),
+    QuantityFamily("current", current.Ampere, current.AMPERE, current.CURRENT_UNITS),
+    QuantityFamily(
+        "density",
+        density.KilogramPerCubicMetre,
+        density.KILOGRAM_PER_CUBIC_METRE,
+        density.DENSITY_UNITS,
+    ),
+    QuantityFamily("energy", energy.Joule, energy.JOULE, energy.ENERGY_UNITS),
+    QuantityFamily("force", force.Newton, force.NEWTON, force.FORCE_UNITS),
     QuantityFamily(
         "frequency", frequency.Hertz, frequency.HERTZ, frequency.FREQUENCY_UNITS
     ),
     QuantityFamily("length", length.Metre, length.METRE, length.LENGTH_UNITS),
     QuantityFamily(
+        "luminous_intensity",
+        luminous_intensity.Candela,
+        luminous_intensity.CANDELA,
+        luminous_intensity.LUMINOUS_INTENSITY_UNITS,
+    ),
+    QuantityFamily("mass", mass.Kilogram, mass.KILOGRAM, mass.MASS_UNITS),
+    QuantityFamily("power", power.Watt, power.WATT, power.POWER_UNITS),
+    QuantityFamily(
+        "pressure", pressure.Pascal, pressure.PASCAL, pressure.PRESSURE_UNITS
+    ),
+    QuantityFamily(
         "proportion", proportion.Ratio, proportion.RATIO, proportion.PROPORTION_UNITS
     ),
     QuantityFamily(
-        "temperature_delta",
-        thermal.DeltaKelvin,
-        thermal.DELTA_KELVIN,
-        thermal.TEMPERATURE_DELTA_UNITS,
-    ),
-    QuantityFamily(
-        "sampling_period",
-        lambda v: time.Second(v).as_sampling_period(),
-        time.SECOND,
-        sampling_period.SAMPLING_PERIOD_UNITS,
+        "resistance", resistance.Ohm, resistance.OHM, resistance.RESISTANCE_UNITS
     ),
     QuantityFamily(
         "sample_rate",
@@ -107,54 +134,27 @@ FAMILIES: list[QuantityFamily] = [
         sample_rate.SAMPLE_RATE_UNITS,
     ),
     QuantityFamily(
-        "baud_rate", baud_rate.Baud, baud_rate.BAUD, baud_rate.BAUD_RATE_UNITS
-    ),
-    QuantityFamily("mass", mass.Kilogram, mass.KILOGRAM, mass.MASS_UNITS),
-    QuantityFamily(
-        "amount_of_substance",
-        amount.Mole,
-        amount.MOLE,
-        amount.AMOUNT_OF_SUBSTANCE_UNITS,
+        "sampling_period",
+        lambda v: time.Second(v).as_sampling_period(),
+        time.SECOND,
+        sampling_period.SAMPLING_PERIOD_UNITS,
     ),
     QuantityFamily(
-        "luminous_intensity",
-        luminous_intensity.Candela,
-        luminous_intensity.CANDELA,
-        luminous_intensity.LUMINOUS_INTENSITY_UNITS,
+        "temperature_delta",
+        thermal.DeltaKelvin,
+        thermal.DELTA_KELVIN,
+        thermal.TEMPERATURE_DELTA_UNITS,
     ),
+    QuantityFamily("time", time.Second, time.SECOND, time.TIME_UNITS),
     QuantityFamily(
         "velocity",
         velocity.MetrePerSecond,
         velocity.METRE_PER_SECOND,
         velocity.VELOCITY_UNITS,
     ),
-    QuantityFamily("charge", charge.Coulomb, charge.COULOMB, charge.CHARGE_UNITS),
-    QuantityFamily("energy", energy.Joule, energy.JOULE, energy.ENERGY_UNITS),
-    QuantityFamily("area", area.SquareMetre, area.SQUARE_METRE, area.AREA_UNITS),
+    QuantityFamily("voltage", voltage.Volt, voltage.VOLT, voltage.VOLTAGE_UNITS),
     QuantityFamily(
         "volume", volume.CubicMetre, volume.CUBIC_METRE, volume.VOLUME_UNITS
-    ),
-    QuantityFamily(
-        "conductance",
-        conductance.Siemens,
-        conductance.SIEMENS,
-        conductance.CONDUCTANCE_UNITS,
-    ),
-    QuantityFamily(
-        "acceleration",
-        acceleration.MetrePerSecondSquared,
-        acceleration.METRE_PER_SECOND_SQUARED,
-        acceleration.ACCELERATION_UNITS,
-    ),
-    QuantityFamily("force", force.Newton, force.NEWTON, force.FORCE_UNITS),
-    QuantityFamily(
-        "density",
-        density.KilogramPerCubicMetre,
-        density.KILOGRAM_PER_CUBIC_METRE,
-        density.DENSITY_UNITS,
-    ),
-    QuantityFamily(
-        "pressure", pressure.Pascal, pressure.PASCAL, pressure.PRESSURE_UNITS
     ),
 ]
 
@@ -174,8 +174,9 @@ ALL_UNIT_CASE_IDS: list[str] = [
 ]
 
 EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
-    "length": frozenset({"in", "au", "ly"}),
     "area": frozenset({"ac", f"in{symbols.SUPERSCRIPT_TWO}"}),
+    "charge": frozenset({"mAh", "Ah"}),
+    "force": frozenset({"lbf", "kgf"}),
     "energy": frozenset(
         {
             "mWh",
@@ -196,9 +197,9 @@ EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
             "MtTNT",
         }
     ),
-    "charge": frozenset({"mAh", "Ah"}),
+    "length": frozenset({"in", "au", "ly"}),
     "velocity": frozenset({"km/h", "kn"}),
-    "force": frozenset({"lbf", "kgf"}),
+    "power": frozenset({"hp", "PS"}),
     "pressure": frozenset({"psi"}),
     "temperature_delta": frozenset({"dF"}),
     "time": frozenset(
@@ -211,7 +212,6 @@ EXACT_DIVISION_EXCLUSIONS: dict[str, frozenset[str]] = {
             "a",
         }
     ),
-    "power": frozenset({"hp", "PS"}),
 }
 """Units excluded from properties that require finite Decimal reciprocals.
 

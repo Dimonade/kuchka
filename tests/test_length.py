@@ -1,7 +1,8 @@
 """Length: arithmetic, exact imperial conversion, and Metre/Meter naming.
 
 NOTE: `Inch`'s (`0.0254`), `Acre`'s, `Hour`'s, and a few others units' scales are not a
-power of ten. These are excluded from the exact-division property suite.
+power of ten.
+These are excluded from the exact-division property suite.
 Their conversions are checked elsewhere.
 
 The rest of the module covers ordinary arithmetic on `Length`, and dividing a `Length`
