@@ -16,6 +16,7 @@ import functools
 import importlib
 import pickle
 from typing import TYPE_CHECKING
+from typing import Any
 from typing import Protocol
 
 from kuchka.errors import InvalidMeasurementError
@@ -23,6 +24,7 @@ from kuchka.internal.typing import override
 from kuchka.numeric import to_exact
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
     from collections.abc import Mapping
     from fractions import Fraction
 
@@ -130,6 +132,43 @@ def _published() -> tuple[Mapping[str, _Unit], Mapping[_Unit, str]]:
             by_name[name] = value
             by_unit.setdefault(value, name)
     return by_name, by_unit
+
+
+def bind_units(quantity_type: type[Any], units: Iterable[_Unit]) -> None:
+    """Bind the units `quantity_type` displays in.
+    
+    This is called once per quantity type.
+
+    Every unit must be of the kind the type displays (`_unit_type`) and, when it has a
+    dimension, of the type's dimension.
+    Several types may bind the same unit.
+    For example, the `second` is a unit of both `Time` and `SamplingPeriod`.
+
+    Raises `TypeError` for a type that is bound already or a unit that does not fit,
+    since either is a defect in `kuchka`'s own unit modules.
+    """
+    if "_applicable_units" in vars(quantity_type):
+        msg = f"{quantity_type.__name__} already has its units bound."
+        raise TypeError(msg)
+    bound = frozenset(units)
+    if not bound:
+        msg = f"{quantity_type.__name__} needs at least one unit."
+        raise TypeError(msg)
+    for unit in bound:
+        if not isinstance(unit, quantity_type._unit_type):  # noqa: SLF001
+            msg = (
+                f"{unit!r} is not a {quantity_type._unit_type.__name__}, "  # noqa: SLF001
+                f"the kind of unit {quantity_type.__name__} displays in."
+            )
+            raise TypeError(msg)
+        dimension = getattr(unit, "dimension", None)
+        if dimension is not None and dimension != quantity_type.dimension:
+            msg = (
+                f"{unit.name} ({unit.symbol}) has dimension [{dimension!r}] but "
+                f"{quantity_type.__name__} has [{quantity_type.dimension!r}]."
+            )
+            raise TypeError(msg)
+    quantity_type._applicable_units = bound  # noqa: SLF001
 
 
 def _published_unit(name: str) -> _Unit:
