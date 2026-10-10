@@ -412,16 +412,16 @@ The complete unit vocabulary is available in the API reference.
 
 ### Electrical
 
-| Quantity    | Representative units                                                                                               |
-| ----------- | ------------------------------------------------------------------------------------------------------------------ |
-| Voltage     | `Nanovolt` though `Petavolt`                                                                                       |
-| Current     | `Picoampere`, through `Megaampere`                                                                                 |
-| Power       | `Picowatt` through `Petawatt`, `Horsepower` and `MetricHorsepower`                                                 |
-| Resistance  | `Microohm`, through `Gigaohm`                                                                                      |
-| Conductance | `Nanosiemens` through `Kilosiemens`                                                                                |
-| Charge      | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                              |
-| Energy      | `Picojoule` through `Petajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour` |
-|             | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                             |
+| Quantity             | Representative units                                                                                               |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Voltage              | `Nanovolt` though `Petavolt`                                                                                       |
+| Current              | `Picoampere`, through `Megaampere`                                                                                 |
+| Power                | `Picowatt` through `Petawatt`, `Horsepower` and `MetricHorsepower`                                                 |
+| Resistance           | `Microohm`, through `Gigaohm`                                                                                      |
+| Conductance          | `Nanosiemens` through `Kilosiemens`                                                                                |
+| Charge               | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                              |
+| Energy               | `Picojoule` through `Petajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour` |
+| _energy, countinued_ | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                             |
 
 ### Time and signals
 
@@ -432,7 +432,7 @@ The complete unit vocabulary is available in the API reference.
 | Frequency         | `Nanohertz` through `Petahertz`                                            |
 | Sampling Period   | reached via `Time.as_sampling_period()`                                    |
 | Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`         |
-| Baud Rate         | `Baud`, `Kilobaud`                                                         |
+| Baud Rate         | `Baud` through `Gigabaud`                                                  |
 | Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                          |
 | Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`                           |
 
@@ -458,10 +458,10 @@ The complete unit vocabulary is available in the API reference.
 
 ### Chemistry and light
 
-| Quantity            | Units                            |
-| ------------------- | -------------------------------- |
-| Amount of Substance | `Micromole`, `Millimole`, `Mole` |
-| Luminous Intensity  | `Candela`                        |
+| Quantity            | Units                           |
+| ------------------- | ------------------------------- |
+| Amount of Substance | `Femtoomole` through `Kilomole` |
+| Luminous Intensity  | `Candela`                       |
 
 ### Dimensionless quantities
 

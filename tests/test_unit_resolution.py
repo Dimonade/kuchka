@@ -51,9 +51,13 @@ TABLE_CASES = [
     (
         amount.AMOUNT_OF_SUBSTANCE_UNITS,
         {
+            "fmol": amount.Femtomole,
+            "pmol": amount.Picomole,
+            "nmol": amount.Nanomole,
             f"{symbols.MICRO}mol": amount.Micromole,
             "mmol": amount.Millimole,
             "mol": amount.Mole,
+            "kmol": amount.Kilomole,
         },
     ),
     (
@@ -73,6 +77,8 @@ TABLE_CASES = [
         {
             "Bd": baud_rate.Baud,
             "kBd": baud_rate.Kilobaud,
+            "MBd": baud_rate.Megabaud,
+            "GBd": baud_rate.Gigabaud,
         },
     ),
     (
