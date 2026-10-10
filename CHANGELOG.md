@@ -59,6 +59,13 @@ Angles measure the short way round the circle.
 - `as_power_ratio()` / `as_field_ratio()` and `from_power_ratio()` / `from_field_ratio()` convert to and from a linear `Proportion`.
   They are evaluated in `Decimal` at the active context precision; whole multiples of 10 dB (power) or 20 dB (field) are exact.
 
+### Changed
+
+#### Conversion functions
+
+Conversions between quantity types are named `to_*` and `from_*`.
+`as_instant`, `as_sampling_period`, and `as_frequency` are now `to_instant`, `to_sampling_period`, and `to_frequency`; the old names are removed.
+
 ### Fixed
 
 #### A unit belongs to its quantity types

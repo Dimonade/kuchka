@@ -41,17 +41,17 @@ Power quantities use ``10 ** (level / 10)`` and field quantities such as voltage
 Whole multiples of 10 dB (power) or 20 dB (field) convert exactly:
 
 >>> from kuchka import Ratio
->>> Decibel(30).as_power_ratio() == Ratio(1000)
+>>> Decibel(30).to_power_ratio() == Ratio(1000)
 True
->>> Decibel(40).as_field_ratio() == Ratio(100)
+>>> Decibel(40).to_field_ratio() == Ratio(100)
 True
 
 Other levels convert to the precision of the active `decimal` context.
 The much-quoted "3 dB is a factor of two" is a close approximation:
 
->>> Decibel(3).as_power_ratio() == Ratio(2)
+>>> Decibel(3).to_power_ratio() == Ratio(2)
 False
->>> float(Decibel(3).as_power_ratio().magnitude)
+>>> float(Decibel(3).to_power_ratio().magnitude)
 1.9952623149688795
 
 The reverse direction is a classmethod on `LogarithmicRatio`:
@@ -63,7 +63,7 @@ Notes
 -----
 A level is the same number for a ratio of power quantities and for a ratio of field
 quantities.
-`as_power_ratio()` and `as_field_ratio()` pick the flavour at the point of conversion.
+`to_power_ratio()` and `to_field_ratio()` pick the flavour at the point of conversion.
 
 Only a positive ratio has a level.
 `LogarithmicRatio.from_power_ratio(Ratio(0))` raises `InvalidMeasurementError`.

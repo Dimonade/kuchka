@@ -73,7 +73,7 @@ PAIRS = _shared_dimension_pairs()
 PAIR_IDS = [f"{a.__name__}-{b.__name__}" for a, b in PAIRS]
 
 
-# --- Every concrete type is bound -----------------------------------------------------
+# Every concrete type is bound.
 
 
 @pytest.mark.parametrize("cls", TYPES, ids=_type_id)
@@ -130,7 +130,7 @@ def test_every_unit_of_a_table_is_bound_to_its_type(cls: type[Any]) -> None:
     assert set(units_of(TABLE_OF[cls])) == set(cls._applicable_units)
 
 
-# --- A type with the same dimension does not lend its units ---------------------------
+# A type with the same dimension does not lend its units.
 
 
 @pytest.mark.parametrize(("first", "second"), PAIRS, ids=PAIR_IDS)
@@ -155,7 +155,7 @@ def test_the_types_sharing_a_dimension_are_found() -> None:
     assert frozenset(("Time", "SamplingPeriod")) in names
 
 
-# --- The reported cases ---------------------------------------------------------------
+# The reported cases.
 
 
 def test_a_frequency_is_not_displayed_in_baud() -> None:
@@ -201,7 +201,7 @@ def test_a_unit_that_belongs_to_no_type_names_no_owner() -> None:
     assert str(caught.value) == "stray (st) is not a unit of Frequency."
 
 
-# --- A shared unit is a unit of every type that binds it ------------------------------
+# A shared unit is a unit of every type that binds it.
 
 
 def test_the_second_is_a_unit_of_time_and_of_sampling_period() -> None:
@@ -211,7 +211,7 @@ def test_the_second_is_a_unit_of_time_and_of_sampling_period() -> None:
 
 def test_a_time_and_a_sampling_period_display_in_milliseconds() -> None:
     assert Second(1).to(MILLISECOND).value_in(MILLISECOND) == Fraction(1000)
-    period = Second(1).as_sampling_period()
+    period = Second(1).to_sampling_period()
     assert period.to(MILLISECOND).value_in(MILLISECOND) == Fraction(1000)
 
 
@@ -221,7 +221,7 @@ def test_an_instant_displays_only_in_the_instant_second() -> None:
     assert Instant._applicable_units == frozenset({INSTANT_SECOND})  # noqa: SLF001
 
 
-# --- Everything that worked still works -----------------------------------------------
+# Everything that worked still works.
 
 
 def test_a_unit_of_the_type_converts_as_before() -> None:
@@ -236,7 +236,7 @@ def test_a_foreign_dimension_still_reports_incompatible_dimensions() -> None:
         Hertz(1).to(VOLT)
 
 
-# --- bind_units -----------------------------------------------------------------------
+# `bind_units`.
 
 
 def _fresh_type() -> type[LinearQuantity]:

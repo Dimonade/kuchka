@@ -120,24 +120,24 @@ Level times level, level plus a naked number, and level plus a linear `Proportio
 ### Converting to and from a linear ratio
 
 The same number of decibels describes a different linear ratio depending on the kind of quantity.
-`as_power_ratio()` uses `10 ** (level / 10)` for power, energy, and intensity.
-`as_field_ratio()` uses `10 ** (level / 20)` for voltage, current, and pressure.
+`to_power_ratio()` uses `10 ** (level / 10)` for power, energy, and intensity.
+`to_field_ratio()` uses `10 ** (level / 20)` for voltage, current, and pressure.
 Both return a `Proportion`.
 `LogarithmicRatio.from_power_ratio()` and `LogarithmicRatio.from_field_ratio()` go the other way and require a positive ratio.
 
 ```python
 from kuchka import Decibel, LogarithmicRatio, Ratio
 
-Decibel(30).as_power_ratio() == Ratio(1000)
-Decibel(40).as_field_ratio() == Ratio(100)
-Decibel(6).as_field_ratio() == Decibel(3).as_power_ratio()
+Decibel(30).to_power_ratio() == Ratio(1000)
+Decibel(40).to_field_ratio() == Ratio(100)
+Decibel(6).to_field_ratio() == Decibel(3).to_power_ratio()
 LogarithmicRatio.from_field_ratio(Ratio(10)) == Decibel(20)
 ```
 
 A logarithm of a general ratio is irrational, so this is the one place a logarithmic quantity leaves exact arithmetic.
 The conversion is evaluated in `Decimal` at the active context precision, and the result is stored as the exact `Fraction` of that `Decimal`.
 Whole multiples of 10 dB (power) or 20 dB (field) yield exact powers of ten and stay exact.
-"The 3 dB point is a factor of two" is a close approximation: `Decibel(3).as_power_ratio()` is `1.99526...`.
+"The 3 dB point is a factor of two" is a close approximation: `Decibel(3).to_power_ratio()` is `1.99526...`.
 
 ### Reference levels
 

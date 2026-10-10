@@ -80,7 +80,7 @@ def test_time_and_frequency_reciprocal_round_trips(value):
 
 @pytest.mark.parametrize("value", CLEAN_RECIPROCAL_VALUES, ids=str)
 def test_sampling_period_and_sample_rate_reciprocal_round_trips(value):
-    original = Second(value).as_sampling_period()
+    original = Second(value).to_sampling_period()
     assert 1 / (1 / original) == original
 
 
@@ -114,27 +114,27 @@ def test_sample_rate_and_baud_rate_are_not_interchangeable():
 
 
 def test_sampling_period_and_sample_rate_are_reciprocals_of_each_other():
-    assert 1 / Second(2).as_sampling_period() == SamplesPerSecond(Decimal("0.5"))
-    assert 1 / SamplesPerSecond(500) == Millisecond(2).as_sampling_period()
+    assert 1 / Second(2).to_sampling_period() == SamplesPerSecond(Decimal("0.5"))
+    assert 1 / SamplesPerSecond(500) == Millisecond(2).to_sampling_period()
 
 
 def test_sampling_period_reciprocal_does_not_produce_frequency():
     """SamplingPeriod shares Time's dimension, but its reciprocal is a SampleRate."""
-    result = 1 / Second(2).as_sampling_period()
+    result = 1 / Second(2).to_sampling_period()
     assert isinstance(result, SampleRate)
     assert not isinstance(result, Frequency)
 
 
 def test_sample_rate_as_frequency():
     rate = SamplesPerSecond(500)
-    frequency = rate.as_frequency()
+    frequency = rate.to_frequency()
     assert isinstance(frequency, Frequency)
     assert frequency == Hertz(500)
 
 
 def test_frequency_as_frequency_is_identity():
     frequency = Hertz(50)
-    assert frequency.as_frequency() is frequency
+    assert frequency.to_frequency() is frequency
 
 
 def test_baud_rate_reciprocal_raises_type_error():
@@ -144,7 +144,7 @@ def test_baud_rate_reciprocal_raises_type_error():
 
 
 def test_baud_rate_has_no_as_frequency():
-    assert not hasattr(Baud(9600), "as_frequency")
+    assert not hasattr(Baud(9600), "to_frequency")
 
 
 def test_baud_rate_does_not_satisfy_convertible_to_frequency():
@@ -170,11 +170,11 @@ def test_naked_number_addition_is_rejected_for_temporal_types_too():
         pytest.param(Second, 2, 3, 6, id="Second"),
         pytest.param(Hertz, 2, 3, 6, id="Hertz"),
         pytest.param(
-            lambda v: Second(v).as_sampling_period(),
+            lambda v: Second(v).to_sampling_period(),
             2,
             3,
             6,
-            id="Time.as_sampling_period",
+            id="Time.to_sampling_period",
         ),
         pytest.param(SamplesPerSecond, 2, 3, 6, id="SamplesPerSecond"),
         pytest.param(Baud, 2, 3, 6, id="Baud"),
@@ -191,7 +191,7 @@ def test_kilobaud_scales_correctly():
 
 def test_sampling_period_and_sample_rate_reject_unsupported_reflected_operands():
     with pytest.raises(TypeError):
-        object() / Second(2).as_sampling_period()
+        object() / Second(2).to_sampling_period()
 
     with pytest.raises(TypeError):
         object() / SamplesPerSecond(500)

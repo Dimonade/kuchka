@@ -290,19 +290,19 @@ Kelvin(0)  # valid.
 ```python
 from kuchka import Second, Millisecond
 
-reading = Second(1_700_000_000).as_instant()
+reading = Second(1_700_000_000).to_instant()
 reading + Millisecond(500)  # -> Instant, 500 ms later
-reading - Second(100).as_instant()  # -> Time(1_699_999_900)
+reading - Second(100).to_instant()  # -> Time(1_699_999_900)
 reading + reading  # rejected: `MeasurementError`.
 ```
 
-`Time.as_instant()` and `Time.as_sampling_period()` work at whatever prefix the `Time` value was already constructed with:
+`Time.to_instant()` and `Time.to_sampling_period()` work at whatever prefix the `Time` value was already constructed with:
 
 ```python
 from kuchka import Hour, Minute
 
-Hour(1).as_instant() == Second(3600).as_instant()
-Minute(1).as_sampling_period() == Second(60).as_sampling_period()
+Hour(1).to_instant() == Second(3600).to_instant()
+Minute(1).to_sampling_period() == Second(60).to_sampling_period()
 ```
 
 An `Instant` carries no calendar or epoch of its own.
@@ -345,8 +345,8 @@ Converting to or from the linear ratio a level describes goes through a logarith
 ```python
 from kuchka import Decibel, LogarithmicRatio, Ratio
 
-Decibel(30).as_power_ratio() == Ratio(1000)  # whole decades are exact.
-Decibel(40).as_field_ratio() == Ratio(100)
+Decibel(30).to_power_ratio() == Ratio(1000)  # whole decades are exact.
+Decibel(40).to_field_ratio() == Ratio(100)
 LogarithmicRatio.from_power_ratio(Ratio(100)) == Decibel(20)
 ```
 
@@ -428,9 +428,9 @@ The complete unit vocabulary is available in the API reference.
 | Quantity          | Representative units                                                       |
 | ----------------- | -------------------------------------------------------------------------- |
 | Time              | `Femtosecond` through `Second`, `Minute` through `JulianYear`, and `Jiffy` |
-| Instant           | reached via `Time.as_instant()`                                            |
+| Instant           | reached via `Time.to_instant()`                                            |
 | Frequency         | `Nanohertz` through `Petahertz`                                            |
-| Sampling Period   | reached via `Time.as_sampling_period()`                                    |
+| Sampling Period   | reached via `Time.to_sampling_period()`                                    |
 | Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`         |
 | Baud Rate         | `Baud` through `Gigabaud`                                                  |
 | Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                          |
@@ -496,7 +496,7 @@ Genuine reciprocal pairs remain reciprocal:
 ```python
 from kuchka import Second
 
-rate = 1 / Second(2).as_sampling_period()  # -> SampleRate
+rate = 1 / Second(2).to_sampling_period()  # -> SampleRate
 period = 1 / rate  # -> SamplingPeriod
 ```
 
@@ -508,7 +508,7 @@ from kuchka import Frequency
 
 
 def nyquist_ok(signal: ConvertibleToFrequency, sample_rate: Frequency) -> bool:
-    return signal.as_frequency() * 2 <= sample_rate
+    return signal.to_frequency() * 2 <= sample_rate
 ```
 
 ### Canonical types and domain-specific types

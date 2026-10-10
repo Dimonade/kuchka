@@ -135,7 +135,7 @@ FAMILIES: list[QuantityFamily] = [
     ),
     QuantityFamily(
         "sampling_period",
-        lambda v: time.Second(v).as_sampling_period(),
+        lambda v: time.Second(v).to_sampling_period(),
         time.SECOND,
         sampling_period.SAMPLING_PERIOD_UNITS,
     ),

@@ -2,16 +2,16 @@
 
     from kuchka import Second, Millisecond, Hour
 
-    reading = Second(1_700_000_000).as_instant()
+    reading = Second(1_700_000_000).to_instant()
     later = reading + Millisecond(500)   # -> Instant
-    checkpoint = Hour(1).as_instant()    # an hour past whatever the caller calls zero
+    checkpoint = Hour(1).to_instant()    # an hour past whatever the caller calls zero
 
 `INSTANT_SECOND` is the affine counterpart of `Time`'s own `SECOND`:
 Same scale (1 second per unit), zero offset, so it sits alongside `Time`'s canonical
 unit the way `Temperature`'s `KELVIN` sits alongside `TemperatureDelta`'s canonical
 unit.
 This is the plain, unshifted reference every reading is ultimately expressed against.
-`Time.as_instant()` is what turns a `Time` value into the distinct `Instant` type, at
+`Time.to_instant()` is what turns a `Time` value into the distinct `Instant` type, at
 whichever prefix the value already carries.
 
 `INSTANT_UNITS` maps each symbol to a callable that reads a Time value as an Instant,
@@ -43,7 +43,7 @@ def _via_time(constructor: Callable[[Numeric], Time]) -> Callable[[Numeric], Ins
     """Wrap a Time constructor so it reads its result as an Instant instead."""
 
     def read_as_instant(value: Numeric) -> Instant:
-        return constructor(value).as_instant()
+        return constructor(value).to_instant()
 
     return read_as_instant
 

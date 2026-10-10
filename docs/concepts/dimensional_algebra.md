@@ -26,7 +26,7 @@ A quantity type displays in the units of its own `*_UNITS` table, and in no unit
 `Hertz(1).to(BAUD)` raises `InvalidConversionError`, and `Frequency(Fraction(1), BAUD)` raises `InvalidMeasurementError`, and both name the type the unit belongs to.
 A unit can belong to several types: the second is a unit of `Time` and of `SamplingPeriod`.
 
-Moving a value between quantity types is a separate, explicit step, such as `SampleRate.as_frequency()`.
+Moving a value between quantity types is a separate, explicit step, such as `SampleRate.to_frequency()`.
 
 ## The registry is closed
 
@@ -49,6 +49,13 @@ The first such kind is the principal one, and a later one states its relation to
 A specialisation records meaning and shape: it converts no value and picks no result.
 A result whose dimension is contested raises `AmbiguousKindError`, naming the candidates.
 `kuchka` does not finish importing while a concrete quantity type is unregistered, and a second linear kind that states no relation is refused.
+
+## Converting between types
+
+`.to(unit)` changes the unit a value is shown in and leaves the type alone.
+A conversion between types is a named method: `to_x()` on the value, or `from_x()` on the class.
+`Millisecond(2).to_sampling_period()`, `SampleRate.to_frequency()`, and `Decibel(30).to_power_ratio()` are in the first form, and `LogarithmicRatio.from_power_ratio(ratio)` is in the second.
+A conversion that has a domain raises `InvalidMeasurementError` outside it, and its docstring says so; `from_power_ratio(Ratio(0))` has no logarithm to return.
 
 ## Type-checker support
 
@@ -85,7 +92,7 @@ from kuchka import Frequency
 from kuchka import SampleRate
 from kuchka import Second
 
-rate = 1 / Second(2).as_sampling_period()
+rate = 1 / Second(2).to_sampling_period()
 
 isinstance(rate, SampleRate)
 # True
