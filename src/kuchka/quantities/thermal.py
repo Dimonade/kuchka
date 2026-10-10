@@ -93,4 +93,6 @@ class Temperature(AffineQuantity[TemperatureDelta]):
         return self._magnitude
 
 
+_register(TEMPERATURE_DELTA, Temperature)
+
 __all__ = ["Temperature", "TemperatureDelta"]

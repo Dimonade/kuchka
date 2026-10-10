@@ -120,7 +120,30 @@ class PlannedDimensionError(UnrepresentableDimensionError):
         self.planned_name = planned_name
 
 
+class AmbiguousKindError(UnrepresentableDimensionError):
+    """Arithmetic produced a dimension that several kinds share on equal footing.
+
+    No one of them is the general name for the dimension, so the library does not pick
+    one for the caller.
+    `candidates` holds the kinds the result could be.
+    A subclass of :class:`UnrepresentableDimensionError`, so code that catches the
+    general error still catches this one too.
+    """
+
+    def __init__(self, dimension: object, candidates: tuple[type, ...]) -> None:
+        """Build the error message from the dimension and the kinds sharing it."""
+        names = ", ".join(kind.__name__ for kind in candidates)
+        MeasurementError.__init__(
+            self,
+            f"the result of this operation has dimension [{dimension!r}], "
+            f"which several kinds share equally: {names}.",
+        )
+        self.dimension = dimension
+        self.candidates = candidates
+
+
 __all__ = [
+    "AmbiguousKindError",
     "DivisionByZeroError",
     "IncompatibleDimensionError",
     "InvalidConversionError",

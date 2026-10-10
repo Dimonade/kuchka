@@ -35,6 +35,13 @@ Symbols stay case-sensitive (`mV` is not `MV`), names and spoken forms ignore ca
 Iterating a table now yields display symbols (`°C`, `ΔK`), and the earlier keys (`C`, `dK`, `t`, `As`) still resolve.
 See `docs/concepts/unit_spellings.md`.
 
+#### Quantity kinds are catalogued separately from arithmetic
+
+Every quantity type, of any shape, is registered as a kind of its dimension, and `kuchka` does not import with a type that is missing.
+Arithmetic keeps choosing its result from the linear kinds alone: a second linear kind of a dimension states whether it specialises the first or is contested with it.
+`SamplingPeriod`, `SampleRate`, and `BaudRate` are specialisations of `Time` and `Frequency`.
+A dimension whose linear kinds are on equal footing has no principal kind, and arithmetic that produces it raises the new `AmbiguousKindError`.
+
 #### `is_close` compares with an explicit tolerance
 
 `a.is_close(b, tolerance=...)` on every quantity shape.

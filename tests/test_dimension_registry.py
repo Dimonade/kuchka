@@ -5,9 +5,9 @@ Arithmetic on quantities hands back the named type for the resulting dimension:
 Each quantity module registers its type while it is imported, and the registry closes
 when the package has finished importing, so the named dimensions are part of the library
 and the registration function is internal.
-Registering a type for a dimension that has one is refused, so a dimension always
-resolves to a single general type: `Frequency` for the dimension shared with
-`SampleRate` and `BaudRate`.
+Registering a second type for a dimension that has one is refused unless the type
+states its relation to the first, so a dimension always resolves to a single general
+type: `Frequency` for the dimension shared with `SampleRate` and `BaudRate`.
 """
 
 from __future__ import annotations
@@ -104,7 +104,13 @@ def test_closing_is_one_way() -> None:
 @pytest.fixture
 def open_registry(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(registry, "_closed", False)
-    monkeypatch.setattr(registry, "_DIMENSION_REGISTRY", dict(REGISTERED))
+    for name in (
+        "_KINDS_BY_DIMENSION",
+        "_DIMENSION_REGISTRY",
+        "_CONTESTED",
+        "_SPECIALISATIONS",
+    ):
+        monkeypatch.setattr(registry, name, dict(getattr(registry, name)))
 
 
 @pytest.mark.usefixtures("open_registry")
