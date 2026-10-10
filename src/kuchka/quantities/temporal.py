@@ -371,6 +371,7 @@ _register(FREQUENCY, Frequency)
 _register(TIME, SamplingPeriod, specialisation_of=Time)
 _register(FREQUENCY, SampleRate, specialisation_of=Frequency)
 _register(FREQUENCY, BaudRate, specialisation_of=Frequency)
+_register(TIME, Instant)
 
 __all__ = [
     "BaudRate",

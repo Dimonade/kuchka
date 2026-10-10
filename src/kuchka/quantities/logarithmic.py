@@ -33,6 +33,7 @@ from kuchka.errors import InvalidMeasurementError
 from kuchka.numeric import to_decimal
 from kuchka.numeric import to_exact
 from kuchka.quantities.base import PureLogarithmicQuantity
+from kuchka.quantities.base.registry import _register
 from kuchka.quantities.proportion import Proportion
 
 if TYPE_CHECKING:
@@ -112,5 +113,7 @@ class LogarithmicRatio(PureLogarithmicQuantity):
         """
         return cls(_level_of(ratio, _FIELD_DIVISOR), cls._canonical_unit)
 
+
+_register(DIMENSIONLESS, LogarithmicRatio)
 
 __all__ = ["LogarithmicRatio"]

@@ -11,6 +11,7 @@ from typing import ClassVar
 
 from kuchka.dimensions import ANGLE
 from kuchka.quantities.base import ModularQuantity
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
@@ -22,5 +23,7 @@ class Angle(ModularQuantity):
     dimension: ClassVar[Dimension] = ANGLE
     __slots__ = ()
 
+
+_register(ANGLE, Angle)
 
 __all__ = ["Angle"]

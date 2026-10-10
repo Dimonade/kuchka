@@ -11,17 +11,32 @@ accurate annotations, not needed to actually run `register()` or `_promote()`.
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from typing import Any
+from typing import cast
 
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.errors import AmbiguousKindError
 from kuchka.errors import PlannedDimensionError
 from kuchka.errors import UnrepresentableDimensionError
+from kuchka.quantities.base.storage import _concrete_types
 
 if TYPE_CHECKING:
     from fractions import Fraction
 
     from kuchka.dimensions import Dimension
     from kuchka.quantities.base.linear import LinearQuantity
+    from kuchka.quantities.base.storage import _ScalarStorage
+
+    _Kind = type[_ScalarStorage[Any]]
+
+_KINDS_BY_DIMENSION: dict[Dimension, tuple[_Kind, ...]] = {}
+"""Maps a dimension to every quantity kind registered for it, in registration order.
+
+A type is a kind of its dimension, whatever its shape (linear, affine, modular,
+logarithmic), and several kinds can share one dimension.
+Every concrete quantity type is registered here; this catalogue records which kinds
+exist and never decides which type arithmetic returns.
+"""
 
 _DIMENSION_REGISTRY: dict[Dimension, type[LinearQuantity]] = {}
 """Maps a dimension signature to its principal kind, the type arithmetic hands back.
@@ -33,30 +48,34 @@ imported, so this module needs no list of the types in advance.
 The registry is closed when the package finishes importing (see ``_close``): the named
 dimensions are part of the library, and arithmetic hands back the library's own types.
 
-A type is a kind, and several kinds can share one dimension.
-The principal kind of a dimension is the general SI/physics name for it
-(``Voltage`` for M L^2 T^-3 I^-1, ``Frequency`` for T^-1, and so on), and it is the
-only kind of that dimension that arithmetic produces.
-Every other kind of the dimension declares how it relates to the principal when it
-registers (see ``_SPECIALISATIONS`` and ``_CONTESTED``), and a type that shares a
-dimension without declaring a relation is refused.
+Only a linear kind of a dimension with extent is a principal kind, the general
+SI/physics name for the dimension (``Voltage`` for M L^2 T^-3 I^-1, ``Frequency`` for
+T^-1).
+Arithmetic never produces an affine, modular, or logarithmic value, and it returns a
+plain ``Fraction`` for a dimensionless result, so those kinds are in the catalogue
+and never here.
+A second linear kind of a dimension with extent states its relation to the first, as
+a specialisation or as contested, and a kind that states none is refused.
 A dimension in ``_CONTESTED`` has no principal and so no entry here.
 """
 
-_SPECIALISATIONS: dict[type[LinearQuantity], type[LinearQuantity]] = {}
-"""Maps a specialisation to the kind of its dimension that it specialises.
-
-A specialisation is a role of an existing kind: ``SamplingPeriod`` of ``Time``,
-``SampleRate`` and ``BaudRate`` of ``Frequency``.
-It is reached only by explicit construction, and every conversion between it and
-another kind is a named operation on the type.
-"""
-
 _CONTESTED: dict[Dimension, tuple[type[LinearQuantity], ...]] = {}
-"""Maps a dimension to the kinds that share it on equal footing.
+"""Maps a dimension to the linear kinds that share it on equal footing.
 
 No kind of a contested dimension is principal, so arithmetic cannot pick a result
 type for the dimension by itself.
+"""
+
+_SPECIALISATIONS: dict[_Kind, _Kind] = {}
+"""Maps a specialisation to the kind it is a role of.
+
+A specialisation is a role of a kind of its dimension and of its shape, such as
+``SamplingPeriod`` of ``Time``, and ``SampleRate`` and ``BaudRate`` of ``Frequency``.
+It is reached only by explicit construction, and every conversion between it and
+another kind is a named operation on the type.
+The relation records meaning: it does not convert values, and it does not pick an
+arithmetic result.
+The target is a kind that is not itself a specialisation.
 """
 
 _PLANNED_DIMENSIONS: dict[Dimension, str] = {}
@@ -76,55 +95,105 @@ Emptied out as each named dimension gets a real registered type.
 _closed = False
 
 
-def _kinds_of(dimension: Dimension) -> tuple[type[LinearQuantity], ...]:
+def _kinds_of(dimension: Dimension) -> tuple[_Kind, ...]:
     """Return every kind registered for `dimension`, in registration order."""
-    principals: tuple[type[LinearQuantity], ...]
-    if dimension in _CONTESTED:
-        principals = _CONTESTED[dimension]
-    elif dimension in _DIMENSION_REGISTRY:
-        principals = (_DIMENSION_REGISTRY[dimension],)
-    else:
-        return ()
-    specialisations = tuple(
-        kind for kind in _SPECIALISATIONS if kind.dimension == dimension
-    )
-    return principals + specialisations
+    return _KINDS_BY_DIMENSION.get(dimension, ())
 
 
-def _shared_dimensions() -> dict[Dimension, tuple[type[LinearQuantity], ...]]:
+def _shared_dimensions() -> dict[Dimension, tuple[_Kind, ...]]:
     """Return each dimension that has more than one kind, with its kinds."""
-    dimensions = {*_DIMENSION_REGISTRY, *_CONTESTED}
     return {
         dimension: kinds
-        for dimension in dimensions
-        if len(kinds := _kinds_of(dimension)) > 1
+        for dimension, kinds in _KINDS_BY_DIMENSION.items()
+        if len(kinds) > 1
     }
 
 
-def _is_registered(quantity_type: type[LinearQuantity]) -> bool:
+def _is_registered(quantity_type: _Kind) -> bool:
     """Return whether `quantity_type` is a registered kind of its dimension."""
     return quantity_type in _kinds_of(quantity_type.dimension)
 
 
+def _shape_of(quantity_type: _Kind) -> type:
+    """Return the shape base (linear, affine, modular, logarithmic) of a type."""
+    from kuchka.quantities.base import AffineQuantity  # noqa: PLC0415 -- the package imports this module while it loads
+    from kuchka.quantities.base import LinearQuantity  # noqa: PLC0415 -- same cycle
+    from kuchka.quantities.base import ModularQuantity  # noqa: PLC0415 -- same cycle
+    from kuchka.quantities.base import PureLogarithmicQuantity  # noqa: PLC0415 -- same cycle
+
+    for shape in (
+        LinearQuantity,
+        AffineQuantity,
+        ModularQuantity,
+        PureLogarithmicQuantity,
+    ):
+        if issubclass(quantity_type, shape):
+            return shape
+    msg = (
+        f"{quantity_type.__name__} is not a linear, affine, modular, or logarithmic "
+        "type."
+    )
+    raise TypeError(msg)
+
+
+def _is_arithmetic_kind(quantity_type: _Kind) -> bool:
+    """Return whether arithmetic could produce `quantity_type`.
+
+    A linear kind of a dimension with extent can be an arithmetic result; every other
+    kind is only ever reached by explicit construction.
+    """
+    from kuchka.quantities.base import LinearQuantity  # noqa: PLC0415 -- the package imports this module while it loads
+
+    return (
+        issubclass(quantity_type, LinearQuantity)
+        and quantity_type.dimension != DIMENSIONLESS
+    )
+
+
+def _arithmetic_roots(dimension: Dimension) -> tuple[type[LinearQuantity], ...]:
+    """Return the principal kind of `dimension`, or the kinds contesting for it."""
+    if dimension in _CONTESTED:
+        return _CONTESTED[dimension]
+    if dimension in _DIMENSION_REGISTRY:
+        return (_DIMENSION_REGISTRY[dimension],)
+    return ()
+
+
+def _relation_of(quantity_type: _Kind) -> tuple[str, _Kind | None] | None:
+    """Return how `quantity_type` is registered, or `None` if it is not."""
+    if not _is_registered(quantity_type):
+        return None
+    if quantity_type in _SPECIALISATIONS:
+        return ("specialisation", _SPECIALISATIONS[quantity_type])
+    if quantity_type in _CONTESTED.get(quantity_type.dimension, ()):
+        return ("contested", None)
+    return ("root", None)
+
+
 def _register(
     dimension: Dimension,
-    quantity_type: type[LinearQuantity],
+    quantity_type: _Kind,
     *,
-    specialisation_of: type[LinearQuantity] | None = None,
-    contested_with: type[LinearQuantity] | None = None,
+    specialisation_of: _Kind | None = None,
+    contested_with: _Kind | None = None,
 ) -> None:
     """Register `quantity_type` as a kind of `dimension`.
 
-    The first type of a dimension becomes its principal kind.
-    A later type states its relation to a kind already registered for the dimension:
-    `specialisation_of` makes it a role of that kind, and `contested_with` places it
-    on equal footing with that kind, after which neither is principal.
+    Every concrete quantity type registers once, whatever its shape.
+    A linear kind of a dimension with extent is also entered in the arithmetic
+    registries: the first becomes the principal kind, and a later one states its
+    relation to the linear kinds already there.
+    `specialisation_of` makes it a role of a kind of its dimension and shape, and
+    `contested_with` places it on equal footing with another linear kind, after which
+    neither is principal.
+    Kinds of other shapes, and dimensionless kinds, share a dimension without stating
+    a relation, because arithmetic never chooses between them.
 
     Called once per quantity type, at import time, by the module that defines that type.
 
-    Raises `TypeError` for a second type that states no relation, for a relation to a
-    type that is not a registered kind of the dimension, and for a type whose own
-    `dimension` is another one; and `RuntimeError` once the registry is closed.
+    Raises `TypeError` for a linear kind that has to state a relation and does not, for
+    a relation that does not fit, and for a type whose own `dimension` is another one;
+    and `RuntimeError` once the registry is closed.
     These are defects in kuchka's own quantity modules, not something a caller of the
     public API can trigger, so none of them is part of the `MeasurementError`
     hierarchy that application code handles.
@@ -143,126 +212,140 @@ def _register(
         )
         raise TypeError(msg)
     if specialisation_of is not None and contested_with is not None:
-        msg = (
-            f"{quantity_type.__name__} is either a specialisation or contested, "
-            "not both."
-        )
+        msg = f"{quantity_type.__name__} states one relation, not both."
         raise TypeError(msg)
 
-    known = _kinds_of(dimension)
-    if specialisation_of is not None:
-        _register_specialisation(quantity_type, specialisation_of, known)
-    elif contested_with is not None:
-        _register_contested(quantity_type, contested_with, known)
-    elif quantity_type not in known:
-        if known:
-            names = ", ".join(kind.__name__ for kind in known)
+    current = _relation_of(quantity_type)
+    if current is not None:
+        if current != _requested_relation(specialisation_of, contested_with):
             msg = (
-                f"dimension {dimension!r} is already registered to {names}; "
-                f"{quantity_type.__name__} has to declare how it relates to it, as a "
-                "specialisation (`specialisation_of=`) or as contested "
-                "(`contested_with=`), so that arithmetic has one principal kind to "
-                "hand back or none (see the note above `_DIMENSION_REGISTRY`)."
+                f"{quantity_type.__name__} is already registered with a different "
+                "relation."
             )
             raise TypeError(msg)
-        _DIMENSION_REGISTRY[dimension] = quantity_type
-
-
-def _register_specialisation(
-    quantity_type: type[LinearQuantity],
-    target: type[LinearQuantity],
-    known: tuple[type[LinearQuantity], ...],
-) -> None:
-    """Record `quantity_type` as a specialisation of `target`."""
-    _check_relation_target(quantity_type, target, known)
-    if _SPECIALISATIONS.get(quantity_type) is target:
         return
-    _refuse_if_kind_already_registered(quantity_type, known)
-    _SPECIALISATIONS[quantity_type] = target
+    _validate_new_kind(quantity_type, specialisation_of, contested_with)
+    _commit_kind(quantity_type, specialisation_of, contested_with)
 
 
-def _register_contested(
-    quantity_type: type[LinearQuantity],
-    target: type[LinearQuantity],
-    known: tuple[type[LinearQuantity], ...],
+def _requested_relation(
+    specialisation_of: _Kind | None, contested_with: _Kind | None
+) -> tuple[str, _Kind | None]:
+    """Return the relation a registration states, in `_relation_of`'s terms."""
+    if specialisation_of is not None:
+        return ("specialisation", specialisation_of)
+    if contested_with is not None:
+        return ("contested", None)
+    return ("root", None)
+
+
+def _validate_new_kind(
+    quantity_type: _Kind,
+    specialisation_of: _Kind | None,
+    contested_with: _Kind | None,
 ) -> None:
-    """Place `quantity_type` on equal footing with `target`."""
+    """Refuse a first registration that does not fit, before anything is recorded."""
+    if specialisation_of is not None:
+        _check_specialisation(quantity_type, specialisation_of)
+    elif contested_with is not None:
+        _check_contested(quantity_type, contested_with)
+    elif _is_arithmetic_kind(quantity_type) and (
+        linear := _arithmetic_roots(quantity_type.dimension)
+    ):
+        names = ", ".join(kind.__name__ for kind in linear)
+        msg = (
+            f"dimension {quantity_type.dimension!r} is already registered to {names}; "
+            f"{quantity_type.__name__} has to state its relation to it: a "
+            "specialisation (`specialisation_of=`) or contested (`contested_with=`), "
+            "so that arithmetic has one principal kind to hand back or none (see the "
+            "note above `_DIMENSION_REGISTRY`)."
+        )
+        raise TypeError(msg)
+
+
+def _commit_kind(
+    quantity_type: _Kind,
+    specialisation_of: _Kind | None,
+    contested_with: _Kind | None,
+) -> None:
+    """Record a validated first registration in every registry it belongs to."""
     dimension = quantity_type.dimension
-    _check_relation_target(quantity_type, target, known)
-    if quantity_type in _CONTESTED.get(dimension, ()):
+    _KINDS_BY_DIMENSION[dimension] = (*_kinds_of(dimension), quantity_type)
+    if specialisation_of is not None:
+        _SPECIALISATIONS[quantity_type] = specialisation_of
         return
-    _refuse_if_kind_already_registered(quantity_type, known)
-    if dimension in _CONTESTED:
-        _CONTESTED[dimension] = (*_CONTESTED[dimension], quantity_type)
-    else:
-        _CONTESTED[dimension] = (_DIMENSION_REGISTRY.pop(dimension), quantity_type)
+    linear = cast("type[LinearQuantity]", quantity_type)
+    if contested_with is not None:
+        contested = _CONTESTED.get(dimension) or (_DIMENSION_REGISTRY.pop(dimension),)
+        _CONTESTED[dimension] = (*contested, linear)
+    elif _is_arithmetic_kind(quantity_type):
+        _DIMENSION_REGISTRY[dimension] = linear
 
 
-def _check_relation_target(
-    quantity_type: type[LinearQuantity],
-    target: type[LinearQuantity],
-    known: tuple[type[LinearQuantity], ...],
-) -> None:
-    """Refuse a relation to something other than a principal or contested kind."""
-    principals = [kind for kind in known if kind not in _SPECIALISATIONS]
-    if target is quantity_type or target not in principals:
-        names = ", ".join(kind.__name__ for kind in principals) or "nothing yet"
+def _check_specialisation(quantity_type: _Kind, target: _Kind) -> None:
+    """Refuse a specialisation that is not a role of a kind of the same shape."""
+    if (
+        target is quantity_type
+        or target.dimension != quantity_type.dimension
+        or not _is_registered(target)
+    ):
+        names = ", ".join(kind.__name__ for kind in _kinds_of(quantity_type.dimension))
         msg = (
-            f"{quantity_type.__name__} cannot relate to {target.__name__}: a "
-            f"relation names another kind registered for {quantity_type.dimension!r} "
-            "that is not "
-            f"itself a specialisation (registered: {names})."
+            f"{quantity_type.__name__} cannot specialise {target.__name__}: a "
+            f"specialisation names another kind registered for "
+            f"{quantity_type.dimension!r} (registered: {names or 'nothing yet'})."
+        )
+        raise TypeError(msg)
+    if target in _SPECIALISATIONS:
+        msg = (
+            f"{quantity_type.__name__} cannot specialise {target.__name__}, which is "
+            "itself a specialisation: name the kind it specialises."
+        )
+        raise TypeError(msg)
+    if _shape_of(quantity_type) is not _shape_of(target):
+        msg = (
+            f"{quantity_type.__name__} cannot specialise {target.__name__}: a "
+            "specialisation has the shape of its kind."
         )
         raise TypeError(msg)
 
 
-def _refuse_if_kind_already_registered(
-    quantity_type: type[LinearQuantity],
-    known: tuple[type[LinearQuantity], ...],
-) -> None:
-    """Refuse to give a registered type a second, different relation."""
-    if quantity_type in known:
+def _check_contested(quantity_type: _Kind, target: _Kind) -> None:
+    """Refuse a contest that is not between linear kinds arithmetic could produce."""
+    if not _is_arithmetic_kind(quantity_type) or target not in _arithmetic_roots(
+        quantity_type.dimension
+    ):
         msg = (
-            f"{quantity_type.__name__} is already registered with a different relation."
+            f"{quantity_type.__name__} cannot be contested with {target.__name__}: "
+            "only linear kinds that arithmetic could produce are contested, and the "
+            "target is the principal kind or one of the contested kinds."
         )
         raise TypeError(msg)
 
 
-def _concrete_linear_types() -> list[type[LinearQuantity]]:
-    """Return every concrete linear quantity type that has been defined."""
-    from kuchka.quantities.base.linear import LinearQuantity  # noqa: PLC0415 -- the module imports this one at its own import time
-
-    found: list[type[LinearQuantity]] = []
-    pending = list(LinearQuantity.__subclasses__())
-    while pending:
-        candidate = pending.pop()
-        pending.extend(candidate.__subclasses__())
-        if "dimension" in vars(candidate):
-            found.append(candidate)
-    return found
+def _concrete_kinds() -> list[_Kind]:
+    """Return every concrete quantity type that has been defined."""
+    return [cast("_Kind", kind) for kind in _concrete_types()]
 
 
 def _close() -> None:
     """Close the registry: later registrations raise `RuntimeError`.
 
     Called once, when the package has imported every quantity module.
-    Every concrete linear quantity type with a dimension has to be a registered kind
-    of it by then, so a type that shares a dimension cannot exist without having
-    declared its relation.
+    Every concrete quantity type, of any shape and dimension, has to be a registered
+    kind by then.
     Raises `TypeError` naming the types that are not.
     """
     global _closed  # noqa: PLW0603 -- one-way switch, set once at the end of the import
     if _closed:
         return
-    undeclared = sorted(
-        kind.__name__
-        for kind in _concrete_linear_types()
-        if kind.dimension != DIMENSIONLESS and not _is_registered(kind)
+    unregistered = sorted(
+        kind.__name__ for kind in _concrete_kinds() if not _is_registered(kind)
     )
-    if undeclared:
+    if unregistered:
         msg = (
-            f"{', '.join(undeclared)} share a dimension without being registered "
-            "for it: each states a relation to the kinds already there."
+            f"{', '.join(unregistered)} are not registered for their dimension: each "
+            "quantity module registers its types while it is imported."
         )
         raise TypeError(msg)
     _closed = True
