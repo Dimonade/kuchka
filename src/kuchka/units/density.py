@@ -29,6 +29,8 @@ Density becomes useful when it participates in an actual physical calculation.
 A metal sample has a measured mass of 7.85 kg and occupies exactly one litre.
 Its density identifies it immediately as a material in the familiar steel range:
 
+>>> from kuchka import Kilogram
+>>> from kuchka import Litre
 >>> sample_mass = Kilogram(7.85)
 >>> sample_volume = Litre(1)
 >>> density = sample_mass / sample_volume
@@ -43,6 +45,7 @@ The same material can be expressed in the customary materials-science scale:
 Density also turns a volume into a mass.
 A 12 m³ tank filled with a liquid having a density of 820 kg/m³ contains:
 
+>>> from kuchka import CubicMetre
 >>> fuel_volume = CubicMetre(12)
 >>> fuel_density = KilogramPerCubicMetre(820)
 >>> fuel_mass = fuel_density * fuel_volume
@@ -52,11 +55,12 @@ A 12 m³ tank filled with a liquid having a density of 820 kg/m³ contains:
 Laboratory work often uses the millilitre scale.
 A 250 mL sample with a density of 1.08 g/mL has a mass of:
 
+>>> from kuchka import Millilitre
 >>> sample_volume = Millilitre(250)
 >>> sample_density = GramPerMillilitre(1.08)
 >>> sample_mass = sample_density * sample_volume
 >>> sample_mass
-270 g
+0.27 kg
 
 Very low-density materials are often more naturally described in grams per litre.
 One cubic metre of a gas with a density of 1.2 g/L therefore contains exactly 1.2 kg
@@ -165,6 +169,7 @@ def KilogramPerCubicMetre(value: Numeric) -> Density:
     --------
     A 12 m³ tank holds a liquid with a density of 820 kg/m³:
 
+    >>> from kuchka import CubicMetre
     >>> density = KilogramPerCubicMetre(820)
     >>> density * CubicMetre(12)
     9840 kg
@@ -193,9 +198,10 @@ def GramPerCubicCentimetre(value: Numeric) -> Density:
     --------
     A 250 cm³ metal sample with a density of 7.85 g/cm³ has a mass of:
 
+    >>> from kuchka import CubicCentimetre
     >>> density = GramPerCubicCentimetre(7.85)
     >>> density * CubicCentimetre(250)
-    1962.5 g
+    1.9625 kg
 
     """
     return Density(
@@ -238,6 +244,7 @@ def GramPerLitre(value: Numeric) -> Density:
     A one-cubic-metre gas sample has a density of 1.2 g/L.
     That cubic metre therefore contains exactly 1.2 kg of gas:
 
+    >>> from kuchka import CubicMetre
     >>> density = GramPerLitre(1.2)
     >>> density * CubicMetre(1)
     1.2 kg
@@ -266,9 +273,10 @@ def GramPerMillilitre(value: Numeric) -> Density:
     --------
     A laboratory sample occupies 250 mL and has a density of 1.08 g/mL:
 
+    >>> from kuchka import Millilitre
     >>> density = GramPerMillilitre(1.08)
     >>> density * Millilitre(250)
-    270 g
+    0.27 kg
 
     """
     return Density(
@@ -294,6 +302,7 @@ def KilogramPerLitre(value: Numeric) -> Density:
     --------
     A cryogenic storage vessel contains 18 L of a liquid with a density of 0.81 kg/L:
 
+    >>> from kuchka import Litre
     >>> density = KilogramPerLitre(0.81)
     >>> density * Litre(18)
     14.58 kg
@@ -310,44 +319,14 @@ GramPerMilliliter = GramPerMillilitre
 KilogramPerLiter = KilogramPerLitre
 
 
-# Non-SI.
-
-
-def PoundPerCubicFoot(value: Numeric) -> Density:
-    """Construct a Density from a magnitude expressed in pounds per cubic foot.
-
-    Parameters
-    ----------
-    value : Numeric
-        Density magnitude in pounds per cubic foot.
-
-    Returns
-    -------
-    Density
-        Density represented in pounds per cubic foot.
-
-    Examples
-    --------
-    Structural foam is tested using a customary density specification of 12 lb/ft³.
-    A 100 ft³ volume therefore contains:
-
-    >>> density = PoundPerCubicFoot(12)
-    >>> density * CubicFoot(100)
-    1200 lb
-
-    """
-    return Density(
-        to_exact(value) * POUND_PER_CUBIC_FOOT.scale,
-        POUND_PER_CUBIC_FOOT,
-    )
-
-
 DENSITY_UNITS: Mapping[str, Callable[[Numeric], Density]] = unit_table(
     "DENSITY_UNITS",
     {
         KILOGRAM_PER_CUBIC_METRE: KilogramPerCubicMetre,
         GRAM_PER_CUBIC_CENTIMETRE: GramPerCubicCentimetre,
         KILOGRAM_PER_LITRE: KilogramPerLitre,
+        GRAM_PER_LITRE: GramPerLitre,
+        GRAM_PER_MILLILITRE: GramPerMillilitre,
     },
 )
 

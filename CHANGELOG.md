@@ -29,6 +29,7 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Frequency: `Nanohertz`, `Microhertz`, and `Millihertz`.
 - Amount: `Femtomole`, `Picomole`, `Nanomole`, and `Kilomole`.
 - Baud Rate: `Megabaud` and `Gigabaud`.
+- Density: `GramPerLitre`, `GramPerMillilitre`, and `KilogramPerLitre`.
 
 #### Unit tables accept the notations real files use
 
