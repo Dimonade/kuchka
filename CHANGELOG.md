@@ -38,6 +38,15 @@ Symbols stay case-sensitive (`mV` is not `MV`), names and spoken forms ignore ca
 Iterating a table now yields display symbols (`°C`, `ΔK`), and the earlier keys (`C`, `dK`, `t`, `As`) still resolve.
 See `docs/concepts/unit_spellings.md`.
 
+#### Archaic units
+
+A collection of historic, archaic, traditional, and out of use units.
+These are reachable only explicitly through `kuchka.archaic` and not polluting the API scope.
+
+- `hebrew`: Biblical and Talmudic units,
+- `japanese`: Shakkanho units,
+- `russian`: Imperial units.
+
 #### Quantity kinds are catalogued separately from arithmetic
 
 Every quantity type, of any shape, is registered as a kind of its dimension, and `kuchka` does not import with a type that is missing.
