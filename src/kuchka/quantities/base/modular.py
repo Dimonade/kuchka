@@ -81,6 +81,7 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
                 f"[{self.dimension!r}] and [{unit.dimension!r}]."
             )
             raise InvalidConversionError(msg)
+        self._reject_foreign_unit(unit)
         return type(self)(self._magnitude, unit)
 
     @override

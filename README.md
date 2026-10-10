@@ -660,6 +660,7 @@ Application-level measurement errors derive from `MeasurementError`:
 | `DivisionByZeroError`           | a measurement is divided by zero, or the reciprocal of zero is taken; also a `ZeroDivisionError`                |
 | `UnrepresentableDimensionError` | arithmetic produces a dimension without a registered engineering type                                           |
 | `PlannedDimensionError`         | an unregistered dimension already has a named future type                                                       |
+| `AmbiguousKindError`            | arithmetic produces a dimension shared by several kinds, none of them principal                                 |
 
 Catching `MeasurementError` handles the whole family at once.
 
@@ -743,6 +744,7 @@ Deeper design material is kept separately:
 
 - **[Quantity shapes and semantics](docs/concepts/quantity_shapes.md)** - Linear, Affine, Modular, and Logarithmic quantities, including temperature, angle, and decibel semantics.
 - **[Dimensional algebra and derived quantities](docs/concepts/dimensional_algebra.md)** - exponent-vector arithmetic, registered results, reciprocal relationships, and the boundary between runtime algebra and static overloads.
+- **[Copying, pickling, and persistence](docs/concepts/persistence.md)** - what `copy` and `pickle` guarantee, why pickle is not a storage format, and how to store a value as exact text and a unit symbol.
 - **[Unit spellings](docs/concepts/unit_spellings.md)** - what the `*_UNITS` tables accept, how case and plurals are treated, and why no spelling can mean two units.
 - **[Exactness, angles, and tolerance](docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, angles and pi, and comparing with a tolerance.
 - **[Design choices](docs/design_choices.md)** - constructor functions, unit definitions, canonical types, string-resolution boundaries, and the reasons for a curated vocabulary.

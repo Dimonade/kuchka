@@ -9,12 +9,14 @@ of this package.
 from __future__ import annotations
 
 from fractions import Fraction
+from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import Generic
 from typing import TypeVar
 
 from kuchka.dimensions import Dimension
 from kuchka.errors import IncompatibleDimensionError
+from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.display import render
 from kuchka.internal.typing import override
@@ -24,6 +26,27 @@ _UnitT = TypeVar("_UnitT", bound=_DisplayUnit)
 
 _STATE_LENGTH = 2
 """A pickled state is a (magnitude, display unit) pair."""
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+
+
+def _concrete_types(base: type | None = None) -> Iterator[type]:
+    """Yield every concrete quantity type: one that names its own `dimension`."""
+    for subclass in (base or _ScalarStorage).__subclasses__():
+        if "dimension" in vars(subclass):
+            yield subclass
+        yield from _concrete_types(subclass)
+
+
+def _owners_of(unit: object) -> str:
+    """Name the quantity types `unit` belongs to, as a sentence; empty if none."""
+    owners = sorted(
+        candidate.__name__
+        for candidate in _concrete_types()
+        if unit in getattr(candidate, "_applicable_units", ())
+    )
+    return f" It is a unit of {', '.join(owners)}." if owners else ""
 
 
 class _ScalarStorage(Generic[_UnitT]):
@@ -52,6 +75,9 @@ class _ScalarStorage(Generic[_UnitT]):
     Assigned by each algebraic base (`LinearQuantity`, `AffineQuantity`, ...).
     """
     __slots__ = ("_display_unit", "_magnitude")
+
+    _applicable_units: ClassVar[frozenset[object]]
+    """The units this quantity type displays in, bound by `bind_units`."""
 
     def __init_subclass__(cls, **kwargs: object) -> None:
         """Check that a concrete quantity type is set up completely.
@@ -118,6 +144,17 @@ class _ScalarStorage(Generic[_UnitT]):
                 f"[{cls.dimension!r}] and [{unit_dimension!r}]."
             )
             raise InvalidMeasurementError(msg)
+        # The units are bound once the unit modules have loaded.
+        # Until then (only while the package imports) the kind and dimension checks
+        # above apply.
+        applicable = getattr(cls, "_applicable_units", None)
+        if applicable is not None and display_unit not in applicable:
+            msg = (
+                f"{getattr(display_unit, 'name', '?')} "
+                f"({getattr(display_unit, 'symbol', '?')}) is not a unit of "
+                f"{cls.__name__}.{_owners_of(display_unit)}"
+            )
+            raise InvalidMeasurementError(msg)
 
     def _store(self, magnitude: Fraction, display_unit: _UnitT) -> None:
         """Validate and set the state of a value that has none yet.
@@ -137,6 +174,17 @@ class _ScalarStorage(Generic[_UnitT]):
     @override
     def __delattr__(self, name: str) -> None:
         raise AttributeError(f"{type(self).__name__} is immutable")
+
+    def _reject_foreign_unit(self, unit: object) -> None:
+        """Raise `InvalidConversionError` unless `unit` is a unit of this type."""
+        applicable = getattr(type(self), "_applicable_units", None)
+        if applicable is not None and unit not in applicable:
+            msg = (
+                f"cannot convert {self.unit.name} ({self.unit.symbol}) to "
+                f"{getattr(unit, 'name', '?')} ({getattr(unit, 'symbol', '?')}): "
+                f"it is not a unit of {type(self).__name__}.{_owners_of(unit)}"
+            )
+            raise InvalidConversionError(msg)
 
     def _tolerance_limit(
         self, other: object, tolerance: object, tolerance_type: type

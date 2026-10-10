@@ -20,6 +20,16 @@ its ``__all__ +=``), and ``tests/test_public_api_surface.py`` fails if one is mi
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+from typing import Any
+
+from kuchka import quantities
+from kuchka.internal.unit_table import units_of
+from kuchka.quantities.base.units import bind_units
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
 from kuchka.units import amount
 from kuchka.units import angular
 from kuchka.units import area
@@ -76,6 +86,45 @@ from kuchka.units.temporal.time import *
 from kuchka.units.thermal import *
 from kuchka.units.voltage import *
 from kuchka.units.volume import *
+
+_UNITS_OF: dict[type[Any], Iterable[Any]] = {
+    quantities.Acceleration: units_of(ACCELERATION_UNITS),
+    quantities.AmountOfSubstance: units_of(AMOUNT_OF_SUBSTANCE_UNITS),
+    quantities.Angle: units_of(ANGLE_UNITS),
+    quantities.Area: units_of(AREA_UNITS),
+    quantities.BaudRate: units_of(BAUD_RATE_UNITS),
+    quantities.Charge: units_of(CHARGE_UNITS),
+    quantities.Conductance: units_of(CONDUCTANCE_UNITS),
+    quantities.Current: units_of(CURRENT_UNITS),
+    quantities.Density: units_of(DENSITY_UNITS),
+    quantities.Energy: units_of(ENERGY_UNITS),
+    quantities.Force: units_of(FORCE_UNITS),
+    quantities.Frequency: units_of(FREQUENCY_UNITS),
+    quantities.Instant: (INSTANT_SECOND,),
+    quantities.Length: units_of(LENGTH_UNITS),
+    quantities.LogarithmicRatio: units_of(LOGARITHMIC_RATIO_UNITS),
+    quantities.LuminousIntensity: units_of(LUMINOUS_INTENSITY_UNITS),
+    quantities.Mass: units_of(MASS_UNITS),
+    quantities.Power: units_of(POWER_UNITS),
+    quantities.Pressure: units_of(PRESSURE_UNITS),
+    quantities.Proportion: units_of(PROPORTION_UNITS),
+    quantities.Resistance: units_of(RESISTANCE_UNITS),
+    quantities.SampleRate: units_of(SAMPLE_RATE_UNITS),
+    quantities.SamplingPeriod: units_of(SAMPLING_PERIOD_UNITS),
+    quantities.Temperature: units_of(TEMPERATURE_UNITS),
+    quantities.TemperatureDelta: units_of(TEMPERATURE_DELTA_UNITS),
+    quantities.Time: units_of(TIME_UNITS),
+    quantities.Velocity: units_of(VELOCITY_UNITS),
+    quantities.Voltage: units_of(VOLTAGE_UNITS),
+    quantities.Volume: units_of(VOLUME_UNITS),
+}
+for _quantity_type, _units in _UNITS_OF.items():
+    bind_units(_quantity_type, _units)
+"""Each quantity type displays in the units of its own table.
+
+A unit of one quantity that shares the type's dimension (a `baud` for a `frequency`) is
+not accepted by another.
+"""
 
 __all__: list[str] = []
 __all__ += amount.__all__

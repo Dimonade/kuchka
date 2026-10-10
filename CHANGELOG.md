@@ -37,6 +37,13 @@ Symbols stay case-sensitive (`mV` is not `MV`), names and spoken forms ignore ca
 Iterating a table now yields display symbols (`°C`, `ΔK`), and the earlier keys (`C`, `dK`, `t`, `As`) still resolve.
 See `docs/concepts/unit_spellings.md`.
 
+#### Quantity kinds are catalogued separately from arithmetic
+
+Every quantity type, of any shape, is registered as a kind of its dimension, and `kuchka` does not import with a type that is missing.
+Arithmetic keeps choosing its result from the linear kinds alone: a second linear kind of a dimension states whether it specialises the first or is contested with it.
+`SamplingPeriod`, `SampleRate`, and `BaudRate` are specialisations of `Time` and `Frequency`.
+A dimension whose linear kinds are on equal footing has no principal kind, and arithmetic that produces it raises the new `AmbiguousKindError`.
+
 #### `is_close` compares with an explicit tolerance
 
 `a.is_close(b, tolerance=...)` on every quantity shape.
@@ -52,6 +59,19 @@ Angles measure the short way round the circle.
   They are evaluated in `Decimal` at the active context precision; whole multiples of 10 dB (power) or 20 dB (field) are exact.
 
 ### Fixed
+
+#### A unit belongs to its quantity types
+
+`Hertz(1).to(BAUD)` displayed `1 Bd`, and `Frequency(Fraction(1), BAUD)` was accepted, because a type took any unit of its dimension.
+Each quantity type now binds the units of its own table and refuses every other, and the error names the type the unit belongs to.
+A unit of `Time` is still a unit of `SamplingPeriod`; `SampleRate` no longer converts to hertz with `.to()`, and `SampleRate.as_frequency()` does.
+
+#### Units keep their identity through copy and pickle
+
+`copy.deepcopy(Volt(5)).unit is VOLT` and the same after a pickle round trip were `False`, because a unit was rebuilt by value on the way back.
+Unit definitions are now immutable values with value equality: copying returns the same unit, and pickling stores the name `kuchka.units` publishes it under, so a pickle holds no unit internals.
+A unit that `kuchka.units` does not publish cannot be pickled.
+Pickle is documented as a way to move values between processes of one version, and storage as an exact magnitude plus a unit symbol; see `docs/concepts/persistence.md`.
 
 #### Quantity class constructors validate their arguments
 
