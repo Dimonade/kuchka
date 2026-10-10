@@ -351,44 +351,44 @@ def test_instances_are_immutable():
     ],
 )
 def test_whole_decades_convert_exactly(level, power, field):
-    assert Decibel(level).as_power_ratio() == Ratio(power)
+    assert Decibel(level).to_power_ratio() == Ratio(power)
     if field is not None:
-        assert Decibel(level).as_field_ratio() == Ratio(field)
+        assert Decibel(level).to_field_ratio() == Ratio(field)
 
 
 def test_conversion_result_is_a_proportion_in_the_ratio_unit():
-    ratio = Decibel(30).as_power_ratio()
+    ratio = Decibel(30).to_power_ratio()
     assert isinstance(ratio, Proportion)
     assert ratio.unit is RATIO
-    assert Decibel(-20).as_field_ratio() == Percent(10)
+    assert Decibel(-20).to_field_ratio() == Percent(10)
 
 
 def test_three_decibels_is_close_to_a_factor_of_two_but_not_exactly():
-    power = Decibel(3).as_power_ratio()
+    power = Decibel(3).to_power_ratio()
     assert power != Ratio(2)
     assert float(power.magnitude) == pytest.approx(1.9952623149688795, rel=1e-15)
 
 
 def test_six_decibels_of_voltage_is_the_same_ratio_as_three_of_power():
-    assert Decibel(6).as_field_ratio() == Decibel(3).as_power_ratio()
+    assert Decibel(6).to_field_ratio() == Decibel(3).to_power_ratio()
 
 
 def test_conversion_precision_follows_the_decimal_context():
     with localcontext() as context:
         context.prec = 10
-        assert Decibel(3).as_power_ratio() == Ratio(Decimal("1.995262315"))
+        assert Decibel(3).to_power_ratio() == Ratio(Decimal("1.995262315"))
 
 
 def test_bel_display_unit_does_not_change_the_ratio():
-    assert Bel(3).as_power_ratio() == Decibel(30).as_power_ratio()
+    assert Bel(3).to_power_ratio() == Decibel(30).to_power_ratio()
 
 
 @pytest.mark.parametrize("level", [10**9, -(10**9)], ids=["overflow", "underflow"])
 def test_levels_beyond_the_decimal_range_are_rejected(level):
     with pytest.raises(InvalidMeasurementError, match="outside the range"):
-        Decibel(level).as_power_ratio()
+        Decibel(level).to_power_ratio()
     with pytest.raises(InvalidMeasurementError, match="outside the range"):
-        Decibel(level).as_field_ratio()
+        Decibel(level).to_field_ratio()
 
 
 # Conversion from a linear ratio.
@@ -458,18 +458,18 @@ def test_zero_is_the_identity_and_negation_the_inverse(a):
 
 @given(a=LEVELS, b=LEVELS)
 def test_adding_levels_multiplies_the_power_ratios(a, b):
-    combined = (Decibel(a) + Decibel(b)).as_power_ratio().magnitude
+    combined = (Decibel(a) + Decibel(b)).to_power_ratio().magnitude
     product = (
-        Decibel(a).as_power_ratio().magnitude * Decibel(b).as_power_ratio().magnitude
+        Decibel(a).to_power_ratio().magnitude * Decibel(b).to_power_ratio().magnitude
     )
     assert _relatively_close(combined, product)
 
 
 @given(a=LEVELS, b=LEVELS)
 def test_subtracting_levels_divides_the_field_ratios(a, b):
-    combined = (Decibel(a) - Decibel(b)).as_field_ratio().magnitude
+    combined = (Decibel(a) - Decibel(b)).to_field_ratio().magnitude
     quotient = (
-        Decibel(a).as_field_ratio().magnitude / Decibel(b).as_field_ratio().magnitude
+        Decibel(a).to_field_ratio().magnitude / Decibel(b).to_field_ratio().magnitude
     )
     assert _relatively_close(combined, quotient)
 
@@ -477,8 +477,8 @@ def test_subtracting_levels_divides_the_field_ratios(a, b):
 @given(a=LEVELS)
 def test_a_level_survives_a_round_trip_through_a_ratio(a):
     level = Decibel(a)
-    via_power = LogarithmicRatio.from_power_ratio(level.as_power_ratio())
-    via_field = LogarithmicRatio.from_field_ratio(level.as_field_ratio())
+    via_power = LogarithmicRatio.from_power_ratio(level.to_power_ratio())
+    via_field = LogarithmicRatio.from_field_ratio(level.to_field_ratio())
     assert abs(via_power.magnitude - level.magnitude) < Fraction(1, 10**20)
     assert abs(via_field.magnitude - level.magnitude) < Fraction(1, 10**20)
 
@@ -486,13 +486,13 @@ def test_a_level_survives_a_round_trip_through_a_ratio(a):
 @given(a=LEVELS, b=LEVELS)
 def test_ordering_of_levels_matches_ordering_of_ratios(a, b):
     if Decibel(a) < Decibel(b):
-        assert Decibel(a).as_power_ratio() < Decibel(b).as_power_ratio()
+        assert Decibel(a).to_power_ratio() < Decibel(b).to_power_ratio()
     elif Decibel(a) > Decibel(b):
-        assert Decibel(a).as_power_ratio() > Decibel(b).as_power_ratio()
+        assert Decibel(a).to_power_ratio() > Decibel(b).to_power_ratio()
     else:
-        assert Decibel(a).as_power_ratio() == Decibel(b).as_power_ratio()
+        assert Decibel(a).to_power_ratio() == Decibel(b).to_power_ratio()
 
 
 @given(a=LEVELS)
 def test_field_ratio_of_a_level_is_the_power_ratio_of_its_half(a):
-    assert Decibel(a).as_field_ratio() == (Decibel(a) / 2).as_power_ratio()
+    assert Decibel(a).to_field_ratio() == (Decibel(a) / 2).to_power_ratio()

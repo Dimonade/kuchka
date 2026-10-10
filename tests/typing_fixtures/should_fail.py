@@ -81,20 +81,20 @@ wrong_temporal_reciprocal: SampleRate = 1 / Second(2)  # type: ignore[assignment
 
 # SamplingPeriod and SampleRate are reciprocals of each other specifically, not of
 # Time/Frequency, even though they share the same dimensions.
-reciprocal_of_sampling_period: SampleRate = 1 / Second(2).as_sampling_period()  # OK
+reciprocal_of_sampling_period: SampleRate = 1 / Second(2).to_sampling_period()  # OK
 reciprocal_of_sample_rate: SamplingPeriod = 1 / SamplesPerSecond(500)  # OK
-wrong_sampling_reciprocal: SamplingPeriod = 1 / Second(2).as_sampling_period()  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+wrong_sampling_reciprocal: SamplingPeriod = 1 / Second(2).to_sampling_period()  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
 
-# BaudRate has no reciprocal and no as_frequency(): both are deliberately unmodelled,
+# BaudRate has no reciprocal and no to_frequency(): both are deliberately unmodelled,
 # so neither should exist as an attribute at all.
-_no_as_frequency = Baud(9600).as_frequency()  # type: ignore[attr-defined]  # ty: ignore[unresolved-attribute]
+_no_as_frequency = Baud(9600).to_frequency()  # type: ignore[attr-defined]  # ty: ignore[unresolved-attribute]
 
 
 def take_frequency_like(value: ConvertibleToFrequency) -> Frequency:
-    return value.as_frequency()
+    return value.to_frequency()
 
 
-# BaudRate does not satisfy ConvertibleToFrequency: it has no as_frequency().
+# BaudRate does not satisfy ConvertibleToFrequency: it has no to_frequency().
 take_frequency_like(Baud(9600))  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
 # Frequency and SampleRate do satisfy it.
@@ -158,5 +158,5 @@ cascade: LogarithmicRatio = Decibel(20) + Decibel(-3)  # OK: statically a level.
 loss: LogarithmicRatio = Decibel(-0.2) * 30  # OK: scaling a level gives a level.
 steps: Fraction = Decibel(6) / Decibel(3)  # OK: level over level is a plain fraction.
 scaled_down: LogarithmicRatio = Decibel(6) / 3  # OK: level over a number is a level.
-linear: Proportion = Decibel(3).as_power_ratio()  # OK: a linear ratio.
+linear: Proportion = Decibel(3).to_power_ratio()  # OK: a linear ratio.
 wrong_steps: LogarithmicRatio = Decibel(6) / Decibel(3)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
