@@ -33,7 +33,22 @@ Moving a value between quantity types is a separate, explicit step, such as `Sam
 The set of named dimensions belongs to the library.
 Each quantity module registers its type while `kuchka` is imported, and the registry closes when that import finishes, so every arithmetic result is one of the library's own types and the same expression gives the same type in every program.
 The registration function is internal (`kuchka.quantities.base.registry._register`), and calling it after the import raises `RuntimeError`.
-A dimension has one registered type, the general SI name for it (`Frequency` for T⁻¹), and a second type that shares the dimension, such as `SampleRate`, is reached by constructing it explicitly.
+A type is a kind of its dimension, whatever its shape (linear, affine, modular, or logarithmic), and several kinds can share one dimension.
+Every concrete quantity type is in the catalogue of kinds, which records which kinds exist and never decides what arithmetic returns.
+
+Arithmetic produces linear kinds only, so the rules that choose its result type look only at the linear kinds of a dimension with extent.
+The first such kind is the principal one, and a later one states its relation to the kinds already there:
+
+| Relation       | Meaning                                                                            | Example                                    |
+| -------------- | ---------------------------------------------------------------------------------- | ------------------------------------------ |
+| principal      | the one linear kind arithmetic produces for a dimension with extent                | `Frequency` for T⁻¹                        |
+| specialisation | a role of a kind of the same dimension and shape, reached by explicit construction | `SampleRate` and `BaudRate` of `Frequency` |
+| contested      | linear kinds on equal footing, so the dimension has no principal                   |                                            |
+
+`Time` and `Instant`, `Angle` and a linear angular quantity, `Proportion` and `LogarithmicRatio` can share a dimension without a relation, because arithmetic never has to choose between them.
+A specialisation records meaning and shape: it converts no value and picks no result.
+A result whose dimension is contested raises `AmbiguousKindError`, naming the candidates.
+`kuchka` does not finish importing while a concrete quantity type is unregistered, and a second linear kind that states no relation is refused.
 
 ## Type-checker support
 

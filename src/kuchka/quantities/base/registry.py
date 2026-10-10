@@ -116,7 +116,7 @@ def _is_registered(quantity_type: _Kind) -> bool:
 
 def _shape_of(quantity_type: _Kind) -> type:
     """Return the shape base (linear, affine, modular, logarithmic) of a type."""
-    from kuchka.quantities.base import AffineQuantity  # noqa: PLC0415 -- the package imports this module while it loads
+    from kuchka.quantities.base import AffineQuantity  # noqa: I001, PLC0415
     from kuchka.quantities.base import LinearQuantity  # noqa: PLC0415 -- same cycle
     from kuchka.quantities.base import ModularQuantity  # noqa: PLC0415 -- same cycle
     from kuchka.quantities.base import PureLogarithmicQuantity  # noqa: PLC0415 -- same cycle
@@ -142,7 +142,7 @@ def _is_arithmetic_kind(quantity_type: _Kind) -> bool:
     A linear kind of a dimension with extent can be an arithmetic result; every other
     kind is only ever reached by explicit construction.
     """
-    from kuchka.quantities.base import LinearQuantity  # noqa: PLC0415 -- the package imports this module while it loads
+    from kuchka.quantities.base import LinearQuantity  # noqa: PLC0415
 
     return (
         issubclass(quantity_type, LinearQuantity)

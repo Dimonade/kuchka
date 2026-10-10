@@ -660,6 +660,7 @@ Application-level measurement errors derive from `MeasurementError`:
 | `DivisionByZeroError`           | a measurement is divided by zero, or the reciprocal of zero is taken; also a `ZeroDivisionError`                |
 | `UnrepresentableDimensionError` | arithmetic produces a dimension without a registered engineering type                                           |
 | `PlannedDimensionError`         | an unregistered dimension already has a named future type                                                       |
+| `AmbiguousKindError`            | arithmetic produces a dimension shared by several kinds, none of them principal                                 |
 
 Catching `MeasurementError` handles the whole family at once.
 
