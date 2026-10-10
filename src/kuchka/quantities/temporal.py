@@ -17,19 +17,19 @@ quantity, at whatever prefix it was already constructed with:
     later = reading + Second(42)   # -> Instant
     later - reading                # -> Time(42)
 
-`SamplingPeriod` and `SampleRate` are a second, unregistered pair sharing the same two
-dimensions:
+`SamplingPeriod` and `SampleRate` are specialisations of `Time` and `Frequency`, a
+second pair sharing the same two dimensions:
 a sample period genuinely is the reciprocal of a sample rate, so they convert into each
 other directly, without going through `Frequency`.
-`BaudRate` also shares `Frequency`'s dimension but is not its reciprocal partner, and
-therefore, is not given one:
+`BaudRate` is a specialisation of `Frequency` too, with no reciprocal partner, and
+therefore is not given one:
 baud is a rate of symbols, not of bits or of seconds, so a default numeric equivalence
 with `Frequency` would be right only by coincidence, for any signal encoding more or
 less than one bit per symbol.
 
-See `_DIMENSION_REGISTRY`'s docstring for why only `Time` and `Frequency` are
-registered here, and `LinearQuantity.__rtruediv__` for how `1 / SamplingPeriod(...)`
-is kept from silently answering with the wrong sibling type.
+See `_DIMENSION_REGISTRY`'s docstring for why only `Time` and `Frequency` are the
+principal kinds of their dimensions, and `LinearQuantity.__rtruediv__` for how
+`1 / SamplingPeriod(...)` is kept from silently answering with the wrong sibling type.
 """
 
 from __future__ import annotations
@@ -368,6 +368,9 @@ class BaudRate(LinearQuantity):
 
 _register(TIME, Time)
 _register(FREQUENCY, Frequency)
+_register(TIME, SamplingPeriod, specialisation_of=Time)
+_register(FREQUENCY, SampleRate, specialisation_of=Frequency)
+_register(FREQUENCY, BaudRate, specialisation_of=Frequency)
 
 __all__ = [
     "BaudRate",
