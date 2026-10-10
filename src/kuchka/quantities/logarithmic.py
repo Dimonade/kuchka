@@ -81,17 +81,17 @@ class LogarithmicRatio(PureLogarithmicQuantity):
     dimension: ClassVar[Dimension] = DIMENSIONLESS
     __slots__ = ()
 
-    def as_power_ratio(self) -> Proportion:
+    def to_power_ratio(self) -> Proportion:
         """Return the linear ratio of two power quantities this level describes.
 
-        ``Decibel(30).as_power_ratio() == Ratio(1000)``.
+        ``Decibel(30).to_power_ratio() == Ratio(1000)``.
         """
         return _linear_ratio(self._magnitude, _POWER_DIVISOR)
 
-    def as_field_ratio(self) -> Proportion:
+    def to_field_ratio(self) -> Proportion:
         """Return the linear ratio of two field quantities this level describes.
 
-        ``Decibel(40).as_field_ratio() == Ratio(100)``.
+        ``Decibel(40).to_field_ratio() == Ratio(100)``.
         """
         return _linear_ratio(self._magnitude, _FIELD_DIVISOR)
 
@@ -100,7 +100,7 @@ class LogarithmicRatio(PureLogarithmicQuantity):
         """Return the level, in decibels, of a ratio of two power quantities.
 
         ``LogarithmicRatio.from_power_ratio(Ratio(1000)) == Decibel(30)``.
-        The ratio must be positive.
+        Raises `InvalidMeasurementError` unless the ratio is positive.
         """
         return cls(_level_of(ratio, _POWER_DIVISOR), cls._canonical_unit)
 
@@ -109,7 +109,7 @@ class LogarithmicRatio(PureLogarithmicQuantity):
         """Return the level, in decibels, of a ratio of two field quantities.
 
         ``LogarithmicRatio.from_field_ratio(Ratio(100)) == Decibel(40)``.
-        The ratio must be positive.
+        Raises `InvalidMeasurementError` unless the ratio is positive.
         """
         return cls(_level_of(ratio, _FIELD_DIVISOR), cls._canonical_unit)
 
