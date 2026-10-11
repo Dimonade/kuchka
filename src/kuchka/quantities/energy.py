@@ -27,9 +27,11 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.angular import AngularDisplacement
     from kuchka.quantities.electrical import Power
     from kuchka.quantities.energy_density import EnergyDensity
     from kuchka.quantities.pressure import Pressure
+    from kuchka.quantities.rotational import Torque
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.volume import Volume
 
@@ -50,6 +52,10 @@ class Energy(LinearQuantity):
     def __truediv__(self, other: Volume) -> EnergyDensity: ...
     @overload
     def __truediv__(self, other: EnergyDensity) -> Volume: ...
+    @overload
+    def __truediv__(self, other: AngularDisplacement) -> Torque: ...
+    @overload
+    def __truediv__(self, other: Torque) -> AngularDisplacement: ...
     @overload
     def __truediv__(self, other: Numeric) -> Energy: ...
     @overload

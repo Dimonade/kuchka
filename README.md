@@ -173,6 +173,9 @@ Mass * Acceleration -> Force
 Force / Area -> Pressure
 Pressure * Volume -> Energy
 Energy / Volume -> EnergyDensity
+Torque * AngularDisplacement -> Energy
+Torque * AngularVelocity -> Power
+AngularDisplacement / Time -> AngularVelocity
 Mass / Volume -> Density
 Length * Length -> Area
 Area * Length -> Volume
@@ -452,18 +455,21 @@ The complete unit vocabulary is available in the API reference.
 | Pressure       | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch` |
 | Energy density | `JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`               |
 
-### Angle
+### Angle and rotation
 
-| Quantity | Units                                                           |
-| -------- | --------------------------------------------------------------- |
-| Angle    | `Radian`, `Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond` |
+| Quantity             | Units                                                                                                                                   |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Angle                | `Radian`, `Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond`                                                                         |
+| Angular displacement | `RadianDisplacement`, `DegreeDisplacement`, `TurnDisplacement`, `GradianDisplacement`, `ArcMinuteDisplacement`, `ArcSecondDisplacement` |
+| Angular velocity     | `RadianPerSecond`, `DegreePerSecond`, `TurnPerSecond`, `RevolutionPerMinute`                                                            |
+| Torque               | `NewtonMetre`, `MillinewtonMetre`, `KilonewtonMetre`, `PoundForceFoot`, `PoundForceInch`, `JoulePerTurn`                                |
 
 ### Chemistry and light
 
-| Quantity            | Units                            |
-| ------------------- | -------------------------------- |
+| Quantity            | Units                           |
+| ------------------- | ------------------------------- |
 | Amount of Substance | `Femtoomole` through `Kilomole` |
-| Luminous Intensity  | `Candela`                        |
+| Luminous Intensity  | `Candela`                       |
 
 ### Dimensionless quantities
 

@@ -43,10 +43,14 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
 
     Arithmetic and equality always operate on the canonical magnitude, so the display
     unit never affects correctness.
+    A kind whose canonical unit is not the one people read results in (the joule per
+    turn of a torque) names that unit in `_result_unit`, and the results of arithmetic
+    display in it; every other kind displays results in its canonical unit.
     """
 
     dimension: ClassVar[Dimension]
     _canonical_unit: ClassVar[UnitDef]
+    _result_unit: ClassVar[UnitDef]
     _unit_type: ClassVar[type] = UnitDef
     __slots__ = ()
 

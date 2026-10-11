@@ -34,6 +34,7 @@ from kuchka.quantities import luminous_intensity
 from kuchka.quantities import mass
 from kuchka.quantities import pressure
 from kuchka.quantities import proportion
+from kuchka.quantities import rotational
 from kuchka.quantities import temporal
 from kuchka.quantities import thermal
 from kuchka.quantities import volume
@@ -53,6 +54,7 @@ from kuchka.quantities.luminous_intensity import *
 from kuchka.quantities.mass import *
 from kuchka.quantities.pressure import *
 from kuchka.quantities.proportion import *
+from kuchka.quantities.rotational import *
 from kuchka.quantities.temporal import *
 from kuchka.quantities.thermal import *
 from kuchka.quantities.volume import *
@@ -74,6 +76,7 @@ __all__ += luminous_intensity.__all__
 __all__ += mass.__all__
 __all__ += pressure.__all__
 __all__ += proportion.__all__
+__all__ += rotational.__all__
 __all__ += temporal.__all__
 __all__ += thermal.__all__
 __all__ += volume.__all__

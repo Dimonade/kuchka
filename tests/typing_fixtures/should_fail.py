@@ -9,6 +9,7 @@ from decimal import Decimal
 from fractions import Fraction
 
 from kuchka import Ampere
+from kuchka import AngularVelocity
 from kuchka import Area
 from kuchka import Baud
 from kuchka import BaudRate
@@ -18,6 +19,7 @@ from kuchka import ConvertibleToFrequency
 from kuchka import CubicMetre
 from kuchka import Current
 from kuchka import Decibel
+from kuchka import DegreeDisplacement
 from kuchka import Energy
 from kuchka import EnergyDensity
 from kuchka import Fahrenheit
@@ -28,11 +30,14 @@ from kuchka import Length
 from kuchka import LogarithmicRatio
 from kuchka import Meter
 from kuchka import Newton
+from kuchka import NewtonMetre
 from kuchka import Ohm
 from kuchka import Percent
 from kuchka import Power
 from kuchka import Pressure
 from kuchka import Proportion
+from kuchka import RadianDisplacement
+from kuchka import RadianPerSecond
 from kuchka import Ratio
 from kuchka import Resistance
 from kuchka import SampleRate
@@ -42,6 +47,7 @@ from kuchka import Second
 from kuchka import Siemens
 from kuchka import SquareMetre
 from kuchka import Time
+from kuchka import Torque
 from kuchka import Volt
 from kuchka import Voltage
 from kuchka import Volume
@@ -177,3 +183,14 @@ steps: Fraction = Decibel(6) / Decibel(3)  # OK: level over level is a plain fra
 scaled_down: LogarithmicRatio = Decibel(6) / 3  # OK: level over a number is a level.
 linear: Proportion = Decibel(3).to_power_ratio()  # OK: a linear ratio.
 wrong_steps: LogarithmicRatio = Decibel(6) / Decibel(3)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+
+# With the angle axis counted, torque is energy per angle and angular velocity is angle
+# per time; the overloads tell them apart from energy and from the hertz.
+torque_of_work: Torque = Joule(5) / RadianDisplacement(1)  # OK: a Torque.
+work_back: Energy = torque_of_work * RadianDisplacement(2)  # OK: an Energy.
+turn_rate: AngularVelocity = DegreeDisplacement(90) / Second(
+    1
+)  # OK: an AngularVelocity.
+shaft_power: Power = NewtonMetre(2) * RadianPerSecond(5)  # OK: a Power.
+shaft_torque: Torque = Watt(10) / RadianPerSecond(5)  # OK: a Torque.
+wrong_torque_kind: Energy = Joule(5) / RadianDisplacement(1)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]

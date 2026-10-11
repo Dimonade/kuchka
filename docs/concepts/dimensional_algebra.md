@@ -51,6 +51,19 @@ A specialisation records meaning and shape: it converts no value and picks no re
 A result whose dimension is contested raises `AmbiguousKindError`, naming the candidates.
 `kuchka` does not finish importing while a concrete quantity type is unregistered, and a second linear kind that states no relation is refused.
 
+## The angle axis
+
+`Dimension` counts angle as an axis of its own, so torque is energy per angle and angular velocity is angle per time.
+That separates torque from energy and angular velocity from the hertz, which have the same dimension in SI's base-quantity accounting.
+
+`Angle` is a position on a circle: 370 degrees is 10 degrees, so it wraps and takes no part in arithmetic.
+`AngularDisplacement` is the angle swept, which does not wrap, and it multiplies and divides: `Torque * AngularDisplacement` is an `Energy`, and `AngularDisplacement / Time` is an `AngularVelocity`.
+`Angle.to_angular_displacement()` and `AngularDisplacement.to_angle()` move between them, and `Frequency.to_angular_velocity()` and `AngularVelocity.to_frequency()` between cycles and angle.
+`Torque.from_force(force, lever_arm)` builds a torque from a force at a distance, where `Force * Length` is an `Energy`.
+
+Turn is the canonical angle, so the canonical units are the turn, the turn per second, and the joule per turn, and a radian enters as the exact factor `1 / (2 pi)`.
+Arithmetic results display in the radian, the radian per second, and the newton-metre.
+
 ## Choosing the result type
 
 The type of a product or quotient is decided in this order:

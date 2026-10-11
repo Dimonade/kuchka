@@ -36,6 +36,13 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 `EnergyDensity` (`JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`) shares its dimension with `Pressure`, and the two are contested.
 `Energy / Volume` is an `EnergyDensity` and `Force / Area` a `Pressure`.
 
+#### The angle axis takes part in arithmetic
+
+`AngularDisplacement` is the angle swept, which does not wrap, next to the wrapping `Angle`.
+`AngularVelocity` (`RadianPerSecond`, `DegreePerSecond`, `TurnPerSecond`, `RevolutionPerMinute`) and `Torque` (`NewtonMetre`, `PoundForceFoot`, and more) follow from it.
+`Torque * AngularDisplacement` is an `Energy`, `AngularDisplacement / Time` is an `AngularVelocity`, and `Hertz(1)` is not an `AngularVelocity`.
+`Torque.from_force(force, lever_arm)`, `Frequency.to_angular_velocity()`, `AngularVelocity.to_frequency()`, `Angle.to_angular_displacement()`, and `AngularDisplacement.to_angle()` convert by name.
+
 #### Unit tables accept the notations real files use
 
 `TEMPERATURE_UNITS` takes `C`, `degC`, `degrees C`, and `Degrees Celsius`, and the other tables take `u` for micro and the dalton, `Mohm`, `meter`, `sec`, `kwh`, `yr`, `mm2`, `m^3`, `cc`, and similar.
