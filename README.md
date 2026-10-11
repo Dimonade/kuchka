@@ -172,6 +172,7 @@ Voltage * Current -> Power
 Mass * Acceleration -> Force
 Force / Area -> Pressure
 Pressure * Volume -> Energy
+Energy / Volume -> EnergyDensity
 Mass / Volume -> Density
 Length * Length -> Area
 Area * Length -> Volume
@@ -438,17 +439,18 @@ The complete unit vocabulary is available in the API reference.
 
 ### Geometry and mechanics
 
-| Quantity     | Representative units                                                                                       |
-| ------------ | ---------------------------------------------------------------------------------------------------------- |
-| Length       | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit` and `LightYear` |
-| Area         | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                            |
-| Volume       | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                   |
-| Velocity     | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`, `Knot`                                                |
-| Acceleration | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                          |
-| Mass         | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                             |
-| Force        | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                              |
-| Density      | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                      |
-| Pressure     | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch` |
+| Quantity       | Representative units                                                                                       |
+| -------------- | ---------------------------------------------------------------------------------------------------------- |
+| Length         | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit` and `LightYear` |
+| Area           | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                            |
+| Volume         | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                   |
+| Velocity       | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`, `Knot`                                                |
+| Acceleration   | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                          |
+| Mass           | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                             |
+| Force          | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                              |
+| Density        | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                      |
+| Pressure       | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch` |
+| Energy density | `JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`               |
 
 ### Angle
 
@@ -458,10 +460,10 @@ The complete unit vocabulary is available in the API reference.
 
 ### Chemistry and light
 
-| Quantity            | Units                           |
-| ------------------- | ------------------------------- |
-| Amount of Substance | `Femtoomole` through `Kilomole` |
-| Luminous Intensity  | `Candela`                       |
+| Quantity            | Units                            |
+| ------------------- | -------------------------------- |
+| Amount of Substance | `Micromole`, `Millimole`, `Mole` |
+| Luminous Intensity  | `Candela`                        |
 
 ### Dimensionless quantities
 
