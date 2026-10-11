@@ -462,7 +462,7 @@ The complete unit vocabulary is available in the API reference.
 
 | Quantity            | Units                            |
 | ------------------- | -------------------------------- |
-| Amount of Substance | `Micromole`, `Millimole`, `Mole` |
+| Amount of Substance | `Femtoomole` through `Kilomole` |
 | Luminous Intensity  | `Candela`                        |
 
 ### Dimensionless quantities

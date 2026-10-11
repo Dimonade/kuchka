@@ -105,7 +105,6 @@ POWER = Dimension(time=-3, length=2, mass=1)
 RESISTANCE = Dimension(time=-3, length=2, mass=1, current=-2)
 VOLTAGE = Dimension(time=-3, length=2, mass=1, current=-1)
 PRESSURE = Dimension(time=-2, length=-1, mass=1)
-ENERGY_DENSITY = ENERGY / VOLUME
 ACCELERATION = Dimension(time=-2, length=1)
 FORCE = Dimension(time=-2, length=1, mass=1)
 ENERGY = Dimension(time=-2, length=2, mass=1)
@@ -129,6 +128,9 @@ ANGLE = Dimension(angle=1)
 See the module docstring for why this is tracked as its own axis rather than reusing
 :data:`DIMENSIONLESS`, even though SI itself treats plane angle as dimensionless.
 """
+
+# Derived, by explicit rules.
+ENERGY_DENSITY = ENERGY / VOLUME
 
 __all__ = [
     "ACCELERATION",
