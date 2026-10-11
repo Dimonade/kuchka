@@ -1,4 +1,4 @@
-"""Unit constructors for Angle: Turn, Degree, Radian, Gradian, ArcMinute, ArcSecond.
+"""Unit constructors for Angle and AngularDisplacement: Turn, Degree, Radian, and more.
 
     from kuchka import Radian, Degree
 
@@ -26,6 +26,11 @@ tolerance written down as an angle.
 
 `ANGLE_UNITS` maps each symbol to its constructor, for boundary code that reads a unit
 as a string from outside the application.
+
+`AngularDisplacement` is the angle swept, which does not wrap, and it uses the same
+units under constructors that end in `Displacement`: `DegreeDisplacement(370)` is 370
+degrees of rotation, where `Degree(370)` is the position 10 degrees.
+`ANGULAR_DISPLACEMENT_UNITS` maps each symbol to its constructor.
 """
 
 from __future__ import annotations
@@ -39,6 +44,7 @@ from kuchka.internal.constants import PI
 from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import to_exact
 from kuchka.quantities import Angle
+from kuchka.quantities import AngularDisplacement
 from kuchka.quantities import UnitDef
 
 if TYPE_CHECKING:
@@ -73,6 +79,8 @@ RADIAN = UnitDef("radian", "rad", 1 / (2 * PI), ANGLE)
 
 Angle._canonical_unit = TURN  # noqa: SLF001 -- this module owns Angle's canonical unit
 Angle._period = TURN.scale  # noqa: SLF001 -- this module owns Angle's period, one turn in the canonical unit
+AngularDisplacement._canonical_unit = TURN  # noqa: SLF001 -- this module owns AngularDisplacement's canonical unit
+AngularDisplacement._result_unit = RADIAN  # noqa: SLF001 -- and the unit its arithmetic results display in
 
 
 def Radian(value: Numeric) -> Angle:
@@ -105,6 +113,36 @@ def ArcSecond(value: Numeric) -> Angle:
     return Angle(to_exact(value) * ARCSECOND.scale, ARCSECOND)
 
 
+def TurnDisplacement(value: Numeric) -> AngularDisplacement:
+    """Construct an AngularDisplacement from a magnitude expressed in turns."""
+    return AngularDisplacement(to_exact(value), TURN)
+
+
+def DegreeDisplacement(value: Numeric) -> AngularDisplacement:
+    """Construct an AngularDisplacement from a magnitude expressed in degrees."""
+    return AngularDisplacement(to_exact(value) * DEGREE.scale, DEGREE)
+
+
+def RadianDisplacement(value: Numeric) -> AngularDisplacement:
+    """Construct an AngularDisplacement from a magnitude expressed in radians."""
+    return AngularDisplacement(to_exact(value) * RADIAN.scale, RADIAN)
+
+
+def GradianDisplacement(value: Numeric) -> AngularDisplacement:
+    """Construct an AngularDisplacement from a magnitude expressed in gradians."""
+    return AngularDisplacement(to_exact(value) * GRADIAN.scale, GRADIAN)
+
+
+def ArcMinuteDisplacement(value: Numeric) -> AngularDisplacement:
+    """Construct an AngularDisplacement from a magnitude expressed in arcminutes."""
+    return AngularDisplacement(to_exact(value) * ARCMINUTE.scale, ARCMINUTE)
+
+
+def ArcSecondDisplacement(value: Numeric) -> AngularDisplacement:
+    """Construct an AngularDisplacement from a magnitude expressed in arcseconds."""
+    return AngularDisplacement(to_exact(value) * ARCSECOND.scale, ARCSECOND)
+
+
 ANGLE_UNITS: Mapping[str, Callable[[Numeric], Angle]] = unit_table(
     "ANGLE_UNITS",
     {
@@ -117,8 +155,23 @@ ANGLE_UNITS: Mapping[str, Callable[[Numeric], Angle]] = unit_table(
     },
 )
 
+ANGULAR_DISPLACEMENT_UNITS: Mapping[str, Callable[[Numeric], AngularDisplacement]] = (
+    unit_table(
+        "ANGULAR_DISPLACEMENT_UNITS",
+        {
+            TURN: TurnDisplacement,
+            DEGREE: DegreeDisplacement,
+            RADIAN: RadianDisplacement,
+            GRADIAN: GradianDisplacement,
+            ARCMINUTE: ArcMinuteDisplacement,
+            ARCSECOND: ArcSecondDisplacement,
+        },
+    )
+)
+
 __all__ = [
     "ANGLE_UNITS",
+    "ANGULAR_DISPLACEMENT_UNITS",
     "ARCMINUTE",
     "ARCSECOND",
     "DEGREE",
@@ -126,9 +179,15 @@ __all__ = [
     "RADIAN",
     "TURN",
     "ArcMinute",
+    "ArcMinuteDisplacement",
     "ArcSecond",
+    "ArcSecondDisplacement",
     "Degree",
+    "DegreeDisplacement",
     "Gradian",
+    "GradianDisplacement",
     "Radian",
+    "RadianDisplacement",
     "Turn",
+    "TurnDisplacement",
 ]

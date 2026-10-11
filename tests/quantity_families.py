@@ -24,6 +24,8 @@ from kuchka.quantities import LinearQuantity
 from kuchka.quantities.base.storage import _ScalarStorage
 from kuchka.units import acceleration
 from kuchka.units import amount
+from kuchka.units import angular
+from kuchka.units import angular_velocity
 from kuchka.units import area
 from kuchka.units import baud_rate
 from kuchka.units import charge
@@ -31,6 +33,7 @@ from kuchka.units import conductance
 from kuchka.units import current
 from kuchka.units import density
 from kuchka.units import energy
+from kuchka.units import energy_density
 from kuchka.units import force
 from kuchka.units import frequency
 from kuchka.units import length
@@ -44,6 +47,7 @@ from kuchka.units import sample_rate
 from kuchka.units import sampling_period
 from kuchka.units import thermal
 from kuchka.units import time
+from kuchka.units import torque
 from kuchka.units import velocity
 from kuchka.units import voltage
 from kuchka.units import volume
@@ -86,6 +90,18 @@ FAMILIES: list[QuantityFamily] = [
         amount.MOLE,
         amount.AMOUNT_OF_SUBSTANCE_UNITS,
     ),
+    QuantityFamily(
+        "angular_displacement",
+        angular.TurnDisplacement,
+        angular.TURN,
+        angular.ANGULAR_DISPLACEMENT_UNITS,
+    ),
+    QuantityFamily(
+        "angular_velocity",
+        angular_velocity.TurnPerSecond,
+        angular_velocity.TURN_PER_SECOND,
+        angular_velocity.ANGULAR_VELOCITY_UNITS,
+    ),
     QuantityFamily("area", area.SquareMetre, area.SQUARE_METRE, area.AREA_UNITS),
     QuantityFamily(
         "baud_rate", baud_rate.Baud, baud_rate.BAUD, baud_rate.BAUD_RATE_UNITS
@@ -105,6 +121,12 @@ FAMILIES: list[QuantityFamily] = [
         density.DENSITY_UNITS,
     ),
     QuantityFamily("energy", energy.Joule, energy.JOULE, energy.ENERGY_UNITS),
+    QuantityFamily(
+        "energy_density",
+        energy_density.JoulePerCubicMetre,
+        energy_density.JOULE_PER_CUBIC_METRE,
+        energy_density.ENERGY_DENSITY_UNITS,
+    ),
     QuantityFamily("force", force.Newton, force.NEWTON, force.FORCE_UNITS),
     QuantityFamily(
         "frequency", frequency.Hertz, frequency.HERTZ, frequency.FREQUENCY_UNITS
@@ -146,6 +168,9 @@ FAMILIES: list[QuantityFamily] = [
         thermal.TEMPERATURE_DELTA_UNITS,
     ),
     QuantityFamily("time", time.Second, time.SECOND, time.TIME_UNITS),
+    QuantityFamily(
+        "torque", torque.JoulePerTurn, torque.JOULE_PER_TURN, torque.TORQUE_UNITS
+    ),
     QuantityFamily(
         "velocity",
         velocity.MetrePerSecond,

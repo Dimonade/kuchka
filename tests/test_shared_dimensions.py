@@ -20,11 +20,14 @@ import pytest
 import kuchka
 from kuchka import AmbiguousKindError
 from kuchka import Angle
+from kuchka import AngularDisplacement
 from kuchka import BaudRate
+from kuchka import EnergyDensity
 from kuchka import Frequency
 from kuchka import Instant
 from kuchka import LogarithmicRatio
 from kuchka import MeasurementError
+from kuchka import Pressure
 from kuchka import Proportion
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
@@ -35,6 +38,7 @@ from kuchka import UnrepresentableDimensionError
 from kuchka.dimensions import ANGLE
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import FREQUENCY
+from kuchka.dimensions import PRESSURE
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.dimensions import TIME
 from kuchka.dimensions import Dimension
@@ -52,6 +56,8 @@ SHARED = {
     FREQUENCY: (Frequency, SampleRate, BaudRate),
     TEMPERATURE_DELTA: (TemperatureDelta, Temperature),
     DIMENSIONLESS: (Proportion, LogarithmicRatio),
+    PRESSURE: (Pressure, EnergyDensity),
+    ANGLE: (Angle, AngularDisplacement),
 }
 
 
@@ -112,6 +118,13 @@ def test_a_kind_arithmetic_cannot_produce_is_never_principal(kind: type) -> None
     assert not any(kind in group for group in registry._CONTESTED.values())  # noqa: SLF001
 
 
+def test_the_angular_displacement_is_the_principal_kind_of_the_angle_dimension() -> (
+    None
+):
+    assert registry._DIMENSION_REGISTRY[ANGLE] is AngularDisplacement  # noqa: SLF001
+    assert Angle not in registry._DIMENSION_REGISTRY.values()  # noqa: SLF001
+
+
 def test_a_dimension_with_a_kind_of_another_shape_keeps_its_principal() -> None:
     assert registry._DIMENSION_REGISTRY[TIME] is Time  # noqa: SLF001
     assert registry._DIMENSION_REGISTRY[TEMPERATURE_DELTA] is TemperatureDelta  # noqa: SLF001
@@ -125,8 +138,9 @@ def test_the_principal_kinds_are_linear_kinds_with_extent() -> None:
         assert registry._is_registered(kind)  # noqa: SLF001
 
 
-def test_no_shipped_dimension_is_contested() -> None:
-    assert registry._CONTESTED == {}  # noqa: SLF001
+def test_only_pressure_and_energy_density_are_contested() -> None:
+    assert {PRESSURE: (Pressure, EnergyDensity)} == registry._CONTESTED  # noqa: SLF001
+    assert PRESSURE not in registry._DIMENSION_REGISTRY  # noqa: SLF001
 
 
 # Specialisations.
@@ -299,7 +313,7 @@ def test_a_registered_kind_cannot_change_its_relation(novel: Dimension) -> None:
         registry._register(novel, general, specialisation_of=role)  # noqa: SLF001
 
 
-# Specialisations.
+# --- Specialisations ------------------------------------------------------------------
 
 
 @open_

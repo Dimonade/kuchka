@@ -31,6 +31,18 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Baud Rate: `Megabaud` and `Gigabaud`.
 - Density: `GramPerLitre`, `GramPerMillilitre`, and `KilogramPerLitre`.
 
+#### Energy density is its own quantity
+
+`EnergyDensity` (`JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`) shares its dimension with `Pressure`, and the two are contested.
+`Energy / Volume` is an `EnergyDensity` and `Force / Area` a `Pressure`.
+
+#### The angle axis takes part in arithmetic
+
+`AngularDisplacement` is the angle swept, which does not wrap, next to the wrapping `Angle`.
+`AngularVelocity` (`RadianPerSecond`, `DegreePerSecond`, `TurnPerSecond`, `RevolutionPerMinute`) and `Torque` (`NewtonMetre`, `PoundForceFoot`, and more) follow from it.
+`Torque * AngularDisplacement` is an `Energy`, `AngularDisplacement / Time` is an `AngularVelocity`, and `Hertz(1)` is not an `AngularVelocity`.
+`Torque.from_force(force, lever_arm)`, `Frequency.to_angular_velocity()`, `AngularVelocity.to_frequency()`, `Angle.to_angular_displacement()`, and `AngularDisplacement.to_angle()` convert by name.
+
 #### Unit tables accept the notations real files use
 
 `TEMPERATURE_UNITS` takes `C`, `degC`, `degrees C`, and `Degrees Celsius`, and the other tables take `u` for micro and the dalton, `Mohm`, `meter`, `sec`, `kwh`, `yr`, `mm2`, `m^3`, `cc`, and similar.
@@ -65,7 +77,7 @@ Angles measure the short way round the circle.
 - `Decibel` and `Bel` constructors, with `LOGARITHMIC_RATIO_UNITS`.
 - `PureLogarithmicQuantity`, the base for a ratio expressed as a logarithm, and `LogarithmicUnitDef`, the unit-definition type for it.
 - Levels add, subtract, scale by a plain number, negate, take `abs()`, and compare, all exactly.
-- `as_power_ratio()` / `as_field_ratio()` and `from_power_ratio()` / `from_field_ratio()` convert to and from a linear `Proportion`.
+- `to_power_ratio()` / `to_field_ratio()` and `from_power_ratio()` / `from_field_ratio()` convert to and from a linear `Proportion`.
   They are evaluated in `Decimal` at the active context precision; whole multiples of 10 dB (power) or 20 dB (field) are exact.
 
 ### Changed
@@ -76,6 +88,11 @@ Conversions between quantity types are named `to_*` and `from_*`.
 `as_instant`, `as_sampling_period`, and `as_frequency` are now `to_instant`, `to_sampling_period`, and `to_frequency`; the old names are removed.
 
 ### Fixed
+
+#### A `Proportion` keeps the kind it scales
+
+`SampleRate * Ratio(2)` and `BaudRate * Percent(50)` returned a `Frequency` in hertz.
+A dimensionless operand now keeps the kind of the other operand.
 
 #### A unit belongs to its quantity types
 

@@ -9,24 +9,35 @@ from decimal import Decimal
 from fractions import Fraction
 
 from kuchka import Ampere
+from kuchka import AngularVelocity
 from kuchka import Area
 from kuchka import Baud
 from kuchka import BaudRate
 from kuchka import Celsius
 from kuchka import Conductance
 from kuchka import ConvertibleToFrequency
+from kuchka import CubicMetre
 from kuchka import Current
 from kuchka import Decibel
+from kuchka import DegreeDisplacement
+from kuchka import Energy
+from kuchka import EnergyDensity
 from kuchka import Fahrenheit
 from kuchka import Frequency
 from kuchka import Hertz
+from kuchka import Joule
 from kuchka import Length
 from kuchka import LogarithmicRatio
 from kuchka import Meter
+from kuchka import Newton
+from kuchka import NewtonMetre
 from kuchka import Ohm
 from kuchka import Percent
 from kuchka import Power
+from kuchka import Pressure
 from kuchka import Proportion
+from kuchka import RadianDisplacement
+from kuchka import RadianPerSecond
 from kuchka import Ratio
 from kuchka import Resistance
 from kuchka import SampleRate
@@ -34,7 +45,9 @@ from kuchka import SamplesPerSecond
 from kuchka import SamplingPeriod
 from kuchka import Second
 from kuchka import Siemens
+from kuchka import SquareMetre
 from kuchka import Time
+from kuchka import Torque
 from kuchka import Volt
 from kuchka import Voltage
 from kuchka import Volume
@@ -134,6 +147,16 @@ height: Length = volume_a / area  # OK: statically known to be Length.
 # the runtime type actually disagrees.
 wrong_area: Area = area * Meter(3)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
 
+# Energy / Volume is an EnergyDensity, and Force / Area a Pressure: the two kinds share
+# a dimension, and the overloads tell them apart.
+density_of_energy: EnergyDensity = Joule(5) / CubicMetre(
+    1
+)  # OK: statically an EnergyDensity.
+pressure_of_force: Pressure = Newton(5) / SquareMetre(1)  # OK: statically a Pressure.
+energy_back: Energy = density_of_energy * CubicMetre(2)  # OK: statically an Energy.
+volume_back: Volume = Joule(5) / density_of_energy  # OK: statically a Volume.
+wrong_kind: Pressure = Joule(5) / CubicMetre(1)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+
 # Resistance and Conductance are reciprocals of each other, the same shape
 # Time/Frequency already have, and Ohm's law works from either side of that
 # reciprocal.
@@ -160,3 +183,14 @@ steps: Fraction = Decibel(6) / Decibel(3)  # OK: level over level is a plain fra
 scaled_down: LogarithmicRatio = Decibel(6) / 3  # OK: level over a number is a level.
 linear: Proportion = Decibel(3).to_power_ratio()  # OK: a linear ratio.
 wrong_steps: LogarithmicRatio = Decibel(6) / Decibel(3)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+
+# With the angle axis counted, torque is energy per angle and angular velocity is angle
+# per time; the overloads tell them apart from energy and from the hertz.
+torque_of_work: Torque = Joule(5) / RadianDisplacement(1)  # OK: a Torque.
+work_back: Energy = torque_of_work * RadianDisplacement(2)  # OK: an Energy.
+turn_rate: AngularVelocity = DegreeDisplacement(90) / Second(
+    1
+)  # OK: an AngularVelocity.
+shaft_power: Power = NewtonMetre(2) * RadianPerSecond(5)  # OK: a Power.
+shaft_torque: Torque = Watt(10) / RadianPerSecond(5)  # OK: a Torque.
+wrong_torque_kind: Energy = Joule(5) / RadianDisplacement(1)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]

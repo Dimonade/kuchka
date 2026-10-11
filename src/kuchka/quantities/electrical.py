@@ -45,6 +45,8 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.charge import Charge
     from kuchka.quantities.energy import Energy
+    from kuchka.quantities.rotational import AngularVelocity
+    from kuchka.quantities.rotational import Torque
     from kuchka.quantities.temporal import Time
 
 
@@ -137,6 +139,10 @@ class Power(LinearQuantity):
     def __truediv__(self, other: Voltage) -> Current: ...
     @overload
     def __truediv__(self, other: Current) -> Voltage: ...
+    @overload
+    def __truediv__(self, other: AngularVelocity) -> Torque: ...
+    @overload
+    def __truediv__(self, other: Torque) -> AngularVelocity: ...
     @overload
     def __truediv__(self, other: Numeric) -> Power: ...
     @overload

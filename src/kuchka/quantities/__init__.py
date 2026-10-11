@@ -26,6 +26,7 @@ from kuchka.quantities import charge
 from kuchka.quantities import density
 from kuchka.quantities import electrical
 from kuchka.quantities import energy
+from kuchka.quantities import energy_density
 from kuchka.quantities import kinematics
 from kuchka.quantities import length
 from kuchka.quantities import logarithmic
@@ -33,6 +34,7 @@ from kuchka.quantities import luminous_intensity
 from kuchka.quantities import mass
 from kuchka.quantities import pressure
 from kuchka.quantities import proportion
+from kuchka.quantities import rotational
 from kuchka.quantities import temporal
 from kuchka.quantities import thermal
 from kuchka.quantities import volume
@@ -44,6 +46,7 @@ from kuchka.quantities.charge import *
 from kuchka.quantities.density import *
 from kuchka.quantities.electrical import *
 from kuchka.quantities.energy import *
+from kuchka.quantities.energy_density import *
 from kuchka.quantities.kinematics import *
 from kuchka.quantities.length import *
 from kuchka.quantities.logarithmic import *
@@ -51,6 +54,7 @@ from kuchka.quantities.luminous_intensity import *
 from kuchka.quantities.mass import *
 from kuchka.quantities.pressure import *
 from kuchka.quantities.proportion import *
+from kuchka.quantities.rotational import *
 from kuchka.quantities.temporal import *
 from kuchka.quantities.thermal import *
 from kuchka.quantities.volume import *
@@ -64,6 +68,7 @@ __all__ += charge.__all__
 __all__ += density.__all__
 __all__ += electrical.__all__
 __all__ += energy.__all__
+__all__ += energy_density.__all__
 __all__ += kinematics.__all__
 __all__ += length.__all__
 __all__ += logarithmic.__all__
@@ -71,6 +76,7 @@ __all__ += luminous_intensity.__all__
 __all__ += mass.__all__
 __all__ += pressure.__all__
 __all__ += proportion.__all__
+__all__ += rotational.__all__
 __all__ += temporal.__all__
 __all__ += thermal.__all__
 __all__ += volume.__all__

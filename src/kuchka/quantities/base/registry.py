@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Literal
 from typing import cast
 
 from kuchka.dimensions import DIMENSIONLESS
@@ -26,6 +27,7 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.quantities.base.linear import LinearQuantity
     from kuchka.quantities.base.storage import _ScalarStorage
+    from kuchka.quantities.base.units import UnitDef
 
     _Kind = type[_ScalarStorage[Any]]
 
@@ -76,6 +78,19 @@ another kind is a named operation on the type.
 The relation records meaning: it does not convert values, and it does not pick an
 arithmetic result.
 The target is a kind that is not itself a specialisation.
+"""
+
+_RULES: dict[tuple[_Kind, str, _Kind], _Kind] = {}
+"""Maps (left kind, operation, right kind) to the kind that product or quotient has.
+
+The operation is ``"*"`` or ``"/"``, and the kinds are the exact types of the operands.
+An explicit rule decides the result type before the dimension is consulted, so it is
+what separates two kinds that share a dimension.
+For instance, ``Force / Area`` is a ``Pressure`` and ``Energy / Volume`` an
+``EnergyDensity`` although both results are M L^-1 T^-2.
+A product is entered in both operand orders.
+Every rule is declared through ``_rule`` while the package imports, and the table
+closes with the registry.
 """
 
 _PLANNED_DIMENSIONS: dict[Dimension, str] = {}
@@ -323,6 +338,116 @@ def _check_contested(quantity_type: _Kind, target: _Kind) -> None:
         raise TypeError(msg)
 
 
+def _result_unit(kind: type[LinearQuantity]) -> UnitDef:
+    """Return the unit the results of arithmetic of `kind` display in."""
+    own = "_result_unit" in vars(kind)
+    return kind._result_unit if own else kind._canonical_unit  # noqa: SLF001 -- the kind's own units
+
+
+def _rule(
+    left: _Kind,
+    operation: Literal["*", "/"],
+    right: _Kind,
+    result: _Kind,
+) -> None:
+    """Declare that `left <operation> right` is a `result`.
+
+    A product holds in both operand orders.
+    The operands are registered linear kinds with a dimension, and the result is the
+    principal kind of the dimension the operation produces or one of its contested
+    kinds, because only those are results of arithmetic.
+
+    Raises `TypeError` for a rule that does not fit or contradicts another, and
+    `RuntimeError` once the registry is closed.
+    A refused rule leaves the table unchanged.
+    """
+    if _closed:
+        msg = (
+            f"cannot add a rule for {left.__name__} {operation} {right.__name__}: the "
+            "dimension registry is closed once `kuchka` has finished importing."
+        )
+        raise RuntimeError(msg)
+    if operation not in ("*", "/"):
+        msg = f"an operation is '*' or '/', not {operation!r}."
+        raise TypeError(msg)
+    for operand in (left, right):
+        if not (_is_registered(operand) and _is_arithmetic_kind(operand)):
+            msg = (
+                f"{operand.__name__} cannot be an operand of a rule: an operand is a "
+                "registered linear kind with a dimension."
+            )
+            raise TypeError(msg)
+    dimension = (
+        left.dimension * right.dimension
+        if operation == "*"
+        else left.dimension / right.dimension
+    )
+    if result.dimension != dimension or result not in _arithmetic_roots(dimension):
+        names = ", ".join(kind.__name__ for kind in _arithmetic_roots(dimension))
+        msg = (
+            f"{left.__name__} {operation} {right.__name__} has dimension "
+            f"{dimension!r}, so {result.__name__} cannot be its result: the result is "
+            f"the principal kind or a contested kind of that dimension "
+            f"({names or 'none registered'})."
+        )
+        raise TypeError(msg)
+    keys = [(left, operation, right)]
+    if operation == "*" and left is not right:
+        keys.append((right, operation, left))
+    for key in keys:
+        known = _RULES.get(key)
+        if known is not None and known is not result:
+            msg = (
+                f"{left.__name__} {operation} {right.__name__} is already "
+                f"{known.__name__}, not {result.__name__}."
+            )
+            raise TypeError(msg)
+    for key in keys:
+        _RULES[key] = result
+
+
+def _result_kind(
+    operation: Literal["*", "/"], left: _Kind, right: _Kind
+) -> _Kind | None:
+    """Return the kind that `left <operation> right` has, if a rule decides it.
+
+    A dimensionless operand leaves the kind of the other operand as it is, so a
+    `SampleRate` scaled by a `Proportion` is still a `SampleRate`.
+    Otherwise an explicit rule decides, and `None` leaves it to the dimension.
+    """
+    if right.dimension == DIMENSIONLESS:
+        return left
+    if left.dimension == DIMENSIONLESS and operation == "*":
+        return right
+    return _RULES.get((left, operation, right))
+
+
+def _combine(
+    operation: Literal["*", "/"],
+    left: LinearQuantity,
+    right: LinearQuantity,
+    magnitude: Fraction,
+) -> LinearQuantity | Fraction:
+    """Build the correctly-typed result of multiplying or dividing two quantities.
+
+    In order: a dimensionless result is a plain ``Fraction``; a dimensionless operand
+    keeps the other operand's kind; an explicit rule names the kind; otherwise the
+    dimension decides (see `_promote`).
+    """
+    dimension = (
+        left.dimension * right.dimension
+        if operation == "*"
+        else left.dimension / right.dimension
+    )
+    if dimension == DIMENSIONLESS:
+        return magnitude
+    kind = _result_kind(operation, type(left), type(right))
+    if kind is None:
+        return _promote(dimension, magnitude)
+    result_kind = cast("type[LinearQuantity]", kind)
+    return result_kind(magnitude, _result_unit(result_kind))
+
+
 def _concrete_kinds() -> list[_Kind]:
     """Return every concrete quantity type that has been defined."""
     return [cast("_Kind", kind) for kind in _concrete_types()]
@@ -352,10 +477,12 @@ def _close() -> None:
 
 
 def _promote(dimension: Dimension, magnitude: Fraction) -> LinearQuantity | Fraction:
-    """Build the correctly-typed result of a multiplication or division.
+    """Build the result of a multiplication or division from its dimension alone.
 
     A dimensionless result (e.g. Resistance / Resistance) is returned as a plain
     ``Fraction`` ratio, matching ordinary physics convention.
+    The principal kind of the dimension is the result; a contested dimension raises
+    `AmbiguousKindError`, because no kind of it is the general one.
     """
     if dimension == DIMENSIONLESS:
         return magnitude
@@ -369,7 +496,7 @@ def _promote(dimension: Dimension, magnitude: Fraction) -> LinearQuantity | Frac
         if planned_name is not None:
             raise PlannedDimensionError(dimension, planned_name) from None
         raise UnrepresentableDimensionError(dimension) from None
-    return quantity_type(magnitude, quantity_type._canonical_unit)  # noqa: SLF001 -- accessing the registered type's own canonical unit, not a foreign instance's internals
+    return quantity_type(magnitude, _result_unit(quantity_type))
 
 
 __all__: list[str] = []

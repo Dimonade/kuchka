@@ -8,6 +8,8 @@ defines it and run `just generate-api`.
 from kuchka.quantities import Acceleration
 from kuchka.quantities import AmountOfSubstance
 from kuchka.quantities import Angle
+from kuchka.quantities import AngularDisplacement
+from kuchka.quantities import AngularVelocity
 from kuchka.quantities import Area
 from kuchka.quantities import BaudRate
 from kuchka.quantities import Charge
@@ -16,6 +18,7 @@ from kuchka.quantities import ConvertibleToFrequency
 from kuchka.quantities import Current
 from kuchka.quantities import Density
 from kuchka.quantities import Energy
+from kuchka.quantities import EnergyDensity
 from kuchka.quantities import Force
 from kuchka.quantities import Frequency
 from kuchka.quantities import Instant
@@ -32,6 +35,7 @@ from kuchka.quantities import SamplingPeriod
 from kuchka.quantities import Temperature
 from kuchka.quantities import TemperatureDelta
 from kuchka.quantities import Time
+from kuchka.quantities import Torque
 from kuchka.quantities import Velocity
 from kuchka.quantities import Voltage
 from kuchka.quantities import Volume
@@ -40,7 +44,9 @@ from kuchka.units import Ampere
 from kuchka.units import AmpereHour
 from kuchka.units import AmpereSecond
 from kuchka.units import ArcMinute
+from kuchka.units import ArcMinuteDisplacement
 from kuchka.units import ArcSecond
+from kuchka.units import ArcSecondDisplacement
 from kuchka.units import AstronomicalUnit
 from kuchka.units import Atmosphere
 from kuchka.units import Bar
@@ -64,6 +70,8 @@ from kuchka.units import Decibel
 from kuchka.units import Decimeter
 from kuchka.units import Decimetre
 from kuchka.units import Degree
+from kuchka.units import DegreeDisplacement
+from kuchka.units import DegreePerSecond
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaFahrenheit
 from kuchka.units import DeltaKelvin
@@ -84,6 +92,7 @@ from kuchka.units import Gigajoule
 from kuchka.units import Gigaohm
 from kuchka.units import Gigawatt
 from kuchka.units import Gradian
+from kuchka.units import GradianDisplacement
 from kuchka.units import Grain
 from kuchka.units import Gram
 from kuchka.units import GramPerCubicCentimeter
@@ -96,6 +105,9 @@ from kuchka.units import Hour
 from kuchka.units import Inch
 from kuchka.units import Jiffy
 from kuchka.units import Joule
+from kuchka.units import JoulePerCubicMeter
+from kuchka.units import JoulePerCubicMetre
+from kuchka.units import JoulePerTurn
 from kuchka.units import JulianYear
 from kuchka.units import Kelvin
 from kuchka.units import Kiloampere
@@ -110,6 +122,8 @@ from kuchka.units import KilogramPerLiter
 from kuchka.units import KilogramPerLitre
 from kuchka.units import Kilohertz
 from kuchka.units import Kilojoule
+from kuchka.units import KilojoulePerCubicMeter
+from kuchka.units import KilojoulePerCubicMetre
 from kuchka.units import Kiloliter
 from kuchka.units import Kilolitre
 from kuchka.units import Kilometer
@@ -118,6 +132,8 @@ from kuchka.units import Kilometre
 from kuchka.units import KilometrePerHour
 from kuchka.units import Kilomole
 from kuchka.units import Kilonewton
+from kuchka.units import KilonewtonMeter
+from kuchka.units import KilonewtonMetre
 from kuchka.units import Kiloohm
 from kuchka.units import Kilopascal
 from kuchka.units import KilosamplesPerSecond
@@ -135,6 +151,8 @@ from kuchka.units import Megaelectronvolt
 from kuchka.units import Megagram
 from kuchka.units import Megahertz
 from kuchka.units import Megajoule
+from kuchka.units import MegajoulePerCubicMeter
+from kuchka.units import MegajoulePerCubicMetre
 from kuchka.units import Meganewton
 from kuchka.units import Megaohm
 from kuchka.units import Megapascal
@@ -185,6 +203,8 @@ from kuchka.units import Millimeter
 from kuchka.units import Millimetre
 from kuchka.units import Millimole
 from kuchka.units import Millinewton
+from kuchka.units import MillinewtonMeter
+from kuchka.units import MillinewtonMetre
 from kuchka.units import Milliohm
 from kuchka.units import Millisecond
 from kuchka.units import Millisiemens
@@ -207,6 +227,8 @@ from kuchka.units import Nanovolt
 from kuchka.units import Nanowatt
 from kuchka.units import NauticalMile
 from kuchka.units import Newton
+from kuchka.units import NewtonMeter
+from kuchka.units import NewtonMetre
 from kuchka.units import Ohm
 from kuchka.units import Ounce
 from kuchka.units import Pascal
@@ -227,9 +249,14 @@ from kuchka.units import Picosecond
 from kuchka.units import Picowatt
 from kuchka.units import Pound
 from kuchka.units import PoundForce
+from kuchka.units import PoundForceFoot
+from kuchka.units import PoundForceInch
 from kuchka.units import PoundPerSquareInch
 from kuchka.units import Radian
+from kuchka.units import RadianDisplacement
+from kuchka.units import RadianPerSecond
 from kuchka.units import Ratio
+from kuchka.units import RevolutionPerMinute
 from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
 from kuchka.units import Siemens
@@ -251,9 +278,13 @@ from kuchka.units import ThermochemicalCalorie
 from kuchka.units import Tonne
 from kuchka.units import TonneOfTNT
 from kuchka.units import Turn
+from kuchka.units import TurnDisplacement
+from kuchka.units import TurnPerSecond
 from kuchka.units import Volt
 from kuchka.units import Watt
 from kuchka.units import WattHour
+from kuchka.units import WattHourPerLiter
+from kuchka.units import WattHourPerLitre
 from kuchka.units import Week
 from kuchka.units import Yard
 
@@ -265,8 +296,12 @@ __all__ = [
     "AmpereHour",
     "AmpereSecond",
     "Angle",
+    "AngularDisplacement",
+    "AngularVelocity",
     "ArcMinute",
+    "ArcMinuteDisplacement",
     "ArcSecond",
+    "ArcSecondDisplacement",
     "Area",
     "AstronomicalUnit",
     "Atmosphere",
@@ -296,6 +331,8 @@ __all__ = [
     "Decimeter",
     "Decimetre",
     "Degree",
+    "DegreeDisplacement",
+    "DegreePerSecond",
     "DeltaCelsius",
     "DeltaFahrenheit",
     "DeltaKelvin",
@@ -304,6 +341,7 @@ __all__ = [
     "EarthMass",
     "Electronvolt",
     "Energy",
+    "EnergyDensity",
     "Erg",
     "Fahrenheit",
     "Femtomole",
@@ -320,6 +358,7 @@ __all__ = [
     "Gigaohm",
     "Gigawatt",
     "Gradian",
+    "GradianDisplacement",
     "Grain",
     "Gram",
     "GramPerCubicCentimeter",
@@ -333,6 +372,9 @@ __all__ = [
     "Instant",
     "Jiffy",
     "Joule",
+    "JoulePerCubicMeter",
+    "JoulePerCubicMetre",
+    "JoulePerTurn",
     "JulianYear",
     "Kelvin",
     "Kiloampere",
@@ -347,6 +389,8 @@ __all__ = [
     "KilogramPerLitre",
     "Kilohertz",
     "Kilojoule",
+    "KilojoulePerCubicMeter",
+    "KilojoulePerCubicMetre",
     "Kiloliter",
     "Kilolitre",
     "Kilometer",
@@ -355,6 +399,8 @@ __all__ = [
     "KilometrePerHour",
     "Kilomole",
     "Kilonewton",
+    "KilonewtonMeter",
+    "KilonewtonMetre",
     "Kiloohm",
     "Kilopascal",
     "KilosamplesPerSecond",
@@ -376,6 +422,8 @@ __all__ = [
     "Megagram",
     "Megahertz",
     "Megajoule",
+    "MegajoulePerCubicMeter",
+    "MegajoulePerCubicMetre",
     "Meganewton",
     "Megaohm",
     "Megapascal",
@@ -426,6 +474,8 @@ __all__ = [
     "Millimetre",
     "Millimole",
     "Millinewton",
+    "MillinewtonMeter",
+    "MillinewtonMetre",
     "Milliohm",
     "Millisecond",
     "Millisiemens",
@@ -448,6 +498,8 @@ __all__ = [
     "Nanowatt",
     "NauticalMile",
     "Newton",
+    "NewtonMeter",
+    "NewtonMetre",
     "Ohm",
     "Ounce",
     "Pascal",
@@ -468,13 +520,18 @@ __all__ = [
     "Picowatt",
     "Pound",
     "PoundForce",
+    "PoundForceFoot",
+    "PoundForceInch",
     "PoundPerSquareInch",
     "Power",
     "Pressure",
     "Proportion",
     "Radian",
+    "RadianDisplacement",
+    "RadianPerSecond",
     "Ratio",
     "Resistance",
+    "RevolutionPerMinute",
     "SampleRate",
     "SamplesPerSecond",
     "SamplingPeriod",
@@ -500,13 +557,18 @@ __all__ = [
     "Time",
     "Tonne",
     "TonneOfTNT",
+    "Torque",
     "Turn",
+    "TurnDisplacement",
+    "TurnPerSecond",
     "Velocity",
     "Volt",
     "Voltage",
     "Volume",
     "Watt",
     "WattHour",
+    "WattHourPerLiter",
+    "WattHourPerLitre",
     "Week",
     "Yard",
 ]

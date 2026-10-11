@@ -8,9 +8,9 @@ Defined as:
 
 Also carries the other overload halves of two relationships defined on their own types:
 - `Volume * Density -> Mass` (see `Density`) and
-- `Volume * Pressure -> Energy` (see `Pressure`),
-the P-V work relationship, alongside its inverse `Energy / Volume -> Pressure`
-(see `Energy`).
+- `Volume * Pressure -> Energy` (see `Pressure`), the P-V work relationship, and
+- `Volume * EnergyDensity -> Energy` (see `EnergyDensity`), alongside its inverse
+  `Energy / Volume -> EnergyDensity` (see `Energy`).
 """
 
 from __future__ import annotations
@@ -32,6 +32,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.area import Area
     from kuchka.quantities.density import Density
     from kuchka.quantities.energy import Energy
+    from kuchka.quantities.energy_density import EnergyDensity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.pressure import Pressure
@@ -60,6 +61,8 @@ class Volume(LinearQuantity):
     def __mul__(self, other: Density) -> Mass: ...
     @overload
     def __mul__(self, other: Pressure) -> Energy: ...
+    @overload
+    def __mul__(self, other: EnergyDensity) -> Energy: ...
     @overload
     def __mul__(self, other: Numeric) -> Volume: ...
     @overload
