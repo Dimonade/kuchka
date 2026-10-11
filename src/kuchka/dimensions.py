@@ -105,6 +105,7 @@ POWER = Dimension(time=-3, length=2, mass=1)
 RESISTANCE = Dimension(time=-3, length=2, mass=1, current=-2)
 VOLTAGE = Dimension(time=-3, length=2, mass=1, current=-1)
 PRESSURE = Dimension(time=-2, length=-1, mass=1)
+ENERGY_DENSITY = ENERGY / VOLUME
 ACCELERATION = Dimension(time=-2, length=1)
 FORCE = Dimension(time=-2, length=1, mass=1)
 ENERGY = Dimension(time=-2, length=2, mass=1)
@@ -140,6 +141,7 @@ __all__ = [
     "DENSITY",
     "DIMENSIONLESS",
     "ENERGY",
+    "ENERGY_DENSITY",
     "FORCE",
     "FREQUENCY",
     "LENGTH",
