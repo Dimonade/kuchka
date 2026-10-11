@@ -90,7 +90,7 @@ class AngularVelocity(LinearQuantity):
 
         One turn per second is one hertz.
         """
-        from kuchka.quantities.temporal import Frequency  # noqa: PLC0415 -- temporal imports this module at its own import time
+        from kuchka.quantities.temporal import Frequency  # noqa: PLC0415
 
         return Frequency(self._magnitude, Frequency._canonical_unit)  # noqa: SLF001 -- Frequency's own canonical unit
 

@@ -215,7 +215,7 @@ class Frequency(LinearQuantity):
 
         One hertz is one turn per second, which is two pi radians per second.
         """
-        from kuchka.quantities.rotational import AngularVelocity  # noqa: PLC0415 -- rotational imports this module at its own import time
+        from kuchka.quantities.rotational import AngularVelocity  # noqa: PLC0415
 
         return AngularVelocity(self._magnitude, AngularVelocity._result_unit)  # noqa: SLF001 -- AngularVelocity's own units
 
