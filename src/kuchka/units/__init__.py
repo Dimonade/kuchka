@@ -32,6 +32,7 @@ if TYPE_CHECKING:
 
 from kuchka.units import amount
 from kuchka.units import angular
+from kuchka.units import angular_velocity
 from kuchka.units import area
 from kuchka.units import charge
 from kuchka.units import conductance
@@ -48,10 +49,12 @@ from kuchka.units import pressure
 from kuchka.units import proportion
 from kuchka.units import resistance
 from kuchka.units import thermal
+from kuchka.units import torque
 from kuchka.units import voltage
 from kuchka.units import volume
 from kuchka.units.amount import *
 from kuchka.units.angular import *
+from kuchka.units.angular_velocity import *
 from kuchka.units.area import *
 from kuchka.units.charge import *
 from kuchka.units.conductance import *
@@ -86,6 +89,7 @@ from kuchka.units.temporal.sample_rate import *
 from kuchka.units.temporal.sampling_period import *
 from kuchka.units.temporal.time import *
 from kuchka.units.thermal import *
+from kuchka.units.torque import *
 from kuchka.units.voltage import *
 from kuchka.units.volume import *
 
@@ -93,6 +97,9 @@ _UNITS_OF: dict[type[Any], Iterable[Any]] = {
     quantities.Acceleration: units_of(ACCELERATION_UNITS),
     quantities.AmountOfSubstance: units_of(AMOUNT_OF_SUBSTANCE_UNITS),
     quantities.Angle: units_of(ANGLE_UNITS),
+    quantities.AngularDisplacement: units_of(ANGULAR_DISPLACEMENT_UNITS),
+    quantities.AngularVelocity: units_of(ANGULAR_VELOCITY_UNITS),
+    quantities.Torque: units_of(TORQUE_UNITS),
     quantities.Area: units_of(AREA_UNITS),
     quantities.BaudRate: units_of(BAUD_RATE_UNITS),
     quantities.Charge: units_of(CHARGE_UNITS),
@@ -132,6 +139,7 @@ not accepted by another.
 __all__: list[str] = []
 __all__ += amount.__all__
 __all__ += angular.__all__
+__all__ += angular_velocity.__all__
 __all__ += area.__all__
 __all__ += charge.__all__
 __all__ += conductance.__all__
@@ -150,6 +158,7 @@ __all__ += resistance.__all__
 __all__ += thermal.__all__
 __all__ += voltage.__all__
 __all__ += volume.__all__
+__all__ += torque.__all__
 __all__ += acceleration.__all__
 __all__ += force.__all__
 __all__ += velocity.__all__

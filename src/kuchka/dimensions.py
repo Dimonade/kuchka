@@ -12,12 +12,13 @@ from the seven base quantities.
 
 SI itself treats plane angle as a quantity of dimension one (the radian is a
 dimensionless derived unit), and `kuchka` is not taking a position against that.
-The ``angle`` field exists purely so that :data:`ANGLE` and :data:`DIMENSIONLESS` are
-distinguishable ``Dimension`` values here.
-Without it, `Proportion` (genuinely dimensionless, ``Percent``/``Ratio``) and `Angle`
-would compare as the exact same dimension, which would be wrong to build error messages
-and conversion checks against even though SI's own base-quantity accounting agrees they
-are both "one".
+The ``angle`` field makes :data:`ANGLE` and :data:`DIMENSIONLESS` distinct ``Dimension``
+values, and it takes part in arithmetic like any other axis.
+Torque is energy per angle (M L^2 T^-2 angle^-1) and angular velocity is angle per time
+(angle T^-1), so both differ from energy and from the hertz, which SI's own
+base-quantity accounting cannot tell apart.
+`Proportion` (genuinely dimensionless, ``Percent``/``Ratio``) and angles are different
+dimensions for the same reason.
 
 Multiplying two physical quantities adds their exponent vectors.
 Dividing subtracts them.
@@ -123,6 +124,7 @@ TEMPERATURE_DELTA = Dimension(temperature=1)
 AMOUNT_OF_SUBSTANCE = Dimension(amount=1)
 LUMINOUS_INTENSITY = Dimension(luminous_intensity=1)
 ANGLE = Dimension(angle=1)
+
 """The dimension of a plane angle: `Angle`'s dimension.
 
 See the module docstring for why this is tracked as its own axis rather than reusing
@@ -131,11 +133,14 @@ See the module docstring for why this is tracked as its own axis rather than reu
 
 # Derived, by explicit rules.
 ENERGY_DENSITY = ENERGY / VOLUME
+ANGULAR_VELOCITY = ANGLE / TIME
+TORQUE = ENERGY / ANGLE
 
 __all__ = [
     "ACCELERATION",
     "AMOUNT_OF_SUBSTANCE",
     "ANGLE",
+    "ANGULAR_VELOCITY",
     "AREA",
     "CHARGE",
     "CONDUCTANCE",
@@ -154,6 +159,7 @@ __all__ = [
     "RESISTANCE",
     "TEMPERATURE_DELTA",
     "TIME",
+    "TORQUE",
     "VELOCITY",
     "VOLTAGE",
     "VOLUME",
