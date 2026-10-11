@@ -56,7 +56,7 @@ Angles measure the short way round the circle.
 - `Decibel` and `Bel` constructors, with `LOGARITHMIC_RATIO_UNITS`.
 - `PureLogarithmicQuantity`, the base for a ratio expressed as a logarithm, and `LogarithmicUnitDef`, the unit-definition type for it.
 - Levels add, subtract, scale by a plain number, negate, take `abs()`, and compare, all exactly.
-- `as_power_ratio()` / `as_field_ratio()` and `from_power_ratio()` / `from_field_ratio()` convert to and from a linear `Proportion`.
+- `to_power_ratio()` / `to_field_ratio()` and `from_power_ratio()` / `from_field_ratio()` convert to and from a linear `Proportion`.
   They are evaluated in `Decimal` at the active context precision; whole multiples of 10 dB (power) or 20 dB (field) are exact.
 
 ### Changed
@@ -67,6 +67,11 @@ Conversions between quantity types are named `to_*` and `from_*`.
 `as_instant`, `as_sampling_period`, and `as_frequency` are now `to_instant`, `to_sampling_period`, and `to_frequency`; the old names are removed.
 
 ### Fixed
+
+#### A `Proportion` keeps the kind it scales
+
+`SampleRate * Ratio(2)` and `BaudRate * Percent(50)` returned a `Frequency` in hertz.
+A dimensionless operand now keeps the kind of the other operand.
 
 #### A unit belongs to its quantity types
 
