@@ -3,9 +3,12 @@
 Defined alongside two relationships:
 - `Power * Time -> Energy`, and its two inverses, `Energy / Time -> Power` and
   `Energy / Power -> Time`.
-- `Pressure * Volume -> Energy`, the P-V work relationship, and its two inverses,
-  `Energy / Pressure -> Volume` and `Energy / Volume -> Pressure`, whose other
-  overload halves live on `Pressure` and `Volume` themselves.
+- `Pressure * Volume -> Energy`, the P-V work relationship, and its inverse
+  `Energy / Pressure -> Volume`, whose other overload halves live on `Pressure` and
+  `Volume` themselves.
+
+Also carries the other overload halves of `Energy / Volume -> EnergyDensity` and its
+inverse `Energy / EnergyDensity -> Volume` (see `EnergyDensity`).
 """
 
 from __future__ import annotations
@@ -25,6 +28,7 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.electrical import Power
+    from kuchka.quantities.energy_density import EnergyDensity
     from kuchka.quantities.pressure import Pressure
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.volume import Volume
@@ -43,7 +47,9 @@ class Energy(LinearQuantity):
     @overload
     def __truediv__(self, other: Pressure) -> Volume: ...
     @overload
-    def __truediv__(self, other: Volume) -> Pressure: ...
+    def __truediv__(self, other: Volume) -> EnergyDensity: ...
+    @overload
+    def __truediv__(self, other: EnergyDensity) -> Volume: ...
     @overload
     def __truediv__(self, other: Numeric) -> Energy: ...
     @overload

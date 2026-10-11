@@ -3,7 +3,7 @@
 Generic algebraic properties (commutativity, associativity, prefix conversion, ...)
 are covered once for every registered quantity family elsewhere;
 this module covers what is specific to Pressure: `Force / Area -> Pressure` and its
-two inverses, `Pressure * Volume -> Energy` (P-V work) and its two inverses, and
+two inverses, `Pressure * Volume -> Energy` (P-V work) and its inverse, and
 the non-SI units `Bar`, `Atmosphere`, and `PoundPerSquareInch`.
 """
 
@@ -16,11 +16,13 @@ from kuchka import Atmosphere
 from kuchka import Bar
 from kuchka import CubicMetre
 from kuchka import Energy
+from kuchka import EnergyDensity
 from kuchka import Force
 from kuchka import Hectopascal
 from kuchka import IncompatibleDimensionError
 from kuchka import InvalidMeasurementError
 from kuchka import Joule
+from kuchka import JoulePerCubicMetre
 from kuchka import Kilopascal
 from kuchka import Megapascal
 from kuchka import Millibar
@@ -80,10 +82,10 @@ def test_energy_divided_by_pressure_is_volume():
     assert volume == CubicMetre(2)
 
 
-def test_energy_divided_by_volume_is_pressure():
-    pressure = Joule(10) / CubicMetre(2)
-    assert isinstance(pressure, Pressure)
-    assert pressure == Pascal(5)
+def test_energy_divided_by_volume_is_an_energy_density_not_a_pressure():
+    result = Joule(10) / CubicMetre(2)
+    assert isinstance(result, EnergyDensity)
+    assert not isinstance(result, Pressure)
 
 
 def test_pressure_volume_energy_round_trip():
@@ -91,7 +93,7 @@ def test_pressure_volume_energy_round_trip():
     volume = CubicMetre(3)
     energy = pressure * volume
     assert energy / pressure == volume
-    assert energy / volume == pressure
+    assert energy / volume == JoulePerCubicMetre(8)
 
 
 def test_pressure_prefixes_scale_correctly():

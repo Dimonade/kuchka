@@ -15,17 +15,23 @@ from kuchka import BaudRate
 from kuchka import Celsius
 from kuchka import Conductance
 from kuchka import ConvertibleToFrequency
+from kuchka import CubicMetre
 from kuchka import Current
 from kuchka import Decibel
+from kuchka import Energy
+from kuchka import EnergyDensity
 from kuchka import Fahrenheit
 from kuchka import Frequency
 from kuchka import Hertz
+from kuchka import Joule
 from kuchka import Length
 from kuchka import LogarithmicRatio
 from kuchka import Meter
+from kuchka import Newton
 from kuchka import Ohm
 from kuchka import Percent
 from kuchka import Power
+from kuchka import Pressure
 from kuchka import Proportion
 from kuchka import Ratio
 from kuchka import Resistance
@@ -34,6 +40,7 @@ from kuchka import SamplesPerSecond
 from kuchka import SamplingPeriod
 from kuchka import Second
 from kuchka import Siemens
+from kuchka import SquareMetre
 from kuchka import Time
 from kuchka import Volt
 from kuchka import Voltage
@@ -133,6 +140,16 @@ height: Length = volume_a / area  # OK: statically known to be Length.
 # assignment statically (the same known gap Ohm(5) * Ohm(2) already has), and only
 # the runtime type actually disagrees.
 wrong_area: Area = area * Meter(3)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+
+# Energy / Volume is an EnergyDensity, and Force / Area a Pressure: the two kinds share
+# a dimension, and the overloads tell them apart.
+density_of_energy: EnergyDensity = Joule(5) / CubicMetre(
+    1
+)  # OK: statically an EnergyDensity.
+pressure_of_force: Pressure = Newton(5) / SquareMetre(1)  # OK: statically a Pressure.
+energy_back: Energy = density_of_energy * CubicMetre(2)  # OK: statically an Energy.
+volume_back: Volume = Joule(5) / density_of_energy  # OK: statically a Volume.
+wrong_kind: Pressure = Joule(5) / CubicMetre(1)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
 
 # Resistance and Conductance are reciprocals of each other, the same shape
 # Time/Frequency already have, and Ohm's law works from either side of that

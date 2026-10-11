@@ -31,6 +31,11 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Baud Rate: `Megabaud` and `Gigabaud`.
 - Density: `GramPerLitre`, `GramPerMillilitre`, and `KilogramPerLitre`.
 
+#### Energy density is its own quantity
+
+`EnergyDensity` (`JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`) shares its dimension with `Pressure`, and the two are contested.
+`Energy / Volume` is an `EnergyDensity` and `Force / Area` a `Pressure`.
+
 #### Unit tables accept the notations real files use
 
 `TEMPERATURE_UNITS` takes `C`, `degC`, `degrees C`, and `Degrees Celsius`, and the other tables take `u` for micro and the dalton, `Mohm`, `meter`, `sec`, `kwh`, `yr`, `mm2`, `m^3`, `cc`, and similar.

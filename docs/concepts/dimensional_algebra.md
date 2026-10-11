@@ -12,6 +12,7 @@ Voltage * Current   -> Power
 Mass * Acceleration -> Force
 Force / Area        -> Pressure
 Pressure * Volume   -> Energy
+Energy / Volume     -> EnergyDensity
 Mass / Volume       -> Density
 Length * Length     -> Area
 Area * Length       -> Volume
@@ -56,7 +57,7 @@ The type of a product or quotient is decided in this order:
 
 1. A dimensionless result is a plain `Fraction`.
 2. A dimensionless operand, a `Proportion`, keeps the kind of the other operand: `SampleRate(...) * Percent(50)` is a `SampleRate`.
-3. A rule for the operand kinds names the kind, for a dimension that has several linear kinds.
+3. A rule for the operand kinds names the kind, for a dimension that has several linear kinds: `Pressure` and `EnergyDensity` share M L⁻¹ T⁻², so `Force / Area` is a `Pressure` and `Energy / Volume` an `EnergyDensity`.
 4. Otherwise the principal kind of the dimension is the result, and a contested dimension raises `AmbiguousKindError`.
 
 ## Converting between types

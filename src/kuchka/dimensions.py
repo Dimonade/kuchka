@@ -129,6 +129,9 @@ See the module docstring for why this is tracked as its own axis rather than reu
 :data:`DIMENSIONLESS`, even though SI itself treats plane angle as dimensionless.
 """
 
+# Derived, by explicit rules.
+ENERGY_DENSITY = ENERGY / VOLUME
+
 __all__ = [
     "ACCELERATION",
     "AMOUNT_OF_SUBSTANCE",
@@ -140,6 +143,7 @@ __all__ = [
     "DENSITY",
     "DIMENSIONLESS",
     "ENERGY",
+    "ENERGY_DENSITY",
     "FORCE",
     "FREQUENCY",
     "LENGTH",

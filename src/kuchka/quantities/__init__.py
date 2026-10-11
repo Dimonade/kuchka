@@ -26,6 +26,7 @@ from kuchka.quantities import charge
 from kuchka.quantities import density
 from kuchka.quantities import electrical
 from kuchka.quantities import energy
+from kuchka.quantities import energy_density
 from kuchka.quantities import kinematics
 from kuchka.quantities import length
 from kuchka.quantities import logarithmic
@@ -44,6 +45,7 @@ from kuchka.quantities.charge import *
 from kuchka.quantities.density import *
 from kuchka.quantities.electrical import *
 from kuchka.quantities.energy import *
+from kuchka.quantities.energy_density import *
 from kuchka.quantities.kinematics import *
 from kuchka.quantities.length import *
 from kuchka.quantities.logarithmic import *
@@ -64,6 +66,7 @@ __all__ += charge.__all__
 __all__ += density.__all__
 __all__ += electrical.__all__
 __all__ += energy.__all__
+__all__ += energy_density.__all__
 __all__ += kinematics.__all__
 __all__ += length.__all__
 __all__ += logarithmic.__all__

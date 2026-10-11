@@ -38,6 +38,7 @@ from kuchka.units import conductance
 from kuchka.units import current
 from kuchka.units import density
 from kuchka.units import energy
+from kuchka.units import energy_density
 from kuchka.units import length
 from kuchka.units import logarithmic
 from kuchka.units import luminous_intensity
@@ -57,6 +58,7 @@ from kuchka.units.conductance import *
 from kuchka.units.current import *
 from kuchka.units.density import *
 from kuchka.units.energy import *
+from kuchka.units.energy_density import *
 from kuchka.units.kinematics import acceleration
 from kuchka.units.kinematics import force
 from kuchka.units.kinematics import velocity
@@ -98,6 +100,7 @@ _UNITS_OF: dict[type[Any], Iterable[Any]] = {
     quantities.Current: units_of(CURRENT_UNITS),
     quantities.Density: units_of(DENSITY_UNITS),
     quantities.Energy: units_of(ENERGY_UNITS),
+    quantities.EnergyDensity: units_of(ENERGY_DENSITY_UNITS),
     quantities.Force: units_of(FORCE_UNITS),
     quantities.Frequency: units_of(FREQUENCY_UNITS),
     quantities.Instant: (INSTANT_SECOND,),
@@ -135,6 +138,7 @@ __all__ += conductance.__all__
 __all__ += current.__all__
 __all__ += density.__all__
 __all__ += energy.__all__
+__all__ += energy_density.__all__
 __all__ += length.__all__
 __all__ += logarithmic.__all__
 __all__ += luminous_intensity.__all__

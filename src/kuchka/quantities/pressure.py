@@ -4,9 +4,12 @@ Defined alongside two relationships:
 - `Force / Area -> Pressure`, and its two inverses, `Pressure * Area -> Force` and
   `Force / Pressure -> Area`, whose other overload halves live on `Force` and
   `Area` themselves.
-- `Pressure * Volume -> Energy`, the P-V work relationship, and its two inverses,
-  `Energy / Pressure -> Volume` and `Energy / Volume -> Pressure`, whose other
-  overload halves live on `Volume` and `Energy` themselves.
+- `Pressure * Volume -> Energy`, the P-V work relationship, and its inverse
+  `Energy / Pressure -> Volume`, whose other overload halves live on `Volume` and
+  `Energy` themselves.
+
+`Pressure` shares its dimension with `EnergyDensity`, so the two are contested and
+`Force / Area` is declared to be a `Pressure` (see `EnergyDensity`).
 """
 
 from __future__ import annotations
@@ -17,17 +20,18 @@ from typing import overload
 
 from kuchka.dimensions import PRESSURE
 from kuchka.internal.typing import override
+from kuchka.quantities.area import Area
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.registry import _register
+from kuchka.quantities.base.registry import _rule
+from kuchka.quantities.kinematics import Force
 
 if TYPE_CHECKING:
     from fractions import Fraction
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
-    from kuchka.quantities.area import Area
     from kuchka.quantities.energy import Energy
-    from kuchka.quantities.kinematics import Force
     from kuchka.quantities.volume import Volume
 
 
@@ -61,5 +65,6 @@ class Pressure(LinearQuantity):
 
 
 _register(PRESSURE, Pressure)
+_rule(Force, "/", Area, Pressure)
 
 __all__ = ["Pressure"]
