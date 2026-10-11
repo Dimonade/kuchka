@@ -53,6 +53,7 @@ if TYPE_CHECKING:
     from fractions import Fraction
 
     from kuchka.dimensions import Dimension
+    from kuchka.quantities.angular import AngularDisplacement
     from kuchka.quantities.charge import Charge
     from kuchka.quantities.electrical import Current
     from kuchka.quantities.electrical import Power
@@ -60,6 +61,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics import Acceleration
     from kuchka.quantities.kinematics import Velocity
     from kuchka.quantities.length import Length
+    from kuchka.quantities.rotational import AngularVelocity
 
 
 class Time(LinearQuantity):
@@ -78,6 +80,8 @@ class Time(LinearQuantity):
     def __mul__(self, other: Velocity) -> Length: ...
     @overload
     def __mul__(self, other: Acceleration) -> Velocity: ...
+    @overload
+    def __mul__(self, other: AngularVelocity) -> AngularDisplacement: ...
     @overload
     def __mul__(self, other: Numeric) -> Time: ...
     @overload
@@ -166,6 +170,8 @@ class Frequency(LinearQuantity):
     @overload
     def __mul__(self, other: Time) -> Fraction: ...
     @overload
+    def __mul__(self, other: AngularDisplacement) -> AngularVelocity: ...
+    @overload
     def __mul__(self, other: Numeric) -> Frequency: ...
     @overload
     def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
@@ -202,10 +208,23 @@ class Frequency(LinearQuantity):
         """
         return self
 
+    def to_angular_velocity(self) -> AngularVelocity:
+        """View these cycles per second as the angle swept per second by a rotation.
+
+            Mains frequency as angular velocity: Hertz(50).to_angular_velocity()
+
+        One hertz is one turn per second, which is two pi radians per second.
+        """
+        from kuchka.quantities.rotational import AngularVelocity  # noqa: PLC0415 -- rotational imports this module at its own import time
+
+        return AngularVelocity(self._magnitude, AngularVelocity._result_unit)  # noqa: SLF001 -- AngularVelocity's own units
+
 
 @runtime_checkable
 class ConvertibleToFrequency(Protocol):
-    """Anything with an `to_frequency()` method: a Frequency or a SampleRate.
+    """Anything with a `to_frequency()` method.
+
+    A `Frequency`, a `SampleRate`, and an `AngularVelocity` all have one.
 
     Intended for consumer-side type hints, e.g. a Nyquist check that should accept a
     `Frequency` or a `SampleRate` interchangeably:
