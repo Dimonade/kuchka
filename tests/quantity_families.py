@@ -31,6 +31,7 @@ from kuchka.units import conductance
 from kuchka.units import current
 from kuchka.units import density
 from kuchka.units import energy
+from kuchka.units import energy_density
 from kuchka.units import force
 from kuchka.units import frequency
 from kuchka.units import length
@@ -105,6 +106,12 @@ FAMILIES: list[QuantityFamily] = [
         density.DENSITY_UNITS,
     ),
     QuantityFamily("energy", energy.Joule, energy.JOULE, energy.ENERGY_UNITS),
+    QuantityFamily(
+        "energy_density",
+        energy_density.JoulePerCubicMetre,
+        energy_density.JOULE_PER_CUBIC_METRE,
+        energy_density.ENERGY_DENSITY_UNITS,
+    ),
     QuantityFamily("force", force.Newton, force.NEWTON, force.FORCE_UNITS),
     QuantityFamily(
         "frequency", frequency.Hertz, frequency.HERTZ, frequency.FREQUENCY_UNITS

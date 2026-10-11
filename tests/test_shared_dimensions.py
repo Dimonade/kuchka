@@ -21,10 +21,12 @@ import kuchka
 from kuchka import AmbiguousKindError
 from kuchka import Angle
 from kuchka import BaudRate
+from kuchka import EnergyDensity
 from kuchka import Frequency
 from kuchka import Instant
 from kuchka import LogarithmicRatio
 from kuchka import MeasurementError
+from kuchka import Pressure
 from kuchka import Proportion
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
@@ -35,6 +37,7 @@ from kuchka import UnrepresentableDimensionError
 from kuchka.dimensions import ANGLE
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import FREQUENCY
+from kuchka.dimensions import PRESSURE
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.dimensions import TIME
 from kuchka.dimensions import Dimension
@@ -52,6 +55,7 @@ SHARED = {
     FREQUENCY: (Frequency, SampleRate, BaudRate),
     TEMPERATURE_DELTA: (TemperatureDelta, Temperature),
     DIMENSIONLESS: (Proportion, LogarithmicRatio),
+    PRESSURE: (Pressure, EnergyDensity),
 }
 
 
@@ -125,8 +129,9 @@ def test_the_principal_kinds_are_linear_kinds_with_extent() -> None:
         assert registry._is_registered(kind)  # noqa: SLF001
 
 
-def test_no_shipped_dimension_is_contested() -> None:
-    assert registry._CONTESTED == {}  # noqa: SLF001
+def test_only_pressure_and_energy_density_are_contested() -> None:
+    assert {PRESSURE: (Pressure, EnergyDensity)} == registry._CONTESTED  # noqa: SLF001
+    assert PRESSURE not in registry._DIMENSION_REGISTRY  # noqa: SLF001
 
 
 # Specialisations.
@@ -299,7 +304,7 @@ def test_a_registered_kind_cannot_change_its_relation(novel: Dimension) -> None:
         registry._register(novel, general, specialisation_of=role)  # noqa: SLF001
 
 
-# Specialisations.
+# --- Specialisations ------------------------------------------------------------------
 
 
 @open_

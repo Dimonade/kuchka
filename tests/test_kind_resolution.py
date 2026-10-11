@@ -4,8 +4,9 @@ In order: a dimensionless result is a plain `Fraction`; a dimensionless operand 
 the other operand's kind; an explicit rule names the kind; otherwise the principal
 kind of the dimension is the result, and a contested dimension raises
 `AmbiguousKindError`.
-No shipped dimension is contested, so the contested cases build one from real kinds
-that share a dimension: `Frequency` and `SampleRate`.
+The contested cases here patch a contest between two real kinds that share a
+dimension, `Frequency` and `SampleRate`; the shipped contest, `Pressure` and
+`EnergyDensity`, is covered in `test_energy_density.py`.
 """
 
 from __future__ import annotations
@@ -178,9 +179,10 @@ def test_a_quotient_rule_holds_in_one_order() -> None:
 
 @pytest.mark.usefixtures("open_registry")
 def test_stating_a_rule_again_is_not_an_error() -> None:
+    before = len(registry._RULES)  # noqa: SLF001
     registry._rule(Voltage, "*", Current, Power)  # noqa: SLF001
     registry._rule(Current, "*", Voltage, Power)  # noqa: SLF001
-    assert len(registry._RULES) == 2  # noqa: PLR2004, SLF001
+    assert len(registry._RULES) - before == 2  # noqa: PLR2004, SLF001
 
 
 @pytest.mark.usefixtures("open_registry")
