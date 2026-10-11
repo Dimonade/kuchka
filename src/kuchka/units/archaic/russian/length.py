@@ -1,7 +1,13 @@
 """Historical Russian units of length.
 
-The imperial Russian system was fixed to the English inch, so every unit here is an
-exact multiple of `Inch`:
+This module represents a selection of historical Russian length units in the
+standardized imperial-era system.
+Each unit is defined as an exact multiple of the English inch, so these historical
+measurements participate in the same typed arithmetic as modern metric and customary
+lengths.
+
+The units span everything from the fine marks of a printmaker to the distances recorded
+by a provincial courier:
 
 ===========  ==============  =====================
 Unit         Translation     Size
@@ -22,36 +28,92 @@ Unit         Translation     Size
 
 `Perst` is another name for `Dyuym`, and `Chetvert` for `Pyad`.
 Both are aliases of the same objects.
-`Shag` and `Arshin` share one size and keep their own names, symbols, and unit
-definitions.
+
+`Shag` and `Arshin` have the same scale in this system but retain separate unit
+definitions and names.
+Although `Shag` translates as "step", it is a fixed historical length here, not a
+measurement of an individual's actual gait.
+
+A number of alternative units and values exist as well.
+These historical variants have their own definitions and are not aliases of the
+standardized road and surveying measures listed above.
+
+==================  ========================  ========================
+Unit                Translation               Size
+==================  ========================  ========================
+`MakhovayaSazhen`   swung sazhen              1.76 m
+`KosayaSazhen`      skewed/oblique sazhen     3.5 arshins (98 inches)
+`MezhevayaVersta`   double, or border verst   1000 sazhens (2.1336 km)
+==================  =======================   ========================
+
+- `MakhovayaSazhen` refers to the span between the fingertips with both arms
+    stretched sideways.
+- `KosayaSazhen` describes the diagonal reach from a raised arm to the opposite foot.
+The expression "kosaya sazhen v plechakh" (косая сажень в плечах) survives in Russian
+    as a figurative description of a broad-shouldered person.
+- `MezhevayaVersta` is the older border-measure convention of 1000 sazhens.
+    The standardized road `Versta` in this module is 500 sazhens, so one
+    `MezhevayaVersta` equals exactly two `Versta` values.
 
 Examples
 --------
-Seven English feet make one sazhen:
+A travelling folk theatre is preparing a painted backdrop for a scene from the tale of
+Baba Yaga.
+The set designer lays out a panel twelve arshins wide and five arshins high.
+Its area emerges directly from the two historical lengths:
 
->>> Sazhen(1) == Foot(7)
-True
+>>> backdrop_width = Arshin(12)
+>>> backdrop_height = Arshin(5)
+>>> painted_area = backdrop_width * backdrop_height
+>>> painted_area
+30.3483264 m²
 
-A verst is 500 sazhens, or exactly 1.0668 km:
+A fictional provincial travel notebook, in the spirit of Gogol's Russia, records
+eight versts from the posting station to an estate.
+The final approach winds through the grounds for another thirty-five sazhens,
+followed by six arshins from the gate to the house:
 
->>> Versta(1) == Kilometre(1.0668)
+>>> road = Versta(8)
+>>> approach = Sazhen(35)
+>>> entrance = Arshin(6)
+>>> total_journey = road + approach + entrance
+>>> total_journey.to(KILOMETRE)
+8.6133432 km
+
+The original measurements can coexist without manual conversion factors.
+The total is still one `Length` quantity, regardless of the historical vocabulary used
+to describe each leg.
+
+A land-survey record specifies a boundary of three mezhevye versty.
+The older boundary measure is twice the road verst represented by `Versta`:
+
+>>> boundary = MezhevayaVersta(3)
+>>> boundary == Versta(6)
 True
 
 Notes
 -----
-`RUSSIAN_LENGTH_UNITS` maps every symbol, such as ``"arshin"``, to its constructor.
+These are the standardized values represented by this module, not a claim that every
+regional or earlier historical version of a Russian unit had the same size.
 
-Notes
------
+One arshin is exactly 28 English inches, and one sazhen is exactly three arshins.
+One versta is 500 sazhens, giving exactly 1.0668 km.
 
-For detailed information, the following page was consulted:
-https://en.wikipedia.org/wiki/Historical_Russian_units_of_measurement
+`RUSSIAN_LENGTH_UNITS` maps each unit symbol, such as ``"arshin"`` or ``"versta"``,
+to its constructor.
+It is intended for boundary code that receives historical unit names from configuration
+files, datasets, or transcribed measurements.
+
+For historical records, the date and local measurement convention matter:
+the standardized conversions here should not be applied blindly to every
+pre-standardization source.
 
 See Also
 --------
-
 ~kuchka.quantities.Length
-    The quantity every constructor in this module builds.
+    Quantity type representing length.
+~kuchka.units.length
+    Modern metric and selected non-SI length constructors.
 
 """
 
@@ -108,10 +170,13 @@ def Tochka(value: Numeric) -> Length:
 
     Examples
     --------
-    A hundred points make one inch:
+    A lubok printmaker lays out the fine details of a traditional popular woodblock
+    illustration.
+    A line measuring twenty-four tochki is just over six millimetres long:
 
-    >>> Tochka(100) == Inch(1)
-    True
+    >>> detail = Tochka(24)
+    >>> detail.to(MILLIMETRE)
+    6.096 mm
 
     """
     return Length(to_exact(value) * TOCHKA.scale, TOCHKA)
@@ -136,10 +201,12 @@ def Liniya(value: Numeric) -> Length:
 
     Examples
     --------
-    Ten lines make one inch:
+    A bookbinder preparing an illustrated volume reserves a six-liniya strip for the
+    spine decoration:
 
-    >>> Liniya(10) == Inch(1)
-    True
+    >>> spine_decoration = Liniya(6)
+    >>> spine_decoration.to(MILLIMETRE)
+    15.24 mm
 
     """
     return Length(to_exact(value) * LINIYA.scale, LINIYA)
@@ -164,10 +231,12 @@ def Dyuym(value: Numeric) -> Length:
 
     Examples
     --------
-    The Russian inch equals the English inch:
+    A tinsmith in Tula fits a brass collar around a samovar's chimney.
+    The collar is specified as three dyuymy across:
 
-    >>> Dyuym(1) == Inch(1)
-    True
+    >>> chimney_collar = Dyuym(3)
+    >>> chimney_collar.to(CENTIMETRE)
+    7.62 cm
 
     """
     return Length(to_exact(value) * DYUYM.scale, DYUYM)
@@ -192,10 +261,13 @@ def Vershok(value: Numeric) -> Length:
 
     Examples
     --------
-    Sixteen vershoks make one arshin:
+    A traditional horse-height record gives two arshins and five vershoks at the
+    withers.
+    The standardized measurements represented here yield:
 
-    >>> Vershok(16) == Arshin(1)
-    True
+    >>> height = Arshin(2) + Vershok(5)
+    >>> height.to(CENTIMETRE)
+    164.465 cm
 
     """
     return Length(to_exact(value) * VERSHOK.scale, VERSHOK)
@@ -220,10 +292,12 @@ def Ladon(value: Numeric) -> Length:
 
     Examples
     --------
-    Four palms make one foot:
+    A woodcarver designing an ornate frame for a painted icon marks out a
+    two-ladoni-wide wooden support:
 
-    >>> Ladon(4) == Fut(1)
-    True
+    >>> support_width = Ladon(2)
+    >>> support_width.to(CENTIMETRE)
+    15.24 cm
 
     """
     return Length(to_exact(value) * LADON.scale, LADON)
@@ -248,10 +322,12 @@ def Pyad(value: Numeric) -> Length:
 
     Examples
     --------
-    Four spans make one arshin:
+    A carpenter preparing carved timber for a northern Russian izba lays out an opening
+    three pyadi wide:
 
-    >>> Pyad(4) == Arshin(1)
-    True
+    >>> opening = Pyad(3)
+    >>> opening.to(CENTIMETRE)
+    53.34 cm
 
     """
     return Length(to_exact(value) * PYAD.scale, PYAD)
@@ -276,10 +352,12 @@ def Fut(value: Numeric) -> Length:
 
     Examples
     --------
-    The Russian foot equals the English foot:
+    A museum workshop reconstructing a traditional folk-theatre prop needs a nine-fut
+    timber beam for its supporting frame:
 
-    >>> Fut(1) == Foot(1)
-    True
+    >>> support_beam = Fut(9)
+    >>> support_beam.to(METRE)
+    2.7432 m
 
     """
     return Length(to_exact(value) * FUT.scale, FUT)
@@ -300,14 +378,16 @@ def Lokot(value: Numeric) -> Length:
 
     Notes
     -----
-    One lokot is 18 inches, or exactly 45.72 cm.
+    One lokot is 18 inches, or exactly 45.72 cm, in this standardized system.
 
     Examples
     --------
-    An elbow is one and a half feet:
+    A museum tailor reconstructing a traditional market costume records a piece of
+    linen as three lokti long:
 
-    >>> Lokot(2) == Fut(3)
-    True
+    >>> linen = Lokot(3)
+    >>> linen.to(CENTIMETRE)
+    137.16 cm
 
     """
     return Length(to_exact(value) * LOKOT.scale, LOKOT)
@@ -329,13 +409,19 @@ def Shag(value: Numeric) -> Length:
     Notes
     -----
     One shag is 28 inches, or exactly 71.12 cm.
+    It shares the scale of `Arshin`, but retains its own unit definition.
+
+    Despite its translation as "step", this constructor represents a fixed historical
+    length, not the variable length of an actual walking step.
 
     Examples
     --------
-    A step is the length of an arshin:
+    A stage designer plans the blocking for a folktale performance:
+    the distance from the izba door to the well is eight standardized shagi.
 
-    >>> Shag(1) == Arshin(1)
-    True
+    >>> doorway_to_well = Shag(8)
+    >>> doorway_to_well.to(METRE)
+    5.6896 m
 
     """
     return Length(to_exact(value) * SHAG.scale, SHAG)
@@ -357,13 +443,19 @@ def Arshin(value: Numeric) -> Length:
     Notes
     -----
     One arshin is 28 inches, or exactly 71.12 cm.
+    Sixteen vershoks make one arshin in this standardized system.
 
     Examples
     --------
-    An arshin is 2 1/3 feet:
+    A set designer paints a backdrop depicting a Russian fairy-tale forest.
+    The panel is twelve arshins wide and five arshins high.
+    Because `Length` participates in geometric arithmetic, its dimensions produce an
+    `Area`:
 
-    >>> Arshin(3) == Fut(7)
-    True
+    >>> backdrop_width = Arshin(12)
+    >>> backdrop_height = Arshin(5)
+    >>> backdrop_width * backdrop_height
+    30.3483264 m²
 
     """
     return Length(to_exact(value) * ARSHIN.scale, ARSHIN)
@@ -384,14 +476,17 @@ def Sazhen(value: Numeric) -> Length:
 
     Notes
     -----
-    One sazhen is 84 inches, or exactly 7 English feet.
+    One sazhen is 84 inches, or exactly seven English feet.
 
     Examples
     --------
-    A fathom is three arshins:
+    A Volga river pilot lowers a sounding line to check the depth of a navigable
+    channel.
+    The recorded depth is four sazhens:
 
-    >>> Sazhen(1) == Arshin(3)
-    True
+    >>> channel_depth = Sazhen(4)
+    >>> channel_depth.to(METRE)
+    8.5344 m
 
     """
     return Length(to_exact(value) * SAZHEN.scale, SAZHEN)
@@ -416,10 +511,14 @@ def Versta(value: Numeric) -> Length:
 
     Examples
     --------
-    A verst is close to one kilometre:
+    A fictional provincial courier's itinerary records twelve versts to a market town,
+    then another seven versts to the next posting station:
 
-    >>> Versta(1) == Kilometre(1.0668)
-    True
+    >>> first_stage = Versta(12)
+    >>> second_stage = Versta(7)
+    >>> total_route = first_stage + second_stage
+    >>> total_route.to(KILOMETRE)
+    20.2692 km
 
     """
     return Length(to_exact(value) * VERSTA.scale, VERSTA)
@@ -427,6 +526,140 @@ def Versta(value: Numeric) -> Length:
 
 Perst = Dyuym
 Chetvert = Pyad
+
+# Alternative units.
+
+MAKHOVAYA_SAZHEN = UnitDef(
+    "makhovaya_sazhen",
+    "makhovaya sazhen",
+    Fraction(8800, 127) * INCH.scale,  # The reported 1.76 m convention.
+    LENGTH,
+)
+
+KOSAYA_SAZHEN = UnitDef(
+    "kosaya_sazhen",
+    "kosaya sazhen",
+    Fraction(98) * INCH.scale,
+    LENGTH,
+)
+
+MEZHEVAYA_VERSTA = UnitDef(
+    "mezhevaya_versta",
+    "mezhevaya versta",
+    1000 * SAZHEN.scale,
+    LENGTH,
+)
+
+
+def MakhovayaSazhen(value: Numeric) -> Length:
+    """Construct length from a magnitude expressed in swung sazhens.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in swung sazhens.
+
+    Returns
+    -------
+    Length
+        Length represented in swung sazhens.
+
+    Notes
+    -----
+    This module adopts the reported 1.76 m convention, represented as an exact
+    scale relative to the English inch. Historical sources differ on the
+    precise definition of similarly named measuring sazhens.
+
+    Examples
+    --------
+    A reconstruction of a traditional Russian workshop uses the extended
+    arm span as a reference length. Under this convention, one swung sazhen
+    is shorter than the standardized seven-foot sazhen:
+
+    >>> span = MakhovayaSazhen(1)
+    >>> span.to(METRE)
+    1.76 m
+    >>> span < Sazhen(1)
+    True
+
+    """
+    return Length(to_exact(value) * MAKHOVAYA_SAZHEN.scale, MAKHOVAYA_SAZHEN)
+
+
+def KosayaSazhen(value: Numeric) -> Length:
+    """Construct length from a magnitude expressed in skewed sazhens.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in skewed sazhens.
+
+    Returns
+    -------
+    Length
+        Length represented in skewed sazhens.
+
+    Notes
+    -----
+    One kosaya sazhen is 3.5 arshins, or exactly 98 English inches.
+
+    Examples
+    --------
+    A stage reconstruction of a Russian folk-tale bogatyr uses the diagonal
+    reach from a raised hand to the opposite foot as its reference measure:
+
+    >>> diagonal_reach = KosayaSazhen(1)
+    >>> diagonal_reach.to(METRE)
+    2.4892 m
+
+    The historical relationship to the arshin remains exact:
+
+    >>> diagonal_reach == Arshin(Fraction(7, 2))
+    True
+
+    """
+    return Length(to_exact(value) * KOSAYA_SAZHEN.scale, KOSAYA_SAZHEN)
+
+
+def MezhevayaVersta(value: Numeric) -> Length:
+    """Construct length from a magnitude expressed in border versts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in border versts (mezhevye versty).
+
+    Returns
+    -------
+    Length
+        Length represented in border versts.
+
+    Notes
+    -----
+    One border verst is 1000 sazhens, or exactly 2.1336 km under the
+    standardized sazhen used in this module. This historical measure was
+    used for land surveying and distances between settlements.
+
+    Examples
+    --------
+    A provincial landowner's estate inventory, worthy of Gogol's *Dead Souls*,
+    describes a rectangular meadow by its surveyed dimensions:
+    one and a half border versts along the road and 240 sazhens across. The dimensions
+    produce an area directly, without manually converting either measurement:
+
+    >>> meadow_length = MezhevayaVersta(Fraction(3, 2))
+    >>> meadow_width = Sazhen(240)
+    >>> meadow_area = meadow_length * meadow_width
+    >>> meadow_area
+    1638809.6256 m²
+
+    The resulting area is about 164 hectares of meadowland:
+
+    >>> meadow_area.to(HECTARE)
+    163.88096256 ha
+
+    """
+    return Length(to_exact(value) * MEZHEVAYA_VERSTA.scale, MEZHEVAYA_VERSTA)
 
 
 RUSSIAN_LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
@@ -443,6 +676,9 @@ RUSSIAN_LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyTy
         ARSHIN.symbol: Arshin,
         SAZHEN.symbol: Sazhen,
         VERSTA.symbol: Versta,
+        MAKHOVAYA_SAZHEN.symbol: MakhovayaSazhen,
+        KOSAYA_SAZHEN.symbol: KosayaSazhen,
+        MEZHEVAYA_VERSTA.symbol: MezhevayaVersta,
     }
 )
 """Constructors by symbol, for configuration files and external interfaces."""
@@ -453,9 +689,12 @@ __all__ = [
     "CHETVERT",
     "DYUYM",
     "FUT",
+    "KOSAYA_SAZHEN",
     "LADON",
     "LINIYA",
     "LOKOT",
+    "MAKHOVAYA_SAZHEN",
+    "MEZHEVAYA_VERSTA",
     "PERST",
     "PYAD",
     "RUSSIAN_LENGTH_UNITS",
@@ -468,9 +707,12 @@ __all__ = [
     "Chetvert",
     "Dyuym",
     "Fut",
+    "KosayaSazhen",
     "Ladon",
     "Liniya",
     "Lokot",
+    "MakhovayaSazhen",
+    "MezhevayaVersta",
     "Perst",
     "Pyad",
     "Sazhen",
