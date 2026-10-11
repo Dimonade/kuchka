@@ -136,7 +136,8 @@ class AmbiguousKindError(UnrepresentableDimensionError):
         MeasurementError.__init__(
             self,
             f"the result of this operation has dimension [{dimension!r}], "
-            f"which several kinds share equally: {names}.",
+            f"which several kinds share equally: {names}; construct the one you "
+            f"mean explicitly, such as {candidates[0].__name__}(...).",
         )
         self.dimension = dimension
         self.candidates = candidates

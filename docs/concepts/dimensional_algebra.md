@@ -50,6 +50,15 @@ A specialisation records meaning and shape: it converts no value and picks no re
 A result whose dimension is contested raises `AmbiguousKindError`, naming the candidates.
 `kuchka` does not finish importing while a concrete quantity type is unregistered, and a second linear kind that states no relation is refused.
 
+## Choosing the result type
+
+The type of a product or quotient is decided in this order:
+
+1. A dimensionless result is a plain `Fraction`.
+2. A dimensionless operand, a `Proportion`, keeps the kind of the other operand: `SampleRate(...) * Percent(50)` is a `SampleRate`.
+3. A rule for the operand kinds names the kind, for a dimension that has several linear kinds.
+4. Otherwise the principal kind of the dimension is the result, and a contested dimension raises `AmbiguousKindError`.
+
 ## Converting between types
 
 `.to(unit)` changes the unit a value is shown in and leaves the type alone.
