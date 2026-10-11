@@ -4,16 +4,33 @@ The Hebrew system of length is built on the etzba (אצבע, thumb-breadth).
 The biblical and rabbinic vocabulary relates fingers, palms, spans, cubits, and longer
 travel distances through a common set of ratios.
 
-===========  ==============  =====================
-Unit         Translation     Size
-===========  ==============  =====================
-`Etzba`      thumb-breadth   1 etzba
-`Tefach`     hand-breadth    4 etzba'ot
-`Zeret`      span            12 etzba'ot
-`Amah`       cubit           24 etzba'ot
-`Mil`        rabbinic mile   2000 amot
-`Parsa`      parasang        4 milin
-===========  ==============  =====================
+===========  ===================  ==============  =====================
+Unit         Hebrew name (plural) Translation     Size
+===========  ===================  ==============  =====================
+`Etzba`      אצבע (אצבעות)        thumb-breadth   1 etzba
+`Tefach`     טפח (טפחים)          hand-breadth    4 etzba'ot
+`Zeret`      זרת (זרות)           span            12 etzba'ot
+`Amah`       אמה (אמות)            cubit           24 etzba'ot
+`Mil`        מיל                   rabbinic mile   2000 amot
+`Parsa`      פרסה                  parasang        4 milin
+===========  ===================  ==============  =====================
+
+Talmudic additions
+------------------
+
+These additional measures extend the biblical length vocabulary with terms used in
+rabbinic literature.
+
+===========  ===================  ==================  =================
+Unit         Hebrew name          Translation         Size
+===========  ===================  ==================  =================
+`Hasit`      חסיט                  double palm         2 tefachim
+`Pesiah`     פסיעה                 pace                1 amah
+`DerekhYom`  דרך יום                day's journey       10 parsa'ot
+===========  ===================  ==================  =================
+
+All three units are available under the same reference, Naeh, and Chazon Ish
+calibrations as the other units in this module.
 
 The ratios are fixed in this model, but the absolute size of the etzba is disputed.
 Each unit therefore comes in three calibrations:
@@ -164,6 +181,43 @@ MIL_CHAZON_ISH = UnitDef(
 )
 PARSA_CHAZON_ISH = UnitDef(
     "parsa_chazon_ish", "parsa (Chazon Ish)", 192000 * _ETZBA_CHAZON_ISH, LENGTH
+)
+
+# Talmudic additions, reference calibration.
+
+HASIT = UnitDef("hasit", "hasit", 2 * TEFACH.scale, LENGTH)
+PESIAH = UnitDef("pesiah", "pesiah", AMAH.scale, LENGTH)
+DEREKH_YOM = UnitDef("derekh_yom", "derekh yom", 10 * PARSA.scale, LENGTH)
+
+
+# Talmudic additions, Naeh calibration.
+
+HASIT_NAEH = UnitDef("hasit_naeh", "hasit (Naeh)", 2 * TEFACH_NAEH.scale, LENGTH)
+PESIAH_NAEH = UnitDef("pesiah_naeh", "pesiah (Naeh)", AMAH_NAEH.scale, LENGTH)
+DEREKH_YOM_NAEH = UnitDef(
+    "derekh_yom_naeh", "derekh yom (Naeh)", 10 * PARSA_NAEH.scale, LENGTH
+)
+
+
+# Talmudic additions, Chazon Ish calibration.
+
+HASIT_CHAZON_ISH = UnitDef(
+    "hasit_chazon_ish",
+    "hasit (Chazon Ish)",
+    2 * TEFACH_CHAZON_ISH.scale,
+    LENGTH,
+)
+PESIAH_CHAZON_ISH = UnitDef(
+    "pesiah_chazon_ish",
+    "pesiah (Chazon Ish)",
+    AMAH_CHAZON_ISH.scale,
+    LENGTH,
+)
+DEREKH_YOM_CHAZON_ISH = UnitDef(
+    "derekh_yom_chazon_ish",
+    "derekh yom (Chazon Ish)",
+    10 * PARSA_CHAZON_ISH.scale,
+    LENGTH,
 )
 
 
@@ -772,6 +826,301 @@ def ParsaChazonIsh(value: Numeric) -> Length:
     return Length(to_exact(value) * PARSA_CHAZON_ISH.scale, PARSA_CHAZON_ISH)
 
 
+# Talmudic additions, and their Chazon Ish calibrations
+
+
+def Hasit(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in double palms (hasitim).
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in double palms.
+
+    Returns
+    -------
+    Length
+        Length represented in double palms.
+
+    Notes
+    -----
+    One hasit is two tefachim under the reference calibration.
+
+    Examples
+    --------
+    A museum workshop prepares a scale model of a carved-stone panel inspired by
+    Jerusalem's historic architecture.
+    The face is four hasitim wide and three tefachim high:
+
+    >>> panel_width = Hasit(4)
+    >>> panel_height = Tefach(3)
+    >>> panel_width * panel_height
+    0.185856 m²
+    """
+    return Length(to_exact(value) * HASIT.scale, HASIT)
+
+
+def HasitNaeh(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in double palms.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in double palms.
+
+    Returns
+    -------
+    Length
+        Length represented in double palms under the Naeh calibration.
+
+    Notes
+    -----
+    One hasit is two tefachim.
+    This constructor uses Rabbi Avraham Chaim Naeh's calibration, with an etzba of
+    2 cm.
+
+    Examples
+    --------
+    A conservator planning a mosaic for a modern Israeli heritage exhibit lays out a
+    panel five hasitim wide and four tefachim high:
+
+    >>> panel_width = HasitNaeh(5)
+    >>> panel_height = TefachNaeh(4)
+    >>> panel_width * panel_height
+    0.256 m²
+    """
+    return Length(to_exact(value) * HASIT_NAEH.scale, HASIT_NAEH)
+
+
+def HasitChazonIsh(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in double palms.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in double palms.
+
+    Returns
+    -------
+    Length
+        Length represented in double palms under the Chazon Ish calibration.
+
+    Notes
+    -----
+    One hasit is two tefachim.
+    This constructor uses the Chazon Ish's calibration, with an etzba of 2.38 cm.
+
+    Examples
+    --------
+    An architectural model uses a decorative limestone panel three hasitim wide and
+    two tefachim high, measured under the Chazon Ish calibration:
+
+    >>> panel_width = HasitChazonIsh(3)
+    >>> panel_height = TefachChazonIsh(2)
+    >>> panel_width * panel_height
+    0.10875648 m²
+    """
+    return Length(
+        to_exact(value) * HASIT_CHAZON_ISH.scale,
+        HASIT_CHAZON_ISH,
+    )
+
+
+def Pesiah(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in paces (pesiyot).
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in paces.
+
+    Returns
+    -------
+    Length
+        Length represented in paces under the reference calibration.
+
+    Notes
+    -----
+    One pesiah is one amah in this model.
+
+    Examples
+    --------
+    An interpretive reconstruction of a Judean courtyard includes a processional
+    passage eighteen pesiyot long and four amot wide.
+    Its floor area follows directly from the two lengths:
+
+    >>> passage_length = Pesiah(18)
+    >>> passage_width = Amah(4)
+    >>> passage_length * passage_width
+    20.060448 m²
+    """
+    return Length(to_exact(value) * PESIAH.scale, PESIAH)
+
+
+def PesiahNaeh(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in paces (pesiyot).
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in paces.
+
+    Returns
+    -------
+    Length
+        Length represented in paces under the Naeh calibration.
+
+    Notes
+    -----
+    One pesiah is one amah.
+    This constructor uses Rabbi Avraham Chaim Naeh's calibration, with an etzba of 2 cm.
+
+    Examples
+    --------
+    A heritage-site plan marks a walkway thirty pesiyot long and three tefachim wide:
+
+    >>> walkway_length = PesiahNaeh(30)
+    >>> walkway_width = TefachNaeh(3)
+    >>> walkway_length * walkway_width
+    3.456 m²
+    """
+    return Length(to_exact(value) * PESIAH_NAEH.scale, PESIAH_NAEH)
+
+
+def PesiahChazonIsh(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in paces (pesiyot).
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in paces.
+
+    Returns
+    -------
+    Length
+        Length represented in paces under the Chazon Ish calibration.
+
+    Notes
+    -----
+    One pesiah is one amah.
+    This constructor uses the Chazon Ish's calibration, with an etzba of 2.38 cm.
+
+    Examples
+    --------
+    A reconstructed lane in an old Jerusalem market scene is twelve pesiyot long and
+    two tefachim wide under the Chazon Ish calibration:
+
+    >>> lane_length = PesiahChazonIsh(12)
+    >>> lane_width = TefachChazonIsh(2)
+    >>> lane_length * lane_width
+    1.30507776 m²
+    """
+    return Length(
+        to_exact(value) * PESIAH_CHAZON_ISH.scale,
+        PESIAH_CHAZON_ISH,
+    )
+
+
+def DerekhYom(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in day's journeys.
+
+    Parameters
+    ----------
+    value : Numeric
+        Distance in day's journeys (darkhei yom).
+
+    Returns
+    -------
+    Length
+        Distance represented in day's journeys.
+
+    Notes
+    -----
+    One derekh yom is ten parsa'ot in this model.
+    Its physical distance consequently depends on the selected etzba calibration.
+
+    Examples
+    --------
+    A museum's map of a rabbinic travel narrative records a day's journey, followed by
+    six milin to a landmark and a final twelve-amah approach to the town gate.
+    The measurements combine into one route:
+
+    >>> route = DerekhYom(1) + Mil(6) + Amah(12)
+    >>> from kuchka.units.length import KILOMETRE
+    >>> route.to(KILOMETRE)
+    48.582336 km
+    """
+    return Length(to_exact(value) * DEREKH_YOM.scale, DEREKH_YOM)
+
+
+def DerekhYomNaeh(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in day's journeys.
+
+    Parameters
+    ----------
+    value : Numeric
+        Distance in day's journeys (darkhei yom).
+
+    Returns
+    -------
+    Length
+        Distance represented in day's journeys under the Naeh calibration.
+
+    Notes
+    -----
+    One derekh yom is ten parsa'ot.
+    This constructor uses Rabbi Avraham Chaim Naeh's calibration, with an etzba of 2 cm.
+
+    Examples
+    --------
+    An educational map of travel through the Judean hill country models a day's
+    journey followed by another five milin to a spring:
+
+    >>> route = DerekhYomNaeh(1) + MilNaeh(5)
+    >>> from kuchka.units.length import KILOMETRE
+    >>> route.to(KILOMETRE)
+    43.2 km
+    """
+    return Length(
+        to_exact(value) * DEREKH_YOM_NAEH.scale,
+        DEREKH_YOM_NAEH,
+    )
+
+
+def DerekhYomChazonIsh(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in day's journeys.
+
+    Parameters
+    ----------
+    value : Numeric
+        Distance in day's journeys (darkhei yom).
+
+    Returns
+    -------
+    Length
+        Distance represented in day's journeys under the Chazon Ish calibration.
+
+    Notes
+    -----
+    One derekh yom is ten parsa'ot.
+    This constructor uses the Chazon Ish's calibration, with an etzba of 2.38 cm.
+
+    Examples
+    --------
+    A comparative map of an ancient travel route records one day's journey and a
+    further one-and-a-half parsa'ot to a second stopping point:
+
+    >>> route = DerekhYomChazonIsh(1) + ParsaChazonIsh(1.5)
+    >>> from kuchka.units.length import KILOMETRE
+    >>> route.to(KILOMETRE)
+    52.5504 km
+    """
+    return Length(
+        to_exact(value) * DEREKH_YOM_CHAZON_ISH.scale,
+        DEREKH_YOM_CHAZON_ISH,
+    )
+
+
 HEBREW_LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
     {
         ETZBA.symbol: Etzba,
@@ -792,6 +1141,18 @@ HEBREW_LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyTyp
         AMAH_CHAZON_ISH.symbol: AmahChazonIsh,
         MIL_CHAZON_ISH.symbol: MilChazonIsh,
         PARSA_CHAZON_ISH.symbol: ParsaChazonIsh,
+        # Talmudic additions, reference calibration.
+        HASIT.symbol: Hasit,
+        PESIAH.symbol: Pesiah,
+        DEREKH_YOM.symbol: DerekhYom,
+        # Talmudic additions, Naeh calibration.
+        HASIT_NAEH.symbol: HasitNaeh,
+        PESIAH_NAEH.symbol: PesiahNaeh,
+        DEREKH_YOM_NAEH.symbol: DerekhYomNaeh,
+        # Talmudic additions, Chazon Ish calibration.
+        HASIT_CHAZON_ISH.symbol: HasitChazonIsh,
+        PESIAH_CHAZON_ISH.symbol: PesiahChazonIsh,
+        DEREKH_YOM_CHAZON_ISH.symbol: DerekhYomChazonIsh,
     }
 )
 """Constructors by symbol, for configuration files and external interfaces."""
@@ -835,4 +1196,22 @@ __all__ = [
     "Zeret",
     "ZeretChazonIsh",
     "ZeretNaeh",
+    "DEREKH_YOM",
+    "DEREKH_YOM_CHAZON_ISH",
+    "DEREKH_YOM_NAEH",
+    "HASIT",
+    "HASIT_CHAZON_ISH",
+    "HASIT_NAEH",
+    "PESIAH",
+    "PESIAH_CHAZON_ISH",
+    "PESIAH_NAEH",
+    "DerekhYom",
+    "DerekhYomChazonIsh",
+    "DerekhYomNaeh",
+    "Hasit",
+    "HasitChazonIsh",
+    "HasitNaeh",
+    "Pesiah",
+    "PesiahChazonIsh",
+    "PesiahNaeh",
 ]
