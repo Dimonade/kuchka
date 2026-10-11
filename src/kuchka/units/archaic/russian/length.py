@@ -9,22 +9,22 @@ lengths.
 The units span everything from the fine marks of a printmaker to the distances recorded
 by a provincial courier:
 
-===========  ==============  =====================
-Unit         Translation     Size
-===========  ==============  =====================
-`Tochka`     point           1/100 inch
-`Liniya`     line            1/10 inch
-`Dyuym`      inch (perst)    1 inch
-`Vershok`    tip             1 3/4 inches
-`Ladon`      palm            3 inches
-`Pyad`       span (quarter)  7 inches
-`Fut`        foot            12 inches (1 ft)
-`Lokot`      elbow, cubit    18 inches (1.5 ft)
-`Shag`       step            28 inches (2 1/3 ft)
-`Arshin`     yard            28 inches (2 1/3 ft)
-`Sazhen`     fathom          84 inches (7 ft)
-`Versta`     verst           500 sazhens (3500 ft)
-===========  ==============  =====================
+===========  =======================  ==============  =====================
+Unit         Russian name             Translation     Size
+===========  =======================  ==============  =====================
+`Tochka`     то́чка                    point           1/100 inch
+`Liniya`     ли́ния                    line            1/10 inch
+`Dyuym`      дюйм (перст)             inch (perst)    1 inch
+`Vershok`    вершо́к                   tip             1 3/4 inches
+`Ladon`      ладонь                   palm            3 inches
+`Pyad`       пядь, че́тверть           span (quarter)  7 inches
+`Fut`        фут                      foot            12 inches (1 ft)
+`Lokot`      локоть                   elbow, cubit    18 inches (1.5 ft)
+`Shag`       шаг                      step            28 inches (2 1/3 ft)
+`Arshin`     арши́н                    yard            28 inches (2 1/3 ft)
+`Sazhen`     саже́нь, са́жень           fathom          84 inches (7 ft)
+`Versta`     верста́                   verst           500 sazhens (3500 ft)
+===========  =======================  ==============  =====================
 
 `Perst` is another name for `Dyuym`, and `Chetvert` for `Pyad`.
 Both are aliases of the same objects.
@@ -38,13 +38,13 @@ A number of alternative units and values exist as well.
 These historical variants have their own definitions and are not aliases of the
 standardized road and surveying measures listed above.
 
-==================  ========================  ========================
-Unit                Translation               Size
-==================  ========================  ========================
-`MakhovayaSazhen`   swung sazhen              1.76 m
-`KosayaSazhen`      skewed/oblique sazhen     3.5 arshins (98 inches)
-`MezhevayaVersta`   double, or border verst   1000 sazhens (2.1336 km)
-==================  =======================   ========================
+==================  ==============  =====================  ========================
+Unit                Russian name    Translation            Size
+==================  ==============  =====================  ========================
+`MakhovayaSazhen`   маховая сажень  swung sazhen           1.76 m
+`KosayaSazhen`      косая сажень    skewed/oblique sazhen  3.5 arshins (98 inches)
+`MezhevayaVersta`   межевая верста  boundary verst         1000 sazhens (2.1336 km)
+==================  ==============  =====================  ========================
 
 - `MakhovayaSazhen` refers to the span between the fingertips with both arms
     stretched sideways.
