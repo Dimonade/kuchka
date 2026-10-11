@@ -16,6 +16,7 @@ from kuchka.quantities import ConvertibleToFrequency
 from kuchka.quantities import Current
 from kuchka.quantities import Density
 from kuchka.quantities import Energy
+from kuchka.quantities import EnergyDensity
 from kuchka.quantities import Force
 from kuchka.quantities import Frequency
 from kuchka.quantities import Instant
@@ -96,6 +97,8 @@ from kuchka.units import Hour
 from kuchka.units import Inch
 from kuchka.units import Jiffy
 from kuchka.units import Joule
+from kuchka.units import JoulePerCubicMeter
+from kuchka.units import JoulePerCubicMetre
 from kuchka.units import JulianYear
 from kuchka.units import Kelvin
 from kuchka.units import Kiloampere
@@ -110,6 +113,8 @@ from kuchka.units import KilogramPerLiter
 from kuchka.units import KilogramPerLitre
 from kuchka.units import Kilohertz
 from kuchka.units import Kilojoule
+from kuchka.units import KilojoulePerCubicMeter
+from kuchka.units import KilojoulePerCubicMetre
 from kuchka.units import Kiloliter
 from kuchka.units import Kilolitre
 from kuchka.units import Kilometer
@@ -135,6 +140,8 @@ from kuchka.units import Megaelectronvolt
 from kuchka.units import Megagram
 from kuchka.units import Megahertz
 from kuchka.units import Megajoule
+from kuchka.units import MegajoulePerCubicMeter
+from kuchka.units import MegajoulePerCubicMetre
 from kuchka.units import Meganewton
 from kuchka.units import Megaohm
 from kuchka.units import Megapascal
@@ -254,6 +261,8 @@ from kuchka.units import Turn
 from kuchka.units import Volt
 from kuchka.units import Watt
 from kuchka.units import WattHour
+from kuchka.units import WattHourPerLiter
+from kuchka.units import WattHourPerLitre
 from kuchka.units import Week
 from kuchka.units import Yard
 
@@ -304,6 +313,7 @@ __all__ = [
     "EarthMass",
     "Electronvolt",
     "Energy",
+    "EnergyDensity",
     "Erg",
     "Fahrenheit",
     "Femtomole",
@@ -333,6 +343,8 @@ __all__ = [
     "Instant",
     "Jiffy",
     "Joule",
+    "JoulePerCubicMeter",
+    "JoulePerCubicMetre",
     "JulianYear",
     "Kelvin",
     "Kiloampere",
@@ -347,6 +359,8 @@ __all__ = [
     "KilogramPerLitre",
     "Kilohertz",
     "Kilojoule",
+    "KilojoulePerCubicMeter",
+    "KilojoulePerCubicMetre",
     "Kiloliter",
     "Kilolitre",
     "Kilometer",
@@ -376,6 +390,8 @@ __all__ = [
     "Megagram",
     "Megahertz",
     "Megajoule",
+    "MegajoulePerCubicMeter",
+    "MegajoulePerCubicMetre",
     "Meganewton",
     "Megaohm",
     "Megapascal",
@@ -507,6 +523,8 @@ __all__ = [
     "Volume",
     "Watt",
     "WattHour",
+    "WattHourPerLiter",
+    "WattHourPerLitre",
     "Week",
     "Yard",
 ]
