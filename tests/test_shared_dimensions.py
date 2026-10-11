@@ -20,6 +20,7 @@ import pytest
 import kuchka
 from kuchka import AmbiguousKindError
 from kuchka import Angle
+from kuchka import AngularDisplacement
 from kuchka import BaudRate
 from kuchka import EnergyDensity
 from kuchka import Frequency
@@ -56,6 +57,7 @@ SHARED = {
     TEMPERATURE_DELTA: (TemperatureDelta, Temperature),
     DIMENSIONLESS: (Proportion, LogarithmicRatio),
     PRESSURE: (Pressure, EnergyDensity),
+    ANGLE: (Angle, AngularDisplacement),
 }
 
 
@@ -114,6 +116,13 @@ def test_a_dimensionless_kind_is_catalogued() -> None:
 def test_a_kind_arithmetic_cannot_produce_is_never_principal(kind: type) -> None:
     assert kind not in registry._DIMENSION_REGISTRY.values()  # noqa: SLF001
     assert not any(kind in group for group in registry._CONTESTED.values())  # noqa: SLF001
+
+
+def test_the_angular_displacement_is_the_principal_kind_of_the_angle_dimension() -> (
+    None
+):
+    assert registry._DIMENSION_REGISTRY[ANGLE] is AngularDisplacement  # noqa: SLF001
+    assert Angle not in registry._DIMENSION_REGISTRY.values()  # noqa: SLF001
 
 
 def test_a_dimension_with_a_kind_of_another_shape_keeps_its_principal() -> None:
