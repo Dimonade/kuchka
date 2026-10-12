@@ -157,6 +157,17 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 
+# TODO: Consider restricting the API to deliver only:
+# - GeographischeMeile 7,420.439 m, 
+# - PreussischeLandmeile 7,532.484 m,
+# - Reichsmeile 7,500 m,
+# - and maybe OesterreichischePostmeile 7,585.9 m,
+# to the higher level.
+# the other ones seems to be quite specific and I'm not sure whether they deserve
+# to be here if their use is ve-e-ery situational.
+# But on the other hand, it costs nothing (except of historical digging time) to have
+# them here.
+
 def _construct(value: Numeric, unit: UnitDef) -> Length:
     """Construct a length while preserving its selected display unit."""
     return Length(to_exact(value) * unit.scale, unit)
