@@ -4,12 +4,12 @@ The Hebrew system of length is built on the etzba (אצבע, thumb-breadth).
 The biblical and rabbinic vocabulary relates fingers, palms, spans, cubits, and longer
 travel distances through a common set of ratios.
 
-===========  ===================  ==============  =====================
-Unit         Hebrew name (plural) Translation     Size
-===========  ===================  ==============  =====================
-`Etzba`      אצבע (אצבעות)        thumb-breadth   1 etzba
-`Tefach`     טפח (טפחים)          hand-breadth    4 etzba'ot
-`Zeret`      זרת (זרות)           span            12 etzba'ot
+===========  ====================  ==============  =====================
+Unit         Hebrew name (plural)  Translation     Size
+===========  ====================  ==============  =====================
+`Etzba`      אצבע (אצבעות)          thumb-breadth   1 etzba
+`Tefach`     טפח (טפחים)            hand-breadth    4 etzba'ot
+`Zeret`      זרת (זרות)              span            12 etzba'ot
 `Amah`       אמה (אמות)            cubit           24 etzba'ot
 `Mil`        מיל                   rabbinic mile   2000 amot
 `Parsa`      פרסה                  parasang        4 milin
