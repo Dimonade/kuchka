@@ -11,19 +11,20 @@ part in the same arithmetic as grams and kilograms.
 Mass
 ----
 
-=============  ===========  ============  =================  =========
-Unit           Romanised    Kanji         Relationship       SI value
-=============  ===========  ============  =================  =========
-`Mo`           Mō           毛, 毫         1/1,000,000 kan    3.75 mg
-`Rin`          Rin          厘             1/100,000 kan      37.5 mg
-`Fun`          Fun          分             1/10,000 kan       375 mg
-`Monme`        Monme        匁             1/1,000 kan        3.75 g
-`Hyakume`      Hyakume      百目           1/10 kan           375 g
-`Kin`          Kin          斤             4/25 kan           600 g
-`Kan`          Kan(me)      貫, 貫目       1 kan              3.75 kg
-`Maru`         Maru         丸             8 kan              30 kg
-`Tan`          Tan          担, 擔         16 kan             60 kg
-=============  ===========  ============  =================  =========
+======= ========== =========== =================== ==========
+Unit    Romanised  Kanji       Relationship        SI value
+======= ========== =========== =================== ==========
+Mo      Mō         毛, 毫       1/1,000,000 kan     3.75 mg
+Rin     Rin        厘           1/100,000 kan       37.5 mg
+Fun     Fun        分           1/10,000 kan        375 mg
+Monme   Monme      匁           1/1,000 kan         3.75 g
+Hyakume Hyakume    百目         1/10 kan            375 g
+Kin     Kin        斤           4/25 kan            600 g
+Kan     Kan(me)    貫, 貫目     1 kan               3.75 kg
+Maru    Maru       丸           8 kan               30 kg
+Tan     Tan        担, 擔       16 kan              60 kg
+======= ========== =========== =================== ==========
+
 
 Monme is familiar from traditional weighing practices, including the
 Japanese pearl trade. Kin and kan provide larger scales for weighing
