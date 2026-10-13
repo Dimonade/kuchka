@@ -25,7 +25,6 @@ Maru    Maru       丸           8 kan               30 kg
 Tan     Tan        担, 擔       16 kan              60 kg
 ======= ========== =========== =================== ==========
 
-
 Monme is familiar from traditional weighing practices, including the
 Japanese pearl trade. Kin and kan provide larger scales for weighing
 goods and materials.

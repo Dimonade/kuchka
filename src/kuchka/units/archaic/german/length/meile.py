@@ -158,7 +158,7 @@ if TYPE_CHECKING:
 
 
 # TODO: Consider restricting the API to deliver only:
-# - GeographischeMeile 7,420.439 m, 
+# - GeographischeMeile 7,420.439 m,
 # - PreussischeLandmeile 7,532.484 m,
 # - Reichsmeile 7,500 m,
 # - and maybe OesterreichischePostmeile 7,585.9 m,
@@ -167,6 +167,7 @@ if TYPE_CHECKING:
 # to be here if their use is ve-e-ery situational.
 # But on the other hand, it costs nothing (except of historical digging time) to have
 # them here.
+
 
 def _construct(value: Numeric, unit: UnitDef) -> Length:
     """Construct a length while preserving its selected display unit."""
@@ -541,6 +542,7 @@ BERNER_MEILE = UnitDef(
         "Bernese mile (older calibration)",
     ),
 )
+
 
 def GeographischeMeile(value: Numeric) -> Length:
     """Construct a length expressed in this historical mile.
@@ -1346,6 +1348,7 @@ def BernerMeile(value: Numeric) -> Length:
     """
     return _construct(value, BERNER_MEILE)
 
+
 # Orthographic aliases share the same constructor and UnitDef.
 GeografischeMeile = GeographischeMeile
 PreussischeMeile = PreussischeLandmeile
@@ -1380,7 +1383,7 @@ _UNIT_CONSTRUCTORS: dict[UnitDef, Callable[[Numeric], Length]] = {
         (OESTERREICHISCHE_POSTMEILE, OesterreichischePostmeile),
         (HELVETISCHE_MEILE, HelvetischeMeile),
         (ZUERCHER_MEILE, ZuercherMeile),
-        (BERNER_MEILE, BernerMeile)
+        (BERNER_MEILE, BernerMeile),
     )
 }
 

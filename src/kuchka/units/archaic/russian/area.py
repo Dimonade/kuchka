@@ -320,6 +320,8 @@ SQUARE_LINIYA = UnitDef(
 
 
 # Desyatina variants: all scales derive from the standardized square sazhen.
+
+
 DESYATINA = UnitDef(
     "desyatina",
     "desyatina",
@@ -339,8 +341,6 @@ DESYATINA = UnitDef(
     ),
 )
 
-# The early desyatina was a square one tenth of a versta on each side:
-# 50 sazhens by 50 sazhens = 2,500 square sazhens.
 VERSTA_DESYATINA = UnitDef(
     "versta_desyatina",
     "desyatina (1/10 versta square)",
@@ -357,6 +357,12 @@ VERSTA_DESYATINA = UnitDef(
         "десятина 2500 квадратных саженей",
     ),
 )
+"""The early Desyatina.
+
+A square one tenth of a versta on each side:
+50 sazhens by 50 sazhens = 2,500 square sazhens.
+"""
+
 
 PROPRIETOR_DESYATINA = UnitDef(
     "proprietor_desyatina",
@@ -434,6 +440,8 @@ BAKHCHEVAYA_DESYATINA = UnitDef(
 
 
 # Chet / chetvert has several documented calibrations.
+
+
 CHET = UnitDef(
     "chet",
     "chet",
