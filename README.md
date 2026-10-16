@@ -103,6 +103,8 @@ led_critical_voltage = { value = "2800", unit = "mV" }
 
 The corresponding loader can use `VOLTAGE_UNITS`, which contains only voltage units:
 
+<!-- doc-test: skip reads device.toml from disk -->
+
 ```python
 from collections.abc import Mapping
 from dataclasses import dataclass

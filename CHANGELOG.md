@@ -78,7 +78,16 @@ Angles measure the short way round the circle.
 Conversions between quantity types are named `to_*` and `from_*`.
 `as_instant`, `as_sampling_period`, and `as_frequency` are now `to_instant`, `to_sampling_period`, and `to_frequency`; the old names are removed.
 
+#### Angle arithmetic
+
+Multiplying or dividing an `Angle` by a quantity raises `IncompatibleDimensionError`, with a pointer to `to_angular_displacement()`.
+It raised a bare `TypeError`.
+
 ### Fixed
+
+#### Every unit of a table is published
+
+`KilowattHour`, `GramPerLitre`, and `GramPerMillilitre` were in their tables but not exported, so `from kuchka import KilowattHour` failed and a value in them could not be pickled.
 
 #### A `Proportion` keeps the kind it scales
 
