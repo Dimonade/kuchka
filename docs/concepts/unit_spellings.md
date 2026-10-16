@@ -115,6 +115,8 @@ Spellings other than the display symbol work for lookup and membership (`"C" in 
 A spelling is a field of the unit definition.
 Add a symbol-like spelling to `aliases`, and a name or spoken form to `words`:
 
+<!-- doc-test: skip a fragment of a unit definition, not a program -->
+
 ```python
 CELSIUS = AffineUnitDef(
     "celsius",

@@ -28,16 +28,20 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import ClassVar
+from typing import Self
 from typing import overload
 
 from kuchka.dimensions import ANGLE
+from kuchka.errors import IncompatibleDimensionError
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import ModularQuantity
 from kuchka.quantities.base.registry import _register
+from kuchka.quantities.base.storage import _ScalarStorage
 
 if TYPE_CHECKING:
     from fractions import Fraction
+    from typing import Any
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
@@ -54,6 +58,29 @@ class Angle(ModularQuantity):
     dimension: ClassVar[Dimension] = ANGLE
     __slots__ = ()
 
+    @override
+    def __mul__(self, other: object) -> Self:
+        """Scale by a plain number; refuse a quantity, pointing at the angle swept."""
+        _refuse_a_quantity("multiply", self, other)
+        return super().__mul__(other)
+
+    @override
+    def __rmul__(self, other: object) -> Self:
+        """Scale by a plain number; refuse a quantity, pointing at the angle swept."""
+        _refuse_a_quantity("multiply", other, self)
+        return super().__rmul__(other)
+
+    @override
+    def __truediv__(self, other: object) -> Self:
+        """Divide by a plain number; refuse a quantity, pointing at the angle swept."""
+        _refuse_a_quantity("divide", self, other)
+        return super().__truediv__(other)
+
+    def __rtruediv__(self, other: object) -> Any:  # noqa: ANN401 -- only ever raises or declines
+        """Refuse to be the divisor of a quantity, pointing at the angle swept."""
+        _refuse_a_quantity("divide", other, self)
+        return NotImplemented
+
     def to_angular_displacement(self) -> AngularDisplacement:
         """View this position as the angle swept from zero to reach it.
 
@@ -64,6 +91,21 @@ class Angle(ModularQuantity):
         """
         wrapped = self._wrap(self._magnitude)
         return AngularDisplacement(wrapped, self._display_unit)
+
+
+def _refuse_a_quantity(operation: str, left: object, right: object) -> None:
+    """Raise if either operand of a product or quotient is a quantity, not a number."""
+    if isinstance(left, _ScalarStorage) and isinstance(right, _ScalarStorage):
+        raise IncompatibleDimensionError(
+            operation,
+            left,
+            right,
+            hint=(
+                "An `Angle` is a position on a circle and wraps, so it does not "
+                f"{operation} quantities. Use `angle.to_angular_displacement()` for "
+                "the angle swept, which does."
+            ),
+        )
 
 
 class AngularDisplacement(LinearQuantity):
