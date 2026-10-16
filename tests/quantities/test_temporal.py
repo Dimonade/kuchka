@@ -38,12 +38,6 @@ def test_time_and_frequency_are_reciprocals_of_each_other():
     assert 1 / frequency_units.Hertz(50) == time.Second(Decimal("0.02"))
 
 
-"""Curated list of reciprocal round-trips values.
-
-`Decimal`'s division only terminates exactly when the divisor's prime factors are
-2 and 5, so a value like 3 would make `1 / (1 / x) == x` a statement about rounding
-behavior, not about whether the reciprocal itself is correct.
-"""
 CLEAN_RECIPROCAL_VALUES = [
     Decimal(1),
     Decimal(2),
@@ -57,6 +51,12 @@ CLEAN_RECIPROCAL_VALUES = [
     Decimal(1000),
     Decimal("2.5"),
 ]
+"""Curated list of reciprocal round-trips values.
+
+`Decimal`'s division only terminates exactly when the divisor's prime factors are
+2 and 5, so a value like 3 would make `1 / (1 / x) == x` a statement about rounding
+behavior, not about whether the reciprocal itself is correct.
+"""
 
 
 @pytest.mark.parametrize("value", CLEAN_RECIPROCAL_VALUES, ids=str)

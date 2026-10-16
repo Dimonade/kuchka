@@ -20,7 +20,7 @@ from kuchka import Time
 from kuchka.units import charge
 from kuchka.units import current
 from kuchka.units import energy
-from kuchka.units import energy_density
+from kuchka.units import energy_density as ed
 from kuchka.units import power
 from kuchka.units import pressure
 from kuchka.units import temporal
@@ -43,20 +43,18 @@ def test_the_pack_energy_adds_up_and_reads_in_kilowatt_hours() -> None:
 def test_the_pack_energy_density_is_an_energy_density_and_never_a_pressure() -> None:
     density = (CELL_ENERGY * CELLS) / (CELL_VOLUME * CELLS)
     assert type(density) is EnergyDensity
-    assert density == energy_density.WattHourPerLitre(Fraction(4375, 4))
+    assert density == ed.WattHourPerLitre(Fraction(4375, 4))
     assert not isinstance(density, Pressure)
-    in_megajoules = density.to(energy_density.MEGAJOULE_PER_CUBIC_METRE)
-    assert in_megajoules.value_in(energy_density.MEGAJOULE_PER_CUBIC_METRE) == Fraction(
+    in_megajoules = density.to(ed.MEGAJOULE_PER_CUBIC_METRE)
+    assert in_megajoules.value_in(ed.MEGAJOULE_PER_CUBIC_METRE) == Fraction(
         3_937_500, 1000
     )
 
 
 def test_a_pressure_does_not_stand_in_for_an_energy_density() -> None:
-    density = energy_density.WattHourPerLitre(1000)
+    density = ed.WattHourPerLitre(1000)
     assert density != pressure.Pascal(density.magnitude)
-    assert density.to(energy_density.JOULE_PER_CUBIC_METRE).magnitude == Fraction(
-        3_600_000_000
-    )
+    assert density.to(ed.JOULE_PER_CUBIC_METRE).magnitude == Fraction(3_600_000_000)
 
 
 def test_runtime_at_a_constant_draw() -> None:

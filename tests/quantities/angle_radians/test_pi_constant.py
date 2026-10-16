@@ -9,29 +9,7 @@ import pytest
 
 from kuchka.internal.constants import PI
 from kuchka.units import angular
-
-
-def _true_pi(decimals: int) -> Fraction:
-    """Pi from Machin's formula, in integer arithmetic, independent of `PI`."""
-
-    def arctan_of_inverse(x: int, unity: int) -> int:
-        total = term = unity // x
-        x_squared = x * x
-        n = 1
-        sign = -1
-        while term:
-            term //= x_squared
-            n += 2
-            total += sign * (term // n)
-            sign = -sign
-        return total
-
-    unity = 10 ** (decimals + 10)
-    pi = 4 * (4 * arctan_of_inverse(5, unity) - arctan_of_inverse(239, unity))
-    return Fraction(pi, unity)
-
-
-TRUE_PI = _true_pi(130)
+from tests.quantities.angle_radians.precision import TRUE_PI
 
 
 def test_pi_is_correct_to_one_hundred_decimals() -> None:
