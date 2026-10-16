@@ -97,6 +97,10 @@ from kuchka.units import Grain
 from kuchka.units import Gram
 from kuchka.units import GramPerCubicCentimeter
 from kuchka.units import GramPerCubicCentimetre
+from kuchka.units import GramPerLiter
+from kuchka.units import GramPerLitre
+from kuchka.units import GramPerMilliliter
+from kuchka.units import GramPerMillilitre
 from kuchka.units import Hectare
 from kuchka.units import Hectopascal
 from kuchka.units import Hertz
@@ -141,6 +145,7 @@ from kuchka.units import Kilosiemens
 from kuchka.units import KilotonneOfTNT
 from kuchka.units import Kilovolt
 from kuchka.units import Kilowatt
+from kuchka.units import KilowattHour
 from kuchka.units import Knot
 from kuchka.units import LightYear
 from kuchka.units import Liter
@@ -363,6 +368,10 @@ __all__ = [
     "Gram",
     "GramPerCubicCentimeter",
     "GramPerCubicCentimetre",
+    "GramPerLiter",
+    "GramPerLitre",
+    "GramPerMilliliter",
+    "GramPerMillilitre",
     "Hectare",
     "Hectopascal",
     "Hertz",
@@ -408,6 +417,7 @@ __all__ = [
     "KilotonneOfTNT",
     "Kilovolt",
     "Kilowatt",
+    "KilowattHour",
     "Knot",
     "Length",
     "LightYear",
