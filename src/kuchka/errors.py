@@ -34,8 +34,18 @@ class IncompatibleDimensionError(MeasurementError):
     - when they coincide, names them as different concepts within identical dimension.
     """
 
-    def __init__(self, operation: str, left: object, right: object) -> None:
-        """Build the error message from the operands' runtime types and dimensions."""
+    def __init__(
+        self,
+        operation: str,
+        left: object,
+        right: object,
+        *,
+        hint: str | None = None,
+    ) -> None:
+        """Build the error message from the operands' runtime types and dimensions.
+
+        A `hint` is appended as a last line, for a refusal that has a better route.
+        """
         left_name = type(left).__name__
         right_name = type(right).__name__
         left_dim = getattr(left, "dimension", None)
@@ -53,6 +63,8 @@ class IncompatibleDimensionError(MeasurementError):
                 f"`{left_name}` has dimension [{left_dim!r}].\n"
                 f"`{right_name}` has dimension [{right_dim!r}]."
             )
+        if hint is not None:
+            message = f"{message}\n{hint}"
         super().__init__(message)
         self.operation = operation
         self.left = left
