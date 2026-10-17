@@ -32,6 +32,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.electrical import Power
     from kuchka.quantities.electrical import Voltage
     from kuchka.quantities.energy_density import EnergyDensity
+    from kuchka.quantities.kinematics import Force
+    from kuchka.quantities.length import Length
     from kuchka.quantities.pressure import Pressure
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.rotational import Torque
@@ -77,6 +79,10 @@ class Energy(LinearQuantity):
     def __truediv__(self, other: Voltage) -> Charge: ...
     @overload
     def __truediv__(self, other: Energy) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Force) -> Length: ...
+    @overload
+    def __truediv__(self, other: Length) -> Force: ...
     @overload
     def __truediv__(self, other: Numeric) -> Energy: ...
     @overload

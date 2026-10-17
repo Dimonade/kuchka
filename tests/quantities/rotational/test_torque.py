@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import operator
 from fractions import Fraction
 
 import pytest
@@ -86,3 +87,12 @@ def test_torque_units_scale_exactly() -> None:
     pound_force = force.Newton(Fraction("4.4482216152605"))
     foot = length.Metre(Fraction("0.3048"))
     assert torque_units.PoundForceFoot(1) == Torque.from_force(pound_force, foot)
+
+
+@pytest.mark.parametrize("combine", [operator.add, operator.sub, operator.gt])
+def test_mixing_a_torque_and_an_energy_names_the_way_between_them(combine) -> None:
+    work = energy.Joule(1)
+    turning = torque_units.NewtonMetre(1)
+    for left, right in ((work, turning), (turning, work)):
+        with pytest.raises(IncompatibleDimensionError, match=r"Torque\.from_force"):
+            combine(left, right)

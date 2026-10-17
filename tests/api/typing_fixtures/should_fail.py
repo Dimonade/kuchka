@@ -188,7 +188,7 @@ _bad_level_reciprocal = 2 / Decibel(3)  # type: ignore[operator]  # ty: ignore[u
 
 cascade: LogarithmicRatio = Decibel(20) + Decibel(-3)  # OK: statically a level.
 loss: LogarithmicRatio = Decibel(-0.2) * 30  # OK: scaling a level gives a level.
-steps: Fraction = Decibel(6) / Decibel(3)  # OK: level over level is a plain fraction.
+steps: Proportion = Decibel(6) / Decibel(3)  # OK: level over level is a proportion.
 scaled_down: LogarithmicRatio = Decibel(6) / 3  # OK: level over a number is a level.
 linear: Proportion = Decibel(3).to_power_ratio()  # OK: a linear ratio.
 wrong_steps: LogarithmicRatio = Decibel(6) / Decibel(3)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]

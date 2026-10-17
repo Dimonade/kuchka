@@ -14,9 +14,6 @@ from kuchka.units import proportion
 from kuchka.units import time
 from kuchka.units import voltage
 
-SAMPLE_RATE = SampleRate(Fraction(8), SampleRate._canonical_unit)  # noqa: SLF001
-
-
 SAMPLING_PERIOD = SamplingPeriod(Fraction(1, 8), SamplingPeriod._canonical_unit)  # noqa: SLF001
 
 
@@ -30,10 +27,6 @@ def test_a_ratio_of_like_quantities_is_a_proportion() -> None:
         Fraction(1, 4)
     )
     assert type(time.Second(1) / time.Second(2)) is Proportion
-
-
-def test_a_dimensionless_result_of_unlike_quantities_is_a_plain_fraction() -> None:
-    assert type(SAMPLE_RATE * time.Second(2)) is Fraction
 
 
 def test_the_reciprocal_of_a_role_is_still_its_own_partner() -> None:

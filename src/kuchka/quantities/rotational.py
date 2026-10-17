@@ -34,10 +34,12 @@ from typing import overload
 from kuchka.dimensions import ANGULAR_VELOCITY
 from kuchka.dimensions import TORQUE
 from kuchka.errors import IncompatibleDimensionError
+from kuchka.errors import _register_hint
 from kuchka.internal.constants import PI
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.registry import _register
+from kuchka.quantities.energy import Energy
 from kuchka.quantities.kinematics import Force
 from kuchka.quantities.length import Length
 
@@ -48,7 +50,6 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.angular import AngularDisplacement
     from kuchka.quantities.electrical import Power
-    from kuchka.quantities.energy import Energy
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -148,5 +149,12 @@ class Torque(LinearQuantity):
 
 _register(ANGULAR_VELOCITY, AngularVelocity)
 _register(TORQUE, Torque)
+_register_hint(
+    Energy,
+    Torque,
+    "A newton-metre of work is an `Energy`, and a `Torque` is energy per angle: "
+    "divide an energy by an `AngularDisplacement` for a torque, multiply a torque by "
+    "one for an energy, or build a torque with `Torque.from_force(force, lever_arm)`.",
+)
 
 __all__ = ["AngularVelocity", "Torque"]

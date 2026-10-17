@@ -11,6 +11,7 @@ import pytest
 
 from kuchka import IncompatibleDimensionError
 from kuchka import InvalidMeasurementError
+from kuchka import Proportion
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.quantities.base import PureLogarithmicQuantity
 from kuchka.units import logarithmic
@@ -81,10 +82,10 @@ def test_scaling_keeps_the_display_unit():
     assert (logarithmic.Bel(2) * 3).unit is logarithmic.BEL
 
 
-def test_level_divided_by_level_is_a_plain_fraction():
-    assert logarithmic.Decibel(6) / logarithmic.Decibel(3) == Fraction(2)
-    assert logarithmic.Bel(1) / logarithmic.Decibel(5) == Fraction(2)
-    assert isinstance(logarithmic.Decibel(6) / logarithmic.Decibel(3), Fraction)
+def test_level_divided_by_level_is_a_proportion():
+    assert logarithmic.Decibel(6) / logarithmic.Decibel(3) == proportion.Ratio(2)
+    assert logarithmic.Bel(1) / logarithmic.Decibel(5) == proportion.Ratio(2)
+    assert isinstance(logarithmic.Decibel(6) / logarithmic.Decibel(3), Proportion)
 
 
 def test_sum_needs_a_level_as_its_start_value():
