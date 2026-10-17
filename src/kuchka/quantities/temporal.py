@@ -120,12 +120,9 @@ class Time(LinearQuantity):
             rate = 1 / period   # -> `SampleRate`
 
         `SamplingPeriod` shares `Time`'s own coordinate units.
-        Thus, the prefix a value was constructed with (`Second`, `Millisecond`,
-        `Microsecond`, `Minute`, `Hour`, ...) carries straight through:
-        `Minute(1).to_sampling_period()` reads exactly as
-        `Second(60).to_sampling_period()`.
+        Display unit carries through.
         """
-        return SamplingPeriod(self._magnitude, SamplingPeriod._canonical_unit)  # noqa: SLF001 -- SamplingPeriod's own canonical unit
+        return SamplingPeriod(self._magnitude, self._display_unit)
 
     def to_instant(self) -> Instant:
         """View this span as an `Instant` that many seconds from wherever zero is.

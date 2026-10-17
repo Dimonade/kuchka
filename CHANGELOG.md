@@ -94,6 +94,11 @@ It raised a bare `TypeError`.
 `SampleRate * Ratio(2)` and `BaudRate * Percent(50)` returned a `Frequency` in hertz.
 A dimensionless operand now keeps the kind of the other operand.
 
+#### `to_sampling_period()` keeps the display unit
+
+`Millisecond(2).to_sampling_period()` displayed `0.002 s`, and so did `SAMPLING_PERIOD_UNITS["ms"](2)`.
+Both now display `2 ms`.
+
 #### A unit belongs to its quantity types
 
 `Hertz(1).to(BAUD)` displayed `1 Bd`, and `Frequency(Fraction(1), BAUD)` was accepted, because a type took any unit of its dimension.
