@@ -10,6 +10,7 @@ import pytest
 from kuchka import DivisionByZeroError
 from kuchka.units import current
 from kuchka.units import frequency
+from kuchka.units import proportion
 from kuchka.units import resistance
 from kuchka.units import time
 from kuchka.units import voltage
@@ -67,11 +68,11 @@ def test_every_linear_family_reports_a_zero_divisor(family) -> None:
 
 def test_division_by_a_non_zero_divisor_is_unchanged() -> None:
     assert voltage.Volt(6) / 3 == voltage.Volt(2)
-    assert voltage.Volt(6) / voltage.Volt(3) == Fraction(2)
+    assert voltage.Volt(6) / voltage.Volt(3) == proportion.Ratio(2)
     assert 1 / time.Second(4) == frequency.Hertz(Fraction(1, 4))
 
 
 def test_a_zero_dividend_is_fine() -> None:
     assert voltage.Volt(0) / 3 == voltage.Volt(0)
-    assert voltage.Volt(0) / voltage.Volt(2) == Fraction(0)
+    assert voltage.Volt(0) / voltage.Volt(2) == proportion.Ratio(0)
     assert 0 / time.Second(2) == frequency.Hertz(0)

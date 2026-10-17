@@ -58,9 +58,6 @@ def runtime_pairs() -> set[tuple[str, str, str, str]]:
             if left.quantity in roles or right.quantity in roles:
                 continue
             for operation, apply in OPERATOR.items():
-                same_kind = left.quantity is right.quantity
-                if same_kind and operation == "__truediv__":
-                    continue
                 try:
                     result = apply(left.canonical(12), right.canonical(3))
                 except (MeasurementError, TypeError):
