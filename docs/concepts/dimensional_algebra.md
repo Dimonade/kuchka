@@ -74,6 +74,21 @@ The type of a product or quotient is decided in this order:
 4. A rule for the operand kinds names the kind, for a dimension that has several linear kinds: `Pressure` and `EnergyDensity` share M L⁻¹ T⁻², so `Force / Area` is a `Pressure` and `Energy / Volume` an `EnergyDensity`.
 5. Otherwise the principal kind of the dimension is the result, and a contested dimension raises `AmbiguousKindError`.
 
+A specialisation is checked before any of those.
+It combines with a plain number, with a `Proportion`, with itself in a quotient, and with its reciprocal: `SampleRate` times `SamplingPeriod` is a `Fraction`.
+Any other operand is refused, and the error names the conversion that leaves the role:
+
+```python
+from kuchka import Baud
+from kuchka import Metre
+from kuchka import SamplesPerSecond
+from kuchka import Second
+
+Baud(9600) * Metre(1)  # rejected: `IncompatibleDimensionError`.
+SamplesPerSecond(48_000) * Second(2)  # rejected: `IncompatibleDimensionError`.
+SamplesPerSecond(48_000).to_frequency() * Second(2) == 96_000
+```
+
 ## Ratios
 
 A ratio is a `Proportion`, and it displays as the coherent ratio:

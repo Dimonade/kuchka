@@ -111,7 +111,7 @@ Bel(1) == Decibel(10)  # True
 ```
 
 Scaling by a plain number scales the level: `Decibel(-0.2) * 30 == Decibel(-6)`.
-Dividing a level by a level gives a plain `Fraction`: `Decibel(6) / Decibel(3) == 2`.
+Dividing a level by a level gives a `Proportion`: `Decibel(6) / Decibel(3) == Ratio(2)`.
 Levels have a total order, since a larger ratio is a larger level.
 `abs()` gives the size of a deviation, which is what a gain tolerance check compares.
 

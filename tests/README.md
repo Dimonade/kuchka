@@ -64,6 +64,4 @@ The doctests in `src/kuchka` run with `--doctest-modules`, and the worked exampl
 
 ## What is still decided by hand
 
-- `support/undeclared_overloads.py` lists the products the runtime allows and the overloads do not declare.
-  The list may only shrink: the test fails when a pair is declared and still listed, and when a new undeclared pair appears.
-- The excluded tables and documents are named, with the reason, where they are excluded.
+The excluded tables and documents are named, with the reason, where they are excluded.

@@ -48,6 +48,7 @@ from kuchka.numeric import to_exact
 from kuchka.quantities.base import AffineQuantity
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.registry import _register
+from kuchka.quantities.base.registry import _register_reciprocal
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -261,6 +262,10 @@ class SamplingPeriod(LinearQuantity):
     directly (see the module docstring), but never produced by generic arithmetic:
     the only way to get one is `Time.to_sampling_period()`, the same way
     `Temperature` is never a side effect of ordinary arithmetic on other quantities.
+
+    It scales by a plain number or a `Proportion`, divides by another `SamplingPeriod`
+    into a `Proportion`, and multiplies with its reciprocal `SampleRate`.
+    `to_time()` takes it as a `Time` for any other arithmetic.
     """
 
     dimension: ClassVar[Dimension] = TIME
@@ -307,6 +312,16 @@ class SamplingPeriod(LinearQuantity):
             return SampleRate(magnitude, SampleRate._canonical_unit)
         return NotImplemented
 
+    def to_time(self) -> Time:
+        """View this interval as an ordinary `Time`, e.g. to multiply it by a speed.
+
+            Millisecond(2).to_sampling_period().to_time() == Millisecond(2)
+
+        The unit it displays in carries over, and `Time.to_sampling_period()` takes
+        the value back.
+        """
+        return Time(self._magnitude, self._display_unit)
+
 
 class SampleRate(LinearQuantity):
     """How often an acquisition system takes a reading, e.g. an ADC's sample rate.
@@ -314,6 +329,10 @@ class SampleRate(LinearQuantity):
     Dimensionally identical to `Frequency`, and convertible to and from
     `SamplingPeriod` directly, but never produced by generic arithmetic:
     see the `SamplingPeriod` docstring for why.
+
+    It scales by a plain number or a `Proportion`, divides by another `SampleRate`
+    into a `Proportion`, and multiplies with its reciprocal `SamplingPeriod`.
+    `to_frequency()` takes it as a `Frequency` for any other arithmetic.
     """
 
     dimension: ClassVar[Dimension] = FREQUENCY
@@ -375,6 +394,9 @@ class BaudRate(LinearQuantity):
     It is deliberately given no reciprocal and no `to_frequency()` -- neither is a
     well-defined, encoding-independent conversion, and a wrong default here would be
     wrong silently.
+
+    It scales by a plain number or a `Proportion`, and divides by another `BaudRate`
+    into a `Proportion`.
     """
 
     dimension: ClassVar[Dimension] = FREQUENCY
@@ -406,6 +428,7 @@ _register(FREQUENCY, Frequency)
 _register(TIME, SamplingPeriod, specialisation_of=Time)
 _register(FREQUENCY, SampleRate, specialisation_of=Frequency)
 _register(FREQUENCY, BaudRate, specialisation_of=Frequency)
+_register_reciprocal(SamplingPeriod, SampleRate)
 _register(TIME, Instant)
 
 __all__ = [

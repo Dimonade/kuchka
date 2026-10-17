@@ -33,6 +33,7 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.area import Area
     from kuchka.quantities.electrical import Power
+    from kuchka.quantities.energy import Energy
     from kuchka.quantities.energy_density import EnergyDensity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
@@ -126,6 +127,8 @@ class Force(LinearQuantity):
 
     @overload
     def __mul__(self, other: Velocity) -> Power: ...
+    @overload
+    def __mul__(self, other: Length) -> Energy: ...
     @overload
     def __mul__(self, other: Numeric) -> Force: ...
     @overload

@@ -18,6 +18,7 @@ REGISTRY_TABLES = (
     "_SPECIALISATIONS",
     "_RULES",
     "_RATIO_KIND",
+    "_RECIPROCALS",
 )
 """The registry tables a registration or a rule writes to."""
 

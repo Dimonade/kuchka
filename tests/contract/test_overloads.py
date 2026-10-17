@@ -15,14 +15,12 @@ import pytest
 
 from kuchka import MeasurementError
 from kuchka.dimensions import DIMENSIONLESS
-from kuchka.quantities.base import registry
 from tests.support.families import FAMILIES
 from tests.support.overloads import FAMILY_OF
 from tests.support.overloads import OVERLOAD_IDS
 from tests.support.overloads import OVERLOADS
 from tests.support.overloads import SYMBOL
 from tests.support.overloads import Overload
-from tests.support.undeclared_overloads import UNDECLARED
 
 OPERATOR = {"__mul__": operator.mul, "__truediv__": operator.truediv}
 
@@ -46,7 +44,6 @@ def test_a_declared_overload_is_what_the_operator_returns(overload: Overload) ->
 
 def runtime_pairs() -> set[tuple[str, str, str, str]]:
     """Return every pair the runtime combines into a quantity or a fraction."""
-    roles = set(registry._SPECIALISATIONS)  # noqa: SLF001 -- excluded by rule, see below
     found = set()
     for left in FAMILIES:
         for right in FAMILIES:
@@ -54,8 +51,6 @@ def runtime_pairs() -> set[tuple[str, str, str, str]]:
                 left.canonical_unit.dimension,
                 right.canonical_unit.dimension,
             ):
-                continue
-            if left.quantity in roles or right.quantity in roles:
                 continue
             for operation, apply in OPERATOR.items():
                 try:
@@ -86,10 +81,5 @@ def declared_pairs() -> set[tuple[str, str, str, str]]:
     }
 
 
-def test_every_product_the_runtime_allows_is_declared_or_listed_as_undecided() -> None:
-    undeclared = runtime_pairs() - declared_pairs()
-    assert undeclared == UNDECLARED
-
-
-def test_nothing_declared_is_still_listed_as_undecided() -> None:
-    assert not UNDECLARED & declared_pairs()
+def test_every_product_the_runtime_allows_is_declared() -> None:
+    assert runtime_pairs() - declared_pairs() == set()
