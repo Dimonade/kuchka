@@ -91,6 +91,15 @@ Each pair is declared on both operand types, so the commuted product is typed to
 Conversions between quantity types are named `to_*` and `from_*`.
 `as_instant`, `as_sampling_period`, and `as_frequency` are now `to_instant`, `to_sampling_period`, and `to_frequency`; the old names are removed.
 
+#### A ratio is a `Proportion`
+
+`Volt(5) / Volt(2)` returned a bare `Fraction`, which is indistinguishable from a plain number, so `Volt(Volt(5) / Volt(2))` was accepted as `2.5 V`.
+The quotient of two quantities of one dimension is now a `Proportion`, and so is the product or quotient of two proportions: `Percent(50) * Percent(50)` is `0.25 1`.
+A `Proportion` compares with a `Proportion` and is not a valid argument to a quantity constructor, so `Volt(5) / Volt(2) > 2` raises and `Volt(Volt(5) / Volt(2))` raises.
+`.magnitude` returns the exact `Fraction`, so `round(Mass / Mass)` is now `round((Mass / Mass).magnitude)`.
+The overloads declare the result on every linear type, and on `Pressure` and `EnergyDensity` against each other.
+Dimensionless results of unlike quantities, such as `Hertz(2) * Second(3)`, remain plain `Fraction` values.
+
 #### Angle arithmetic
 
 Multiplying or dividing an `Angle` by a quantity raises `IncompatibleDimensionError`, with a pointer to `to_angular_displacement()`.

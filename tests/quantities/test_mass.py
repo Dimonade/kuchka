@@ -162,7 +162,8 @@ def test_sagittarius_a_dwarfs_an_ordinary_car():
     """Pins the module docstring's own worked example as a regression test."""
     yaris = mass.Kilogram(1_000)
     sagittarius_a = mass.SolarMass(4_300_000)
-    assert round(sagittarius_a / yaris) == 8_550_188_800_000_000_000_000_000_000_000_000  # noqa: PLR2004  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
+    expected = 8_550_188_800_000_000_000_000_000_000_000_000
+    assert round((sagittarius_a / yaris).magnitude) == expected
 
 
 def test_megagram_and_tonne_have_distinct_boundary_symbols():

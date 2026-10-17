@@ -9,9 +9,11 @@ from fractions import Fraction
 import pytest
 
 from kuchka import InvalidMeasurementError
+from kuchka import Proportion
 from kuchka.numeric import to_decimal
 from kuchka.numeric import to_exact
 from kuchka.units import frequency
+from kuchka.units import proportion
 from kuchka.units import resistance
 from kuchka.units import thermal
 from kuchka.units import voltage
@@ -136,15 +138,15 @@ def test_repr_of_a_prefix_sum_is_unaffected():
     assert repr(voltage.Volt(1) + Millivolt(500)) == "1.5 V"
 
 
-def test_dimensionless_division_result_is_a_fraction():
+def test_like_quantity_division_result_is_an_exact_proportion():
     ratio = resistance.Ohm(5) / resistance.Ohm(2)
-    assert isinstance(ratio, Fraction)
-    assert not hasattr(ratio, "magnitude")
+    assert isinstance(ratio, Proportion)
+    assert isinstance(ratio.magnitude, Fraction)
 
 
-def test_dimensionless_division_result_still_compares_equal_to_decimal():
+def test_like_quantity_division_result_compares_equal_to_a_decimal_ratio():
     ratio = resistance.Ohm(5) / resistance.Ohm(2)
-    assert ratio == Decimal("2.5")
+    assert ratio == proportion.Ratio(Decimal("2.5"))
 
 
 def test_time_times_frequency_result_is_a_fraction():

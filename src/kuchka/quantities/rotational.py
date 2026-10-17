@@ -49,6 +49,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.angular import AngularDisplacement
     from kuchka.quantities.electrical import Power
     from kuchka.quantities.energy import Energy
+    from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -76,6 +77,8 @@ class AngularVelocity(LinearQuantity):
     def __truediv__(self, other: Frequency) -> AngularDisplacement: ...
     @overload
     def __truediv__(self, other: AngularDisplacement) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: AngularVelocity) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> AngularVelocity: ...
     @overload
@@ -116,6 +119,8 @@ class Torque(LinearQuantity):
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    @overload
+    def __truediv__(self, other: Torque) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Torque: ...
     @overload

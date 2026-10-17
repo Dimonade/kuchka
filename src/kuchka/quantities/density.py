@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.volume import Volume
 
 
@@ -42,6 +43,8 @@ class Density(LinearQuantity):
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    @overload
+    def __truediv__(self, other: Density) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Density: ...
     @overload

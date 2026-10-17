@@ -13,6 +13,7 @@ from kuchka import Energy
 from kuchka import Frequency
 from kuchka import Length
 from kuchka import Mass
+from kuchka import Proportion
 from kuchka import Temperature
 from kuchka import Time
 from kuchka import Velocity
@@ -65,8 +66,8 @@ def test_neutron_is_heavier_than_proton() -> None:
 def test_proton_electron_mass_ratio_matches_codata() -> None:
     """CODATA 2022: m_p / m_e = 1836.152 673 426(32)."""
     ratio = PROTON_MASS / ELECTRON_MASS
-    assert isinstance(ratio, Fraction)
-    assert round(ratio, 1) == Fraction("1836.2")
+    assert isinstance(ratio, Proportion)
+    assert round(ratio.magnitude, 1) == Fraction("1836.2")
 
 
 def test_wavelength_from_speed_of_light_and_frequency_is_a_length() -> None:

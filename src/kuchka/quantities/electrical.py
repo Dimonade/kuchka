@@ -47,6 +47,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.energy import Energy
     from kuchka.quantities.kinematics import Force
     from kuchka.quantities.kinematics import Velocity
+    from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.rotational import AngularVelocity
     from kuchka.quantities.rotational import Torque
     from kuchka.quantities.temporal import Frequency
@@ -78,6 +79,8 @@ class Voltage(LinearQuantity):
     def __truediv__(self, other: Current) -> Resistance: ...
     @overload
     def __truediv__(self, other: Resistance) -> Current: ...
+    @overload
+    def __truediv__(self, other: Voltage) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Voltage: ...
     @overload
@@ -117,6 +120,8 @@ class Current(LinearQuantity):
     def __truediv__(self, other: Charge) -> Frequency: ...
     @overload
     def __truediv__(self, other: Frequency) -> Charge: ...
+    @overload
+    def __truediv__(self, other: Current) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Current: ...
     @overload
@@ -161,6 +166,8 @@ class Power(LinearQuantity):
     @overload
     def __truediv__(self, other: Velocity) -> Force: ...
     @overload
+    def __truediv__(self, other: Power) -> Proportion: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Power: ...
     @overload
     def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
@@ -201,6 +208,17 @@ class Resistance(LinearQuantity):
         # for the same pattern with Frequency).
         return super().__rtruediv__(other)
 
+    @overload
+    def __truediv__(self, other: Resistance) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Numeric) -> Resistance: ...
+    @overload
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+        return super().__truediv__(other)
+
 
 class Conductance(LinearQuantity):
     """How readily a circuit element passes current: the reciprocal of Resistance."""
@@ -219,6 +237,8 @@ class Conductance(LinearQuantity):
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    @overload
+    def __truediv__(self, other: Conductance) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Conductance: ...
     @overload

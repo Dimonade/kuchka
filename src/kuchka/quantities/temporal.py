@@ -61,6 +61,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics import Acceleration
     from kuchka.quantities.kinematics import Velocity
     from kuchka.quantities.length import Length
+    from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.rotational import AngularVelocity
 
 
@@ -91,6 +92,8 @@ class Time(LinearQuantity):
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    @overload
+    def __truediv__(self, other: Time) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Time: ...
     @overload
@@ -186,6 +189,8 @@ class Frequency(LinearQuantity):
         return super().__mul__(other)
 
     @overload
+    def __truediv__(self, other: Frequency) -> Proportion: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Frequency: ...
     @overload
     def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
@@ -273,6 +278,8 @@ class SamplingPeriod(LinearQuantity):
         return super().__mul__(other)
 
     @overload
+    def __truediv__(self, other: SamplingPeriod) -> Proportion: ...
+    @overload
     def __truediv__(self, other: Numeric) -> SamplingPeriod: ...
     @overload
     def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
@@ -323,6 +330,8 @@ class SampleRate(LinearQuantity):
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    @overload
+    def __truediv__(self, other: SampleRate) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> SampleRate: ...
     @overload
@@ -380,6 +389,8 @@ class BaudRate(LinearQuantity):
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    @overload
+    def __truediv__(self, other: BaudRate) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> BaudRate: ...
     @overload

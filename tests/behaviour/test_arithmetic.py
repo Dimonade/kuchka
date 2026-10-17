@@ -10,11 +10,13 @@ from kuchka.errors import UnrepresentableDimensionError
 from kuchka.quantities import Conductance
 from kuchka.quantities import Current
 from kuchka.quantities import Power
+from kuchka.quantities import Proportion
 from kuchka.quantities import Resistance
 from kuchka.quantities import Voltage
 from kuchka.units import conductance
 from kuchka.units import current
 from kuchka.units import power
+from kuchka.units import proportion
 from kuchka.units import resistance
 from kuchka.units import voltage
 
@@ -140,10 +142,10 @@ def test_scalar_division():
     assert voltage.Volt(6) / 3 == voltage.Volt(2)
 
 
-def test_same_dimension_division_is_dimensionless():
+def test_same_dimension_division_is_a_proportion():
     ratio = resistance.Ohm(10) / resistance.Ohm(5)
-    assert not hasattr(ratio, "magnitude")  # it's a plain Decimal, not a Resistance
-    assert ratio == Decimal(2)
+    assert type(ratio) is Proportion
+    assert ratio == proportion.Ratio(2)
 
 
 def test_negation_and_abs():
