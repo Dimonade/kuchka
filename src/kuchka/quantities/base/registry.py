@@ -54,8 +54,8 @@ Only a linear kind of a dimension with extent is a principal kind, the general
 SI/physics name for the dimension (``Voltage`` for M L^2 T^-3 I^-1, ``Frequency`` for
 T^-1).
 Arithmetic never produces an affine, modular, or logarithmic value, and it returns a
-plain ``Fraction`` for a dimensionless result, so those kinds are in the catalogue
-and never here.
+ratio kind or a plain ``Fraction`` for a dimensionless result (see ``_RATIO_KIND``), so
+those kinds are in the catalogue and never here.
 A second linear kind of a dimension with extent states its relation to the first, as
 a specialisation or as contested, and a kind that states none is refused.
 A dimension in ``_CONTESTED`` has no principal and so no entry here.
@@ -91,6 +91,15 @@ For instance, ``Force / Area`` is a ``Pressure`` and ``Energy / Volume`` an
 A product is entered in both operand orders.
 Every rule is declared through ``_rule`` while the package imports, and the table
 closes with the registry.
+"""
+
+_RATIO_KIND: dict[Dimension, _Kind] = {}
+"""Maps the dimensionless dimension to the kind a ratio of two like quantities has.
+
+A quotient of two quantities of one dimension, and a product of two dimensionless
+quantities, is a ratio.
+Other dimensionless results, such as a frequency times a duration, count cycles and
+remain plain ``Fraction`` values: the dimension has no principal kind.
 """
 
 _PLANNED_DIMENSIONS: dict[Dimension, str] = {}
@@ -406,6 +415,44 @@ def _rule(
         _RULES[key] = result
 
 
+def _register_ratio(quantity_type: _Kind) -> None:
+    """Declare `quantity_type` as the kind of a ratio of two like quantities.
+
+    The type is a registered linear kind of the dimensionless dimension.
+
+    Raises `TypeError` for a type that does not fit and `RuntimeError` once the
+    registry is closed.
+    """
+    if _closed:
+        msg = (
+            f"cannot make {quantity_type.__name__} the ratio kind: the dimension "
+            "registry is closed once `kuchka` has finished importing."
+        )
+        raise RuntimeError(msg)
+    from kuchka.quantities.base import LinearQuantity  # noqa: PLC0415 -- same cycle
+
+    if (
+        not issubclass(quantity_type, LinearQuantity)
+        or quantity_type.dimension != DIMENSIONLESS
+        or not _is_registered(quantity_type)
+    ):
+        msg = (
+            f"{quantity_type.__name__} cannot be the ratio kind: it is a registered "
+            "linear kind of the dimensionless dimension."
+        )
+        raise TypeError(msg)
+    _RATIO_KIND[DIMENSIONLESS] = quantity_type
+
+
+def _is_ratio(
+    operation: Literal["*", "/"], left: LinearQuantity, right: LinearQuantity
+) -> bool:
+    """Return whether `left <operation> right` is a ratio of like quantities."""
+    if operation == "/":
+        return left.dimension == right.dimension
+    return left.dimension == right.dimension == DIMENSIONLESS
+
+
 def _result_kind(
     operation: Literal["*", "/"], left: _Kind, right: _Kind
 ) -> _Kind | None:
@@ -430,9 +477,10 @@ def _combine(
 ) -> LinearQuantity | Fraction:
     """Build the correctly-typed result of multiplying or dividing two quantities.
 
-    In order: a dimensionless result is a plain ``Fraction``; a dimensionless operand
-    keeps the other operand's kind; an explicit rule names the kind; otherwise the
-    dimension decides (see `_promote`).
+    In order: a ratio of like quantities is the ratio kind; any other dimensionless
+    result is a plain ``Fraction``; a dimensionless operand keeps the other operand's
+    kind; an explicit rule names the kind; otherwise the dimension decides (see
+    `_promote`).
     """
     dimension = (
         left.dimension * right.dimension
@@ -440,7 +488,11 @@ def _combine(
         else left.dimension / right.dimension
     )
     if dimension == DIMENSIONLESS:
-        return magnitude
+        ratio_kind = _RATIO_KIND.get(DIMENSIONLESS)
+        if ratio_kind is None or not _is_ratio(operation, left, right):
+            return magnitude
+        ratio_type = cast("type[LinearQuantity]", ratio_kind)
+        return ratio_type(magnitude, _result_unit(ratio_type))
     kind = _result_kind(operation, type(left), type(right))
     if kind is None:
         return _promote(dimension, magnitude)
@@ -479,8 +531,8 @@ def _close() -> None:
 def _promote(dimension: Dimension, magnitude: Fraction) -> LinearQuantity | Fraction:
     """Build the result of a multiplication or division from its dimension alone.
 
-    A dimensionless result (e.g. Resistance / Resistance) is returned as a plain
-    ``Fraction`` ratio, matching ordinary physics convention.
+    A dimensionless result is returned as a plain ``Fraction``: the ratio of two like
+    quantities is built by `_combine`, which knows the operands.
     The principal kind of the dimension is the result; a contested dimension raises
     `AmbiguousKindError`, because no kind of it is the general one.
     """

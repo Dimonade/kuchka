@@ -36,6 +36,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.pressure import Pressure
+    from kuchka.quantities.proportion import Proportion
 
 
 class Volume(LinearQuantity):
@@ -48,6 +49,8 @@ class Volume(LinearQuantity):
     def __truediv__(self, other: Length) -> Area: ...
     @overload
     def __truediv__(self, other: Area) -> Length: ...
+    @overload
+    def __truediv__(self, other: Volume) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Volume: ...
     @overload

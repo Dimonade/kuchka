@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electrical import Current
     from kuchka.quantities.electrical import Voltage
     from kuchka.quantities.energy import Energy
+    from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -51,6 +52,8 @@ class Charge(LinearQuantity):
     def __truediv__(self, other: Time) -> Current: ...
     @overload
     def __truediv__(self, other: Current) -> Time: ...
+    @overload
+    def __truediv__(self, other: Charge) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Charge: ...
     @overload

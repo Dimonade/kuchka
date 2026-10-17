@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.area import Area
     from kuchka.quantities.kinematics import Velocity
+    from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.volume import Volume
@@ -48,6 +49,8 @@ class Length(LinearQuantity):
     def __truediv__(self, other: Time) -> Velocity: ...
     @overload
     def __truediv__(self, other: Velocity) -> Time: ...
+    @overload
+    def __truediv__(self, other: Length) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Length: ...
     @overload
