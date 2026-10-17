@@ -71,6 +71,19 @@ Angles measure the short way round the circle.
 - `to_power_ratio()` / `to_field_ratio()` and `from_power_ratio()` / `from_field_ratio()` convert to and from a linear `Proportion`.
   They are evaluated in `Decimal` at the active context precision; whole multiples of 10 dB (power) or 20 dB (field) are exact.
 
+#### Typed products and quotients
+
+The static overloads of `*` and `/` declare 27 more pairs the runtime already computed, so a type checker infers the result and not `LinearQuantity | Fraction`:
+
+- Energy and charge: `Charge * Voltage`, `Energy / Charge`, and `Energy / Voltage`.
+- Charge flow: `Charge * Frequency`, `Current / Charge`, and `Current / Frequency`.
+- Power: `Force * Velocity`, `Power / Force`, `Power / Velocity`, `Energy * Frequency`, `Power / Energy`, and `Power / Frequency`.
+- Kinematics: `Frequency * Length`, `Frequency * Velocity`, `Velocity / Length`, `Acceleration / Frequency`, and `Acceleration / Velocity`.
+- Rotation: `AngularVelocity / AngularDisplacement`.
+- Energy density: `EnergyDensity * Area` and `Force / EnergyDensity`.
+
+Each pair is declared on both operand types, so the commuted product is typed too.
+
 ### Changed
 
 #### Conversion functions

@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.area import Area
     from kuchka.quantities.kinematics import Velocity
+    from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.volume import Volume
 
@@ -32,6 +33,8 @@ class Length(LinearQuantity):
     def __mul__(self, other: Length) -> Area: ...
     @overload
     def __mul__(self, other: Area) -> Volume: ...
+    @overload
+    def __mul__(self, other: Frequency) -> Velocity: ...
     @overload
     def __mul__(self, other: Numeric) -> Length: ...
     @overload
