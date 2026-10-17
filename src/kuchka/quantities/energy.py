@@ -28,10 +28,13 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.angular import AngularDisplacement
+    from kuchka.quantities.charge import Charge
     from kuchka.quantities.electrical import Power
+    from kuchka.quantities.electrical import Voltage
     from kuchka.quantities.energy_density import EnergyDensity
     from kuchka.quantities.pressure import Pressure
     from kuchka.quantities.rotational import Torque
+    from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.volume import Volume
 
@@ -41,6 +44,17 @@ class Energy(LinearQuantity):
 
     dimension: ClassVar[Dimension] = ENERGY
     __slots__ = ()
+
+    @overload
+    def __mul__(self, other: Frequency) -> Power: ...
+    @overload
+    def __mul__(self, other: Numeric) -> Energy: ...
+    @overload
+    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+        return super().__mul__(other)
 
     @overload
     def __truediv__(self, other: Time) -> Power: ...
@@ -56,6 +70,10 @@ class Energy(LinearQuantity):
     def __truediv__(self, other: AngularDisplacement) -> Torque: ...
     @overload
     def __truediv__(self, other: Torque) -> AngularDisplacement: ...
+    @overload
+    def __truediv__(self, other: Charge) -> Voltage: ...
+    @overload
+    def __truediv__(self, other: Voltage) -> Charge: ...
     @overload
     def __truediv__(self, other: Numeric) -> Energy: ...
     @overload

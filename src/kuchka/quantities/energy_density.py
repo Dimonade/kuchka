@@ -35,6 +35,8 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.area import Area
+    from kuchka.quantities.kinematics import Force
 
 
 class EnergyDensity(LinearQuantity):
@@ -45,6 +47,8 @@ class EnergyDensity(LinearQuantity):
 
     @overload
     def __mul__(self, other: Volume) -> Energy: ...
+    @overload
+    def __mul__(self, other: Area) -> Force: ...
     @overload
     def __mul__(self, other: Numeric) -> EnergyDensity: ...
     @overload

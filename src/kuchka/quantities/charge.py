@@ -22,6 +22,9 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.electrical import Current
+    from kuchka.quantities.electrical import Voltage
+    from kuchka.quantities.energy import Energy
+    from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
 
@@ -30,6 +33,19 @@ class Charge(LinearQuantity):
 
     dimension: ClassVar[Dimension] = CHARGE
     __slots__ = ()
+
+    @overload
+    def __mul__(self, other: Frequency) -> Current: ...
+    @overload
+    def __mul__(self, other: Voltage) -> Energy: ...
+    @overload
+    def __mul__(self, other: Numeric) -> Charge: ...
+    @overload
+    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+        return super().__mul__(other)
 
     @overload
     def __truediv__(self, other: Time) -> Current: ...
