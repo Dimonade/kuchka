@@ -68,10 +68,34 @@ Arithmetic results display in the radian, the radian per second, and the newton-
 
 The type of a product or quotient is decided in this order:
 
-1. A dimensionless result is a plain `Fraction`.
-2. A dimensionless operand, a `Proportion`, keeps the kind of the other operand: `SampleRate(...) * Percent(50)` is a `SampleRate`.
-3. A rule for the operand kinds names the kind, for a dimension that has several linear kinds: `Pressure` and `EnergyDensity` share M L⁻¹ T⁻², so `Force / Area` is a `Pressure` and `Energy / Volume` an `EnergyDensity`.
-4. Otherwise the principal kind of the dimension is the result, and a contested dimension raises `AmbiguousKindError`.
+1. A ratio of like quantities is a `Proportion`: the quotient of two quantities of one dimension, and the product or quotient of two proportions.
+2. Any other dimensionless result is a plain `Fraction`: `Hertz(2) * Second(3)` counts cycles.
+3. A dimensionless operand, a `Proportion`, keeps the kind of the other operand: `SampleRate(...) * Percent(50)` is a `SampleRate`.
+4. A rule for the operand kinds names the kind, for a dimension that has several linear kinds: `Pressure` and `EnergyDensity` share M L⁻¹ T⁻², so `Force / Area` is a `Pressure` and `Energy / Volume` an `EnergyDensity`.
+5. Otherwise the principal kind of the dimension is the result, and a contested dimension raises `AmbiguousKindError`.
+
+## Ratios
+
+A ratio is a `Proportion`, and it displays as the coherent ratio:
+
+```python
+from kuchka import Hertz, Percent, Ratio, Second, Volt
+
+gain = Volt(5) / Volt(2)
+gain == Ratio(2.5)
+Percent(50) * Percent(50) == Ratio(0.25)
+Hertz(2) * Second(3) == 6  # Cycles are a plain `Fraction`.
+```
+
+A `Proportion` compares with a `Proportion`, and a quantity is not built from one.
+`.magnitude` is the exact `Fraction` when a plain number is what is wanted:
+
+```python
+gain > Ratio(2)
+gain > 2  # rejected: `IncompatibleDimensionError`.
+Volt(gain)  # rejected: `InvalidMeasurementError`.
+Volt(gain.magnitude) == Volt(2.5)
+```
 
 ## Converting between types
 
