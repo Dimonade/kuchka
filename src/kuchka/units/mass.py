@@ -28,7 +28,7 @@ You would need roughly six billion of them to reach the mass of a six-tonne elep
 
 >>> fruit_fly = Milligram(1)
 >>> elephant = Tonne(6)
->>> elephant_to_fly_equivalent = round(elephant / fruit_fly)
+>>> elephant_to_fly_equivalent = round((elephant / fruit_fly).magnitude)
 >>> elephant_to_fly_equivalent
 6000000000
 
@@ -58,7 +58,7 @@ that black hole with cars would require an utterly unreasonable fleet:
 
 >>> yaris = Kilogram(1_000)
 >>> sagittarius_a = SolarMass(4_300_000)
->>> yaris_per_sagittarius_a = round(sagittarius_a / yaris)
+>>> yaris_per_sagittarius_a = round((sagittarius_a / yaris).magnitude)
 >>> yaris_per_sagittarius_a
 8550188800000000000000000000000000
 
@@ -266,7 +266,7 @@ def Milligram(value: Numeric) -> Mass:
 
     >>> fly = Gram(0.1)
     >>> dog = Kilogram(30)
-    >>> swarm = round(dog / fly)
+    >>> swarm = round((dog / fly).magnitude)
     >>> swarm
     300000
 

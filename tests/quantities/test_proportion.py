@@ -1,14 +1,13 @@
 """Proportion: a dimensionless quantity, and its arithmetic with the rest of the vocab.
 
-Unlike `Frequency`/`SampleRate`/`BaudRate`, `Percent` and `Ratio` are not
-different concepts sharing a dimension -- they are the same quantity at
-different scale, the same relationship `Volt`/`Millivolt` has. The
-interesting part of this module is proving that `Proportion` never
-needed any new arithmetic: multiplying or dividing an existing quantity
-by a `Proportion` already produces the correctly-typed result through
-the same general dimension algebra every other quantity uses, and a
-dimensionless result between two same-type quantities still collapses to
-a bare `Decimal`, exactly as it did before `Proportion` existed.
+Unlike `Frequency`/`SampleRate`/`BaudRate`, `Percent` and `Ratio` are not different
+concepts sharing a dimension -- they are the same quantity at different scale, the same
+relationship `Volt`/`Millivolt` has.
+The interesting part of this module is proving that `Proportion` never needed any new
+arithmetic: multiplying or dividing an existing quantity by a `Proportion` already
+produces the correctly-typed result through the same general dimension algebra every
+other quantity uses, and the quotient of two like quantities is a `Proportion` of its
+own.
 """
 
 from decimal import Decimal
@@ -81,18 +80,16 @@ def test_dividing_a_dimensioned_quantity_by_a_proportion_scales_it_up():
     assert result == voltage.Volt(50)
 
 
-def test_same_type_division_is_still_dimensionless_not_a_proportion():
-    """Ohm / Ohm collapsing to a bare Decimal is unchanged by Proportion existing."""
+def test_a_quotient_of_like_quantities_is_a_proportion():
     ratio = resistance.Ohm(5) / resistance.Ohm(2)
-    assert not hasattr(ratio, "magnitude")
-    assert ratio == Decimal("2.5")
+    assert type(ratio) is Proportion
+    assert ratio == proportion.Ratio(Decimal("2.5"))
 
 
-def test_percent_divided_by_percent_is_a_bare_decimal_not_a_proportion():
-    """The same collapse applies here: Proportion / Proportion is still just a ratio."""
+def test_percent_divided_by_percent_is_a_proportion():
     ratio = proportion.Percent(50) / proportion.Percent(25)
-    assert not hasattr(ratio, "magnitude")
-    assert ratio == Decimal(2)
+    assert type(ratio) is Proportion
+    assert ratio == proportion.Ratio(2)
 
 
 def test_repr_of_ratio_uses_the_coherent_unit_symbol():

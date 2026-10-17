@@ -85,6 +85,23 @@ def test_repr_shows_the_display_unit_symbol():
     assert repr(time.Second(42).to_sampling_period()) == "42 s"
 
 
+def test_a_time_unit_carries_through_to_the_sampling_period_display():
+    assert repr(time.Millisecond(2).to_sampling_period()) == "2 ms"
+    assert repr(time.Minute(1).to_sampling_period()) == "1 min"
+
+
+def test_every_time_unit_is_the_display_unit_of_its_sampling_period():
+    for symbol, constructor in time.TIME_UNITS.items():
+        period = constructor(2).to_sampling_period()
+        assert period.unit is constructor(2).unit, symbol
+        assert period.magnitude == constructor(2).magnitude, symbol
+
+
+def test_the_sampling_period_table_displays_in_the_unit_it_is_named_for():
+    for symbol, constructor in sp.SAMPLING_PERIOD_UNITS.items():
+        assert constructor(2).unit.symbol == symbol
+
+
 def test_sampling_period_units_table_resolves_every_symbol():
     assert sp.SAMPLING_PERIOD_UNITS["ms"](2) == time.Millisecond(2).to_sampling_period()
     assert sp.SAMPLING_PERIOD_UNITS["s"](1) == time.Second(1).to_sampling_period()

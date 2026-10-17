@@ -51,7 +51,7 @@ A serial instrument is upgraded from 9.6 kBd to 115.2 kBd:
 
 This is a much needed upgrade:
 
->>> int(new_link / old_link)
+>>> int((new_link / old_link).magnitude)
 12
 
 A communication system can also express the same configured symbol rate at a different
@@ -185,9 +185,8 @@ def Kilobaud(value: Numeric) -> BaudRate:
 
     This is much better than before:
 
-    >>> from fractions import Fraction
     >>> new_rate / old_rate
-    Fraction(8, 5)
+    1.6 1
 
     """
     return BaudRate(to_exact(value) * KILOBAUD.scale, KILOBAUD)

@@ -22,6 +22,16 @@ class InvalidMeasurementError(MeasurementError):
     """
 
 
+_HINTS: dict[tuple[type, type], str] = {}
+"""Advice for a refused pair of types, keyed by the operand types in either order."""
+
+
+def _register_hint(left: type, right: type, hint: str) -> None:
+    """Attach `hint` to every `IncompatibleDimensionError` between two types."""
+    _HINTS[left, right] = hint
+    _HINTS[right, left] = hint
+
+
 class IncompatibleDimensionError(MeasurementError):
     """An operation was attempted between two incompatible dimensions or types.
 
@@ -45,7 +55,10 @@ class IncompatibleDimensionError(MeasurementError):
         """Build the error message from the operands' runtime types and dimensions.
 
         A `hint` is appended as a last line, for a refusal that has a better route.
+        Without one, the advice registered for the operand types is used.
         """
+        if hint is None:
+            hint = _HINTS.get((type(left), type(right)))
         left_name = type(left).__name__
         right_name = type(right).__name__
         left_dim = getattr(left, "dimension", None)

@@ -27,9 +27,11 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.energy_density import EnergyDensity
     from kuchka.quantities.kinematics import Force
     from kuchka.quantities.length import Length
     from kuchka.quantities.pressure import Pressure
+    from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.volume import Volume
 
 
@@ -44,6 +46,8 @@ class Area(LinearQuantity):
     @overload
     def __mul__(self, other: Pressure) -> Force: ...
     @overload
+    def __mul__(self, other: EnergyDensity) -> Force: ...
+    @overload
     def __mul__(self, other: Numeric) -> Area: ...
     @overload
     def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
@@ -54,6 +58,8 @@ class Area(LinearQuantity):
 
     @overload
     def __truediv__(self, other: Length) -> Length: ...
+    @overload
+    def __truediv__(self, other: Area) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Area: ...
     @overload

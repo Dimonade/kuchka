@@ -80,12 +80,47 @@ Angles measure the short way round the circle.
 - `to_power_ratio()` / `to_field_ratio()` and `from_power_ratio()` / `from_field_ratio()` convert to and from a linear `Proportion`.
   They are evaluated in `Decimal` at the active context precision; whole multiples of 10 dB (power) or 20 dB (field) are exact.
 
+#### Typed products and quotients
+
+The static overloads of `*` and `/` declare 33 more pairs the runtime already computed, so a type checker infers the result and not `LinearQuantity | Fraction`:
+
+- Energy and charge: `Charge * Voltage`, `Energy / Charge`, and `Energy / Voltage`.
+- Charge flow: `Charge * Frequency`, `Current / Charge`, and `Current / Frequency`.
+- Power: `Force * Velocity`, `Power / Force`, `Power / Velocity`, `Energy * Frequency`, `Power / Energy`, and `Power / Frequency`.
+- Kinematics: `Frequency * Length`, `Frequency * Velocity`, `Velocity / Length`, `Acceleration / Frequency`, and `Acceleration / Velocity`.
+- Rotation: `AngularVelocity / AngularDisplacement`.
+- Energy density: `EnergyDensity * Area` and `Force / EnergyDensity`.
+- Work: `Force * Length`, `Energy / Force`, and `Energy / Length`.
+- Resistance: `Resistance * Conductance`, and their `/` - a plain `Fraction`.
+
+Each pair is declared on both operand types, so the commuted product is typed too.
+
 ### Changed
 
 #### Conversion functions
 
 Conversions between quantity types are named `to_*` and `from_*`.
 `as_instant`, `as_sampling_period`, and `as_frequency` are now `to_instant`, `to_sampling_period`, and `to_frequency`; the old names are removed.
+
+#### A ratio is a `Proportion`
+
+`Volt(5) / Volt(2)` returned a bare `Fraction`, which is indistinguishable from a plain number, so `Volt(Volt(5) / Volt(2))` was accepted as `2.5 V`.
+The quotient of two quantities of one dimension is now a `Proportion`, and so is the product or quotient of two proportions and the quotient of two levels: `Percent(50) * Percent(50)` is `0.25 1`, and `Decibel(6) / Decibel(3)` is `2 1`.
+A `Proportion` compares with a `Proportion` and is not a valid argument to a quantity constructor, so `Volt(5) / Volt(2) > 2` raises and `Volt(Volt(5) / Volt(2))` raises.
+`.magnitude` returns the exact `Fraction`, so `round(Mass / Mass)` is now `round((Mass / Mass).magnitude)`.
+The overloads declare the result on every linear type, and on `Pressure` and `EnergyDensity` against each other.
+Dimensionless results of unlike quantities, such as `Hertz(2) * Second(3)`, remain plain `Fraction` values.
+
+#### Role kinds refuse arithmetic by dimension
+
+`BaudRate(9600) * Metre(1)` was a `Velocity`, because `BaudRate` shares the dimension T⁻¹ with `Frequency`.
+`SampleRate`, `SamplingPeriod`, and `BaudRate` now combine only with a plain number, a `Proportion`, themselves in a quotient, and, for the reciprocal pair, each other.
+Every other product or quotient raises `IncompatibleDimensionError`, and the error names the conversion that leaves the role: `SampleRate.to_frequency()`, or the new `SamplingPeriod.to_time()`.
+`BaudRate` has no such conversion, and the error says so.
+
+#### A hint where a torque and an energy meet
+
+Adding, subtracting, or comparing an `Energy` and a `Torque` raises `IncompatibleDimensionError` with a pointer to `AngularDisplacement` and `Torque.from_force`.
 
 #### Angle arithmetic
 
@@ -102,6 +137,11 @@ It raised a bare `TypeError`.
 
 `SampleRate * Ratio(2)` and `BaudRate * Percent(50)` returned a `Frequency` in hertz.
 A dimensionless operand now keeps the kind of the other operand.
+
+#### `to_sampling_period()` keeps the display unit
+
+`Millisecond(2).to_sampling_period()` displayed `0.002 s`, and so did `SAMPLING_PERIOD_UNITS["ms"](2)`.
+Both now display `2 ms`.
 
 #### A unit belongs to its quantity types
 

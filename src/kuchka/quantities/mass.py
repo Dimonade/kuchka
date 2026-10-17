@@ -26,6 +26,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.density import Density
     from kuchka.quantities.kinematics import Acceleration
     from kuchka.quantities.kinematics import Force
+    from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.volume import Volume
 
 
@@ -50,6 +51,8 @@ class Mass(LinearQuantity):
     def __truediv__(self, other: Volume) -> Density: ...
     @overload
     def __truediv__(self, other: Density) -> Volume: ...
+    @overload
+    def __truediv__(self, other: Mass) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Mass: ...
     @overload

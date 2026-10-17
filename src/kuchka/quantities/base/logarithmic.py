@@ -18,6 +18,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import Self
+from typing import cast
 from typing import overload
 
 from kuchka.errors import IncompatibleDimensionError
@@ -28,6 +29,7 @@ from kuchka.numeric import Numeric
 from kuchka.numeric import exact_quotient
 from kuchka.numeric import to_exact
 from kuchka.quantities.base.ordering import _OrderedScalarMixin
+from kuchka.quantities.base.registry import _ratio
 from kuchka.quantities.base.storage import _ScalarStorage
 from kuchka.quantities.base.units import LogarithmicUnitDef
 
@@ -35,6 +37,7 @@ if TYPE_CHECKING:
     from fractions import Fraction
 
     from kuchka.dimensions import Dimension
+    from kuchka.quantities.proportion import Proportion
 
 
 class PureLogarithmicQuantity(_OrderedScalarMixin, _ScalarStorage[LogarithmicUnitDef]):
@@ -147,15 +150,16 @@ class PureLogarithmicQuantity(_OrderedScalarMixin, _ScalarStorage[LogarithmicUni
     @overload
     def __truediv__(self, other: Numeric) -> Self: ...
     @overload
-    def __truediv__(self, other: Self) -> Fraction: ...
+    def __truediv__(self, other: Self) -> Proportion: ...
 
-    def __truediv__(self, other: object) -> Self | Fraction:
+    def __truediv__(self, other: object) -> Self | Proportion:
         if isinstance(other, PureLogarithmicQuantity):
             if type(self) is not type(other):
                 raise IncompatibleDimensionError("divide", self, other)
-            return exact_quotient(
+            ratio = exact_quotient(
                 self._magnitude, other._magnitude, left=self, right=other
             )
+            return cast("Proportion", _ratio(ratio))
         if isinstance(other, Numeric):
             magnitude = exact_quotient(
                 self._magnitude, to_exact(other), left=self, right=other

@@ -23,6 +23,7 @@ from __future__ import annotations
 from fractions import Fraction
 from typing import TYPE_CHECKING
 from typing import ClassVar
+from typing import overload
 
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.errors import InvalidMeasurementError
@@ -33,6 +34,8 @@ from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
+    from kuchka.numeric import Numeric
+    from kuchka.quantities.proportion import Proportion
 
 
 class TemperatureDelta(LinearQuantity):
@@ -40,6 +43,17 @@ class TemperatureDelta(LinearQuantity):
 
     dimension: ClassVar[Dimension] = TEMPERATURE_DELTA
     __slots__ = ()
+
+    @overload
+    def __truediv__(self, other: TemperatureDelta) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Numeric) -> TemperatureDelta: ...
+    @overload
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+        return super().__truediv__(other)
 
 
 _register(TEMPERATURE_DELTA, TemperatureDelta)

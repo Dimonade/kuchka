@@ -36,8 +36,12 @@ def test_a_rate_and_its_period_are_reciprocal_roles() -> None:
     assert 1 / period == RATE
 
 
-def test_the_samples_in_a_record_are_a_plain_count() -> None:
-    samples = RATE * temporal.Second(2)
+def test_the_samples_in_a_record_are_counted_from_the_rate_viewed_as_a_frequency() -> (
+    None
+):
+    with pytest.raises(IncompatibleDimensionError, match=r"to_frequency\(\)"):
+        RATE * temporal.Second(2)  # type: ignore[operator]
+    samples = RATE.to_frequency() * temporal.Second(2)
     assert samples == Fraction(96_000)
     assert type(samples) is Fraction
 

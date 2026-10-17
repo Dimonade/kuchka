@@ -32,6 +32,8 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.energy import Energy
+    from kuchka.quantities.energy_density import EnergyDensity
+    from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.volume import Volume
 
 
@@ -54,6 +56,10 @@ class Pressure(LinearQuantity):
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    @overload
+    def __truediv__(self, other: Pressure) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: EnergyDensity) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Pressure: ...
     @overload

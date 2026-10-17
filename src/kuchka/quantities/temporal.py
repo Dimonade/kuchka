@@ -48,6 +48,7 @@ from kuchka.numeric import to_exact
 from kuchka.quantities.base import AffineQuantity
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.registry import _register
+from kuchka.quantities.base.registry import _register_reciprocal
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -61,6 +62,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics import Acceleration
     from kuchka.quantities.kinematics import Velocity
     from kuchka.quantities.length import Length
+    from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.rotational import AngularVelocity
 
 
@@ -92,6 +94,8 @@ class Time(LinearQuantity):
         return super().__mul__(other)
 
     @overload
+    def __truediv__(self, other: Time) -> Proportion: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Time: ...
     @overload
     def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
@@ -120,12 +124,9 @@ class Time(LinearQuantity):
             rate = 1 / period   # -> `SampleRate`
 
         `SamplingPeriod` shares `Time`'s own coordinate units.
-        Thus, the prefix a value was constructed with (`Second`, `Millisecond`,
-        `Microsecond`, `Minute`, `Hour`, ...) carries straight through:
-        `Minute(1).to_sampling_period()` reads exactly as
-        `Second(60).to_sampling_period()`.
+        Display unit carries through.
         """
-        return SamplingPeriod(self._magnitude, SamplingPeriod._canonical_unit)  # noqa: SLF001 -- SamplingPeriod's own canonical unit
+        return SamplingPeriod(self._magnitude, self._display_unit)
 
     def to_instant(self) -> Instant:
         """View this span as an `Instant` that many seconds from wherever zero is.
@@ -172,6 +173,14 @@ class Frequency(LinearQuantity):
     @overload
     def __mul__(self, other: AngularDisplacement) -> AngularVelocity: ...
     @overload
+    def __mul__(self, other: Charge) -> Current: ...
+    @overload
+    def __mul__(self, other: Energy) -> Power: ...
+    @overload
+    def __mul__(self, other: Length) -> Velocity: ...
+    @overload
+    def __mul__(self, other: Velocity) -> Acceleration: ...
+    @overload
     def __mul__(self, other: Numeric) -> Frequency: ...
     @overload
     def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
@@ -180,6 +189,8 @@ class Frequency(LinearQuantity):
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    @overload
+    def __truediv__(self, other: Frequency) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Frequency: ...
     @overload
@@ -251,6 +262,10 @@ class SamplingPeriod(LinearQuantity):
     directly (see the module docstring), but never produced by generic arithmetic:
     the only way to get one is `Time.to_sampling_period()`, the same way
     `Temperature` is never a side effect of ordinary arithmetic on other quantities.
+
+    It scales by a plain number or a `Proportion`, divides by another `SamplingPeriod`
+    into a `Proportion`, and multiplies with its reciprocal `SampleRate`.
+    `to_time()` takes it as a `Time` for any other arithmetic.
     """
 
     dimension: ClassVar[Dimension] = TIME
@@ -267,6 +282,8 @@ class SamplingPeriod(LinearQuantity):
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    @overload
+    def __truediv__(self, other: SamplingPeriod) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> SamplingPeriod: ...
     @overload
@@ -295,6 +312,16 @@ class SamplingPeriod(LinearQuantity):
             return SampleRate(magnitude, SampleRate._canonical_unit)
         return NotImplemented
 
+    def to_time(self) -> Time:
+        """View this interval as an ordinary `Time`, e.g. to multiply it by a speed.
+
+            Millisecond(2).to_sampling_period().to_time() == Millisecond(2)
+
+        The unit it displays in carries over, and `Time.to_sampling_period()` takes
+        the value back.
+        """
+        return Time(self._magnitude, self._display_unit)
+
 
 class SampleRate(LinearQuantity):
     """How often an acquisition system takes a reading, e.g. an ADC's sample rate.
@@ -302,6 +329,10 @@ class SampleRate(LinearQuantity):
     Dimensionally identical to `Frequency`, and convertible to and from
     `SamplingPeriod` directly, but never produced by generic arithmetic:
     see the `SamplingPeriod` docstring for why.
+
+    It scales by a plain number or a `Proportion`, divides by another `SampleRate`
+    into a `Proportion`, and multiplies with its reciprocal `SamplingPeriod`.
+    `to_frequency()` takes it as a `Frequency` for any other arithmetic.
     """
 
     dimension: ClassVar[Dimension] = FREQUENCY
@@ -318,6 +349,8 @@ class SampleRate(LinearQuantity):
     def __mul__(self, other: object) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    @overload
+    def __truediv__(self, other: SampleRate) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> SampleRate: ...
     @overload
@@ -361,6 +394,9 @@ class BaudRate(LinearQuantity):
     It is deliberately given no reciprocal and no `to_frequency()` -- neither is a
     well-defined, encoding-independent conversion, and a wrong default here would be
     wrong silently.
+
+    It scales by a plain number or a `Proportion`, and divides by another `BaudRate`
+    into a `Proportion`.
     """
 
     dimension: ClassVar[Dimension] = FREQUENCY
@@ -376,6 +412,8 @@ class BaudRate(LinearQuantity):
         return super().__mul__(other)
 
     @overload
+    def __truediv__(self, other: BaudRate) -> Proportion: ...
+    @overload
     def __truediv__(self, other: Numeric) -> BaudRate: ...
     @overload
     def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
@@ -390,6 +428,7 @@ _register(FREQUENCY, Frequency)
 _register(TIME, SamplingPeriod, specialisation_of=Time)
 _register(FREQUENCY, SampleRate, specialisation_of=Frequency)
 _register(FREQUENCY, BaudRate, specialisation_of=Frequency)
+_register_reciprocal(SamplingPeriod, SampleRate)
 _register(TIME, Instant)
 
 __all__ = [

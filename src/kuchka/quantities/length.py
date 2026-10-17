@@ -17,7 +17,11 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.area import Area
+    from kuchka.quantities.energy import Energy
+    from kuchka.quantities.kinematics import Force
     from kuchka.quantities.kinematics import Velocity
+    from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.volume import Volume
 
@@ -33,6 +37,10 @@ class Length(LinearQuantity):
     @overload
     def __mul__(self, other: Area) -> Volume: ...
     @overload
+    def __mul__(self, other: Frequency) -> Velocity: ...
+    @overload
+    def __mul__(self, other: Force) -> Energy: ...
+    @overload
     def __mul__(self, other: Numeric) -> Length: ...
     @overload
     def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
@@ -45,6 +53,8 @@ class Length(LinearQuantity):
     def __truediv__(self, other: Time) -> Velocity: ...
     @overload
     def __truediv__(self, other: Velocity) -> Time: ...
+    @overload
+    def __truediv__(self, other: Length) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Length: ...
     @overload
