@@ -128,6 +128,17 @@ reading == Volt(0)
 bool(reading)  # rejected: `TypeError`.
 ```
 
+## Summing
+
+`sum()` starts from the plain number `0`, which a quantity refuses to add, so give it a start of the same type:
+
+```python
+from kuchka import Volt
+
+sum([Volt(1), Volt(2)])  # rejected: `InvalidMeasurementError`.
+sum([Volt(1), Volt(2)], start=Volt(0)) == Volt(3)
+```
+
 ## Logarithmic conversions
 
 Levels (`LogarithmicRatio`) store an exact `Fraction` and every combination of levels is exact.

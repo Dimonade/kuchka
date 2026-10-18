@@ -118,6 +118,19 @@ Every other product or quotient raises `IncompatibleDimensionError`, and the err
 
 Adding, subtracting, or comparing an `Energy` and a `Torque` raises `IncompatibleDimensionError` with a pointer to `AngularDisplacement` and `Torque.from_force`.
 
+#### A `Proportion` scales a quantity, and the overloads say so
+
+`Percent(50) * Volt(2)` is `Volt(1)`, and `Volt(2) / Percent(50)` is `Volt(4)`.
+The overloads declare it on every linear type, in both orders, and declare `Ratio(2) / Second(4)` as a `Frequency` and the other reciprocals, so mypy and ty infer the type and not `LinearQuantity | Fraction`.
+A `Proportion` over a role kind is now the reciprocal role, as a plain number is: `Ratio(2) / SampleRate(4)` is a `SamplingPeriod`.
+It returned a plain `Time`, and `Ratio(2) / BaudRate(9600)` returned a `Time` too, where `2 / BaudRate(9600)` raised.
+A role with no reciprocal kind now raises `IncompatibleDimensionError` for a `Proportion` as well.
+
+#### `sum()` names its start
+
+`sum([Volt(1), Volt(2)])` raised because `sum()` starts from the plain number `0`.
+The error now says what `sum()` needs: `sum(values, start=Volt(0))`, with the zero of the type that was added to.
+
 #### A quantity has no truth value
 
 `bool(Volt(0))` was `True`, so `if not voltage:` was always false, and a rule of zero being false has no single meaning across shapes: `Celsius(0)` is not `Kelvin(0)`, `Degree(360)` is `Degree(0)`, and `Decibel(0)` is a ratio of one.
