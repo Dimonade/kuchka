@@ -178,16 +178,16 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
         )
         raise InvalidMeasurementError(msg)
 
-    def __mul__(self, other: object) -> Self:
+    def __mul__(self, other: Numeric) -> Self:
         if isinstance(other, Numeric):
             magnitude = self._wrap(self._magnitude * to_exact(other))
             return type(self)(magnitude, self._display_unit)
         return NotImplemented
 
-    def __rmul__(self, other: object) -> Self:
+    def __rmul__(self, other: Numeric) -> Self:
         return self.__mul__(other)
 
-    def __truediv__(self, other: object) -> Self:
+    def __truediv__(self, other: Numeric) -> Self:
         if isinstance(other, Numeric):
             quotient = exact_quotient(
                 self._magnitude, to_exact(other), left=self, right=other

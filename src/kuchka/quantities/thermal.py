@@ -49,10 +49,10 @@ class TemperatureDelta(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> TemperatureDelta: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
 
     @override
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 

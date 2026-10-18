@@ -157,19 +157,19 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
     # Each subclass overload list ends with a fallback overload matching this exact
     # signature (`other: object -> LinearQuantity | Fraction`) so that overriding it
     # remains compatible with this base signature.
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         if isinstance(other, LinearQuantity):
             return _combine("*", self, other, self._magnitude * other._magnitude)
         if isinstance(other, Numeric):
             return type(self)(self._magnitude * to_exact(other), self._display_unit)
         return NotImplemented
 
-    def __rmul__(self, other: object) -> Self:
+    def __rmul__(self, other: Numeric) -> Self:
         if isinstance(other, Numeric):
             return type(self)(self._magnitude * to_exact(other), self._display_unit)
         return NotImplemented
 
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         if isinstance(other, LinearQuantity):
             magnitude = exact_quotient(
                 self._magnitude, other._magnitude, left=self, right=other
@@ -182,7 +182,9 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
             return type(self)(magnitude, self._display_unit)
         return NotImplemented
 
-    def __rtruediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction:
         # NOTE: `Numeric / self`, e.g. `1 / Time(2)`.
         # The reciprocal's kind is chosen by its dimension alone, which is only right
         # when `self` is the principal kind of its dimension or one of its contested

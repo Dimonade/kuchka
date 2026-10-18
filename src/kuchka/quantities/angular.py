@@ -42,6 +42,7 @@ from kuchka.quantities.base.storage import _ScalarStorage
 if TYPE_CHECKING:
     from fractions import Fraction
     from typing import Any
+    from typing import Never
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
@@ -60,24 +61,24 @@ class Angle(ModularQuantity):
     __slots__ = ()
 
     @override
-    def __mul__(self, other: object) -> Self:
+    def __mul__(self, other: Numeric) -> Self:
         """Scale by a plain number; refuse a quantity, pointing at the angle swept."""
         _refuse_a_quantity("multiply", self, other)
         return super().__mul__(other)
 
     @override
-    def __rmul__(self, other: object) -> Self:
+    def __rmul__(self, other: Numeric) -> Self:
         """Scale by a plain number; refuse a quantity, pointing at the angle swept."""
         _refuse_a_quantity("multiply", other, self)
         return super().__rmul__(other)
 
     @override
-    def __truediv__(self, other: object) -> Self:
+    def __truediv__(self, other: Numeric) -> Self:
         """Divide by a plain number; refuse a quantity, pointing at the angle swept."""
         _refuse_a_quantity("divide", self, other)
         return super().__truediv__(other)
 
-    def __rtruediv__(self, other: object) -> Any:  # noqa: ANN401 -- only ever raises or declines
+    def __rtruediv__(self, other: Never) -> Any:  # noqa: ANN401 -- only ever raises or declines
         """Refuse to be the divisor of a quantity, pointing at the angle swept."""
         _refuse_a_quantity("divide", other, self)
         return NotImplemented
@@ -128,10 +129,10 @@ class AngularDisplacement(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> AngularDisplacement: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
 
     @override
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
@@ -143,10 +144,10 @@ class AngularDisplacement(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> AngularDisplacement: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
 
     @override
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
     def to_angle(self) -> Angle:
