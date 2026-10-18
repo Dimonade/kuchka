@@ -469,6 +469,25 @@ def _conversion_hint(role: _Kind) -> str:
     )
 
 
+def _reciprocal_role(
+    left: LinearQuantity, right: LinearQuantity
+) -> type[LinearQuantity] | None:
+    """Return the kind of a dimensionless `left` over a specialisation `right`.
+
+    It is the reciprocal specialisation, as for a plain number over `right`, and a
+    specialisation with no reciprocal refuses.
+    Returns `None` when `right` is not a specialisation.
+    """
+    right_kind = type(right)
+    if right_kind not in _SPECIALISATIONS:
+        return None
+    reciprocal = _RECIPROCALS.get(right_kind)
+    if reciprocal is None:
+        hint = f"`{right_kind.__name__}` has no reciprocal kind to divide into."
+        raise IncompatibleDimensionError("divide", left, right, hint=hint)
+    return cast("type[LinearQuantity]", reciprocal)
+
+
 def _refuse_a_role(
     operation: Literal["*", "/"], left: LinearQuantity, right: LinearQuantity
 ) -> None:
@@ -555,13 +574,18 @@ def _combine(
     """Build the correctly-typed result of multiplying or dividing two quantities.
 
     A specialisation is refused unless it is scaled by a dimensionless operand,
-    divided by itself, or multiplied by its reciprocal.
+    divided by itself, or multiplied by its reciprocal; a dimensionless operand over a
+    specialisation is its reciprocal specialisation.
     Then, in order: a ratio of like quantities is the ratio kind; any other
     dimensionless result is a plain ``Fraction``; a dimensionless operand keeps the
     other operand's kind; an explicit rule names the kind; otherwise the dimension
     decides (see `_promote`).
     """
     _refuse_a_role(operation, left, right)
+    if operation == "/" and left.dimension == DIMENSIONLESS:
+        reciprocal = _reciprocal_role(left, right)
+        if reciprocal is not None:
+            return reciprocal(magnitude, _result_unit(reciprocal))
     dimension = (
         left.dimension * right.dimension
         if operation == "*"

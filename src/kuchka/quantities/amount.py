@@ -26,7 +26,20 @@ class AmountOfSubstance(LinearQuantity):
     __slots__ = ()
 
     @overload
+    def __mul__(self, other: Proportion) -> AmountOfSubstance: ...
+    @overload
+    def __mul__(self, other: Numeric) -> AmountOfSubstance: ...
+    @overload
+    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__mul__(other)
+
+    @overload
     def __truediv__(self, other: AmountOfSubstance) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> AmountOfSubstance: ...
     @overload
     def __truediv__(self, other: Numeric) -> AmountOfSubstance: ...
     @overload
