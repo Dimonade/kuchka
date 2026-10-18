@@ -60,7 +60,7 @@ class Velocity(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Velocity: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -81,7 +81,9 @@ class Velocity(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Velocity: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -103,7 +105,7 @@ class Acceleration(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Acceleration: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -120,7 +122,9 @@ class Acceleration(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Acceleration: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -142,7 +146,7 @@ class Force(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Force: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -165,7 +169,9 @@ class Force(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Force: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

@@ -71,7 +71,7 @@ class Voltage(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Voltage: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -88,7 +88,9 @@ class Voltage(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Voltage: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -112,7 +114,7 @@ class Current(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Current: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -133,7 +135,9 @@ class Current(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Current: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -153,7 +157,7 @@ class Power(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Power: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -182,7 +186,9 @@ class Power(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Power: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -204,7 +210,7 @@ class Resistance(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Resistance: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -213,7 +219,9 @@ class Resistance(LinearQuantity):
     @overload
     def __rtruediv__(self, other: Numeric) -> Conductance: ...
     @overload
-    def __rtruediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __rtruediv__(
@@ -233,7 +241,9 @@ class Resistance(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Resistance: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -255,7 +265,7 @@ class Conductance(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Conductance: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -268,7 +278,9 @@ class Conductance(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Conductance: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -277,7 +289,9 @@ class Conductance(LinearQuantity):
     @overload
     def __rtruediv__(self, other: Numeric) -> Resistance: ...
     @overload
-    def __rtruediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __rtruediv__(

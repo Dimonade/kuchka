@@ -70,7 +70,7 @@ class AngularVelocity(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> AngularVelocity: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -87,7 +87,9 @@ class AngularVelocity(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> AngularVelocity: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -120,7 +122,7 @@ class Torque(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Torque: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -133,7 +135,9 @@ class Torque(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Torque: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

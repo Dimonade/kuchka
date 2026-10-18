@@ -89,7 +89,7 @@ class Time(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Time: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -102,7 +102,9 @@ class Time(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Time: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -111,7 +113,9 @@ class Time(LinearQuantity):
     @overload
     def __rtruediv__(self, other: Numeric) -> Frequency: ...
     @overload
-    def __rtruediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __rtruediv__(
@@ -191,7 +195,7 @@ class Frequency(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> Frequency: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -204,7 +208,9 @@ class Frequency(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> Frequency: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -213,7 +219,9 @@ class Frequency(LinearQuantity):
     @overload
     def __rtruediv__(self, other: Numeric) -> Time: ...
     @overload
-    def __rtruediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __rtruediv__(
@@ -290,7 +298,7 @@ class SamplingPeriod(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> SamplingPeriod: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -303,7 +311,9 @@ class SamplingPeriod(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> SamplingPeriod: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -312,7 +322,9 @@ class SamplingPeriod(LinearQuantity):
     @overload
     def __rtruediv__(self, other: Numeric) -> SampleRate: ...
     @overload
-    def __rtruediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __rtruediv__(
@@ -363,7 +375,7 @@ class SampleRate(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> SampleRate: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -376,7 +388,9 @@ class SampleRate(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> SampleRate: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -385,7 +399,9 @@ class SampleRate(LinearQuantity):
     @overload
     def __rtruediv__(self, other: Numeric) -> SamplingPeriod: ...
     @overload
-    def __rtruediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __rtruediv__(
@@ -431,7 +447,7 @@ class BaudRate(LinearQuantity):
     @overload
     def __mul__(self, other: Numeric) -> BaudRate: ...
     @overload
-    def __mul__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -444,7 +460,9 @@ class BaudRate(LinearQuantity):
     @overload
     def __truediv__(self, other: Numeric) -> BaudRate: ...
     @overload
-    def __truediv__(self, other: LinearQuantity) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
