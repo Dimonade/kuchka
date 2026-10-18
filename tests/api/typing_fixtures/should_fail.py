@@ -126,11 +126,8 @@ duty_cycle: Proportion = Ratio(Decimal("0.8"))
 # dimensionless is not the same as "any dimension".
 _bad_proportion_add = Percent(5) + Volt(5)  # type: ignore[operator]  # not (yet) flagged by ty across sibling quantity types
 
-# Multiplying a dimensioned quantity by a Proportion falls through to the generic
-# `object` overload (LinearQuantity | Decimal): correct at runtime via dimension
-# algebra (see quantities/proportion.py), but not statically narrowed to Voltage,
-# the same gap Ohm(5) * Ohm(2) already has.
-scaled_voltage: Voltage = Volt(5) * Ratio(Decimal("0.1"))  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+# Multiplying a dimensioned quantity by a Proportion keeps its type, statically too.
+scaled_voltage: Voltage = Volt(5) * Ratio(Decimal("0.1"))  # OK: statically a Voltage.
 
 # Length * Length is statically known to produce Area, and Area * Length / Length *
 # Area both statically produce Volume -- the same overload-table shape Voltage,
