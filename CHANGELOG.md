@@ -118,6 +118,17 @@ Every other product or quotient raises `IncompatibleDimensionError`, and the err
 
 Adding, subtracting, or comparing an `Energy` and a `Torque` raises `IncompatibleDimensionError` with a pointer to `AngularDisplacement` and `Torque.from_force`.
 
+#### A quantity has no truth value
+
+`bool(Volt(0))` was `True`, so `if not voltage:` was always false, and a rule of zero being false has no single meaning across shapes: `Celsius(0)` is not `Kelvin(0)`, `Degree(360)` is `Degree(0)`, and `Decibel(0)` is a ratio of one.
+`bool()` of any quantity now raises `TypeError`, with a pointer to `is None` and to an equality with zero.
+
+#### Static types refuse what the runtime refuses
+
+A parameter typed `object` let `Degree(30) * Volt(1)` and `Celsius(20) * Volt(1)` type-check, as an `Angle` and a `Voltage`, and let any quantity be compared with any other and with a plain number.
+Comparisons now take their own type, the reflected operators take a plain number, and a linear quantity multiplies and divides by a linear quantity or a plain number, so mypy and ty refuse each of those.
+A test reveals a representative set of operand pairs and operators with mypy, and checks every one against the runtime.
+
 #### Angle arithmetic
 
 Multiplying or dividing an `Angle` by a quantity raises `IncompatibleDimensionError`, with a pointer to `to_angular_displacement()`.
