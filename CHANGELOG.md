@@ -9,6 +9,11 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
+#### German degree words
+
+`TEMPERATURE_UNITS` reads `grad C`, `Grad Celsius`, `grad F`, `Grad Fahrenheit`, `grad K`, and `Grad Kelvin`, the spellings of historical German data, in any case.
+A bare `Grad` names no scale, as `deg` and `degrees` do not.
+
 #### New units added
 
 - Time:
@@ -82,7 +87,7 @@ The static overloads of `*` and `/` declare 33 more pairs the runtime already co
 - Rotation: `AngularVelocity / AngularDisplacement`.
 - Energy density: `EnergyDensity * Area` and `Force / EnergyDensity`.
 - Work: `Force * Length`, `Energy / Force`, and `Energy / Length`.
-- Resistance: `Resistance * Conductance`, and their `/` - a plain `Fraction`.
+- Resistance: `Resistance * Conductance`, a plain `Fraction`.
 
 Each pair is declared on both operand types, so the commuted product is typed too.
 

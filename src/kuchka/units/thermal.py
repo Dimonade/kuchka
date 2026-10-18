@@ -110,6 +110,8 @@ if TYPE_CHECKING:
 def _degree_words(letter: str, name: str) -> tuple[str, ...]:
     """Spoken forms of a temperature scale: `degC`, `degrees C`, `degree Celsius`.
 
+    The German `grad C` and `grad Celsius` are included, as found in historical data.
+    A bare `grad` is no form of any scale: it names a gradian in angles.
     Words are compared ignoring case, so one lower-case form of each is enough.
     """
     letter = letter.lower()
@@ -121,6 +123,8 @@ def _degree_words(letter: str, name: str) -> tuple[str, ...]:
         f"degrees {letter}",
         f"degree {name}",
         f"degrees {name}",
+        f"grad {letter}",
+        f"grad {name}",
     )
 
 
