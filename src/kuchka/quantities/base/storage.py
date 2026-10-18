@@ -35,7 +35,9 @@ if TYPE_CHECKING:
 
 def _concrete_types(base: type | None = None) -> Iterator[type]:
     """Yield every concrete quantity type: one that names its own `dimension`."""
-    for subclass in (base or _ScalarStorage).__subclasses__():
+    parent: type = base or _ScalarStorage
+    subclass: type
+    for subclass in parent.__subclasses__():
         if "dimension" in vars(subclass):
             yield subclass
         yield from _concrete_types(subclass)

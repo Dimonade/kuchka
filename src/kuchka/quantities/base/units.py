@@ -91,7 +91,7 @@ class _Unit:
 
     @override
     def __eq__(self, other: object) -> bool:
-        if type(other) is not type(self):
+        if not isinstance(other, type(self)) or type(other) is not type(self):
             return NotImplemented
         return self._fields() == other._fields()
 
