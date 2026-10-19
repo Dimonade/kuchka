@@ -44,6 +44,13 @@ ACCEPTED = [
     ("TEMPERATURE_UNITS", "\u2109", "\u00b0F"),
     ("TEMPERATURE_UNITS", "degF", "\u00b0F"),
     ("TEMPERATURE_UNITS", "degrees F", "\u00b0F"),
+    ("TEMPERATURE_UNITS", "grad C", "\u00b0C"),
+    ("TEMPERATURE_UNITS", "Grad C", "\u00b0C"),
+    ("TEMPERATURE_UNITS", "grad Celsius", "\u00b0C"),
+    ("TEMPERATURE_UNITS", "Grad Celsius", "\u00b0C"),
+    ("TEMPERATURE_UNITS", "grad F", "\u00b0F"),
+    ("TEMPERATURE_UNITS", "Grad Fahrenheit", "\u00b0F"),
+    ("TEMPERATURE_UNITS", "Grad Kelvin", "K"),
     ("TEMPERATURE_UNITS", "degrees Fahrenheit", "\u00b0F"),
     ("TEMPERATURE_UNITS", "fahrenheit", "\u00b0F"),
     # Temperature differences.
@@ -390,6 +397,7 @@ REJECTED = [
     # Ambiguous between units of the table, so claimed by none.
     ("TEMPERATURE_UNITS", "deg", "could be Celsius, Fahrenheit, or Kelvin"),
     ("TEMPERATURE_UNITS", "degrees", "could be Celsius, Fahrenheit, or Kelvin"),
+    ("TEMPERATURE_UNITS", "Grad", "could be Celsius, Fahrenheit, or Kelvin"),
     ("TEMPERATURE_UNITS", "degree", "could be Celsius, Fahrenheit, or Kelvin"),
     ("TEMPERATURE_DELTA_UNITS", "delta", "which scale"),
     ("TEMPERATURE_DELTA_UNITS", "d", "which scale"),

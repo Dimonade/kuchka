@@ -6,36 +6,27 @@ each marked with ``# type: ignore[...]``.
 Under ``--strict``, an unused ``type: ignore`` is itself an error --
 so a clean mypy run against that fixture is only possible if every marked line actually
 produced the expected static error *and* nothing else went wrong.
-That is what this test checks.
+That is what the mypy test checks.
+Pyright is held to the same rule, in strict mode with
+``reportUnnecessaryTypeIgnoreComment``, since it honours ``# type: ignore`` comments of
+any code.
 """
 
 from __future__ import annotations
 
-import os
+import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 
-import pytest
+from tests.support.static_checkers import require_or_skip
 
 FIXTURE = Path(__file__).parent / "typing_fixtures" / "should_fail.py"
 
 
-def _mypy_available() -> bool:
-    try:
-        import mypy  # noqa: F401
-    except ImportError:
-        return False
-    return True
-
-
-def _skip_without_mypy() -> bool:
-    """Skip for lack of mypy only outside tox, whose environments install it."""
-    return not _mypy_available() and "TOX_ENV_NAME" not in os.environ
-
-
-@pytest.mark.skipif(_skip_without_mypy(), reason="mypy is not installed")
 def test_mypy_agrees_with_runtime_on_the_fixture() -> None:
+    require_or_skip("mypy")
     result = subprocess.run(
         [sys.executable, "-m", "mypy", "--strict", str(FIXTURE)],
         capture_output=True,
@@ -44,5 +35,30 @@ def test_mypy_agrees_with_runtime_on_the_fixture() -> None:
     )
     assert result.returncode == 0, (
         "mypy did not cleanly accept/reject exactly the lines the fixture "
+        f"expects it to.\n\nstdout:\n{result.stdout}\nstderr:\n{result.stderr}"
+    )
+
+
+def test_pyright_agrees_with_runtime_on_the_fixture(tmp_path: Path) -> None:
+    require_or_skip("pyright")
+    shutil.copy(FIXTURE, tmp_path / FIXTURE.name)
+    (tmp_path / "pyrightconfig.json").write_text(
+        json.dumps(
+            {
+                "typeCheckingMode": "strict",
+                "reportUnnecessaryTypeIgnoreComment": True,
+                "enableTypeIgnoreComments": True,
+            }
+        )
+    )
+    result = subprocess.run(
+        ["pyright", "--pythonpath", sys.executable, FIXTURE.name],
+        capture_output=True,
+        text=True,
+        check=False,
+        cwd=tmp_path,
+    )
+    assert result.returncode == 0, (
+        "pyright did not cleanly accept/reject exactly the lines the fixture "
         f"expects it to.\n\nstdout:\n{result.stdout}\nstderr:\n{result.stderr}"
     )

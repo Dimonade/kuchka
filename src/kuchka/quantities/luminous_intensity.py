@@ -29,14 +29,29 @@ class LuminousIntensity(LinearQuantity):
     __slots__ = ()
 
     @overload
+    def __mul__(self, other: Proportion) -> LuminousIntensity: ...
+    @overload
+    def __mul__(self, other: Numeric) -> LuminousIntensity: ...
+    @overload
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__mul__(other)
+
+    @overload
     def __truediv__(self, other: LuminousIntensity) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> LuminousIntensity: ...
     @overload
     def __truediv__(self, other: Numeric) -> LuminousIntensity: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 

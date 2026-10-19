@@ -85,3 +85,14 @@ def test_a_sampling_period_returns_to_a_time_with_its_unit() -> None:
     assert type(back) is Time
     assert back == time.Millisecond(2)
     assert back.to_sampling_period() == period
+
+
+def test_a_proportion_over_a_role_is_its_reciprocal_role() -> None:
+    ratio = proportion.Ratio(2)
+    assert type(ratio / sample_rate.SamplesPerSecond(4)) is SamplingPeriod
+    assert type(ratio / time.Second(4).to_sampling_period()) is SampleRate
+
+
+def test_a_proportion_over_a_role_without_a_reciprocal_is_refused() -> None:
+    with pytest.raises(IncompatibleDimensionError, match="no reciprocal"):
+        proportion.Ratio(2) / baud_rate.Baud(9600)

@@ -3,7 +3,8 @@
 A type checker trusts the `@overload` declarations, and the runtime ignores them, so
 nothing but a test keeps the two together.
 Every declared overload is run, and every pair of linear types that the runtime
-multiplies or divides into another quantity must have been declared.
+multiplies or divides into another quantity, a `Proportion` included, must have been
+declared.
 """
 
 from __future__ import annotations
@@ -14,7 +15,6 @@ from fractions import Fraction
 import pytest
 
 from kuchka import MeasurementError
-from kuchka.dimensions import DIMENSIONLESS
 from tests.support.families import FAMILIES
 from tests.support.overloads import FAMILY_OF
 from tests.support.overloads import OVERLOAD_IDS
@@ -47,11 +47,6 @@ def runtime_pairs() -> set[tuple[str, str, str, str]]:
     found = set()
     for left in FAMILIES:
         for right in FAMILIES:
-            if DIMENSIONLESS in (
-                left.canonical_unit.dimension,
-                right.canonical_unit.dimension,
-            ):
-                continue
             for operation, apply in OPERATOR.items():
                 try:
                     result = apply(left.canonical(12), right.canonical(3))

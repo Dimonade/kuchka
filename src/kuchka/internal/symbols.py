@@ -65,4 +65,4 @@ def get_superscript(exponent: int) -> str:
     return str(exponent).translate(_SUPERSCRIPT_TRANSLATION)
 
 
-__all__ = []
+__all__: list[str] = []

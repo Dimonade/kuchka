@@ -150,7 +150,7 @@ def test_hemoglobin_is_heavier_than_water_in_daltons():
 
 def test_earth_is_lighter_than_the_sun():
     assert mass.EarthMass(1) < mass.SolarMass(1)
-    assert mass.EarthMass(318) < mass.SolarMass(1)  # roughly Jupiter's mass
+    assert mass.EarthMass(318) < mass.SolarMass(1)  # roughly Jupiter's mass.
 
 
 def test_isinstance_of_the_astronomical_mass_units():

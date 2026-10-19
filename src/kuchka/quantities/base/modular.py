@@ -19,7 +19,6 @@ from typing import Self
 
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
-from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.typing import override
 from kuchka.numeric import Numeric
 from kuchka.numeric import exact_quotient
@@ -169,25 +168,16 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
             self._reject_naked_number("subtract", other)
         return NotImplemented
 
-    def _reject_naked_number(self, operation: str, other: object) -> None:
-        unit_name = self._canonical_unit.name.capitalize()
-        msg = (
-            f"cannot {operation} a plain number ({other!r}) to a "
-            f"{type(self).__name__}; wrap it in a unit constructor first, "
-            f"e.g. {unit_name}({other!r})"
-        )
-        raise InvalidMeasurementError(msg)
-
-    def __mul__(self, other: object) -> Self:
+    def __mul__(self, other: Numeric) -> Self:
         if isinstance(other, Numeric):
             magnitude = self._wrap(self._magnitude * to_exact(other))
             return type(self)(magnitude, self._display_unit)
         return NotImplemented
 
-    def __rmul__(self, other: object) -> Self:
+    def __rmul__(self, other: Numeric) -> Self:
         return self.__mul__(other)
 
-    def __truediv__(self, other: object) -> Self:
+    def __truediv__(self, other: Numeric) -> Self:
         if isinstance(other, Numeric):
             quotient = exact_quotient(
                 self._magnitude, to_exact(other), left=self, right=other

@@ -30,6 +30,12 @@ alias tx := tox
 tox:
     uv run tox
 
+alias wt := watch-tools
+# Run the checks on the newest tool versions the dependency floors allow, as a scheduled job would.
+# `uv run` uses `uv.lock` while tox resolves fresh, so a failure here with `just check` green means a tool moved.
+watch-tools:
+    uv run tox -e lint,pyright,3.14
+
 alias ga := generate-api
 # Regenerate `src/kuchka/_api.py`, the names promoted to the top level, after changing a leaf `__all__`.
 generate-api:

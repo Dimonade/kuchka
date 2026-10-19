@@ -7,7 +7,6 @@ from fractions import Fraction
 import pytest
 
 from kuchka import BaudRate
-from kuchka import Frequency
 from kuchka import Proportion
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
@@ -51,7 +50,3 @@ def test_a_scaled_role_keeps_its_own_unit_and_value() -> None:
     assert str(SAMPLE_RATE * proportion.Percent(50)) == "4 Sa/s"
     assert str(BAUD_RATE * proportion.Percent(50)) == "4800 Bd"
     assert (SAMPLING_PERIOD / proportion.Percent(50)).magnitude == Fraction(1, 4)
-
-
-def test_a_proportion_does_not_divide_into_a_kind() -> None:
-    assert type(proportion.Ratio(1) / SAMPLING_PERIOD) is Frequency
