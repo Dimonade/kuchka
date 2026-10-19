@@ -112,6 +112,33 @@ Degree(359.9999).is_close(Degree(0.0001), tolerance=Degree(0.001))
 # True -- the short way round the circle.
 ```
 
+## Truth value
+
+A quantity has no truth value, because zero is a measurement and not an absence.
+`if not reading:` could not tell a missing reading from `Volt(0)`, and a zero depends on the shape: `Celsius(0)` is not `Kelvin(0)`, `Degree(360)` is `Degree(0)`, and `Decibel(0)` is a ratio of one.
+`bool()` raises `TypeError`, so `if reading:`, `reading or default`, and `any(readings)` fail where they are written.
+A missing value is `is None`, and zero is an equality:
+
+```python
+from kuchka import Volt
+
+reading = Volt(0)
+reading is not None
+reading == Volt(0)
+bool(reading)  # rejected: `TypeError`.
+```
+
+## Summing
+
+`sum()` starts from the plain number `0`, which a quantity refuses to add, so give it a start of the same type:
+
+```python
+from kuchka import Volt
+
+sum([Volt(1), Volt(2)])  # rejected: `InvalidMeasurementError`.
+sum([Volt(1), Volt(2)], start=Volt(0)) == Volt(3)
+```
+
 ## Logarithmic conversions
 
 Levels (`LogarithmicRatio`) store an exact `Fraction` and every combination of levels is exact.

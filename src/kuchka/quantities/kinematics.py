@@ -56,12 +56,14 @@ class Velocity(LinearQuantity):
     @overload
     def __mul__(self, other: Frequency) -> Acceleration: ...
     @overload
+    def __mul__(self, other: Proportion) -> Velocity: ...
+    @overload
     def __mul__(self, other: Numeric) -> Velocity: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
@@ -75,12 +77,16 @@ class Velocity(LinearQuantity):
     @overload
     def __truediv__(self, other: Velocity) -> Proportion: ...
     @overload
+    def __truediv__(self, other: Proportion) -> Velocity: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Velocity: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 
@@ -95,12 +101,14 @@ class Acceleration(LinearQuantity):
     @overload
     def __mul__(self, other: Mass) -> Force: ...
     @overload
+    def __mul__(self, other: Proportion) -> Acceleration: ...
+    @overload
     def __mul__(self, other: Numeric) -> Acceleration: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
@@ -110,12 +118,16 @@ class Acceleration(LinearQuantity):
     @overload
     def __truediv__(self, other: Acceleration) -> Proportion: ...
     @overload
+    def __truediv__(self, other: Proportion) -> Acceleration: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Acceleration: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 
@@ -130,12 +142,14 @@ class Force(LinearQuantity):
     @overload
     def __mul__(self, other: Length) -> Energy: ...
     @overload
+    def __mul__(self, other: Proportion) -> Force: ...
+    @overload
     def __mul__(self, other: Numeric) -> Force: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
@@ -151,12 +165,16 @@ class Force(LinearQuantity):
     @overload
     def __truediv__(self, other: Force) -> Proportion: ...
     @overload
+    def __truediv__(self, other: Proportion) -> Force: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Force: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 

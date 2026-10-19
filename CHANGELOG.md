@@ -9,11 +9,6 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
-#### German degree words
-
-`TEMPERATURE_UNITS` reads `grad C`, `Grad Celsius`, `grad F`, `Grad Fahrenheit`, `grad K`, and `Grad Kelvin`, the spellings of historical German data, in any case.
-A bare `Grad` names no scale, as `deg` and `degrees` do not.
-
 #### New units added
 
 - Time:
@@ -40,6 +35,11 @@ A bare `Grad` names no scale, as `deg` and `degrees` do not.
 
 `EnergyDensity` (`JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`) shares its dimension with `Pressure`, and the two are contested.
 `Energy / Volume` is an `EnergyDensity` and `Force / Area` a `Pressure`.
+
+#### German degree words
+
+`TEMPERATURE_UNITS` reads `grad C`, `Grad Celsius`, `grad F`, `Grad Fahrenheit`, `grad K`, and `Grad Kelvin`, the spellings of historical German data, in any case.
+A bare `Grad` names no scale, as `deg` and `degrees` do not.
 
 #### The angle axis takes part in arithmetic
 
@@ -91,6 +91,12 @@ The static overloads of `*` and `/` declare 33 more pairs the runtime already co
 
 Each pair is declared on both operand types, so the commuted product is typed too.
 
+#### A type-checker policy, and the matrix that holds it
+
+The README states which checkers the types are written for: mypy from 1.11 and at the newest, pyright at the newest, and the library's own source under `ty`.
+A contract test asks each installed checker about a representative set of operand pairs and operators and compares the answer with the runtime, and the negative typing fixture is checked on mypy and on pyright.
+The tox environments `typing-min` and `pyright` run them, and `just watch-tools` runs the checks on the newest tool versions as an early warning.
+
 ### Changed
 
 #### Conversion functions
@@ -117,6 +123,30 @@ Every other product or quotient raises `IncompatibleDimensionError`, and the err
 #### A hint where a torque and an energy meet
 
 Adding, subtracting, or comparing an `Energy` and a `Torque` raises `IncompatibleDimensionError` with a pointer to `AngularDisplacement` and `Torque.from_force`.
+
+#### A `Proportion` scales a quantity, and the overloads say so
+
+`Percent(50) * Volt(2)` is `Volt(1)`, and `Volt(2) / Percent(50)` is `Volt(4)`.
+The overloads declare it on every linear type, in both orders, and declare `Ratio(2) / Second(4)` as a `Frequency` and the other reciprocals, so mypy and ty infer the type and not `LinearQuantity | Fraction`.
+A `Proportion` over a role kind is now the reciprocal role, as a plain number is: `Ratio(2) / SampleRate(4)` is a `SamplingPeriod`.
+It returned a plain `Time`, and `Ratio(2) / BaudRate(9600)` returned a `Time` too, where `2 / BaudRate(9600)` raised.
+A role with no reciprocal kind now raises `IncompatibleDimensionError` for a `Proportion` as well.
+
+#### `sum()` names its start
+
+`sum([Volt(1), Volt(2)])` raised because `sum()` starts from the plain number `0`.
+The error now says what `sum()` needs: `sum(values, start=Volt(0))`, with the zero of the type that was added to.
+
+#### A quantity has no truth value
+
+`bool(Volt(0))` was `True`, so `if not voltage:` was always false, and a rule of zero being false has no single meaning across shapes: `Celsius(0)` is not `Kelvin(0)`, `Degree(360)` is `Degree(0)`, and `Decibel(0)` is a ratio of one.
+`bool()` of any quantity now raises `TypeError`, with a pointer to `is None` and to an equality with zero.
+
+#### Static types refuse what the runtime refuses
+
+A parameter typed `object` let `Degree(30) * Volt(1)` and `Celsius(20) * Volt(1)` type-check, as an `Angle` and a `Voltage`, and let any quantity be compared with any other and with a plain number.
+Comparisons now take their own type, the reflected operators take a plain number, and a linear quantity multiplies and divides by a linear quantity or a plain number, so mypy and ty refuse each of those.
+A test reveals a representative set of operand pairs and operators with mypy, and checks every one against the runtime.
 
 #### Angle arithmetic
 

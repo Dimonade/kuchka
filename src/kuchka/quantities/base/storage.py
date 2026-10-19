@@ -10,8 +10,10 @@ from __future__ import annotations
 
 from fractions import Fraction
 from typing import TYPE_CHECKING
+from typing import Any
 from typing import ClassVar
 from typing import Generic
+from typing import NoReturn
 from typing import TypeVar
 
 from kuchka.dimensions import Dimension
@@ -33,7 +35,9 @@ if TYPE_CHECKING:
 
 def _concrete_types(base: type | None = None) -> Iterator[type]:
     """Yield every concrete quantity type: one that names its own `dimension`."""
-    for subclass in (base or _ScalarStorage).__subclasses__():
+    parent: type = base or _ScalarStorage
+    subclass: type
+    for subclass in parent.__subclasses__():
         if "dimension" in vars(subclass):
             yield subclass
         yield from _concrete_types(subclass)
@@ -69,6 +73,8 @@ class _ScalarStorage(Generic[_UnitT]):
     _magnitude: Fraction
     _display_unit: _UnitT
     dimension: ClassVar[Dimension]
+    _canonical_unit: ClassVar[Any]
+    """The unit the magnitude is stored in; each algebraic shape narrows its type."""
     _unit_type: ClassVar[type]
     """The kind of unit definition this algebraic shape displays in.
 
@@ -245,6 +251,40 @@ class _ScalarStorage(Generic[_UnitT]):
         scale-plus-offset (`AffineQuantity`).
         """
         raise NotImplementedError
+
+    def __bool__(self) -> NoReturn:
+        """Raise: a quantity has no truth value.
+
+        Zero is a measurement and not an absence, so `if not voltage:` cannot tell a
+        missing reading from `Volt(0)`.
+        A zero depends on the shape: `Celsius(0)` is not `Kelvin(0)`, `Degree(360)` is
+        `Degree(0)`, and `Decibel(0)` is a ratio of one.
+        Test for a missing value with `is None`, and for zero with an equality.
+        """
+        msg = (
+            f"the truth value of a {type(self).__name__} is ambiguous: compare it "
+            "with `is None` for a missing value, or with a zero of its own type."
+        )
+        raise TypeError(msg)
+
+    def _reject_naked_number(self, operation: str, other: object) -> None:
+        """Raise `InvalidMeasurementError` for a plain number met in arithmetic.
+
+        A plain `0` added to a quantity is what `sum()` starts from, so that case
+        names the `start=` that `sum()` needs.
+        """
+        unit_name = self._canonical_unit.name.capitalize()
+        msg = (
+            f"cannot {operation} a plain number ({other!r}) to a "
+            f"{type(self).__name__}; wrap it in a unit constructor first, "
+            f"e.g. {unit_name}({other!r})"
+        )
+        if operation == "add" and type(other) is int and other == 0:
+            msg += (
+                f". If this came from `sum()`, which starts from 0, give it a start "
+                f"of the same type: `sum(values, start={unit_name}(0))`"
+            )
+        raise InvalidMeasurementError(msg)
 
     @override
     def __repr__(self) -> str:

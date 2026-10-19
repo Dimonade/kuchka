@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import ClassVar
+from typing import Self
 
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.internal.typing import override
@@ -43,22 +44,22 @@ class _OrderedScalarMixin:
     def __hash__(self) -> int:
         return hash((type(self), self._magnitude))
 
-    def __lt__(self, other: object) -> bool:
+    def __lt__(self, other: Self) -> bool:
         if not isinstance(other, _OrderedScalarMixin) or type(self) is not type(other):
             raise IncompatibleDimensionError("compare", self, other)
         return self._magnitude < other._magnitude
 
-    def __le__(self, other: object) -> bool:
+    def __le__(self, other: Self) -> bool:
         if not isinstance(other, _OrderedScalarMixin) or type(self) is not type(other):
             raise IncompatibleDimensionError("compare", self, other)
         return self._magnitude <= other._magnitude
 
-    def __gt__(self, other: object) -> bool:
+    def __gt__(self, other: Self) -> bool:
         if not isinstance(other, _OrderedScalarMixin) or type(self) is not type(other):
             raise IncompatibleDimensionError("compare", self, other)
         return self._magnitude > other._magnitude
 
-    def __ge__(self, other: object) -> bool:
+    def __ge__(self, other: Self) -> bool:
         if not isinstance(other, _OrderedScalarMixin) or type(self) is not type(other):
             raise IncompatibleDimensionError("compare", self, other)
         return self._magnitude >= other._magnitude

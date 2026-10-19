@@ -727,6 +727,25 @@ Breaking changes are expected while the API settles.
 
 From `0.2.0` onward, `kuchka` follows ordinary semantic versioning: a minor release will not break existing code, and a breaking change comes with a major version bump.
 
+### Compatibility
+
+`kuchka` supports Python 3.11 and later, and its tests run on every release from 3.11 to 3.15.
+
+The types are written for code that other type checkers read, and what is promised is what is tested:
+
+| Checker | Checked against                                                                              |
+| ------- | -------------------------------------------------------------------------------------------- |
+| mypy    | the oldest supported release, 1.11, and the newest                                           |
+| pyright | the newest release                                                                           |
+| ty      | the library's own source only: `ty` is `0.0.x`, so its results on user code are not promised |
+
+On every change, mypy and pyright are each asked about a representative set of operand pairs and every operator, and must agree with the runtime: it infers the type the runtime returns, and it refuses what the runtime refuses, such as a quantity of another dimension, a plain number, or a comparison across types.
+A fixture of lines that must be accepted and lines that must be rejected is held to the same rule.
+The library's own source passes `mypy --strict` from 1.11 on.
+Earlier mypy releases, back to 1.5, gave the same answers on consumer code when they were tried, but they are not tested on every change, and they cannot check the library's own source.
+
+Raising the oldest supported checker is recorded in the changelog.
+
 ## Development
 
 `uv sync` installs the `dev` dependency group (`ruff`, `mypy`, `ty`, `pytest`, `hypothesis`, `coverage`, and editor tooling) alongside `kuchka` itself.
@@ -742,9 +761,13 @@ uv run coverage run -m pytest && uv run coverage report
 ```
 
 `just test` runs the doctests and the test suite, `just check` runs the generated-API check, `ruff`, `mypy --strict`, and `ty`, and `just ct` (or `just covtest`) runs the full testbench with coverage after `check` passes, so a lint or type error fails before the slower run.
-`just tox` runs the doctests and the test suite on every supported Python version, plus a `lint` environment with the same checks as `just check`.
+`just tox` runs the doctests and the test suite on every supported Python version, plus a `lint` environment with the same checks as `just check`, a `typing-min` environment that checks the library and its consumer-side types on the oldest supported mypy, and a `pyright` environment that checks the same consumer-side types on pyright.
 
-`tests/test_typing.py` exercises negative typing fixtures under `--strict`.
+`uv run` resolves the tools from `uv.lock`, while tox installs the newest versions the floors in `pyproject.toml` allow.
+`just watch-tools` runs the `lint`, `pyright`, and newest-Python environments that way, as an early warning for a new `ruff`, `mypy`, `ty`, or `pyright`: when it fails and `just check` passes, a tool moved, and the fix is a small change followed by `uv lock --upgrade-package <tool>`.
+Run it on a schedule, for example weekly.
+
+`tests/api/test_typing.py` exercises negative typing fixtures under `--strict` on mypy and on pyright, and `tests/contract/test_static_types_agree_with_runtime.py` compares what each checker infers with what the runtime returns.
 Ruff is configured with `select = ["ALL"]`; disabled rules in `pyproject.toml` carry inline explanations for why they do not fit the codebase.
 
 ## Further reading

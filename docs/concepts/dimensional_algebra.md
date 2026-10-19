@@ -102,6 +102,20 @@ Percent(50) * Percent(50) == Ratio(0.25)
 Hertz(2) * Second(3) == 6  # Cycles are a plain `Fraction`.
 ```
 
+A `Proportion` scales a quantity and keeps its type, and over a quantity it is the reciprocal:
+
+```python
+from kuchka import Hertz
+from kuchka import Percent
+from kuchka import Ratio
+from kuchka import Second
+from kuchka import Volt
+
+Percent(50) * Volt(2) == Volt(1)
+Volt(2) / Percent(50) == Volt(4)
+Ratio(2) / Second(4) == Hertz(0.5)
+```
+
 A `Proportion` compares with a `Proportion`, and a quantity is not built from one.
 `.magnitude` is the exact `Fraction` when a plain number is what is wanted:
 

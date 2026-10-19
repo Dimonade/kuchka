@@ -16,6 +16,8 @@ from tests.support.families import FAMILIES
 OPERATIONS = ("__mul__", "__truediv__")
 SYMBOL = {"__mul__": "*", "__truediv__": "/"}
 NOT_A_QUANTITY_OPERAND = ("Numeric", "object")
+WEAK_RESULT = "LinearQuantity | Fraction"
+"""The result of the fallback overload, which declares no pair."""
 FAMILY_OF = {family.quantity: family for family in FAMILIES}
 
 
@@ -48,7 +50,7 @@ def declared_overloads() -> tuple[Overload, ...]:
             for overload in typing.get_overloads(implementation):
                 other = overload.__annotations__.get("other")
                 result = overload.__annotations__.get("return")
-                if other in NOT_A_QUANTITY_OPERAND:
+                if other in NOT_A_QUANTITY_OPERAND or result == WEAK_RESULT:
                     continue
                 right = getattr(quantities, other)
                 if result == "Fraction":

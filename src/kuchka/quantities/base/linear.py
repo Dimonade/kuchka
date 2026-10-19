@@ -18,7 +18,6 @@ from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import Dimension
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
-from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.typing import override
 from kuchka.numeric import Numeric
 from kuchka.numeric import exact_quotient
@@ -135,15 +134,6 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
         limit = self._tolerance_limit(other, tolerance, type(self))
         return abs(self._magnitude - other._magnitude) <= limit
 
-    def _reject_naked_number(self, operation: str, other: object) -> None:
-        unit_name = self._canonical_unit.name.capitalize()
-        msg = (
-            f"cannot {operation} a plain number ({other!r}) to a "
-            f"{type(self).__name__}; wrap it in a unit constructor first, "
-            f"e.g. {unit_name}({other!r})"
-        )
-        raise InvalidMeasurementError(msg)
-
     # NOTE ON TYPING: the return type here is intentionally broad
     # (`LinearQuantity | Fraction`) because this base implementation runs the fully
     # general dimension algebra -- it has no static way of knowing that a Voltage times
@@ -157,19 +147,19 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
     # Each subclass overload list ends with a fallback overload matching this exact
     # signature (`other: object -> LinearQuantity | Fraction`) so that overriding it
     # remains compatible with this base signature.
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         if isinstance(other, LinearQuantity):
             return _combine("*", self, other, self._magnitude * other._magnitude)
         if isinstance(other, Numeric):
             return type(self)(self._magnitude * to_exact(other), self._display_unit)
         return NotImplemented
 
-    def __rmul__(self, other: object) -> Self:
+    def __rmul__(self, other: Numeric) -> Self:
         if isinstance(other, Numeric):
             return type(self)(self._magnitude * to_exact(other), self._display_unit)
         return NotImplemented
 
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         if isinstance(other, LinearQuantity):
             magnitude = exact_quotient(
                 self._magnitude, other._magnitude, left=self, right=other
@@ -182,7 +172,9 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
             return type(self)(magnitude, self._display_unit)
         return NotImplemented
 
-    def __rtruediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction:
         # NOTE: `Numeric / self`, e.g. `1 / Time(2)`.
         # The reciprocal's kind is chosen by its dimension alone, which is only right
         # when `self` is the principal kind of its dimension or one of its contested
