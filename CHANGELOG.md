@@ -9,11 +9,6 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
-#### German degree words
-
-`TEMPERATURE_UNITS` reads `grad C`, `Grad Celsius`, `grad F`, `Grad Fahrenheit`, `grad K`, and `Grad Kelvin`, the spellings of historical German data, in any case.
-A bare `Grad` names no scale, as `deg` and `degrees` do not.
-
 #### New units added
 
 - Time:
@@ -40,6 +35,11 @@ A bare `Grad` names no scale, as `deg` and `degrees` do not.
 
 `EnergyDensity` (`JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`) shares its dimension with `Pressure`, and the two are contested.
 `Energy / Volume` is an `EnergyDensity` and `Force / Area` a `Pressure`.
+
+#### German degree words
+
+`TEMPERATURE_UNITS` reads `grad C`, `Grad Celsius`, `grad F`, `Grad Fahrenheit`, `grad K`, and `Grad Kelvin`, the spellings of historical German data, in any case.
+A bare `Grad` names no scale, as `deg` and `degrees` do not.
 
 #### The angle axis takes part in arithmetic
 
@@ -90,6 +90,12 @@ The static overloads of `*` and `/` declare 33 more pairs the runtime already co
 - Resistance: `Resistance * Conductance`, a plain `Fraction`.
 
 Each pair is declared on both operand types, so the commuted product is typed too.
+
+#### A type-checker policy, and the matrix that holds it
+
+The README states which checkers the types are written for: mypy from 1.11 and at the newest, pyright at the newest, and the library's own source under `ty`.
+A contract test asks each installed checker about a representative set of operand pairs and operators and compares the answer with the runtime, and the negative typing fixture is checked on mypy and on pyright.
+The tox environments `typing-min` and `pyright` run them, and `just watch-tools` runs the checks on the newest tool versions as an early warning.
 
 ### Changed
 

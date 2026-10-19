@@ -2,23 +2,19 @@
 
 A parameter typed `object` lets mypy accept `Degree(30) * Volt(1)`, which the runtime
 refuses, and types it as an `Angle`.
-Every pair of a representative operand set and every operator is revealed by mypy and
-evaluated at runtime, and the two must agree:
+Every pair of a representative operand set and every operator is revealed by each
+checker (mypy and pyright) and evaluated at runtime, and they must agree:
 
-- when the runtime refuses, mypy refuses too, or falls back to the weak
+- when the runtime refuses, the checker refuses too, or falls back to the weak
   `LinearQuantity | Fraction` that a linear operand and a linear operand or a plain
   number share, because only the dimension decides those results;
-- when the runtime answers, mypy does not refuse, and a specific type is the runtime's.
+- when the runtime answers, the checker does not refuse, and a specific type is the
+  runtime's.
 """
 
 from __future__ import annotations
 
-import importlib.util
 import operator
-import os
-import re
-import subprocess
-import sys
 from typing import TYPE_CHECKING
 
 import pytest
@@ -29,6 +25,9 @@ from kuchka import Degree
 from kuchka import Second
 from kuchka.quantities.base import LinearQuantity
 from tests.support.families import FAMILIES
+from tests.support.static_checkers import CHECKERS
+from tests.support.static_checkers import require_or_skip
+from tests.support.static_checkers import reveal
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -69,42 +68,11 @@ def _runtime(left: object, symbol: str, right: object) -> str | None:
         return None
 
 
-def _static(
-    path: Path, index: dict[int, tuple[str, str, str]]
-) -> dict[tuple[str, str, str], str | None]:
-    """Return mypy's verdict per expression: a type's name, or `None` for a refusal."""
-    result = subprocess.run(
-        [sys.executable, "-m", "mypy", "--strict", "--no-error-summary", str(path)],
-        capture_output=True,
-        text=True,
-        check=False,
-        env={**os.environ},
-    )
-    verdicts: dict[tuple[str, str, str], str | None] = {}
-    for line in result.stdout.splitlines():
-        match = re.match(r".*?:(\d+): (error|note): (.*)", line)
-        if match is None or int(match.group(1)) not in index:
-            continue
-        key = index[int(match.group(1))]
-        if match.group(2) == "error" and "[operator]" in match.group(3):
-            verdicts[key] = None
-        elif key not in verdicts and "Revealed type is" in match.group(3):
-            revealed = match.group(3).split('"')[1]
-            names = {
-                part.strip().split(".")[-1]
-                for part in re.split(
-                    r"\||,", revealed.replace("Union[", "").replace("]", "")
-                )
-            }
-            verdicts[key] = "|".join(sorted(names))
-    return verdicts
-
-
-@pytest.mark.skipif(
-    "TOX_ENV_NAME" not in os.environ and importlib.util.find_spec("mypy") is None,
-    reason="mypy is not installed",
-)
-def test_mypy_and_the_runtime_agree_on_every_operand_pair(tmp_path: Path) -> None:
+@pytest.mark.parametrize("checker", CHECKERS)
+def test_the_checker_and_the_runtime_agree_on_every_operand_pair(
+    checker: str, tmp_path: Path
+) -> None:
+    require_or_skip(checker)
     operands = _operands()
     lines = ["from __future__ import annotations", "import kuchka"]
     index: dict[int, tuple[str, str, str]] = {}
@@ -121,10 +89,14 @@ def test_mypy_and_the_runtime_agree_on_every_operand_pair(tmp_path: Path) -> Non
                 index[len(lines)] = (left, symbol, right)
     path = tmp_path / "pairs.py"
     path.write_text("\n".join(lines) + "\n")
-    verdicts = _static(path, index)
+    revealed = reveal(checker, path)
 
     mismatches = []
-    for (left, symbol, right), static in verdicts.items():
+    for number, (left, symbol, right) in index.items():
+        assert number in revealed, (
+            f"{checker} said nothing about {left} {symbol} {right}"
+        )
+        static = revealed[number]
         runtime = _runtime(operands[left], symbol, operands[right])
         sized = (LinearQuantity, int)
         both_sized = isinstance(operands[left], sized) and isinstance(
@@ -137,7 +109,6 @@ def test_mypy_and_the_runtime_agree_on_every_operand_pair(tmp_path: Path) -> Non
             ok = static is not None and (weak or static == runtime)
         if not ok:
             mismatches.append(
-                f"{left} {symbol} {right}: mypy {static}, runtime {runtime}"
+                f"{left} {symbol} {right}: {checker} {static}, runtime {runtime}"
             )
-    assert len(verdicts) == len(index)
     assert not mismatches, "\n".join(mismatches[:20])

@@ -40,6 +40,8 @@ test = ["coverage>=7.15.4", "hypothesis>=6.165.10", "pytest>=9.1.1"]
 
 typing = ["mypy>=2.3.1"]
 
+pyright = ["pyright>=1.1.414"]
+
 lint = [
   { include-group = "typing" },
   "mccabe>=0.7.0",
@@ -166,12 +168,14 @@ force-single-line = true
 
 [tool.tox]
 requires = ["tox>=4.64"]
-env_list = ["3.11", "3.12", "3.13", "3.14", "3.15", "lint"]
+env_list = ["3.11", "3.12", "3.13", "3.14", "3.15", "lint", "typing-min", "pyright"]
 
 [tool.tox.env_run_base]
 description = "run the doctests and the test suite on Python {base_python}"
 # `typing` brings mypy in for the test that checks the static types agree with the runtime.
 dependency_groups = ["test", "typing"]
+# The checkers an environment installs: a test that needs one fails, and does not skip, if it is missing.
+set_env = { KUCHKA_CHECKERS = "mypy" }
 commands = [
   [
     "pytest",
@@ -215,6 +219,43 @@ commands = [
     "ty",
     "check",
     "src/kuchka",
+  ],
+]
+
+[tool.tox.env.typing-min]
+description = "type-check the library and the consumer-side types on the oldest supported mypy"
+base_python = ["3.11"]
+dependency_groups = ["test"]
+# The floor of the type-checker policy in `README.md`: the oldest mypy that checks the library's own source cleanly.
+deps = ["mypy==1.11.2"]
+set_env = { KUCHKA_CHECKERS = "mypy" }
+commands = [
+  [
+    "mypy",
+    "--strict",
+    "--python-version",
+    "3.11",
+    "src/kuchka",
+  ],
+  [
+    "pytest",
+    "-q",
+    "tests/api/test_typing.py",
+    "tests/contract/test_static_types_agree_with_runtime.py",
+  ],
+]
+
+[tool.tox.env.pyright]
+description = "check the consumer-side types on pyright"
+base_python = ["3.11"]
+dependency_groups = ["test", "pyright"]
+set_env = { KUCHKA_CHECKERS = "pyright" }
+commands = [
+  [
+    "pytest",
+    "-q",
+    "tests/api/test_typing.py",
+    "tests/contract/test_static_types_agree_with_runtime.py",
   ],
 ]
 
