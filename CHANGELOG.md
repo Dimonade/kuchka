@@ -66,7 +66,7 @@ The top-level namespace, `kuchka.units`, and the generated API list none of them
 - `russian`: Imperial units of length and area.
 
 Modules register their units through `extend_units`, which adds units to a quantity type beside those `bind_units` bound.
-`docs/how-to/extending_kuchka.md` describes adding a unit, a quantity, and a dimension.
+The pages under `docs/how-to` describe adding a unit, a quantity, a dimension, and archaic units, splitting a unit module, and the tests and documentation each needs.
 
 #### Quantity kinds are catalogued separately from arithmetic
 

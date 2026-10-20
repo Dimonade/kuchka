@@ -488,6 +488,22 @@ American-English `*meter` names are aliases of the corresponding `*metre`
 constructors, not separate unit implementations. The same principle applies
 to `Litre`/`Liter` and other spelling aliases.
 
+### Archaic and historical units
+
+Historical, regional, and culturally specific units live apart from the main vocabulary, in `kuchka.units.archaic`.
+They are imported explicitly from the module of their tradition and add nothing to the top-level namespace:
+
+```python
+from kuchka.units.archaic.russian.length import Arshin
+from kuchka.units.length import CENTIMETRE
+
+print(Arshin(3).to(CENTIMETRE))
+# 213.36 cm
+```
+
+The traditions today are German (the Meilen), Hebrew, Japanese, and Russian.
+See the [archaic units README](src/kuchka/units/archaic/README.md) for what each provides, and [How to extend kuchka](docs/how-to/README.md) for adding more.
+
 ## A few important distinctions
 
 ### Same dimension does not always mean the same concept
@@ -780,6 +796,7 @@ Deeper design material is kept separately:
 - **[Copying, pickling, and persistence](docs/concepts/persistence.md)** - what `copy` and `pickle` guarantee, why pickle is not a storage format, and how to store a value as exact text and a unit symbol.
 - **[Unit spellings](docs/concepts/unit_spellings.md)** - what the `*_UNITS` tables accept, how case and plurals are treated, and why no spelling can mean two units.
 - **[Exactness, angles, and tolerance](docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, angles and pi, and comparing with a tolerance.
+- **[How to extend kuchka](docs/how-to/README.md)** - adding a unit, a quantity, a dimension, or archaic units, splitting a module, and the tests and documentation each needs, with an imaginary krakenpeople example.
 - **[Design choices](docs/design_choices.md)** - constructor functions, unit definitions, canonical types, string-resolution boundaries, and the reasons for a curated vocabulary.
 - **[Comparison with existing tools](docs/comparison.md)** - the deliberate trade-offs versus Pint, physipy, impunity, and related libraries.
 

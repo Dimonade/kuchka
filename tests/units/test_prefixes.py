@@ -1,6 +1,7 @@
 """Specific tests for `kuchka.prefixes`.
 
-Includes the `Prefix` dataclass itself, and the `prefixed_unit()` helper.
+Includes the `Prefix` dataclass itself, and the `prefixed_unit()` and `with_prefix()`
+helpers.
 
 Every expected scale is hand written as an independent decimal literal to avoid
 testing against the implementation of itself, which would always be true.
@@ -10,16 +11,22 @@ from __future__ import annotations
 
 import dataclasses
 from decimal import Decimal
+from fractions import Fraction
 from typing import TYPE_CHECKING
 
 import pytest
 
+from kuchka.dimensions import LENGTH
 from kuchka.dimensions import MASS
 from kuchka.dimensions import VOLTAGE
 from kuchka.internal import prefixes
 from kuchka.internal import symbols
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.prefixes import with_prefix
 from kuchka.quantities.base import UnitDef
+from kuchka.units import length
+from kuchka.units import mass
+from kuchka.units import voltage
 
 if TYPE_CHECKING:
     from kuchka.internal.prefixes import Prefix
@@ -157,3 +164,52 @@ def test_coherent_offset_defaults_to_zero() -> None:
 def test_coherent_offset_composes_additively_with_the_prefix_exponent():
     unit = prefixed_unit(prefixes.KILO, "x", "x", VOLTAGE, coherent_offset=-2)
     assert unit.scale == Decimal(10)  # 10^3 * 10^-2 = 10^1
+
+
+SHELL = UnitDef(
+    "shell", "shell", Fraction(3, 100), LENGTH, aliases=("sh",), words=("shells",)
+)
+
+PUBLISHED_PREFIXED_CASES = [
+    (prefixes.MILLI, length.METRE, length.MILLIMETRE),
+    (prefixes.KILO, length.METRE, length.KILOMETRE),
+    (prefixes.KILO, mass.GRAM, mass.KILOGRAM),
+    (prefixes.MILLI, voltage.VOLT, voltage.MILLIVOLT),
+]
+
+
+def test_with_prefix_multiplies_the_scale_of_a_base_that_is_not_an_si_unit() -> None:
+    unit = with_prefix(prefixes.KILO, SHELL)
+    assert unit.name == "kiloshell"
+    assert unit.symbol == "kshell"
+    assert unit.scale == Fraction(30)
+    assert unit.dimension is LENGTH
+
+
+def test_with_prefix_keeps_a_fractional_scale_exact() -> None:
+    assert with_prefix(prefixes.MICRO, SHELL).scale == Fraction(3, 100_000_000)
+
+
+def test_with_prefix_pairs_the_spellings_of_prefix_and_base() -> None:
+    unit = with_prefix(prefixes.MICRO, SHELL)
+    assert set(unit.aliases) == {"ush", f"{symbols.MICRO}sh", "ushell"}
+    assert unit.words == ("microshells",)
+
+
+def test_with_prefix_adds_the_extra_spellings_it_is_given() -> None:
+    unit = with_prefix(prefixes.KILO, SHELL, aliases=("ks",), words=("shellthousand",))
+    assert "ks" in unit.aliases
+    assert "shellthousand" in unit.words
+
+
+def test_with_prefix_with_no_prefix_is_a_pass_through() -> None:
+    assert with_prefix(prefixes.UNIT, length.METRE) == length.METRE
+
+
+@pytest.mark.parametrize(
+    ("prefix", "base", "published"), PUBLISHED_PREFIXED_CASES, ids=str
+)
+def test_with_prefix_reproduces_the_published_prefixed_unit(
+    prefix: Prefix, base: UnitDef, published: UnitDef
+) -> None:
+    assert with_prefix(prefix, base) == published
