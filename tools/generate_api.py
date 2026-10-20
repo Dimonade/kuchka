@@ -57,12 +57,21 @@ def _all_of(path: Path) -> list[str]:
     raise SystemExit(msg)
 
 
+_NOT_PROMOTED = frozenset({"base", "archaic"})
+"""Subpackages whose names never reach the top level.
+
+`base` holds machinery, and `archaic` holds historical units that applications import
+explicitly from their own modules.
+"""
+
+
 def _leaves(package: Path) -> list[Path]:
     """Return every leaf module under `package`, subpackages included."""
     return sorted(
         path
         for path in package.rglob("*.py")
-        if path.name != "__init__.py" and "base" not in path.relative_to(package).parts
+        if path.name != "__init__.py"
+        and _NOT_PROMOTED.isdisjoint(path.relative_to(package).parts)
     )
 
 
