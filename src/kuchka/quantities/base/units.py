@@ -134,7 +134,24 @@ def _published() -> tuple[Mapping[str, _Unit], Mapping[_Unit, str]]:
     return by_name, by_unit
 
 
-def bind_units(quantity_type: type[Any], units: Iterable[_Unit]) -> None:
+def _check_fits(quantity_type: type[Any], unit: object) -> None:
+    """Raise `TypeError` unless `unit` is of the kind and dimension of the type."""
+    if not isinstance(unit, quantity_type._unit_type):  # noqa: SLF001
+        msg = (
+            f"{unit!r} is not a {quantity_type._unit_type.__name__}, "  # noqa: SLF001
+            f"the kind of unit {quantity_type.__name__} displays in."
+        )
+        raise TypeError(msg)
+    dimension = getattr(unit, "dimension", None)
+    if dimension is not None and dimension != quantity_type.dimension:
+        msg = (
+            f"{unit.name} ({unit.symbol}) has dimension [{dimension!r}] but "
+            f"{quantity_type.__name__} has [{quantity_type.dimension!r}]."
+        )
+        raise TypeError(msg)
+
+
+def bind_units(quantity_type: type[Any], units: Iterable[Any]) -> None:
     """Bind the units `quantity_type` displays in.
 
     This is called once per quantity type.
@@ -155,20 +172,40 @@ def bind_units(quantity_type: type[Any], units: Iterable[_Unit]) -> None:
         msg = f"{quantity_type.__name__} needs at least one unit."
         raise TypeError(msg)
     for unit in bound:
-        if not isinstance(unit, quantity_type._unit_type):  # noqa: SLF001
-            msg = (
-                f"{unit!r} is not a {quantity_type._unit_type.__name__}, "  # noqa: SLF001
-                f"the kind of unit {quantity_type.__name__} displays in."
-            )
-            raise TypeError(msg)
-        dimension = getattr(unit, "dimension", None)
-        if dimension is not None and dimension != quantity_type.dimension:
-            msg = (
-                f"{unit.name} ({unit.symbol}) has dimension [{dimension!r}] but "
-                f"{quantity_type.__name__} has [{quantity_type.dimension!r}]."
-            )
-            raise TypeError(msg)
+        _check_fits(quantity_type, unit)
     quantity_type._applicable_units = bound  # noqa: SLF001
+
+
+def extend_units(quantity_type: type[Any], units: Iterable[Any]) -> None:
+    """Add units to those a bound `quantity_type` displays in.
+
+    A collection of units that lives outside `kuchka.units`, such as the archaic
+    units, calls this when its module is imported, so a quantity type displays in
+    those units exactly when the application has imported them.
+    The units pass the same kind and dimension checks as bound ones.
+    The added units are recorded apart from the bound ones (`_extension_units`), so
+    the published set a type binds stays recoverable.
+    Extending with a unit the type already displays in changes nothing, which makes
+    importing the same module twice harmless.
+
+    Raises `TypeError` for a type that has no bound units yet, no unit, or a unit
+    that does not fit.
+    """
+    if "_applicable_units" not in vars(quantity_type):
+        msg = f"{quantity_type.__name__} has no bound units to extend."
+        raise TypeError(msg)
+    added = frozenset(units)
+    if not added:
+        msg = f"{quantity_type.__name__} needs at least one unit to extend with."
+        raise TypeError(msg)
+    for unit in added:
+        _check_fits(quantity_type, unit)
+    already = quantity_type._applicable_units  # noqa: SLF001
+    extension: frozenset[object] = getattr(
+        quantity_type, "_extension_units", frozenset()
+    )
+    quantity_type._extension_units = extension | (added - already)  # noqa: SLF001
+    quantity_type._applicable_units = already | added  # noqa: SLF001
 
 
 def _published_unit(name: str) -> _Unit:

@@ -83,7 +83,13 @@ class _ScalarStorage(Generic[_UnitT]):
     __slots__ = ("_display_unit", "_magnitude")
 
     _applicable_units: ClassVar[frozenset[object]]
-    """The units this quantity type displays in, bound by `bind_units`."""
+    """The units this quantity type displays in, bound by `bind_units`.
+
+    `extend_units` adds the units of an imported collection, such as the archaic ones.
+    """
+
+    _extension_units: ClassVar[frozenset[object]]
+    """The units `extend_units` added to those `bind_units` bound; absent until then."""
 
     def __init_subclass__(cls, **kwargs: object) -> None:
         """Check that a concrete quantity type is set up completely.

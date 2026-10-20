@@ -128,6 +128,11 @@ force-single-line = true
   "PLE0605",
 ] # Same: mid-level package aggregating its own family of leaf modules.
 "src/kuchka/quantities/__init__.py" = ["PLE0605"] # Same.
+"src/kuchka/units/archaic/**" = [
+  "E501",
+  "RUF001",
+  "RUF002",
+] # The grid tables in the docstrings are wide, and the units carry their Cyrillic, Hebrew, and Japanese names.
 
 "tests/*" = [
   "ANN001", # Parametrized test arguments take on whatever values the parametrize table provides across cases;

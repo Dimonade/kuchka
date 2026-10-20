@@ -55,6 +55,19 @@ Symbols stay case-sensitive (`mV` is not `MV`), names and spoken forms ignore ca
 Iterating a table now yields display symbols (`°C`, `ΔK`), and the earlier keys (`C`, `dK`, `t`, `As`) still resolve.
 See `docs/concepts/unit_spellings.md`.
 
+#### Archaic units
+
+A collection of historic, archaic, traditional, and out of use units, imported explicitly from `kuchka.units.archaic`.
+The top-level namespace, `kuchka.units`, and the generated API list none of them, and a quantity type displays in an archaic unit once its module is imported.
+
+- `german`: the principal Meilen, with the regional ones in their own module,
+- `hebrew`: Biblical and Talmudic units,
+- `japanese`: Shakkanho units of length, area, volume, and mass,
+- `russian`: Imperial units of length and area.
+
+Modules register their units through `extend_units`, which adds units to a quantity type beside those `bind_units` bound.
+`docs/how-to/extending_kuchka.md` describes adding a unit, a quantity, and a dimension.
+
 #### Quantity kinds are catalogued separately from arithmetic
 
 Every quantity type, of any shape, is registered as a kind of its dimension, and `kuchka` does not import with a type that is missing.
