@@ -67,7 +67,8 @@ def test_the_table_of_a_type_builds_values_in_its_bound_units(cls: type) -> None
         assert type(value) is cls
         assert value.unit in bound_units(cls)
     if cls.__name__ != "Instant":
-        assert set(units_of(TABLE_OF[cls])) == set(bound_units(cls))
+        extension = getattr(cls, "_extension_units", frozenset())
+        assert set(units_of(TABLE_OF[cls])) == set(bound_units(cls)) - extension
 
 
 @pytest.mark.parametrize(("first", "second"), PAIRS, ids=PAIR_IDS)

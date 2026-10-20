@@ -21,6 +21,8 @@ PACKAGES = [
     kuchka.errors,
 ]
 PACKAGE_IDS = [package.__name__ for package in PACKAGES]
+EXPLICIT_ONLY = "archaic"
+"""The subpackage applications import explicitly, so no package re-exports it."""
 AGGREGATING_PACKAGES = [
     kuchka.units,
     kuchka.units.temporal,
@@ -59,6 +61,8 @@ def _leaf_exports(package: types.ModuleType) -> set[str]:
     """Union of the `__all__` of every module and subpackage directly inside it."""
     names: set[str] = set()
     for info in pkgutil.iter_modules(package.__path__):
+        if info.name == EXPLICIT_ONLY:
+            continue
         names |= set(importlib.import_module(f"{package.__name__}.{info.name}").__all__)
     return names
 
