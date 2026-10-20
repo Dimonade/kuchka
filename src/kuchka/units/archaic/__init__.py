@@ -47,8 +47,8 @@ pickles after conversion to a published unit.
 
 Adding a unit
 -------------
-The guide `docs/how-to/extending_kuchka.md` describes adding a unit, a quantity, and a
-dimension, and the tests each needs, with a worked example of a new tradition.
+The pages under `docs/how-to` describe adding a unit, a quantity, a dimension, and a
+new tradition, and the tests and documentation each needs.
 
 Historical accuracy and sources
 -------------------------------
