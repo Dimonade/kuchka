@@ -13,7 +13,8 @@ Two-tier export policy:
   constants (VOLT, KILOVOLT, ...) and `*_UNITS` boundary tables.
   _see docs/examples/config_migration for why those exist and who needs them._
 
-Historical units live in `kuchka.archaic`, outside both tiers.
+Historical units live in `kuchka.units.archaic`, outside both tiers, and are imported
+explicitly from the module of their tradition.
 
 The promoted names are listed in `kuchka._api`, which `tools/generate_api.py` derives
 from the `__all__` of the leaf modules under `kuchka.units` and `kuchka.quantities`.
