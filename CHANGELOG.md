@@ -57,12 +57,16 @@ See `docs/concepts/unit_spellings.md`.
 
 #### Archaic units
 
-A collection of historic, archaic, traditional, and out of use units.
-These are reachable only explicitly through `kuchka.archaic` and not polluting the API scope.
+A collection of historic, archaic, traditional, and out of use units, imported explicitly from `kuchka.units.archaic`.
+The top-level namespace, `kuchka.units`, and the generated API list none of them, and a quantity type displays in an archaic unit once its module is imported.
 
+- `german`: the principal Meilen, with the regional ones in their own module,
 - `hebrew`: Biblical and Talmudic units,
-- `japanese`: Shakkanho units,
-- `russian`: Imperial units.
+- `japanese`: Shakkanho units of length, area, volume, and mass,
+- `russian`: Imperial units of length and area.
+
+Modules register their units through `extend_units`, which adds units to a quantity type beside those `bind_units` bound.
+`docs/how-to/extending_kuchka.md` describes adding a unit, a quantity, and a dimension.
 
 #### Quantity kinds are catalogued separately from arithmetic
 
