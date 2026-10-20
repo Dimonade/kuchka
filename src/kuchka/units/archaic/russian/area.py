@@ -55,10 +55,10 @@ The sources also record chet variants of 1,250 square sazhens
 `Osminnik` is the 300-square-sazhen unit in the Russian system's general area table.
 `Osmina` is its parallel name.
 The sokha account also uses an osminnik-sized term at 600 square sazhens.
-This contextual variant is exposed as `OsminnikSokha` and is not collapsed into the
+This contextual variant is exposed as `OsminnikSokha` and stays separate from the
 standard `Osminnik`.
 
-A *sokha* was primarily a land-tax assessment unit, not a universal fixed area.
+A *sokha* was primarily a land-tax assessment unit, and its area varied.
 For the three named categories, this module follows the sokha article's best-land
 calibration: 800, 600, or 400 sowing quarters, each taken as 600 standardized
 square sazhens (2,731.349376 m²).
@@ -66,19 +66,18 @@ This is deliberately represented by the separate `SokhaQuarter` definition.
 The source also says that two such quarters equalled a desyatina, which conflicts with
 the standardized official desyatina of 2,400 square sazhens.
 Therefore these sokha definitions encode the selected area calibration only.
-They should not be read as universal tax assessments or as a claim that historical
-usage was consistent across periods.
+Historical usage varied across periods, and a tax assessment follows its own record.
 Land quality and period could change the area represented by a sokha.
 
-The metric values above are exact consequences of the standardized length scales, not a
-claim that all historical surveys used those scales.
+The metric values above are exact consequences of the standardized length scales;
+historical surveys used scales of their own.
 In particular, `SquareVersta` uses the 500-sazhen versta and `RussianSquareMile` uses
 the Russian seven-versta mile.
 
 Examples
 --------
-A Russian square mile is the square of a seven-versta Russian mile, not an English
-square mile:
+A Russian square mile is the square of a seven-versta Russian mile, which makes it far
+larger than an English square mile:
 
 >>> RussianSquareMile(1) == SquareVersta(49)
 True
@@ -99,8 +98,8 @@ True
 >>> SotennayaDesyatina(1) == SquareSazhen(10_000)
 True
 
-An estate register can combine areas recorded in different units without converting
-each line manually:
+An estate register can combine areas recorded in different units, each line kept as
+written:
 
 >>> estate = Desyatina(12) + Chet(6) + Osminnik(4)
 >>> estate == SquareSazhen(37_200)
@@ -125,7 +124,8 @@ True
 True
 
 A government sokha represents 800 of the selected sokha quarters.
-This is a historical modelling convention, not a universal assessment of land or tax:
+This is a historical modelling convention, and land and tax assessments followed
+their own records:
 
 >>> GovernmentSokha(1) == SokhaQuarter(800)
 True
@@ -167,6 +167,7 @@ See Also
 --------
 ~kuchka.quantities.Area
     The quantity every constructor in this module builds.
+
 """
 
 from __future__ import annotations
@@ -176,21 +177,24 @@ from typing import TYPE_CHECKING
 from kuchka.dimensions import AREA
 from kuchka.internal import symbols
 from kuchka.internal.unit_table import unit_table
+from kuchka.internal.unit_table import units_of
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Area
 from kuchka.quantities import UnitDef
-
+from kuchka.quantities.base.units import extend_units
 from kuchka.units.archaic.russian.length import ARSHIN
 from kuchka.units.archaic.russian.length import DYUYM
 from kuchka.units.archaic.russian.length import FUT
 from kuchka.units.archaic.russian.length import LINIYA
 from kuchka.units.archaic.russian.length import SAZHEN
-from kuchka.units.archaic.russian.length import VERSTA
 from kuchka.units.archaic.russian.length import VERSHOK
+from kuchka.units.archaic.russian.length import VERSTA
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+    from kuchka.internal.unit_table import SpelledUnit
 
 
 _TWO = symbols.SUPERSCRIPT_TWO
@@ -606,7 +610,8 @@ def RussianSquareMile(value: Numeric) -> Area:
     Notes
     -----
     One Russian mile is seven verstas.
-    Its square is therefore 49 square verstas, not an English square mile.
+    Its square is therefore 49 square verstas, which makes it far larger than an English
+    square mile.
 
     Examples
     --------
@@ -614,8 +619,8 @@ def RussianSquareMile(value: Numeric) -> Area:
     seven square verstas of pasture:
 
     >>> district = RussianSquareMile(1) + SquareVersta(7)
-    >>> district
-    SquareVersta(56)
+    >>> district == SquareVersta(56)
+    True
 
     """
     return _construct(value, SQUARE_RUSSIAN_MILE)
@@ -644,8 +649,8 @@ def SquareVersta(value: Numeric) -> Area:
     A survey map groups six one-square-versta blocks into a single reserve:
 
     >>> reserve = SquareVersta(3 * 2)
-    >>> reserve
-    SquareSazhen(1_500_000)
+    >>> reserve == SquareSazhen(1_500_000)
+    True
 
     """
     return _construct(value, SQUARE_VERSTA)
@@ -673,8 +678,8 @@ def SquareSazhen(value: Numeric) -> Area:
     A rye field measuring 40 by 30 sazhens was a traditional one-chet plot:
 
     >>> rye_field = SquareSazhen(40 * 30)
-    >>> rye_field
-    Chet(1)
+    >>> rye_field == Chet(1)
+    True
 
     """
     return _construct(value, SQUARE_SAZHEN)
@@ -703,8 +708,8 @@ def SquareArshin(value: Numeric) -> Area:
     A dyer's workshop floor is recorded as 18 by 12 arshins:
 
     >>> workshop_floor = SquareArshin(18 * 12)
-    >>> workshop_floor
-    SquareSazhen(24)
+    >>> workshop_floor == SquareSazhen(24)
+    True
 
     """
     return _construct(value, SQUARE_ARSHIN)
@@ -732,8 +737,8 @@ def SquareFut(value: Numeric) -> Area:
     An old flooring account lists a hall measuring 14 by 7 futs:
 
     >>> hall_floor = SquareFut(14 * 7)
-    >>> hall_floor
-    SquareSazhen(2)
+    >>> hall_floor == SquareSazhen(2)
+    True
 
     """
     return _construct(value, SQUARE_FUT)
@@ -761,8 +766,8 @@ def SquareVershok(value: Numeric) -> Area:
     A cabinetmaker cuts a square of decorative veneer 16 vershoks on each side:
 
     >>> veneer = SquareVershok(16 * 16)
-    >>> veneer
-    SquareArshin(1)
+    >>> veneer == SquareArshin(1)
+    True
 
     """
     return _construct(value, SQUARE_VERSHOK)
@@ -791,8 +796,8 @@ def SquareDyuym(value: Numeric) -> Area:
     An engraver orders a metal plate measuring 12 by 6 dyuym:
 
     >>> plate = SquareDyuym(12 * 6)
-    >>> plate
-    SquareFut(1) / 2
+    >>> plate == SquareFut(1) / 2
+    True
 
     """
     return _construct(value, SQUARE_DYUYM)
@@ -821,8 +826,8 @@ def SquareLiniya(value: Numeric) -> Area:
     An instrument maker lays out a fine engraving 10 liniya wide and high:
 
     >>> engraving = SquareLiniya(10 * 10)
-    >>> engraving
-    SquareDyuym(1)
+    >>> engraving == SquareDyuym(1)
+    True
 
     """
     return _construct(value, SQUARE_LINIYA)
@@ -852,8 +857,8 @@ def Desyatina(value: Numeric) -> Area:
     An estate register records 18 official desyatinas and two cheti:
 
     >>> registered_area = Desyatina(18) + Chet(2)
-    >>> registered_area
-    Desyatina(19)
+    >>> registered_area == Desyatina(19)
+    True
 
     """
     return _construct(value, DESYATINA)
@@ -882,8 +887,8 @@ def VerstaDesyatina(value: Numeric) -> Area:
     A cadastral plan marks a plot one tenth of a versta on each side:
 
     >>> plot = VerstaDesyatina(1)
-    >>> plot
-    SquareSazhen(50 * 50)
+    >>> plot == SquareSazhen(50 * 50)
+    True
 
     """
     return _construct(value, VERSTA_DESYATINA)
@@ -911,8 +916,8 @@ def ProprietorDesyatina(value: Numeric) -> Area:
     A deed records three proprietor's desyatinas plus one official desyatina:
 
     >>> deed_area = ProprietorDesyatina(3) + Desyatina(1)
-    >>> deed_area
-    Desyatina(5)
+    >>> deed_area == Desyatina(5)
+    True
 
     """
     return _construct(value, PROPRIETOR_DESYATINA)
@@ -941,8 +946,8 @@ def KosayaDesyatina(value: Numeric) -> Area:
     A surveyor transcribes an oblique desyatina from an 80-by-40-sazhen plan:
 
     >>> field = KosayaDesyatina(1)
-    >>> field
-    SquareSazhen(80 * 40)
+    >>> field == SquareSazhen(80 * 40)
+    True
 
     """
     return _construct(value, KOSAYA_DESYATINA)
@@ -964,15 +969,15 @@ def RoundDesyatina(value: Numeric) -> Area:
     Notes
     -----
     The recorded dimensions are 60 by 60 sazhens.
-    The historical name does not imply that the surveyed plot itself was circular.
+    The surveyed plot itself was a square, whatever its historical name suggests.
 
     Examples
     --------
     A land account identifies the 60-by-60-sazhen variant:
 
     >>> round_plot = RoundDesyatina(1)
-    >>> round_plot
-    SquareSazhen(60 * 60)
+    >>> round_plot == SquareSazhen(60 * 60)
+    True
 
     """
     return _construct(value, ROUND_DESYATINA)
@@ -1000,8 +1005,8 @@ def SotennayaDesyatina(value: Numeric) -> Area:
     A boundary plan reserves a square 100 sazhens on each side:
 
     >>> reserved_land = SotennayaDesyatina(1)
-    >>> reserved_land
-    SquareSazhen(100 * 100)
+    >>> reserved_land == SquareSazhen(100 * 100)
+    True
 
     """
     return _construct(value, SOTENNAYA_DESYATINA)
@@ -1029,8 +1034,8 @@ def BakhchevayaDesyatina(value: Numeric) -> Area:
     A market gardener's melon patch is entered in the ledger as 80 by 10 sazhens:
 
     >>> melon_patch = BakhchevayaDesyatina(1)
-    >>> melon_patch
-    SquareSazhen(80 * 10)
+    >>> melon_patch == SquareSazhen(80 * 10)
+    True
 
     """
     return _construct(value, BAKHCHEVAYA_DESYATINA)
@@ -1060,8 +1065,8 @@ def Chet(value: Numeric) -> Area:
     A rye plot measuring 40 by 30 sazhens is one chet under this calibration:
 
     >>> rye_plot = Chet(1)
-    >>> rye_plot
-    SquareSazhen(40 * 30)
+    >>> rye_plot == SquareSazhen(40 * 30)
+    True
 
     """
     return _construct(value, CHET)
@@ -1147,8 +1152,8 @@ def Osminnik(value: Numeric) -> Area:
     A steward divides an official desyatina into eight equal parcels:
 
     >>> parcels = Osminnik(8)
-    >>> parcels
-    Desyatina(1)
+    >>> parcels == Desyatina(1)
+    True
 
     """
     return _construct(value, OSMINNIK)
@@ -1169,18 +1174,17 @@ def SokhaQuarter(value: Numeric) -> Area:
 
     Notes
     -----
-    The source descriptions do not use *quarter* consistently across land-area and
-    sowing measures.
+    The source descriptions use *quarter* for several land-area and sowing measures.
     This named unit preserves the 600-square-sazhen calibration selected for the sokha
-    account rather than conflating it with the 1,200-square-sazhen `Chet`.
+    account and stays apart from the 1,200-square-sazhen `Chet`.
 
     Examples
     --------
     An archival sowing ledger records two sokha quarters of rye land:
 
     >>> sowing_land = SokhaQuarter(2)
-    >>> sowing_land
-    Chet(1)
+    >>> sowing_land == Chet(1)
+    True
 
     """
     return _construct(value, SOKHA_QUARTER)
@@ -1210,8 +1214,8 @@ def OsminnikSokha(value: Numeric) -> Area:
     osminnik:
 
     >>> archival_plot = OsminnikSokha(1)
-    >>> archival_plot
-    Osminnik(2)
+    >>> archival_plot == Osminnik(2)
+    True
 
     """
     return _construct(value, OSMINNIK_SOKHA)
@@ -1233,7 +1237,7 @@ def GovernmentSokha(value: Numeric) -> Area:
     Notes
     -----
     The model uses 800 `SokhaQuarter` units per government sokha.
-    A sokha was a land-tax assessment class, not a universal fixed area.
+    A sokha was a land-tax assessment class, and its area varied.
     Period and land quality matter when interpreting a historical record.
 
     Examples
@@ -1241,8 +1245,8 @@ def GovernmentSokha(value: Numeric) -> Area:
     An estate register lists three government sokhas under this model:
 
     >>> assessed_estate = GovernmentSokha(3)
-    >>> assessed_estate
-    SokhaQuarter(2400)
+    >>> assessed_estate == SokhaQuarter(2400)
+    True
 
     """
     return _construct(value, GOVERNMENT_SOKHA)
@@ -1264,7 +1268,7 @@ def ChurchSokha(value: Numeric) -> Area:
     Notes
     -----
     The model uses 600 `SokhaQuarter` units per church sokha.
-    This is one historical area convention, not a universal definition of a tax sokha.
+    This is one historical area convention among those of a tax sokha.
 
     Examples
     --------
@@ -1295,7 +1299,7 @@ def BlackSokha(value: Numeric) -> Area:
     -----
     The model uses 400 `SokhaQuarter` units per black sokha.
     The category name and conversion belong to a particular historical classification.
-    They should not be treated as a universal land-tax rule.
+    A land-tax rule of any period follows its own records.
 
     Examples
     --------
@@ -1325,7 +1329,7 @@ ChernayaSokha = BlackSokha
 ChornayaSokha = BlackSokha
 
 
-_UNIT_CONSTRUCTORS: dict[UnitDef, Callable[[Numeric], Area]] = {
+_UNIT_CONSTRUCTORS: dict[SpelledUnit, Callable[[Numeric], Area]] = {
     SQUARE_RUSSIAN_MILE: RussianSquareMile,
     SQUARE_VERSTA: SquareVersta,
     SQUARE_SAZHEN: SquareSazhen,
@@ -1355,6 +1359,9 @@ _UNIT_CONSTRUCTORS: dict[UnitDef, Callable[[Numeric], Area]] = {
 RUSSIAN_AREA_UNITS = unit_table("RUSSIAN_AREA_UNITS", _UNIT_CONSTRUCTORS)
 """Constructors by symbol, alias, or registered word for boundary code."""
 
+# Importing this module makes Area display in the units of its table.
+extend_units(Area, units_of(RUSSIAN_AREA_UNITS))
+
 
 __all__ = [
     "BAKHCHEVAYA_DESYATINA",
@@ -1364,7 +1371,6 @@ __all__ = [
     "CHET_1600",
     "CHURCH_SOKHA",
     "DESYATINA",
-    "VERSTA_DESYATINA",
     "GOVERNMENT_SOKHA",
     "KOSAYA_DESYATINA",
     "OSMINNIK",
@@ -1380,27 +1386,28 @@ __all__ = [
     "SQUARE_LINIYA",
     "SQUARE_RUSSIAN_MILE",
     "SQUARE_SAZHEN",
-    "SQUARE_VERSTA",
     "SQUARE_VERSHOK",
+    "SQUARE_VERSTA",
+    "VERSTA_DESYATINA",
     "BakhchevayaDesyatina",
     "BlackSokha",
+    "ChernayaSokha",
     "Chet",
     "Chet1250",
     "Chet1600",
     "Chetvert",
-    "ChurchSokha",
-    "ChernayaSokha",
     "ChornayaSokha",
+    "ChurchSokha",
     "Desyatina",
     "GovernmentSokha",
-    "KazyonnayaDesyatina",
     "KazennayaDesyatina",
+    "KazyonnayaDesyatina",
     "KosayaDesyatina",
-    "Osmina",
-    "OsminnikSokha",
-    "OsminaSokha",
     "OldDesyatina",
+    "Osmina",
+    "OsminaSokha",
     "Osminnik",
+    "OsminnikSokha",
     "ProprietorDesyatina",
     "RoundDesyatina",
     "RussianSquareMile",
@@ -1413,9 +1420,9 @@ __all__ = [
     "SquareFut",
     "SquareLiniya",
     "SquareSazhen",
-    "SquareVersta",
     "SquareVershok",
+    "SquareVersta",
     "TserkovnayaSokha",
-    "VladelcheskayaDesyatina",
     "VerstaDesyatina",
+    "VladelcheskayaDesyatina",
 ]

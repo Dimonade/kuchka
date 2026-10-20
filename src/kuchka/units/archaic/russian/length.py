@@ -31,11 +31,11 @@ Both are aliases of the same objects.
 
 `Shag` and `Arshin` have the same scale in this system but retain separate unit
 definitions and names.
-Although `Shag` translates as "step", it is a fixed historical length here, not a
-measurement of an individual's actual gait.
+Although `Shag` translates as "step", it is a fixed historical length here, which
+stands for any individual's gait.
 
 A number of alternative units and values exist as well.
-These historical variants have their own definitions and are not aliases of the
+These historical variants have definitions of their own, separate from the
 standardized road and surveying measures listed above.
 
 ==================  ==============  =====================  ========================
@@ -77,6 +77,7 @@ followed by six arshins from the gate to the house:
 >>> approach = Sazhen(35)
 >>> entrance = Arshin(6)
 >>> total_journey = road + approach + entrance
+>>> from kuchka.units.length import KILOMETRE
 >>> total_journey.to(KILOMETRE)
 8.6133432 km
 
@@ -93,8 +94,8 @@ True
 
 Notes
 -----
-These are the standardized values represented by this module, not a claim that every
-regional or earlier historical version of a Russian unit had the same size.
+These are the standardized values this module represents.
+Regional and earlier historical versions of a Russian unit had sizes of their own.
 
 One arshin is exactly 28 English inches, and one sazhen is exactly three arshins.
 One versta is 500 sazhens, giving exactly 1.0668 km.
@@ -105,8 +106,7 @@ It is intended for boundary code that receives historical unit names from config
 files, datasets, or transcribed measurements.
 
 For historical records, the date and local measurement convention matter:
-the standardized conversions here should not be applied blindly to every
-pre-standardization source.
+the standardized conversions here suit pre-standardization sources as approximations.
 
 See Also
 --------
@@ -120,14 +120,16 @@ See Also
 from __future__ import annotations
 
 from fractions import Fraction
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LENGTH
+from kuchka.internal.unit_table import unit_table
+from kuchka.internal.unit_table import units_of
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Length
 from kuchka.quantities import UnitDef
+from kuchka.quantities.base.units import extend_units
 from kuchka.units.length import INCH
 
 if TYPE_CHECKING:
@@ -136,10 +138,10 @@ if TYPE_CHECKING:
 
 TOCHKA = UnitDef("tochka", "tochka", INCH.scale / 100, LENGTH)
 LINIYA = UnitDef("liniya", "liniya", INCH.scale / 10, LENGTH)
-DYUYM = UnitDef("dyuym", "dyuym", INCH.scale, LENGTH)
+DYUYM = UnitDef("dyuym", "dyuym", INCH.scale, LENGTH, words=("perst",))
 VERSHOK = UnitDef("vershok", "vershok", Fraction(7, 4) * INCH.scale, LENGTH)
 LADON = UnitDef("ladon", "ladon", 3 * INCH.scale, LENGTH)
-PYAD = UnitDef("pyad", "pyad", 7 * INCH.scale, LENGTH)
+PYAD = UnitDef("pyad", "pyad", 7 * INCH.scale, LENGTH, words=("chetvert",))
 FUT = UnitDef("fut", "fut", 12 * INCH.scale, LENGTH)
 LOKOT = UnitDef("lokot", "lokot", 18 * INCH.scale, LENGTH)
 SHAG = UnitDef("shag", "shag", 28 * INCH.scale, LENGTH)
@@ -175,6 +177,7 @@ def Tochka(value: Numeric) -> Length:
     A line measuring twenty-four tochki is just over six millimetres long:
 
     >>> detail = Tochka(24)
+    >>> from kuchka.units.length import MILLIMETRE
     >>> detail.to(MILLIMETRE)
     6.096 mm
 
@@ -205,6 +208,7 @@ def Liniya(value: Numeric) -> Length:
     spine decoration:
 
     >>> spine_decoration = Liniya(6)
+    >>> from kuchka.units.length import MILLIMETRE
     >>> spine_decoration.to(MILLIMETRE)
     15.24 mm
 
@@ -235,6 +239,7 @@ def Dyuym(value: Numeric) -> Length:
     The collar is specified as three dyuymy across:
 
     >>> chimney_collar = Dyuym(3)
+    >>> from kuchka.units.length import CENTIMETRE
     >>> chimney_collar.to(CENTIMETRE)
     7.62 cm
 
@@ -266,6 +271,7 @@ def Vershok(value: Numeric) -> Length:
     The standardized measurements represented here yield:
 
     >>> height = Arshin(2) + Vershok(5)
+    >>> from kuchka.units.length import CENTIMETRE
     >>> height.to(CENTIMETRE)
     164.465 cm
 
@@ -296,6 +302,7 @@ def Ladon(value: Numeric) -> Length:
     two-ladoni-wide wooden support:
 
     >>> support_width = Ladon(2)
+    >>> from kuchka.units.length import CENTIMETRE
     >>> support_width.to(CENTIMETRE)
     15.24 cm
 
@@ -326,6 +333,7 @@ def Pyad(value: Numeric) -> Length:
     three pyadi wide:
 
     >>> opening = Pyad(3)
+    >>> from kuchka.units.length import CENTIMETRE
     >>> opening.to(CENTIMETRE)
     53.34 cm
 
@@ -356,6 +364,7 @@ def Fut(value: Numeric) -> Length:
     timber beam for its supporting frame:
 
     >>> support_beam = Fut(9)
+    >>> from kuchka.units.length import METRE
     >>> support_beam.to(METRE)
     2.7432 m
 
@@ -386,6 +395,7 @@ def Lokot(value: Numeric) -> Length:
     linen as three lokti long:
 
     >>> linen = Lokot(3)
+    >>> from kuchka.units.length import CENTIMETRE
     >>> linen.to(CENTIMETRE)
     137.16 cm
 
@@ -412,7 +422,7 @@ def Shag(value: Numeric) -> Length:
     It shares the scale of `Arshin`, but retains its own unit definition.
 
     Despite its translation as "step", this constructor represents a fixed historical
-    length, not the variable length of an actual walking step.
+    length, which stands for the varying length of an actual walking step.
 
     Examples
     --------
@@ -420,6 +430,7 @@ def Shag(value: Numeric) -> Length:
     the distance from the izba door to the well is eight standardized shagi.
 
     >>> doorway_to_well = Shag(8)
+    >>> from kuchka.units.length import METRE
     >>> doorway_to_well.to(METRE)
     5.6896 m
 
@@ -485,6 +496,7 @@ def Sazhen(value: Numeric) -> Length:
     The recorded depth is four sazhens:
 
     >>> channel_depth = Sazhen(4)
+    >>> from kuchka.units.length import METRE
     >>> channel_depth.to(METRE)
     8.5344 m
 
@@ -517,6 +529,7 @@ def Versta(value: Numeric) -> Length:
     >>> first_stage = Versta(12)
     >>> second_stage = Versta(7)
     >>> total_route = first_stage + second_stage
+    >>> from kuchka.units.length import KILOMETRE
     >>> total_route.to(KILOMETRE)
     20.2692 km
 
@@ -577,6 +590,7 @@ def MakhovayaSazhen(value: Numeric) -> Length:
     is shorter than the standardized seven-foot sazhen:
 
     >>> span = MakhovayaSazhen(1)
+    >>> from kuchka.units.length import METRE
     >>> span.to(METRE)
     1.76 m
     >>> span < Sazhen(1)
@@ -609,6 +623,7 @@ def KosayaSazhen(value: Numeric) -> Length:
     reach from a raised hand to the opposite foot as its reference measure:
 
     >>> diagonal_reach = KosayaSazhen(1)
+    >>> from kuchka.units.length import METRE
     >>> diagonal_reach.to(METRE)
     2.4892 m
 
@@ -645,7 +660,7 @@ def MezhevayaVersta(value: Numeric) -> Length:
     A provincial landowner's estate inventory, worthy of Gogol's *Dead Souls*,
     describes a rectangular meadow by its surveyed dimensions:
     one and a half border versts along the road and 240 sazhens across. The dimensions
-    produce an area directly, without manually converting either measurement:
+    produce an area directly, with each measurement used as written:
 
     >>> meadow_length = MezhevayaVersta(Fraction(3, 2))
     >>> meadow_width = Sazhen(240)
@@ -655,6 +670,7 @@ def MezhevayaVersta(value: Numeric) -> Length:
 
     The resulting area is about 164 hectares of meadowland:
 
+    >>> from kuchka.units.area import HECTARE
     >>> meadow_area.to(HECTARE)
     163.88096256 ha
 
@@ -662,26 +678,31 @@ def MezhevayaVersta(value: Numeric) -> Length:
     return Length(to_exact(value) * MEZHEVAYA_VERSTA.scale, MEZHEVAYA_VERSTA)
 
 
-RUSSIAN_LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
+RUSSIAN_LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = unit_table(
+    "RUSSIAN_LENGTH_UNITS",
     {
-        TOCHKA.symbol: Tochka,
-        LINIYA.symbol: Liniya,
-        DYUYM.symbol: Dyuym,
-        VERSHOK.symbol: Vershok,
-        LADON.symbol: Ladon,
-        PYAD.symbol: Pyad,
-        FUT.symbol: Fut,
-        LOKOT.symbol: Lokot,
-        SHAG.symbol: Shag,
-        ARSHIN.symbol: Arshin,
-        SAZHEN.symbol: Sazhen,
-        VERSTA.symbol: Versta,
-        MAKHOVAYA_SAZHEN.symbol: MakhovayaSazhen,
-        KOSAYA_SAZHEN.symbol: KosayaSazhen,
-        MEZHEVAYA_VERSTA.symbol: MezhevayaVersta,
-    }
+        TOCHKA: Tochka,
+        LINIYA: Liniya,
+        DYUYM: Dyuym,
+        VERSHOK: Vershok,
+        LADON: Ladon,
+        PYAD: Pyad,
+        FUT: Fut,
+        LOKOT: Lokot,
+        SHAG: Shag,
+        ARSHIN: Arshin,
+        SAZHEN: Sazhen,
+        VERSTA: Versta,
+        MAKHOVAYA_SAZHEN: MakhovayaSazhen,
+        KOSAYA_SAZHEN: KosayaSazhen,
+        MEZHEVAYA_VERSTA: MezhevayaVersta,
+    },
 )
 """Constructors by symbol, for configuration files and external interfaces."""
+
+
+# Importing this module makes Length display in the units of its table.
+extend_units(Length, units_of(RUSSIAN_LENGTH_UNITS))
 
 
 __all__ = [
