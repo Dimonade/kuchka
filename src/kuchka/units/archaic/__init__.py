@@ -1,65 +1,75 @@
 """Historical, regional, and culturally specific units of measurement.
 
-This package collects units of measurement that fall outside the SI and the modern
-units commonly exposed by `kuchka`.
-It includes historical and obsolete units, regional measurement systems, and units
-associated with particular peoples, cultures, trades, or traditions.
+This package collects units of measurement beyond the SI and the modern units that
+`kuchka` exposes at its top level.
+It holds historical and obsolete units, regional measurement systems, and units tied to
+particular peoples, cultures, trades, or traditions.
+*Archaic* is a practical namespace label, and a unit listed here may well remain in
+use somewhere.
 
-The term *archaic* is a practical namespace label, not a claim that every unit listed
-here has disappeared from modern use.
+Importing
+---------
+Each unit is imported explicitly from the module of its tradition and quantity:
+
+    from kuchka.units.archaic.russian.length import Arshin
+    from kuchka.units.archaic.japanese.mass import Kan
+
+The top-level `kuchka` namespace, `kuchka.units`, and the generated API list none of
+these names.
+A quantity type displays in a historical unit once the module defining it is imported,
+because the module adds its units to the quantity type when it loads.
+`Length(1, ARSHIN)` and `.to(ARSHIN)` therefore work after the Russian length module is
+imported, and an application that imports no archaic module sees no archaic unit.
 
 Organization
 ------------
-Units are grouped by their country, region, people, or another useful historical or
-cultural context.
-Individual modules define the relevant units, their conversion scales, alternative
-spellings, and known variants.
+Units are grouped by country, region, people, or another historical or cultural
+context, with one module per quantity inside each group:
 
-These units are deliberately excluded from the global user-facing API.
-Import them explicitly from the appropriate submodule under `kuchka.units.archaic`
-when they are needed.
+- `german`: the Meilen, with the principal miles in `german.length.meile` and the
+  regional ones in `german.length.regional_meilen`,
+- `hebrew`: Biblical and Talmudic lengths in three calibrations,
+- `japanese`: the shakkan-hō units of length, area, volume, and mass,
+- `russian`: the imperial-era units of length and land area.
 
 Interoperability
 ----------------
-The unit families expose `*_UNITS` tables following the same interface as the tables
-provided for the main unit families.
-These tables can resolve supported unit symbols and names to their constructors at
-application boundaries, such as when parsing configuration files or historical records.
+Every module exposes a `*_UNITS` table with the interface of the tables of the main
+unit families.
+A table resolves unit symbols, names, and other spellings to constructors at an
+application boundary, such as a configuration file or a transcribed historical record.
 
-Archaic unit constructors produce the ordinary `kuchka` quantity types.
-They therefore interoperate with modern units of the same quantity:
-values can be combined arithmetically and converted using `.to(UNIT)` in the usual way.
-No separate quantity type is required merely because a unit is historical.
+Archaic constructors build the ordinary `kuchka` quantity types, so values combine
+arithmetically with modern units of the same quantity and convert with `.to(UNIT)`.
+A historical unit needs no quantity type of its own.
+Archaic units are unpublished units, so a value displayed in one copies freely and
+pickles after conversion to a published unit.
+
+Adding a unit
+-------------
+The guide `docs/how-to/extending_kuchka.md` describes adding a unit, a quantity, and a
+dimension, and the tests each needs, with a worked example of a new tradition.
 
 Historical accuracy and sources
 -------------------------------
-These definitions are maintained on a best-effort basis.
-Research currently relies primarily on the relevant Wikipedia articles, preferably in
-the language associated with the unit or measurement system.
-These sources are a starting point for documenting the units, not a guarantee of
-scholarly consensus (as far as I know).
+The definitions are maintained on a best-effort basis from the relevant Wikipedia
+articles, preferably in the language of the unit or measurement system.
+These sources are a starting point for documenting the units, and scholarly
+consensus can differ from them.
 
-Historical measures can vary by period, location, trade, land category, or
-standardization.
-Some definitions are disputed, approximate, or preserved in sources that disagree with
-one another.
-Where known, distinct calibrations are represented separately, and relevant assumptions
-and uncertainties are documented alongside the units.
+Historical measures varied by period, place, trade, land category, and standardization.
+Some definitions are disputed or approximate, and the sources for some disagree.
+Distinct calibrations are separate units where they are known, and each module
+documents its assumptions and uncertainties beside the units.
 
-Conversion scales represent the particular historical definition adopted by this
-implementation.
-Exact arithmetic preserves that definition.
-It does not imply that the underlying historical measurement was universal or
-unambiguous.
+A conversion scale is the particular historical definition this implementation adopts,
+and exact arithmetic keeps that definition without rounding.
 
 Versioning
 ----------
-The definitions in this namespace are provisional and may be corrected as research
-improves.
-Changes to historical interpretations, spellings, or conversion scales are not, by
-themselves, considered breaking changes requiring a compatibility-version bump.
-Such changes will still be documented in `CHANGELOG.md`.
-
-This relaxed policy applies specifically to the historical data in this namespace.
-It does not change the compatibility policy for the rest of `kuchka`.
+The definitions in this namespace are provisional and change as research improves.
+A correction to a historical interpretation, a spelling, or a conversion scale is a
+documented change in the changelog and leaves the compatibility version alone.
+The compatibility policy of the rest of `kuchka` applies to everything outside this
+namespace.
 """
