@@ -19,7 +19,7 @@ Unit           Romanised    Kanji         Size
 `Bu`           Bu           分            1/100 shaku
 `Sun`          Sun          寸            1/10 shaku
 `Shaku`        Shaku        尺            10/33 m
-`Ken`          Ken          間            6 shaku
+`Ken`          Ken, Hiro    間, 尋        6 shaku
 `Jo`           Jō           丈            10 shaku
 `Cho`          Chō          町            60 ken
 `Ri`           Ri           里            36 cho
@@ -28,6 +28,8 @@ Unit           Romanised    Kanji         Size
 The shaku and sun are particularly familiar in traditional Japanese
 carpentry. Ken describes a structural interval in traditional architecture,
 while cho and ri provide larger scales for surveying and travel.
+Hiro (尋), the fathom of outstretched arms, is another name of ken and builds the
+same unit.
 
 Examples
 --------
@@ -70,8 +72,9 @@ The principal relationships are:
 ``1 cho = 60 ken = 360 shaku``
 ``1 ri = 36 cho = 12,960 shaku``
 
-These are the standardized definitions represented by this module, not a
-claim that every historical or regional Japanese convention was identical.
+These are the standardized definitions this module represents.
+Historical and regional Japanese conventions varied, and each deserves its own
+calibration.
 
 `JAPANESE_LENGTH_UNITS` maps each unit symbol, such as ``"shaku"`` or
 ``"ri"``, to its constructor. It is intended for boundary code that reads
@@ -89,20 +92,22 @@ See Also
     Area derived from multiplying two lengths.
 ~kuchka.units.length
     Modern metric and selected non-SI length constructors.
+
 """
 
 from __future__ import annotations
 
 from fractions import Fraction
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LENGTH
 from kuchka.internal.unit_table import unit_table
+from kuchka.internal.unit_table import units_of
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Length
 from kuchka.quantities import UnitDef
+from kuchka.quantities.base.units import extend_units
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -130,16 +135,12 @@ RIN = UnitDef(
 BU = UnitDef("bu", "bu", _SHAKU / 100, LENGTH, aliases=("分",))
 SUN = UnitDef("sun", "sun", _SHAKU / 10, LENGTH, aliases=("寸",))
 SHAKU = UnitDef("shaku", "shaku", _SHAKU, LENGTH, aliases=("尺",))
-KEN = UnitDef("ken", "ken", 6 * _SHAKU, LENGTH, aliases=("間",))
+KEN = UnitDef("ken", "ken", 6 * _SHAKU, LENGTH, aliases=("間", "尋"), words=("hiro",))
 JO = UnitDef("jo", "jo", 10 * _SHAKU, LENGTH, aliases=("丈",))
 CHO = UnitDef("cho", "cho", 60 * KEN.scale, LENGTH, aliases=("町",))
 RI = UnitDef("ri", "ri", 36 * CHO.scale, LENGTH, aliases=("里",))
 
-# TODO: KEN and HIRO are different names of same unit.
-"""
-Ken[b] 	間 	6  20/11 m 	1.818 m 	25,000/12,573 yd 	5 ft 11.6 in
-Hiro 	尋
-"""
+HIRO = KEN
 
 
 def Mo(value: Numeric) -> Length:
@@ -169,6 +170,7 @@ def Mo(value: Numeric) -> Length:
     >>> registration_mark = Mo(165)
     >>> registration_mark.to(MILLIMETRE)
     5 mm
+
     """
     return Length(to_exact(value) * MO.scale, MO)
 
@@ -199,6 +201,7 @@ def Rin(value: Numeric) -> Length:
     >>> inlay_section = Rin(66)
     >>> inlay_section.to(MILLIMETRE)
     20 mm
+
     """
     return Length(to_exact(value) * RIN.scale, RIN)
 
@@ -229,6 +232,7 @@ def Bu(value: Numeric) -> Length:
     >>> rail = Bu(33)
     >>> (rail * 3).to(CENTIMETRE)
     30 cm
+
     """
     return Length(to_exact(value) * BU.scale, BU)
 
@@ -259,6 +263,7 @@ def Sun(value: Numeric) -> Length:
     >>> projection = Sun(2)
     >>> (member + projection).to(SHAKU)
     1.2 shaku
+
     """
     return Length(to_exact(value) * SUN.scale, SUN)
 
@@ -288,6 +293,7 @@ def Shaku(value: Numeric) -> Length:
     >>> flute_length = Shaku(1) + Sun(8)
     >>> flute_length
     1.8 shaku
+
     """
     return Length(to_exact(value) * SHAKU.scale, SHAKU)
 
@@ -318,6 +324,7 @@ def Ken(value: Numeric) -> Length:
     >>> walkway = Ken(33)
     >>> walkway.to(METRE)
     60 m
+
     """
     return Length(to_exact(value) * KEN.scale, KEN)
 
@@ -349,6 +356,7 @@ def Jo(value: Numeric) -> Length:
     >>> tower_height = Jo(1) + Shaku(23)
     >>> tower_height.to(METRE)
     10 m
+
     """
     return Length(to_exact(value) * JO.scale, JO)
 
@@ -379,6 +387,7 @@ def Cho(value: Numeric) -> Length:
     >>> channel_length = Cho(11)
     >>> channel_length.to(KILOMETRE)
     1.2 km
+
     """
     return Length(to_exact(value) * CHO.scale, CHO)
 
@@ -409,8 +418,12 @@ def Ri(value: Numeric) -> Length:
     >>> surveyed_route = Ri(11)
     >>> surveyed_route.to(KILOMETRE)
     43.2 km
+
     """
     return Length(to_exact(value) * RI.scale, RI)
+
+
+Hiro = Ken
 
 
 JAPANESE_LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = unit_table(
@@ -430,24 +443,30 @@ JAPANESE_LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = unit_table(
 """Length constructors by symbol, for configuration files and external interfaces."""
 
 
+# Importing this module makes Length display in the units of its table.
+extend_units(Length, units_of(JAPANESE_LENGTH_UNITS))
+
+
 __all__ = [
     "BU",
     "CHO",
+    "HIRO",
     "JAPANESE_LENGTH_UNITS",
     "JO",
     "KEN",
+    "MO",
     "RI",
+    "RIN",
     "SHAKU",
     "SUN",
     "Bu",
     "Cho",
+    "Hiro",
     "Jo",
     "Ken",
+    "Mo",
     "Ri",
+    "Rin",
     "Shaku",
     "Sun",
-    "MO",
-    "RIN",
-    "Mo",
-    "Rin",
 ]

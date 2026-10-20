@@ -53,6 +53,7 @@ its available metal in kan. Eight kan divided among four casting batches
 gives each batch a mass of:
 
 >>> bronze_stock = Kan(8)
+>>> from kuchka.units.mass import KILOGRAM
 >>> casting_mass = (bronze_stock / 4).to(KILOGRAM)
 >>> casting_mass
 7.5 kg
@@ -65,10 +66,9 @@ The principal standardized definitions are:
 ``1 kin = 160 monme = 600 g``
 ``1 kan = 1000 monme = 3.75 kg``
 
-These definitions represent the selected standardized system, not every
-historical or regional convention. In particular, the modern metric
-equivalences should not be applied uncritically to records made before
-standardization.
+These definitions represent the selected standardized system.
+Records made before standardization follow their own conventions, so the modern metric
+equivalences suit them as approximations.
 
 `JAPANESE_MASS_UNITS` maps each unit symbol, such as ``"monme"`` or
 ``"kan"``, to its constructor. It is intended for boundary code that reads
@@ -86,74 +86,75 @@ See Also
     Mass per unit volume.
 ~kuchka.units.mass
     Modern metric and selected non-SI mass constructors.
+
 """
 
 from __future__ import annotations
 
-from decimal import Decimal
-from types import MappingProxyType
+from fractions import Fraction
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import MASS
 from kuchka.internal.unit_table import unit_table
+from kuchka.internal.unit_table import units_of
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Mass
 from kuchka.quantities import UnitDef
+from kuchka.quantities.base.units import extend_units
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
 
+KAN = UnitDef(
+    "kan",
+    "kan",
+    Fraction(15, 4),
+    MASS,
+    aliases=("貫", "貫目"),
+    words=("kanme",),
+)
 MO = UnitDef(
     "mo",
     "mo",
-    KAN.scale / Decimal(1_000_000),
+    KAN.scale / 1_000_000,
     MASS,
     aliases=("毛", "毫", "mō"),
 )
 RIN = UnitDef(
     "rin",
     "rin",
-    KAN.scale / Decimal(100_000),
+    KAN.scale / 100_000,
     MASS,
     aliases=("厘",),
 )
 FUN = UnitDef(
     "fun",
     "fun",
-    KAN.scale / Decimal(10_000),
+    KAN.scale / 10_000,
     MASS,
     aliases=("分",),
 )
 MONME = UnitDef(
     "monme",
     "monme",
-    Decimal("0.00375"),
+    KAN.scale / 1000,
     MASS,
-    aliases=("匁", "momme"),
+    aliases=("匁",),
+    words=("momme",),
 )
 HYAKUME = UnitDef(
     "hyakume",
     "hyakume",
-    KAN.scale / Decimal(10),
+    KAN.scale / 10,
     MASS,
     aliases=("百目",),
 )
 KIN = UnitDef("kin", "kin", 160 * MONME.scale, MASS, aliases=("斤",))
-KAN = UnitDef(
-    "kan",
-    "kan",
-    1000 * MONME.scale,
-    MASS,
-    aliases=("貫", "貫目", "kanme"),
-)
 MARU = UnitDef("maru", "maru", 8 * KAN.scale, MASS, aliases=("丸",))
 TAN = UnitDef("tan", "tan", 16 * KAN.scale, MASS, aliases=("担", "擔"))
-
-# TODO: MONME can be aliased to MOMME?
-# TODO: KAN and KANME?
 
 
 def Mo(value: Numeric) -> Mass:
@@ -182,6 +183,7 @@ def Mo(value: Numeric) -> Mass:
     >>> gold_foil = Mo(800)
     >>> gold_foil.to(GRAM)
     3 g
+
     """
     return Mass(to_exact(value) * MO.scale, MO)
 
@@ -212,6 +214,7 @@ def Rin(value: Numeric) -> Mass:
     >>> sample = Rin(8)
     >>> sample.to(GRAM)
     0.3 g
+
     """
     return Mass(to_exact(value) * RIN.scale, RIN)
 
@@ -242,6 +245,7 @@ def Fun(value: Numeric) -> Mass:
     >>> preparation = Fun(8)
     >>> preparation.to(GRAM)
     3 g
+
     """
     return Mass(to_exact(value) * FUN.scale, FUN)
 
@@ -272,6 +276,7 @@ def Monme(value: Numeric) -> Mass:
     >>> consignment = Monme(80)
     >>> (consignment / 4).to(GRAM)
     75 g
+
     """
     return Mass(to_exact(value) * MONME.scale, MONME)
 
@@ -303,6 +308,7 @@ def Hyakume(value: Numeric) -> Mass:
     >>> package_mass = (shipment / 3).to(GRAM)
     >>> package_mass
     125 g
+
     """
     return Mass(to_exact(value) * HYAKUME.scale, HYAKUME)
 
@@ -334,6 +340,7 @@ def Kin(value: Numeric) -> Mass:
     >>> batch_mass = (bean_stock / 6).to(GRAM)
     >>> batch_mass
     500 g
+
     """
     return Mass(to_exact(value) * KIN.scale, KIN)
 
@@ -366,6 +373,7 @@ def Kan(value: Numeric) -> Mass:
     >>> casting_mass = (bronze_stock / 4).to(KILOGRAM)
     >>> casting_mass
     7.5 kg
+
     """
     return Mass(to_exact(value) * KAN.scale, KAN)
 
@@ -397,6 +405,7 @@ def Maru(value: Numeric) -> Mass:
     >>> load_mass = (inventory / 6).to(KILOGRAM)
     >>> load_mass
     15 kg
+
     """
     return Mass(to_exact(value) * MARU.scale, MARU)
 
@@ -428,6 +437,7 @@ def Tan(value: Numeric) -> Mass:
     >>> lot_mass = (delivery / 10).to(KILOGRAM)
     >>> lot_mass
     30 kg
+
     """
     return Mass(to_exact(value) * TAN.scale, TAN)
 
@@ -448,25 +458,28 @@ JAPANESE_MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = unit_table(
 )
 """Mass constructors by symbol, for configuration files and external interfaces."""
 
+# Importing this module makes Mass display in the units of its table.
+extend_units(Mass, units_of(JAPANESE_MASS_UNITS))
+
 
 __all__ = [
+    "FUN",
+    "HYAKUME",
     "JAPANESE_MASS_UNITS",
     "KAN",
     "KIN",
-    "MONME",
-    "Kan",
-    "Kin",
-    "Monme",
-    "FUN",
-    "HYAKUME",
     "MARU",
     "MO",
+    "MONME",
     "RIN",
     "TAN",
     "Fun",
     "Hyakume",
+    "Kan",
+    "Kin",
     "Maru",
     "Mo",
+    "Monme",
     "Rin",
     "Tan",
 ]

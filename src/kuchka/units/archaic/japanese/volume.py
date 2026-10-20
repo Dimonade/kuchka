@@ -30,10 +30,9 @@ To      To         斗     10              24,010/1,331 L
 Koku    Koku       石     100             240,100/1,331 L
 ======= ========== ====== =============== =======================
 
-The metric values are exact fractions, not rounded approximations.
+The metric values are exact fractions.
 In particular, one shō is exactly 2401/1331 litres under the standardized capacity
-definition.
-It is close to, but not exactly, 1.8 litres.
+definition, which is slightly more than 1.8 litres.
 
 Examples
 --------
@@ -80,10 +79,9 @@ local namespace.
 ``Koku`` models the standardized capacity unit 石 equal to 100 shō.
 Historical trade also used commodity-specific measures called shipping koku, timber
 koku, and fish koku.
-Those conventions did not always denote this same volume, and are not represented by
-this constructor.
-These definitions follow the selected standardized system rather than every historical
-or regional practice.
+Those conventions denoted volumes of their own, which this constructor leaves to a
+future definition.
+These definitions follow the selected standardized system.
 
 ``JAPANESE_VOLUME_UNITS`` maps unit symbols such as ``"gō"``, ``"sho"``, and ``"石"`` to
 their constructors.
@@ -103,6 +101,7 @@ See Also
     Metric and other volume constructors, including litres and cubic metres.
 ~kuchka.units.japanese.mass
     Japanese mass units, including the kan used in historical weight records.
+
 """
 
 from __future__ import annotations
@@ -112,10 +111,12 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import VOLUME
 from kuchka.internal.unit_table import unit_table
+from kuchka.internal.unit_table import units_of
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import UnitDef
 from kuchka.quantities import Volume
+from kuchka.quantities.base.units import extend_units
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -192,6 +193,7 @@ def Sai(value: Numeric) -> Volume:
     >>> usable = (measured - Shaku(5)).to(GO)
     >>> usable
     9.5 go
+
     """
     return Volume(to_exact(value) * SAI.scale, SAI)
 
@@ -212,7 +214,8 @@ def Shaku(value: Numeric) -> Volume:
     Notes
     -----
     One shaku is 1/100 shō, or exactly 2401/133,100 litres.
-    This is the volume unit 勺, not the length unit 尺.
+    This is the volume unit 勺; the length unit 尺 has its own constructor in the length
+    module.
 
     Examples
     --------
@@ -222,6 +225,7 @@ def Shaku(value: Numeric) -> Volume:
     >>> trial_blend = Shaku(12) + Shaku(8) + Go(3)
     >>> trial_blend.to(GO)
     5 go
+
     """
     return Volume(to_exact(value) * SHAKU.scale, SHAKU)
 
@@ -253,6 +257,7 @@ def Go(value: Numeric) -> Volume:
     >>> saleable = Sho(6) - Go(12)
     >>> saleable.to(GO)
     48 go
+
     """
     return Volume(to_exact(value) * GO.scale, GO)
 
@@ -286,6 +291,7 @@ def Sho(value: Numeric) -> Volume:
     >>> cask_fill = (saleable / 6).to(SHO)
     >>> cask_fill
     2 sho
+
     """
     return Volume(to_exact(value) * SHO.scale, SHO)
 
@@ -317,6 +323,7 @@ def To(value: Numeric) -> Volume:
     >>> each_vat = (remainder / 7).to(SHO)
     >>> each_vat
     5 sho
+
     """
     return Volume(to_exact(value) * TO.scale, TO)
 
@@ -339,7 +346,7 @@ def Koku(value: Numeric) -> Volume:
     One koku is one hundred shō, or exactly 240,100/1331 litres.
     The koku was prominent in rice-yield and stipend records.
     The familiar comparison with a person's yearly rice needs is a historical rule of
-    thumb, not a universal nutritional or accounting definition.
+    thumb, which suits a story and serves no accounting definition.
 
     Examples
     --------
@@ -352,6 +359,7 @@ def Koku(value: Numeric) -> Volume:
     >>> storehouse_share = ((harvest - central_reserve) / 7).to(KOKU)
     >>> storehouse_share
     2 koku
+
     """
     return Volume(to_exact(value) * KOKU.scale, KOKU)
 
@@ -368,3 +376,24 @@ JAPANESE_VOLUME_UNITS: Mapping[str, Callable[[Numeric], Volume]] = unit_table(
     },
 )
 """Volume constructors by symbol, for configuration files and external interfaces."""
+
+
+# Importing this module makes Volume display in the units of its table.
+extend_units(Volume, units_of(JAPANESE_VOLUME_UNITS))
+
+
+__all__ = [
+    "GO",
+    "JAPANESE_VOLUME_UNITS",
+    "KOKU",
+    "SAI",
+    "SHAKU",
+    "SHO",
+    "TO",
+    "Go",
+    "Koku",
+    "Sai",
+    "Shaku",
+    "Sho",
+    "To",
+]

@@ -4,7 +4,8 @@ These units belong to the shakkan-hō (尺貫法) measurement tradition.
 The *tsubo* (坪) is the principal reference unit for this area scale:
 one tsubo is equivalent to a square *ken* (間), or 36 square shaku (尺).
 The smaller unit written 勺 is also romanised *shaku*, but it is a distinct area unit
-equal to 1/100 tsubo; it is not a square shaku.
+equal to 1/100 tsubo, which makes it a unit of its own and leaves the square shaku
+unnamed.
 
 Japanese area units appear in two especially familiar settings.
 The *jō* (畳 or 帖) is used when discussing tatami-based floor plans, while *tsubo* is
@@ -28,10 +29,10 @@ Tan               Tan        段, 反  300          120,000/121 m²
 Chobu             Chōbu      町歩    3,000        1,200,000/121 m²
 ================= ========== ======= ============ =====================
 
-The scales are exact fractions, not rounded metric approximations.
+The scales are exact fractions.
 In this standardized table, one *jō* is half a tsubo, but actual tatami mats have
 varied by region and building convention.
-A count of physical mats therefore need not equal an exact area computed with ``Jo``.
+A count of physical mats can therefore differ from the area computed with ``Jo``.
 
 Examples
 --------
@@ -64,8 +65,8 @@ The remaining land is divided equally among three households:
 
 Notes
 -----
-These are selected standardized definitions, not a claim that every historic
-or regional convention used the same values.
+These are selected standardized definitions; historic and regional conventions used
+values of their own.
 
 ``JAPANESE_AREA_UNITS`` maps unit symbols such as ``"tsubo"``, ``"tan"``, and ``"町歩"``
 to their constructors.
@@ -83,6 +84,7 @@ See Also
     Metric and other area constructors, including square metres and hectares.
 ~kuchka.units.japanese.length
     Japanese length units, including shaku and ken.
+
 """
 
 from __future__ import annotations
@@ -92,10 +94,12 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import AREA
 from kuchka.internal.unit_table import unit_table
+from kuchka.internal.unit_table import units_of
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Area
 from kuchka.quantities import UnitDef
+from kuchka.quantities.base.units import extend_units
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -176,7 +180,8 @@ def Shaku(value: Numeric) -> Area:
     Notes
     -----
     One shaku (勺) is 1/100 tsubo, or exactly 4/121 square metres.
-    Do not confuse it with shaku (尺), the length unit, or treat it as one square shaku.
+    Shaku (尺), the length unit, is a different unit, and one square shaku is another
+    area again.
 
     Examples
     --------
@@ -187,8 +192,9 @@ def Shaku(value: Numeric) -> Area:
     >>> threshold = Shaku(25)
     >>> (apron + threshold).to(TSUBO)
     2 tsubo
+
     """
-    return Area(to_exact(value) * SHAKU_AREA.scale, SHAKU_AREA)
+    return Area(to_exact(value) * SHAKU.scale, SHAKU)
 
 
 def Go(value: Numeric) -> Area:
@@ -215,8 +221,9 @@ def Go(value: Numeric) -> Area:
 
     >>> landing = Go(4)
     >>> drainage_apron = Go(6)
-    >>> (landing + drainage_apron).to(Tsubo)
+    >>> (landing + drainage_apron).to(TSUBO)
     1 tsubo
+
     """
     return Area(to_exact(value) * GO.scale, GO)
 
@@ -237,8 +244,8 @@ def Jo(value: Numeric) -> Area:
     Notes
     -----
     In the standardized scale, one jō is half a tsubo, or exactly 200/121 square metres.
-    Physical tatami dimensions vary, so this constructor models the nominal area unit
-    rather than a particular mat's measured dimensions.
+    Physical tatami dimensions vary, so this constructor models the nominal area unit,
+    which stands for any mat of that standard.
 
     Examples
     --------
@@ -248,6 +255,7 @@ def Jo(value: Numeric) -> Area:
     >>> rooms = Jo(8) + Jo(6)
     >>> (rooms - Jo(1)).to(TSUBO)
     6.5 tsubo
+
     """
     return Area(to_exact(value) * JO.scale, JO)
 
@@ -282,6 +290,7 @@ def Tsubo(value: Numeric) -> Area:
     >>> entrance_and_drive = Tsubo(3)
     >>> lot - footprint - entrance_and_drive
     24 tsubo
+
     """
     return Area(to_exact(value) * TSUBO.scale, TSUBO)
 
@@ -310,10 +319,11 @@ def Bu(value: Numeric) -> Area:
     The remaining cultivated area is seven se:
 
     >>> cultivated = Bu(240) - Bu(30)
-    >>> cultivated.to(Se)
+    >>> cultivated.to(SE)
     7 se
+
     """
-    return Area(to_exact(value) * BU_AREA.scale, BU_AREA)
+    return Area(to_exact(value) * BU.scale, BU)
 
 
 def Se(value: Numeric) -> Area:
@@ -342,6 +352,7 @@ def Se(value: Numeric) -> Area:
     >>> vegetable_plots = Se(2) + Se(3) + Se(4)
     >>> vegetable_plots - Se(1)
     8 se
+
     """
     return Area(to_exact(value) * SE.scale, SE)
 
@@ -370,8 +381,9 @@ def Tan(value: Numeric) -> Area:
 
     >>> paddy = Tan(2)
     >>> nursery = Se(3)
-    >>> (paddy - nursery).to(Se)
+    >>> (paddy - nursery).to(SE)
     17 se
+
     """
     return Area(to_exact(value) * TAN.scale, TAN)
 
@@ -392,8 +404,8 @@ def Chobu(value: Numeric) -> Area:
     Notes
     -----
     One chōbu is 3,000 tsubo, or exactly 1,200,000/121 square metres.
-    The spelling chōbu identifies the area unit; plain 町 is not registered as an alias
-    because it can also denote a unit of length.
+    The spelling chōbu identifies the area unit; the plain 町 can also denote a unit of
+    length, so the area unit is reached through 町歩.
 
     Examples
     --------
@@ -402,6 +414,7 @@ def Chobu(value: Numeric) -> Area:
 
     >>> (Chobu(2) - Tan(1)).to(TAN)
     19 tan
+
     """
     return Area(to_exact(value) * CHOBU.scale, CHOBU)
 
@@ -420,3 +433,28 @@ JAPANESE_AREA_UNITS: Mapping[str, Callable[[Numeric], Area]] = unit_table(
     },
 )
 """Area constructors by symbol, for configuration files and external interfaces."""
+
+
+# Importing this module makes Area display in the units of its table.
+extend_units(Area, units_of(JAPANESE_AREA_UNITS))
+
+
+__all__ = [
+    "BU",
+    "CHOBU",
+    "GO",
+    "JAPANESE_AREA_UNITS",
+    "JO",
+    "SE",
+    "SHAKU",
+    "TAN",
+    "TSUBO",
+    "Bu",
+    "Chobu",
+    "Go",
+    "Jo",
+    "Se",
+    "Shaku",
+    "Tan",
+    "Tsubo",
+]
