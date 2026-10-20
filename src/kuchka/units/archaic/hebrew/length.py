@@ -40,7 +40,7 @@ Each unit therefore comes in three calibrations:
 * the `Naeh` suffix follows Rabbi Avraham Chaim Naeh, using an etzba of 2 cm;
 * the `ChazonIsh` suffix follows the Chazon Ish, using an etzba of 2.38 cm.
 
-The reference calibration is a convenient common scale, not a separate halakhic ruling.
+The reference calibration is a convenient common scale of 2.2 cm per etzba.
 The Naeh and Chazon Ish calibrations represent distinct interpretations of traditional
 measurements.
 
@@ -54,7 +54,8 @@ Examples
 An educational exhibit about the *techum Shabbat* illustrates the traditional 2000-amah
 boundary.
 The exhibit lets visitors compare the three calibration conventions.
-These calculations are illustrative, not a practical halakhic ruling:
+These calculations are illustrative and leave practical halakhic rulings to the
+authorities:
 
 >>> from kuchka.units.length import KILOMETRE, CENTIMETRE, METRE
 >>> reference_boundary = Mil(1).to(KILOMETRE)
@@ -108,8 +109,8 @@ These are exact decimal values in the computational model.
 The historical and halakhic interpretations remain matters of scholarship and religious
 tradition.
 
-The names `Mil` and `Parsa` refer to historical travel distances, not to the modern
-statute mile or a universally fixed real-world journey.
+The names `Mil` and `Parsa` refer to historical travel distances that differ from the
+modern statute mile and from any fixed real-world journey.
 This module uses the stated relationships to provide deterministic arithmetic.
 
 `HEBREW_LENGTH_UNITS` maps every symbol, such as ``"amah"`` or ``"amah (Naeh)"``, to
@@ -125,19 +126,22 @@ See Also
     Area derived from multiplying two lengths.
 ~kuchka.units.length
     Modern metric and selected non-SI length constructors.
+
 """
 
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LENGTH
+from kuchka.internal.unit_table import unit_table
+from kuchka.internal.unit_table import units_of
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Length
 from kuchka.quantities import UnitDef
+from kuchka.quantities.base.units import extend_units
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -476,7 +480,6 @@ def TefachNaeh(value: Numeric) -> Length:
 
     Uses Rabbi Avraham Chaim Naeh's calibration: an etzba of 2 cm.
 
-    Examples
     Examples
     --------
     A workshop designing a patterned tile for a Jerusalem courtyard display specifies a
@@ -856,6 +859,7 @@ def Hasit(value: Numeric) -> Length:
     >>> panel_height = Tefach(3)
     >>> panel_width * panel_height
     0.185856 m²
+
     """
     return Length(to_exact(value) * HASIT.scale, HASIT)
 
@@ -888,6 +892,7 @@ def HasitNaeh(value: Numeric) -> Length:
     >>> panel_height = TefachNaeh(4)
     >>> panel_width * panel_height
     0.256 m²
+
     """
     return Length(to_exact(value) * HASIT_NAEH.scale, HASIT_NAEH)
 
@@ -919,6 +924,7 @@ def HasitChazonIsh(value: Numeric) -> Length:
     >>> panel_height = TefachChazonIsh(2)
     >>> panel_width * panel_height
     0.10875648 m²
+
     """
     return Length(
         to_exact(value) * HASIT_CHAZON_ISH.scale,
@@ -952,7 +958,8 @@ def Pesiah(value: Numeric) -> Length:
     >>> passage_length = Pesiah(18)
     >>> passage_width = Amah(4)
     >>> passage_length * passage_width
-    20.060448 m²
+    20.072448 m²
+
     """
     return Length(to_exact(value) * PESIAH.scale, PESIAH)
 
@@ -983,6 +990,7 @@ def PesiahNaeh(value: Numeric) -> Length:
     >>> walkway_width = TefachNaeh(3)
     >>> walkway_length * walkway_width
     3.456 m²
+
     """
     return Length(to_exact(value) * PESIAH_NAEH.scale, PESIAH_NAEH)
 
@@ -1014,6 +1022,7 @@ def PesiahChazonIsh(value: Numeric) -> Length:
     >>> lane_width = TefachChazonIsh(2)
     >>> lane_length * lane_width
     1.30507776 m²
+
     """
     return Length(
         to_exact(value) * PESIAH_CHAZON_ISH.scale,
@@ -1049,6 +1058,7 @@ def DerekhYom(value: Numeric) -> Length:
     >>> from kuchka.units.length import KILOMETRE
     >>> route.to(KILOMETRE)
     48.582336 km
+
     """
     return Length(to_exact(value) * DEREKH_YOM.scale, DEREKH_YOM)
 
@@ -1080,6 +1090,7 @@ def DerekhYomNaeh(value: Numeric) -> Length:
     >>> from kuchka.units.length import KILOMETRE
     >>> route.to(KILOMETRE)
     43.2 km
+
     """
     return Length(
         to_exact(value) * DEREKH_YOM_NAEH.scale,
@@ -1114,6 +1125,7 @@ def DerekhYomChazonIsh(value: Numeric) -> Length:
     >>> from kuchka.units.length import KILOMETRE
     >>> route.to(KILOMETRE)
     52.5504 km
+
     """
     return Length(
         to_exact(value) * DEREKH_YOM_CHAZON_ISH.scale,
@@ -1121,50 +1133,61 @@ def DerekhYomChazonIsh(value: Numeric) -> Length:
     )
 
 
-HEBREW_LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
+HEBREW_LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = unit_table(
+    "HEBREW_LENGTH_UNITS",
     {
-        ETZBA.symbol: Etzba,
-        TEFACH.symbol: Tefach,
-        ZERET.symbol: Zeret,
-        AMAH.symbol: Amah,
-        MIL.symbol: Mil,
-        PARSA.symbol: Parsa,
-        ETZBA_NAEH.symbol: EtzbaNaeh,
-        TEFACH_NAEH.symbol: TefachNaeh,
-        ZERET_NAEH.symbol: ZeretNaeh,
-        AMAH_NAEH.symbol: AmahNaeh,
-        MIL_NAEH.symbol: MilNaeh,
-        PARSA_NAEH.symbol: ParsaNaeh,
-        ETZBA_CHAZON_ISH.symbol: EtzbaChazonIsh,
-        TEFACH_CHAZON_ISH.symbol: TefachChazonIsh,
-        ZERET_CHAZON_ISH.symbol: ZeretChazonIsh,
-        AMAH_CHAZON_ISH.symbol: AmahChazonIsh,
-        MIL_CHAZON_ISH.symbol: MilChazonIsh,
-        PARSA_CHAZON_ISH.symbol: ParsaChazonIsh,
+        ETZBA: Etzba,
+        TEFACH: Tefach,
+        ZERET: Zeret,
+        AMAH: Amah,
+        MIL: Mil,
+        PARSA: Parsa,
+        ETZBA_NAEH: EtzbaNaeh,
+        TEFACH_NAEH: TefachNaeh,
+        ZERET_NAEH: ZeretNaeh,
+        AMAH_NAEH: AmahNaeh,
+        MIL_NAEH: MilNaeh,
+        PARSA_NAEH: ParsaNaeh,
+        ETZBA_CHAZON_ISH: EtzbaChazonIsh,
+        TEFACH_CHAZON_ISH: TefachChazonIsh,
+        ZERET_CHAZON_ISH: ZeretChazonIsh,
+        AMAH_CHAZON_ISH: AmahChazonIsh,
+        MIL_CHAZON_ISH: MilChazonIsh,
+        PARSA_CHAZON_ISH: ParsaChazonIsh,
         # Talmudic additions, reference calibration.
-        HASIT.symbol: Hasit,
-        PESIAH.symbol: Pesiah,
-        DEREKH_YOM.symbol: DerekhYom,
+        HASIT: Hasit,
+        PESIAH: Pesiah,
+        DEREKH_YOM: DerekhYom,
         # Talmudic additions, Naeh calibration.
-        HASIT_NAEH.symbol: HasitNaeh,
-        PESIAH_NAEH.symbol: PesiahNaeh,
-        DEREKH_YOM_NAEH.symbol: DerekhYomNaeh,
+        HASIT_NAEH: HasitNaeh,
+        PESIAH_NAEH: PesiahNaeh,
+        DEREKH_YOM_NAEH: DerekhYomNaeh,
         # Talmudic additions, Chazon Ish calibration.
-        HASIT_CHAZON_ISH.symbol: HasitChazonIsh,
-        PESIAH_CHAZON_ISH.symbol: PesiahChazonIsh,
-        DEREKH_YOM_CHAZON_ISH.symbol: DerekhYomChazonIsh,
-    }
+        HASIT_CHAZON_ISH: HasitChazonIsh,
+        PESIAH_CHAZON_ISH: PesiahChazonIsh,
+        DEREKH_YOM_CHAZON_ISH: DerekhYomChazonIsh,
+    },
 )
 """Constructors by symbol, for configuration files and external interfaces."""
+
+
+# Importing this module makes Length display in the units of its table.
+extend_units(Length, units_of(HEBREW_LENGTH_UNITS))
 
 
 __all__ = [
     "AMAH",
     "AMAH_CHAZON_ISH",
     "AMAH_NAEH",
+    "DEREKH_YOM",
+    "DEREKH_YOM_CHAZON_ISH",
+    "DEREKH_YOM_NAEH",
     "ETZBA",
     "ETZBA_CHAZON_ISH",
     "ETZBA_NAEH",
+    "HASIT",
+    "HASIT_CHAZON_ISH",
+    "HASIT_NAEH",
     "HEBREW_LENGTH_UNITS",
     "MIL",
     "MIL_CHAZON_ISH",
@@ -1172,6 +1195,9 @@ __all__ = [
     "PARSA",
     "PARSA_CHAZON_ISH",
     "PARSA_NAEH",
+    "PESIAH",
+    "PESIAH_CHAZON_ISH",
+    "PESIAH_NAEH",
     "TEFACH",
     "TEFACH_CHAZON_ISH",
     "TEFACH_NAEH",
@@ -1181,37 +1207,28 @@ __all__ = [
     "Amah",
     "AmahChazonIsh",
     "AmahNaeh",
+    "DerekhYom",
+    "DerekhYomChazonIsh",
+    "DerekhYomNaeh",
     "Etzba",
     "EtzbaChazonIsh",
     "EtzbaNaeh",
+    "Hasit",
+    "HasitChazonIsh",
+    "HasitNaeh",
     "Mil",
     "MilChazonIsh",
     "MilNaeh",
     "Parsa",
     "ParsaChazonIsh",
     "ParsaNaeh",
+    "Pesiah",
+    "PesiahChazonIsh",
+    "PesiahNaeh",
     "Tefach",
     "TefachChazonIsh",
     "TefachNaeh",
     "Zeret",
     "ZeretChazonIsh",
     "ZeretNaeh",
-    "DEREKH_YOM",
-    "DEREKH_YOM_CHAZON_ISH",
-    "DEREKH_YOM_NAEH",
-    "HASIT",
-    "HASIT_CHAZON_ISH",
-    "HASIT_NAEH",
-    "PESIAH",
-    "PESIAH_CHAZON_ISH",
-    "PESIAH_NAEH",
-    "DerekhYom",
-    "DerekhYomChazonIsh",
-    "DerekhYomNaeh",
-    "Hasit",
-    "HasitChazonIsh",
-    "HasitNaeh",
-    "Pesiah",
-    "PesiahChazonIsh",
-    "PesiahNaeh",
 ]
