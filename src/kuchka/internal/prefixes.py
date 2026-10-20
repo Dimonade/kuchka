@@ -13,6 +13,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import Decimal
+from fractions import Fraction
 from typing import TYPE_CHECKING
 
 from kuchka.internal import symbols
@@ -70,6 +71,41 @@ RONNA = Prefix("ronna", "R", 27)
 QUETTA = Prefix("quetta", "Q", 30)
 
 
+def with_prefix(
+    prefix: Prefix,
+    base: UnitDef,
+    *,
+    aliases: tuple[str, ...] = (),
+    words: tuple[str, ...] = (),
+) -> UnitDef:
+    """Build a `UnitDef` for `prefix` applied to the unit `base`.
+
+    The scale is the scale of `base` times the factor of the prefix, held as an exact
+    fraction, so the base may be any linear unit: the metre, the gram, or a unit of an
+    old measurement system such as the shell of the krakenpeople.
+    The name and the symbol join the prefix and the base.
+    The unit is known by every pairing of a prefix symbol, or prefix alias, with a base
+    symbol or base alias, and by the prefix name before each word of the base.
+    `aliases` and `words` add spellings of this one unit that no pairing produces,
+    such as `t` for the megagram.
+    """
+    symbol = f"{prefix.symbol}{base.symbol}"
+    paired = tuple(
+        spelling
+        for prefix_symbol in (prefix.symbol, *prefix.aliases)
+        for base_symbol in (base.symbol, *base.aliases)
+        if (spelling := f"{prefix_symbol}{base_symbol}") != symbol
+    )
+    return UnitDef(
+        f"{prefix.name}{base.name}",
+        symbol,
+        base.scale * Fraction(prefix.factor),
+        base.dimension,
+        aliases=(*paired, *aliases),
+        words=(*(f"{prefix.name}{word}" for word in base.words), *words),
+    )
+
+
 def prefixed_unit(  # noqa: PLR0913 -- the spelling extras are keyword-only
     prefix: Prefix,
     base_name: str,
@@ -82,7 +118,7 @@ def prefixed_unit(  # noqa: PLR0913 -- the spelling extras are keyword-only
     aliases: tuple[str, ...] = (),
     words: tuple[str, ...] = (),
 ) -> UnitDef:
-    """Build a `UnitDef` for `prefix` applied to a dimenion's coherent SI unit.
+    """Build a `UnitDef` for `prefix` applied to a dimension's coherent SI unit.
 
     `coherent_offset` corrects for a dimension whose canonical unit, namely, what
     `UnitDef.scale` is expressed relative to, is not itself the coherent SI unit.
@@ -95,29 +131,21 @@ def prefixed_unit(  # noqa: PLR0913 -- the spelling extras are keyword-only
 
     `base_aliases` are other symbols for the base unit (`ohm` for the ohm), and
     `base_words` other names for it (`meter` for the metre).
-    The prefixed unit is known by every pairing of a prefix symbol, or prefix alias,
-    with a base symbol or base alias, and by the prefix name before each base word.
-    `aliases` and `words` add spellings of this one unit that no pairing produces,
-    such as `t` for the megagram.
+    The spellings pair up as `with_prefix` describes.
     """
-    symbol = f"{prefix.symbol}{base_symbol}"
-    paired = tuple(
-        spelling
-        for prefix_symbol in (prefix.symbol, *prefix.aliases)
-        for base in (base_symbol, *base_aliases)
-        if (spelling := f"{prefix_symbol}{base}") != symbol
-    )
-    return UnitDef(
-        f"{prefix.name}{base_name}",
-        symbol,
-        Decimal(1).scaleb(prefix.exponent + coherent_offset),
+    base = UnitDef(
+        base_name,
+        base_symbol,
+        Decimal(1).scaleb(coherent_offset),
         dimension,
-        aliases=(*paired, *aliases),
-        words=(*(f"{prefix.name}{word}" for word in base_words), *words),
+        aliases=base_aliases,
+        words=base_words,
     )
+    return with_prefix(prefix, base, aliases=aliases, words=words)
 
 
 __all__ = [
     "Prefix",
     "prefixed_unit",
+    "with_prefix",
 ]
