@@ -37,6 +37,8 @@ from kuchka.units import area
 from kuchka.units import charge
 from kuchka.units import conductance
 from kuchka.units import current
+from kuchka.units import data
+from kuchka.units import data_rate
 from kuchka.units import density
 from kuchka.units import energy
 from kuchka.units import energy_density
@@ -59,6 +61,8 @@ from kuchka.units.area import *
 from kuchka.units.charge import *
 from kuchka.units.conductance import *
 from kuchka.units.current import *
+from kuchka.units.data import *
+from kuchka.units.data_rate import *
 from kuchka.units.density import *
 from kuchka.units.energy import *
 from kuchka.units.energy_density import *
@@ -105,6 +109,8 @@ _UNITS_OF: dict[type[Any], Iterable[Any]] = {
     quantities.Charge: units_of(CHARGE_UNITS),
     quantities.Conductance: units_of(CONDUCTANCE_UNITS),
     quantities.Current: units_of(CURRENT_UNITS),
+    quantities.Data: units_of(DATA_UNITS),
+    quantities.DataRate: units_of(DATA_RATE_UNITS),
     quantities.Density: units_of(DENSITY_UNITS),
     quantities.Energy: units_of(ENERGY_UNITS),
     quantities.EnergyDensity: units_of(ENERGY_DENSITY_UNITS),
@@ -142,6 +148,8 @@ __all__ += angular.__all__
 __all__ += angular_velocity.__all__
 __all__ += area.__all__
 __all__ += charge.__all__
+__all__ += data.__all__
+__all__ += data_rate.__all__
 __all__ += conductance.__all__
 __all__ += current.__all__
 __all__ += density.__all__
