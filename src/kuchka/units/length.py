@@ -117,6 +117,7 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LENGTH
 from kuchka.internal import prefixes
+from kuchka.internal import symbols
 from kuchka.internal.prefixes import prefixed_unit
 from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
@@ -381,7 +382,7 @@ INCH = UnitDef(
     "in",
     Decimal("0.0254"),
     LENGTH,
-    aliases=('"', "\u2033", "''"),
+    aliases=('"', symbols.DOUBLE_PRIME, "''"),
     words=("inches",),
 )
 
@@ -422,7 +423,7 @@ FOOT = UnitDef(
     "ft",
     Decimal("0.3048"),
     LENGTH,
-    aliases=("'", "\u2032"),
+    aliases=("'", symbols.PRIME),
     words=("feet",),
 )
 

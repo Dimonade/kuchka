@@ -819,7 +819,7 @@ MILLIWATT_HOUR = UnitDef(
     "mWh",
     Decimal("3.6"),
     ENERGY,
-    aliases=("mW\u00b7h", "mW h"),
+    aliases=(f"mW{symbols.MIDDLE_DOT}h", "mW h"),
     words=("milliwatt-hour",),
 )
 WATT_HOUR = UnitDef(
@@ -827,7 +827,7 @@ WATT_HOUR = UnitDef(
     "Wh",
     Decimal(3600),
     ENERGY,
-    aliases=("wh", "W\u00b7h", "W h"),
+    aliases=("wh", f"W{symbols.MIDDLE_DOT}h", "W h"),
     words=("watt-hour",),
 )
 KILOWATT_HOUR = UnitDef(
@@ -835,7 +835,7 @@ KILOWATT_HOUR = UnitDef(
     "kWh",
     Decimal(3600000),
     ENERGY,
-    aliases=("kwh", "KWH", "kW\u00b7h", "kW h"),
+    aliases=("kwh", "KWH", f"kW{symbols.MIDDLE_DOT}h", "kW h"),
     words=("kilowatt-hour", "kilowatthour"),
 )
 

@@ -163,7 +163,7 @@ def test_coherent_offset_defaults_to_zero() -> None:
 
 def test_coherent_offset_composes_additively_with_the_prefix_exponent():
     unit = prefixed_unit(prefixes.KILO, "x", "x", VOLTAGE, coherent_offset=-2)
-    assert unit.scale == Decimal(10)  # 10^3 * 10⁻² = 10¹
+    assert unit.scale == Decimal(10)  # 10³ * 10⁻² = 10¹
 
 
 SHELL = UnitDef(

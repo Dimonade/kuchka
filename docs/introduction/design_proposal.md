@@ -350,10 +350,10 @@ For example:
 
 ```text
 Voltage
-    = Mass x Length^2 / (Time^3 x Current)
+    = Mass x Length² / (Time³ x Current)
 
 Power
-    = Mass x Length^2 / Time^3
+    = Mass x Length² / Time³
 
 Velocity
     = Length / Time

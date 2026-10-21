@@ -52,7 +52,7 @@ The registry is closed when the package finishes importing (see ``_close``): the
 dimensions are part of the library, and arithmetic hands back the library's own types.
 
 Only a linear kind of a dimension with extent is a principal kind, the general
-SI/physics name for the dimension (``Voltage`` for M L² T^-3 I⁻¹, ``Frequency`` for
+SI/physics name for the dimension (``Voltage`` for M L² T⁻³ I⁻¹, ``Frequency`` for
 T⁻¹).
 Arithmetic never produces an affine, modular, or logarithmic value, and it returns a
 ratio kind or a plain ``Fraction`` for a dimensionless result (see ``_RATIO_KIND``), so

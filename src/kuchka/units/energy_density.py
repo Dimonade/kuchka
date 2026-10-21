@@ -7,7 +7,7 @@
 
 `WattHourPerLitre` is the unit volumetric battery capacity is quoted in.
 Its scale is computed from kuchka's own exact `WATT_HOUR` and `LITRE` scales, so it
-cannot drift from either: one watt-hour per litre is `3 600 000` J/m\u00b3.
+cannot drift from either: one watt-hour per litre is `3 600 000` J/m³.
 
 `ENERGY_DENSITY_UNITS` maps each symbol to its constructor, for boundary code that
 reads a unit as a string from outside the application.

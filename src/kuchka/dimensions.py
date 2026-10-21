@@ -47,7 +47,7 @@ class Dimension:
 
     Two ``Dimension`` instances compare equal (and hash equal) exactly when every
     exponent matches -- this is what lets the arithmetic engine use a plain `dict` to
-    look up "which named type does M¹ L² T^-3 correspond to?".
+    look up "which named type does M¹ L² T⁻³ correspond to?".
     """
 
     time: int = 0

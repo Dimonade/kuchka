@@ -24,6 +24,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import TORQUE
+from kuchka.internal import symbols
 from kuchka.internal.constants import PI
 from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
@@ -50,7 +51,7 @@ JOULE_PER_TURN = UnitDef(
 )
 NEWTON_METRE = UnitDef(
     "newton_metre",
-    "N\u00b7m",
+    f"N{symbols.MIDDLE_DOT}m",
     _PER_RADIAN,
     TORQUE,
     aliases=("Nm", "N m", "N*m"),
@@ -58,21 +59,21 @@ NEWTON_METRE = UnitDef(
 )
 MILLINEWTON_METRE = UnitDef(
     "millinewton_metre",
-    "mN\u00b7m",
+    f"mN{symbols.MIDDLE_DOT}m",
     _PER_RADIAN / 1000,
     TORQUE,
     aliases=("mNm", "mN m", "mN*m"),
 )
 KILONEWTON_METRE = UnitDef(
     "kilonewton_metre",
-    "kN\u00b7m",
+    f"kN{symbols.MIDDLE_DOT}m",
     _PER_RADIAN * 1000,
     TORQUE,
     aliases=("kNm", "kN m", "kN*m"),
 )
 POUND_FORCE_FOOT = UnitDef(
     "pound_force_foot",
-    "lbf\u00b7ft",
+    f"lbf{symbols.MIDDLE_DOT}ft",
     _PER_RADIAN * POUND_FORCE.scale * FOOT.scale,
     TORQUE,
     aliases=("lbf-ft", "lbf ft", "lbf*ft"),
@@ -80,7 +81,7 @@ POUND_FORCE_FOOT = UnitDef(
 )
 POUND_FORCE_INCH = UnitDef(
     "pound_force_inch",
-    "lbf\u00b7in",
+    f"lbf{symbols.MIDDLE_DOT}in",
     _PER_RADIAN * POUND_FORCE.scale * INCH.scale,
     TORQUE,
     aliases=("lbf-in", "lbf in", "lbf*in"),

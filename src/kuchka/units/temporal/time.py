@@ -652,7 +652,7 @@ def Jiffy(value: Numeric) -> Time:
     One physics jiffy is defined here as the time required for light to travel one
     femtometre in vacuum.
 
-    Since one femtometre is exactly ``10^-15 m`` and the speed of light in vacuum is
+    Since one femtometre is exactly ``10⁻¹⁵ m`` and the speed of light in vacuum is
     exactly ``299_792_458 m/s``, the conversion is an exact rational number of seconds.
 
     Examples
