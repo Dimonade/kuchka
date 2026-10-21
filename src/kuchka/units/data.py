@@ -5,49 +5,78 @@
 `Data` counts information, and its canonical unit is the bit.
 A byte is 8 bits, and each of the two has multiples in two families:
 
-* the SI prefixes count in thousands: a kilobyte (`kB`) is 1000 bytes, and the
-  prefixes run through the petabyte (`PB`);
+* the SI prefixes count in thousands: a kilobyte (`kB`) is 1000 bytes, and the prefixes
+  run through the petabyte (`PB`);
 * the IEC binary prefixes count in powers of 1024: a kibibyte (`KiB`) is 1024 bytes,
   and the prefixes run through the pebibyte (`PiB`).
 
 Examples
 --------
-A firmware image of 3 MiB is written to flash in pages of 4 KiB:
+A 4 MiB flash slot must hold the bootloader, application, calibration table, and
+rollback image.
+Calculate how much space remains after reserving each region:
 
->>> image = Mebibyte(3)
->>> page = Kibibyte(4)
->>> int((image / page).magnitude)
-768
+>>> slot = Mebibyte(4)
+>>> bootloader = Kibibyte(384)
+>>> application = Mebibyte(11) / 4
+>>> calibration = Kibibyte(16)
+>>> rollback_image = Kibibyte(512)
+>>> used = bootloader + application + calibration + rollback_image
+>>> (slot - used).to(KIBIBYTE)
+368 KiB
 
-A drive sold as 1 TB holds fewer bytes than a tebibyte, which is what an operating
-system reporting in binary multiples shows:
+A device writes one 96-byte telemetry record every ten seconds.
+Estimate its local storage requirement before deciding how often logs need to be
+uploaded:
 
->>> Terabyte(1) < Tebibyte(1)
-True
->>> f"{Terabyte(1).to(TEBIBYTE):.3f}"
+>>> record = Byte(96)
+>>> records_per_day = 24 * 60 * 6
+>>> daily_log = record * records_per_day
+>>> daily_log.to(KIBIBYTE)
+810 KiB
+>>> int((daily_log * 7).to(KIBIBYTE).magnitude)
+5670
+
+A firmware update is sent in payload chunks of at most 1460 bytes.
+The final chunk may be only partly filled, so calculate both the number of chunks and
+the unused payload capacity in the last one:
+
+>>> from math import ceil
+>>> firmware = Mebibyte(3)
+>>> payload = Byte(1460)
+>>> chunks = ceil((firmware / payload).magnitude)
+>>> chunks
+2155
+>>> (payload * chunks - firmware).to(BYTE)
+572 B
+
+A nominal 1 TB drive is marketed in decimal units, while the operating system may
+report capacity in tebibytes.
+Reserve 700 GiB for data, 64 GiB for the system, and 128 GiB for update staging, then
+inspect what is left:
+
+>>> drive = Terabyte(1)
+>>> f"{drive.to(TEBIBYTE):.3f}"
 '0.909 TiB'
-
-Bits and bytes convert exactly, so a count of bits does not drift:
-
->>> Kilobyte(1).to(BIT)
-8000 bit
->>> Kibibit(1) == Bit(1024)
-True
+>>> f"{(drive - Gibibyte(700) - Gibibyte(64) - Gibibyte(128)).to(GIBIBYTE):.1f}"
+'39.3 GiB'
 
 Notes
 -----
-`kB` is 1000 bytes and `KiB` is 1024 bytes, and the two are never mixed up: symbols
-are case-sensitive, so `KB` and `Kb` are refused, since a capital K names no SI prefix
-and the number it was written to mean is a choice between the two families.
-`MB` and `GB` read as the SI megabyte and gigabyte, and `Mb` is the megabit, which is
-an eighth of that size.
+`kB` is 1000 bytes and `KiB` is 1024 bytes. Symbols are case-sensitive: `KB` and `Kb`
+are not accepted because uppercase `K` is not an SI prefix and the intended scale would
+be ambiguous.
+`MB` and `GB` denote megabytes and gigabytes; `Mb` denotes megabits, one eighth of a
+megabyte at the same prefix.
 
-The bit is `bit` (or `b`) and the byte is `B` (or the word `octet`).
+The bit uses the symbol `bit` (or `b`), while the byte uses `B` (or the word `octet`).
+These units count information; they do not represent transfer speed.
+For information per unit time, use `DataRate`.
 
 `DATA_UNITS` maps symbols such as ``"kB"``, ``"KiB"``, ``"Mbit"``, and ``"bit"`` to
 their constructors.
-It is intended for boundary code that reads a size from configuration files, device
-descriptors, or other external sources.
+It is intended for boundary code that reads sizes from configuration files, device
+descriptors, protocol metadata, or other external sources.
 
 See Also
 --------
@@ -116,9 +145,10 @@ def Bit(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Bit(8).to(BYTE)
-    1 B
+    A 24-bit sensor field occupies exactly three bytes:
 
+    >>> Bit(24).to(BYTE)
+    3 B
     """
     return Data(to_exact(value) * BIT.scale, BIT)
 
@@ -138,9 +168,10 @@ def Kilobit(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Kilobit(1).to(BIT)
-    1000 bit
+    A 12-kilobit buffer can hold 1500 bytes of payload:
 
+    >>> Kilobit(12).to(BYTE)
+    1500 B
     """
     return Data(to_exact(value) * KILOBIT.scale, KILOBIT)
 
@@ -160,9 +191,10 @@ def Megabit(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Megabit(1).to(BIT)
-    1000000 bit
+    A 24-megabit capture occupies three decimal megabytes:
 
+    >>> Megabit(24).to(MEGABYTE)
+    3 MB
     """
     return Data(to_exact(value) * MEGABIT.scale, MEGABIT)
 
@@ -182,9 +214,10 @@ def Gigabit(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Gigabit(1).to(BIT)
-    1000000000 bit
+    Express an eight-gigabit export in the byte unit used by a storage API:
 
+    >>> Gigabit(8).to(GIGABYTE)
+    1 GB
     """
     return Data(to_exact(value) * GIGABIT.scale, GIGABIT)
 
@@ -204,9 +237,10 @@ def Terabit(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Terabit(1).to(BIT)
-    1000000000000 bit
+    A two-terabyte archive contains sixteen terabits of information:
 
+    >>> Terabyte(2).to(TERABIT)
+    16 Tbit
     """
     return Data(to_exact(value) * TERABIT.scale, TERABIT)
 
@@ -226,9 +260,10 @@ def Petabit(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Petabit(1).to(BIT)
-    1000000000000000 bit
+    A petabyte-scale archive expressed in bits contains eight petabits:
 
+    >>> Petabyte(1).to(PETABIT)
+    8 Pbit
     """
     return Data(to_exact(value) * PETABIT.scale, PETABIT)
 
@@ -248,9 +283,10 @@ def Kibibit(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Kibibit(1).to(BIT)
-    1024 bit
+    A 32-kibibit buffer holds four kibibytes:
 
+    >>> Kibibit(32).to(KIBIBYTE)
+    4 KiB
     """
     return Data(to_exact(value) * KIBIBIT.scale, KIBIBIT)
 
@@ -270,9 +306,10 @@ def Mebibit(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Mebibit(1).to(BIT)
-    1048576 bit
+    Eight mebibits make the one-mebibyte payload budget for a firmware component:
 
+    >>> Mebibit(8).to(MEBIBYTE)
+    1 MiB
     """
     return Data(to_exact(value) * MEBIBIT.scale, MEBIBIT)
 
@@ -292,9 +329,10 @@ def Gibibit(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Gibibit(1).to(BIT)
-    1073741824 bit
+    Express a four-gibibyte image in gibibits for a bit-addressed interface:
 
+    >>> Gibibyte(4).to(GIBIBIT)
+    32 Gibit
     """
     return Data(to_exact(value) * GIBIBIT.scale, GIBIBIT)
 
@@ -314,9 +352,10 @@ def Tebibit(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Tebibit(1).to(BIT)
-    1099511627776 bit
+    Express a tebibyte of archived data in the units of a bit-counting interface:
 
+    >>> Tebibyte(1).to(TEBIBIT)
+    8 Tibit
     """
     return Data(to_exact(value) * TEBIBIT.scale, TEBIBIT)
 
@@ -336,9 +375,10 @@ def Pebibit(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Pebibit(1).to(BIT)
-    1125899906842624 bit
+    Convert a pebibyte archive allocation to its bit-based capacity:
 
+    >>> Pebibyte(1).to(PEBIBIT)
+    8 Pibit
     """
     return Data(to_exact(value) * PEBIBIT.scale, PEBIBIT)
 
@@ -358,9 +398,10 @@ def Byte(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Byte(1).to(BIT)
-    8 bit
+    A 1500-byte buffer has this many bits available to a bit-counting API:
 
+    >>> Byte(1500).to(BIT)
+    12000 bit
     """
     return Data(to_exact(value) * BYTE.scale, BYTE)
 
@@ -380,9 +421,11 @@ def Kilobyte(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Kilobyte(1).to(BYTE)
-    1000 B
+    A 64 kB diagnostics buffer has 9 kB already occupied by headers.
+    Find the remaining payload capacity in bytes:
 
+    >>> (Kilobyte(64) - Kilobyte(9)).to(BYTE)
+    55000 B
     """
     return Data(to_exact(value) * KILOBYTE.scale, KILOBYTE)
 
@@ -402,9 +445,10 @@ def Megabyte(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Megabyte(1).to(BYTE)
-    1000000 B
+    Split a 25 MB upload into five-megabyte transfer jobs:
 
+    >>> int((Megabyte(25) / Megabyte(5)).magnitude)
+    5
     """
     return Data(to_exact(value) * MEGABYTE.scale, MEGABYTE)
 
@@ -424,9 +468,11 @@ def Gigabyte(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Gigabyte(1).to(BYTE)
-    1000000000 B
+    A 2 GB staging area contains a 750 MB package.
+    Calculate the remaining space:
 
+    >>> (Gigabyte(2) - Megabyte(750)).to(MEGABYTE)
+    1250 MB
     """
     return Data(to_exact(value) * GIGABYTE.scale, GIGABYTE)
 
@@ -446,9 +492,10 @@ def Terabyte(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Terabyte(1).to(BYTE)
-    1000000000000 B
+    Split a 2 TB backup into 250 GB archive shards:
 
+    >>> int((Terabyte(2) / Gigabyte(250)).magnitude)
+    8
     """
     return Data(to_exact(value) * TERABYTE.scale, TERABYTE)
 
@@ -468,9 +515,10 @@ def Petabyte(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Petabyte(1).to(BYTE)
-    1000000000000000 B
+    A 2 PB data lake partitioned into 250 TB archive tiers needs eight tiers:
 
+    >>> int((Petabyte(2) / Terabyte(250)).magnitude)
+    8
     """
     return Data(to_exact(value) * PETABYTE.scale, PETABYTE)
 
@@ -490,9 +538,10 @@ def Kibibyte(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Kibibyte(1).to(BYTE)
-    1024 B
+    A 64 KiB buffer accommodates sixteen 4 KiB flash pages:
 
+    >>> int((Kibibyte(64) / Kibibyte(4)).magnitude)
+    16
     """
     return Data(to_exact(value) * KIBIBYTE.scale, KIBIBYTE)
 
@@ -512,9 +561,10 @@ def Mebibyte(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Mebibyte(1).to(BYTE)
-    1048576 B
+    A 128 MiB model bundle split into 8 MiB assets requires sixteen assets:
 
+    >>> int((Mebibyte(128) / Mebibyte(8)).magnitude)
+    16
     """
     return Data(to_exact(value) * MEBIBYTE.scale, MEBIBYTE)
 
@@ -534,9 +584,10 @@ def Gibibyte(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Gibibyte(1).to(BYTE)
-    1073741824 B
+    A 6 GiB cache divided into 256 MiB slots has room for twenty-four slots:
 
+    >>> int((Gibibyte(6) / Mebibyte(256)).magnitude)
+    24
     """
     return Data(to_exact(value) * GIBIBYTE.scale, GIBIBYTE)
 
@@ -556,9 +607,10 @@ def Tebibyte(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Tebibyte(1).to(BYTE)
-    1099511627776 B
+    One TiB of storage can be split into four 256 GiB volumes:
 
+    >>> int((Tebibyte(1) / Gibibyte(256)).magnitude)
+    4
     """
     return Data(to_exact(value) * TEBIBYTE.scale, TEBIBYTE)
 
@@ -578,9 +630,10 @@ def Pebibyte(value: Numeric) -> Data:
 
     Examples
     --------
-    >>> Pebibyte(1).to(BYTE)
-    1125899906842624 B
+    Split a 3 PiB archive into 24 TiB shards for independent processing:
 
+    >>> int((Pebibyte(3) / Tebibyte(24)).magnitude)
+    128
     """
     return Data(to_exact(value) * PEBIBYTE.scale, PEBIBYTE)
 
