@@ -30,6 +30,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.angular import AngularDisplacement
     from kuchka.quantities.area import Area
     from kuchka.quantities.charge import Charge
+    from kuchka.quantities.data import Data
+    from kuchka.quantities.data import DataRate
     from kuchka.quantities.density import Density
     from kuchka.quantities.electrical import Conductance
     from kuchka.quantities.electrical import Current
@@ -72,6 +74,10 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: Area) -> Area: ...
     @overload
     def __mul__(self, other: Charge) -> Charge: ...
+    @overload
+    def __mul__(self, other: Data) -> Data: ...
+    @overload
+    def __mul__(self, other: DataRate) -> DataRate: ...
     @overload
     def __mul__(self, other: Density) -> Density: ...
     @overload
