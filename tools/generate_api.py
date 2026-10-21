@@ -40,7 +40,7 @@ defines it and run `just generate-api`.
 
 def _all_of(path: Path) -> list[str]:
     """Return the literal `__all__` of the module at `path`."""
-    for node in ast.parse(path.read_text()).body:
+    for node in ast.parse(path.read_text(encoding="utf-8")).body:
         if (
             isinstance(node, ast.Assign)
             and len(node.targets) == 1
@@ -105,13 +105,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--check", action="store_true", help="fail if out of date")
     arguments = parser.parse_args(argv)
     text = render()
-    current = TARGET.read_text() if TARGET.exists() else ""
+    current = TARGET.read_text(encoding="utf-8") if TARGET.exists() else ""
     if arguments.check:
         if text != current:
             sys.stderr.write(f"{TARGET} is out of date; run `just generate-api`.\n")
             return 1
         return 0
-    TARGET.write_text(text)
+    TARGET.write_text(text, encoding="utf-8")
     return 0
 
 

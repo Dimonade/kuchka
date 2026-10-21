@@ -32,7 +32,7 @@ generator = _load_generator()
 
 
 def test_the_generated_module_is_current() -> None:
-    assert generator.TARGET.read_text() == generator.render(), (
+    assert generator.TARGET.read_text(encoding="utf-8") == generator.render(), (
         "src/kuchka/_api.py is out of date; run `just generate-api`."
     )
 
@@ -41,7 +41,7 @@ def test_check_mode_succeeds_on_a_current_file(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     target = tmp_path / "_api.py"
-    target.write_text(generator.render())
+    target.write_text(generator.render(), encoding="utf-8")
     monkeypatch.setattr(generator, "TARGET", target)
     assert generator.main(["--check"]) == 0
 
@@ -52,11 +52,11 @@ def test_check_mode_fails_on_a_stale_file(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     target = tmp_path / "_api.py"
-    target.write_text("__all__ = []\n")
+    target.write_text("__all__ = []\n", encoding="utf-8")
     monkeypatch.setattr(generator, "TARGET", target)
     assert generator.main(["--check"]) == 1
     assert "just generate-api" in capsys.readouterr().err
-    assert target.read_text() == "__all__ = []\n"
+    assert target.read_text(encoding="utf-8") == "__all__ = []\n"
 
 
 def test_check_mode_fails_on_a_missing_file(
@@ -72,7 +72,7 @@ def test_write_mode_produces_the_rendered_text(
     target = tmp_path / "_api.py"
     monkeypatch.setattr(generator, "TARGET", target)
     assert generator.main([]) == 0
-    assert target.read_text() == generator.render()
+    assert target.read_text(encoding="utf-8") == generator.render()
 
 
 def test_the_generator_promotes_constructors_and_quantity_types_only() -> None:
