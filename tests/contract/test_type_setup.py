@@ -19,8 +19,8 @@ from tests.support.kinds import sample_of
 
 
 def test_the_concrete_types_are_discovered() -> None:
-    assert len(QUANTITY_TYPES) > 30  # noqa: PLR2004 -- a floor, so discovery cannot silently empty
-    assert len(QUANTITY_TYPES) < 35  # noqa: PLR2004 -- just so that I remember to bump it.
+    assert len(QUANTITY_TYPES) > 35  # noqa: PLR2004 -- a floor, so discovery cannot silently empty
+    assert len(QUANTITY_TYPES) < 40  # noqa: PLR2004 -- just so that I remember to bump it.
 
 
 @pytest.mark.parametrize("cls", QUANTITY_TYPES, ids=TYPE_IDS)

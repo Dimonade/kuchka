@@ -345,6 +345,42 @@ ACCEPTED = [
     # Frequency by name.
     ("FREQUENCY_UNITS", "hertz", "Hz"),
     ("FREQUENCY_UNITS", "Kilohertz", "kHz"),
+    # Data: the prefix tells SI from IEC, and the case tells bit from byte.
+    ("DATA_UNITS", "kB", "kB"),
+    ("DATA_UNITS", "KiB", "KiB"),
+    ("DATA_UNITS", "MB", "MB"),
+    ("DATA_UNITS", "Mb", "Mbit"),
+    ("DATA_UNITS", "kb", "kbit"),
+    ("DATA_UNITS", "Kib", "Kibit"),
+    ("DATA_UNITS", "b", "bit"),
+    ("DATA_UNITS", "bits", "bit"),
+    ("DATA_UNITS", "Bit", "bit"),
+    ("DATA_UNITS", "byte", "B"),
+    ("DATA_UNITS", "Bytes", "B"),
+    ("DATA_UNITS", "octet", "B"),
+    ("DATA_UNITS", "octets", "B"),
+    ("DATA_UNITS", "kilobyte", "kB"),
+    ("DATA_UNITS", "Kilobytes", "kB"),
+    ("DATA_UNITS", "kibibyte", "KiB"),
+    ("DATA_UNITS", "mebibytes", "MiB"),
+    ("DATA_UNITS", "gigabit", "Gbit"),
+    ("DATA_UNITS", "pebibyte", "PiB"),
+    ("DATA_UNITS", "kilooctet", "kB"),
+    # Data rate.
+    ("DATA_RATE_UNITS", "bps", "bit/s"),
+    ("DATA_RATE_UNITS", "b/s", "bit/s"),
+    ("DATA_RATE_UNITS", "kbps", "kbit/s"),
+    ("DATA_RATE_UNITS", "Mbps", "Mbit/s"),
+    ("DATA_RATE_UNITS", "Mb/s", "Mbit/s"),
+    ("DATA_RATE_UNITS", "Gbit/s", "Gbit/s"),
+    ("DATA_RATE_UNITS", "MB/s", "MB/s"),
+    ("DATA_RATE_UNITS", "MiB/s", "MiB/s"),
+    ("DATA_RATE_UNITS", "Bps", "B/s"),
+    ("DATA_RATE_UNITS", "MBps", "MB/s"),
+    ("DATA_RATE_UNITS", "bit/sec", "bit/s"),
+    ("DATA_RATE_UNITS", "bits per second", "bit/s"),
+    ("DATA_RATE_UNITS", "megabits per second", "Mbit/s"),
+    ("DATA_RATE_UNITS", "mebibytes per second", "MiB/s"),
 ]
 
 
@@ -496,4 +532,31 @@ REJECTED = [
     # Only the nautical mile takes the bare symbol M; the metre does not.
     ("LENGTH_UNITS", "NM", "case is not loosened: nmi and M are the spellings"),
     # Only some spoken forms exist for a scale.
+    # Data: a capital K is no SI prefix, and the size it was meant to name is a choice.
+    (
+        "DATA_UNITS",
+        "KB",
+        "the SI prefix is a lower-case k, and the 1024 reading is KiB",
+    ),
+    (
+        "DATA_UNITS",
+        "Kb",
+        "the SI prefix is a lower-case k, and the 1024 reading is Kib",
+    ),
+    ("DATA_UNITS", "kib", "the IEC prefix is a capital K, Ki"),
+    ("DATA_UNITS", "KIB", "case is not loosened on a symbol"),
+    ("DATA_UNITS", "mb", "no millibit, and Mb is the megabit"),
+    ("DATA_UNITS", "mB", "no millibyte, and MB is the megabyte"),
+    ("DATA_UNITS", "kBs", "a plural of a symbol"),
+    ("DATA_UNITS", "MiB/s", "a rate belongs to DATA_RATE_UNITS"),
+    ("DATA_UNITS", "bps", "a rate belongs to DATA_RATE_UNITS"),
+    ("DATA_UNITS", "Hz", "a frequency"),
+    ("DATA_RATE_UNITS", "MB", "a size belongs to DATA_UNITS"),
+    (
+        "DATA_RATE_UNITS",
+        "KB/s",
+        "the SI prefix is a lower-case k, and the 1024 reading is KiB/s",
+    ),
+    ("DATA_RATE_UNITS", "Bd", "a baud counts symbols, not bits"),
+    ("BAUD_RATE_UNITS", "bps", "a bit rate is a DataRate, not a symbol rate"),
 ]
