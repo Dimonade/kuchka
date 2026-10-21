@@ -101,7 +101,7 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
         # The runtime guard compares `type(self) is type(other)` and not
         # `self.dimension != other.dimension`:
         # two different types can share a dimension (`Frequency` and `BaudRate` are
-        # both T^-1), and adding across that boundary is exactly the mistake this check
+        # both T⁻¹), and adding across that boundary is exactly the mistake this check
         # exists to catch, even though the dimensions agree.
         if isinstance(other, LinearQuantity):
             if type(self) is not type(other):
@@ -179,9 +179,9 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
         # The reciprocal's kind is chosen by its dimension alone, which is only right
         # when `self` is the principal kind of its dimension or one of its contested
         # kinds (the guard below).
-        # `SamplingPeriod` and `Time` are both T^1, so a naive `1 / self._magnitude`
+        # `SamplingPeriod` and `Time` are both T¹, so a naive `1 / self._magnitude`
         # promoted through `_promote` would always hand back a `Frequency`, the
-        # principal T^-1 kind, even when `self` was a `SamplingPeriod`,
+        # principal T⁻¹ kind, even when `self` was a `SamplingPeriod`,
         # silently mislabelling a sample rate as a generic frequency.
         #
         # A specialisation overrides this method itself if it has a specific,

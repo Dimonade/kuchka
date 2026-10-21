@@ -5,13 +5,13 @@
     reagent = Millilitre(500) + Litre(Decimal("0.25"))
 
 `CubicMetre` is the SI-coherent canonical unit (`scale = Decimal(1)`).
-A `Litre` is exactly one cubic decimetre (`Decimal("0.001")` m^3), but as it is the
+A `Litre` is exactly one cubic decimetre (`Decimal("0.001")` m³), but as it is the
 unit that actually shows up in lab and process-engineering work, so it gets its own
 full set of prefixes and first grade support.
 
 NOTE: Two pairs below have the exact same scale by coincidence:
-- `CubicCentimetre` and `Millilitre` are both `Decimal("0.000001")` m^3, and,
-- `CubicMillimetre` and `Microlitre` are both `Decimal("0.000000001")` m^3.
+- `CubicCentimetre` and `Millilitre` are both `Decimal("0.000001")` m³, and,
+- `CubicMillimetre` and `Microlitre` are both `Decimal("0.000000001")` m³.
 
 A cubic centimetre and a millilitre are the same physical quantity;
 they are kept as separate `UnitDef`s (the way `Tonne` aliases `Megagram`) because they

@@ -10,12 +10,12 @@
 A number of families share this package because they share two physical dimensions and
 one recurring theme -- a dimension is not a concept, and a symbol is not a type:
 
-- `time.py` -- `Time` (T^1), the SI-general span: a duration, a timeout, an interval.
+- `time.py` -- `Time` (T¹), the SI-general span: a duration, a timeout, an interval.
 - `instant.py` -- `Instant`'s canonical unit.
   `Time.to_instant()` is the point-in-time counterpart to `Time` itself.
   Subtracting two instants gives a `Time`, adding a `Time` to an `Instant` shifts the
   reading.
-- `frequency.py` -- `Frequency` (T^-1), the SI-general rate.
+- `frequency.py` -- `Frequency` (T⁻¹), the SI-general rate.
 - `sampling_period.py` -- `SamplingPeriod`'s canonical unit.
   `Time.to_sampling_period()` reaches it, and it converts to and from `SampleRate`
   directly, since a sample period genuinely is the reciprocal of a sample rate.

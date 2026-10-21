@@ -38,7 +38,7 @@ repr(q)
 A `Fraction` cannot hold pi, so kuchka holds it as an exact rational to 100 decimal places (`kuchka.internal.constants.PI`) and uses it for the radian scale alone.
 That has three consequences:
 
-- A conversion to or from radians is off by less than one part in 10^100, so every digit that is displayed is correct.
+- A conversion to or from radians is off by less than one part in 10¹⁰⁰, so every digit that is displayed is correct.
 - A value built in radians reads back exactly what was given, and converting degrees to radians and back returns the original.
 - A radian value built from `PI` itself is exactly a half turn.
 

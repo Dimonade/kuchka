@@ -1,7 +1,7 @@
 """AngularVelocity and Torque: how fast an angle is swept, and the effort behind it.
 
-`AngularVelocity` is angle per time (angle T^-1), and `Torque` is energy per angle
-(M L^2 T^-2 angle^-1).
+`AngularVelocity` is angle per time (angle T⁻¹), and `Torque` is energy per angle
+(M L² T⁻² angle⁻¹).
 Counting the angle axis tells them apart from `Frequency` and `Energy`: one hertz is a
 cycle per second, not an angular velocity, and a newton-metre of torque is not a joule.
 Turn is the canonical angle, so the canonical units are the turn per second and the

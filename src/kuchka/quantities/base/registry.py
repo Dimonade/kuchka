@@ -52,8 +52,8 @@ The registry is closed when the package finishes importing (see ``_close``): the
 dimensions are part of the library, and arithmetic hands back the library's own types.
 
 Only a linear kind of a dimension with extent is a principal kind, the general
-SI/physics name for the dimension (``Voltage`` for M L^2 T^-3 I^-1, ``Frequency`` for
-T^-1).
+SI/physics name for the dimension (``Voltage`` for M L² T⁻³ I⁻¹, ``Frequency`` for
+T⁻¹).
 Arithmetic never produces an affine, modular, or logarithmic value, and it returns a
 ratio kind or a plain ``Fraction`` for a dimensionless result (see ``_RATIO_KIND``), so
 those kinds are in the catalogue and never here.
@@ -88,7 +88,7 @@ The operation is ``"*"`` or ``"/"``, and the kinds are the exact types of the op
 An explicit rule decides the result type before the dimension is consulted, so it is
 what separates two kinds that share a dimension.
 For instance, ``Force / Area`` is a ``Pressure`` and ``Energy / Volume`` an
-``EnergyDensity`` although both results are M L^-1 T^-2.
+``EnergyDensity`` although both results are M L⁻¹ T⁻².
 A product is entered in both operand orders.
 Every rule is declared through ``_rule`` while the package imports, and the table
 closes with the registry.

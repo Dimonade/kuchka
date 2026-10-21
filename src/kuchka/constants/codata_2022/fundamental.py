@@ -82,7 +82,7 @@ SPEED_OF_LIGHT_IN_VACUUM: Final[Velocity] = _MetrePerSecond(299_792_458)
 """The speed of light in vacuum, c.
 
 Accuracy: Exact.
-Value: 299 792 458 m s^-1.
+Value: 299 792 458 m s⁻¹.
 Uncertainty: None.
 Link: https://en.wikipedia.org/wiki/Speed_of_light
 """
@@ -159,7 +159,7 @@ STANDARD_ACCELERATION_OF_GRAVITY: Final[Acceleration] = _MetrePerSecondSquared(
 """The standard acceleration of gravity, g_n.
 
 Accuracy: Exact.
-Value: 9.806 65 m s^-2.
+Value: 9.806 65 m s⁻².
 Uncertainty: None.
 Link: https://en.wikipedia.org/wiki/Gravitational_acceleration
 """

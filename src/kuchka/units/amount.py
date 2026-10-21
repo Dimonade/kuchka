@@ -63,11 +63,11 @@ number of specified elementary entities in one mole exactly.
 
 Metric submultiples are exact decimal fractions of the mole:
 
-``1 mmol = 10^-3 mol``
-``1 umol = 10^-6 mol``
-``1 nmol = 10^-9 mol``
-``1 pmol = 10^-12 mol``
-``1 fmol = 10^-15 mol``
+``1 mmol = 10⁻³ mol``
+``1 umol = 10⁻⁶ mol``
+``1 nmol = 10⁻⁹ mol``
+``1 pmol = 10⁻¹² mol``
+``1 fmol = 10⁻¹⁵ mol``
 
 The kilomole is the corresponding large-scale engineering unit:
 

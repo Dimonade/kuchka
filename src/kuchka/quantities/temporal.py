@@ -1,8 +1,8 @@
 """Time and Frequency, plus the domain vocabulary that shares their dimensions.
 
-`Time` (T^1) and `Frequency` (T^-1) are the SI-general pair:
+`Time` (T¹) and `Frequency` (T⁻¹) are the SI-general pair:
 they are the types the dimension registry hands back for any arithmetic that produces
-a plain span or a plain rate, the same role `Voltage` plays for M L^2 T^-3 I^-1.
+a plain span or a plain rate, the same role `Voltage` plays for M L² T⁻³ I⁻¹.
 
 `Time` is a span: a sample period, a timeout, or a duration between two readings.
 `.to_sampling_period()` and `.to_instant()` read that same span as a different kind of
@@ -121,7 +121,7 @@ class Time(LinearQuantity):
     def __rtruediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction:
-        # NOTE: `Time` is the registered T^1 type, so the base implementation's
+        # NOTE: `Time` is the registered T¹ type, so the base implementation's
         # canonical-type guard passes and this reaches `Frequency` through
         # ordinary dimension algebra -- no override of the runtime logic needed, only
         # of the static signature.
@@ -331,7 +331,7 @@ class SamplingPeriod(LinearQuantity):
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction:
         # NOTE: Overridden and not inherited:
-        # `SamplingPeriod` is not the registered type for T^1 (`Time` is), so the base
+        # `SamplingPeriod` is not the registered type for T¹ (`Time` is), so the base
         # implementation's canonical-type guard would refuse this and not risk handing
         # back the wrong sibling.
         #

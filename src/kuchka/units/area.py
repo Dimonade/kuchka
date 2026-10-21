@@ -11,8 +11,8 @@ the same convention:
 The same applies to all prefixed metre constructors.
 
 Metric area prefixes are applied to both dimensions.
-Consequently, a millimetre-based area is scaled by `10^-6` relative to the square
-metre, while a kilometre-based area is scaled by `10^6`.
+Consequently, a millimetre-based area is scaled by `10⁻⁶` relative to the square
+metre, while a kilometre-based area is scaled by `10⁶`.
 
 `Hectare` is an exact non-SI unit equal to 10,000 m².
 It is especially useful for land and forestry, where square metres quickly become

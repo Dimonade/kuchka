@@ -14,8 +14,8 @@ SI itself treats plane angle as a quantity of dimension one (the radian is a
 dimensionless derived unit), and `kuchka` is not taking a position against that.
 The ``angle`` field makes :data:`ANGLE` and :data:`DIMENSIONLESS` distinct ``Dimension``
 values, and it takes part in arithmetic like any other axis.
-Torque is energy per angle (M L^2 T^-2 angle^-1) and angular velocity is angle per time
-(angle T^-1), so both differ from energy and from the hertz, which SI's own
+Torque is energy per angle (M L² T⁻² angle⁻¹) and angular velocity is angle per time
+(angle T⁻¹), so both differ from energy and from the hertz, which SI's own
 base-quantity accounting cannot tell apart.
 `Proportion` (genuinely dimensionless, ``Percent``/``Ratio``) and angles are different
 dimensions for the same reason.
@@ -42,7 +42,7 @@ class Dimension:
 
     Two ``Dimension`` instances compare equal (and hash equal) exactly when every
     exponent matches -- this is what lets the arithmetic engine use a plain `dict` to
-    look up "which named type does M^1 L^2 T^-3 correspond to?".
+    look up "which named type does M¹ L² T⁻³ correspond to?".
     """
 
     time: int = 0
