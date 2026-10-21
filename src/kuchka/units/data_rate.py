@@ -154,6 +154,7 @@ def BitPerSecond(value: Numeric) -> DataRate:
     >>> packet_rate = (Byte(12) * 5) / Second(1)
     >>> packet_rate.to(BIT_PER_SECOND)
     480 bit/s
+
     """
     return DataRate(to_exact(value) * BIT_PER_SECOND.scale, BIT_PER_SECOND)
 
@@ -180,6 +181,7 @@ def KilobitPerSecond(value: Numeric) -> DataRate:
     >>> duration = Kibibyte(24) / KilobitPerSecond(9.6)
     >>> f"{duration:.2f}"
     '20.48 s'
+
     """
     return DataRate(to_exact(value) * KILOBIT_PER_SECOND.scale, KILOBIT_PER_SECOND)
 
@@ -207,6 +209,7 @@ def MegabitPerSecond(value: Numeric) -> DataRate:
     >>> recording = MegabitPerSecond(12) * Second(45 * 60)
     >>> recording.to(GIGABYTE)
     4.05 GB
+
     """
     return DataRate(to_exact(value) * MEGABIT_PER_SECOND.scale, MEGABIT_PER_SECOND)
 
@@ -226,12 +229,14 @@ def GigabitPerSecond(value: Numeric) -> DataRate:
 
     Examples
     --------
-    A 250 GB backup sent over a dedicated 10 Gbit/s link has this expected transfer time:
+    A 250 GB backup sent over a dedicated 10 Gbit/s link has this expected transfer
+    time:
 
     >>> from kuchka import Gigabyte
     >>> duration = Gigabyte(250) / GigabitPerSecond(10)
     >>> f"{duration:.0f}"
     '200 s'
+
     """
     return DataRate(to_exact(value) * GIGABIT_PER_SECOND.scale, GIGABIT_PER_SECOND)
 
@@ -259,6 +264,7 @@ def TerabitPerSecond(value: Numeric) -> DataRate:
     >>> moved = TerabitPerSecond(2) * Second(30)
     >>> moved.to(TERABYTE)
     7.5 TB
+
     """
     return DataRate(to_exact(value) * TERABIT_PER_SECOND.scale, TERABIT_PER_SECOND)
 
@@ -285,6 +291,7 @@ def PetabitPerSecond(value: Numeric) -> DataRate:
     >>> from kuchka.units.data import PETABYTE
     >>> (PetabitPerSecond(1) * Second(8)).to(PETABYTE)
     1 PB
+
     """
     return DataRate(to_exact(value) * PETABIT_PER_SECOND.scale, PETABIT_PER_SECOND)
 
@@ -311,6 +318,7 @@ def KibibitPerSecond(value: Numeric) -> DataRate:
     >>> from kuchka.units.data import KIBIBYTE
     >>> (KibibitPerSecond(64) * Second(15)).to(KIBIBYTE)
     120 KiB
+
     """
     return DataRate(to_exact(value) * KIBIBIT_PER_SECOND.scale, KIBIBIT_PER_SECOND)
 
@@ -336,6 +344,7 @@ def MebibitPerSecond(value: Numeric) -> DataRate:
     >>> duration = Mebibyte(384) / MebibitPerSecond(96)
     >>> f"{duration:.0f}"
     '32 s'
+
     """
     return DataRate(to_exact(value) * MEBIBIT_PER_SECOND.scale, MEBIBIT_PER_SECOND)
 
@@ -361,6 +370,7 @@ def GibibitPerSecond(value: Numeric) -> DataRate:
     >>> from kuchka.units.data import GIBIBYTE
     >>> (GibibitPerSecond(2) * Second(5)).to(GIBIBYTE)
     1.25 GiB
+
     """
     return DataRate(to_exact(value) * GIBIBIT_PER_SECOND.scale, GIBIBIT_PER_SECOND)
 
@@ -387,6 +397,7 @@ def TebibitPerSecond(value: Numeric) -> DataRate:
     >>> duration = Tebibyte(32) / TebibitPerSecond(4)
     >>> f"{duration:.0f}"
     '64 s'
+
     """
     return DataRate(to_exact(value) * TEBIBIT_PER_SECOND.scale, TEBIBIT_PER_SECOND)
 
@@ -413,6 +424,7 @@ def PebibitPerSecond(value: Numeric) -> DataRate:
     >>> duration = Pebibyte(16) / PebibitPerSecond(8)
     >>> f"{duration:.0f}"
     '16 s'
+
     """
     return DataRate(to_exact(value) * PEBIBIT_PER_SECOND.scale, PEBIBIT_PER_SECOND)
 
@@ -439,6 +451,7 @@ def BytePerSecond(value: Numeric) -> DataRate:
     >>> log_rate = (Byte(24) * 20) / Second(1)
     >>> log_rate.to(BYTE_PER_SECOND)
     480 B/s
+
     """
     return DataRate(to_exact(value) * BYTE_PER_SECOND.scale, BYTE_PER_SECOND)
 
@@ -464,6 +477,7 @@ def KilobytePerSecond(value: Numeric) -> DataRate:
     >>> duration = Kilobyte(480) / KilobytePerSecond(12)
     >>> f"{duration:.0f}"
     '40 s'
+
     """
     return DataRate(to_exact(value) * KILOBYTE_PER_SECOND.scale, KILOBYTE_PER_SECOND)
 
@@ -491,6 +505,7 @@ def MegabytePerSecond(value: Numeric) -> DataRate:
     >>> captured = MegabytePerSecond(150) * Second(10 * 60)
     >>> captured.to(GIGABYTE)
     90 GB
+
     """
     return DataRate(to_exact(value) * MEGABYTE_PER_SECOND.scale, MEGABYTE_PER_SECOND)
 
@@ -516,6 +531,7 @@ def GigabytePerSecond(value: Numeric) -> DataRate:
     >>> duration = Gigabyte(800) / GigabytePerSecond(5)
     >>> f"{duration:.0f}"
     '160 s'
+
     """
     return DataRate(to_exact(value) * GIGABYTE_PER_SECOND.scale, GIGABYTE_PER_SECOND)
 
@@ -542,6 +558,7 @@ def TerabytePerSecond(value: Numeric) -> DataRate:
     >>> duration = Terabyte(8) / TerabytePerSecond(2)
     >>> f"{duration:.0f}"
     '4 s'
+
     """
     return DataRate(to_exact(value) * TERABYTE_PER_SECOND.scale, TERABYTE_PER_SECOND)
 
@@ -568,6 +585,7 @@ def PetabytePerSecond(value: Numeric) -> DataRate:
     >>> duration = Petabyte(3) / PetabytePerSecond(0.5)
     >>> f"{duration:.0f}"
     '6 s'
+
     """
     return DataRate(to_exact(value) * PETABYTE_PER_SECOND.scale, PETABYTE_PER_SECOND)
 
@@ -594,6 +612,7 @@ def KibibytePerSecond(value: Numeric) -> DataRate:
     >>> duration = Kibibyte(384) / KibibytePerSecond(64)
     >>> f"{duration:.0f}"
     '6 s'
+
     """
     return DataRate(to_exact(value) * KIBIBYTE_PER_SECOND.scale, KIBIBYTE_PER_SECOND)
 
@@ -620,6 +639,7 @@ def MebibytePerSecond(value: Numeric) -> DataRate:
     >>> aggregate = MebibytePerSecond(250) * 4
     >>> f"{aggregate.to(GIBIBYTE_PER_SECOND):.3f}"
     '0.977 GiB/s'
+
     """
     return DataRate(to_exact(value) * MEBIBYTE_PER_SECOND.scale, MEBIBYTE_PER_SECOND)
 
@@ -645,6 +665,7 @@ def GibibytePerSecond(value: Numeric) -> DataRate:
     >>> from kuchka.units.data import GIBIBYTE
     >>> (GibibytePerSecond(8) * Second(2)).to(GIBIBYTE)
     16 GiB
+
     """
     return DataRate(to_exact(value) * GIBIBYTE_PER_SECOND.scale, GIBIBYTE_PER_SECOND)
 
@@ -671,6 +692,7 @@ def TebibytePerSecond(value: Numeric) -> DataRate:
     >>> from kuchka.units.data import TEBIBYTE
     >>> (TebibytePerSecond(4) * Second(6)).to(TEBIBYTE)
     24 TiB
+
     """
     return DataRate(to_exact(value) * TEBIBYTE_PER_SECOND.scale, TEBIBYTE_PER_SECOND)
 
@@ -697,6 +719,7 @@ def PebibytePerSecond(value: Numeric) -> DataRate:
     >>> duration = Pebibyte(5) / PebibytePerSecond(1)
     >>> f"{duration:.0f}"
     '5 s'
+
     """
     return DataRate(to_exact(value) * PEBIBYTE_PER_SECOND.scale, PEBIBYTE_PER_SECOND)
 

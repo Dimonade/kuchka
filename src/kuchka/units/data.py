@@ -34,8 +34,8 @@ uploaded:
 >>> daily_log = record * records_per_day
 >>> daily_log.to(KIBIBYTE)
 810 KiB
->>> int((daily_log * 7).to(KIBIBYTE).magnitude)
-5670
+>>> (daily_log * 7).to(KIBIBYTE)
+5670 KiB
 
 A firmware update is sent in payload chunks of at most 1460 bytes.
 The final chunk may be only partly filled, so calculate both the number of chunks and
@@ -149,6 +149,7 @@ def Bit(value: Numeric) -> Data:
 
     >>> Bit(24).to(BYTE)
     3 B
+
     """
     return Data(to_exact(value) * BIT.scale, BIT)
 
@@ -172,6 +173,7 @@ def Kilobit(value: Numeric) -> Data:
 
     >>> Kilobit(12).to(BYTE)
     1500 B
+
     """
     return Data(to_exact(value) * KILOBIT.scale, KILOBIT)
 
@@ -195,6 +197,7 @@ def Megabit(value: Numeric) -> Data:
 
     >>> Megabit(24).to(MEGABYTE)
     3 MB
+
     """
     return Data(to_exact(value) * MEGABIT.scale, MEGABIT)
 
@@ -218,6 +221,7 @@ def Gigabit(value: Numeric) -> Data:
 
     >>> Gigabit(8).to(GIGABYTE)
     1 GB
+
     """
     return Data(to_exact(value) * GIGABIT.scale, GIGABIT)
 
@@ -241,6 +245,7 @@ def Terabit(value: Numeric) -> Data:
 
     >>> Terabyte(2).to(TERABIT)
     16 Tbit
+
     """
     return Data(to_exact(value) * TERABIT.scale, TERABIT)
 
@@ -264,6 +269,7 @@ def Petabit(value: Numeric) -> Data:
 
     >>> Petabyte(1).to(PETABIT)
     8 Pbit
+
     """
     return Data(to_exact(value) * PETABIT.scale, PETABIT)
 
@@ -287,6 +293,7 @@ def Kibibit(value: Numeric) -> Data:
 
     >>> Kibibit(32).to(KIBIBYTE)
     4 KiB
+
     """
     return Data(to_exact(value) * KIBIBIT.scale, KIBIBIT)
 
@@ -310,6 +317,7 @@ def Mebibit(value: Numeric) -> Data:
 
     >>> Mebibit(8).to(MEBIBYTE)
     1 MiB
+
     """
     return Data(to_exact(value) * MEBIBIT.scale, MEBIBIT)
 
@@ -333,6 +341,7 @@ def Gibibit(value: Numeric) -> Data:
 
     >>> Gibibyte(4).to(GIBIBIT)
     32 Gibit
+
     """
     return Data(to_exact(value) * GIBIBIT.scale, GIBIBIT)
 
@@ -356,6 +365,7 @@ def Tebibit(value: Numeric) -> Data:
 
     >>> Tebibyte(1).to(TEBIBIT)
     8 Tibit
+
     """
     return Data(to_exact(value) * TEBIBIT.scale, TEBIBIT)
 
@@ -379,6 +389,7 @@ def Pebibit(value: Numeric) -> Data:
 
     >>> Pebibyte(1).to(PEBIBIT)
     8 Pibit
+
     """
     return Data(to_exact(value) * PEBIBIT.scale, PEBIBIT)
 
@@ -402,6 +413,7 @@ def Byte(value: Numeric) -> Data:
 
     >>> Byte(1500).to(BIT)
     12000 bit
+
     """
     return Data(to_exact(value) * BYTE.scale, BYTE)
 
@@ -426,6 +438,7 @@ def Kilobyte(value: Numeric) -> Data:
 
     >>> (Kilobyte(64) - Kilobyte(9)).to(BYTE)
     55000 B
+
     """
     return Data(to_exact(value) * KILOBYTE.scale, KILOBYTE)
 
@@ -449,6 +462,7 @@ def Megabyte(value: Numeric) -> Data:
 
     >>> int((Megabyte(25) / Megabyte(5)).magnitude)
     5
+
     """
     return Data(to_exact(value) * MEGABYTE.scale, MEGABYTE)
 
@@ -473,6 +487,7 @@ def Gigabyte(value: Numeric) -> Data:
 
     >>> (Gigabyte(2) - Megabyte(750)).to(MEGABYTE)
     1250 MB
+
     """
     return Data(to_exact(value) * GIGABYTE.scale, GIGABYTE)
 
@@ -496,6 +511,7 @@ def Terabyte(value: Numeric) -> Data:
 
     >>> int((Terabyte(2) / Gigabyte(250)).magnitude)
     8
+
     """
     return Data(to_exact(value) * TERABYTE.scale, TERABYTE)
 
@@ -519,6 +535,7 @@ def Petabyte(value: Numeric) -> Data:
 
     >>> int((Petabyte(2) / Terabyte(250)).magnitude)
     8
+
     """
     return Data(to_exact(value) * PETABYTE.scale, PETABYTE)
 
@@ -542,6 +559,7 @@ def Kibibyte(value: Numeric) -> Data:
 
     >>> int((Kibibyte(64) / Kibibyte(4)).magnitude)
     16
+
     """
     return Data(to_exact(value) * KIBIBYTE.scale, KIBIBYTE)
 
@@ -565,6 +583,7 @@ def Mebibyte(value: Numeric) -> Data:
 
     >>> int((Mebibyte(128) / Mebibyte(8)).magnitude)
     16
+
     """
     return Data(to_exact(value) * MEBIBYTE.scale, MEBIBYTE)
 
@@ -588,6 +607,7 @@ def Gibibyte(value: Numeric) -> Data:
 
     >>> int((Gibibyte(6) / Mebibyte(256)).magnitude)
     24
+
     """
     return Data(to_exact(value) * GIBIBYTE.scale, GIBIBYTE)
 
@@ -611,6 +631,7 @@ def Tebibyte(value: Numeric) -> Data:
 
     >>> int((Tebibyte(1) / Gibibyte(256)).magnitude)
     4
+
     """
     return Data(to_exact(value) * TEBIBYTE.scale, TEBIBYTE)
 
@@ -634,6 +655,7 @@ def Pebibyte(value: Numeric) -> Data:
 
     >>> int((Pebibyte(3) / Tebibyte(24)).magnitude)
     128
+
     """
     return Data(to_exact(value) * PEBIBYTE.scale, PEBIBYTE)
 
