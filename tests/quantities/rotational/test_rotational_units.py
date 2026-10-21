@@ -49,7 +49,12 @@ def test_angle_and_displacement_share_their_units() -> None:
 
 def test_the_tables_list_the_units_by_symbol() -> None:
     assert set(angular.ANGULAR_DISPLACEMENT_UNITS) >= {"tr", "rad", symbols.DEGREE}
-    assert set(angvel.ANGULAR_VELOCITY_UNITS) == {"tr/s", "rad/s", f"{symbols.DEGREE}/s", "rpm"}
+    assert set(angvel.ANGULAR_VELOCITY_UNITS) == {
+        "tr/s",
+        "rad/s",
+        f"{symbols.DEGREE}/s",
+        "rpm",
+    }
     assert set(torque.TORQUE_UNITS) == {
         "J/tr",
         f"N{symbols.MIDDLE_DOT}m",
@@ -61,7 +66,10 @@ def test_the_tables_list_the_units_by_symbol() -> None:
 
 
 def test_results_display_in_the_units_people_read() -> None:
-    assert str(energy.Joule(1) / angular.RadianDisplacement(1)) == f"1 N{symbols.MIDDLE_DOT}m"
+    assert (
+        str(energy.Joule(1) / angular.RadianDisplacement(1))
+        == f"1 N{symbols.MIDDLE_DOT}m"
+    )
     assert str(angvel.RadianPerSecond(5) * time.Second(2)) == "10 rad"
     assert str(angular.DegreeDisplacement(90) / time.Second(1)).endswith(" rad/s")
     assert (
