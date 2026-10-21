@@ -1,4 +1,4 @@
-"""SI prefixes definition.
+"""SI and IEC binary prefixes definition.
 
 The central registry exists for two reasons:
 - remove the need to manually type the same things, and
@@ -25,8 +25,10 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True, slots=True)
 class Prefix:
-    """SI prefix - its name, display symbol, and power-of-ten exponent.
+    """A prefix - its name, display symbol, base, and exponent.
 
+    The factor is `base ** exponent`: the SI prefixes are powers of ten, and the IEC
+    binary prefixes (`kibi`, `mebi`, ...) are powers of two.
     `aliases` are other symbols for the same prefix: `u` for micro, which is what a
     keyboard offers in place of the micro sign.
     """
@@ -35,12 +37,22 @@ class Prefix:
     symbol: str
     exponent: int
     aliases: tuple[str, ...] = ()
+    base: int = 10
 
     @property
     def factor(self) -> Decimal:
-        """The exact scale factor, built through `scaleb`."""
-        return Decimal(1).scaleb(self.exponent)
+        """The exact scale factor.
 
+        A power of ten is built through `scaleb`.
+        Any other base is an integer power, built from the integer so that no
+        arithmetic context can round it (`Decimal(2) ** 100` would).
+        """
+        if self.base == _DECIMAL_BASE:
+            return Decimal(1).scaleb(self.exponent)
+        return Decimal(self.base**self.exponent)
+
+
+_DECIMAL_BASE = 10
 
 UNIT = Prefix("", "", 0)
 """No prefix to let the unprefixed unit to go through the same helper."""
@@ -69,6 +81,16 @@ ZETTA = Prefix("zetta", "Z", 21)
 YOTTA = Prefix("yotta", "Y", 24)
 RONNA = Prefix("ronna", "R", 27)
 QUETTA = Prefix("quetta", "Q", 30)
+
+
+KIBI = Prefix("kibi", "Ki", 10, base=2)
+MEBI = Prefix("mebi", "Mi", 20, base=2)
+GIBI = Prefix("gibi", "Gi", 30, base=2)
+TEBI = Prefix("tebi", "Ti", 40, base=2)
+PEBI = Prefix("pebi", "Pi", 50, base=2)
+EXBI = Prefix("exbi", "Ei", 60, base=2)
+ZEBI = Prefix("zebi", "Zi", 70, base=2)
+YOBI = Prefix("yobi", "Yi", 80, base=2)
 
 
 def with_prefix(

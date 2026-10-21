@@ -56,6 +56,8 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.quantities.angular import AngularDisplacement
     from kuchka.quantities.charge import Charge
+    from kuchka.quantities.data import Data
+    from kuchka.quantities.data import DataRate
     from kuchka.quantities.electrical import Current
     from kuchka.quantities.electrical import Power
     from kuchka.quantities.energy import Energy
@@ -76,6 +78,8 @@ class Time(LinearQuantity):
     def __mul__(self, other: Frequency) -> Fraction: ...
     @overload
     def __mul__(self, other: Current) -> Charge: ...
+    @overload
+    def __mul__(self, other: DataRate) -> Data: ...
     @overload
     def __mul__(self, other: Power) -> Energy: ...
     @overload
@@ -184,6 +188,8 @@ class Frequency(LinearQuantity):
     def __mul__(self, other: AngularDisplacement) -> AngularVelocity: ...
     @overload
     def __mul__(self, other: Charge) -> Current: ...
+    @overload
+    def __mul__(self, other: Data) -> DataRate: ...
     @overload
     def __mul__(self, other: Energy) -> Power: ...
     @overload

@@ -7,8 +7,8 @@ and unit constructors (``Volt``, ``Milliampere``, ...) exposed from the top-leve
 
 Dimensions are represented as exponent vectors over the seven SI base quantities:
 mass, length, time, electric current, thermodynamic temperature, amount of substance,
-and luminous intensity -- plus one supplementary axis, ``angle``, tracked separately
-from the seven base quantities.
+and luminous intensity -- plus two supplementary axes, ``angle`` and ``information``,
+tracked separately from the seven base quantities.
 
 SI itself treats plane angle as a quantity of dimension one (the radian is a
 dimensionless derived unit), and `kuchka` is not taking a position against that.
@@ -19,6 +19,11 @@ Torque is energy per angle (M L² T⁻² angle⁻¹) and angular velocity is ang
 base-quantity accounting cannot tell apart.
 `Proportion` (genuinely dimensionless, ``Percent``/``Ratio``) and angles are different
 dimensions for the same reason.
+
+The ``information`` field does the same for data: a count of bits is neither a
+`Proportion` nor a number of cycles.
+A data rate is information per time (information T⁻¹), so it differs from the hertz,
+the sample rate, and the baud, which all have the dimension T⁻¹.
 
 Multiplying two physical quantities adds their exponent vectors.
 Dividing subtracts them.
@@ -53,6 +58,7 @@ class Dimension:
     amount: int = 0
     luminous_intensity: int = 0
     angle: int = 0
+    information: int = 0
 
     def __mul__(self, other: Dimension) -> Dimension:
         return Dimension(
@@ -64,6 +70,7 @@ class Dimension:
             amount=self.amount + other.amount,
             luminous_intensity=self.luminous_intensity + other.luminous_intensity,
             angle=self.angle + other.angle,
+            information=self.information + other.information,
         )
 
     def __truediv__(self, other: Dimension) -> Dimension:
@@ -76,6 +83,7 @@ class Dimension:
             amount=self.amount - other.amount,
             luminous_intensity=self.luminous_intensity - other.luminous_intensity,
             angle=self.angle - other.angle,
+            information=self.information - other.information,
         )
 
     @override
@@ -89,6 +97,7 @@ class Dimension:
             ("amount", "N"),
             ("luminous_intensity", "J"),
             ("angle", symbols.ANGLE),
+            ("information", symbols.INFORMATION),
         )
 
         parts = []
@@ -124,6 +133,7 @@ TEMPERATURE_DELTA = Dimension(temperature=1)
 AMOUNT_OF_SUBSTANCE = Dimension(amount=1)
 LUMINOUS_INTENSITY = Dimension(luminous_intensity=1)
 ANGLE = Dimension(angle=1)
+DATA = Dimension(information=1)
 
 """The dimension of a plane angle: `Angle`'s dimension.
 
@@ -135,6 +145,7 @@ See the module docstring for why this is tracked as its own axis rather than reu
 ENERGY_DENSITY = ENERGY / VOLUME
 ANGULAR_VELOCITY = ANGLE / TIME
 TORQUE = ENERGY / ANGLE
+DATA_RATE = DATA / TIME
 
 __all__ = [
     "ACCELERATION",
@@ -145,6 +156,8 @@ __all__ = [
     "CHARGE",
     "CONDUCTANCE",
     "CURRENT",
+    "DATA",
+    "DATA_RATE",
     "DENSITY",
     "DIMENSIONLESS",
     "ENERGY",

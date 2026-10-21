@@ -23,6 +23,7 @@ from kuchka.quantities import angular
 from kuchka.quantities import area
 from kuchka.quantities import base
 from kuchka.quantities import charge
+from kuchka.quantities import data
 from kuchka.quantities import density
 from kuchka.quantities import electrical
 from kuchka.quantities import energy
@@ -43,6 +44,7 @@ from kuchka.quantities.angular import *
 from kuchka.quantities.area import *
 from kuchka.quantities.base import *
 from kuchka.quantities.charge import *
+from kuchka.quantities.data import *
 from kuchka.quantities.density import *
 from kuchka.quantities.electrical import *
 from kuchka.quantities.energy import *
@@ -65,6 +67,7 @@ __all__ += angular.__all__
 __all__ += area.__all__
 __all__ += base.__all__
 __all__ += charge.__all__
+__all__ += data.__all__
 __all__ += density.__all__
 __all__ += electrical.__all__
 __all__ += energy.__all__

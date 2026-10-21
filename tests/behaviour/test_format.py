@@ -40,5 +40,6 @@ def test_dimensions_superscripts() -> None:
         amount=0,
         luminous_intensity=-9000,
         angle=1991,
+        information=3,
     )
-    assert d.__repr__() == "T⁻¹⁷ M⁻⁴²⁰ I¹⁰²⁴ Θ⁻⁵¹² J⁻⁹⁰⁰⁰ ∠¹⁹⁹¹"
+    assert d.__repr__() == "T⁻¹⁷ M⁻⁴²⁰ I¹⁰²⁴ Θ⁻⁵¹² J⁻⁹⁰⁰⁰ ∠¹⁹⁹¹ D³"

@@ -98,7 +98,7 @@ def run(path: Path) -> list[str]:
     module = types.ModuleType("documentation_example")
     sys.modules[module.__name__] = module
     namespace = module.__dict__
-    for block in blocks_of(path.read_text()):
+    for block in blocks_of(path.read_text(encoding="utf-8")):
         if block.skipped:
             continue
         tree = ast.parse(block.source)
