@@ -1,6 +1,6 @@
 """Energy density: energy per unit volume.
 
-Shares its dimension with `Pressure` (both are M L^-1 T^-2), and is a different
+Shares its dimension with `Pressure` (both are M L⁻¹ T⁻²), and is a different
 concept: a pressure is a force on an area, and an energy density is how much energy a
 volume holds.
 Neither is the general kind of the dimension, so `EnergyDensity` and `Pressure` are

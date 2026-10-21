@@ -64,6 +64,32 @@ That separates torque from energy and angular velocity from the hertz, which hav
 Turn is the canonical angle, so the canonical units are the turn, the turn per second, and the joule per turn, and a radian enters as the exact factor `1 / (2 pi)`.
 Arithmetic results display in the radian, the radian per second, and the newton-metre.
 
+## The information axis
+
+`Dimension` counts information as an axis of its own, so data is a dimension and a data rate is data per time.
+That keeps `Data` apart from `Proportion`, which is dimensionless, and `DataRate` apart from `Frequency`, `SampleRate`, and `BaudRate`, which share T⁻¹.
+
+`Data` counts bits, and the bit is its canonical unit.
+`Data / Time` is a `DataRate`, `DataRate * Time` is `Data`, and the quotient of two `Data` values is a `Proportion`, the way `Current * Time` is a `Charge`:
+
+```python
+from kuchka import Gibibyte
+from kuchka import Hertz
+from kuchka import Kibibyte
+from kuchka import Megabit
+from kuchka import MegabitPerSecond
+from kuchka import Second
+
+Gibibyte(4) / Second(10)  # a DataRate
+MegabitPerSecond(100) * Second(10) == Megabit(1000)  # a Data
+Gibibyte(4) / MegabitPerSecond(100)  # a Time
+Hertz(1000) * Kibibyte(4)  # a DataRate
+MegabitPerSecond(100) + Hertz(1)  # rejected: `IncompatibleDimensionError`.
+```
+
+The SI prefixes count in thousands and the IEC binary prefixes in powers of 1024, so `Kilobyte(1)` is 1000 bytes, `Kibibyte(1)` is 1024 bytes, and the two never compare equal.
+Spellings follow the same split: `kB` and `KiB` resolve, and `KB` is refused.
+
 ## Choosing the result type
 
 The type of a product or quotient is decided in this order:

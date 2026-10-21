@@ -1,6 +1,6 @@
 # Adding a dimension
 
-A `Dimension` is a vector of exponents over the base quantities: time, length, mass, current, temperature, amount, luminous intensity, and angle.
+A `Dimension` is a vector of exponents over the base quantities: time, length, mass, current, temperature, amount, luminous intensity, angle, and information.
 Two dimensions are equal when every exponent matches, and the arithmetic engine reads products and quotients straight off the exponents.
 
 ## Do you need one?
@@ -45,3 +45,32 @@ Once `Absement` is registered as the first linear kind of `ABSEMENT`, it is the 
 - [ ] a quantity type registered for it ([Adding a quantity](adding_a_quantity.md)),
 - [ ] `@overload`s on the operand classes for the products and quotients it produces,
 - [ ] [tests](adding_tests.md) for the new arithmetic.
+
+## Adding an axis
+
+An axis is rarer than a dimension.
+Add one when SI's own accounting folds two concepts into one dimension and a model needs to tell them apart: angle separates torque from energy, and information separates a count of bits from a plain number and a data rate from a frequency.
+An axis takes four edits in `kuchka/dimensions.py` and one in `kuchka/internal/symbols.py`:
+
+<!-- doc-test: skip a fragment of the dimensions module, not a program -->
+
+```python
+class Dimension:
+    ...
+    # A field with a default of 0 leaves every existing dimension unchanged.
+    information: int = 0
+
+    def __mul__(self, other):
+        ...
+        information = self.information + other.information
+
+    def __truediv__(self, other):
+        ...
+        information = self.information - other.information
+```
+
+- `__repr__` lists the axis with a label from `kuchka/internal/symbols.py`, so `DATA_RATE` shows as `T⁻¹ D¹`.
+- The exponent-formatting test in `tests/behaviour/test_format.py` gives the new field an exponent, so the label and the superscripts are checked together.
+- The dimension constants that use the axis (`DATA = Dimension(information=1)`) follow as described above.
+
+Nothing else reads the fields one by one: equality, hashing, and the result registry compare whole dimensions.

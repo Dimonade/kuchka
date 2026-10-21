@@ -1,6 +1,6 @@
 """Two small circuit-arithmetic helpers.
 
-`power_dissipation` computes P = V^2 / R. `Voltage` squared has no registered
+`power_dissipation` computes P = V² / R. `Voltage` squared has no registered
 kuchka type, so the calculation drops to `.magnitude` for that one step and wraps
 the result back up as `Power`.
 
@@ -41,7 +41,7 @@ def series(*resistors: Resistance) -> Resistance:
 
 
 def power_dissipation(voltage: Voltage, resistance: Resistance) -> Power:
-    """Return the power dissipated by `resistance` at `voltage`, via P = V^2 / R.
+    """Return the power dissipated by `resistance` at `voltage`, via P = V² / R.
 
     `voltage.magnitude` and `resistance.magnitude` are always expressed in kuchka's
     canonical units (volts, ohms), regardless of the prefix each value was

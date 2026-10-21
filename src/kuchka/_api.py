@@ -16,6 +16,8 @@ from kuchka.quantities import Charge
 from kuchka.quantities import Conductance
 from kuchka.quantities import ConvertibleToFrequency
 from kuchka.quantities import Current
+from kuchka.quantities import Data
+from kuchka.quantities import DataRate
 from kuchka.quantities import Density
 from kuchka.quantities import Energy
 from kuchka.quantities import EnergyDensity
@@ -52,6 +54,10 @@ from kuchka.units import Atmosphere
 from kuchka.units import Bar
 from kuchka.units import Baud
 from kuchka.units import Bel
+from kuchka.units import Bit
+from kuchka.units import BitPerSecond
+from kuchka.units import Byte
+from kuchka.units import BytePerSecond
 from kuchka.units import Calorie
 from kuchka.units import Candela
 from kuchka.units import Celsius
@@ -85,7 +91,15 @@ from kuchka.units import Femtosecond
 from kuchka.units import Foot
 from kuchka.units import Fortnight
 from kuchka.units import Gal
+from kuchka.units import Gibibit
+from kuchka.units import GibibitPerSecond
+from kuchka.units import Gibibyte
+from kuchka.units import GibibytePerSecond
 from kuchka.units import Gigabaud
+from kuchka.units import Gigabit
+from kuchka.units import GigabitPerSecond
+from kuchka.units import Gigabyte
+from kuchka.units import GigabytePerSecond
 from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gigajoule
@@ -114,8 +128,16 @@ from kuchka.units import JoulePerCubicMetre
 from kuchka.units import JoulePerTurn
 from kuchka.units import JulianYear
 from kuchka.units import Kelvin
+from kuchka.units import Kibibit
+from kuchka.units import KibibitPerSecond
+from kuchka.units import Kibibyte
+from kuchka.units import KibibytePerSecond
 from kuchka.units import Kiloampere
 from kuchka.units import Kilobaud
+from kuchka.units import Kilobit
+from kuchka.units import KilobitPerSecond
+from kuchka.units import Kilobyte
+from kuchka.units import KilobytePerSecond
 from kuchka.units import Kilocalorie
 from kuchka.units import Kiloelectronvolt
 from kuchka.units import Kilogram
@@ -150,8 +172,16 @@ from kuchka.units import Knot
 from kuchka.units import LightYear
 from kuchka.units import Liter
 from kuchka.units import Litre
+from kuchka.units import Mebibit
+from kuchka.units import MebibitPerSecond
+from kuchka.units import Mebibyte
+from kuchka.units import MebibytePerSecond
 from kuchka.units import Megaampere
 from kuchka.units import Megabaud
+from kuchka.units import Megabit
+from kuchka.units import MegabitPerSecond
+from kuchka.units import Megabyte
+from kuchka.units import MegabytePerSecond
 from kuchka.units import Megaelectronvolt
 from kuchka.units import Megagram
 from kuchka.units import Megahertz
@@ -237,7 +267,15 @@ from kuchka.units import NewtonMetre
 from kuchka.units import Ohm
 from kuchka.units import Ounce
 from kuchka.units import Pascal
+from kuchka.units import Pebibit
+from kuchka.units import PebibitPerSecond
+from kuchka.units import Pebibyte
+from kuchka.units import PebibytePerSecond
 from kuchka.units import Percent
+from kuchka.units import Petabit
+from kuchka.units import PetabitPerSecond
+from kuchka.units import Petabyte
+from kuchka.units import PetabytePerSecond
 from kuchka.units import Petaelectronvolt
 from kuchka.units import Petahertz
 from kuchka.units import Petajoule
@@ -275,6 +313,14 @@ from kuchka.units import SquareMeter
 from kuchka.units import SquareMetre
 from kuchka.units import SquareMillimeter
 from kuchka.units import SquareMillimetre
+from kuchka.units import Tebibit
+from kuchka.units import TebibitPerSecond
+from kuchka.units import Tebibyte
+from kuchka.units import TebibytePerSecond
+from kuchka.units import Terabit
+from kuchka.units import TerabitPerSecond
+from kuchka.units import Terabyte
+from kuchka.units import TerabytePerSecond
 from kuchka.units import Teraelectronvolt
 from kuchka.units import Terahertz
 from kuchka.units import Terajoule
@@ -314,6 +360,10 @@ __all__ = [
     "Baud",
     "BaudRate",
     "Bel",
+    "Bit",
+    "BitPerSecond",
+    "Byte",
+    "BytePerSecond",
     "Calorie",
     "Candela",
     "Celsius",
@@ -331,6 +381,8 @@ __all__ = [
     "CubicMillimetre",
     "Current",
     "Dalton",
+    "Data",
+    "DataRate",
     "Day",
     "Decibel",
     "Decimeter",
@@ -356,7 +408,15 @@ __all__ = [
     "Fortnight",
     "Frequency",
     "Gal",
+    "Gibibit",
+    "GibibitPerSecond",
+    "Gibibyte",
+    "GibibytePerSecond",
     "Gigabaud",
+    "Gigabit",
+    "GigabitPerSecond",
+    "Gigabyte",
+    "GigabytePerSecond",
     "Gigaelectronvolt",
     "Gigahertz",
     "Gigajoule",
@@ -386,8 +446,16 @@ __all__ = [
     "JoulePerTurn",
     "JulianYear",
     "Kelvin",
+    "Kibibit",
+    "KibibitPerSecond",
+    "Kibibyte",
+    "KibibytePerSecond",
     "Kiloampere",
     "Kilobaud",
+    "Kilobit",
+    "KilobitPerSecond",
+    "Kilobyte",
+    "KilobytePerSecond",
     "Kilocalorie",
     "Kiloelectronvolt",
     "Kilogram",
@@ -426,8 +494,16 @@ __all__ = [
     "LogarithmicRatio",
     "LuminousIntensity",
     "Mass",
+    "Mebibit",
+    "MebibitPerSecond",
+    "Mebibyte",
+    "MebibytePerSecond",
     "Megaampere",
     "Megabaud",
+    "Megabit",
+    "MegabitPerSecond",
+    "Megabyte",
+    "MegabytePerSecond",
     "Megaelectronvolt",
     "Megagram",
     "Megahertz",
@@ -513,7 +589,15 @@ __all__ = [
     "Ohm",
     "Ounce",
     "Pascal",
+    "Pebibit",
+    "PebibitPerSecond",
+    "Pebibyte",
+    "PebibytePerSecond",
     "Percent",
+    "Petabit",
+    "PetabitPerSecond",
+    "Petabyte",
+    "PetabytePerSecond",
     "Petaelectronvolt",
     "Petahertz",
     "Petajoule",
@@ -557,8 +641,16 @@ __all__ = [
     "SquareMetre",
     "SquareMillimeter",
     "SquareMillimetre",
+    "Tebibit",
+    "TebibitPerSecond",
+    "Tebibyte",
+    "TebibytePerSecond",
     "Temperature",
     "TemperatureDelta",
+    "Terabit",
+    "TerabitPerSecond",
+    "Terabyte",
+    "TerabytePerSecond",
     "Teraelectronvolt",
     "Terahertz",
     "Terajoule",

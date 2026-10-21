@@ -24,10 +24,12 @@ from kuchka import Energy
 from kuchka import EnergyDensity
 from kuchka import Fahrenheit
 from kuchka import Frequency
+from kuchka import Gibibyte
 from kuchka import Hertz
 from kuchka import Joule
 from kuchka import Length
 from kuchka import LogarithmicRatio
+from kuchka import MegabitPerSecond
 from kuchka import Meter
 from kuchka import Newton
 from kuchka import NewtonMetre
@@ -69,8 +71,8 @@ _scale_temp_b = 2 * Celsius(20)  # type: ignore[operator]  # ty: ignore[unsuppor
 _scale_temp_c = Fahrenheit(68) * 2  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 _scale_temp_d = 2 * Fahrenheit(68)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 
-_bad_add = Volt(5) + Ampere(2)  # type: ignore[operator]  # not (yet) flagged by ty across sibling quantity types
-_bad_sub = Volt(5) - Ampere(2)  # type: ignore[operator]  # not (yet) flagged by ty across sibling quantity types
+_bad_add = Volt(5) + Ampere(2)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+_bad_sub = Volt(5) - Ampere(2)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 _bad_temp_add = Celsius(20) + Celsius(5)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 _bad_fahrenheit_add = Fahrenheit(68) + Fahrenheit(9)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 
@@ -84,7 +86,7 @@ wrong: Current = Volt(5) * Ampere(2)  # type: ignore[assignment]  # ty: ignore[i
 
 # Frequency and SampleRate share a dimension but must be rejected as statically
 # incompatible, the same way Voltage and Current are.
-_bad_temporal_add = Hertz(50) + SamplesPerSecond(50)  # type: ignore[operator]  # not (yet) flagged by ty across sibling quantity types
+_bad_temporal_add = Hertz(50) + SamplesPerSecond(50)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 
 # Reciprocals of the registered pair fall out of the general `1 / x` mechanism and are
 # statically precise about which type they produce.
@@ -124,7 +126,7 @@ duty_cycle: Proportion = Ratio(Decimal("0.8"))
 
 # A Proportion is still statically incompatible with a dimensioned quantity:
 # dimensionless is not the same as "any dimension".
-_bad_proportion_add = Percent(5) + Volt(5)  # type: ignore[operator]  # not (yet) flagged by ty across sibling quantity types
+_bad_proportion_add = Percent(5) + Volt(5)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 
 # Multiplying a dimensioned quantity by a Proportion keeps its type, statically too.
 scaled_voltage: Voltage = Volt(5) * Ratio(Decimal("0.1"))  # OK: statically a Voltage.
@@ -200,3 +202,10 @@ turn_rate: AngularVelocity = DegreeDisplacement(90) / Second(
 shaft_power: Power = NewtonMetre(2) * RadianPerSecond(5)  # OK: a Power.
 shaft_torque: Torque = Watt(10) / RadianPerSecond(5)  # OK: a Torque.
 wrong_torque_kind: Energy = Joule(5) / RadianDisplacement(1)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+
+# Data and DataRate have dimensions of their own: neither mixes with the other, with
+# time, or with a frequency, which a bit rate is not.
+_data_plus_rate = Gibibyte(4) + MegabitPerSecond(100)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+_rate_plus_frequency = MegabitPerSecond(100) + Hertz(1)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+duration: Time = Gibibyte(4) / MegabitPerSecond(100)  # OK
+wrong_duration: Frequency = Gibibyte(4) / MegabitPerSecond(100)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
