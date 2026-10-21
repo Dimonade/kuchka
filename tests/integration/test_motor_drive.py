@@ -17,6 +17,7 @@ from kuchka import Energy
 from kuchka import IncompatibleDimensionError
 from kuchka import Power
 from kuchka import Torque
+from kuchka.internal import symbols
 from kuchka.internal.constants import PI
 from kuchka.units import angular
 from kuchka.units import angular_velocity
@@ -80,5 +81,5 @@ def test_a_gearbox_scales_speed_and_torque_inversely() -> None:
 
 def test_results_read_in_the_units_an_engineer_reads() -> None:
     assert str(SHAFT * SPEED).endswith(" W")
-    assert str(power.Kilowatt(2) / SPEED).endswith(" N\u00b7m")
+    assert str(power.Kilowatt(2) / SPEED).endswith(f" N{symbols.MIDDLE_DOT}m")
     assert str(SPEED * temporal.Second(1)).endswith(" rad")

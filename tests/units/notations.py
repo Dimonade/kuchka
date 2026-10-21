@@ -1,8 +1,7 @@
 """Notations the `*_UNITS` tables accept and refuse, kept as data.
 
 A unit read from a configuration file or a specification is rarely typed as its display
-symbol: `C` or `degrees C` for `\u00b0C`, `u` or `Da` for the dalton, `uV` for
-`\u00b5V`.
+symbol: `C` or `degrees C` for `°C`, `u` or `Da` for the dalton, `uV` for `µV`.
 `ACCEPTED` lists what must resolve, each to a named unit, and `REJECTED` lists what
 must not, because it is ambiguous, wrong, or belongs to another quantity.
 Every entry is a hand-written expectation, not something derived from the tables.

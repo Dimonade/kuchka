@@ -12,6 +12,7 @@ from kuchka import Force
 from kuchka import InvalidConversionError
 from kuchka import InvalidMeasurementError
 from kuchka import Torque
+from kuchka.internal import symbols
 from kuchka.units import angular
 from kuchka.units import angular_velocity as angvel
 from kuchka.units import energy
@@ -47,25 +48,25 @@ def test_angle_and_displacement_share_their_units() -> None:
 
 
 def test_the_tables_list_the_units_by_symbol() -> None:
-    assert set(angular.ANGULAR_DISPLACEMENT_UNITS) >= {"tr", "rad", "\u00b0"}
-    assert set(angvel.ANGULAR_VELOCITY_UNITS) == {"tr/s", "rad/s", "\u00b0/s", "rpm"}
+    assert set(angular.ANGULAR_DISPLACEMENT_UNITS) >= {"tr", "rad", symbols.DEGREE}
+    assert set(angvel.ANGULAR_VELOCITY_UNITS) == {"tr/s", "rad/s", f"{symbols.DEGREE}/s", "rpm"}
     assert set(torque.TORQUE_UNITS) == {
         "J/tr",
-        "N\u00b7m",
-        "mN\u00b7m",
-        "kN\u00b7m",
-        "lbf\u00b7ft",
-        "lbf\u00b7in",
+        f"N{symbols.MIDDLE_DOT}m",
+        f"mN{symbols.MIDDLE_DOT}m",
+        f"kN{symbols.MIDDLE_DOT}m",
+        f"lbf{symbols.MIDDLE_DOT}ft",
+        f"lbf{symbols.MIDDLE_DOT}in",
     }
 
 
 def test_results_display_in_the_units_people_read() -> None:
-    assert str(energy.Joule(1) / angular.RadianDisplacement(1)) == "1 N\u00b7m"
+    assert str(energy.Joule(1) / angular.RadianDisplacement(1)) == f"1 N{symbols.MIDDLE_DOT}m"
     assert str(angvel.RadianPerSecond(5) * time.Second(2)) == "10 rad"
     assert str(angular.DegreeDisplacement(90) / time.Second(1)).endswith(" rad/s")
     assert (
         str(Torque.from_force(force.Newton(50), length.Metre(Fraction(1, 5))))
-        == "10 N\u00b7m"
+        == f"10 N{symbols.MIDDLE_DOT}m"
     )
 
 

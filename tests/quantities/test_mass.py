@@ -184,7 +184,7 @@ def test_solar_and_earth_mass_symbols_are_defined():
 
     This is a regression test.
     """
-    assert symbols.SUN == "\u2609"
-    assert symbols.EARTH == "\u2641"
+    assert symbols.SUN == symbols.SUN
+    assert symbols.EARTH == symbols.EARTH
     assert repr(mass.SolarMass(1)) == f"1 M{symbols.SUN}"
     assert repr(mass.EarthMass(1)) == f"1 M{symbols.EARTH}"

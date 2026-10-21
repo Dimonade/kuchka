@@ -17,6 +17,7 @@ from typing import Any
 
 import pytest
 
+from kuchka.internal import symbols
 from kuchka.units import thermal
 from kuchka.units import thermal as thermal_units
 from kuchka.units import voltage
@@ -82,7 +83,7 @@ def test_the_stored_symbol_may_be_written_in_another_spelling() -> None:
 
 
 def test_the_micro_sign_in_a_stored_symbol_restores() -> None:
-    stored = {"value": "5", "unit": "\u00b5V"}
+    stored = {"value": "5", "unit": f"{symbols.MICRO}V"}
     restored = restore(voltage.VOLTAGE_UNITS, stored)
     assert restored.value_in(voltage.MICROVOLT) == Fraction(5)
 
