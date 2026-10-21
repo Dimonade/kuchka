@@ -73,7 +73,7 @@ KRAKENTENTACLE = UnitDef("krakententacle", "kt", Fraction(43, 3) * SHELL.scale, 
 
 Prefixed units have two helpers in `kuchka.internal.prefixes`:
 
-- `with_prefix(prefix, base)` builds the unit for a prefix applied to any base `UnitDef`, so the scale, the name, the symbol, and every pairing of prefix and base spellings follow from the two:
+- `with_prefix(prefix, base)` builds the unit for a prefix applied to any base `UnitDef`, with an SI prefix (`prefixes.KILO`, powers of ten) or an IEC binary one (`prefixes.KIBI`, powers of two), so the scale, the name, the symbol, and every pairing of prefix and base spellings follow from the two:
 
   <!-- doc-test: skip an illustration of a module that does not exist in the library -->
 
