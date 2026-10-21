@@ -431,16 +431,18 @@ The complete unit vocabulary is available in the API reference.
 
 ### Time and signals
 
-| Quantity          | Representative units                                                       |
-| ----------------- | -------------------------------------------------------------------------- |
-| Time              | `Femtosecond` through `Second`, `Minute` through `JulianYear`, and `Jiffy` |
-| Instant           | reached via `Time.to_instant()`                                            |
-| Frequency         | `Nanohertz` through `Petahertz`                                            |
-| Sampling Period   | reached via `Time.to_sampling_period()`                                    |
-| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`         |
-| Baud Rate         | `Baud` through `Gigabaud`                                                  |
-| Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                          |
-| Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`                           |
+| Quantity          | Representative units                                                                                  |
+| ----------------- | ----------------------------------------------------------------------------------------------------- |
+| Time              | `Femtosecond` through `Second`, `Minute` through `JulianYear`, and `Jiffy`                            |
+| Instant           | reached via `Time.to_instant()`                                                                       |
+| Frequency         | `Nanohertz` through `Petahertz`                                                                       |
+| Sampling Period   | reached via `Time.to_sampling_period()`                                                               |
+| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`                                    |
+| Baud Rate         | `Baud` through `Gigabaud`                                                                             |
+| Data              | `Bit` and `Byte`, `Kilobyte` through `Petabyte`, `Kibibyte` through `Pebibyte`, and the same for bits |
+| Data Rate         | `BitPerSecond` and `BytePerSecond`, with the same SI and IEC multiples                                |
+| Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                                                     |
+| Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`                                                      |
 
 ### Geometry and mechanics
 

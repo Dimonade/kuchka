@@ -31,6 +31,18 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Baud Rate: `Megabaud` and `Gigabaud`.
 - Density: `GramPerLitre`, `GramPerMillilitre`, and `KilogramPerLitre`.
 
+#### Data and data rate
+
+`Data` counts bits and `DataRate` is data per time.
+Both have a dimension of their own, the new information axis, so a bit rate is not a `Frequency`, a `SampleRate`, or a `BaudRate`, and `Data / Data` is a `Proportion`.
+`Data / Time` is a `DataRate`, `DataRate * Time` is `Data`, and `Data / DataRate` is a `Time`.
+
+- Data: `Bit` and `Byte`, with the SI multiples `Kilobit` to `Petabit` and `Kilobyte` to `Petabyte`, and the IEC binary multiples `Kibibit` to `Pebibit` and `Kibibyte` to `Pebibyte`.
+- Data rate: `BitPerSecond` and `BytePerSecond`, with the same multiples (`MegabitPerSecond`, `MebibytePerSecond`, and so on).
+- `kB` is 1000 bytes and `KiB` is 1024 bytes, `Mb` is the megabit and `MB` the megabyte, and `KB` and `Kb` are refused.
+
+The IEC binary prefixes `kibi` to `yobi` join the SI ones in `kuchka.internal.prefixes`, and a `Prefix` takes a `base`.
+
 #### Energy density is its own quantity
 
 `EnergyDensity` (`JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`) shares its dimension with `Pressure`, and the two are contested.
