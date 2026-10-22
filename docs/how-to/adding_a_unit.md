@@ -61,6 +61,32 @@ Three forms express "the same unit again", and the choice carries meaning:
    `Millilitre` and `CubicCentimetre` are separate for this reason.
    Pick this form when a unit would otherwise be recorded as someone else's alias.
 
+## A type that reads another type's units
+
+A specialisation measures what its principal kind measures.
+The krakenpeople's **depth** is a length, so `Depth` reuses every unit of `Length` and mints no lookalike, the way `SamplingPeriod` reuses the units of `Time` and `Stress` those of `Pressure`.
+The module sets the canonical unit from the principal kind and derives its table from the principal kind's table with `.map`, which wraps each constructor so that it reads its result through the conversion:
+
+<!-- doc-test: skip an illustration of a module that does not exist in the library -->
+
+```python
+Depth._canonical_unit = METRE  # the principal kind's own unit
+
+
+def _via_length(constructor):
+    def read_as_depth(value):
+        return constructor(value).to_depth()
+
+    return read_as_depth
+
+
+DEPTH_UNITS: UnitTable[Depth] = LENGTH_UNITS.map("DEPTH_UNITS", _via_length)
+```
+
+The source table is annotated `UnitTable[Length]`, which is what lets a type checker see `.map`.
+The `_UNITS_OF` entry is `units_of(DEPTH_UNITS)`, and the derived table joins the derived-table cases in the unit tests, beside `SAMPLING_PERIOD_UNITS` and `STRESS_UNITS`.
+A specialisation that needs a symbol of its own, such as the volt-ampere beside the watt, defines its own units instead.
+
 ## Multiples and prefixes
 
 A unit defined as a multiple of another derives its scale from it:

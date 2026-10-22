@@ -48,7 +48,10 @@ _register(LENGTH, Depth, specialisation_of=Length)
 
 A specialisation records meaning and shape and converts no value.
 Moving between it and its principal kind is explicit, with named conversions in the `to_x` and `from_x` style (`Time.to_sampling_period()`, `SamplingPeriod.to_time()`).
-`SampleRate` and `BaudRate` are specialisations of `Frequency`.
+`SampleRate`, `BaudRate`, and `Activity` are specialisations of `Frequency`, `ApparentPower` and `ReactivePower` of `Power`, and `Stress` of `Pressure`.
+A role takes part in arithmetic only when it is scaled by a dimensionless value, divided by itself, or multiplied by its reciprocal.
+Every other product goes through the conversion first, so `Stress * Area` is refused with a hint and `stress.to_pressure() * area` is a `Force`.
+A `_rule` names a result for the kinds that arithmetic reaches, which a role is not, so a role takes no rule.
 A real contested pair is `Pressure` and `EnergyDensity`: neither is principal, and a result in that dimension raises `AmbiguousKindError` naming the candidates.
 A second linear kind that states no relation is refused when the module is imported.
 

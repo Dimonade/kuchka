@@ -23,7 +23,7 @@ Area * Length       -> Volume
 ## Units belong to quantity types
 
 A quantity type displays in the units of its own `*_UNITS` table, and in no unit of another type, even one with the same dimension.
-`Frequency`, `BaudRate`, and `SampleRate` share the dimension T⁻¹, and each has its own units: the hertz, the baud, and the sample per second.
+`Frequency`, `BaudRate`, `SampleRate`, and `Activity` share the dimension T⁻¹, and each has its own units: the hertz, the baud, the sample per second, and the becquerel.
 `Hertz(1).to(BAUD)` raises `InvalidConversionError`, and `Frequency(Fraction(1), BAUD)` raises `InvalidMeasurementError`, and both name the type the unit belongs to.
 A unit can belong to several types: the second is a unit of `Time` and of `SamplingPeriod`.
 
@@ -40,11 +40,11 @@ Every concrete quantity type is in the catalogue of kinds, which records which k
 Arithmetic produces linear kinds only, so the rules that choose its result type look only at the linear kinds of a dimension with extent.
 The first such kind is the principal one, and a later one states its relation to the kinds already there:
 
-| Relation       | Meaning                                                                            | Example                                    |
-| -------------- | ---------------------------------------------------------------------------------- | ------------------------------------------ |
-| principal      | the one linear kind arithmetic produces for a dimension with extent                | `Frequency` for T⁻¹                        |
-| specialisation | a role of a kind of the same dimension and shape, reached by explicit construction | `SampleRate` and `BaudRate` of `Frequency` |
-| contested      | linear kinds on equal footing, so the dimension has no principal                   |                                            |
+| Relation       | Meaning                                                                            | Example                                                                                        |
+| -------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| principal      | the one linear kind arithmetic produces for a dimension with extent                | `Frequency` for T⁻¹                                                                            |
+| specialisation | a role of a kind of the same dimension and shape, reached by explicit construction | `SampleRate` and `BaudRate` of `Frequency`, `ApparentPower` of `Power`, `Stress` of `Pressure` |
+| contested      | linear kinds on equal footing, so the dimension has no principal                   |                                                                                                |
 
 `Time` and `Instant`, `Angle` and a linear angular quantity, `Proportion` and `LogarithmicRatio` can share a dimension without a relation, because arithmetic never has to choose between them.
 A specialisation records meaning and shape: it converts no value and picks no result.
