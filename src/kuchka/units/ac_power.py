@@ -57,6 +57,7 @@ AC load-flow calculation.
 
 `APPARENT_POWER_UNITS` and `REACTIVE_POWER_UNITS` map unit symbols to their respective
 constructors for boundary code that reads unit strings from external sources.
+
 """
 
 from __future__ import annotations
@@ -115,6 +116,7 @@ def VoltAmpere(value: Numeric) -> ApparentPower:
     >>> meters = VoltAmpere(65) + VoltAmpere(95)
     >>> (transformer - meters).to(VOLT_AMPERE)
     90 VA
+
     """
     return ApparentPower(to_exact(value) * VOLT_AMPERE.scale, VOLT_AMPERE)
 
@@ -142,6 +144,7 @@ def MillivoltAmpere(value: Numeric) -> ApparentPower:
     >>> sensor_load = MillivoltAmpere(3.5)
     >>> (fixture_budget - sensor_load).to(MILLIVOLT_AMPERE)
     4.5 mVA
+
     """
     return ApparentPower(to_exact(value) * MILLIVOLT_AMPERE.scale, MILLIVOLT_AMPERE)
 
@@ -170,6 +173,7 @@ def KilovoltAmpere(value: Numeric) -> ApparentPower:
     >>> radios = KilovoltAmpere(1.6)
     >>> (generator - refrigeration - radios).to(KILOVOLT_AMPERE)
     7.6 kVA
+
     """
     return ApparentPower(to_exact(value) * KILOVOLT_AMPERE.scale, KILOVOLT_AMPERE)
 
@@ -198,6 +202,7 @@ def MegavoltAmpere(value: Numeric) -> ApparentPower:
     >>> rail_feeder = MegavoltAmpere(8)
     >>> (transformer - industrial_feeder - rail_feeder).to(MEGAVOLT_AMPERE)
     15 MVA
+
     """
     return ApparentPower(to_exact(value) * MEGAVOLT_AMPERE.scale, MEGAVOLT_AMPERE)
 
@@ -225,6 +230,7 @@ def GigavoltAmpere(value: Numeric) -> ApparentPower:
     >>> laser_bank = MegavoltAmpere(525)
     >>> (bus - laser_bank).to(MEGAVOLT_AMPERE)
     675 MVA
+
     """
     return ApparentPower(to_exact(value) * GIGAVOLT_AMPERE.scale, GIGAVOLT_AMPERE)
 
@@ -278,6 +284,7 @@ def Var(value: Numeric) -> ReactivePower:
     >>> correction_stage = Var(350)
     >>> (motor_demand - correction_stage).to(VAR)
     850 var
+
     """
     return ReactivePower(to_exact(value) * VAR.scale, VAR)
 
@@ -306,6 +313,7 @@ def Millivar(value: Numeric) -> ReactivePower:
     >>> trim_network = Millivar(150)
     >>> (measured - trim_network).to(MILLIVAR)
     270 mvar
+
     """
     return ReactivePower(to_exact(value) * MILLIVAR.scale, MILLIVAR)
 
@@ -332,6 +340,7 @@ def Kilovar(value: Numeric) -> ReactivePower:
     >>> capacitor_bank = Kilovar(15)
     >>> (motor_group - capacitor_bank).to(KILOVAR)
     9 kvar
+
     """
     return ReactivePower(to_exact(value) * KILOVAR.scale, KILOVAR)
 
@@ -358,6 +367,7 @@ def Megavar(value: Numeric) -> ReactivePower:
     >>> existing_compensation = Megavar(49)
     >>> (corridor_demand - existing_compensation).to(MEGAVAR)
     23 Mvar
+
     """
     return ReactivePower(to_exact(value) * MEGAVAR.scale, MEGAVAR)
 
@@ -385,6 +395,7 @@ def Gigavar(value: Numeric) -> ReactivePower:
     >>> tuning_array = Gigavar(1.5)
     >>> (shield_lattice - tuning_array).to(GIGAVAR)
     2.5 Gvar
+
     """
     return ReactivePower(to_exact(value) * GIGAVAR.scale, GIGAVAR)
 

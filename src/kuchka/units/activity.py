@@ -103,6 +103,7 @@ See Also
     Quantity type representing radioactive activity.
 ~kuchka.quantities.Frequency
     Quantity type representing frequency.
+
 """
 
 from __future__ import annotations
@@ -158,6 +159,7 @@ def Becquerel(value: Numeric) -> Activity:
     >>> body_potassium = Becquerel(4000)
     >>> body_potassium.to(KILOBECQUEREL)
     4 kBq
+
     """
     return Activity(to_exact(value) * BECQUEREL.scale, BECQUEREL)
 
@@ -184,6 +186,7 @@ def Millibecquerel(value: Numeric) -> Activity:
     >>> sample_blank = Millibecquerel(25)
     >>> sample_blank.to(BECQUEREL)
     0.025 Bq
+
     """
     return Activity(to_exact(value) * MILLIBECQUEREL.scale, MILLIBECQUEREL)
 
@@ -210,6 +213,7 @@ def Kilobecquerel(value: Numeric) -> Activity:
     >>> dust_activity = Kilobecquerel(8)
     >>> (filter_activity + dust_activity).to(KILOBECQUEREL)
     20 kBq
+
     """
     return Activity(to_exact(value) * KILOBECQUEREL.scale, KILOBECQUEREL)
 
@@ -237,6 +241,7 @@ def Megabecquerel(value: Numeric) -> Activity:
     >>> skeletal_scan_reference = Megabecquerel(650)
     >>> skeletal_scan_reference.to(GIGABECQUEREL)
     0.65 GBq
+
     """
     return Activity(to_exact(value) * MEGABECQUEREL.scale, MEGABECQUEREL)
 
@@ -263,6 +268,7 @@ def Gigabecquerel(value: Numeric) -> Activity:
     >>> iodine_release = Gigabecquerel(555)
     >>> iodine_release.to(CURIE)
     15 Ci
+
     """
     return Activity(to_exact(value) * GIGABECQUEREL.scale, GIGABECQUEREL)
 
@@ -290,6 +296,7 @@ def Terabecquerel(value: Numeric) -> Activity:
     >>> captured_sample = Terabecquerel(2.4)
     >>> captured_sample.to(GIGABECQUEREL)
     2400 GBq
+
     """
     return Activity(to_exact(value) * TERABECQUEREL.scale, TERABECQUEREL)
 
@@ -316,6 +323,7 @@ def Curie(value: Numeric) -> Activity:
     >>> lower_estimate = Curie(2_400_000)
     >>> lower_estimate.to(TERABECQUEREL)
     88800 TBq
+
     """
     return Activity(to_exact(value) * CURIE.scale, CURIE)
 
@@ -341,6 +349,7 @@ def Millicurie(value: Numeric) -> Activity:
     >>> calibration_source = Millicurie(1)
     >>> calibration_source.to(MEGABECQUEREL)
     37 MBq
+
     """
     return Activity(to_exact(value) * MILLICURIE.scale, MILLICURIE)
 
@@ -367,6 +376,7 @@ def Microcurie(value: Numeric) -> Activity:
 
     >>> f"{Becquerel(4000).to(MICROCURIE):.3f}"
     '0.108 µCi'
+
     """
     return Activity(to_exact(value) * MICROCURIE.scale, MICROCURIE)
 
@@ -396,6 +406,7 @@ def Picocurie(value: Numeric) -> Activity:
     activity.
     This constructor represents pCi only; it cannot by itself represent the volume
     denominator in pCi/L.
+
     """
     return Activity(to_exact(value) * PICOCURIE.scale, PICOCURIE)
 

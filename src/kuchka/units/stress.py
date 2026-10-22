@@ -62,6 +62,7 @@ See Also
     Quantity type representing pressure.
 ~kuchka.units.pressure
     Unit definitions shared by pressure and stress.
+
 """
 
 from __future__ import annotations
