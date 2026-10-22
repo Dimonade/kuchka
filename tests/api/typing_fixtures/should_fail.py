@@ -10,9 +10,11 @@ from fractions import Fraction
 
 from kuchka import Ampere
 from kuchka import AngularVelocity
+from kuchka import ApparentPower
 from kuchka import Area
 from kuchka import Baud
 from kuchka import BaudRate
+from kuchka import Becquerel
 from kuchka import Celsius
 from kuchka import Conductance
 from kuchka import ConvertibleToFrequency
@@ -27,6 +29,7 @@ from kuchka import Frequency
 from kuchka import Gibibyte
 from kuchka import Hertz
 from kuchka import Joule
+from kuchka import KilovoltAmpere
 from kuchka import Length
 from kuchka import LogarithmicRatio
 from kuchka import MegabitPerSecond
@@ -34,6 +37,7 @@ from kuchka import Meter
 from kuchka import Newton
 from kuchka import NewtonMetre
 from kuchka import Ohm
+from kuchka import Pascal
 from kuchka import Percent
 from kuchka import Power
 from kuchka import Pressure
@@ -50,8 +54,10 @@ from kuchka import Siemens
 from kuchka import SquareMetre
 from kuchka import Time
 from kuchka import Torque
+from kuchka import Var
 from kuchka import Volt
 from kuchka import Voltage
+from kuchka import VoltAmpere
 from kuchka import Volume
 from kuchka import Watt
 
@@ -209,3 +215,12 @@ _data_plus_rate = Gibibyte(4) + MegabitPerSecond(100)  # type: ignore[operator] 
 _rate_plus_frequency = MegabitPerSecond(100) + Hertz(1)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 duration: Time = Gibibyte(4) / MegabitPerSecond(100)  # OK
 wrong_duration: Frequency = Gibibyte(4) / MegabitPerSecond(100)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+
+# Apparent power, reactive power, activity, and stress are roles of Power, Frequency,
+# and Pressure, and each adds only with its own kind.
+_va_plus_watt = VoltAmpere(1) + Watt(1)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+_va_plus_var = VoltAmpere(1) + Var(1)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+_bq_plus_hz = Becquerel(1) + Hertz(1)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+_stress_plus_pressure = Pascal(1).to_stress() + Pascal(1)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+headroom: ApparentPower = KilovoltAmpere(5) - VoltAmpere(3200)  # OK
+wrong_headroom: Power = KilovoltAmpere(5) - VoltAmpere(3200)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]

@@ -4,23 +4,29 @@ from __future__ import annotations
 
 import pytest
 
+from kuchka import Activity
 from kuchka import Angle
 from kuchka import AngularDisplacement
+from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import EnergyDensity
 from kuchka import Frequency
 from kuchka import Instant
 from kuchka import LogarithmicRatio
+from kuchka import Power
 from kuchka import Pressure
 from kuchka import Proportion
+from kuchka import ReactivePower
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
+from kuchka import Stress
 from kuchka import Temperature
 from kuchka import TemperatureDelta
 from kuchka import Time
 from kuchka.dimensions import ANGLE
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import FREQUENCY
+from kuchka.dimensions import POWER
 from kuchka.dimensions import PRESSURE
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.dimensions import TIME
@@ -33,10 +39,11 @@ from tests.support.kinds import QUANTITY_TYPES
 
 SHARED = {
     TIME: (Time, SamplingPeriod, Instant),
-    FREQUENCY: (Frequency, SampleRate, BaudRate),
+    FREQUENCY: (Frequency, SampleRate, BaudRate, Activity),
     TEMPERATURE_DELTA: (TemperatureDelta, Temperature),
     DIMENSIONLESS: (Proportion, LogarithmicRatio),
-    PRESSURE: (Pressure, EnergyDensity),
+    PRESSURE: (Pressure, Stress, EnergyDensity),
+    POWER: (Power, ApparentPower, ReactivePower),
     ANGLE: (Angle, AngularDisplacement),
 }
 

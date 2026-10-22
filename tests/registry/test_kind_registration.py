@@ -4,10 +4,16 @@ from __future__ import annotations
 
 import pytest
 
+from kuchka import Activity
+from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import Frequency
+from kuchka import Power
+from kuchka import Pressure
+from kuchka import ReactivePower
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
+from kuchka import Stress
 from kuchka import Time
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import TIME
@@ -20,7 +26,15 @@ from tests.support.synthetic import registry_state
 
 @pytest.mark.parametrize(
     ("kind", "target"),
-    [(SamplingPeriod, Time), (SampleRate, Frequency), (BaudRate, Frequency)],
+    [
+        (Activity, Frequency),
+        (ApparentPower, Power),
+        (BaudRate, Frequency),
+        (ReactivePower, Power),
+        (SampleRate, Frequency),
+        (SamplingPeriod, Time),
+        (Stress, Pressure),
+    ],
     ids=lambda value: value.__name__,
 )
 def test_a_role_of_a_kind_is_its_specialisation(kind: type, target: type) -> None:
@@ -28,7 +42,15 @@ def test_a_role_of_a_kind_is_its_specialisation(kind: type, target: type) -> Non
 
 
 def test_only_the_listed_kinds_are_specialisations() -> None:
-    assert set(registry._SPECIALISATIONS) == {SamplingPeriod, SampleRate, BaudRate}  # noqa: SLF001
+    assert set(registry._SPECIALISATIONS) == {  # noqa: SLF001
+        Activity,
+        ApparentPower,
+        BaudRate,
+        ReactivePower,
+        SampleRate,
+        SamplingPeriod,
+        Stress,
+    }
 
 
 def test_every_specialisation_is_consistent() -> None:

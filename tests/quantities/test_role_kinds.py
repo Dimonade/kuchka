@@ -7,10 +7,14 @@ from fractions import Fraction
 
 import pytest
 
+from kuchka import Activity
+from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import IncompatibleDimensionError
+from kuchka import ReactivePower
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
+from kuchka import Stress
 from kuchka import Time
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.quantities.base import registry
@@ -24,9 +28,13 @@ ROLES = [f for f in FAMILIES if f.quantity in registry._SPECIALISATIONS]  # noqa
 ROLE_IDS = [f.id for f in ROLES]
 OTHERS = [f for f in FAMILIES if f.canonical_unit.dimension != DIMENSIONLESS]
 CONVERSION = {
+    Activity: "to_frequency",
+    ApparentPower: "to_power",
+    BaudRate: "no conversion",
+    ReactivePower: "to_power",
     SampleRate: "to_frequency",
     SamplingPeriod: "to_time",
-    BaudRate: "no conversion",
+    Stress: "to_pressure",
 }
 
 
