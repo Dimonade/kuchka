@@ -30,6 +30,8 @@ from kuchka.quantities.base.units import bind_units
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
+from kuchka.units import ac_power
+from kuchka.units import activity
 from kuchka.units import amount
 from kuchka.units import angular
 from kuchka.units import angular_velocity
@@ -50,10 +52,13 @@ from kuchka.units import power
 from kuchka.units import pressure
 from kuchka.units import proportion
 from kuchka.units import resistance
+from kuchka.units import stress
 from kuchka.units import thermal
 from kuchka.units import torque
 from kuchka.units import voltage
 from kuchka.units import volume
+from kuchka.units.ac_power import *
+from kuchka.units.activity import *
 from kuchka.units.amount import *
 from kuchka.units.angular import *
 from kuchka.units.angular_velocity import *
@@ -80,6 +85,7 @@ from kuchka.units.power import *
 from kuchka.units.pressure import *
 from kuchka.units.proportion import *
 from kuchka.units.resistance import *
+from kuchka.units.stress import *
 from kuchka.units.temporal import baud_rate
 from kuchka.units.temporal import frequency
 from kuchka.units.temporal import instant
@@ -99,6 +105,9 @@ from kuchka.units.volume import *
 
 _UNITS_OF: dict[type[Any], Iterable[Any]] = {
     quantities.Acceleration: units_of(ACCELERATION_UNITS),
+    quantities.Activity: units_of(ACTIVITY_UNITS),
+    quantities.ApparentPower: units_of(APPARENT_POWER_UNITS),
+    quantities.ReactivePower: units_of(REACTIVE_POWER_UNITS),
     quantities.AmountOfSubstance: units_of(AMOUNT_OF_SUBSTANCE_UNITS),
     quantities.Angle: units_of(ANGLE_UNITS),
     quantities.AngularDisplacement: units_of(ANGULAR_DISPLACEMENT_UNITS),
@@ -123,6 +132,7 @@ _UNITS_OF: dict[type[Any], Iterable[Any]] = {
     quantities.Mass: units_of(MASS_UNITS),
     quantities.Power: units_of(POWER_UNITS),
     quantities.Pressure: units_of(PRESSURE_UNITS),
+    quantities.Stress: units_of(STRESS_UNITS),
     quantities.Proportion: units_of(PROPORTION_UNITS),
     quantities.Resistance: units_of(RESISTANCE_UNITS),
     quantities.SampleRate: units_of(SAMPLE_RATE_UNITS),
@@ -143,6 +153,8 @@ not accepted by another.
 """
 
 __all__: list[str] = []
+__all__ += ac_power.__all__
+__all__ += activity.__all__
 __all__ += amount.__all__
 __all__ += angular.__all__
 __all__ += angular_velocity.__all__
@@ -161,6 +173,7 @@ __all__ += luminous_intensity.__all__
 __all__ += mass.__all__
 __all__ += power.__all__
 __all__ += pressure.__all__
+__all__ += stress.__all__
 __all__ += proportion.__all__
 __all__ += resistance.__all__
 __all__ += thermal.__all__

@@ -18,6 +18,10 @@ it can never drift out of sync with either.
 They are two different naming traditions -- meteorology and SI prefixing -- that happen
 to agree numerically.
 
+`Gigapascal` and `KilopoundPerSquareInch` (`GPa`, `ksi`) are the units a material's
+stiffness and strength are quoted in, and they serve `Stress` as well, which reads
+every unit of this module (see `kuchka.units.stress`).
+
 `PRESSURE_UNITS` maps each symbol to its constructor, for boundary code that reads
 a unit as a string from outside the application.
 """
@@ -39,8 +43,7 @@ from kuchka.units.area import SQUARE_INCH
 from kuchka.units.kinematics import POUND_FORCE
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-    from collections.abc import Mapping
+    from kuchka.internal.unit_table import UnitTable
 
 PASCAL_NAME = "pascal"
 PASCAL_SYMBOL = "Pa"
@@ -49,6 +52,7 @@ PASCAL = prefixed_unit(prefixes.UNIT, PASCAL_NAME, PASCAL_SYMBOL, PRESSURE)
 HECTOPASCAL = prefixed_unit(prefixes.HECTO, PASCAL_NAME, PASCAL_SYMBOL, PRESSURE)
 KILOPASCAL = prefixed_unit(prefixes.KILO, PASCAL_NAME, PASCAL_SYMBOL, PRESSURE)
 MEGAPASCAL = prefixed_unit(prefixes.MEGA, PASCAL_NAME, PASCAL_SYMBOL, PRESSURE)
+GIGAPASCAL = prefixed_unit(prefixes.GIGA, PASCAL_NAME, PASCAL_SYMBOL, PRESSURE)
 
 Pressure._canonical_unit = PASCAL  # noqa: SLF001 -- this module owns Pressure's canonical unit
 
@@ -73,6 +77,11 @@ def Megapascal(value: Numeric) -> Pressure:
     return Pressure(to_exact(value) * MEGAPASCAL.scale, MEGAPASCAL)
 
 
+def Gigapascal(value: Numeric) -> Pressure:
+    """Construct a Pressure from a magnitude expressed in gigapascals."""
+    return Pressure(to_exact(value) * GIGAPASCAL.scale, GIGAPASCAL)
+
+
 # Non-SI units.
 
 BAR = UnitDef("bar", "bar", Decimal(100_000), PRESSURE)
@@ -82,6 +91,12 @@ POUND_PER_SQUARE_INCH = UnitDef(
     "pound_per_square_inch",
     "psi",
     POUND_FORCE.scale / SQUARE_INCH.scale,
+    PRESSURE,
+)
+KILOPOUND_PER_SQUARE_INCH = UnitDef(
+    "kilopound_per_square_inch",
+    "ksi",
+    1000 * POUND_PER_SQUARE_INCH.scale,
     PRESSURE,
 )
 
@@ -118,25 +133,40 @@ def PoundPerSquareInch(value: Numeric) -> Pressure:
     )
 
 
-PRESSURE_UNITS: Mapping[str, Callable[[Numeric], Pressure]] = unit_table(
+def KilopoundPerSquareInch(value: Numeric) -> Pressure:
+    """Construct a Pressure from a magnitude expressed in kilopounds per square inch.
+
+    Exact: a thousand times `POUND_PER_SQUARE_INCH`.
+    """
+    return Pressure(
+        to_exact(value) * KILOPOUND_PER_SQUARE_INCH.scale,
+        KILOPOUND_PER_SQUARE_INCH,
+    )
+
+
+PRESSURE_UNITS: UnitTable[Pressure] = unit_table(
     "PRESSURE_UNITS",
     {
         PASCAL: Pascal,
         HECTOPASCAL: Hectopascal,
         KILOPASCAL: Kilopascal,
         MEGAPASCAL: Megapascal,
+        GIGAPASCAL: Gigapascal,
         BAR: Bar,
         MILLIBAR: Millibar,
         ATMOSPHERE: Atmosphere,
         POUND_PER_SQUARE_INCH: PoundPerSquareInch,
+        KILOPOUND_PER_SQUARE_INCH: KilopoundPerSquareInch,
     },
 )
 
 __all__ = [
     "ATMOSPHERE",
     "BAR",
+    "GIGAPASCAL",
     "HECTOPASCAL",
     "KILOPASCAL",
+    "KILOPOUND_PER_SQUARE_INCH",
     "MEGAPASCAL",
     "MILLIBAR",
     "PASCAL",
@@ -144,8 +174,10 @@ __all__ = [
     "PRESSURE_UNITS",
     "Atmosphere",
     "Bar",
+    "Gigapascal",
     "Hectopascal",
     "Kilopascal",
+    "KilopoundPerSquareInch",
     "Megapascal",
     "Millibar",
     "Pascal",
