@@ -26,6 +26,9 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.ac_power import ApparentPower
+    from kuchka.quantities.ac_power import ReactivePower
+    from kuchka.quantities.activity import Activity
     from kuchka.quantities.amount import AmountOfSubstance
     from kuchka.quantities.angular import AngularDisplacement
     from kuchka.quantities.area import Area
@@ -47,6 +50,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.luminous_intensity import LuminousIntensity
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.pressure import Pressure
+    from kuchka.quantities.pressure import Stress
     from kuchka.quantities.rotational import AngularVelocity
     from kuchka.quantities.rotational import Torque
     from kuchka.quantities.temporal import BaudRate
@@ -100,6 +104,14 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: Force) -> Force: ...
     @overload
     def __mul__(self, other: Pressure) -> Pressure: ...
+    @overload
+    def __mul__(self, other: Stress) -> Stress: ...
+    @overload
+    def __mul__(self, other: ApparentPower) -> ApparentPower: ...
+    @overload
+    def __mul__(self, other: ReactivePower) -> ReactivePower: ...
+    @overload
+    def __mul__(self, other: Activity) -> Activity: ...
     @overload
     def __mul__(self, other: Volume) -> Volume: ...
     @overload

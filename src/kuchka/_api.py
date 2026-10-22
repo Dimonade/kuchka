@@ -6,10 +6,12 @@ defines it and run `just generate-api`.
 """
 
 from kuchka.quantities import Acceleration
+from kuchka.quantities import Activity
 from kuchka.quantities import AmountOfSubstance
 from kuchka.quantities import Angle
 from kuchka.quantities import AngularDisplacement
 from kuchka.quantities import AngularVelocity
+from kuchka.quantities import ApparentPower
 from kuchka.quantities import Area
 from kuchka.quantities import BaudRate
 from kuchka.quantities import Charge
@@ -31,9 +33,11 @@ from kuchka.quantities import Mass
 from kuchka.quantities import Power
 from kuchka.quantities import Pressure
 from kuchka.quantities import Proportion
+from kuchka.quantities import ReactivePower
 from kuchka.quantities import Resistance
 from kuchka.quantities import SampleRate
 from kuchka.quantities import SamplingPeriod
+from kuchka.quantities import Stress
 from kuchka.quantities import Temperature
 from kuchka.quantities import TemperatureDelta
 from kuchka.quantities import Time
@@ -53,6 +57,7 @@ from kuchka.units import AstronomicalUnit
 from kuchka.units import Atmosphere
 from kuchka.units import Bar
 from kuchka.units import Baud
+from kuchka.units import Becquerel
 from kuchka.units import Bel
 from kuchka.units import Bit
 from kuchka.units import BitPerSecond
@@ -70,6 +75,7 @@ from kuchka.units import CubicMeter
 from kuchka.units import CubicMetre
 from kuchka.units import CubicMillimeter
 from kuchka.units import CubicMillimetre
+from kuchka.units import Curie
 from kuchka.units import Dalton
 from kuchka.units import Day
 from kuchka.units import Decibel
@@ -96,6 +102,7 @@ from kuchka.units import GibibitPerSecond
 from kuchka.units import Gibibyte
 from kuchka.units import GibibytePerSecond
 from kuchka.units import Gigabaud
+from kuchka.units import Gigabecquerel
 from kuchka.units import Gigabit
 from kuchka.units import GigabitPerSecond
 from kuchka.units import Gigabyte
@@ -104,6 +111,9 @@ from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gigajoule
 from kuchka.units import Gigaohm
+from kuchka.units import Gigapascal
+from kuchka.units import Gigavar
+from kuchka.units import GigavoltAmpere
 from kuchka.units import Gigawatt
 from kuchka.units import Gradian
 from kuchka.units import GradianDisplacement
@@ -134,6 +144,7 @@ from kuchka.units import Kibibyte
 from kuchka.units import KibibytePerSecond
 from kuchka.units import Kiloampere
 from kuchka.units import Kilobaud
+from kuchka.units import Kilobecquerel
 from kuchka.units import Kilobit
 from kuchka.units import KilobitPerSecond
 from kuchka.units import Kilobyte
@@ -162,10 +173,13 @@ from kuchka.units import KilonewtonMeter
 from kuchka.units import KilonewtonMetre
 from kuchka.units import Kiloohm
 from kuchka.units import Kilopascal
+from kuchka.units import KilopoundPerSquareInch
 from kuchka.units import KilosamplesPerSecond
 from kuchka.units import Kilosiemens
 from kuchka.units import KilotonneOfTNT
+from kuchka.units import Kilovar
 from kuchka.units import Kilovolt
+from kuchka.units import KilovoltAmpere
 from kuchka.units import Kilowatt
 from kuchka.units import KilowattHour
 from kuchka.units import Knot
@@ -178,6 +192,7 @@ from kuchka.units import Mebibyte
 from kuchka.units import MebibytePerSecond
 from kuchka.units import Megaampere
 from kuchka.units import Megabaud
+from kuchka.units import Megabecquerel
 from kuchka.units import Megabit
 from kuchka.units import MegabitPerSecond
 from kuchka.units import Megabyte
@@ -193,7 +208,9 @@ from kuchka.units import Megaohm
 from kuchka.units import Megapascal
 from kuchka.units import MegasamplesPerSecond
 from kuchka.units import MegatonneOfTNT
+from kuchka.units import Megavar
 from kuchka.units import Megavolt
+from kuchka.units import MegavoltAmpere
 from kuchka.units import Megawatt
 from kuchka.units import Meter
 from kuchka.units import MeterPerSecond
@@ -204,6 +221,7 @@ from kuchka.units import MetrePerSecondSquared
 from kuchka.units import MetricHorsepower
 from kuchka.units import Microampere
 from kuchka.units import Microcoulomb
+from kuchka.units import Microcurie
 from kuchka.units import Microelectronvolt
 from kuchka.units import Microgal
 from kuchka.units import Microgram
@@ -226,7 +244,9 @@ from kuchka.units import Milliampere
 from kuchka.units import MilliampereHour
 from kuchka.units import MilliampereSecond
 from kuchka.units import Millibar
+from kuchka.units import Millibecquerel
 from kuchka.units import Millicoulomb
+from kuchka.units import Millicurie
 from kuchka.units import Millielectronvolt
 from kuchka.units import Milligal
 from kuchka.units import Milligram
@@ -243,7 +263,9 @@ from kuchka.units import MillinewtonMetre
 from kuchka.units import Milliohm
 from kuchka.units import Millisecond
 from kuchka.units import Millisiemens
+from kuchka.units import Millivar
 from kuchka.units import Millivolt
+from kuchka.units import MillivoltAmpere
 from kuchka.units import Milliwatt
 from kuchka.units import MilliwattHour
 from kuchka.units import Minute
@@ -283,6 +305,7 @@ from kuchka.units import Petavolt
 from kuchka.units import Petawatt
 from kuchka.units import Picoampere
 from kuchka.units import Picocoulomb
+from kuchka.units import Picocurie
 from kuchka.units import Picogram
 from kuchka.units import Picojoule
 from kuchka.units import Picometer
@@ -317,6 +340,7 @@ from kuchka.units import Tebibit
 from kuchka.units import TebibitPerSecond
 from kuchka.units import Tebibyte
 from kuchka.units import TebibytePerSecond
+from kuchka.units import Terabecquerel
 from kuchka.units import Terabit
 from kuchka.units import TerabitPerSecond
 from kuchka.units import Terabyte
@@ -331,7 +355,9 @@ from kuchka.units import TonneOfTNT
 from kuchka.units import Turn
 from kuchka.units import TurnDisplacement
 from kuchka.units import TurnPerSecond
+from kuchka.units import Var
 from kuchka.units import Volt
+from kuchka.units import VoltAmpere
 from kuchka.units import Watt
 from kuchka.units import WattHour
 from kuchka.units import WattHourPerLiter
@@ -342,6 +368,7 @@ from kuchka.units import Yard
 __all__ = [
     "Acceleration",
     "Acre",
+    "Activity",
     "AmountOfSubstance",
     "Ampere",
     "AmpereHour",
@@ -349,6 +376,7 @@ __all__ = [
     "Angle",
     "AngularDisplacement",
     "AngularVelocity",
+    "ApparentPower",
     "ArcMinute",
     "ArcMinuteDisplacement",
     "ArcSecond",
@@ -359,6 +387,7 @@ __all__ = [
     "Bar",
     "Baud",
     "BaudRate",
+    "Becquerel",
     "Bel",
     "Bit",
     "BitPerSecond",
@@ -379,6 +408,7 @@ __all__ = [
     "CubicMetre",
     "CubicMillimeter",
     "CubicMillimetre",
+    "Curie",
     "Current",
     "Dalton",
     "Data",
@@ -413,6 +443,7 @@ __all__ = [
     "Gibibyte",
     "GibibytePerSecond",
     "Gigabaud",
+    "Gigabecquerel",
     "Gigabit",
     "GigabitPerSecond",
     "Gigabyte",
@@ -421,6 +452,9 @@ __all__ = [
     "Gigahertz",
     "Gigajoule",
     "Gigaohm",
+    "Gigapascal",
+    "Gigavar",
+    "GigavoltAmpere",
     "Gigawatt",
     "Gradian",
     "GradianDisplacement",
@@ -452,6 +486,7 @@ __all__ = [
     "KibibytePerSecond",
     "Kiloampere",
     "Kilobaud",
+    "Kilobecquerel",
     "Kilobit",
     "KilobitPerSecond",
     "Kilobyte",
@@ -480,10 +515,13 @@ __all__ = [
     "KilonewtonMetre",
     "Kiloohm",
     "Kilopascal",
+    "KilopoundPerSquareInch",
     "KilosamplesPerSecond",
     "Kilosiemens",
     "KilotonneOfTNT",
+    "Kilovar",
     "Kilovolt",
+    "KilovoltAmpere",
     "Kilowatt",
     "KilowattHour",
     "Knot",
@@ -500,6 +538,7 @@ __all__ = [
     "MebibytePerSecond",
     "Megaampere",
     "Megabaud",
+    "Megabecquerel",
     "Megabit",
     "MegabitPerSecond",
     "Megabyte",
@@ -515,7 +554,9 @@ __all__ = [
     "Megapascal",
     "MegasamplesPerSecond",
     "MegatonneOfTNT",
+    "Megavar",
     "Megavolt",
+    "MegavoltAmpere",
     "Megawatt",
     "Meter",
     "MeterPerSecond",
@@ -526,6 +567,7 @@ __all__ = [
     "MetricHorsepower",
     "Microampere",
     "Microcoulomb",
+    "Microcurie",
     "Microelectronvolt",
     "Microgal",
     "Microgram",
@@ -548,7 +590,9 @@ __all__ = [
     "MilliampereHour",
     "MilliampereSecond",
     "Millibar",
+    "Millibecquerel",
     "Millicoulomb",
+    "Millicurie",
     "Millielectronvolt",
     "Milligal",
     "Milligram",
@@ -565,7 +609,9 @@ __all__ = [
     "Milliohm",
     "Millisecond",
     "Millisiemens",
+    "Millivar",
     "Millivolt",
+    "MillivoltAmpere",
     "Milliwatt",
     "MilliwattHour",
     "Minute",
@@ -605,6 +651,7 @@ __all__ = [
     "Petawatt",
     "Picoampere",
     "Picocoulomb",
+    "Picocurie",
     "Picogram",
     "Picojoule",
     "Picometer",
@@ -624,6 +671,7 @@ __all__ = [
     "RadianDisplacement",
     "RadianPerSecond",
     "Ratio",
+    "ReactivePower",
     "Resistance",
     "RevolutionPerMinute",
     "SampleRate",
@@ -641,12 +689,14 @@ __all__ = [
     "SquareMetre",
     "SquareMillimeter",
     "SquareMillimetre",
+    "Stress",
     "Tebibit",
     "TebibitPerSecond",
     "Tebibyte",
     "TebibytePerSecond",
     "Temperature",
     "TemperatureDelta",
+    "Terabecquerel",
     "Terabit",
     "TerabitPerSecond",
     "Terabyte",
@@ -663,8 +713,10 @@ __all__ = [
     "Turn",
     "TurnDisplacement",
     "TurnPerSecond",
+    "Var",
     "Velocity",
     "Volt",
+    "VoltAmpere",
     "Voltage",
     "Volume",
     "Watt",

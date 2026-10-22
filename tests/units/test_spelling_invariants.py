@@ -32,7 +32,7 @@ def test_every_spelling_of_a_unit_resolves_back_to_it(name: str, unit) -> None:
     expected = table[unit.symbol]
     # A table derived from another builds values in the canonical unit of its own type,
     # so the display unit is checked only where the table names its units itself.
-    if not name.startswith(("INSTANT", "SAMPLING")):
+    if not name.startswith(("INSTANT", "SAMPLING", "STRESS")):
         assert expected(1).unit is unit
     for alias in unit.aliases:
         assert table[alias] is expected, alias

@@ -18,6 +18,8 @@ its ``__all__ +=``), and ``tests/test_public_api_surface.py`` fails if one is mi
 
 from __future__ import annotations
 
+from kuchka.quantities import ac_power
+from kuchka.quantities import activity
 from kuchka.quantities import amount
 from kuchka.quantities import angular
 from kuchka.quantities import area
@@ -39,6 +41,8 @@ from kuchka.quantities import rotational
 from kuchka.quantities import temporal
 from kuchka.quantities import thermal
 from kuchka.quantities import volume
+from kuchka.quantities.ac_power import *
+from kuchka.quantities.activity import *
 from kuchka.quantities.amount import *
 from kuchka.quantities.angular import *
 from kuchka.quantities.area import *
@@ -62,6 +66,8 @@ from kuchka.quantities.thermal import *
 from kuchka.quantities.volume import *
 
 __all__: list[str] = []
+__all__ += ac_power.__all__
+__all__ += activity.__all__
 __all__ += amount.__all__
 __all__ += angular.__all__
 __all__ += area.__all__
