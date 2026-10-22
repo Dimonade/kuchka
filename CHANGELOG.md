@@ -31,6 +31,16 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Baud Rate: `Megabaud` and `Gigabaud`.
 - Density: `GramPerLitre`, `GramPerMillilitre`, and `KilogramPerLitre`.
 
+#### Stress, apparent and reactive power, and activity
+
+Four more kinds share a dimension with an existing one, each as a role of it: `Stress` of `Pressure`, `ApparentPower` and `ReactivePower` of `Power`, and `Activity` of `Frequency`.
+A role adds with its own kind, scales by a plain number or a `Proportion`, divides by its own kind into a `Proportion`, and takes the conversion back to its principal kind (`to_pressure()`, `to_power()`, `to_frequency()`) for any other arithmetic.
+
+- Stress: reached with `Pressure.to_stress()`, and reads every unit of `Pressure`.
+- Apparent power: `VoltAmpere` and `MillivoltAmpere` through `GigavoltAmpere`; reactive power: `Var` and `Millivar` through `Gigavar`, read as `VAr` and `VAR` too.
+- Activity: `Millibecquerel` through `Terabecquerel`, and `Curie` with `Millicurie`, `Microcurie`, and `Picocurie`.
+- Pressure: `Gigapascal` and `KilopoundPerSquareInch`.
+
 #### Data and data rate
 
 `Data` counts bits and `DataRate` is data per time.
