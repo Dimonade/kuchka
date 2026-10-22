@@ -201,9 +201,7 @@ def extend_units(quantity_type: type[Any], units: Iterable[Any]) -> None:
     for unit in added:
         _check_fits(quantity_type, unit)
     already = quantity_type._applicable_units  # noqa: SLF001
-    extension: frozenset[object] = getattr(
-        quantity_type, "_extension_units", frozenset()
-    )
+    extension = getattr(quantity_type, "_extension_units", frozenset[object]())
     quantity_type._extension_units = extension | (added - already)  # noqa: SLF001
     quantity_type._applicable_units = already | added  # noqa: SLF001
 
