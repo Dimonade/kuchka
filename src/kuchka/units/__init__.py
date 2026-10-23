@@ -145,6 +145,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Voltage: VOLTAGE_UNITS,
     quantities.Volume: VOLUME_UNITS,
 }
+
 for _quantity_type, _table in _TABLE_OF.items():
     bind_units(
         _quantity_type,
