@@ -26,16 +26,17 @@ Then register the table with the quantity type:
 <!-- doc-test: skip an illustration of a module that does not exist in the library -->
 
 ```python
-from kuchka.internal.unit_table import units_of
 from kuchka.quantities import Length
 from kuchka.quantities.base.units import extend_units
 
 # Importing this module makes Length display in the units of its table.
-extend_units(Length, units_of(KRAKEN_LENGTH_UNITS))
+extend_units(Length, KRAKEN_LENGTH_UNITS)
 ```
 
-`extend_units` adds the units to those `kuchka.units` bound, after the same kind and dimension checks.
+`extend_units` adds the units of the table to those `kuchka.units` bound, after the same kind and dimension checks, and records the table on the type.
+The recorded table is how `parse` reads the spellings of an archaic unit once the caller allows archaic units, so a module that passes its units without the table can be displayed in but not parsed.
 It is idempotent, so importing a module twice changes nothing.
+A module may extend a type with a table that holds the units of another table of the same tradition, as the regional German miles do with the principal ones, because `parse` tells two units apart and not two tables.
 Each quantity type needs its own call: `SamplingPeriod` shares the dimension of `Time` and gets a unit only where a module says so.
 
 The bubble is a time, so it takes a second module of the same shape, with `TIME`, `Time`, and a scale of `6` seconds.
