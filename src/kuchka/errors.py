@@ -102,6 +102,28 @@ class InvalidConversionError(MeasurementError):
     """``.to(...)`` was given something that is not a valid conversion target."""
 
 
+class ParseError(InvalidMeasurementError, ValueError):
+    """Text could not be read as a measurement of the quantity type asked for.
+
+    Raised by `parse` for text without a number or without a unit, for a number
+    written in a form `parse` does not read, and for a unit text that two units claim.
+    Also a `ValueError`, so code that catches either one handles it.
+    """
+
+
+class UnknownUnitError(ParseError):
+    """The unit in the text is no unit of the quantity type asked for.
+
+    `unit` is the unit text as written and `quantity` the type `parse` was given.
+    """
+
+    def __init__(self, message: str, *, unit: str, quantity: type) -> None:
+        """Keep the unit text and the quantity type beside the message."""
+        super().__init__(message)
+        self.unit = unit
+        self.quantity = quantity
+
+
 class UnrepresentableDimensionError(MeasurementError):
     """Arithmetic produced a dimension with no registered engineering type.
 
@@ -175,6 +197,8 @@ __all__ = [
     "InvalidConversionError",
     "InvalidMeasurementError",
     "MeasurementError",
+    "ParseError",
     "PlannedDimensionError",
+    "UnknownUnitError",
     "UnrepresentableDimensionError",
 ]

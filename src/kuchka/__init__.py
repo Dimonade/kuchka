@@ -7,8 +7,8 @@
     power = voltage * current   # -> Power, computed and typed automatically
 
 Two-tier export policy:
-  - kuchka (this package): unit constructors (Volt, Tonne, ...) and semantic quantity
-  types (Voltage, Temperature, ...) only.
+  - kuchka (this package): unit constructors (Volt, Tonne, ...), semantic quantity
+  types (Voltage, Temperature, ...), the errors, and `parse` with its `ArchaicPolicy`.
   - kuchka.units / kuchka.quantities: the complete surface, including raw `UnitDef`
   constants (VOLT, KILOVOLT, ...) and `*_UNITS` boundary tables.
   _see docs/examples/config_migration for why those exist and who needs them._
@@ -31,9 +31,11 @@ from importlib.metadata import version
 
 from kuchka import _api
 from kuchka import errors
+from kuchka import parsing
 from kuchka._api import *
 from kuchka.constants import codata_2022
 from kuchka.errors import *
+from kuchka.parsing import *
 from kuchka.quantities.base.registry import _close
 
 try:
@@ -46,3 +48,4 @@ _close()
 __all__: list[str] = ["__version__", "codata_2022"]
 __all__ += _api.__all__
 __all__ += errors.__all__
+__all__ += parsing.__all__
