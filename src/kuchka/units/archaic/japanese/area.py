@@ -94,7 +94,6 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import AREA
 from kuchka.internal.unit_table import unit_table
-from kuchka.internal.unit_table import units_of
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Area
@@ -436,7 +435,7 @@ JAPANESE_AREA_UNITS: Mapping[str, Callable[[Numeric], Area]] = unit_table(
 
 
 # Importing this module makes Area display in the units of its table.
-extend_units(Area, units_of(JAPANESE_AREA_UNITS))
+extend_units(Area, JAPANESE_AREA_UNITS)
 
 
 __all__ = [

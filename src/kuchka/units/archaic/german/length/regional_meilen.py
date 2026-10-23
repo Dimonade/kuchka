@@ -112,7 +112,6 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LENGTH
 from kuchka.internal.unit_table import unit_table
-from kuchka.internal.unit_table import units_of
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Length
@@ -1227,7 +1226,7 @@ GERMAN_MEILE_UNITS_ALL: Mapping[str, Callable[[Numeric], Length]] = unit_table(
 """The principal and the regional miles by spelling in one table."""
 
 # Importing this module makes Length display in the units of its tables.
-extend_units(Length, units_of(GERMAN_MEILE_UNITS_ALL))
+extend_units(Length, GERMAN_MEILE_UNITS_ALL)
 
 
 __all__ = [
