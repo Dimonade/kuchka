@@ -16,6 +16,7 @@ from __future__ import annotations
 import kuchka
 from kuchka import constants
 from kuchka import errors
+from kuchka import parsing
 from kuchka import quantities as quantities_pkg
 from kuchka import units as units_pkg
 from kuchka.quantities.base import AffineQuantity
@@ -171,6 +172,7 @@ def _promoted_by_policy() -> set[str]:
         constructors
         | quantity_types
         | set(errors.__all__)
+        | set(parsing.__all__)
         | {"__version__", "codata_2022"}
     )
 

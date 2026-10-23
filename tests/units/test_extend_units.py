@@ -5,6 +5,7 @@ from fractions import Fraction
 import pytest
 
 from kuchka.dimensions import VOLTAGE
+from kuchka.internal.unit_table import unit_table
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.units import bind_units
 from kuchka.quantities.base.units import extend_units
@@ -78,3 +79,41 @@ def test_a_refused_extension_leaves_the_type_as_it_was() -> None:
         extend_units(fresh, [voltage.MILLIVOLT, frequency.HERTZ])
     assert fresh._applicable_units == {voltage.VOLT}  # noqa: SLF001
     assert not hasattr(fresh, "_extension_units")
+
+
+def test_extending_with_a_table_adds_its_units_and_records_the_table() -> None:
+    fresh = _bound_type()
+    table = unit_table(
+        "EXTRA_UNITS",
+        {voltage.MILLIVOLT: lambda value: fresh(Fraction(value), voltage.MILLIVOLT)},
+    )
+    extend_units(fresh, table)
+    assert fresh._applicable_units == {voltage.VOLT, voltage.MILLIVOLT}  # noqa: SLF001
+    assert fresh._extension_units == {voltage.MILLIVOLT}  # noqa: SLF001
+    assert fresh._extension_tables == (table,)  # noqa: SLF001
+
+
+def test_extending_twice_with_one_table_records_it_once() -> None:
+    fresh = _bound_type()
+    table = unit_table(
+        "EXTRA_UNITS",
+        {voltage.MILLIVOLT: lambda value: fresh(Fraction(value), voltage.MILLIVOLT)},
+    )
+    extend_units(fresh, table)
+    extend_units(fresh, table)
+    assert fresh._extension_tables == (table,)  # noqa: SLF001
+
+
+def test_tables_are_recorded_in_the_order_they_extend() -> None:
+    fresh = _bound_type()
+    first = unit_table("FIRST_UNITS", {voltage.MILLIVOLT: lambda value: value})
+    second = unit_table("SECOND_UNITS", {voltage.KILOVOLT: lambda value: value})
+    extend_units(fresh, first)
+    extend_units(fresh, second)
+    assert fresh._extension_tables == (first, second)  # noqa: SLF001
+
+
+def test_extending_with_units_records_no_table() -> None:
+    fresh = _bound_type()
+    extend_units(fresh, [voltage.MILLIVOLT])
+    assert "_extension_tables" not in vars(fresh)
