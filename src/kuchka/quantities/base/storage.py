@@ -32,6 +32,8 @@ _STATE_LENGTH = 2
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
+    from kuchka.internal.unit_table import UnitTable
+
 
 def _concrete_types(base: type | None = None) -> Iterator[type]:
     """Yield every concrete quantity type: one that names its own `dimension`."""
@@ -90,6 +92,15 @@ class _ScalarStorage(Generic[_UnitT]):
 
     _extension_units: ClassVar[frozenset[object]]
     """The units `extend_units` added to those `bind_units` bound; absent until then."""
+
+    _unit_table: ClassVar[UnitTable[Any]]
+    """The table that reads the text of a unit into a value of this type.
+
+    Bound by `bind_table`, and read by `parse`.
+    """
+
+    _extension_tables: ClassVar[tuple[UnitTable[Any], ...]]
+    """The tables `extend_units` was given, in the order added; absent until then."""
 
     def __init_subclass__(cls, **kwargs: object) -> None:
         """Check that a concrete quantity type is set up completely.
