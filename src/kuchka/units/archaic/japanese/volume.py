@@ -111,7 +111,6 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import VOLUME
 from kuchka.internal.unit_table import unit_table
-from kuchka.internal.unit_table import units_of
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import UnitDef
@@ -379,7 +378,7 @@ JAPANESE_VOLUME_UNITS: Mapping[str, Callable[[Numeric], Volume]] = unit_table(
 
 
 # Importing this module makes Volume display in the units of its table.
-extend_units(Volume, units_of(JAPANESE_VOLUME_UNITS))
+extend_units(Volume, JAPANESE_VOLUME_UNITS)
 
 
 __all__ = [

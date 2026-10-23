@@ -148,14 +148,14 @@ KRAKEN_LENGTH_UNITS = unit_table(
 ```
 
 Each module owns one hand-written `__all__` naming its constants, constructors, and tables.
-A published unit also joins its type's table in `kuchka/units/__init__.py` (the `_UNITS_OF` block), and `just generate-api` promotes its constructor to the top level.
+A published unit also joins its type's table in `kuchka/units/__init__.py` (the `_TABLE_OF` block, which also lets `parse` read the type's units), and `just generate-api` promotes its constructor to the top level.
 
 ## Checklist
 
 - [ ] the unit, with an exact scale and the spellings people use,
 - [ ] a constructor with a docstring and a doctest,
 - [ ] a place in the module's `*_UNITS` table and `__all__`,
-- [ ] wiring: `_UNITS_OF` for a published unit, `extend_units` for an archaic one,
+- [ ] wiring: `_TABLE_OF` for a published unit, `extend_units` with the table for an archaic one,
 - [ ] `just generate-api` for a published unit,
 - [ ] [tests](adding_tests.md) for what discovery cannot know,
 - [ ] a changelog line.

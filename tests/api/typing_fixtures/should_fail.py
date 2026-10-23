@@ -60,6 +60,7 @@ from kuchka import Voltage
 from kuchka import VoltAmpere
 from kuchka import Volume
 from kuchka import Watt
+from kuchka import parse
 
 
 def analyse_voltage(_voltage: Voltage) -> None: ...
@@ -224,3 +225,10 @@ _bq_plus_hz = Becquerel(1) + Hertz(1)  # type: ignore[operator]  # ty: ignore[un
 _stress_plus_pressure = Pascal(1).to_stress() + Pascal(1)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
 headroom: ApparentPower = KilovoltAmpere(5) - VoltAmpere(3200)  # OK
 wrong_headroom: Power = KilovoltAmpere(5) - VoltAmpere(3200)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+
+# `parse` builds the quantity type it is given from text.
+parsed: Voltage = parse("5 mV", Voltage)  # OK
+wrong_quantity: Current = parse("5 mV", Voltage)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+_parse_a_number = parse(5, Voltage)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
+_parse_a_constructor = parse("5 mV", Volt)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
+_parse_with_a_word = parse("5 mV", Voltage, allow_archaic="yes")  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]

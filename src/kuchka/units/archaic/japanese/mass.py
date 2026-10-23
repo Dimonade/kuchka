@@ -96,7 +96,6 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import MASS
 from kuchka.internal.unit_table import unit_table
-from kuchka.internal.unit_table import units_of
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Mass
@@ -459,7 +458,7 @@ JAPANESE_MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = unit_table(
 """Mass constructors by symbol, for configuration files and external interfaces."""
 
 # Importing this module makes Mass display in the units of its table.
-extend_units(Mass, units_of(JAPANESE_MASS_UNITS))
+extend_units(Mass, JAPANESE_MASS_UNITS)
 
 
 __all__ = [

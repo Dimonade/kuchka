@@ -177,7 +177,6 @@ from typing import TYPE_CHECKING
 from kuchka.dimensions import AREA
 from kuchka.internal import symbols
 from kuchka.internal.unit_table import unit_table
-from kuchka.internal.unit_table import units_of
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Area
@@ -1360,7 +1359,7 @@ RUSSIAN_AREA_UNITS = unit_table("RUSSIAN_AREA_UNITS", _UNIT_CONSTRUCTORS)
 """Constructors by symbol, alias, or registered word for boundary code."""
 
 # Importing this module makes Area display in the units of its table.
-extend_units(Area, units_of(RUSSIAN_AREA_UNITS))
+extend_units(Area, RUSSIAN_AREA_UNITS)
 
 
 __all__ = [

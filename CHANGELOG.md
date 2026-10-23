@@ -31,6 +31,16 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Baud Rate: `Megabaud` and `Gigabaud`.
 - Density: `GramPerLitre`, `GramPerMillilitre`, and `KilogramPerLitre`.
 
+#### Reading text with `parse`
+
+`parse(text, quantity)` reads a number and a unit from text into the quantity type it is given, through that type's own table of unit spellings: `parse("5 mV", Voltage)`.
+The caller names the type, since `"5 s"` can be a `Time`, an `Instant`, or a `SamplingPeriod`.
+The number is read exactly, and text that cannot be read raises `ParseError`, or `UnknownUnitError` for a unit the type does not have.
+
+- `allow_archaic` takes an `ArchaicPolicy` (`Deny` by default, or `Allow`), with `False` and `True` as shorthands, and reads the archaic modules the application has imported.
+- A text that two different units claim raises `ParseError` and never picks one.
+- `extend_units` takes the table of an archaic module, and records it on the type for `parse`.
+
 #### Stress, apparent and reactive power, and activity
 
 Four more kinds share a dimension with an existing one, each as a role of it: `Stress` of `Pressure`, `ApparentPower` and `ReactivePower` of `Power`, and `Activity` of `Frequency`.

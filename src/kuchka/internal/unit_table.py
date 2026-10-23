@@ -109,24 +109,35 @@ class UnitTable(Mapping[str, Callable[["Numeric"], _QuantityT]]):
                 raise ValueError(msg)
 
     @property
+    def label(self) -> str:
+        """The name the table was built with, such as `LENGTH_UNITS`."""
+        return self._label
+
+    @property
     def units(self) -> tuple[SpelledUnit, ...]:
         """The unit definitions in the table, in definition order."""
         return tuple(unit for unit, _ in self._entries)
 
-    @override
-    def __getitem__(self, spelling: object) -> Callable[[Numeric], _QuantityT]:
-        """Resolve `spelling` to a constructor, or raise `KeyError`."""
+    def resolve(
+        self, spelling: object
+    ) -> tuple[SpelledUnit, Callable[[Numeric], _QuantityT]]:
+        """Resolve `spelling` to its unit and constructor, or raise `KeyError`."""
         if isinstance(spelling, str):
             exact = self._exact.get(normalize(spelling))
             if exact is not None:
-                return exact[1]
+                return exact
             word = fold(spelling)
             found = self._words.get(word)
             if found is None and word.endswith(_PLURAL):
                 found = self._words.get(word.removesuffix(_PLURAL))
             if found is not None:
-                return found[1]
+                return found
         raise KeyError(spelling)
+
+    @override
+    def __getitem__(self, spelling: object) -> Callable[[Numeric], _QuantityT]:
+        """Resolve `spelling` to a constructor, or raise `KeyError`."""
+        return self.resolve(spelling)[1]
 
     @override
     def __iter__(self) -> Iterator[str]:

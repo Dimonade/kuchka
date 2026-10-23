@@ -25,11 +25,8 @@ from typing import Any
 
 from kuchka import quantities
 from kuchka.internal.unit_table import units_of
+from kuchka.quantities.base.units import bind_table
 from kuchka.quantities.base.units import bind_units
-
-if TYPE_CHECKING:
-    from collections.abc import Iterable
-
 from kuchka.units import ac_power
 from kuchka.units import activity
 from kuchka.units import amount
@@ -103,50 +100,59 @@ from kuchka.units.torque import *
 from kuchka.units.voltage import *
 from kuchka.units.volume import *
 
-_UNITS_OF: dict[type[Any], Iterable[Any]] = {
-    quantities.Acceleration: units_of(ACCELERATION_UNITS),
-    quantities.Activity: units_of(ACTIVITY_UNITS),
-    quantities.ApparentPower: units_of(APPARENT_POWER_UNITS),
-    quantities.ReactivePower: units_of(REACTIVE_POWER_UNITS),
-    quantities.AmountOfSubstance: units_of(AMOUNT_OF_SUBSTANCE_UNITS),
-    quantities.Angle: units_of(ANGLE_UNITS),
-    quantities.AngularDisplacement: units_of(ANGULAR_DISPLACEMENT_UNITS),
-    quantities.AngularVelocity: units_of(ANGULAR_VELOCITY_UNITS),
-    quantities.Torque: units_of(TORQUE_UNITS),
-    quantities.Area: units_of(AREA_UNITS),
-    quantities.BaudRate: units_of(BAUD_RATE_UNITS),
-    quantities.Charge: units_of(CHARGE_UNITS),
-    quantities.Conductance: units_of(CONDUCTANCE_UNITS),
-    quantities.Current: units_of(CURRENT_UNITS),
-    quantities.Data: units_of(DATA_UNITS),
-    quantities.DataRate: units_of(DATA_RATE_UNITS),
-    quantities.Density: units_of(DENSITY_UNITS),
-    quantities.Energy: units_of(ENERGY_UNITS),
-    quantities.EnergyDensity: units_of(ENERGY_DENSITY_UNITS),
-    quantities.Force: units_of(FORCE_UNITS),
-    quantities.Frequency: units_of(FREQUENCY_UNITS),
-    quantities.Instant: (INSTANT_SECOND,),
-    quantities.Length: units_of(LENGTH_UNITS),
-    quantities.LogarithmicRatio: units_of(LOGARITHMIC_RATIO_UNITS),
-    quantities.LuminousIntensity: units_of(LUMINOUS_INTENSITY_UNITS),
-    quantities.Mass: units_of(MASS_UNITS),
-    quantities.Power: units_of(POWER_UNITS),
-    quantities.Pressure: units_of(PRESSURE_UNITS),
-    quantities.Stress: units_of(STRESS_UNITS),
-    quantities.Proportion: units_of(PROPORTION_UNITS),
-    quantities.Resistance: units_of(RESISTANCE_UNITS),
-    quantities.SampleRate: units_of(SAMPLE_RATE_UNITS),
-    quantities.SamplingPeriod: units_of(SAMPLING_PERIOD_UNITS),
-    quantities.Temperature: units_of(TEMPERATURE_UNITS),
-    quantities.TemperatureDelta: units_of(TEMPERATURE_DELTA_UNITS),
-    quantities.Time: units_of(TIME_UNITS),
-    quantities.Velocity: units_of(VELOCITY_UNITS),
-    quantities.Voltage: units_of(VOLTAGE_UNITS),
-    quantities.Volume: units_of(VOLUME_UNITS),
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from collections.abc import Mapping
+
+_TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
+    quantities.Acceleration: ACCELERATION_UNITS,
+    quantities.Activity: ACTIVITY_UNITS,
+    quantities.ApparentPower: APPARENT_POWER_UNITS,
+    quantities.ReactivePower: REACTIVE_POWER_UNITS,
+    quantities.AmountOfSubstance: AMOUNT_OF_SUBSTANCE_UNITS,
+    quantities.Angle: ANGLE_UNITS,
+    quantities.AngularDisplacement: ANGULAR_DISPLACEMENT_UNITS,
+    quantities.AngularVelocity: ANGULAR_VELOCITY_UNITS,
+    quantities.Torque: TORQUE_UNITS,
+    quantities.Area: AREA_UNITS,
+    quantities.BaudRate: BAUD_RATE_UNITS,
+    quantities.Charge: CHARGE_UNITS,
+    quantities.Conductance: CONDUCTANCE_UNITS,
+    quantities.Current: CURRENT_UNITS,
+    quantities.Data: DATA_UNITS,
+    quantities.DataRate: DATA_RATE_UNITS,
+    quantities.Density: DENSITY_UNITS,
+    quantities.Energy: ENERGY_UNITS,
+    quantities.EnergyDensity: ENERGY_DENSITY_UNITS,
+    quantities.Force: FORCE_UNITS,
+    quantities.Frequency: FREQUENCY_UNITS,
+    quantities.Instant: INSTANT_UNITS,
+    quantities.Length: LENGTH_UNITS,
+    quantities.LogarithmicRatio: LOGARITHMIC_RATIO_UNITS,
+    quantities.LuminousIntensity: LUMINOUS_INTENSITY_UNITS,
+    quantities.Mass: MASS_UNITS,
+    quantities.Power: POWER_UNITS,
+    quantities.Pressure: PRESSURE_UNITS,
+    quantities.Stress: STRESS_UNITS,
+    quantities.Proportion: PROPORTION_UNITS,
+    quantities.Resistance: RESISTANCE_UNITS,
+    quantities.SampleRate: SAMPLE_RATE_UNITS,
+    quantities.SamplingPeriod: SAMPLING_PERIOD_UNITS,
+    quantities.Temperature: TEMPERATURE_UNITS,
+    quantities.TemperatureDelta: TEMPERATURE_DELTA_UNITS,
+    quantities.Time: TIME_UNITS,
+    quantities.Velocity: VELOCITY_UNITS,
+    quantities.Voltage: VOLTAGE_UNITS,
+    quantities.Volume: VOLUME_UNITS,
 }
-for _quantity_type, _units in _UNITS_OF.items():
-    bind_units(_quantity_type, _units)
-"""Each quantity type displays in the units of its own table.
+
+for _quantity_type, _table in _TABLE_OF.items():
+    bind_units(
+        _quantity_type,
+        (INSTANT_SECOND,) if _quantity_type is quantities.Instant else units_of(_table),
+    )
+    bind_table(_quantity_type, _table)
+"""Each quantity type displays in the units of its own table, and parse reads them.
 
 A unit of one quantity that shares the type's dimension (a `baud` for a `frequency`) is
 not accepted by another.

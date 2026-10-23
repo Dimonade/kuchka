@@ -165,6 +165,21 @@ Symbols such as `mV` are compared exactly, because `mV` and `MV` are different u
 A spelling that could mean more than one unit in a table, like `deg` for temperature, is refused rather than guessed.
 See [Unit spellings](docs/concepts/unit_spellings.md).
 
+When the whole value arrives as one string, `parse` reads the number and the unit together through the table of the type you name:
+
+```python
+from fractions import Fraction
+
+from kuchka import Temperature, Volt, Voltage, parse
+
+parse("5 mV", Voltage)  # 5 mV
+parse("-40 °C", Temperature)  # -40 °C
+parse("0.1 V", Voltage) == Volt(Fraction(1, 10))  # True: the number is read exactly
+```
+
+The caller names the type because the same text can mean different quantities: `"5 s"` is a `Time`, an `Instant`, or a `SamplingPeriod`, so there is no untyped `parse`.
+Text that is no measurement of that type raises a `ParseError`, and a unit the type does not have raises an `UnknownUnitError`.
+
 ### 3. Compose real engineering relationships
 
 The library is useful when a calculation crosses more than one physical domain. For example, an actuator calculation can derive several quantities in sequence:
@@ -507,6 +522,17 @@ print(Arshin(3).to(CENTIMETRE))
 # 213.36 cm
 ```
 
+`parse` reads an archaic unit only when asked, and only from the modules that have been imported:
+
+```python
+from kuchka import Length, parse
+
+parse("3 arshin", Length, allow_archaic=True)  # 3 arshin
+```
+
+`allow_archaic` takes an `ArchaicPolicy`, `Deny` by default or `Allow`, and `False` and `True` stand for them.
+The error for a refused archaic unit says how to read it.
+
 The traditions today are German (the Meilen), Hebrew, Japanese, and Russian.
 See the [archaic units README](src/kuchka/units/archaic/README.md) for what each provides, and [How to extend kuchka](docs/how-to/README.md) for adding more.
 
@@ -693,6 +719,8 @@ Application-level measurement errors derive from `MeasurementError`:
 | `UnrepresentableDimensionError` | arithmetic produces a dimension without a registered engineering type                                           |
 | `PlannedDimensionError`         | an unregistered dimension already has a named future type                                                       |
 | `AmbiguousKindError`            | arithmetic produces a dimension shared by several kinds, none of them principal                                 |
+| `ParseError`                    | `parse` receives text that is no measurement of the type, or a unit that two tables claim; also a `ValueError`  |
+| `UnknownUnitError`              | `parse` receives a unit that the quantity type does not have                                                    |
 
 Catching `MeasurementError` handles the whole family at once.
 

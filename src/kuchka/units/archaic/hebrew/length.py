@@ -136,7 +136,6 @@ from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LENGTH
 from kuchka.internal.unit_table import unit_table
-from kuchka.internal.unit_table import units_of
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Length
@@ -1172,7 +1171,7 @@ HEBREW_LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = unit_table(
 
 
 # Importing this module makes Length display in the units of its table.
-extend_units(Length, units_of(HEBREW_LENGTH_UNITS))
+extend_units(Length, HEBREW_LENGTH_UNITS)
 
 
 __all__ = [

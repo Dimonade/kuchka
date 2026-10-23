@@ -80,3 +80,26 @@ def test_underscores_in_a_name_read_as_spaces() -> None:
 def test_a_word_does_not_resolve_a_different_unit() -> None:
     with pytest.raises(KeyError):
         TABLE["megaxx"]
+
+
+def test_resolve_gives_the_unit_with_its_constructor() -> None:
+    unit, constructor = TABLE.resolve("mx")
+    assert unit.symbol == "mx"
+    assert constructor(1)[0] == "milli"
+
+
+def test_resolve_reads_every_spelling_that_the_table_reads() -> None:
+    for text in ("mx", "Mx", "x", "ex"):
+        assert TABLE.resolve(text)[1] is TABLE[text]
+
+
+@pytest.mark.parametrize("text", ["MX", "nothing", ""])
+def test_resolve_refuses_what_the_table_refuses(text: str) -> None:
+    with pytest.raises(KeyError):
+        TABLE.resolve(text)
+
+
+def test_a_table_has_the_label_it_was_built_with() -> None:
+    assert unit_table("SOME_UNITS", {make_unit("u", "u"): make_ctor("u")}).label == (
+        "SOME_UNITS"
+    )

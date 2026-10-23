@@ -106,6 +106,23 @@ Building it raises `ValueError` when:
 So a table that exists has no ambiguity, and adding a spelling that collides fails when the library is imported.
 The same spelling can mean different things in different tables, because a table is for one quantity: `C` is a coulomb in `CHARGE_UNITS` and degrees Celsius in `TEMPERATURE_UNITS`.
 
+## Reading a whole measurement
+
+When a value arrives as one string, `parse` reads the number and the unit together through the table of the type it is given:
+
+```python
+from kuchka import Temperature, Voltage, parse
+
+parse("5 mV", Voltage)  # 5 mV
+parse("-40 °C", Temperature)  # -40 °C
+parse("5 millivolts", Voltage)  # 5 mV
+```
+
+The unit is read exactly as the table reads it, so everything on this page applies: symbols are compared with their case, spoken forms ignoring it, and a spelling the table refuses is an `UnknownUnitError`.
+The caller names the type because the same text can mean different quantities, and there is no untyped `parse`.
+The text is normalized the way the tables normalize it, so a micro sign, a superscript, a non-breaking space, and the minus sign `−` read as the characters they stand for.
+A unit that starts with a digit, such as the `1` of a `Proportion`, takes a space after the number.
+
 ## Iterating a table
 
 Iterating a table yields each unit's display symbol once, in definition order, and its length is the number of units.

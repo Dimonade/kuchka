@@ -21,9 +21,11 @@ from typing import Protocol
 
 from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.typing import override
+from kuchka.internal.unit_table import UnitTable
 from kuchka.numeric import to_exact
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from collections.abc import Iterable
     from collections.abc import Mapping
     from fractions import Fraction
@@ -176,7 +178,29 @@ def bind_units(quantity_type: type[Any], units: Iterable[Any]) -> None:
     quantity_type._applicable_units = bound  # noqa: SLF001
 
 
-def extend_units(quantity_type: type[Any], units: Iterable[Any]) -> None:
+def bind_table(
+    quantity_type: type[Any], table: Mapping[str, Callable[..., Any]]
+) -> None:
+    """Bind the table that reads the text of a unit into a `quantity_type`.
+
+    This is called once per quantity type, with the table of that type's units.
+    `parse` reads the type's table from here.
+
+    Raises `TypeError` for a type that has its table bound already or for a table not
+    built by `unit_table`, since either is a defect in `kuchka`'s own unit modules.
+    """
+    if "_unit_table" in vars(quantity_type):
+        msg = f"{quantity_type.__name__} already has its table bound."
+        raise TypeError(msg)
+    if not isinstance(table, UnitTable):
+        msg = f"{table!r} is not a table built by unit_table."
+        raise TypeError(msg)
+    quantity_type._unit_table = table  # noqa: SLF001
+
+
+def extend_units(
+    quantity_type: type[Any], units: Iterable[Any] | UnitTable[Any]
+) -> None:
     """Add units to those a bound `quantity_type` displays in.
 
     A collection of units that lives outside `kuchka.units`, such as the archaic
@@ -185,6 +209,9 @@ def extend_units(quantity_type: type[Any], units: Iterable[Any]) -> None:
     The units pass the same kind and dimension checks as bound ones.
     The added units are recorded apart from the bound ones (`_extension_units`), so
     the published set a type binds stays recoverable.
+    A `UnitTable` stands for its units, and the type records the table too
+    (`_extension_tables`), which is how `parse` reads the spellings of the units an
+    application has imported.
     Extending with a unit the type already displays in changes nothing, which makes
     importing the same module twice harmless.
 
@@ -194,16 +221,23 @@ def extend_units(quantity_type: type[Any], units: Iterable[Any]) -> None:
     if "_applicable_units" not in vars(quantity_type):
         msg = f"{quantity_type.__name__} has no bound units to extend."
         raise TypeError(msg)
-    added = frozenset(units)
+    table = units if isinstance(units, UnitTable) else None
+    added = frozenset(units.units if isinstance(units, UnitTable) else units)
     if not added:
         msg = f"{quantity_type.__name__} needs at least one unit to extend with."
         raise TypeError(msg)
     for unit in added:
         _check_fits(quantity_type, unit)
     already = quantity_type._applicable_units  # noqa: SLF001
-    extension = getattr(quantity_type, "_extension_units", frozenset[object]())
+    extension: frozenset[object] = getattr(
+        quantity_type, "_extension_units", frozenset()
+    )
     quantity_type._extension_units = extension | (added - already)  # noqa: SLF001
     quantity_type._applicable_units = already | added  # noqa: SLF001
+    if table is not None:
+        recorded = vars(quantity_type).get("_extension_tables", ())
+        if not any(known is table for known in recorded):
+            quantity_type._extension_tables = (*recorded, table)  # noqa: SLF001
 
 
 def _published_unit(name: str) -> _Unit:
