@@ -1,0 +1,107 @@
+"""Every concrete quantity type is a registered kind, and arithmetic stays linear."""
+
+from __future__ import annotations
+
+import pytest
+
+from kuchka import Activity
+from kuchka import Angle
+from kuchka import AngularDisplacement
+from kuchka import ApparentPower
+from kuchka import BaudRate
+from kuchka import EnergyDensity
+from kuchka import Frequency
+from kuchka import Instant
+from kuchka import LogarithmicRatio
+from kuchka import Power
+from kuchka import Pressure
+from kuchka import Proportion
+from kuchka import ReactivePower
+from kuchka import SampleRate
+from kuchka import SamplingPeriod
+from kuchka import Stress
+from kuchka import Temperature
+from kuchka import TemperatureDelta
+from kuchka import Time
+from kuchka.dimensions import ANGLE
+from kuchka.dimensions import DIMENSIONLESS
+from kuchka.dimensions import FREQUENCY
+from kuchka.dimensions import POWER
+from kuchka.dimensions import PRESSURE
+from kuchka.dimensions import TEMPERATURE_DELTA
+from kuchka.dimensions import TIME
+from kuchka.dimensions import Dimension
+from kuchka.quantities.base import AffineQuantity
+from kuchka.quantities.base import LinearQuantity
+from kuchka.quantities.base import ModularQuantity
+from kuchka.quantities.base import registry
+from tests.support.kinds import QUANTITY_TYPES
+
+SHARED = {
+    TIME: (Time, SamplingPeriod, Instant),
+    FREQUENCY: (Frequency, SampleRate, BaudRate, Activity),
+    TEMPERATURE_DELTA: (TemperatureDelta, Temperature),
+    DIMENSIONLESS: (Proportion, LogarithmicRatio),
+    PRESSURE: (Pressure, Stress, EnergyDensity),
+    POWER: (Power, ApparentPower, ReactivePower),
+    ANGLE: (Angle, AngularDisplacement),
+}
+
+
+def test_the_shared_dimensions_are_exactly_the_listed_ones() -> None:
+    assert registry._shared_dimensions() == SHARED  # noqa: SLF001
+
+
+def test_an_unknown_dimension_has_no_kinds() -> None:
+    assert registry._kinds_of(Dimension(mass=7)) == ()  # noqa: SLF001
+
+
+@pytest.mark.parametrize("cls", QUANTITY_TYPES, ids=lambda kind: kind.__name__)
+def test_every_concrete_type_is_a_registered_kind(cls: type) -> None:
+    assert registry._is_registered(cls)  # noqa: SLF001
+
+
+def test_each_shape_has_registered_kinds() -> None:
+    kinds = {kind for found in registry._KINDS_BY_DIMENSION.values() for kind in found}  # noqa: SLF001
+    for shape in (LinearQuantity, AffineQuantity, ModularQuantity):
+        assert any(issubclass(kind, shape) for kind in kinds)
+    assert LogarithmicRatio in kinds
+
+
+def test_a_dimensionless_kind_is_catalogued() -> None:
+    assert registry._kinds_of(DIMENSIONLESS) == (Proportion, LogarithmicRatio)  # noqa: SLF001
+
+
+@pytest.mark.parametrize(
+    "kind",
+    [Angle, Instant, Temperature, LogarithmicRatio, Proportion],
+    ids=lambda k: k.__name__,
+)
+def test_a_kind_arithmetic_cannot_produce_is_never_principal(kind: type) -> None:
+    assert kind not in registry._DIMENSION_REGISTRY.values()  # noqa: SLF001
+    assert not any(kind in group for group in registry._CONTESTED.values())  # noqa: SLF001
+
+
+def test_the_angular_displacement_is_the_principal_kind_of_the_angle_dimension() -> (
+    None
+):
+    assert registry._DIMENSION_REGISTRY[ANGLE] is AngularDisplacement  # noqa: SLF001
+    assert Angle not in registry._DIMENSION_REGISTRY.values()  # noqa: SLF001
+
+
+def test_a_dimension_with_a_kind_of_another_shape_keeps_its_principal() -> None:
+    assert registry._DIMENSION_REGISTRY[TIME] is Time  # noqa: SLF001
+    assert registry._DIMENSION_REGISTRY[TEMPERATURE_DELTA] is TemperatureDelta  # noqa: SLF001
+    assert DIMENSIONLESS not in registry._DIMENSION_REGISTRY  # noqa: SLF001
+
+
+def test_the_principal_kinds_are_linear_kinds_with_extent() -> None:
+    for dimension, kind in registry._DIMENSION_REGISTRY.items():  # noqa: SLF001
+        assert issubclass(kind, LinearQuantity)
+        assert kind.dimension == dimension != DIMENSIONLESS
+        assert registry._is_registered(kind)  # noqa: SLF001
+
+
+def test_only_pressure_and_energy_density_are_contested() -> None:
+    assert {PRESSURE: (Pressure, EnergyDensity)} == registry._CONTESTED  # noqa: SLF001
+    assert PRESSURE not in registry._DIMENSION_REGISTRY  # noqa: SLF001

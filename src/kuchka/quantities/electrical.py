@@ -36,7 +36,7 @@ from kuchka.dimensions import RESISTANCE
 from kuchka.dimensions import VOLTAGE
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -45,6 +45,12 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.charge import Charge
     from kuchka.quantities.energy import Energy
+    from kuchka.quantities.kinematics import Force
+    from kuchka.quantities.kinematics import Velocity
+    from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.rotational import AngularVelocity
+    from kuchka.quantities.rotational import Torque
+    from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
 
@@ -52,18 +58,23 @@ class Voltage(LinearQuantity):
     """An electric potential difference."""
 
     dimension: ClassVar[Dimension] = VOLTAGE
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Current) -> Power: ...
     @overload
     def __mul__(self, other: Conductance) -> Current: ...
     @overload
+    def __mul__(self, other: Charge) -> Energy: ...
+    @overload
+    def __mul__(self, other: Proportion) -> Voltage: ...
+    @overload
     def __mul__(self, other: Numeric) -> Voltage: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
@@ -71,12 +82,18 @@ class Voltage(LinearQuantity):
     @overload
     def __truediv__(self, other: Resistance) -> Current: ...
     @overload
+    def __truediv__(self, other: Voltage) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> Voltage: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Voltage: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 
@@ -84,6 +101,7 @@ class Current(LinearQuantity):
     """An electric current."""
 
     dimension: ClassVar[Dimension] = CURRENT
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Voltage) -> Power: ...
@@ -92,12 +110,14 @@ class Current(LinearQuantity):
     @overload
     def __mul__(self, other: Time) -> Charge: ...
     @overload
+    def __mul__(self, other: Proportion) -> Current: ...
+    @overload
     def __mul__(self, other: Numeric) -> Current: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
@@ -105,12 +125,22 @@ class Current(LinearQuantity):
     @overload
     def __truediv__(self, other: Conductance) -> Voltage: ...
     @overload
+    def __truediv__(self, other: Charge) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: Frequency) -> Charge: ...
+    @overload
+    def __truediv__(self, other: Current) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> Current: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Current: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 
@@ -118,16 +148,19 @@ class Power(LinearQuantity):
     """The rate at which electrical energy is transferred or dissipated."""
 
     dimension: ClassVar[Dimension] = POWER
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Time) -> Energy: ...
     @overload
+    def __mul__(self, other: Proportion) -> Power: ...
+    @overload
     def __mul__(self, other: Numeric) -> Power: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
@@ -135,12 +168,30 @@ class Power(LinearQuantity):
     @overload
     def __truediv__(self, other: Current) -> Voltage: ...
     @overload
+    def __truediv__(self, other: AngularVelocity) -> Torque: ...
+    @overload
+    def __truediv__(self, other: Torque) -> AngularVelocity: ...
+    @overload
+    def __truediv__(self, other: Energy) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: Force) -> Velocity: ...
+    @overload
+    def __truediv__(self, other: Frequency) -> Energy: ...
+    @overload
+    def __truediv__(self, other: Velocity) -> Force: ...
+    @overload
+    def __truediv__(self, other: Power) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> Power: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Power: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 
@@ -148,25 +199,34 @@ class Resistance(LinearQuantity):
     """The opposition a circuit element presents to current flow."""
 
     dimension: ClassVar[Dimension] = RESISTANCE
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Current) -> Voltage: ...
     @overload
+    def __mul__(self, other: Conductance) -> Fraction: ...
+    @overload
+    def __mul__(self, other: Proportion) -> Resistance: ...
+    @overload
     def __mul__(self, other: Numeric) -> Resistance: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
     def __rtruediv__(self, other: Numeric) -> Conductance: ...
     @overload
-    def __rtruediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
-    def __rtruediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction:
         # NOTE: `Resistance` is the registered canonical type for `RESISTANCE`, so the
         # base implementation's canonical-type guard passes and this reaches
         # `Conductance` through ordinary dimension algebra -- no override of the
@@ -174,46 +234,76 @@ class Resistance(LinearQuantity):
         # for the same pattern with Frequency).
         return super().__rtruediv__(other)
 
+    @overload
+    def __truediv__(self, other: Resistance) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> Resistance: ...
+    @overload
+    def __truediv__(self, other: Numeric) -> Resistance: ...
+    @overload
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__truediv__(other)
+
 
 class Conductance(LinearQuantity):
     """How readily a circuit element passes current: the reciprocal of Resistance."""
 
     dimension: ClassVar[Dimension] = CONDUCTANCE
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Voltage) -> Current: ...
     @overload
+    def __mul__(self, other: Resistance) -> Fraction: ...
+    @overload
+    def __mul__(self, other: Proportion) -> Conductance: ...
+    @overload
     def __mul__(self, other: Numeric) -> Conductance: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
+    def __truediv__(self, other: Conductance) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> Conductance: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Conductance: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
     @overload
     def __rtruediv__(self, other: Numeric) -> Resistance: ...
     @overload
-    def __rtruediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
-    def __rtruediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction:
         return super().__rtruediv__(other)
 
 
-register(VOLTAGE, Voltage)
-register(CURRENT, Current)
-register(POWER, Power)
-register(RESISTANCE, Resistance)
-register(CONDUCTANCE, Conductance)
+_register(VOLTAGE, Voltage)
+_register(CURRENT, Current)
+_register(POWER, Power)
+_register(RESISTANCE, Resistance)
+_register(CONDUCTANCE, Conductance)
 
 __all__ = ["Conductance", "Current", "Power", "Resistance", "Voltage"]

@@ -91,7 +91,7 @@ def main() -> None:
 
 
 def _show_failure(description: str, broken_toml: str, *, section: str) -> None:
-    from device_config import _parse_led_limits  # noqa: PLC0415, I001 -- demo-only, internal helper.
+    from device_config import _parse_led_limits  # noqa: PLC0415 -- demo-only.
 
     print(f"  {description}")
     raw = tomllib.loads(broken_toml)

@@ -40,6 +40,27 @@ abs(reading - setpoint) <= tolerance
 Kelvin(20) * 2  # rejected: no __mul__ on an affine quantity.
 ```
 
+Kelvin, Celsius, and Fahrenheit readings are all `Temperature`.
+Their units differ by a scale and an offset, and kuchka keeps both exact: a Fahrenheit degree is exactly 5/9 of a kelvin, and 0 °F sits at exactly 459.67 x 5/9 K.
+
+```python
+from kuchka import Celsius, DeltaCelsius, DeltaFahrenheit, Fahrenheit, Kelvin
+
+Fahrenheit(32) == Celsius(0)
+# True
+
+Fahrenheit(-459.67) == Kelvin(0)
+# True
+
+Fahrenheit(77) - Fahrenheit(68) == DeltaFahrenheit(9)
+# True
+
+DeltaFahrenheit(9) == DeltaCelsius(5)
+# True
+```
+
+A temperature difference is a size, not a position, so `DeltaFahrenheit` and `DeltaCelsius` differ by scale only (9 °F of difference is 5 °C of difference).
+
 Absolute zero is enforced for temperature readings.
 
 `AffineQuantity` is generic so that a future point-in-time type can reuse the same semantics without making `Temperature` special.
@@ -66,3 +87,59 @@ commanded.normalize().magnitude == Degree(10).magnitude
 Construction does **not** normalize: `Degree(370)` is stored as-is and stays distinct from `Degree(10)` until it's compared (equality normalizes both sides) or explicitly wrapped with `.normalize()`.
 
 There is deliberately no total order for modular quantities: a cyclic value has no universal `greater than` relationship without choosing a direction of travel.
+
+`is_close(other, tolerance=...)` asks whether two readings are within a stated tolerance of each other, measured the short way round the circle.
+It exists on every shape; see [Comparing with a tolerance](exactness.md#comparing-with-a-tolerance).
+
+## Logarithmic
+
+Logarithmic quantities are the logarithm of a ratio.
+`LogarithmicRatio` is the current example, expressed in decibels or bels.
+
+The level is stored exactly.
+Multiplying two ratios adds their levels, so `+` and `-` combine stages in series and are exact:
+
+```python
+from kuchka import Bel, Decibel
+
+amplifier = Decibel(20)
+cable = Decibel(-3.5)
+amplifier + cable  # 16.5 dB
+amplifier - cable  # 23.5 dB
+-cable  # 3.5 dB, the reciprocal ratio.
+Bel(1) == Decibel(10)  # True
+```
+
+Scaling by a plain number scales the level: `Decibel(-0.2) * 30 == Decibel(-6)`.
+Dividing a level by a level gives a `Proportion`: `Decibel(6) / Decibel(3) == Ratio(2)`.
+Levels have a total order, since a larger ratio is a larger level.
+`abs()` gives the size of a deviation, which is what a gain tolerance check compares.
+
+Level times level, level plus a naked number, and level plus a linear `Proportion` are rejected.
+
+### Converting to and from a linear ratio
+
+The same number of decibels describes a different linear ratio depending on the kind of quantity.
+`to_power_ratio()` uses `10 ** (level / 10)` for power, energy, and intensity.
+`to_field_ratio()` uses `10 ** (level / 20)` for voltage, current, and pressure.
+Both return a `Proportion`.
+`LogarithmicRatio.from_power_ratio()` and `LogarithmicRatio.from_field_ratio()` go the other way and require a positive ratio.
+
+```python
+from kuchka import Decibel, LogarithmicRatio, Ratio
+
+Decibel(30).to_power_ratio() == Ratio(1000)
+Decibel(40).to_field_ratio() == Ratio(100)
+Decibel(6).to_field_ratio() == Decibel(3).to_power_ratio()
+LogarithmicRatio.from_field_ratio(Ratio(10)) == Decibel(20)
+```
+
+A logarithm of a general ratio is irrational, so this is the one place a logarithmic quantity leaves exact arithmetic.
+The conversion is evaluated in `Decimal` at the active context precision, and the result is stored as the exact `Fraction` of that `Decimal`.
+Whole multiples of 10 dB (power) or 20 dB (field) yield exact powers of ten and stay exact.
+"The 3 dB point is a factor of two" is a close approximation: `Decibel(3).to_power_ratio()` is `1.99526...`.
+
+### Reference levels
+
+`LogarithmicRatio` is the ratio of two quantities of the same kind.
+A level relative to a fixed reference, such as dBm (1 mW), dBW, dBV, dBu, or dBFS, is a separate family with its own semantics, planned for when a use case calls for it.

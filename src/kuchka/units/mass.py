@@ -28,7 +28,7 @@ You would need roughly six billion of them to reach the mass of a six-tonne elep
 
 >>> fruit_fly = Milligram(1)
 >>> elephant = Tonne(6)
->>> elephant_to_fly_equivalent = round(elephant / fruit_fly)
+>>> elephant_to_fly_equivalent = round((elephant / fruit_fly).magnitude)
 >>> elephant_to_fly_equivalent
 6000000000
 
@@ -58,7 +58,7 @@ that black hole with cars would require an utterly unreasonable fleet:
 
 >>> yaris = Kilogram(1_000)
 >>> sagittarius_a = SolarMass(4_300_000)
->>> yaris_per_sagittarius_a = round(sagittarius_a / yaris)
+>>> yaris_per_sagittarius_a = round((sagittarius_a / yaris).magnitude)
 >>> yaris_per_sagittarius_a
 8550188800000000000000000000000000
 
@@ -99,13 +99,13 @@ See Also
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import MASS
 from kuchka.internal import prefixes
 from kuchka.internal import symbols
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Mass
@@ -167,6 +167,8 @@ MEGAGRAM = prefixed_unit(
     GRAM_SYMBOL,
     MASS,
     coherent_offset=-3,
+    aliases=("t",),
+    words=("tonne", "metric ton", "metric tonne"),
 )
 
 Mass._canonical_unit = KILOGRAM  # noqa: SLF001 -- this module owns Mass's canonical unit
@@ -264,7 +266,7 @@ def Milligram(value: Numeric) -> Mass:
 
     >>> fly = Gram(0.1)
     >>> dog = Kilogram(30)
-    >>> swarm = round(dog / fly)
+    >>> swarm = round((dog / fly).magnitude)
     >>> swarm
     300000
 
@@ -367,7 +369,14 @@ True
 
 # Non-SI units.
 
-DALTON = UnitDef("dalton", "Da", Decimal("1.66053906892e-27"), MASS)
+DALTON = UnitDef(
+    "dalton",
+    "Da",
+    Decimal("1.66053906892e-27"),
+    MASS,
+    aliases=("u", "amu"),
+    words=("atomic mass unit",),
+)
 
 
 def Dalton(value: Numeric) -> Mass:
@@ -431,7 +440,7 @@ def Grain(value: Numeric) -> Mass:
     return Mass(to_exact(value) * GRAIN.scale, GRAIN)
 
 
-POUND = UnitDef("pound", "lb", Decimal("0.45359237"), MASS)
+POUND = UnitDef("pound", "lb", Decimal("0.45359237"), MASS, aliases=("lbs",))
 
 
 def Pound(value: Numeric) -> Mass:
@@ -502,7 +511,14 @@ def Ounce(value: Numeric) -> Mass:
     return Mass(to_exact(value) * OUNCE.scale, OUNCE)
 
 
-SOLAR_MASS = UnitDef("solar_mass", f"M{symbols.SUN}", Decimal("1.988416e30"), MASS)
+SOLAR_MASS = UnitDef(
+    "solar_mass",
+    f"M{symbols.SUN}",
+    Decimal("1.988416e30"),
+    MASS,
+    aliases=("Msun", "M_sun"),
+    words=("solar masses",),
+)
 
 
 def SolarMass(value: Numeric) -> Mass:
@@ -540,7 +556,14 @@ def SolarMass(value: Numeric) -> Mass:
     return Mass(to_exact(value) * SOLAR_MASS.scale, SOLAR_MASS)
 
 
-EARTH_MASS = UnitDef("earth_mass", f"M{symbols.EARTH}", Decimal("5.972168e24"), MASS)
+EARTH_MASS = UnitDef(
+    "earth_mass",
+    f"M{symbols.EARTH}",
+    Decimal("5.972168e24"),
+    MASS,
+    aliases=("Mearth", "M_earth"),
+    words=("earth masses",),
+)
 
 
 def EarthMass(value: Numeric) -> Mass:
@@ -578,23 +601,23 @@ def EarthMass(value: Numeric) -> Mass:
     return Mass(to_exact(value) * EARTH_MASS.scale, EARTH_MASS)
 
 
-MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = MappingProxyType(
+MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = unit_table(
+    "MASS_UNITS",
     {
-        PICOGRAM.symbol: Picogram,
-        NANOGRAM.symbol: Nanogram,
-        MICROGRAM.symbol: Microgram,
-        MILLIGRAM.symbol: Milligram,
-        GRAM.symbol: Gram,
-        KILOGRAM.symbol: Kilogram,
-        MEGAGRAM.symbol: Megagram,
-        "t": Tonne,
-        DALTON.symbol: Dalton,
-        GRAIN.symbol: Grain,
-        POUND.symbol: Pound,
-        OUNCE.symbol: Ounce,
-        SOLAR_MASS.symbol: SolarMass,
-        EARTH_MASS.symbol: EarthMass,
-    }
+        PICOGRAM: Picogram,
+        NANOGRAM: Nanogram,
+        MICROGRAM: Microgram,
+        MILLIGRAM: Milligram,
+        GRAM: Gram,
+        KILOGRAM: Kilogram,
+        MEGAGRAM: Megagram,
+        DALTON: Dalton,
+        GRAIN: Grain,
+        POUND: Pound,
+        OUNCE: Ounce,
+        SOLAR_MASS: SolarMass,
+        EARTH_MASS: EarthMass,
+    },
 )
 
 __all__ = [

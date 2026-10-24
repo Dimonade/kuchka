@@ -8,9 +8,9 @@ Defined as:
 
 Also carries the other overload halves of two relationships defined on their own types:
 - `Volume * Density -> Mass` (see `Density`) and
-- `Volume * Pressure -> Energy` (see `Pressure`),
-the P-V work relationship, alongside its inverse `Energy / Volume -> Pressure`
-(see `Energy`).
+- `Volume * Pressure -> Energy` (see `Pressure`), the P-V work relationship, and
+- `Volume * EnergyDensity -> Energy` (see `EnergyDensity`), alongside its inverse
+  `Energy / Volume -> EnergyDensity` (see `Energy`).
 """
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ from typing import overload
 from kuchka.dimensions import VOLUME
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -32,27 +32,36 @@ if TYPE_CHECKING:
     from kuchka.quantities.area import Area
     from kuchka.quantities.density import Density
     from kuchka.quantities.energy import Energy
+    from kuchka.quantities.energy_density import EnergyDensity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.pressure import Pressure
+    from kuchka.quantities.proportion import Proportion
 
 
 class Volume(LinearQuantity):
     """A three-dimensional extent: how much space something occupies or holds."""
 
     dimension: ClassVar[Dimension] = VOLUME
+    __slots__ = ()
 
     @overload
     def __truediv__(self, other: Length) -> Area: ...
     @overload
     def __truediv__(self, other: Area) -> Length: ...
     @overload
+    def __truediv__(self, other: Volume) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> Volume: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Volume: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
     @overload
@@ -60,15 +69,19 @@ class Volume(LinearQuantity):
     @overload
     def __mul__(self, other: Pressure) -> Energy: ...
     @overload
+    def __mul__(self, other: EnergyDensity) -> Energy: ...
+    @overload
+    def __mul__(self, other: Proportion) -> Volume: ...
+    @overload
     def __mul__(self, other: Numeric) -> Volume: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
 
-register(VOLUME, Volume)
+_register(VOLUME, Volume)
 
 __all__ = ["Volume"]

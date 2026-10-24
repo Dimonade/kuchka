@@ -66,8 +66,8 @@ class AffineQuantity(
 
     A concrete subclass (`Temperature`) is parametrized with its own delta type
     (``class Temperature(AffineQuantity[TemperatureDelta])``) and assigns two class
-    attributes once, the same way a `LinearQuantity` subclass's owning unit module
-    assigns `_canonical_unit`:
+    attributes once, and its owning unit module assigns `_canonical_unit`, the unit
+    the magnitude is stored in, as for a `LinearQuantity` subclass:
 
     - `_delta_type`: the same type passed as the generic parameter, repeated as a
       plain `ClassVar` so the runtime methods below can construct and `isinstance`-
@@ -85,7 +85,9 @@ class AffineQuantity(
 
     dimension: ClassVar[Dimension]
     _delta_type: ClassVar[type[LinearQuantity]]
+    _canonical_unit: ClassVar[AffineUnitDef]
     _conversion_target_hint: ClassVar[str] = "a matching affine unit"
+    _unit_type: ClassVar[type] = AffineUnitDef
     __slots__ = ()
 
     def to(self, unit: AffineUnitDef) -> Self:
@@ -100,6 +102,7 @@ class AffineQuantity(
                 f"got {unit!r}"
             )
             raise InvalidConversionError(msg)
+        self._reject_foreign_unit(unit)
         return type(self)(self._magnitude, unit)
 
     @override
@@ -148,6 +151,16 @@ class AffineQuantity(
         if isinstance(other, self._delta_type):
             return type(self)(self._magnitude - other.magnitude, self._display_unit)
         return NotImplemented
+
+    def is_close(self, other: Self, *, tolerance: _DeltaT) -> bool:
+        """Return whether `other` is within `tolerance` of `self`, inclusive.
+
+        The tolerance is the delta type, what a difference of two readings is:
+        a `TemperatureDelta` for `Temperature`, a `Time` for `Instant`.
+        It has no default.
+        """
+        limit = self._tolerance_limit(other, tolerance, self._delta_type)
+        return abs(self._magnitude - other._magnitude) <= limit
 
     # NOTE: Deliberately no __mul__ / __rmul__ / __truediv__ by a scalar:
     # see the class docstring for why scaling a point on a scale is left undefined

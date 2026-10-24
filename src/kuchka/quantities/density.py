@@ -14,7 +14,7 @@ from typing import overload
 from kuchka.dimensions import DENSITY
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.volume import Volume
 
 
@@ -29,28 +30,37 @@ class Density(LinearQuantity):
     """Mass per unit volume: how tightly packed a material's mass is."""
 
     dimension: ClassVar[Dimension] = DENSITY
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Volume) -> Mass: ...
     @overload
+    def __mul__(self, other: Proportion) -> Density: ...
+    @overload
     def __mul__(self, other: Numeric) -> Density: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
+    def __truediv__(self, other: Density) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> Density: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Density: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 
-register(DENSITY, Density)
+_register(DENSITY, Density)
 
 __all__ = ["Density"]

@@ -5,6 +5,280 @@ All notable changes to kuchka are documented here.
 The format tries to follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 See the `Stability` section in `README.md` for what versioning means before `0.2.0`.
 
+## [0.1.5] - `develop`
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+## [0.1.4] - 2026-10-24
+
+### Added
+
+#### New units added
+
+- Time:
+  - `Femtosecond`, `Picosecond`, and `Nanosecond`.
+  - `Day`, `Week`, `Fortnight`, and `JulianYear`. All exact scales of a `Second`.
+  - `Jiffy`.
+- Temperature: `Fahrenheit`, the usual `Fahrenheit(32) == Celsius(0)`, `Fahrenheit(-459.67) == Kelvin(0)`.
+- Current: `Picoampere`, `Nanoampere`, and `Megaampere`.
+- Resistance: `Microohm` and `Gigaohm`.
+- Conductance: `Nanosiemens`.
+- Voltage: `Nanovolt`, `Megavolt`, and `Petavolt`.
+- Power: `Picowatt`, `Nanowatt`, `Megawatt` to `Petawatt`, `Horsepower`, and `MetricHorsepower`.
+- Force: `KilogramForce`, `Meganewton`, `Micronewton`.
+- Acceleration: `Gal`, `Milligal`, and `Microgal`.
+- Length: `AstronomicalUnit` and `LightYear`.
+- Energy: `Petajoule`, `KilowattHour`, `TonneOfTNT`, `KilotonneOfTNT`, and `MegatonneOfTNT`.
+- Velocity: `Knot`.
+- Frequency: `Nanohertz`, `Microhertz`, and `Millihertz`.
+- Amount: `Femtomole`, `Picomole`, `Nanomole`, and `Kilomole`.
+- Baud Rate: `Megabaud` and `Gigabaud`.
+- Density: `GramPerLitre`, `GramPerMillilitre`, and `KilogramPerLitre`.
+
+#### Reading text with `parse`
+
+`parse(text, quantity)` reads a number and a unit from text into the quantity type it is given, through that type's own table of unit spellings: `parse("5 mV", Voltage)`.
+The caller names the type, since `"5 s"` can be a `Time`, an `Instant`, or a `SamplingPeriod`.
+The number is read exactly, and text that cannot be read raises `ParseError`, or `UnknownUnitError` for a unit the type does not have.
+
+- `allow_archaic` takes an `ArchaicPolicy` (`Deny` by default, or `Allow`), with `False` and `True` as shorthands, and reads the archaic modules the application has imported.
+- A text that two different units claim raises `ParseError` and never picks one.
+- `extend_units` takes the table of an archaic module, and records it on the type for `parse`.
+
+#### Stress, apparent and reactive power, and activity
+
+Four more kinds share a dimension with an existing one, each as a role of it: `Stress` of `Pressure`, `ApparentPower` and `ReactivePower` of `Power`, and `Activity` of `Frequency`.
+A role adds with its own kind, scales by a plain number or a `Proportion`, divides by its own kind into a `Proportion`, and takes the conversion back to its principal kind (`to_pressure()`, `to_power()`, `to_frequency()`) for any other arithmetic.
+
+- Stress: reached with `Pressure.to_stress()`, and reads every unit of `Pressure`.
+- Apparent power: `VoltAmpere` and `MillivoltAmpere` through `GigavoltAmpere`; reactive power: `Var` and `Millivar` through `Gigavar`, read as `VAr` and `VAR` too.
+- Activity: `Millibecquerel` through `Terabecquerel`, and `Curie` with `Millicurie`, `Microcurie`, and `Picocurie`.
+- Pressure: `Gigapascal` and `KilopoundPerSquareInch`.
+
+#### Data and data rate
+
+`Data` counts bits and `DataRate` is data per time.
+Both have a dimension of their own, the new information axis, so a bit rate is not a `Frequency`, a `SampleRate`, or a `BaudRate`, and `Data / Data` is a `Proportion`.
+`Data / Time` is a `DataRate`, `DataRate * Time` is `Data`, and `Data / DataRate` is a `Time`.
+
+- Data: `Bit` and `Byte`, with the SI multiples `Kilobit` to `Petabit` and `Kilobyte` to `Petabyte`, and the IEC binary multiples `Kibibit` to `Pebibit` and `Kibibyte` to `Pebibyte`.
+- Data rate: `BitPerSecond` and `BytePerSecond`, with the same multiples (`MegabitPerSecond`, `MebibytePerSecond`, and so on).
+- `kB` is 1000 bytes and `KiB` is 1024 bytes, `Mb` is the megabit and `MB` the megabyte, and `KB` and `Kb` are refused.
+
+The IEC binary prefixes `kibi` to `yobi` join the SI ones in `kuchka.internal.prefixes`, and a `Prefix` takes a `base`.
+
+#### Energy density is its own quantity
+
+`EnergyDensity` (`JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`) shares its dimension with `Pressure`, and the two are contested.
+`Energy / Volume` is an `EnergyDensity` and `Force / Area` a `Pressure`.
+
+#### German degree words
+
+`TEMPERATURE_UNITS` reads `grad C`, `Grad Celsius`, `grad F`, `Grad Fahrenheit`, `grad K`, and `Grad Kelvin`, the spellings of historical German data, in any case.
+A bare `Grad` names no scale, as `deg` and `degrees` do not.
+
+#### The angle axis takes part in arithmetic
+
+`AngularDisplacement` is the angle swept, which does not wrap, next to the wrapping `Angle`.
+`AngularVelocity` (`RadianPerSecond`, `DegreePerSecond`, `TurnPerSecond`, `RevolutionPerMinute`) and `Torque` (`NewtonMetre`, `PoundForceFoot`, and more) follow from it.
+`Torque * AngularDisplacement` is an `Energy`, `AngularDisplacement / Time` is an `AngularVelocity`, and `Hertz(1)` is not an `AngularVelocity`.
+`Torque.from_force(force, lever_arm)`, `Frequency.to_angular_velocity()`, `AngularVelocity.to_frequency()`, `Angle.to_angular_displacement()`, and `AngularDisplacement.to_angle()` convert by name.
+
+#### Unit tables accept the notations real files use
+
+`TEMPERATURE_UNITS` takes `C`, `degC`, `degrees C`, and `Degrees Celsius`, and the other tables take `u` for micro and the dalton, `Mohm`, `meter`, `sec`, `kwh`, `yr`, `mm2`, `m^3`, `cc`, and similar.
+Symbols stay case-sensitive (`mV` is not `MV`), names and spoken forms ignore case, and a table cannot be built if a spelling could mean two units.
+Iterating a table now yields display symbols (`°C`, `ΔK`), and the earlier keys (`C`, `dK`, `t`, `As`) still resolve.
+See `docs/concepts/unit_spellings.md`.
+
+#### Archaic units
+
+A collection of historic, archaic, traditional, and out of use units, imported explicitly from `kuchka.units.archaic`.
+The top-level namespace, `kuchka.units`, and the generated API list none of them, and a quantity type displays in an archaic unit once its module is imported.
+
+- `german`: the principal Meilen, with the regional ones in their own module,
+- `hebrew`: Biblical and Talmudic units,
+- `japanese`: Shakkanho units of length, area, volume, and mass,
+- `russian`: Imperial units of length and area.
+
+Modules register their units through `extend_units`, which adds units to a quantity type beside those `bind_units` bound.
+The pages under `docs/how-to` describe adding a unit, a quantity, a dimension, and archaic units, splitting a unit module, and the tests and documentation each needs.
+
+#### Quantity kinds are catalogued separately from arithmetic
+
+Every quantity type, of any shape, is registered as a kind of its dimension, and `kuchka` does not import with a type that is missing.
+Arithmetic keeps choosing its result from the linear kinds alone: a second linear kind of a dimension states whether it specialises the first or is contested with it.
+`SamplingPeriod`, `SampleRate`, and `BaudRate` are specialisations of `Time` and `Frequency`.
+A dimension whose linear kinds are on equal footing has no principal kind, and arithmetic that produces it raises the new `AmbiguousKindError`.
+
+#### `is_close` compares with an explicit tolerance
+
+`a.is_close(b, tolerance=...)` on every quantity shape.
+The tolerance is a required keyword-only quantity (a `TemperatureDelta` for `Temperature`, a `Time` for `Instant`), and the test is exact and inclusive.
+Angles measure the short way round the circle.
+
+#### `LogarithmicRatio`, the first logarithmic quantity
+
+- `Decibel` and `Bel` constructors, with `LOGARITHMIC_RATIO_UNITS`.
+- `PureLogarithmicQuantity`, the base for a ratio expressed as a logarithm, and `LogarithmicUnitDef`, the unit-definition type for it.
+- Levels add, subtract, scale by a plain number, negate, take `abs()`, and compare, all exactly.
+- `to_power_ratio()` / `to_field_ratio()` and `from_power_ratio()` / `from_field_ratio()` convert to and from a linear `Proportion`.
+  They are evaluated in `Decimal` at the active context precision; whole multiples of 10 dB (power) or 20 dB (field) are exact.
+
+#### Typed products and quotients
+
+The static overloads of `*` and `/` declare 33 more pairs the runtime already computed, so a type checker infers the result and not `LinearQuantity | Fraction`:
+
+- Energy and charge: `Charge * Voltage`, `Energy / Charge`, and `Energy / Voltage`.
+- Charge flow: `Charge * Frequency`, `Current / Charge`, and `Current / Frequency`.
+- Power: `Force * Velocity`, `Power / Force`, `Power / Velocity`, `Energy * Frequency`, `Power / Energy`, and `Power / Frequency`.
+- Kinematics: `Frequency * Length`, `Frequency * Velocity`, `Velocity / Length`, `Acceleration / Frequency`, and `Acceleration / Velocity`.
+- Rotation: `AngularVelocity / AngularDisplacement`.
+- Energy density: `EnergyDensity * Area` and `Force / EnergyDensity`.
+- Work: `Force * Length`, `Energy / Force`, and `Energy / Length`.
+- Resistance: `Resistance * Conductance`, a plain `Fraction`.
+
+Each pair is declared on both operand types, so the commuted product is typed too.
+
+#### A type-checker policy, and the matrix that holds it
+
+The README states which checkers the types are written for: mypy from 1.11 and at the newest, pyright at the newest, and the library's own source under `ty`.
+A contract test asks each installed checker about a representative set of operand pairs and operators and compares the answer with the runtime, and the negative typing fixture is checked on mypy and on pyright.
+The tox environments `typing-min` and `pyright` run them, and `just watch-tools` runs the checks on the newest tool versions as an early warning.
+
+### Changed
+
+#### Conversion functions
+
+Conversions between quantity types are named `to_*` and `from_*`.
+`as_instant`, `as_sampling_period`, and `as_frequency` are now `to_instant`, `to_sampling_period`, and `to_frequency`; the old names are removed.
+
+#### A ratio is a `Proportion`
+
+`Volt(5) / Volt(2)` returned a bare `Fraction`, which is indistinguishable from a plain number, so `Volt(Volt(5) / Volt(2))` was accepted as `2.5 V`.
+The quotient of two quantities of one dimension is now a `Proportion`, and so is the product or quotient of two proportions and the quotient of two levels: `Percent(50) * Percent(50)` is `0.25 1`, and `Decibel(6) / Decibel(3)` is `2 1`.
+A `Proportion` compares with a `Proportion` and is not a valid argument to a quantity constructor, so `Volt(5) / Volt(2) > 2` raises and `Volt(Volt(5) / Volt(2))` raises.
+`.magnitude` returns the exact `Fraction`, so `round(Mass / Mass)` is now `round((Mass / Mass).magnitude)`.
+The overloads declare the result on every linear type, and on `Pressure` and `EnergyDensity` against each other.
+Dimensionless results of unlike quantities, such as `Hertz(2) * Second(3)`, remain plain `Fraction` values.
+
+#### Role kinds refuse arithmetic by dimension
+
+`BaudRate(9600) * Metre(1)` was a `Velocity`, because `BaudRate` shares the dimension T⁻¹ with `Frequency`.
+`SampleRate`, `SamplingPeriod`, and `BaudRate` now combine only with a plain number, a `Proportion`, themselves in a quotient, and, for the reciprocal pair, each other.
+Every other product or quotient raises `IncompatibleDimensionError`, and the error names the conversion that leaves the role: `SampleRate.to_frequency()`, or the new `SamplingPeriod.to_time()`.
+`BaudRate` has no such conversion, and the error says so.
+
+#### A hint where a torque and an energy meet
+
+Adding, subtracting, or comparing an `Energy` and a `Torque` raises `IncompatibleDimensionError` with a pointer to `AngularDisplacement` and `Torque.from_force`.
+
+#### A `Proportion` scales a quantity, and the overloads say so
+
+`Percent(50) * Volt(2)` is `Volt(1)`, and `Volt(2) / Percent(50)` is `Volt(4)`.
+The overloads declare it on every linear type, in both orders, and declare `Ratio(2) / Second(4)` as a `Frequency` and the other reciprocals, so mypy and ty infer the type and not `LinearQuantity | Fraction`.
+A `Proportion` over a role kind is now the reciprocal role, as a plain number is: `Ratio(2) / SampleRate(4)` is a `SamplingPeriod`.
+It returned a plain `Time`, and `Ratio(2) / BaudRate(9600)` returned a `Time` too, where `2 / BaudRate(9600)` raised.
+A role with no reciprocal kind now raises `IncompatibleDimensionError` for a `Proportion` as well.
+
+#### `sum()` names its start
+
+`sum([Volt(1), Volt(2)])` raised because `sum()` starts from the plain number `0`.
+The error now says what `sum()` needs: `sum(values, start=Volt(0))`, with the zero of the type that was added to.
+
+#### A quantity has no truth value
+
+`bool(Volt(0))` was `True`, so `if not voltage:` was always false, and a rule of zero being false has no single meaning across shapes: `Celsius(0)` is not `Kelvin(0)`, `Degree(360)` is `Degree(0)`, and `Decibel(0)` is a ratio of one.
+`bool()` of any quantity now raises `TypeError`, with a pointer to `is None` and to an equality with zero.
+
+#### Static types refuse what the runtime refuses
+
+A parameter typed `object` let `Degree(30) * Volt(1)` and `Celsius(20) * Volt(1)` type-check, as an `Angle` and a `Voltage`, and let any quantity be compared with any other and with a plain number.
+Comparisons now take their own type, the reflected operators take a plain number, and a linear quantity multiplies and divides by a linear quantity or a plain number, so mypy and ty refuse each of those.
+A test reveals a representative set of operand pairs and operators with mypy, and checks every one against the runtime.
+
+#### Angle arithmetic
+
+Multiplying or dividing an `Angle` by a quantity raises `IncompatibleDimensionError`, with a pointer to `to_angular_displacement()`.
+It raised a bare `TypeError`.
+
+### Fixed
+
+#### Every unit of a table is published
+
+`KilowattHour`, `GramPerLitre`, and `GramPerMillilitre` were in their tables but not exported, so `from kuchka import KilowattHour` failed and a value in them could not be pickled.
+
+#### A `Proportion` keeps the kind it scales
+
+`SampleRate * Ratio(2)` and `BaudRate * Percent(50)` returned a `Frequency` in hertz.
+A dimensionless operand now keeps the kind of the other operand.
+
+#### `to_sampling_period()` keeps the display unit
+
+`Millisecond(2).to_sampling_period()` displayed `0.002 s`, and so did `SAMPLING_PERIOD_UNITS["ms"](2)`.
+Both now display `2 ms`.
+
+#### A unit belongs to its quantity types
+
+`Hertz(1).to(BAUD)` displayed `1 Bd`, and `Frequency(Fraction(1), BAUD)` was accepted, because a type took any unit of its dimension.
+Each quantity type now binds the units of its own table and refuses every other, and the error names the type the unit belongs to.
+A unit of `Time` is still a unit of `SamplingPeriod`; `SampleRate` no longer converts to hertz with `.to()`, and `SampleRate.as_frequency()` does.
+
+#### Units keep their identity through copy and pickle
+
+`copy.deepcopy(Volt(5)).unit is VOLT` and the same after a pickle round trip were `False`, because a unit was rebuilt by value on the way back.
+Unit definitions are now immutable values with value equality: copying returns the same unit, and pickling stores the name `kuchka.units` publishes it under, so a pickle holds no unit internals.
+A unit that `kuchka.units` does not publish cannot be pickled.
+Pickle is documented as a way to move values between processes of one version, and storage as an exact magnitude plus a unit symbol; see `docs/concepts/persistence.md`.
+
+#### Quantity class constructors validate their arguments
+
+`Voltage(0.5, AMPERE)` and the other quantity classes used to store whatever they were given.
+They now accept only an exact `Fraction` magnitude and a display unit of the right kind and dimension, and raise `InvalidMeasurementError` otherwise.
+The unit constructors (`Volt(5)`) are unchanged.
+
+#### A quantity keeps its state
+
+Deleting an attribute, calling `__init__` again, or calling `__setstate__` on a live value raises `AttributeError`.
+Restoring from `pickle` or `copy` data runs the same validation as construction.
+
+#### Numeric input has a bounded size
+
+`Decimal("1E+1000000")` was accepted and then took seconds to display.
+Input is limited to a `Decimal` exponent of +/-1000, 1000 digits, and 8192 bits for an `int` or each part of a `Fraction`; larger values raise `InvalidMeasurementError`.
+The limits live in `kuchka.internal.limits`.
+
+#### Display ignores the active `Decimal` context
+
+`repr()` and `format()` no longer depend on the caller's precision, rounding mode, or traps, and round once, from the exact value.
+Ties round away from zero: `f"{Volt(2.665):.2f}"` is `2.67 V` (it was `2.66 V`).
+
+#### `__all__` lists only real exports
+
+`kuchka.units.__all__` and `kuchka.quantities.__all__` no longer include submodule names or `annotations`.
+`kuchka/__init__.py` shrinks to 42 lines: the promoted names are generated into `kuchka/_api.py` by `tools/generate_api.py` (`just generate-api`).
+
+#### Division by zero raises `DivisionByZeroError`
+
+`Volt(1) / 0`, `Volt(1) / Volt(0)`, and `1 / Second(0)` raised a bare `ZeroDivisionError` with the message `Fraction(1, 0)`.
+They raise `DivisionByZeroError`, a `MeasurementError` that is also a `ZeroDivisionError`, so existing handlers keep working.
+A unit definition with a zero or negative scale is rejected when it is created.
+
+#### Angles are exact in turns
+
+`Turn` is the canonical angle unit, and `Degree`, `Gradian`, `ArcMinute`, and `ArcSecond` are exact fractions of it.
+`Radian` converts with pi to 100 decimals (it was 15), so every displayed digit of a conversion is correct.
+`Radian(math.pi) == Degree(180)` is now `False`; compare with `is_close`.
+`Angle.magnitude` is now in turns.
+
 ## [0.1.3] - 2026-09-29
 
 ### Added
@@ -78,7 +352,7 @@ Additional units are: `Atmosphere`, `Bar`, `Hectopascal`, `Kilopascal`, `Megapas
 #### `Density` family
 
 `KilogramPerCubicMetre` is the canonical unit.
-Additional units are: `GramPerCubicCentimetre`, `KilogramPerCubicLitre`.
+Additional units are: `GramPerCubicCentimetre`, `KilogramPerLitre`.
 
 #### Expanded kinematics
 

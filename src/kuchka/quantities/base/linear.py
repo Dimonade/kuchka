@@ -18,12 +18,13 @@ from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import Dimension
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
-from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.typing import override
 from kuchka.numeric import Numeric
+from kuchka.numeric import exact_quotient
 from kuchka.numeric import to_exact
 from kuchka.quantities.base.ordering import _OrderedScalarMixin
-from kuchka.quantities.base.registry import _DIMENSION_REGISTRY
+from kuchka.quantities.base.registry import _arithmetic_roots
+from kuchka.quantities.base.registry import _combine
 from kuchka.quantities.base.registry import _promote
 from kuchka.quantities.base.storage import _ScalarStorage
 from kuchka.quantities.base.units import UnitDef
@@ -41,10 +42,15 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
 
     Arithmetic and equality always operate on the canonical magnitude, so the display
     unit never affects correctness.
+    A kind whose canonical unit is not the one people read results in (the joule per
+    turn of a torque) names that unit in `_result_unit`, and the results of arithmetic
+    display in it; every other kind displays results in its canonical unit.
     """
 
     dimension: ClassVar[Dimension]
     _canonical_unit: ClassVar[UnitDef]
+    _result_unit: ClassVar[UnitDef]
+    _unit_type: ClassVar[type] = UnitDef
     __slots__ = ()
 
     @property
@@ -72,6 +78,7 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
                 f"[{self.dimension!r}] and [{unit.dimension!r}]."
             )
             raise InvalidConversionError(msg)
+        self._reject_foreign_unit(unit)
         return type(self)(self._magnitude, unit)
 
     @override
@@ -94,7 +101,7 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
         # The runtime guard compares `type(self) is type(other)` and not
         # `self.dimension != other.dimension`:
         # two different types can share a dimension (`Frequency` and `BaudRate` are
-        # both T^-1), and adding across that boundary is exactly the mistake this check
+        # both T⁻¹), and adding across that boundary is exactly the mistake this check
         # exists to catch, even though the dimensions agree.
         if isinstance(other, LinearQuantity):
             if type(self) is not type(other):
@@ -116,14 +123,16 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
             self._reject_naked_number("subtract", other)
         return NotImplemented
 
-    def _reject_naked_number(self, operation: str, other: object) -> None:
-        unit_name = self._canonical_unit.name.capitalize()
-        msg = (
-            f"cannot {operation} a plain number ({other!r}) to a "
-            f"{type(self).__name__}; wrap it in a unit constructor first, "
-            f"e.g. {unit_name}({other!r})"
-        )
-        raise InvalidMeasurementError(msg)
+    def is_close(self, other: Self, *, tolerance: Self) -> bool:
+        """Return whether `other` is within `tolerance` of `self`, inclusive.
+
+        The comparison is exact, and the tolerance is a quantity of the same type with
+        no default: what counts as close is always written down by the caller.
+        Closeness is not transitive: `a` can be close to `b`, and `b` to `c`, while
+        `a` is not close to `c`.
+        """
+        limit = self._tolerance_limit(other, tolerance, type(self))
+        return abs(self._magnitude - other._magnitude) <= limit
 
     # NOTE ON TYPING: the return type here is intentionally broad
     # (`LinearQuantity | Fraction`) because this base implementation runs the fully
@@ -138,48 +147,53 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
     # Each subclass overload list ends with a fallback overload matching this exact
     # signature (`other: object -> LinearQuantity | Fraction`) so that overriding it
     # remains compatible with this base signature.
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         if isinstance(other, LinearQuantity):
-            result_dimension = self.dimension * other.dimension
-            result_magnitude = self._magnitude * other._magnitude
-            return _promote(result_dimension, result_magnitude)
+            return _combine("*", self, other, self._magnitude * other._magnitude)
         if isinstance(other, Numeric):
             return type(self)(self._magnitude * to_exact(other), self._display_unit)
         return NotImplemented
 
-    def __rmul__(self, other: object) -> Self:
+    def __rmul__(self, other: Numeric) -> Self:
         if isinstance(other, Numeric):
             return type(self)(self._magnitude * to_exact(other), self._display_unit)
         return NotImplemented
 
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         if isinstance(other, LinearQuantity):
-            result_dimension = self.dimension / other.dimension
-            result_magnitude = self._magnitude / other._magnitude
-            return _promote(result_dimension, result_magnitude)
+            magnitude = exact_quotient(
+                self._magnitude, other._magnitude, left=self, right=other
+            )
+            return _combine("/", self, other, magnitude)
         if isinstance(other, Numeric):
-            return type(self)(self._magnitude / to_exact(other), self._display_unit)
+            magnitude = exact_quotient(
+                self._magnitude, to_exact(other), left=self, right=other
+            )
+            return type(self)(magnitude, self._display_unit)
         return NotImplemented
 
-    def __rtruediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction:
         # NOTE: `Numeric / self`, e.g. `1 / Time(2)`.
-        # This only derives an answer through the shared dimension registry when
-        # `self`'s own type is the *canonical* one for its dimension (the guard below).
-        # That guard matters the moment two types share a dimension:
-        # `SamplingPeriod` and `Time` are both T^1, so a naive `1 / self._magnitude`
-        # promoted through `_promote` would always hand back a `Time` --
-        # the registered T^-1 owner -- even when `self` was a `SamplingPeriod`,
+        # The reciprocal's kind is chosen by its dimension alone, which is only right
+        # when `self` is the principal kind of its dimension or one of its contested
+        # kinds (the guard below).
+        # `SamplingPeriod` and `Time` are both T¹, so a naive `1 / self._magnitude`
+        # promoted through `_promote` would always hand back a `Frequency`, the
+        # principal T⁻¹ kind, even when `self` was a `SamplingPeriod`,
         # silently mislabelling a sample rate as a generic frequency.
         #
-        # Non-canonical types are expected to override this method themselves if they
-        # have a specific, well-defined reciprocal (see `SamplingPeriod`/`SampleRate`,
-        # or to have none at all if they do not (see `BaudRate`, whose reciprocal is
-        # not a modelled concept).
+        # A specialisation overrides this method itself if it has a specific,
+        # well-defined reciprocal (see `SamplingPeriod`/`SampleRate`), and has none
+        # if it does not (see `BaudRate`, whose reciprocal is not a modelled concept).
         if isinstance(other, Numeric):
-            if _DIMENSION_REGISTRY.get(self.dimension) is not type(self):
+            if type(self) not in _arithmetic_roots(self.dimension):
                 return NotImplemented
             result_dimension = DIMENSIONLESS / self.dimension
-            result_magnitude = to_exact(other) / self._magnitude
+            result_magnitude = exact_quotient(
+                to_exact(other), self._magnitude, left=other, right=self
+            )
             return _promote(result_dimension, result_magnitude)
         return NotImplemented
 

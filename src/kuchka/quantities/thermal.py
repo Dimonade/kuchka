@@ -9,8 +9,8 @@ while :class:`Temperature` is a :class:`~kuchka.quantities.base.AffineQuantity`
 instead -- see that class's docstring for the operations a point on a scale supports
 and the ones it deliberately omits, and why.
 
-This module treats Celsius and Kelvin identically:
-both construct the same ``Temperature`` type, and neither supports scalar
+This module treats Kelvin, Celsius, and Fahrenheit identically:
+all three construct the same ``Temperature`` type, and none supports scalar
 multiplication, even though "2 x 300 K" has a defensible thermodynamic reading that
 "2 x 20 degC" does not.
 Giving Kelvin its own multiplicable type would be a reasonable extension for a use case
@@ -20,29 +20,58 @@ vocabulary this library currently targets.
 
 from __future__ import annotations
 
+from fractions import Fraction
 from typing import TYPE_CHECKING
 from typing import ClassVar
+from typing import overload
 
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.errors import InvalidMeasurementError
+from kuchka.internal.typing import override
 from kuchka.quantities.base import AffineQuantity
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
-    from fractions import Fraction
-
     from kuchka.dimensions import Dimension
-    from kuchka.quantities.base import AffineUnitDef
+    from kuchka.numeric import Numeric
+    from kuchka.quantities.proportion import Proportion
 
 
 class TemperatureDelta(LinearQuantity):
     """A difference between two temperatures, e.g. a tolerance band."""
 
     dimension: ClassVar[Dimension] = TEMPERATURE_DELTA
+    __slots__ = ()
+
+    @overload
+    def __mul__(self, other: Proportion) -> TemperatureDelta: ...
+    @overload
+    def __mul__(self, other: Numeric) -> TemperatureDelta: ...
+    @overload
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__mul__(other)
+
+    @overload
+    def __truediv__(self, other: TemperatureDelta) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> TemperatureDelta: ...
+    @overload
+    def __truediv__(self, other: Numeric) -> TemperatureDelta: ...
+    @overload
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__truediv__(other)
 
 
-register(TEMPERATURE_DELTA, TemperatureDelta)
+_register(TEMPERATURE_DELTA, TemperatureDelta)
 
 
 class Temperature(AffineQuantity[TemperatureDelta]):
@@ -71,24 +100,28 @@ class Temperature(AffineQuantity[TemperatureDelta]):
     dimension: ClassVar[Dimension] = TEMPERATURE_DELTA
     _delta_type: ClassVar[type[LinearQuantity]] = TemperatureDelta
     _conversion_target_hint: ClassVar[str] = (
-        "a temperature unit such as Kelvin or Celsius"
+        "a temperature unit such as Kelvin, Celsius, or Fahrenheit"
     )
     __slots__ = ()
 
-    def __init__(self, magnitude: Fraction, display_unit: AffineUnitDef) -> None:
-        """Store `magnitude`, rejecting a reading below absolute zero (0 K)."""
-        if magnitude < 0:
+    @classmethod
+    @override
+    def _validate(cls, magnitude: object, display_unit: object) -> None:
+        """Validate the pair, and reject a reading below absolute zero (0 K)."""
+        super()._validate(magnitude, display_unit)
+        if isinstance(magnitude, Fraction) and magnitude < 0:
             msg = (
                 f"cannot construct a Temperature of {float(magnitude)} K: physical "
                 "temperature cannot be below absolute zero (0 K)."
             )
             raise InvalidMeasurementError(msg)
-        super().__init__(magnitude, display_unit)
 
     @property
     def kelvin(self) -> Fraction:
         """Magnitude expressed in Kelvin, this type's canonical unit."""
         return self._magnitude
 
+
+_register(TEMPERATURE_DELTA, Temperature)
 
 __all__ = ["Temperature", "TemperatureDelta"]

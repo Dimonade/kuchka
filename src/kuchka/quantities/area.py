@@ -20,16 +20,18 @@ from typing import overload
 from kuchka.dimensions import AREA
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.energy_density import EnergyDensity
     from kuchka.quantities.kinematics import Force
     from kuchka.quantities.length import Length
     from kuchka.quantities.pressure import Pressure
+    from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.volume import Volume
 
 
@@ -37,32 +39,43 @@ class Area(LinearQuantity):
     """A two-dimensional extent: how much surface something covers."""
 
     dimension: ClassVar[Dimension] = AREA
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Length) -> Volume: ...
     @overload
     def __mul__(self, other: Pressure) -> Force: ...
     @overload
+    def __mul__(self, other: EnergyDensity) -> Force: ...
+    @overload
+    def __mul__(self, other: Proportion) -> Area: ...
+    @overload
     def __mul__(self, other: Numeric) -> Area: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
     def __truediv__(self, other: Length) -> Length: ...
     @overload
+    def __truediv__(self, other: Area) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> Area: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Area: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 
-register(AREA, Area)
+_register(AREA, Area)
 
 __all__ = ["Area"]

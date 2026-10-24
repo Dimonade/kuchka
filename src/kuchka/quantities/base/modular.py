@@ -19,9 +19,9 @@ from typing import Self
 
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidConversionError
-from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.typing import override
 from kuchka.numeric import Numeric
+from kuchka.numeric import exact_quotient
 from kuchka.numeric import to_exact
 from kuchka.quantities.base.storage import _ScalarStorage
 from kuchka.quantities.base.units import UnitDef
@@ -57,6 +57,7 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
     dimension: ClassVar[Dimension]
     _period: ClassVar[Fraction]
     _canonical_unit: ClassVar[UnitDef]
+    _unit_type: ClassVar[type] = UnitDef
     __slots__ = ()
 
     @property
@@ -79,12 +80,24 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
                 f"[{self.dimension!r}] and [{unit.dimension!r}]."
             )
             raise InvalidConversionError(msg)
+        self._reject_foreign_unit(unit)
         return type(self)(self._magnitude, unit)
 
     @override
     def value_in(self, unit: UnitDef) -> Fraction:
         """Exact magnitude expressed in ``unit``."""
         return self._magnitude / unit.scale
+
+    def is_close(self, other: Self, *, tolerance: Self) -> bool:
+        """Return whether `other` is within `tolerance` of `self`, the short way round.
+
+        The distance is the size of `difference()`, so readings either side of the
+        wrap point are close: ``Angle(359.9999).is_close(Angle(0.0001), ...)``.
+        The tolerance is an explicit quantity of the same type and is never
+        defaulted, so what counts as close is always written down by the caller.
+        """
+        limit = self._tolerance_limit(other, tolerance, type(self))
+        return abs(self.difference(other).magnitude) <= limit
 
     def _wrap(self, magnitude: Fraction) -> Fraction:
         """Reduce `magnitude` into ``[0, period)``.
@@ -155,28 +168,21 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
             self._reject_naked_number("subtract", other)
         return NotImplemented
 
-    def _reject_naked_number(self, operation: str, other: object) -> None:
-        unit_name = self._canonical_unit.name.capitalize()
-        msg = (
-            f"cannot {operation} a plain number ({other!r}) to a "
-            f"{type(self).__name__}; wrap it in a unit constructor first, "
-            f"e.g. {unit_name}({other!r})"
-        )
-        raise InvalidMeasurementError(msg)
-
-    def __mul__(self, other: object) -> Self:
+    def __mul__(self, other: Numeric) -> Self:
         if isinstance(other, Numeric):
             magnitude = self._wrap(self._magnitude * to_exact(other))
             return type(self)(magnitude, self._display_unit)
         return NotImplemented
 
-    def __rmul__(self, other: object) -> Self:
+    def __rmul__(self, other: Numeric) -> Self:
         return self.__mul__(other)
 
-    def __truediv__(self, other: object) -> Self:
+    def __truediv__(self, other: Numeric) -> Self:
         if isinstance(other, Numeric):
-            magnitude = self._wrap(self._magnitude / to_exact(other))
-            return type(self)(magnitude, self._display_unit)
+            quotient = exact_quotient(
+                self._magnitude, to_exact(other), left=self, right=other
+            )
+            return type(self)(self._wrap(quotient), self._display_unit)
         return NotImplemented
 
     def __neg__(self) -> Self:

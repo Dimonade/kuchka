@@ -8,6 +8,7 @@ and others, to avoid redefining them everywhere.
 """
 
 ANGLE = "\u2220"
+INFORMATION = "D"
 DEGREE = "\u00b0"
 DELTA = "\u0394"
 DOUBLE_PRIME = "\u2033"
@@ -37,6 +38,7 @@ SUPERSCRIPT_RIGHT_PARENTHESIS = "\u207e"
 SMALL_MICRO = "\u03bc"
 PRIME = "\u2032"
 THETA = "\u0398"
+MIDDLE_DOT = "\u00b7"
 
 
 _SUPERSCRIPT_TRANSLATION = str.maketrans(
@@ -65,4 +67,4 @@ def get_superscript(exponent: int) -> str:
     return str(exponent).translate(_SUPERSCRIPT_TRANSLATION)
 
 
-__all__ = []
+__all__: list[str] = []

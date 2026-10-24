@@ -1,4 +1,4 @@
-"""Length quantities and constructors for metric and selected exact imperial units.
+"""Length quantities and constructors for engineering, science, and space.
 
 `Length` represents one-dimensional distance. The metre is the canonical SI base unit,
 while the constructors in this module provide convenient entry points from metric
@@ -13,6 +13,10 @@ Every imperial unit implemented here is an **exact** decimal multiple of the met
 Since the 1959 international yard and pound agreement, conversions such as
 `1 in = 25.4 mm` and `1 ft = 0.3048 m` are exact, so they preserve the same `Decimal`
 precision guarantees as SI prefixes.
+
+The astronomical unit and light-year extend the same `Length` quantity to astronomical
+scales. The astronomical unit (`au`) is an exact conventional length, while the
+light-year (`ly`) is the exact distance light travels in a Julian year.
 
 Examples
 --------
@@ -50,6 +54,20 @@ The Apollo 11 landing site is about 384,400 km from Earth on average:
 
 >>> earth_to_moon = Kilometre(384400)
 
+The astronomical unit moves the same quantity into planetary-scale distances.
+One astronomical unit is the conventional Earth-Sun distance scale:
+
+>>> earth_sun_distance = AstronomicalUnit(1)
+>>> earth_sun_distance.to(KILOMETRE)
+149597870.7 km
+
+Light-years extend `Length` from the Solar System to interstellar space.
+A distance of 4.25 light-years is a useful representative stellar scale:
+
+>>> stellar_neighborhood = LightYear(Decimal("4.25"))
+>>> stellar_neighborhood.to(KILOMETRE)
+40208104508468.4 km
+
 It is also possible to be cheesy and correct at the same time.
 "I love you to the moon and back" is, at least dimensionally, a well-formed `Length`:
 
@@ -69,8 +87,17 @@ True
 
 hold exactly.
 
-`LENGTH_UNITS` maps symbols such as ``"mm"``, ``"km"``, and ``"in"`` to their
-constructors for configuration files and other external interfaces.
+The astronomical unit is defined exactly as:
+
+    1 au = 149597870700 m
+
+The light-year is defined from the exact speed of light and the Julian year of
+365.25 days:
+
+    1 ly = 9460730472580800 m
+
+`LENGTH_UNITS` maps symbols such as ``"mm"``, ``"km"``, ``"in"``, ``"au"``, and
+``"ly"`` to their constructors for configuration files and other external interfaces.
 
 See Also
 --------
@@ -86,12 +113,13 @@ See Also
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LENGTH
 from kuchka.internal import prefixes
+from kuchka.internal import symbols
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Length
@@ -103,15 +131,38 @@ if TYPE_CHECKING:
 
 METRE_NAME = "metre"
 METRE_SYMBOL = "m"
+METRE_WORDS = ("meter",)
+"""The American spelling, which prefixed names follow: `kilometer`."""
 
-PICOMETRE = prefixed_unit(prefixes.PICO, METRE_NAME, METRE_SYMBOL, LENGTH)
-NANOMETRE = prefixed_unit(prefixes.NANO, METRE_NAME, METRE_SYMBOL, LENGTH)
-MICROMETRE = prefixed_unit(prefixes.MICRO, METRE_NAME, METRE_SYMBOL, LENGTH)
-MILLIMETRE = prefixed_unit(prefixes.MILLI, METRE_NAME, METRE_SYMBOL, LENGTH)
-CENTIMETRE = prefixed_unit(prefixes.CENTI, METRE_NAME, METRE_SYMBOL, LENGTH)
-DECIMETRE = prefixed_unit(prefixes.DECI, METRE_NAME, METRE_SYMBOL, LENGTH)
-METRE = prefixed_unit(prefixes.UNIT, METRE_NAME, METRE_SYMBOL, LENGTH)
-KILOMETRE = prefixed_unit(prefixes.KILO, METRE_NAME, METRE_SYMBOL, LENGTH)
+PICOMETRE = prefixed_unit(
+    prefixes.PICO, METRE_NAME, METRE_SYMBOL, LENGTH, base_words=METRE_WORDS
+)
+NANOMETRE = prefixed_unit(
+    prefixes.NANO, METRE_NAME, METRE_SYMBOL, LENGTH, base_words=METRE_WORDS
+)
+MICROMETRE = prefixed_unit(
+    prefixes.MICRO,
+    METRE_NAME,
+    METRE_SYMBOL,
+    LENGTH,
+    base_words=METRE_WORDS,
+    words=("micron",),
+)
+MILLIMETRE = prefixed_unit(
+    prefixes.MILLI, METRE_NAME, METRE_SYMBOL, LENGTH, base_words=METRE_WORDS
+)
+CENTIMETRE = prefixed_unit(
+    prefixes.CENTI, METRE_NAME, METRE_SYMBOL, LENGTH, base_words=METRE_WORDS
+)
+DECIMETRE = prefixed_unit(
+    prefixes.DECI, METRE_NAME, METRE_SYMBOL, LENGTH, base_words=METRE_WORDS
+)
+METRE = prefixed_unit(
+    prefixes.UNIT, METRE_NAME, METRE_SYMBOL, LENGTH, base_words=METRE_WORDS
+)
+KILOMETRE = prefixed_unit(
+    prefixes.KILO, METRE_NAME, METRE_SYMBOL, LENGTH, base_words=METRE_WORDS
+)
 
 PICOMETER = PICOMETRE
 NANOMETER = NANOMETRE
@@ -326,7 +377,14 @@ Kilometer = Kilometre
 
 # Non-SI units.
 
-INCH = UnitDef("inch", "in", Decimal("0.0254"), LENGTH)
+INCH = UnitDef(
+    "inch",
+    "in",
+    Decimal("0.0254"),
+    LENGTH,
+    aliases=('"', symbols.DOUBLE_PRIME, "''"),
+    words=("inches",),
+)
 
 
 def Inch(value: Numeric) -> Length:
@@ -360,7 +418,14 @@ def Inch(value: Numeric) -> Length:
     return Length(to_exact(value) * INCH.scale, INCH)
 
 
-FOOT = UnitDef("foot", "ft", Decimal("0.3048"), LENGTH)
+FOOT = UnitDef(
+    "foot",
+    "ft",
+    Decimal("0.3048"),
+    LENGTH,
+    aliases=("'", symbols.PRIME),
+    words=("feet",),
+)
 
 
 def Foot(value: Numeric) -> Length:
@@ -441,7 +506,7 @@ def Mile(value: Numeric) -> Length:
     return Length(to_exact(value) * MILE.scale, MILE)
 
 
-NAUTICAL_MILE = UnitDef("nautical_mile", "M", 1_852, LENGTH)
+NAUTICAL_MILE = UnitDef("nautical_mile", "M", 1_852, LENGTH, aliases=("nmi",))
 
 
 def NauticalMile(value: Numeric) -> Length:
@@ -474,25 +539,99 @@ def NauticalMile(value: Numeric) -> Length:
     return Length(to_exact(value) * NAUTICAL_MILE.scale, NAUTICAL_MILE)
 
 
-LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = MappingProxyType(
+# Astronomy and space.
+
+ASTRONOMICAL_UNIT = UnitDef(
+    "astronomical_unit",
+    "au",
+    Decimal(149597870700),
+    LENGTH,
+    aliases=("AU", "ua"),
+)
+LIGHT_YEAR = UnitDef(
+    "light_year",
+    "ly",
+    Decimal(9460730472580800),
+    LENGTH,
+    aliases=("lyr", "l.y."),
+    words=("light-year", "lightyear"),
+)
+
+
+def AstronomicalUnit(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in astronomical units.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in astronomical units.
+
+    Returns
+    -------
+    Length
+        Length represented in astronomical units.
+
+    Examples
+    --------
+    The astronomical unit is useful for expressing distances within the Solar System:
+
+    >>> earth_sun_distance = AstronomicalUnit(1)
+    >>> earth_sun_distance.to(KILOMETRE) == Kilometre(Decimal("149597870.7"))
+    True
+
+    """
+    return Length(to_exact(value) * ASTRONOMICAL_UNIT.scale, ASTRONOMICAL_UNIT)
+
+
+def LightYear(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in light-years.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in light-years.
+
+    Returns
+    -------
+    Length
+        Length represented in light-years.
+
+    Examples
+    --------
+    A light-year is the distance travelled by light during one Julian year.
+    Its exact SI conversion is:
+
+    >>> distance = LightYear(1)
+    >>> distance.to(KILOMETRE)
+    9460730472580.8 km
+
+    """
+    return Length(to_exact(value) * LIGHT_YEAR.scale, LIGHT_YEAR)
+
+
+LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = unit_table(
+    "LENGTH_UNITS",
     {
-        PICOMETRE.symbol: Picometre,
-        NANOMETRE.symbol: Nanometre,
-        MICROMETRE.symbol: Micrometre,
-        MILLIMETRE.symbol: Millimetre,
-        CENTIMETRE.symbol: Centimetre,
-        DECIMETRE.symbol: Decimetre,
-        METRE.symbol: Metre,
-        KILOMETRE.symbol: Kilometre,
-        INCH.symbol: Inch,
-        FOOT.symbol: Foot,
-        YARD.symbol: Yard,
-        MILE.symbol: Mile,
-        NAUTICAL_MILE.symbol: NauticalMile,
-    }
+        PICOMETRE: Picometre,
+        NANOMETRE: Nanometre,
+        MICROMETRE: Micrometre,
+        MILLIMETRE: Millimetre,
+        CENTIMETRE: Centimetre,
+        DECIMETRE: Decimetre,
+        METRE: Metre,
+        KILOMETRE: Kilometre,
+        INCH: Inch,
+        FOOT: Foot,
+        YARD: Yard,
+        MILE: Mile,
+        NAUTICAL_MILE: NauticalMile,
+        ASTRONOMICAL_UNIT: AstronomicalUnit,
+        LIGHT_YEAR: LightYear,
+    },
 )
 
 __all__ = [
+    "ASTRONOMICAL_UNIT",
     "CENTIMETER",
     "CENTIMETRE",
     "DECIMETER",
@@ -502,6 +641,7 @@ __all__ = [
     "KILOMETER",
     "KILOMETRE",
     "LENGTH_UNITS",
+    "LIGHT_YEAR",
     "METER",
     "METRE",
     "MICROMETER",
@@ -515,6 +655,7 @@ __all__ = [
     "PICOMETER",
     "PICOMETRE",
     "YARD",
+    "AstronomicalUnit",
     "Centimeter",
     "Centimetre",
     "Decimeter",
@@ -523,6 +664,7 @@ __all__ = [
     "Inch",
     "Kilometer",
     "Kilometre",
+    "LightYear",
     "Meter",
     "Metre",
     "Micrometer",

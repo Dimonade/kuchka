@@ -7,17 +7,23 @@ and unit constructors (``Volt``, ``Milliampere``, ...) exposed from the top-leve
 
 Dimensions are represented as exponent vectors over the seven SI base quantities:
 mass, length, time, electric current, thermodynamic temperature, amount of substance,
-and luminous intensity -- plus one supplementary axis, ``angle``, tracked separately
-from the seven base quantities.
+and luminous intensity -- plus two supplementary axes, ``angle`` and ``information``,
+tracked separately from the seven base quantities.
 
 SI itself treats plane angle as a quantity of dimension one (the radian is a
 dimensionless derived unit), and `kuchka` is not taking a position against that.
-The ``angle`` field exists purely so that :data:`ANGLE` and :data:`DIMENSIONLESS` are
-distinguishable ``Dimension`` values here.
-Without it, `Proportion` (genuinely dimensionless, ``Percent``/``Ratio``) and `Angle`
-would compare as the exact same dimension, which would be wrong to build error messages
-and conversion checks against even though SI's own base-quantity accounting agrees they
-are both "one".
+The ``angle`` field makes :data:`ANGLE` and :data:`DIMENSIONLESS` distinct ``Dimension``
+values, and it takes part in arithmetic like any other axis.
+Torque is energy per angle (M L² T⁻² angle⁻¹) and angular velocity is angle per time
+(angle T⁻¹), so both differ from energy and from the hertz, which SI's own
+base-quantity accounting cannot tell apart.
+`Proportion` (genuinely dimensionless, ``Percent``/``Ratio``) and angles are different
+dimensions for the same reason.
+
+The ``information`` field does the same for data: a count of bits is neither a
+`Proportion` nor a number of cycles.
+A data rate is information per time (information T⁻¹), so it differs from the hertz,
+the sample rate, and the baud, which all have the dimension T⁻¹.
 
 Multiplying two physical quantities adds their exponent vectors.
 Dividing subtracts them.
@@ -41,7 +47,7 @@ class Dimension:
 
     Two ``Dimension`` instances compare equal (and hash equal) exactly when every
     exponent matches -- this is what lets the arithmetic engine use a plain `dict` to
-    look up "which named type does M^1 L^2 T^-3 correspond to?".
+    look up "which named type does M¹ L² T⁻³ correspond to?".
     """
 
     time: int = 0
@@ -52,6 +58,7 @@ class Dimension:
     amount: int = 0
     luminous_intensity: int = 0
     angle: int = 0
+    information: int = 0
 
     def __mul__(self, other: Dimension) -> Dimension:
         return Dimension(
@@ -63,6 +70,7 @@ class Dimension:
             amount=self.amount + other.amount,
             luminous_intensity=self.luminous_intensity + other.luminous_intensity,
             angle=self.angle + other.angle,
+            information=self.information + other.information,
         )
 
     def __truediv__(self, other: Dimension) -> Dimension:
@@ -75,6 +83,7 @@ class Dimension:
             amount=self.amount - other.amount,
             luminous_intensity=self.luminous_intensity - other.luminous_intensity,
             angle=self.angle - other.angle,
+            information=self.information - other.information,
         )
 
     @override
@@ -88,6 +97,7 @@ class Dimension:
             ("amount", "N"),
             ("luminous_intensity", "J"),
             ("angle", symbols.ANGLE),
+            ("information", symbols.INFORMATION),
         )
 
         parts = []
@@ -123,23 +133,35 @@ TEMPERATURE_DELTA = Dimension(temperature=1)
 AMOUNT_OF_SUBSTANCE = Dimension(amount=1)
 LUMINOUS_INTENSITY = Dimension(luminous_intensity=1)
 ANGLE = Dimension(angle=1)
+DATA = Dimension(information=1)
+
 """The dimension of a plane angle: `Angle`'s dimension.
 
 See the module docstring for why this is tracked as its own axis rather than reusing
 :data:`DIMENSIONLESS`, even though SI itself treats plane angle as dimensionless.
 """
 
+# Derived, by explicit rules.
+ENERGY_DENSITY = ENERGY / VOLUME
+ANGULAR_VELOCITY = ANGLE / TIME
+TORQUE = ENERGY / ANGLE
+DATA_RATE = DATA / TIME
+
 __all__ = [
     "ACCELERATION",
     "AMOUNT_OF_SUBSTANCE",
     "ANGLE",
+    "ANGULAR_VELOCITY",
     "AREA",
     "CHARGE",
     "CONDUCTANCE",
     "CURRENT",
+    "DATA",
+    "DATA_RATE",
     "DENSITY",
     "DIMENSIONLESS",
     "ENERGY",
+    "ENERGY_DENSITY",
     "FORCE",
     "FREQUENCY",
     "LENGTH",
@@ -150,6 +172,7 @@ __all__ = [
     "RESISTANCE",
     "TEMPERATURE_DELTA",
     "TIME",
+    "TORQUE",
     "VELOCITY",
     "VOLTAGE",
     "VOLUME",

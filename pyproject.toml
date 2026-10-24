@@ -1,6 +1,6 @@
 [project]
 name = "kuchka"
-version = "0.1.3"
+version = "0.1.4"
 description = "A small pile of strongly-typed engineering units for Python."
 readme = "README.md"
 authors = [{ name = "dimonade", email = "dimonade@protonmail.com" }]
@@ -8,11 +8,23 @@ requires-python = ">=3.11"
 dependencies = ['typing_extensions>=4.4; python_version < "3.12"']
 classifiers = [
   "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
 ]
 license = "Apache-2.0"
+license-files = ["LICENSE-APACHE"]
 
 [project.urls]
 Homepage = "https://codeberg.org/dimonade/kuchka"
@@ -20,22 +32,26 @@ Repository = "https://codeberg.org/dimonade/kuchka"
 "Bug Tracker" = "https://codeberg.org/dimonade/kuchka/issues"
 
 [build-system]
-requires = ["uv_build>=0.12.5,<0.13.0"]
+requires = ["uv_build>=0.13.5,<0.14.0"]
 build-backend = "uv_build"
 
 [dependency-groups]
-test = ["coverage>=7.15.4", "hypothesis>=6.165.10", "pytest>=9.1.1"]
+test = ["coverage>=7.17.0", "hypothesis>=6.170.8", "pytest>=9.1.1"]
+
+typing = ["mypy>=2.4.0"]
+
+pyright = ["pyright>=1.1.414"]
 
 lint = [
+  { include-group = "typing" },
   "mccabe>=0.7.0",
-  "mypy>=2.3.1",
-  "pylsp-mypy>=0.8.0",
+  "pylsp-mypy>=0.8.2",
   "python-lsp-server>=1.15.0",
-  "ruff>=0.16.3",
-  "ty>=0.0.72",
+  "ruff>=0.17.2",
+  "ty>=0.0.91",
 ]
 
-dev = [{ include-group = "test" }, { include-group = "lint" }, "tox>=4.64.4"]
+dev = [{ include-group = "test" }, { include-group = "lint" }, "tox>=4.67.1"]
 
 [tool.coverage.run]
 branch = true
@@ -112,6 +128,11 @@ force-single-line = true
   "PLE0605",
 ] # Same: mid-level package aggregating its own family of leaf modules.
 "src/kuchka/quantities/__init__.py" = ["PLE0605"] # Same.
+"src/kuchka/units/archaic/**" = [
+  "E501",
+  "RUF001",
+  "RUF002",
+] # The grid tables in the docstrings are wide, and the units carry their Cyrillic, Hebrew, and Japanese names.
 
 "tests/*" = [
   "ANN001", # Parametrized test arguments take on whatever values the parametrize table provides across cases;
@@ -151,12 +172,106 @@ force-single-line = true
 ]
 
 [tool.tox]
-requires = ["tox>=4.64"]
-env_list = ["3.11", "3.12", "3.13", "3.14", "3.15"]
+requires = ["tox>=4.67"]
+env_list = [
+  "3.11",
+  "3.12",
+  "3.13",
+  "3.14",
+  "3.15",
+  "lint",
+  "typing-min",
+  "pyright",
+]
 
 [tool.tox.env_run_base]
+description = "run the doctests and the test suite on Python {base_python}"
+# `typing` brings mypy in for the test that checks the static types agree with the runtime.
+dependency_groups = ["test", "typing"]
+# The checkers an environment installs: a test that needs one fails, and does not skip, if it is missing.
+set_env = { KUCHKA_CHECKERS = "mypy" }
+commands = [
+  [
+    "pytest",
+    "-q",
+    "--doctest-modules",
+    "src/kuchka",
+  ],
+  [
+    "pytest",
+    "-q",
+  ],
+]
+
+[tool.tox.env.lint]
+description = "check the code standards: generated API, ruff, mypy, and ty"
+base_python = ["3.11"]
+dependency_groups = ["lint"]
+commands = [
+  [
+    "python",
+    "tools/generate_api.py",
+    "--check",
+  ],
+  [
+    "ruff",
+    "check",
+  ],
+  [
+    "ruff",
+    "format",
+    "--check",
+  ],
+  [
+    "mypy",
+    "--strict",
+    "--python-version",
+    "3.11",
+    "src/kuchka",
+  ],
+  [
+    "ty",
+    "check",
+    "src/kuchka",
+  ],
+]
+
+[tool.tox.env.typing-min]
+description = "type-check the library and the consumer-side types on the oldest supported mypy"
+base_python = ["3.11"]
 dependency_groups = ["test"]
-commands = [["pytest", "-q"]]
+# The floor of the type-checker policy in `README.md`: the oldest mypy that checks the library's own source cleanly.
+deps = ["mypy==1.11.2"]
+set_env = { KUCHKA_CHECKERS = "mypy" }
+commands = [
+  [
+    "mypy",
+    "--strict",
+    "--python-version",
+    "3.11",
+    "src/kuchka",
+  ],
+  [
+    "pytest",
+    "-q",
+    "tests/api/test_typing.py",
+    "tests/contract/test_static_types_agree_with_runtime.py",
+  ],
+]
+
+[tool.tox.env.pyright]
+description = "check the consumer-side types on pyright"
+base_python = ["3.11"]
+dependency_groups = ["test", "pyright"]
+set_env = { KUCHKA_CHECKERS = "pyright" }
+commands = [
+  [
+    "pytest",
+    "-q",
+    "tests/api/test_typing.py",
+    "tests/contract/test_static_types_agree_with_runtime.py",
+  ],
+]
 
 [tool.ty.rules]
 all = "warn"

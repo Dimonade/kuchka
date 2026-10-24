@@ -16,7 +16,7 @@ from typing import overload
 from kuchka.dimensions import MASS
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
-from kuchka.quantities.base import register
+from kuchka.quantities.base.registry import _register
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -26,6 +26,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.density import Density
     from kuchka.quantities.kinematics import Acceleration
     from kuchka.quantities.kinematics import Force
+    from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.volume import Volume
 
 
@@ -33,16 +34,19 @@ class Mass(LinearQuantity):
     """How much matter something contains."""
 
     dimension: ClassVar[Dimension] = MASS
+    __slots__ = ()
 
     @overload
     def __mul__(self, other: Acceleration) -> Force: ...
     @overload
+    def __mul__(self, other: Proportion) -> Mass: ...
+    @overload
     def __mul__(self, other: Numeric) -> Mass: ...
     @overload
-    def __mul__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
     @override
-    def __mul__(self, other: object) -> LinearQuantity | Fraction:
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
     @overload
@@ -50,15 +54,21 @@ class Mass(LinearQuantity):
     @overload
     def __truediv__(self, other: Density) -> Volume: ...
     @overload
+    def __truediv__(self, other: Mass) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> Mass: ...
+    @overload
     def __truediv__(self, other: Numeric) -> Mass: ...
     @overload
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction: ...
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
 
     @override
-    def __truediv__(self, other: object) -> LinearQuantity | Fraction:
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
 
-register(MASS, Mass)
+_register(MASS, Mass)
 
 __all__ = ["Mass"]

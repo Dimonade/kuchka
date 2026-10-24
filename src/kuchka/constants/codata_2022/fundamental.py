@@ -33,6 +33,7 @@ from typing import TYPE_CHECKING
 from typing import Final
 
 from kuchka.units import Coulomb as _Coulomb
+from kuchka.units import Gigaelectronvolt as _Gigaelectronvolt
 from kuchka.units import Kelvin as _Kelvin
 from kuchka.units import Kilogram as _Kilogram
 from kuchka.units import Metre as _Metre
@@ -43,6 +44,7 @@ from kuchka.units import Second as _Second
 if TYPE_CHECKING:
     from kuchka.quantities import Acceleration
     from kuchka.quantities import Charge
+    from kuchka.quantities import Energy
     from kuchka.quantities import Length
     from kuchka.quantities import Mass
     from kuchka.quantities import Temperature
@@ -80,7 +82,7 @@ SPEED_OF_LIGHT_IN_VACUUM: Final[Velocity] = _MetrePerSecond(299_792_458)
 """The speed of light in vacuum, c.
 
 Accuracy: Exact.
-Value: 299 792 458 m s^-1.
+Value: 299 792 458 m s⁻¹.
 Uncertainty: None.
 Link: https://en.wikipedia.org/wiki/Speed_of_light
 """
@@ -93,6 +95,18 @@ Value: 1.674 927 500 56 e-27 kg.
 Uncertainty: 0.000 000 000 85 e-27 kg.
 Link: https://en.wikipedia.org/wiki/Neutron#Mass
 """
+
+PLANCK_ENERGY: Final[Energy] = _Gigaelectronvolt(_Decimal("1.220890e19"))
+"""The Planck energy, E_p.
+
+Accuracy: Measured.
+Value: 1.220 890 e19 GeV.
+Uncertainty: 0.000 014 e19 GeV.
+Link: https://en.wikipedia.org/wiki/Planck_units#Planck_energy
+"""
+
+PLANCK_MASS_ENERGY_EQUIVALENT_IN_GEV = PLANCK_ENERGY
+"""An alias of the official CODATA 2022 to a shorter name."""
 
 PLANCK_LENGTH: Final[Length] = _Metre(_Decimal("1.616255e-35"))
 """The Planck length, l_P: the length scale at which quantum gravity dominates.
@@ -145,7 +159,7 @@ STANDARD_ACCELERATION_OF_GRAVITY: Final[Acceleration] = _MetrePerSecondSquared(
 """The standard acceleration of gravity, g_n.
 
 Accuracy: Exact.
-Value: 9.806 65 m s^-2.
+Value: 9.806 65 m s⁻².
 Uncertainty: None.
 Link: https://en.wikipedia.org/wiki/Gravitational_acceleration
 """
@@ -155,8 +169,10 @@ __all__ = [
     "ELECTRON_MASS",
     "ELEMENTARY_CHARGE",
     "NEUTRON_MASS",
+    "PLANCK_ENERGY",
     "PLANCK_LENGTH",
     "PLANCK_MASS",
+    "PLANCK_MASS_ENERGY_EQUIVALENT_IN_GEV",
     "PLANCK_TEMPERATURE",
     "PLANCK_TIME",
     "PROTON_MASS",

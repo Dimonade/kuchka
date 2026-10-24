@@ -15,10 +15,10 @@ unit as a string from outside the application.
 from __future__ import annotations
 
 from decimal import Decimal
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import FREQUENCY
+from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import SampleRate
@@ -66,12 +66,13 @@ def MegasamplesPerSecond(value: Numeric) -> SampleRate:
     )
 
 
-SAMPLE_RATE_UNITS: Mapping[str, Callable[[Numeric], SampleRate]] = MappingProxyType(
+SAMPLE_RATE_UNITS: Mapping[str, Callable[[Numeric], SampleRate]] = unit_table(
+    "SAMPLE_RATE_UNITS",
     {
-        SAMPLES_PER_SECOND.symbol: SamplesPerSecond,
-        KILOSAMPLES_PER_SECOND.symbol: KilosamplesPerSecond,
-        MEGASAMPLES_PER_SECOND.symbol: MegasamplesPerSecond,
-    }
+        SAMPLES_PER_SECOND: SamplesPerSecond,
+        KILOSAMPLES_PER_SECOND: KilosamplesPerSecond,
+        MEGASAMPLES_PER_SECOND: MegasamplesPerSecond,
+    },
 )
 
 __all__ = [
