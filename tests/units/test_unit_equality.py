@@ -11,7 +11,7 @@ from kuchka.dimensions import VOLTAGE
 from kuchka.quantities.base import AffineUnitDef
 from kuchka.quantities.base import LogarithmicUnitDef
 from kuchka.quantities.base import UnitDef
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 from tests.units.helpers import PUBLISHED
 from tests.units.helpers import _linear
 

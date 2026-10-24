@@ -16,10 +16,10 @@ from kuchka import Force
 from kuchka import IncompatibleDimensionError
 from kuchka import InvalidMeasurementError
 from kuchka import Mass
-from kuchka.units import acceleration as acc
-from kuchka.units import force as force_units
 from kuchka.units import mass as mass_units
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.kinematics import acceleration as acc
+from kuchka.units.mechanics import force as force_units
 
 
 def test_force_prefixes_scale_correctly():

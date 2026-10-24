@@ -11,7 +11,7 @@ from kuchka import InvalidMeasurementError
 from kuchka.quantities.base import AffineUnitDef
 from kuchka.quantities.base import LogarithmicUnitDef
 from kuchka.quantities.base import UnitDef
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 
 ZERO_SCALE_IDS = ["int", "float", "decimal", "fraction"]
 

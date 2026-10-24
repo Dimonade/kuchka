@@ -11,9 +11,9 @@ cubic-metric units.
 from decimal import Decimal
 
 from kuchka import Volume
-from kuchka.units import area
 from kuchka.units import length
-from kuchka.units import volume as volume_units
+from kuchka.units.geometry import area
+from kuchka.units.geometry import volume as volume_units
 
 
 def test_volume_length_area_round_trip():

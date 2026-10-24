@@ -39,13 +39,14 @@ Unit constructors, constants, and tables come in by module, and a quantity is im
 
 ```python
 from kuchka import Torque
-from kuchka.units import angular_velocity
-from kuchka.units import torque
+from kuchka.units.kinematics import angular_velocity
+from kuchka.units.mechanics import torque
 
 shaft = torque.NewtonMetre(20) * angular_velocity.RevolutionPerMinute(3000)
 ```
 
-A long module name may be shortened (`from kuchka.units import acceleration as acc`), and a module that a local variable shadows takes a `_units` suffix.
+A module comes in from the package that holds it, and a long module name may be shortened (`from kuchka.units.kinematics import acceleration as acc`).
+A module that a local variable shadows takes a `_units` suffix.
 Lists of names and cases are alphabetical, and `ruff` keeps the imports sorted.
 
 ## Where a new test goes

@@ -27,7 +27,7 @@ Importing `meile` then makes `Length` display in the four principal miles, and i
 
 A split of a published module also touches the places that list modules:
 
-- the imports in `kuchka/units/__init__.py` (the module import and the wildcard import, and the `__all__ +=` line),
+- the imports in the package's `__init__.py` (the module import, the wildcard import, and the `__all__ +=` line for each leaf) and a wildcard import per leaf in `kuchka/units/__init__.py`, which also takes the package's own import and `__all__ +=` when the split creates the package,
 - `tools/generate_api.py` finds leaves by walking the tree, so `just generate-api` picks the new files up,
 - the package list in the export test grows by the new package.
 

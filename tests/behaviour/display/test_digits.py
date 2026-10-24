@@ -6,7 +6,7 @@ from decimal import Decimal
 from fractions import Fraction
 
 from kuchka.internal.display import DISPLAY_DIGITS
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 
 ONE_THIRD = Fraction(1, 3)
 

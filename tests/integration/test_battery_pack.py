@@ -17,15 +17,15 @@ from kuchka import EnergyDensity
 from kuchka import Power
 from kuchka import Pressure
 from kuchka import Time
-from kuchka.units import charge
 from kuchka.units import current
-from kuchka.units import energy
-from kuchka.units import energy_density as ed
-from kuchka.units import power
-from kuchka.units import pressure
 from kuchka.units import temporal
-from kuchka.units import voltage
-from kuchka.units import volume
+from kuchka.units.electromagnetics import charge
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.geometry import volume
+from kuchka.units.mechanics import energy
+from kuchka.units.mechanics import energy_density as ed
+from kuchka.units.mechanics import power
+from kuchka.units.mechanics import pressure
 
 CELLS = 96
 CELL_ENERGY = energy.WattHour(875)

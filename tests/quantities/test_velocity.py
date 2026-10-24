@@ -12,8 +12,8 @@ from fractions import Fraction
 
 from kuchka import Velocity
 from kuchka.units import length
-from kuchka.units import time
-from kuchka.units import velocity as velocity_units
+from kuchka.units.kinematics import velocity as velocity_units
+from kuchka.units.temporal import time
 
 
 def test_velocity_length_time_round_trip():

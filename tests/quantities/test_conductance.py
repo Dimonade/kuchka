@@ -15,10 +15,10 @@ from kuchka import Conductance
 from kuchka import IncompatibleDimensionError
 from kuchka import InvalidMeasurementError
 from kuchka import Resistance
-from kuchka.units import conductance as conductance_units
 from kuchka.units import current as current_units
-from kuchka.units import resistance as resistance_units
-from kuchka.units import voltage as voltage_units
+from kuchka.units.electromagnetics import conductance as conductance_units
+from kuchka.units.electromagnetics import resistance as resistance_units
+from kuchka.units.electromagnetics import voltage as voltage_units
 
 
 def test_resistance_reciprocal_is_conductance():

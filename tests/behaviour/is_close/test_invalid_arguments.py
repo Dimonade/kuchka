@@ -12,9 +12,9 @@ from kuchka import IncompatibleDimensionError
 from kuchka import InvalidMeasurementError
 from kuchka.units import angular
 from kuchka.units import logarithmic
-from kuchka.units import resistance
 from kuchka.units import thermal
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import resistance
+from kuchka.units.electromagnetics import voltage
 
 
 @dataclass(frozen=True)

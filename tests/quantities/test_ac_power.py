@@ -13,11 +13,11 @@ from kuchka import IncompatibleDimensionError
 from kuchka import Power
 from kuchka import Proportion
 from kuchka import ReactivePower
-from kuchka.units import ac_power
-from kuchka.units import energy
-from kuchka.units import power
 from kuchka.units import proportion
-from kuchka.units import time
+from kuchka.units.electromagnetics import ac_power
+from kuchka.units.mechanics import energy
+from kuchka.units.mechanics import power
+from kuchka.units.temporal import time
 
 
 def test_the_headroom_of_a_transformer_is_an_apparent_power() -> None:

@@ -20,14 +20,14 @@ from kuchka import Torque
 from kuchka.internal import symbols
 from kuchka.internal.constants import PI
 from kuchka.units import angular
-from kuchka.units import angular_velocity
-from kuchka.units import energy
-from kuchka.units import force
-from kuchka.units import frequency
 from kuchka.units import length
-from kuchka.units import power
 from kuchka.units import temporal
-from kuchka.units import torque
+from kuchka.units.kinematics import angular_velocity
+from kuchka.units.mechanics import energy
+from kuchka.units.mechanics import force
+from kuchka.units.mechanics import power
+from kuchka.units.mechanics import torque
+from kuchka.units.temporal import frequency
 
 SPEED = angular_velocity.RevolutionPerMinute(3000)
 SHAFT = torque.NewtonMetre(20)

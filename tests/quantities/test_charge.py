@@ -10,8 +10,8 @@ import pytest
 
 from kuchka import Charge
 from kuchka import IncompatibleDimensionError
-from kuchka.units import charge as charge_units
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import charge as charge_units
+from kuchka.units.electromagnetics import voltage
 
 
 def test_charge_prefixes_scale_correctly():

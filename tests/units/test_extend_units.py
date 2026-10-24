@@ -9,9 +9,9 @@ from kuchka.internal.unit_table import unit_table
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.units import bind_units
 from kuchka.quantities.base.units import extend_units
-from kuchka.units import frequency
-from kuchka.units import instant
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.temporal import frequency
+from kuchka.units.temporal import instant
 
 
 def _bound_type() -> type[LinearQuantity]:

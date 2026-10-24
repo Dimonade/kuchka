@@ -17,10 +17,10 @@ from kuchka import Instant
 from kuchka import InvalidMeasurementError
 from kuchka import LogarithmicRatio
 from kuchka import SampleRate
-from kuchka.units import frequency
 from kuchka.units import logarithmic
 from kuchka.units import proportion
-from kuchka.units import time
+from kuchka.units.temporal import frequency
+from kuchka.units.temporal import time
 from tests.support.kinds import QUANTITY_TYPES
 
 

@@ -14,11 +14,11 @@ from kuchka import IncompatibleDimensionError
 from kuchka import Pressure
 from kuchka import Proportion
 from kuchka import Stress
-from kuchka.units import area
-from kuchka.units import kinematics
-from kuchka.units import pressure
 from kuchka.units import proportion
-from kuchka.units import stress
+from kuchka.units.geometry import area
+from kuchka.units.mechanics import force
+from kuchka.units.mechanics import pressure
+from kuchka.units.mechanics import stress
 
 
 def test_a_pressure_is_read_as_a_stress_in_the_unit_it_carries() -> None:
@@ -42,7 +42,7 @@ def test_a_stress_and_a_pressure_of_one_value_do_not_mix() -> None:
 def test_the_load_a_section_carries_goes_through_the_pressure() -> None:
     strength = pressure.Megapascal(250).to_stress()
     section = area.SquareMillimetre(100)
-    assert strength.to_pressure() * section == kinematics.Kilonewton(25)
+    assert strength.to_pressure() * section == force.Kilonewton(25)
     with pytest.raises(IncompatibleDimensionError, match="to_pressure"):
         strength * section
 

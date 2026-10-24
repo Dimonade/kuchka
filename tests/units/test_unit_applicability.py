@@ -17,12 +17,12 @@ from kuchka import InvalidConversionError
 from kuchka import InvalidMeasurementError
 from kuchka import SamplingPeriod
 from kuchka import Time
-from kuchka.units import baud_rate
-from kuchka.units import frequency
-from kuchka.units import instant
-from kuchka.units import sample_rate
-from kuchka.units import time
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.temporal import baud_rate
+from kuchka.units.temporal import frequency
+from kuchka.units.temporal import instant
+from kuchka.units.temporal import sample_rate
+from kuchka.units.temporal import time
 
 
 def test_a_frequency_is_not_displayed_in_baud() -> None:

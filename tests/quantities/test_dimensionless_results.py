@@ -9,14 +9,14 @@ import pytest
 from kuchka import IncompatibleDimensionError
 from kuchka import InvalidMeasurementError
 from kuchka import Proportion
-from kuchka.units import conductance
-from kuchka.units import energy_density as edens
-from kuchka.units import frequency
-from kuchka.units import pressure
 from kuchka.units import proportion
-from kuchka.units import resistance
-from kuchka.units import time
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import conductance
+from kuchka.units.electromagnetics import resistance
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.mechanics import energy_density as edens
+from kuchka.units.mechanics import pressure
+from kuchka.units.temporal import frequency
+from kuchka.units.temporal import time
 from tests.support.families import FAMILIES
 from tests.support.families import FAMILY_IDS
 

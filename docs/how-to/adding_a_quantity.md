@@ -59,7 +59,7 @@ A second linear kind that states no relation is refused when the module is impor
 
 A type needs units before it can display anything:
 
-1. a module in `kuchka.units` with the unit definitions, a `*_UNITS` table, and an `__all__`,
+1. a module in `kuchka.units`, in the package [its dimension belongs to](adding_a_unit.md#where-the-module-goes), with the unit definitions, a `*_UNITS` table, and an `__all__`,
 2. the canonical unit, with scale 1, set in that module as `Absement._canonical_unit = METRE_SECOND`,
 3. an entry in the `_UNITS_OF` block of `kuchka/units/__init__.py`, which binds the table to the type.
 

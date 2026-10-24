@@ -16,7 +16,7 @@ from kuchka.dimensions import DIMENSIONLESS
 from kuchka.quantities.base import PureLogarithmicQuantity
 from kuchka.units import logarithmic
 from kuchka.units import proportion
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 from tests.support.values import BINARY_IMPRECISE_TRIPLES
 
 if TYPE_CHECKING:

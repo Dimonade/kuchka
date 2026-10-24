@@ -12,7 +12,7 @@ from kuchka.quantities.base.units import _published
 from kuchka.quantities.base.units import _published_unit
 from kuchka.units import logarithmic
 from kuchka.units import thermal
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 from tests.support.values import PICKLE_PROTOCOLS
 from tests.units.helpers import PUBLISHED
 from tests.units.helpers import _linear

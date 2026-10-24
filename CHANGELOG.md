@@ -11,6 +11,12 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Changed
 
+#### Unit modules live in themed packages
+
+`kuchka.units` keeps the base dimensions and the angle, proportion, and logarithmic axes at its top level, and groups the other modules in `geometry`, `kinematics`, `mechanics`, `electromagnetics`, `information`, and `radiation`.
+Every constructor and table is still imported from `kuchka` and `kuchka.units`.
+A unit module is imported from its package, so `from kuchka.units import voltage` is now `from kuchka.units.electromagnetics import voltage`, and `kuchka.units.kinematics.force` is now `kuchka.units.mechanics.force`.
+
 ### Deprecated
 
 ### Removed

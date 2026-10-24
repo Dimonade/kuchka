@@ -7,7 +7,7 @@ import pytest
 from kuchka import InvalidMeasurementError
 from kuchka.units import angular
 from kuchka.units import logarithmic
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 
 SHAPES = [
     pytest.param(voltage.Volt, "Volt", id="linear"),

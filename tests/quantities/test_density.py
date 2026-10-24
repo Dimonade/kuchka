@@ -12,10 +12,10 @@ import pytest
 
 from kuchka import Density
 from kuchka import IncompatibleDimensionError
-from kuchka.units import density as density_units
 from kuchka.units import mass as mass_units
-from kuchka.units import voltage
-from kuchka.units import volume as volume_units
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.geometry import volume as volume_units
+from kuchka.units.mechanics import density as density_units
 
 
 def test_density_mass_volume_round_trip():

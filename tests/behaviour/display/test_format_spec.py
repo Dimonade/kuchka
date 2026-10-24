@@ -7,7 +7,7 @@ from fractions import Fraction
 import pytest
 
 from kuchka.units import thermal
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 
 ONE_THIRD = Fraction(1, 3)
 

@@ -11,8 +11,8 @@ from kuchka import SampleRate
 from kuchka import SamplingPeriod
 from kuchka.units import current
 from kuchka.units import proportion
-from kuchka.units import time
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.temporal import time
 
 SAMPLING_PERIOD = SamplingPeriod(Fraction(1, 8), SamplingPeriod._canonical_unit)  # noqa: SLF001
 

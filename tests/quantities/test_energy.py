@@ -9,7 +9,7 @@ the `Power * Time` relationship, its inverses, and pulse-scale prefix arithmetic
 from decimal import Decimal
 
 from kuchka import Energy
-from kuchka.units import energy as energy_units
+from kuchka.units.mechanics import energy as energy_units
 
 
 def test_energy_prefixes_scale_correctly():

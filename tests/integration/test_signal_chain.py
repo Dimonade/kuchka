@@ -17,14 +17,14 @@ from kuchka import IncompatibleDimensionError
 from kuchka import LogarithmicRatio
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
-from kuchka.units import baud_rate
-from kuchka.units import frequency
 from kuchka.units import logarithmic
 from kuchka.units import proportion
-from kuchka.units import sample_rate
-from kuchka.units import sampling_period
 from kuchka.units import temporal
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.temporal import baud_rate
+from kuchka.units.temporal import frequency
+from kuchka.units.temporal import sample_rate
+from kuchka.units.temporal import sampling_period
 
 RATE = sample_rate.KilosamplesPerSecond(48)
 

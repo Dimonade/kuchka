@@ -29,10 +29,10 @@ from kuchka.constants.codata_2022 import PLANCK_TIME
 from kuchka.constants.codata_2022 import PROTON_MASS
 from kuchka.constants.codata_2022 import SPEED_OF_LIGHT_IN_VACUUM
 from kuchka.constants.codata_2022 import STANDARD_ACCELERATION_OF_GRAVITY
-from kuchka.units import acceleration as acc
-from kuchka.units import frequency
 from kuchka.units import mass
-from kuchka.units import velocity
+from kuchka.units.kinematics import acceleration as acc
+from kuchka.units.kinematics import velocity
+from kuchka.units.temporal import frequency
 
 
 def test_speed_of_light_is_exact_by_definition() -> None:

@@ -15,13 +15,13 @@ from kuchka import EnergyDensity
 from kuchka import IncompatibleDimensionError
 from kuchka import InvalidMeasurementError
 from kuchka import Pressure
-from kuchka.units import area as area_units
-from kuchka.units import energy as energy_units
-from kuchka.units import energy_density as edens
-from kuchka.units import force as force_units
-from kuchka.units import pressure as pressure_units
-from kuchka.units import voltage
-from kuchka.units import volume as volume_units
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.geometry import area as area_units
+from kuchka.units.geometry import volume as volume_units
+from kuchka.units.mechanics import energy as energy_units
+from kuchka.units.mechanics import energy_density as edens
+from kuchka.units.mechanics import force as force_units
+from kuchka.units.mechanics import pressure as pressure_units
 
 
 def test_force_area_pressure_round_trip():

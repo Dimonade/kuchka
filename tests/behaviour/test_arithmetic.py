@@ -13,12 +13,12 @@ from kuchka.quantities import Power
 from kuchka.quantities import Proportion
 from kuchka.quantities import Resistance
 from kuchka.quantities import Voltage
-from kuchka.units import conductance
 from kuchka.units import current
-from kuchka.units import power
 from kuchka.units import proportion
-from kuchka.units import resistance
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import conductance
+from kuchka.units.electromagnetics import resistance
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.mechanics import power
 
 
 def test_addition_within_same_unit():

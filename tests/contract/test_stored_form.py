@@ -20,7 +20,7 @@ import pytest
 from kuchka.internal import symbols
 from kuchka.units import thermal
 from kuchka.units import thermal as thermal_units
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 from tests.support.kinds import UNIT_TABLES
 
 if TYPE_CHECKING:

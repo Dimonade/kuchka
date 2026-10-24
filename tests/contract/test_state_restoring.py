@@ -18,7 +18,7 @@ from kuchka import Temperature
 from kuchka import Voltage
 from kuchka.units import current
 from kuchka.units import thermal
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 
 BAD_MAGNITUDES = (0.5, 5, Decimal("0.5"), "5", None)
 WRONG_KIND_OF_UNIT = (None, "V", 1, thermal.KELVIN)

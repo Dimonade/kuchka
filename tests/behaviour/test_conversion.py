@@ -7,8 +7,8 @@ import pytest
 from kuchka import InvalidConversionError
 from kuchka import InvalidMeasurementError
 from kuchka.units import current
-from kuchka.units import resistance
-from kuchka.units import voltage as voltage_units
+from kuchka.units.electromagnetics import resistance
+from kuchka.units.electromagnetics import voltage as voltage_units
 
 
 def test_to_changes_display_unit_not_value():

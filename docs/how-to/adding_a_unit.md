@@ -1,9 +1,32 @@
 # Adding a unit
 
 A unit belongs to one quantity type, such as `Length`, and measures in the canonical unit of that type: metres for a length, seconds for a time, kilograms for a mass.
-Units for the main library live in a module of `kuchka.units`.
+Units for the main library live in a module of `kuchka.units`, placed as [Where the module goes](#where-the-module-goes) says.
 Units of a historical or cultural system live under `kuchka.units.archaic` and follow [Adding archaic units](adding_archaic_units.md).
 Both start the same way.
+
+## Where the module goes
+
+A base dimension (`length`, `mass`, `current`, `thermal`, `amount`, `luminous_intensity`) and an axis that is not a dimension of its own (`angular`, `proportion`, `logarithmic`) have a module at the top level of `kuchka.units`.
+The time family is the `temporal` package, because its quantities share two dimensions.
+Every other quantity lives in the themed package of the relation that defines it:
+
+| Package            | Holds                                                                                               |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| `geometry`         | measures built from length alone: area, volume                                                      |
+| `kinematics`       | motion: velocity, acceleration, angular velocity                                                    |
+| `mechanics`        | force and the work it does: force, torque, pressure, stress, density, energy, power, energy density |
+| `electromagnetics` | charge, voltage, resistance, conductance, AC power                                                  |
+| `information`      | data and data rate                                                                                  |
+| `radiation`        | radioactive activity                                                                                |
+
+A quantity that fits two packages lives where its defining relation lives, and the other package imports it.
+`Energy` is `Force * Length`, so it is in `mechanics`, and the electrical units reuse it for the watt-hour.
+A package imports only from the top level and from packages earlier in this order: `temporal`, `geometry`, `information`, and `radiation` depend on the top level alone, then come `kinematics`, `mechanics`, and `electromagnetics`.
+A test fails when an import runs the other way.
+
+A package exists as soon as one quantity has its home in it.
+A quantity with no package yet, such as a luminous flux, starts the package it belongs to (`photometry`), with its own `__init__.py` listing its leaves.
 
 ## Define the unit
 
@@ -148,13 +171,15 @@ KRAKEN_LENGTH_UNITS = unit_table(
 ```
 
 Each module owns one hand-written `__all__` naming its constants, constructors, and tables.
-A published unit also joins its type's table in `kuchka/units/__init__.py` (the `_TABLE_OF` block, which also lets `parse` read the type's units), and `just generate-api` promotes its constructor to the top level.
+A published module takes its three lines in the `__init__.py` of its package (the module import, the wildcard import, and the `__all__ +=`) and a wildcard import in `kuchka/units/__init__.py`.
+A published unit also joins its type's table there (the `_TABLE_OF` block, which also lets `parse` read the type's units), and `just generate-api` promotes its constructor to the top level.
 
 ## Checklist
 
 - [ ] the unit, with an exact scale and the spellings people use,
 - [ ] a constructor with a docstring and a doctest,
 - [ ] a place in the module's `*_UNITS` table and `__all__`,
+- [ ] a place in the right package, and its imports and `__all__ +=` lines,
 - [ ] wiring: `_TABLE_OF` for a published unit, `extend_units` with the table for an archaic one,
 - [ ] `just generate-api` for a published unit,
 - [ ] [tests](adding_tests.md) for what discovery cannot know,

@@ -14,10 +14,10 @@ from kuchka import Activity
 from kuchka import Frequency
 from kuchka import IncompatibleDimensionError
 from kuchka import Proportion
-from kuchka.units import activity
-from kuchka.units import frequency
 from kuchka.units import proportion
-from kuchka.units import time
+from kuchka.units.radiation import activity
+from kuchka.units.temporal import frequency
+from kuchka.units.temporal import time
 
 
 def test_a_curie_is_exactly_37_billion_becquerel() -> None:

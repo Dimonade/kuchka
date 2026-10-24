@@ -17,11 +17,11 @@ from kuchka import Frequency
 from kuchka import IncompatibleDimensionError
 from kuchka import Proportion
 from kuchka import Time
-from kuchka.units import data
-from kuchka.units import data_rate
-from kuchka.units import frequency
 from kuchka.units import proportion
-from kuchka.units import time
+from kuchka.units.information import data
+from kuchka.units.information import data_rate
+from kuchka.units.temporal import frequency
+from kuchka.units.temporal import time
 
 
 def test_data_over_time_is_a_data_rate() -> None:

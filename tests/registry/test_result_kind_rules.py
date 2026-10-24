@@ -18,7 +18,7 @@ from kuchka.dimensions import FREQUENCY
 from kuchka.dimensions import TIME
 from kuchka.quantities.base import registry
 from kuchka.units import length
-from kuchka.units import velocity
+from kuchka.units.kinematics import velocity
 
 
 def test_a_rule_after_the_close_is_refused() -> None:

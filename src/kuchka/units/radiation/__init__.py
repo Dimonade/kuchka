@@ -1,4 +1,4 @@
-"""Unit constructors for radioactive Activity.
+"""Unit constructors for radioactive activity.
 
     from kuchka import Becquerel, Curie, Megabecquerel
 

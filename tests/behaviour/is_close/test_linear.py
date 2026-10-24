@@ -5,10 +5,10 @@ from __future__ import annotations
 import pytest
 
 from kuchka import IncompatibleDimensionError
-from kuchka.units import baud_rate
-from kuchka.units import frequency
 from kuchka.units import length
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.temporal import baud_rate
+from kuchka.units.temporal import frequency
 
 
 def test_linear_readings_within_the_tolerance_are_close() -> None:

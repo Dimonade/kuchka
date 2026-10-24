@@ -12,11 +12,11 @@ from decimal import Decimal
 import pytest
 
 from kuchka.quantities import Acceleration
-from kuchka.units import acceleration as acc
 from kuchka.units import length
 from kuchka.units import mass
 from kuchka.units import temporal
-from kuchka.units import velocity
+from kuchka.units.kinematics import acceleration as acc
+from kuchka.units.kinematics import velocity
 
 
 def test_newtons_second_law_round_trip():

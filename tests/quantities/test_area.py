@@ -12,8 +12,8 @@ are covered once for every registered quantity family elsewhere;
 from decimal import Decimal
 
 from kuchka import Area
-from kuchka.units import area as area_units
 from kuchka.units import length
+from kuchka.units.geometry import area as area_units
 
 
 def test_hectare_scales_correctly():

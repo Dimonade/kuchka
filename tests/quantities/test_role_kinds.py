@@ -18,10 +18,10 @@ from kuchka import Stress
 from kuchka import Time
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.quantities.base import registry
-from kuchka.units import baud_rate
 from kuchka.units import proportion
-from kuchka.units import sample_rate
-from kuchka.units import time
+from kuchka.units.temporal import baud_rate
+from kuchka.units.temporal import sample_rate
+from kuchka.units.temporal import time
 from tests.support.families import FAMILIES
 
 ROLES = [f for f in FAMILIES if f.quantity in registry._SPECIALISATIONS]  # noqa: SLF001
