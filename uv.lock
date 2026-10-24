@@ -463,32 +463,32 @@ requires-dist = [{ name = "typing-extensions", marker = "python_full_version < '
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "coverage", specifier = ">=7.15.4" },
-    { name = "hypothesis", specifier = ">=6.165.10" },
+    { name = "coverage", specifier = ">=7.17.0" },
+    { name = "hypothesis", specifier = ">=6.170.8" },
     { name = "mccabe", specifier = ">=0.7.0" },
-    { name = "mypy", specifier = ">=2.3.1" },
-    { name = "pylsp-mypy", specifier = ">=0.8.0" },
+    { name = "mypy", specifier = ">=2.4.0" },
+    { name = "pylsp-mypy", specifier = ">=0.8.2" },
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "python-lsp-server", specifier = ">=1.15.0" },
-    { name = "ruff", specifier = ">=0.16.3" },
-    { name = "tox", specifier = ">=4.64.4" },
-    { name = "ty", specifier = ">=0.0.72" },
+    { name = "ruff", specifier = ">=0.17.2" },
+    { name = "tox", specifier = ">=4.67.1" },
+    { name = "ty", specifier = ">=0.0.91" },
 ]
 lint = [
     { name = "mccabe", specifier = ">=0.7.0" },
-    { name = "mypy", specifier = ">=2.3.1" },
-    { name = "pylsp-mypy", specifier = ">=0.8.0" },
+    { name = "mypy", specifier = ">=2.4.0" },
+    { name = "pylsp-mypy", specifier = ">=0.8.2" },
     { name = "python-lsp-server", specifier = ">=1.15.0" },
-    { name = "ruff", specifier = ">=0.16.3" },
-    { name = "ty", specifier = ">=0.0.72" },
+    { name = "ruff", specifier = ">=0.17.2" },
+    { name = "ty", specifier = ">=0.0.91" },
 ]
 pyright = [{ name = "pyright", specifier = ">=1.1.414" }]
 test = [
-    { name = "coverage", specifier = ">=7.15.4" },
-    { name = "hypothesis", specifier = ">=6.165.10" },
+    { name = "coverage", specifier = ">=7.17.0" },
+    { name = "hypothesis", specifier = ">=6.170.8" },
     { name = "pytest", specifier = ">=9.1.1" },
 ]
-typing = [{ name = "mypy", specifier = ">=2.3.1" }]
+typing = [{ name = "mypy", specifier = ">=2.4.0" }]
 
 [[package]]
 name = "librt"
