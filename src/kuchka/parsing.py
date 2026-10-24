@@ -94,9 +94,11 @@ from typing import TYPE_CHECKING
 from typing import Any
 from typing import TypeVar
 
+from kuchka.errors import InvalidMeasurementError
 from kuchka.errors import ParseError
 from kuchka.errors import UnknownUnitError
 from kuchka.internal.spelling import normalize
+from kuchka.numeric import to_exact
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -155,7 +157,8 @@ def parse(
     ------
     ParseError
         The text has no number or no unit, writes its number in a form that is not
-        read, or names a unit that two tables claim.
+        read, writes a number outside the numeric limits of the library, or names a
+        unit that two tables claim.
     UnknownUnitError
         The unit is no unit of `quantity`.
     TypeError
@@ -221,6 +224,11 @@ def _split(text: str, original: str) -> tuple[Decimal, str]:
     except InvalidOperation:
         msg = f"the number in {original!r} is out of range."
         raise ParseError(msg) from None
+    try:
+        to_exact(number)
+    except InvalidMeasurementError as exc:
+        msg = f"the number in {original!r} is out of range: {exc}"
+        raise ParseError(msg) from exc
     return number, unit_text
 
 
