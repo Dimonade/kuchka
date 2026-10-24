@@ -13,7 +13,7 @@ import timeit
 from dataclasses import dataclass
 from decimal import Decimal
 
-SAMPLE_COUNT = 200_000
+SAMPLE_COUNT = 20_000
 """Iterations per timed case.
 
 Large enough that per-call overhead in `timeit` itself is negligible relative to the
