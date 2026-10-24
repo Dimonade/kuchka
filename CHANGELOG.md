@@ -21,7 +21,7 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Conductance: `Nanosiemens`.
 - Voltage: `Nanovolt`, `Megavolt`, and `Petavolt`.
 - Power: `Picowatt`, `Nanowatt`, `Megawatt` to `Petawatt`, `Horsepower`, and `MetricHorsepower`.
-- Force: `KilogramForce`, `Meganewton`, `Micronewton`,.
+- Force: `KilogramForce`, `Meganewton`, `Micronewton`.
 - Acceleration: `Gal`, `Milligal`, and `Microgal`.
 - Length: `AstronomicalUnit` and `LightYear`.
 - Energy: `Petajoule`, `KilowattHour`, `TonneOfTNT`, `KilotonneOfTNT`, and `MegatonneOfTNT`.
