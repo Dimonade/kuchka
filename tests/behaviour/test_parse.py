@@ -7,9 +7,14 @@ arguments.
 
 from __future__ import annotations
 
+from decimal import Decimal
 from fractions import Fraction
 
 import pytest
+from hypothesis import example
+from hypothesis import given
+from hypothesis import settings
+from hypothesis import strategies as st
 
 from kuchka import ArchaicPolicy
 from kuchka import Area
@@ -24,6 +29,7 @@ from kuchka import Time
 from kuchka import UnknownUnitError
 from kuchka import Voltage
 from kuchka import parse
+from kuchka.internal.limits import NUMERIC_LIMITS
 from kuchka.quantities.base import LinearQuantity
 from kuchka.units import area
 from kuchka.units import proportion
@@ -132,9 +138,65 @@ def test_a_number_out_of_range_is_refused() -> None:
         parse("1e99999999999999999999 V", Voltage)
 
 
-def test_the_numeric_limits_of_the_library_apply_to_what_is_read() -> None:
-    with pytest.raises(InvalidMeasurementError):
-        parse("1e100000000 V", Voltage)
+_MAX_EXPONENT = NUMERIC_LIMITS.max_decimal_exponent
+_MAX_DIGITS = NUMERIC_LIMITS.max_decimal_digits
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        f"1e{_MAX_EXPONENT + 1} V",
+        f"1e-{_MAX_EXPONENT + 1} V",
+        f"{'1' * (_MAX_DIGITS + 1)} V",
+        "1e100000000 V",
+    ],
+    ids=["exponent_above", "exponent_below", "digits", "exponent_far_above"],
+)
+def test_a_number_beyond_the_numeric_limits_is_text_that_cannot_be_read(
+    text: str,
+) -> None:
+    with pytest.raises(ParseError, match="out of range") as raised:
+        parse(text, Voltage)
+    cause = raised.value.__cause__
+    assert isinstance(cause, InvalidMeasurementError)
+    assert not isinstance(cause, ParseError)
+
+
+@pytest.mark.parametrize(
+    "text",
+    [f"1e{_MAX_EXPONENT}", f"1e-{_MAX_EXPONENT}", "1" * _MAX_DIGITS],
+    ids=["exponent_above", "exponent_below", "digits"],
+)
+def test_a_number_at_the_numeric_limits_is_read(text: str) -> None:
+    assert parse(f"{text} V", Voltage) == voltage.Volt(Decimal(text))
+
+
+def test_a_number_read_but_no_valid_measurement_is_not_a_parse_error() -> None:
+    with pytest.raises(InvalidMeasurementError) as raised:
+        parse("-300 \u00b0C", Temperature)
+    assert not isinstance(raised.value, ParseError)
+
+
+_TEXT_LIKE_A_MEASUREMENT = st.from_regex(
+    r"[+\-\u2212]?[0-9]{0,1100}(\.[0-9]{0,12})?"
+    r"([eE][+\-]?[0-9]{0,12})?[ ]?[A-Za-z\u00b5\u03a9]{0,6}",
+    fullmatch=True,
+)
+
+
+@settings(max_examples=300, deadline=None)
+@given(text=st.one_of(st.text(max_size=40), _TEXT_LIKE_A_MEASUREMENT))
+@example(text="1e999999999 V")
+@example(text="1e-999999999 V")
+@example(text="1" * (_MAX_DIGITS + 1) + " V")
+@example(text="1e99999999999999999999 V")
+@example(text="\uff15 mV")
+def test_any_text_is_read_as_a_voltage_or_refused_as_a_parse_error(text: str) -> None:
+    try:
+        result = parse(text, Voltage)
+    except ParseError:
+        return
+    assert isinstance(result, Voltage)
 
 
 def test_a_unit_of_the_type_that_is_unknown_names_the_type_and_its_table() -> None:

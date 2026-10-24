@@ -5,7 +5,19 @@ All notable changes to kuchka are documented here.
 The format tries to follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 See the `Stability` section in `README.md` for what versioning means before `0.2.0`.
 
-## [0.1.4] - `develop`
+## [0.1.5] - `develop`
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+## [0.1.4] - 2026-10-24
 
 ### Added
 
@@ -21,7 +33,7 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - Conductance: `Nanosiemens`.
 - Voltage: `Nanovolt`, `Megavolt`, and `Petavolt`.
 - Power: `Picowatt`, `Nanowatt`, `Megawatt` to `Petawatt`, `Horsepower`, and `MetricHorsepower`.
-- Force: `KilogramForce`, `Meganewton`, `Micronewton`,.
+- Force: `KilogramForce`, `Meganewton`, `Micronewton`.
 - Acceleration: `Gal`, `Milligal`, and `Microgal`.
 - Length: `AstronomicalUnit` and `LightYear`.
 - Energy: `Petajoule`, `KilowattHour`, `TonneOfTNT`, `KilotonneOfTNT`, and `MegatonneOfTNT`.

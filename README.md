@@ -770,6 +770,10 @@ The vocabulary is intentionally curated and will remain finite. Current gaps inc
 
 A future persistence layer may use a representation such as `{"value": 4.2, "unit": "V"}` at the serialization boundary while reconstructing a typed quantity when data enters application code.
 
+Quantities have no exponentiation:
+`Second(2) ** 2` raises a `TypeError`.
+Multiply the factors instead, since every step lands on a registered type: `v0 * t + a * t * t / 2` is a `Length`.
+
 ## Stability
 
 `kuchka` is currently `0.1.x`.
