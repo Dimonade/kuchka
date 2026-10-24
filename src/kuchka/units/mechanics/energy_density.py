@@ -27,8 +27,8 @@ from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import EnergyDensity
 from kuchka.quantities import UnitDef
-from kuchka.units.energy import WATT_HOUR
-from kuchka.units.volume import LITRE
+from kuchka.units.geometry.volume import LITRE
+from kuchka.units.mechanics.energy import WATT_HOUR
 
 if TYPE_CHECKING:
     from collections.abc import Callable

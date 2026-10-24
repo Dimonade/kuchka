@@ -33,8 +33,10 @@ its own type.
 `BaudRate` gets its own symbol, `Bd`, as that is how it actually appears in the wild.
 
 Each leaf module owns one hand-written ``__all__`` naming exactly what it defines.
-The enclosing `kuchka.units` package imports these leaves directly and composes its own
-``__all__`` from theirs, so this package carries no export list of its own.
+This package composes its own ``__all__`` from theirs, and `kuchka.units` composes its
+own from this one's, so adding a unit to an existing dimension never touches either.
+A new leaf module needs three lines here: its module import, its wildcard import, and
+its ``__all__ +=``.
 """
 
 from __future__ import annotations

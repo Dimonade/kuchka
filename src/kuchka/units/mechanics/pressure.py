@@ -9,9 +9,9 @@
 and `101 325` Pa respectively).
 `PoundPerSquareInch` is exact too, but for a different reason:
 it is computed directly from `kuchka`'s own already-exact `POUND_FORCE` and
-`SQUARE_INCH` scales (`kuchka.units.kinematics.POUND_FORCE`,
-`kuchka.units.area.SQUARE_INCH`) rather than a separately hand-typed literal, so
-it can never drift out of sync with either.
+`SQUARE_INCH` scales (`kuchka.units.mechanics.force.POUND_FORCE`,
+`kuchka.units.geometry.area.SQUARE_INCH`) rather than a separately hand-typed
+literal, so it can never drift out of sync with either.
 
 `Millibar` and `Hectopascal` share the same scale (`100`), the same coincidence
 `Litre`/`CubicDecimetre`-style units have elsewhere.
@@ -20,7 +20,7 @@ to agree numerically.
 
 `Gigapascal` and `KilopoundPerSquareInch` (`GPa`, `ksi`) are the units a material's
 stiffness and strength are quoted in, and they serve `Stress` as well, which reads
-every unit of this module (see `kuchka.units.stress`).
+every unit of this module (see `kuchka.units.mechanics.stress`).
 
 `PRESSURE_UNITS` maps each symbol to its constructor, for boundary code that reads
 a unit as a string from outside the application.
@@ -39,8 +39,8 @@ from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Pressure
 from kuchka.quantities import UnitDef
-from kuchka.units.area import SQUARE_INCH
-from kuchka.units.kinematics import POUND_FORCE
+from kuchka.units.geometry.area import SQUARE_INCH
+from kuchka.units.mechanics.force import POUND_FORCE
 
 if TYPE_CHECKING:
     from kuchka.internal.unit_table import UnitTable

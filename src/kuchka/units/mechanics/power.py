@@ -89,7 +89,7 @@ Electrical power follows the familiar relationship
 
 A 12 V circuit carrying 2 A therefore transfers power at exactly 24 W:
 
->>> from kuchka.units.voltage import Volt
+>>> from kuchka.units.electromagnetics.voltage import Volt
 >>> from kuchka.units.current import Ampere
 >>> supply_voltage = Volt(12)
 >>> supply_current = Ampere(2)

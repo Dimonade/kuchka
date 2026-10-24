@@ -8,7 +8,8 @@ stress describes internal force per area within a loaded solid.
 dimensions and units are the same.
 
 No unit definitions live here.
-`kuchka.units.pressure` owns the pascal, its multiples, and pound per square inch.
+`kuchka.units.mechanics.pressure` owns the pascal, its multiples, and pound per square
+inch.
 `Pressure.to_stress()` interprets an existing pressure-valued magnitude as stress while
 retaining its unit.
 It does not calculate material stress from force and area, or establish that a measured
@@ -21,7 +22,7 @@ design estimate puts operating stress at 180 MPa.
 Treat both readings as stress before calculating the difference:
 
 >>> from kuchka import Gigapascal, Megapascal
->>> from kuchka.units.pressure import MEGAPASCAL
+>>> from kuchka.units.mechanics.pressure import MEGAPASCAL
 >>> proof_strength = Gigapascal(0.22).to_stress()
 >>> operating_stress = Megapascal(180).to_stress()
 >>> (proof_strength - operating_stress).to(MEGAPASCAL)
@@ -34,7 +35,7 @@ and applicable safety factors.
 A results importer can use the unit table when a report's unit symbol arrives as data
 instead of being hard-coded in the program:
 
->>> from kuchka.units.stress import STRESS_UNITS
+>>> from kuchka.units.mechanics.stress import STRESS_UNITS
 >>> report_unit = "MPa"
 >>> specimen_strength = STRESS_UNITS[report_unit](220)
 >>> specimen_strength.to(MEGAPASCAL)
@@ -60,7 +61,7 @@ See Also
     Quantity type representing material stress.
 ~kuchka.quantities.Pressure
     Quantity type representing pressure.
-~kuchka.units.pressure
+~kuchka.units.mechanics.pressure
     Unit definitions shared by pressure and stress.
 
 """
@@ -70,8 +71,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from kuchka.quantities import Stress
-from kuchka.units.pressure import PASCAL
-from kuchka.units.pressure import PRESSURE_UNITS
+from kuchka.units.mechanics.pressure import PASCAL
+from kuchka.units.mechanics.pressure import PRESSURE_UNITS
 
 if TYPE_CHECKING:
     from collections.abc import Callable

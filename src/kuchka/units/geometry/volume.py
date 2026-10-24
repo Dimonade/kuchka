@@ -46,9 +46,9 @@ if TYPE_CHECKING:
 CUBIC_METRE_NAME = "cubic_metre"
 CUBIC_METRE_SYMBOL = f"m{symbols.SUPERSCRIPT_THREE}"
 
-# NOTE: same reasoning as kuchka.units.area -- a cubed unit needs the linear prefix's
-# scale applied three times, not once, so `prefixed_unit()`'s constructor is not
-# flexible enough for it as defined now.
+# NOTE: same reasoning as kuchka.units.geometry.area -- a cubed unit needs the linear
+# prefix's scale applied three times, not once, so `prefixed_unit()`'s constructor is
+# not flexible enough for it as defined now.
 CUBIC_MILLIMETRE = UnitDef(
     "cubic_millimetre",
     f"mm{symbols.SUPERSCRIPT_THREE}",

@@ -31,9 +31,9 @@ from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Torque
 from kuchka.quantities import UnitDef
-from kuchka.units.kinematics.force import POUND_FORCE
 from kuchka.units.length import FOOT
 from kuchka.units.length import INCH
+from kuchka.units.mechanics.force import POUND_FORCE
 
 if TYPE_CHECKING:
     from collections.abc import Callable
