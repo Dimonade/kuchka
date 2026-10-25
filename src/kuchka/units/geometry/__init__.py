@@ -9,12 +9,6 @@
 that reads a unit as a string from outside the application.
 Area and volume are the length-derived dimensions that pressure, density, and the other
 themed packages build on.
-
-Each leaf module owns one hand-written ``__all__`` naming exactly what it defines.
-This package composes its own ``__all__`` from theirs, and `kuchka.units` composes its
-own from this one's, so adding a unit to an existing dimension never touches either.
-A new leaf module needs three lines here: its module import, its wildcard import, and
-its ``__all__ +=``.
 """
 
 from __future__ import annotations

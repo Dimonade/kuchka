@@ -171,7 +171,7 @@ KRAKEN_LENGTH_UNITS = unit_table(
 ```
 
 Each module owns one hand-written `__all__` naming its constants, constructors, and tables.
-A published module takes its three lines in the `__init__.py` of its package (the module import, the wildcard import, and the `__all__ +=`) and a wildcard import in `kuchka/units/__init__.py`.
+A published module is exported the way its neighbours are, following the comment above `__all__` in `kuchka/units/__init__.py`.
 A published unit also joins its type's table there (the `_TABLE_OF` block, which also lets `parse` read the type's units), and `just generate-api` promotes its constructor to the top level.
 
 ## Checklist

@@ -6,12 +6,6 @@ The package holds `Charge`, `Voltage`, `Resistance`, `Conductance`, `ApparentPow
 `ReactivePower`.
 Electric current is a base quantity and is defined at the top level of
 `kuchka.quantities`, beside length and mass.
-
-Each leaf module owns one hand-written ``__all__`` naming exactly what it defines.
-This package composes its own ``__all__`` from theirs, and `kuchka.quantities` composes
-its own from this one's.
-A new leaf module needs three lines here: its module import, its wildcard import, and
-its ``__all__ +=``.
 """
 
 from __future__ import annotations

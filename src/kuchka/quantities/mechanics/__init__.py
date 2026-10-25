@@ -6,12 +6,6 @@ The package holds `Force`, `Torque`, `Pressure`, `Stress`, `Density`, `Energy`, 
 and `EnergyDensity`.
 `Energy` and `Power` are defined here, from force and motion, and the thermal and
 electrical quantities reuse them.
-
-Each leaf module owns one hand-written ``__all__`` naming exactly what it defines.
-This package composes its own ``__all__`` from theirs, and `kuchka.quantities` composes
-its own from this one's.
-A new leaf module needs three lines here: its module import, its wildcard import, and
-its ``__all__ +=``.
 """
 
 from __future__ import annotations

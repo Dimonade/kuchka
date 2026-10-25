@@ -27,14 +27,6 @@ Each quantity's canonical unit (the one arithmetic results come back in, e.g.
 ``Voltage * Current`` yields a result expressed in ``Watt``) is assigned onto the
 corresponding domain class from ``kuchka.quantities`` at the bottom of the module that
 owns that dimension.
-
-Each leaf module owns one hand-written ``__all__`` naming exactly what it defines, and
-each package composes its own from its leaves.
-This package star-imports every leaf directly, which the type checkers follow, and
-composes its own ``__all__`` from the packages'.
-A new leaf module needs a wildcard import here and its three lines in its own package,
-a new package needs its import and its ``__all__ +=`` here, and a test fails if one is
-missing.
 """
 
 from __future__ import annotations
@@ -157,6 +149,15 @@ A unit of one quantity that shares the type's dimension (a `baud` for a `frequen
 not accepted by another.
 """
 
+# Export rule, for every package under `kuchka.units` and `kuchka.quantities`.
+# A leaf module owns the only hand-written `__all__`, naming exactly what it defines.
+# A package composes its own `__all__` from its leaves with `__all__ += leaf.__all__`,
+# and the package above composes its own from the packages'.
+# This file star-imports every leaf directly, because the type checkers do not follow
+# a star import through two packages.
+# A new leaf therefore takes a wildcard import here, plus its module import, its
+# wildcard import, and its `__all__ +=` in its own package; a test fails if one is
+# missing.
 __all__: list[str] = []
 __all__ += amount.__all__
 __all__ += angular.__all__

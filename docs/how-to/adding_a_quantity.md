@@ -73,8 +73,7 @@ Types share a module only when they construct one another when the code runs, as
 A module imports, when it is imported, only from the top level and from the packages before its own, and a test fails when one does not.
 An overload may name a type of any package, because a type checker reads it and nothing runs it.
 
-A new leaf module takes three lines in the `__init__.py` of its package: its module import, its wildcard import, and its `__all__ +=`.
-`kuchka/quantities/__init__.py` takes one wildcard line for it, and a new package also takes its import and its `__all__ +=` there.
+A new leaf module is exported the way its neighbours are, following the comment above `__all__` in `kuchka/units/__init__.py`.
 Then run `just generate-api`, which promotes the constructors and the type to the top level.
 
 ## Checklist

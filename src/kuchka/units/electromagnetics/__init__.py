@@ -15,12 +15,6 @@ constructor, for boundary code that reads a unit as a string from outside the
 application.
 Electric current is a base quantity and is defined at the top level of `kuchka.units`
 beside length and mass.
-
-Each leaf module owns one hand-written ``__all__`` naming exactly what it defines.
-This package composes its own ``__all__`` from theirs, and `kuchka.units` composes its
-own from this one's, so adding a unit to an existing dimension never touches either.
-A new leaf module needs three lines here: its module import, its wildcard import, and
-its ``__all__ +=``.
 """
 
 from __future__ import annotations

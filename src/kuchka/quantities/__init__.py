@@ -25,14 +25,6 @@ Type checkers cannot infer "Voltage times Current is Power" from that algebra, s
 type spells out its relationships as explicit `@overload` declarations, and every
 overload list ends with a fallback matching the signature declared on `LinearQuantity`,
 which keeps the overrides compatible with the base class under strict checking.
-
-Each leaf module owns one hand-written ``__all__`` naming exactly what it defines, and
-each package composes its own from its leaves.
-This package star-imports every leaf directly, which the type checkers follow, and
-composes its own ``__all__`` from the packages'.
-A new leaf module needs a wildcard import here and its three lines in its own package,
-a new package needs its import and its ``__all__ +=`` here, and a test fails if one is
-missing.
 """
 
 from __future__ import annotations
