@@ -10,7 +10,7 @@ The whole suite takes about twenty seconds.
 | -------------- | ----------------------------------------------------------------------------------------------------- |
 | `contract/`    | What every quantity type, unit, and family must satisfy, discovered from the library                  |
 | `units/`       | The unit machinery: tables, spellings, prefixes, applicability, and the identity of a unit            |
-| `quantities/`  | One module per quantity, or a package of modules where a quantity is large                            |
+| `quantities/`  | One module per quantity, in the package its type lives in, or a package where a quantity is large     |
 | `behaviour/`   | How quantities behave in general: arithmetic, comparison, display, numeric limits, division by zero   |
 | `registry/`    | The kind registry: registration, specialisations, contested kinds, and the result type of `*` and `/` |
 | `api/`         | The public surface: exports, generated API, naming, and static typing                                 |
@@ -52,7 +52,7 @@ Lists of names and cases are alphabetical, and `ruff` keeps the imports sorted.
 ## Where a new test goes
 
 - It holds for every type or unit: `contract/`, discovered through `tests/support/`.
-- It is about one quantity: `quantities/test_<quantity>.py`.
+- It is about one quantity: `quantities/test_<quantity>.py`, or `quantities/<package>/test_<quantity>.py` when the type lives in a themed package such as `mechanics`.
 - It needs two or more quantities to make sense: `integration/`.
 - It is an example in the documentation: write it in the document, and `docs/` runs it.
 

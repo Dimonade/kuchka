@@ -21,6 +21,12 @@ PACKAGES = [
     kuchka.units.radiation,
     kuchka.units.temporal,
     kuchka.quantities,
+    kuchka.quantities.electromagnetics,
+    kuchka.quantities.geometry,
+    kuchka.quantities.information,
+    kuchka.quantities.kinematics,
+    kuchka.quantities.mechanics,
+    kuchka.quantities.radiation,
     kuchka.quantities.base,
     kuchka.constants,
     kuchka.errors,
@@ -38,6 +44,12 @@ AGGREGATING_PACKAGES = [
     kuchka.units.radiation,
     kuchka.units.temporal,
     kuchka.quantities,
+    kuchka.quantities.electromagnetics,
+    kuchka.quantities.geometry,
+    kuchka.quantities.information,
+    kuchka.quantities.kinematics,
+    kuchka.quantities.mechanics,
+    kuchka.quantities.radiation,
 ]
 
 

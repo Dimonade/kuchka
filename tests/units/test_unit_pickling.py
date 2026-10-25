@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import pickle
+import pickletools
 
 import pytest
 
@@ -50,7 +51,12 @@ def test_a_pickled_quantity_holds_no_unit_fields() -> None:
     payload = pickle.dumps(voltage.Volt(5))
     assert b"VOLT" in payload
     assert b"Dimension" not in payload
-    assert b"volt" not in payload
+    strings = {
+        argument
+        for _, argument, _ in pickletools.genops(payload)
+        if isinstance(argument, str)
+    }
+    assert voltage.VOLT.name not in strings
 
 
 def test_a_unit_published_under_two_names_pickles_under_the_first() -> None:
