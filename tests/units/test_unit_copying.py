@@ -8,7 +8,7 @@ import pytest
 
 from kuchka.units import logarithmic
 from kuchka.units import thermal
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 from tests.units.helpers import _linear
 
 

@@ -12,10 +12,10 @@ from kuchka import IncompatibleDimensionError
 from kuchka import InvalidMeasurementError
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
-from kuchka.units import sample_rate
-from kuchka.units import sampling_period as sp
-from kuchka.units import time
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.temporal import sample_rate
+from kuchka.units.temporal import sampling_period as sp
+from kuchka.units.temporal import time
 
 
 def test_time_as_sampling_period_returns_a_sampling_period():

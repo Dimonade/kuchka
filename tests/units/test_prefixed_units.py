@@ -7,8 +7,12 @@ magnitude, is covered once for all units in `test_unit_scaling`.
 
 from __future__ import annotations
 
+import functools
+import importlib
+import pkgutil
 from decimal import Decimal
 from fractions import Fraction
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -16,12 +20,27 @@ import kuchka.units as published
 from tests.support.families import UNIT_CASES
 from tests.units.prefix_scales import PREFIXED_UNIT_SCALES
 
+if TYPE_CHECKING:
+    import types
+
 IDS = [f"{module}.{unit}" for module, unit, _, _ in PREFIXED_UNIT_SCALES]
+
+
+@functools.cache
+def _unit_module(name: str) -> types.ModuleType:
+    """Return the unit module called `name`, wherever it sits under `kuchka.units`."""
+    matches = [
+        info.name
+        for info in pkgutil.walk_packages(published.__path__, f"{published.__name__}.")
+        if info.name.rsplit(".", 1)[-1] == name and ".archaic." not in info.name
+    ]
+    assert len(matches) == 1, f"{name!r} names {len(matches)} unit modules"
+    return importlib.import_module(matches[0])
 
 
 def lookup(module: str, constant: str):
     """Return the unit constant `constant` of the units module `module`."""
-    return getattr(getattr(published, module), constant)
+    return getattr(_unit_module(module), constant)
 
 
 @pytest.mark.parametrize(

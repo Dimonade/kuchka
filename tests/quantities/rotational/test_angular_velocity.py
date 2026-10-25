@@ -13,9 +13,9 @@ from kuchka import IncompatibleDimensionError
 from kuchka import Time
 from kuchka.internal.constants import PI
 from kuchka.units import angular
-from kuchka.units import angular_velocity as angvel
-from kuchka.units import frequency as frequency_units
-from kuchka.units import time
+from kuchka.units.kinematics import angular_velocity as angvel
+from kuchka.units.temporal import frequency as frequency_units
+from kuchka.units.temporal import time
 
 
 def test_angle_per_time_is_angular_velocity_and_back() -> None:

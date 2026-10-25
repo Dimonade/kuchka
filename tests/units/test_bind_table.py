@@ -9,7 +9,7 @@ from kuchka.dimensions import VOLTAGE
 from kuchka.internal.unit_table import unit_table
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.units import bind_table
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 from tests.units.table_fixtures import TABLE
 
 

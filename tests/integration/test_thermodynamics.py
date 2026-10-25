@@ -17,13 +17,13 @@ from kuchka import Force
 from kuchka import IncompatibleDimensionError
 from kuchka import Pressure
 from kuchka import Volume
-from kuchka.units import area
-from kuchka.units import energy
-from kuchka.units import energy_density
-from kuchka.units import force
-from kuchka.units import pressure
 from kuchka.units import thermal
-from kuchka.units import volume
+from kuchka.units.geometry import area
+from kuchka.units.geometry import volume
+from kuchka.units.mechanics import energy
+from kuchka.units.mechanics import energy_density
+from kuchka.units.mechanics import force
+from kuchka.units.mechanics import pressure
 
 PISTON = area.SquareCentimetre(50)
 

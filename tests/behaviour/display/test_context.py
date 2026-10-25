@@ -11,7 +11,7 @@ from fractions import Fraction
 import pytest
 
 from kuchka.internal.display import render
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 from tests.support.kinds import QUANTITY_TYPES
 from tests.support.kinds import sample_of
 

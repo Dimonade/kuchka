@@ -26,7 +26,7 @@ from kuchka.internal.prefixes import with_prefix
 from kuchka.quantities.base import UnitDef
 from kuchka.units import length
 from kuchka.units import mass
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 
 if TYPE_CHECKING:
     from kuchka.internal.prefixes import Prefix

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import copy
 import pickle
+import pickletools
 
 import pytest
 
@@ -57,3 +58,23 @@ def test_a_value_keeps_its_display_unit_through_copy_and_pickle(name: str) -> No
         ):
             assert clone == original
             assert clone.unit is original.unit
+
+
+@pytest.mark.parametrize("protocol", [0, pickle.HIGHEST_PROTOCOL])
+@pytest.mark.parametrize("cls", QUANTITY_TYPES, ids=TYPE_IDS)
+def test_a_pickle_names_the_published_class_and_not_its_module(
+    cls: type, protocol: int
+) -> None:
+    payload = pickle.dumps(sample_of(cls), protocol=protocol)
+    strings = {
+        argument
+        for _, argument, _ in pickletools.genops(payload)
+        if isinstance(argument, str)
+    }
+    assert cls.__name__ in strings
+    assert cls.__module__ not in strings
+    assert all(
+        string.startswith("kuchka.quantities.base.")
+        for string in strings
+        if string.startswith("kuchka.quantities")
+    )

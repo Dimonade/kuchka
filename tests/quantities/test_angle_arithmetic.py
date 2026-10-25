@@ -13,10 +13,10 @@ import pytest
 
 from kuchka import IncompatibleDimensionError
 from kuchka.units import angular
-from kuchka.units import energy
 from kuchka.units import proportion
-from kuchka.units import time
-from kuchka.units import torque
+from kuchka.units.mechanics import energy
+from kuchka.units.mechanics import torque
+from kuchka.units.temporal import time
 
 ANGLE = angular.Radian(1)
 QUANTITIES = (

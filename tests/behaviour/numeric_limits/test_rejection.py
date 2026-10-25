@@ -10,7 +10,7 @@ import pytest
 from kuchka import InvalidMeasurementError
 from kuchka.internal.limits import NUMERIC_LIMITS
 from kuchka.numeric import to_exact
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 
 BITS = NUMERIC_LIMITS.max_exact_bits
 

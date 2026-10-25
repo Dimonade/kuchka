@@ -3,7 +3,7 @@ from __future__ import annotations
 from kuchka.dimensions import Dimension
 from kuchka.internal import symbols
 from kuchka.units import thermal
-from kuchka.units import voltage as voltage_units
+from kuchka.units.electromagnetics import voltage as voltage_units
 
 
 def test_empty_format_spec_matches_repr() -> None:

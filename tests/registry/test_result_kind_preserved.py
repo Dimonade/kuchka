@@ -12,7 +12,7 @@ from kuchka import SampleRate
 from kuchka import SamplingPeriod
 from kuchka import Voltage
 from kuchka.units import proportion
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 
 SAMPLE_RATE = SampleRate(Fraction(8), SampleRate._canonical_unit)  # noqa: SLF001
 

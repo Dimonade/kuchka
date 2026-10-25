@@ -12,7 +12,7 @@ from kuchka.quantities.base import LogarithmicUnitDef
 from kuchka.quantities.base import UnitDef
 from kuchka.units import logarithmic
 from kuchka.units import thermal
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 
 if TYPE_CHECKING:
     from kuchka.quantities.base.units import _Unit

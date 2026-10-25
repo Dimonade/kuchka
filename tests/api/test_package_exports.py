@@ -13,9 +13,20 @@ import kuchka
 PACKAGES = [
     kuchka,
     kuchka.units,
-    kuchka.units.temporal,
+    kuchka.units.electromagnetics,
+    kuchka.units.geometry,
+    kuchka.units.information,
     kuchka.units.kinematics,
+    kuchka.units.mechanics,
+    kuchka.units.radiation,
+    kuchka.units.temporal,
     kuchka.quantities,
+    kuchka.quantities.electromagnetics,
+    kuchka.quantities.geometry,
+    kuchka.quantities.information,
+    kuchka.quantities.kinematics,
+    kuchka.quantities.mechanics,
+    kuchka.quantities.radiation,
     kuchka.quantities.base,
     kuchka.constants,
     kuchka.errors,
@@ -25,9 +36,20 @@ EXPLICIT_ONLY = "archaic"
 """The subpackage applications import explicitly, so no package re-exports it."""
 AGGREGATING_PACKAGES = [
     kuchka.units,
-    kuchka.units.temporal,
+    kuchka.units.electromagnetics,
+    kuchka.units.geometry,
+    kuchka.units.information,
     kuchka.units.kinematics,
+    kuchka.units.mechanics,
+    kuchka.units.radiation,
+    kuchka.units.temporal,
     kuchka.quantities,
+    kuchka.quantities.electromagnetics,
+    kuchka.quantities.geometry,
+    kuchka.quantities.information,
+    kuchka.quantities.kinematics,
+    kuchka.quantities.mechanics,
+    kuchka.quantities.radiation,
 ]
 
 

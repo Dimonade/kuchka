@@ -19,8 +19,8 @@ from kuchka import InvalidMeasurementError
 from kuchka import Proportion
 from kuchka import Voltage
 from kuchka.units import proportion
-from kuchka.units import resistance
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import resistance
+from kuchka.units.electromagnetics import voltage
 
 
 def test_percent_and_ratio_are_the_same_quantity_at_different_scale():

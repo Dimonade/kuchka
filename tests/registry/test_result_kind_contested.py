@@ -13,10 +13,10 @@ from kuchka import SampleRate
 from kuchka import Time
 from kuchka import Velocity
 from kuchka.quantities.base import registry
-from kuchka.units import acceleration as acc
 from kuchka.units import length
 from kuchka.units import proportion
-from kuchka.units import velocity
+from kuchka.units.kinematics import acceleration as acc
+from kuchka.units.kinematics import velocity
 
 SAMPLE_RATE = SampleRate(Fraction(8), SampleRate._canonical_unit)  # noqa: SLF001
 

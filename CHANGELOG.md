@@ -11,6 +11,16 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Changed
 
+#### Unit modules live in themed packages
+
+`kuchka.units` keeps the base dimensions and the angle, proportion, and logarithmic axes at its top level, and groups the other modules in `geometry`, `kinematics`, `mechanics`, `electromagnetics`, `information`, and `radiation`.
+Every constructor and table is still imported from `kuchka` and `kuchka.units`.
+A unit module is imported from its package, so `from kuchka.units import voltage` is now `from kuchka.units.electromagnetics import voltage`, and `kuchka.units.kinematics.force` is now `kuchka.units.mechanics.force`.
+
+The quantity types follow the same layout, one module per type in the matching package of `kuchka.quantities`: `kuchka.quantities.electrical.Voltage` is now `kuchka.quantities.electromagnetics.voltage.Voltage`, and `Force`, `Power`, and `Torque` are in `kuchka.quantities.mechanics`.
+A quantity now pickles by the name `kuchka.quantities` publishes its class under, so a pickle no longer depends on the module that defines the class and survives such a move.
+A pickle made by an earlier version names the old module and does not load when its class moved.
+
 ### Deprecated
 
 ### Removed

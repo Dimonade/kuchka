@@ -16,14 +16,14 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
-    from kuchka.quantities.area import Area
-    from kuchka.quantities.energy import Energy
-    from kuchka.quantities.kinematics import Force
-    from kuchka.quantities.kinematics import Velocity
+    from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.geometry.volume import Volume
+    from kuchka.quantities.kinematics.velocity import Velocity
+    from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
-    from kuchka.quantities.volume import Volume
 
 
 class Length(LinearQuantity):

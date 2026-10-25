@@ -24,7 +24,7 @@ from kuchka.units import logarithmic
 from kuchka.units import proportion
 from kuchka.units import thermal
 from kuchka.units import thermal as thermal_units
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 from kuchka.units.temporal import instant
 
 ACCEPTED_UNITS = (

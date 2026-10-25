@@ -12,9 +12,9 @@ from kuchka.dimensions import TIME
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import registry
 from kuchka.units import current
-from kuchka.units import frequency
-from kuchka.units import time
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.temporal import frequency
+from kuchka.units.temporal import time
 from tests.support.kinds import QUANTITY_TYPES
 
 REGISTERED = registry._DIMENSION_REGISTRY  # noqa: SLF001 -- inspected, never modified

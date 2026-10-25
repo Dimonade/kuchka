@@ -399,7 +399,7 @@ current = Milliampere(150)
 power = voltage * current
 
 power  # 0.63 W
-type(power)  # `<class 'kuchka.quantities.electrical.Power'>`
+type(power)  # `<class 'kuchka.quantities.mechanics.power.Power'>`
 ```
 
 A function can require `Voltage`, a configuration loader can construct a `Voltage`, and an engineering formula can produce a `Power`.

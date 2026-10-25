@@ -669,7 +669,7 @@ def MezhevayaVersta(value: Numeric) -> Length:
 
     The resulting area is about 164 hectares of meadowland:
 
-    >>> from kuchka.units.area import HECTARE
+    >>> from kuchka.units.geometry.area import HECTARE
     >>> meadow_area.to(HECTARE)
     163.88096256 ha
 

@@ -9,7 +9,7 @@ from fractions import Fraction
 import pytest
 
 from kuchka.internal.display import DISPLAY_ROUNDING
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 
 
 def test_the_display_rounding_mode_is_half_up() -> None:

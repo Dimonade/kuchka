@@ -31,10 +31,6 @@ defines, reached through `.to_sampling_period()` / `.to_instant()`.
 `SampleRate` shares its display symbols with `Frequency` the same way, while remaining
 its own type.
 `BaudRate` gets its own symbol, `Bd`, as that is how it actually appears in the wild.
-
-Each leaf module owns one hand-written ``__all__`` naming exactly what it defines.
-The enclosing `kuchka.units` package imports these leaves directly and composes its own
-``__all__`` from theirs, so this package carries no export list of its own.
 """
 
 from __future__ import annotations

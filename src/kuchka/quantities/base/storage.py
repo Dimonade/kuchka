@@ -8,6 +8,8 @@ of this package.
 
 from __future__ import annotations
 
+import importlib
+import pickle
 from fractions import Fraction
 from typing import TYPE_CHECKING
 from typing import Any
@@ -250,6 +252,19 @@ class _ScalarStorage(Generic[_UnitT]):
         """
         return (self._magnitude, self._display_unit)
 
+    @override
+    def __reduce__(self) -> tuple[object, ...]:
+        """Pickle by the name `kuchka.quantities` publishes this class under.
+
+        A published class is named rather than located, so a pickle does not depend on
+        the module that defines the class and still loads when the class moves.
+        A class that is not published is pickled by reference, as `object` does.
+        """
+        name = _published_name(type(self))
+        if name is None:
+            return (_new_instance, (type(self),), self.__getstate__())
+        return (_new_published, (name,), self.__getstate__())
+
     def __setstate__(self, state: tuple[Fraction, _UnitT]) -> None:
         """Restore a pickled/copied instance, validating it like construction."""
         if not isinstance(state, tuple) or len(state) != _STATE_LENGTH:
@@ -325,3 +340,31 @@ class _ScalarStorage(Generic[_UnitT]):
 
 
 __all__ = ["_ScalarStorage"]
+
+
+def _published_name(cls: type) -> str | None:
+    """Return the name `kuchka.quantities` publishes `cls` under, or `None`."""
+    package = importlib.import_module("kuchka.quantities")
+    name = cls.__name__
+    return name if name in package.__all__ and getattr(package, name) is cls else None
+
+
+def _new_instance(cls: type[_ScalarStorage[Any]]) -> _ScalarStorage[Any]:
+    """Return a blank instance of `cls`, to be restored from its pickled state."""
+    return cls.__new__(cls)
+
+
+def _new_published(name: str) -> _ScalarStorage[Any]:
+    """Return a blank instance of the class `kuchka.quantities` publishes as `name`.
+
+    Only names of published quantity types are accepted.
+    """
+    package = importlib.import_module("kuchka.quantities")
+    cls = getattr(package, name, None) if name in package.__all__ else None
+    if not (isinstance(cls, type) and issubclass(cls, _ScalarStorage)):
+        msg = (
+            f"cannot restore {name!r}: "
+            "kuchka.quantities publishes no such quantity type."
+        )
+        raise pickle.UnpicklingError(msg)
+    return cls.__new__(cls)

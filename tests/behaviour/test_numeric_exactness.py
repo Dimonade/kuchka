@@ -12,12 +12,12 @@ from kuchka import InvalidMeasurementError
 from kuchka import Proportion
 from kuchka.numeric import to_decimal
 from kuchka.numeric import to_exact
-from kuchka.units import frequency
 from kuchka.units import proportion
-from kuchka.units import resistance
 from kuchka.units import thermal
-from kuchka.units import voltage
-from kuchka.units import volume
+from kuchka.units.electromagnetics import resistance
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.geometry import volume
+from kuchka.units.temporal import frequency
 
 
 def test_int_is_exact():

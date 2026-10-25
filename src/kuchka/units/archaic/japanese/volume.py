@@ -97,7 +97,7 @@ See Also
     Quantity type representing volume.
 ~kuchka.quantities.Density
     Mass per unit volume.
-~kuchka.units.volume
+~kuchka.units.geometry.volume
     Metric and other volume constructors, including litres and cubic metres.
 ~kuchka.units.japanese.mass
     Japanese mass units, including the kan used in historical weight records.
