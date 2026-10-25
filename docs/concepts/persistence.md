@@ -20,15 +20,15 @@ copy.deepcopy(Volt(5)).unit is VOLT  # True
 pickle.loads(pickle.dumps(Volt(5))).unit is VOLT  # True
 ```
 
-A pickled quantity holds its class, its exact magnitude, and the name `kuchka.units` publishes its unit under, which is `VOLT` here.
-It holds none of the fields behind the unit, so changing how a unit is built does not change what a pickle contains.
-Unpickling accepts only names of published units.
+A pickled quantity holds the name `kuchka.quantities` publishes its class under, its exact magnitude, and the name `kuchka.units` publishes its unit under, which are `Voltage` and `VOLT` here.
+It holds neither the module that defines the class nor the fields behind the unit, so moving a class between modules or changing how a unit is built does not change what a pickle contains.
+Unpickling accepts only names of published quantity types and published units.
 
 A unit that `kuchka.units` does not publish copies normally and cannot be pickled, and raises `pickle.PicklingError` if pickling is attempted.
 
 ## Pickle is not a storage format
 
-A pickle names Python classes and unit constants, so it stops loading when one of them moves or is renamed in a later version, and loading an untrusted pickle runs code.
+A pickle names quantity types and unit constants, so it stops loading when one of them is renamed or removed in a later version, and loading an untrusted pickle runs code.
 It is a way to transport a value, and the file or database is better served by a form that does not depend on `kuchka`'s internals.
 
 ## Storing a value

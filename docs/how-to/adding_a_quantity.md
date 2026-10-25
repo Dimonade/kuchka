@@ -68,7 +68,13 @@ A type shares units with another type of its dimension only where a table says s
 
 ## Exports
 
-`kuchka/quantities/__init__.py` takes three lines for a new leaf module: its module import, its wildcard import, and its `__all__ +=`.
+A type lives in the package of the relation that defines it, the same placement as its units ([where the module goes](adding_a_unit.md#where-the-module-goes)), with one module per type.
+Types share a module only when they construct one another when the code runs, as the time types do, and as `Pressure` and `Stress` do through `to_stress()`.
+A module imports, when it is imported, only from the top level and from the packages before its own, and a test fails when one does not.
+An overload may name a type of any package, because a type checker reads it and nothing runs it.
+
+A new leaf module takes three lines in the `__init__.py` of its package: its module import, its wildcard import, and its `__all__ +=`.
+`kuchka/quantities/__init__.py` takes one wildcard line for it, and a new package also takes its import and its `__all__ +=` there.
 Then run `just generate-api`, which promotes the constructors and the type to the top level.
 
 ## Checklist
