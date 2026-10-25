@@ -21,9 +21,9 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.proportion import Proportion
-    from kuchka.quantities.volume import Volume
 
 
 class Density(LinearQuantity):

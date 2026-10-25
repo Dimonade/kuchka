@@ -22,7 +22,7 @@ from kuchka.dimensions import POWER
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.registry import _register
-from kuchka.quantities.electrical import Power
+from kuchka.quantities.mechanics.power import Power
 
 if TYPE_CHECKING:
     from fractions import Fraction

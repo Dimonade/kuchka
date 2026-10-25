@@ -21,9 +21,9 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
-    from kuchka.quantities.electrical import Current
-    from kuchka.quantities.electrical import Voltage
-    from kuchka.quantities.energy import Energy
+    from kuchka.quantities.current import Current
+    from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time

@@ -29,13 +29,13 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
-    from kuchka.quantities.area import Area
-    from kuchka.quantities.density import Density
-    from kuchka.quantities.energy import Energy
-    from kuchka.quantities.energy_density import EnergyDensity
+    from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
-    from kuchka.quantities.pressure import Pressure
+    from kuchka.quantities.mechanics.density import Density
+    from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.proportion import Proportion
 
 

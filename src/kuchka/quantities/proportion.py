@@ -26,40 +26,40 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
-    from kuchka.quantities.ac_power import ApparentPower
-    from kuchka.quantities.ac_power import ReactivePower
-    from kuchka.quantities.activity import Activity
     from kuchka.quantities.amount import AmountOfSubstance
     from kuchka.quantities.angular import AngularDisplacement
-    from kuchka.quantities.area import Area
-    from kuchka.quantities.charge import Charge
-    from kuchka.quantities.data import Data
-    from kuchka.quantities.data import DataRate
-    from kuchka.quantities.density import Density
-    from kuchka.quantities.electrical import Conductance
-    from kuchka.quantities.electrical import Current
-    from kuchka.quantities.electrical import Power
-    from kuchka.quantities.electrical import Resistance
-    from kuchka.quantities.electrical import Voltage
-    from kuchka.quantities.energy import Energy
-    from kuchka.quantities.energy_density import EnergyDensity
-    from kuchka.quantities.kinematics import Acceleration
-    from kuchka.quantities.kinematics import Force
-    from kuchka.quantities.kinematics import Velocity
+    from kuchka.quantities.current import Current
+    from kuchka.quantities.electromagnetics.ac_power import ApparentPower
+    from kuchka.quantities.electromagnetics.ac_power import ReactivePower
+    from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.resistance import Resistance
+    from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.geometry.volume import Volume
+    from kuchka.quantities.information.data import Data
+    from kuchka.quantities.information.data_rate import DataRate
+    from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.luminous_intensity import LuminousIntensity
     from kuchka.quantities.mass import Mass
-    from kuchka.quantities.pressure import Pressure
-    from kuchka.quantities.pressure import Stress
-    from kuchka.quantities.rotational import AngularVelocity
-    from kuchka.quantities.rotational import Torque
+    from kuchka.quantities.mechanics.density import Density
+    from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.pressure import Pressure
+    from kuchka.quantities.mechanics.pressure import Stress
+    from kuchka.quantities.mechanics.torque import Torque
+    from kuchka.quantities.radiation.activity import Activity
     from kuchka.quantities.temporal import BaudRate
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import SampleRate
     from kuchka.quantities.temporal import SamplingPeriod
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.thermal import TemperatureDelta
-    from kuchka.quantities.volume import Volume
 
 
 class Proportion(LinearQuantity):

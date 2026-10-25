@@ -28,18 +28,18 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.angular import AngularDisplacement
-    from kuchka.quantities.charge import Charge
-    from kuchka.quantities.electrical import Power
-    from kuchka.quantities.electrical import Voltage
-    from kuchka.quantities.energy_density import EnergyDensity
-    from kuchka.quantities.kinematics import Force
+    from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.length import Length
-    from kuchka.quantities.pressure import Pressure
+    from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.pressure import Pressure
+    from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.proportion import Proportion
-    from kuchka.quantities.rotational import Torque
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
-    from kuchka.quantities.volume import Volume
 
 
 class Energy(LinearQuantity):

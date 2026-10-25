@@ -46,10 +46,10 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
-    from kuchka.quantities.energy import Energy
+    from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.proportion import Proportion
-    from kuchka.quantities.rotational import AngularVelocity
-    from kuchka.quantities.rotational import Torque
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 

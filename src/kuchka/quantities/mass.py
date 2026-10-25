@@ -2,7 +2,7 @@
 
 Defined alongside two relationships:
 - `Mass * Acceleration -> Force`, Newton's second law, whose other two overload
-  halves live on `Acceleration` and `Force` themselves in `kinematics.py`.
+  halves live on `Acceleration` and `Force` themselves.
 - `Mass / Volume -> Density`, and its inverse `Mass / Density -> Volume`, whose
   other overload half (`Density * Volume -> Mass`) lives on `Density` and `Volume`.
 """
@@ -23,11 +23,11 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
-    from kuchka.quantities.density import Density
-    from kuchka.quantities.kinematics import Acceleration
-    from kuchka.quantities.kinematics import Force
+    from kuchka.quantities.geometry.volume import Volume
+    from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.mechanics.density import Density
+    from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.proportion import Proportion
-    from kuchka.quantities.volume import Volume
 
 
 class Mass(LinearQuantity):

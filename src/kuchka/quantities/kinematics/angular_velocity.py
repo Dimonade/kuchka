@@ -1,0 +1,95 @@
+"""AngularVelocity: how fast an angle is swept.
+
+`AngularVelocity` is angle per time (angle T⁻¹).
+Counting the angle axis tells it apart from `Frequency`: one hertz is a cycle per
+second, not an angular velocity.
+Turn is the canonical angle, so the canonical unit is the turn per second, and a radian
+enters only as the exact factor `1 / (2 pi)`.
+
+- `AngularVelocity * Time -> AngularDisplacement` and its inverses,
+  `AngularDisplacement / Time -> AngularVelocity` and
+  `AngularDisplacement / AngularVelocity -> Time`;
+- `Torque * AngularVelocity -> Power` and `Power / Torque -> AngularVelocity`;
+- `AngularVelocity / Frequency -> AngularDisplacement`.
+
+`Frequency.to_angular_velocity()` and `AngularVelocity.to_frequency()` move between a
+rate of cycles and a rate of angle.
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import overload
+
+from kuchka.dimensions import ANGULAR_VELOCITY
+from kuchka.internal.typing import override
+from kuchka.quantities.base import LinearQuantity
+from kuchka.quantities.base.registry import _register
+from kuchka.quantities.temporal import Frequency
+
+if TYPE_CHECKING:
+    from fractions import Fraction
+
+    from kuchka.dimensions import Dimension
+    from kuchka.numeric import Numeric
+    from kuchka.quantities.angular import AngularDisplacement
+    from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.torque import Torque
+    from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.temporal import Time
+
+
+class AngularVelocity(LinearQuantity):
+    """Angle swept per unit time: a shaft speed, a turn rate."""
+
+    dimension: ClassVar[Dimension] = ANGULAR_VELOCITY
+    __slots__ = ()
+
+    @overload
+    def __mul__(self, other: Time) -> AngularDisplacement: ...
+    @overload
+    def __mul__(self, other: Torque) -> Power: ...
+    @overload
+    def __mul__(self, other: Proportion) -> AngularVelocity: ...
+    @overload
+    def __mul__(self, other: Numeric) -> AngularVelocity: ...
+    @overload
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__mul__(other)
+
+    @overload
+    def __truediv__(self, other: Frequency) -> AngularDisplacement: ...
+    @overload
+    def __truediv__(self, other: AngularDisplacement) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: AngularVelocity) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> AngularVelocity: ...
+    @overload
+    def __truediv__(self, other: Numeric) -> AngularVelocity: ...
+    @overload
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__truediv__(other)
+
+    def to_frequency(self) -> Frequency:
+        """View this rate of angle as the cycles per second of the rotation.
+
+            shaft_speed = RevolutionPerMinute(3000).to_frequency()
+
+        One turn per second is one hertz.
+        """
+        return Frequency(self._magnitude, Frequency._canonical_unit)  # noqa: SLF001 -- Frequency's own canonical unit
+
+
+_register(ANGULAR_VELOCITY, AngularVelocity)
+
+__all__ = ["AngularVelocity"]

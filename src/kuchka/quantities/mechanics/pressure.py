@@ -25,21 +25,21 @@ from typing import overload
 
 from kuchka.dimensions import PRESSURE
 from kuchka.internal.typing import override
-from kuchka.quantities.area import Area
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.registry import _register
 from kuchka.quantities.base.registry import _rule
-from kuchka.quantities.kinematics import Force
+from kuchka.quantities.geometry.area import Area
+from kuchka.quantities.mechanics.force import Force
 
 if TYPE_CHECKING:
     from fractions import Fraction
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
-    from kuchka.quantities.energy import Energy
-    from kuchka.quantities.energy_density import EnergyDensity
+    from kuchka.quantities.geometry.volume import Volume
+    from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.proportion import Proportion
-    from kuchka.quantities.volume import Volume
 
 
 class Pressure(LinearQuantity):

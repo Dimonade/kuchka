@@ -55,17 +55,17 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.quantities.angular import AngularDisplacement
-    from kuchka.quantities.charge import Charge
-    from kuchka.quantities.data import Data
-    from kuchka.quantities.data import DataRate
-    from kuchka.quantities.electrical import Current
-    from kuchka.quantities.electrical import Power
-    from kuchka.quantities.energy import Energy
-    from kuchka.quantities.kinematics import Acceleration
-    from kuchka.quantities.kinematics import Velocity
+    from kuchka.quantities.current import Current
+    from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.information.data import Data
+    from kuchka.quantities.information.data_rate import DataRate
+    from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
+    from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.proportion import Proportion
-    from kuchka.quantities.rotational import AngularVelocity
 
 
 class Time(LinearQuantity):
@@ -252,7 +252,7 @@ class Frequency(LinearQuantity):
 
         One hertz is one turn per second, which is two pi radians per second.
         """
-        from kuchka.quantities.rotational import AngularVelocity  # noqa: PLC0415
+        from kuchka.quantities.kinematics.angular_velocity import AngularVelocity  # noqa: PLC0415
 
         return AngularVelocity(self._magnitude, AngularVelocity._result_unit)  # noqa: SLF001 -- AngularVelocity's own units
 

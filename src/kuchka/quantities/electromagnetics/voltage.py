@@ -1,0 +1,80 @@
+"""Voltage: an electric potential difference.
+
+Ohm's law and the power triangle give `Voltage` its relationships:
+
+- `Voltage / Current -> Resistance` and `Voltage / Resistance -> Current`,
+- `Voltage * Conductance -> Current`,
+- `Voltage * Current -> Power`, and `Voltage * Charge -> Energy`.
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import overload
+
+from kuchka.dimensions import VOLTAGE
+from kuchka.internal.typing import override
+from kuchka.quantities.base import LinearQuantity
+from kuchka.quantities.base.registry import _register
+
+if TYPE_CHECKING:
+    from fractions import Fraction
+
+    from kuchka.dimensions import Dimension
+    from kuchka.numeric import Numeric
+    from kuchka.quantities.current import Current
+    from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.resistance import Resistance
+    from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.proportion import Proportion
+
+
+class Voltage(LinearQuantity):
+    """An electric potential difference."""
+
+    dimension: ClassVar[Dimension] = VOLTAGE
+    __slots__ = ()
+
+    @overload
+    def __mul__(self, other: Current) -> Power: ...
+    @overload
+    def __mul__(self, other: Conductance) -> Current: ...
+    @overload
+    def __mul__(self, other: Charge) -> Energy: ...
+    @overload
+    def __mul__(self, other: Proportion) -> Voltage: ...
+    @overload
+    def __mul__(self, other: Numeric) -> Voltage: ...
+    @overload
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__mul__(other)
+
+    @overload
+    def __truediv__(self, other: Current) -> Resistance: ...
+    @overload
+    def __truediv__(self, other: Resistance) -> Current: ...
+    @overload
+    def __truediv__(self, other: Voltage) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> Voltage: ...
+    @overload
+    def __truediv__(self, other: Numeric) -> Voltage: ...
+    @overload
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
+
+    @override
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__truediv__(other)
+
+
+_register(VOLTAGE, Voltage)
+
+__all__ = ["Voltage"]
