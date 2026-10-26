@@ -22,8 +22,7 @@ Every other quantity lives in the themed package of the relation that defines it
 
 A quantity that fits two packages lives where its defining relation lives, and the other package imports it.
 `Energy` is `Force * Length`, so it is in `mechanics`, and the electrical units reuse it for the watt-hour.
-A package imports only from the top level and from packages earlier in this order: `temporal`, `geometry`, `information`, and `radiation` depend on the top level alone, then come `kinematics`, `mechanics`, and `electromagnetics`.
-A test fails when an import runs the other way.
+A package imports only from the top level and from the packages before it, in the order `RANK` fixes in `tests/units/test_package_layering.py`, and the test fails when an import runs the other way.
 
 A package exists as soon as one quantity has its home in it.
 A quantity with no package yet, such as a luminous flux, starts the package it belongs to (`photometry`), with its own `__init__.py` listing its leaves.

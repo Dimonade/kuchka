@@ -16,7 +16,7 @@ class Absement(LinearQuantity):
     dimension: ClassVar[Dimension] = ABSEMENT
     __slots__ = ()
 
-    # ... @overloads for Absement / Time -> Length and Absement / Length -> Time ...
+    # ... the `*` and `/` overloads, generated ...
 
 
 _register(ABSEMENT, Absement)
@@ -71,7 +71,6 @@ A type shares units with another type of its dimension only where a table says s
 A type lives in the package of the relation that defines it, the same placement as its units ([where the module goes](adding_a_unit.md#where-the-module-goes)), with one module per type.
 Types share a module only when they construct one another when the code runs, as the time types do, and as `Pressure` and `Stress` do through `to_stress()`.
 A module imports, when it is imported, only from the top level and from the packages before its own, and a test fails when one does not.
-An overload may name a type of any package, because a type checker reads it and nothing runs it.
 
 A new leaf module is exported the way its neighbours are, following the comment above `__all__` in `kuchka/units/__init__.py`.
 Then run `just generate-api`, which promotes the constructors and the type to the top level.
@@ -79,7 +78,8 @@ Then run `just generate-api`, which promotes the constructors and the type to th
 ## Checklist
 
 - [ ] the dimension ([Adding a dimension](adding_a_dimension.md)),
-- [ ] the class, with `__slots__`, a docstring, and `@overload`s,
+- [ ] the class, with `__slots__` and a docstring,
+- [ ] `just generate-overloads`, which writes the `*` and `/` overloads of every type the new one combines with,
 - [ ] `_register(...)`, stating a relation when another linear kind exists,
 - [ ] a unit module with a canonical unit and a table, and its `_UNITS_OF` entry,
 - [ ] the three export lines and `just generate-api`,
