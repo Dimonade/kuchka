@@ -14,6 +14,7 @@ alias ck := check
 # Check the repository against the current code standards.
 check:
     uv run python tools/generate_api.py --check
+    uv run python tools/generate_overloads.py --check
     uv run ruff check
     uv run ruff format --check
     uv run mypy --strict --python-version 3.11 src/kuchka
@@ -41,6 +42,11 @@ alias ga := generate-api
 generate-api:
     uv run python tools/generate_api.py
     uv run ruff format src/kuchka/_api.py
+
+alias go := generate-overloads
+# Regenerate the `*` and `/` overloads of the linear quantity types, after adding or changing a type.
+generate-overloads:
+    uv run python tools/generate_overloads.py
 
 alias dfp := develop-fetch-pull
 # Switch to develop, fetch, and pull changes.
