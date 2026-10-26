@@ -1,9 +1,4 @@
-"""Quantity types for radioactivity: Activity.
-
-    from kuchka import Activity
-
-`Activity` is a role of `Frequency`: the same dimension, counting decays per second.
-"""
+"""Quantity types for radioactivity."""
 
 from __future__ import annotations
 

@@ -1,12 +1,9 @@
-"""Unit constructors for radioactive Activity.
+"""Unit constructors for radioactive activity.
 
-    from kuchka import Becquerel, Curie, Megabecquerel
+from kuchka import Becquerel, Curie, Megabecquerel
 
-    source = Megabecquerel(3.7)
-    calibration = Curie(1)
-
-`ACTIVITY_UNITS` maps a symbol to its constructor, for boundary code that reads a unit
-as a string from outside the application.
+source = Megabecquerel(3.7)
+calibration = Curie(1)
 """
 
 from __future__ import annotations

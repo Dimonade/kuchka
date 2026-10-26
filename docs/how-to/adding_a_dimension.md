@@ -36,14 +36,14 @@ Once `Absement` is registered as the first linear kind of `ABSEMENT`, it is the 
 ## What arithmetic needs
 
 - The result registry is built from registrations, so `Length * Time` resolves to `Absement` and `Absement / Time` to `Length` once the type exists.
-- Static typing needs `@overload`s on the operand classes, as `Length.__mul__` declares `Area` for `Length`. A contract test compares the declared overloads with the runtime results.
+- Static typing needs `@overload`s on the operand classes, as `Length.__mul__` declares `Area` for `Length`. `just generate-overloads` writes them from the registry, `just check` fails when they are out of date, and a contract test compares them with the runtime results.
 - A dimension that two linear kinds both claim must say how they relate, which `docs/concepts/dimensional_algebra.md` describes.
 
 ## Checklist
 
 - [ ] the constant in `dimensions.py` and in its `__all__`,
 - [ ] a quantity type registered for it ([Adding a quantity](adding_a_quantity.md)),
-- [ ] `@overload`s on the operand classes for the products and quotients it produces,
+- [ ] `just generate-overloads`, for the products and quotients it produces,
 - [ ] [tests](adding_tests.md) for the new arithmetic.
 
 ## Adding an axis

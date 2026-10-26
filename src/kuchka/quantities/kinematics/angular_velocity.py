@@ -5,15 +5,6 @@ Counting the angle axis tells it apart from `Frequency`: one hertz is a cycle pe
 second, not an angular velocity.
 Turn is the canonical angle, so the canonical unit is the turn per second, and a radian
 enters only as the exact factor `1 / (2 pi)`.
-
-- `AngularVelocity * Time -> AngularDisplacement` and its inverses,
-  `AngularDisplacement / Time -> AngularVelocity` and
-  `AngularDisplacement / AngularVelocity -> Time`;
-- `Torque * AngularVelocity -> Power` and `Power / Torque -> AngularVelocity`;
-- `AngularVelocity / Frequency -> AngularDisplacement`.
-
-`Frequency.to_angular_velocity()` and `AngularVelocity.to_frequency()` move between a
-rate of cycles and a rate of angle.
 """
 
 from __future__ import annotations
@@ -46,27 +37,31 @@ class AngularVelocity(LinearQuantity):
     dimension: ClassVar[Dimension] = ANGULAR_VELOCITY
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: Proportion) -> AngularVelocity: ...
     @overload
     def __mul__(self, other: Time) -> AngularDisplacement: ...
     @overload
     def __mul__(self, other: Torque) -> Power: ...
     @overload
-    def __mul__(self, other: Proportion) -> AngularVelocity: ...
-    @overload
     def __mul__(self, other: Numeric) -> AngularVelocity: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: Frequency) -> AngularDisplacement: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: AngularDisplacement) -> Frequency: ...
     @overload
     def __truediv__(self, other: AngularVelocity) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Frequency) -> AngularDisplacement: ...
     @overload
     def __truediv__(self, other: Proportion) -> AngularVelocity: ...
     @overload
@@ -75,6 +70,8 @@ class AngularVelocity(LinearQuantity):
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

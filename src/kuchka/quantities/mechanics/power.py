@@ -1,14 +1,4 @@
-"""Power: energy per time.
-
-`Power * Time -> Energy` and its inverses, `Energy / Time -> Power` and
-`Energy / Power -> Time`, hold for every kind of power.
-`Power` also carries the halves of the power triangle (`Voltage * Current -> Power` and
-`Power / Voltage -> Current`), of the mechanical relationships
-(`Force * Velocity -> Power` and `Torque * AngularVelocity -> Power`), and of their
-inverses.
-
-`ApparentPower` and `ReactivePower` are specialisations of `Power` (see those).
-"""
+"""Power: energy per time."""
 
 from __future__ import annotations
 
@@ -44,27 +34,27 @@ class Power(LinearQuantity):
     dimension: ClassVar[Dimension] = POWER
     __slots__ = ()
 
-    @overload
-    def __mul__(self, other: Time) -> Energy: ...
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Proportion) -> Power: ...
+    @overload
+    def __mul__(self, other: Time) -> Energy: ...
     @overload
     def __mul__(self, other: Numeric) -> Power: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: Voltage) -> Current: ...
-    @overload
-    def __truediv__(self, other: Current) -> Voltage: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: AngularVelocity) -> Torque: ...
     @overload
-    def __truediv__(self, other: Torque) -> AngularVelocity: ...
+    def __truediv__(self, other: Current) -> Voltage: ...
     @overload
     def __truediv__(self, other: Energy) -> Frequency: ...
     @overload
@@ -72,17 +62,23 @@ class Power(LinearQuantity):
     @overload
     def __truediv__(self, other: Frequency) -> Energy: ...
     @overload
-    def __truediv__(self, other: Velocity) -> Force: ...
-    @overload
     def __truediv__(self, other: Power) -> Proportion: ...
     @overload
     def __truediv__(self, other: Proportion) -> Power: ...
+    @overload
+    def __truediv__(self, other: Torque) -> AngularVelocity: ...
+    @overload
+    def __truediv__(self, other: Velocity) -> Force: ...
+    @overload
+    def __truediv__(self, other: Voltage) -> Current: ...
     @overload
     def __truediv__(self, other: Numeric) -> Power: ...
     @overload
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

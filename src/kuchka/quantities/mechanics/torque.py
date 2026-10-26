@@ -4,11 +4,6 @@
 Counting the angle axis tells it apart from `Energy`: a newton-metre of torque is not a
 joule.
 Turn is the canonical angle, so the canonical unit is the joule per turn.
-
-- `Torque * AngularDisplacement -> Energy` and its inverses (see `AngularDisplacement`);
-- `Torque * AngularVelocity -> Power` and `Power / AngularVelocity -> Torque`.
-
-`Torque.from_force(force, lever_arm)` builds a torque from a force at a distance.
 """
 
 from __future__ import annotations
@@ -46,6 +41,7 @@ class Torque(LinearQuantity):
     dimension: ClassVar[Dimension] = TORQUE
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: AngularDisplacement) -> Energy: ...
     @overload
@@ -57,20 +53,25 @@ class Torque(LinearQuantity):
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: Torque) -> Proportion: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Proportion) -> Torque: ...
+    @overload
+    def __truediv__(self, other: Torque) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Torque: ...
     @overload
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

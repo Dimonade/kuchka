@@ -1,9 +1,4 @@
-"""Resistance: the opposition a circuit element presents to current flow.
-
-`Resistance * Current -> Voltage`, and `Resistance * Conductance` is a plain number.
-`Conductance` is `Resistance`'s reciprocal: `1 / Resistance -> Conductance` and
-`1 / Conductance -> Resistance`.
-"""
+"""Resistance: the opposition a circuit element presents to current flow."""
 
 from __future__ import annotations
 
@@ -33,10 +28,11 @@ class Resistance(LinearQuantity):
     dimension: ClassVar[Dimension] = RESISTANCE
     __slots__ = ()
 
-    @overload
-    def __mul__(self, other: Current) -> Voltage: ...
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Conductance) -> Fraction: ...
+    @overload
+    def __mul__(self, other: Current) -> Voltage: ...
     @overload
     def __mul__(self, other: Proportion) -> Resistance: ...
     @overload
@@ -44,16 +40,21 @@ class Resistance(LinearQuantity):
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    # BEGIN GENERATED __rtruediv__
     @overload
     def __rtruediv__(self, other: Numeric) -> Conductance: ...
     @overload
     def __rtruediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __rtruediv__(
@@ -66,16 +67,19 @@ class Resistance(LinearQuantity):
         # for the same pattern with Frequency).
         return super().__rtruediv__(other)
 
-    @overload
-    def __truediv__(self, other: Resistance) -> Proportion: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Proportion) -> Resistance: ...
+    @overload
+    def __truediv__(self, other: Resistance) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Resistance: ...
     @overload
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

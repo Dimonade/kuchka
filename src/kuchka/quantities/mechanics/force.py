@@ -1,12 +1,4 @@
-"""Force: a push or a pull, the interaction that changes a mass's motion.
-
-- `Mass * Acceleration -> Force`, Newton's second law, and its two inverses,
-  `Force / Mass -> Acceleration` and `Force / Acceleration -> Mass`.
-- `Force / Area -> Pressure` and its two inverses, `Pressure * Area -> Force` and
-  `Force / Pressure -> Area`; the other overload halves live on `Pressure` and `Area`.
-- `Force * Length -> Energy`, `Force * Velocity -> Power`, and
-  `Power / Velocity -> Force`.
-"""
+"""Force: a push or a pull, the interaction that changes a mass's motion."""
 
 from __future__ import annotations
 
@@ -42,33 +34,37 @@ class Force(LinearQuantity):
     dimension: ClassVar[Dimension] = FORCE
     __slots__ = ()
 
-    @overload
-    def __mul__(self, other: Velocity) -> Power: ...
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Length) -> Energy: ...
     @overload
     def __mul__(self, other: Proportion) -> Force: ...
     @overload
+    def __mul__(self, other: Velocity) -> Power: ...
+    @overload
     def __mul__(self, other: Numeric) -> Force: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: Mass) -> Acceleration: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Acceleration) -> Mass: ...
     @overload
     def __truediv__(self, other: Area) -> Pressure: ...
     @overload
-    def __truediv__(self, other: Pressure) -> Area: ...
-    @overload
     def __truediv__(self, other: EnergyDensity) -> Area: ...
     @overload
     def __truediv__(self, other: Force) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Mass) -> Acceleration: ...
+    @overload
+    def __truediv__(self, other: Pressure) -> Area: ...
     @overload
     def __truediv__(self, other: Proportion) -> Force: ...
     @overload
@@ -77,6 +73,8 @@ class Force(LinearQuantity):
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

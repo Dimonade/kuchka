@@ -1,20 +1,12 @@
-"""Unit constructors for the quantities of force and the work it does.
+"""Unit constructors for force and the work it does.
 
-    from kuchka import Bar, Joule, Newton, NewtonMetre, Watt
+from kuchka import Bar, Joule, Newton, NewtonMetre, Watt
 
-    push = Newton(10)
-    load = Bar(6)
-    twist = NewtonMetre(20)
-    work = Joule(500)
-    rate_of_work = Watt(750)
-
-The package holds `Force`, `Torque`, `Pressure`, `Stress`, `Density`, `Energy`, `Power`,
-and `EnergyDensity`.
-Each has a table (`FORCE_UNITS`, `TORQUE_UNITS`, ...) that maps a symbol to its
-constructor, for boundary code that reads a unit as a string from outside the
-application.
-Energy and power are defined here, from force and motion, and the thermal and
-electrical quantities reuse them.
+push = Newton(10)
+load = Bar(6)
+twist = NewtonMetre(20)
+work = Joule(500)
+rate_of_work = Watt(750)
 """
 
 from __future__ import annotations

@@ -1,27 +1,16 @@
 """Engineer-facing unit constructors, grouped by the physical dimension they measure.
 
-    from kuchka import Volt, Milliampere
+from kuchka import Volt, Milliampere
 
-    voltage = Volt(4.2)
-    current = Milliampere(150)
-    power = voltage * current
+voltage = Volt(4.2)
+current = Milliampere(150)
+power = voltage * current
 
 The base dimensions and the axes that are not dimensions of their own (angle,
 proportion, logarithmic ratio) each have a module at this level, and `temporal` is a
 package because the time family shares its dimensions.
-Related derived dimensions live in themed packages:
-
-- `geometry` -- measures built from length alone (area, volume).
-- `kinematics` -- motion (velocity, acceleration, angular velocity).
-- `mechanics` -- force and the work it does (force, torque, pressure, stress, density,
-  energy, power, energy density).
-- `electromagnetics` -- charge, voltage, resistance, conductance, and AC power.
-- `information` -- data and data rate.
-- `radiation` -- radioactive activity.
-
-A quantity lives in the package of the relation that defines it, and a package imports
-only from the top level and from the packages before it in the order above.
-`archaic` holds historical units that applications import explicitly.
+Related derived dimensions live in themed packages, and `archaic` holds historical
+units that applications import explicitly.
 
 Each quantity's canonical unit (the one arithmetic results come back in, e.g.
 ``Voltage * Current`` yields a result expressed in ``Watt``) is assigned onto the

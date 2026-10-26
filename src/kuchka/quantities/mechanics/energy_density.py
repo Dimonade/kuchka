@@ -4,13 +4,7 @@ Shares its dimension with `Pressure` (both are M L⁻¹ T⁻²), and is a differ
 concept: a pressure is a force on an area, and an energy density is how much energy a
 volume holds.
 Neither is the general kind of the dimension, so `EnergyDensity` and `Pressure` are
-contested, and the operand kinds decide the result:
-
-- `Energy / Volume -> EnergyDensity`, declared here, and its inverses,
-  `EnergyDensity * Volume -> Energy` and `Energy / EnergyDensity -> Volume`, whose
-  other overload halves live on `Volume` and `Energy` themselves;
-- `Force / Area -> Pressure`, declared with `Pressure`.
-
+contested, and the operand kinds decide the result.
 Any other operation that produces this dimension raises `AmbiguousKindError`, and a
 `Pressure` or an `EnergyDensity` is then constructed explicitly.
 """
@@ -46,21 +40,25 @@ class EnergyDensity(LinearQuantity):
     dimension: ClassVar[Dimension] = ENERGY_DENSITY
     __slots__ = ()
 
-    @overload
-    def __mul__(self, other: Volume) -> Energy: ...
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Area) -> Force: ...
     @overload
     def __mul__(self, other: Proportion) -> EnergyDensity: ...
     @overload
+    def __mul__(self, other: Volume) -> Energy: ...
+    @overload
     def __mul__(self, other: Numeric) -> EnergyDensity: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: EnergyDensity) -> Proportion: ...
     @overload
@@ -73,6 +71,8 @@ class EnergyDensity(LinearQuantity):
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

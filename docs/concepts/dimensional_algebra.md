@@ -162,7 +162,7 @@ A conversion that has a domain raises `InvalidMeasurementError` outside it, and 
 ## Type-checker support
 
 The runtime engine can derive arbitrary dimensions, but static type checkers cannot infer a semantic mapping such as `Voltage * Current -> Power` from exponent arithmetic alone.
-`kuchka` therefore maintains explicit overloads for registered derived quantities.
+`kuchka` therefore declares explicit overloads for registered derived quantities, generated from the same registry the runtime uses.
 
 This keeps arithmetic visible to mypy and ty while retaining a general runtime model.
 

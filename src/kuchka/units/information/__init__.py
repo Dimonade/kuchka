@@ -1,15 +1,10 @@
-"""Unit constructors for Data and DataRate: bits, bytes, and their rates.
+"""Unit constructors for information and its rate.
 
-    from kuchka import Byte, GigabitPerSecond, Mebibyte
+from kuchka import Byte, GigabitPerSecond, Mebibyte
 
-    firmware = Mebibyte(64)
-    link = GigabitPerSecond(1)
-    record = Byte(96)
-
-`DATA_UNITS` and `DATA_RATE_UNITS` each map a symbol to its constructor, for boundary
-code that reads a unit as a string from outside the application.
-Information is an axis of its own, so a data rate is not interchangeable with a
-`Frequency`, a `SampleRate`, or a `BaudRate`.
+firmware = Mebibyte(64)
+link = GigabitPerSecond(1)
+record = Byte(96)
 """
 
 from __future__ import annotations

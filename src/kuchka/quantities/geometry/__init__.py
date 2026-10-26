@@ -1,10 +1,4 @@
-"""Quantity types built from length alone: Area and Volume.
-
-    from kuchka import Area, Volume
-
-`Area` and `Volume` are the length-derived dimensions that pressure, density, and the
-other themed packages build on.
-"""
+"""Quantity types built from length alone."""
 
 from __future__ import annotations
 

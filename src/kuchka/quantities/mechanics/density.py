@@ -1,9 +1,4 @@
-"""Density: mass per unit volume.
-
-Defined alongside its one relationship to `Mass` and `Volume` (`Mass / Volume ->
-Density`, and its two inverses, `Density * Volume -> Mass` and `Mass / Density ->
-Volume`), whose other overload halves live on `Mass` and `Volume` themselves.
-"""
+"""Density: mass per unit volume."""
 
 from __future__ import annotations
 
@@ -32,19 +27,23 @@ class Density(LinearQuantity):
     dimension: ClassVar[Dimension] = DENSITY
     __slots__ = ()
 
-    @overload
-    def __mul__(self, other: Volume) -> Mass: ...
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Proportion) -> Density: ...
+    @overload
+    def __mul__(self, other: Volume) -> Mass: ...
     @overload
     def __mul__(self, other: Numeric) -> Density: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Density) -> Proportion: ...
     @overload
@@ -55,6 +54,8 @@ class Density(LinearQuantity):
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

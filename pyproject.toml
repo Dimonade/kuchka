@@ -204,13 +204,18 @@ commands = [
 ]
 
 [tool.tox.env.lint]
-description = "check the code standards: generated API, ruff, mypy, and ty"
+description = "check the code standards: generated API and overloads, ruff, mypy, and ty"
 base_python = ["3.11"]
 dependency_groups = ["lint"]
 commands = [
   [
     "python",
     "tools/generate_api.py",
+    "--check",
+  ],
+  [
+    "python",
+    "tools/generate_overloads.py",
     "--check",
   ],
   [
