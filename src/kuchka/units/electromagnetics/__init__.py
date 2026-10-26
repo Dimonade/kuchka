@@ -1,20 +1,12 @@
-"""Unit constructors for charge, voltage, resistance, conductance, and AC power.
+"""Unit constructors for the electrical quantities other than current.
 
-    from kuchka import Coulomb, Ohm, Siemens, Volt, VoltAmpere
+from kuchka import Coulomb, Ohm, Siemens, Volt, VoltAmpere
 
-    stored = Coulomb(0.5)
-    supply = Volt(12)
-    load = Ohm(47)
-    admittance = Siemens(0.02)
-    rating = VoltAmpere(1500)
-
-The package holds `Charge`, `Voltage`, `Resistance`, `Conductance`, `ApparentPower`, and
-`ReactivePower`.
-Each has a table (`VOLTAGE_UNITS`, `RESISTANCE_UNITS`, ...) that maps a symbol to its
-constructor, for boundary code that reads a unit as a string from outside the
-application.
-Electric current is a base quantity and is defined at the top level of `kuchka.units`
-beside length and mass.
+stored = Coulomb(0.5)
+supply = Volt(12)
+load = Ohm(47)
+admittance = Siemens(0.02)
+rating = VoltAmpere(1500)
 """
 
 from __future__ import annotations
