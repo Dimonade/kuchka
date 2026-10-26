@@ -1,10 +1,4 @@
-"""Quantity types for information: Data and DataRate.
-
-    from kuchka import Data, DataRate
-
-Information is an axis of its own, so a data rate is not interchangeable with a
-`Frequency`, a `SampleRate`, or a `BaudRate`.
-"""
+"""Quantity types for information and its rate."""
 
 from __future__ import annotations
 

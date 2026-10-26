@@ -1,12 +1,4 @@
-"""Quantity types for charge, voltage, resistance, conductance, and AC power.
-
-    from kuchka import Charge, Conductance, Resistance, Voltage
-
-The package holds `Charge`, `Voltage`, `Resistance`, `Conductance`, `ApparentPower`, and
-`ReactivePower`.
-Electric current is a base quantity and is defined at the top level of
-`kuchka.quantities`, beside length and mass.
-"""
+"""Quantity types for the electrical and magnetic quantities other than current."""
 
 from __future__ import annotations
 

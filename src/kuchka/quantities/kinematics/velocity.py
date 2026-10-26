@@ -1,9 +1,4 @@
-"""Velocity: a rate of change of position.
-
-- `Length / Time -> Velocity`, and its inverse, `Velocity * Time -> Length`.
-- `Velocity / Time -> Acceleration`, and `Velocity / Acceleration -> Time`.
-- `Force * Velocity -> Power` and `Power / Force -> Velocity`.
-"""
+"""Velocity: a rate of change of position."""
 
 from __future__ import annotations
 
@@ -36,8 +31,7 @@ class Velocity(LinearQuantity):
     dimension: ClassVar[Dimension] = VELOCITY
     __slots__ = ()
 
-    @overload
-    def __mul__(self, other: Time) -> Length: ...
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Force) -> Power: ...
     @overload
@@ -45,32 +39,39 @@ class Velocity(LinearQuantity):
     @overload
     def __mul__(self, other: Proportion) -> Velocity: ...
     @overload
+    def __mul__(self, other: Time) -> Length: ...
+    @overload
     def __mul__(self, other: Numeric) -> Velocity: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: Frequency) -> Length: ...
-    @overload
-    def __truediv__(self, other: Time) -> Acceleration: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Acceleration) -> Time: ...
     @overload
+    def __truediv__(self, other: Frequency) -> Length: ...
+    @overload
     def __truediv__(self, other: Length) -> Frequency: ...
     @overload
-    def __truediv__(self, other: Velocity) -> Proportion: ...
-    @overload
     def __truediv__(self, other: Proportion) -> Velocity: ...
+    @overload
+    def __truediv__(self, other: Time) -> Acceleration: ...
+    @overload
+    def __truediv__(self, other: Velocity) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Velocity: ...
     @overload
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

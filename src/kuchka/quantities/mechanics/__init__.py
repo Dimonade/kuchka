@@ -1,12 +1,4 @@
-"""Quantity types for force and the work it does.
-
-    from kuchka import Energy, Force, Power, Pressure, Torque
-
-The package holds `Force`, `Torque`, `Pressure`, `Stress`, `Density`, `Energy`, `Power`,
-and `EnergyDensity`.
-`Energy` and `Power` are defined here, from force and motion, and the thermal and
-electrical quantities reuse them.
-"""
+"""Quantity types for force and the work it does."""
 
 from __future__ import annotations
 

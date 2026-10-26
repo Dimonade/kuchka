@@ -1,20 +1,7 @@
 """Pressure and Stress: force per unit area, and the force per area inside a material.
 
-Defined alongside two relationships:
-- `Force / Area -> Pressure`, and its two inverses, `Pressure * Area -> Force` and
-  `Force / Pressure -> Area`, whose other overload halves live on `Force` and
-  `Area` themselves.
-- `Pressure * Volume -> Energy`, the P-V work relationship, and its inverse
-  `Energy / Pressure -> Volume`, whose other overload halves live on `Volume` and
-  `Energy` themselves.
-
-`Pressure` shares its dimension with `EnergyDensity`, so the two are contested and
-`Force / Area` is declared to be a `Pressure` (see `EnergyDensity`).
-
 `Stress` is a role of `Pressure`: the same dimension, read as the force per area a
 material carries.
-It is reached with `Pressure.to_stress()`, gives back a `Pressure` with
-`Stress.to_pressure()`, and shares every unit of `Pressure`.
 """
 
 from __future__ import annotations
@@ -48,25 +35,29 @@ class Pressure(LinearQuantity):
     dimension: ClassVar[Dimension] = PRESSURE
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Area) -> Force: ...
     @overload
-    def __mul__(self, other: Volume) -> Energy: ...
-    @overload
     def __mul__(self, other: Proportion) -> Pressure: ...
+    @overload
+    def __mul__(self, other: Volume) -> Energy: ...
     @overload
     def __mul__(self, other: Numeric) -> Pressure: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: Pressure) -> Proportion: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: EnergyDensity) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Pressure) -> Proportion: ...
     @overload
     def __truediv__(self, other: Proportion) -> Pressure: ...
     @overload
@@ -75,6 +66,8 @@ class Pressure(LinearQuantity):
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -108,6 +101,7 @@ class Stress(LinearQuantity):
     dimension: ClassVar[Dimension] = PRESSURE
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Proportion) -> Stress: ...
     @overload
@@ -115,20 +109,25 @@ class Stress(LinearQuantity):
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: Stress) -> Proportion: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Proportion) -> Stress: ...
+    @overload
+    def __truediv__(self, other: Stress) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Stress: ...
     @overload
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

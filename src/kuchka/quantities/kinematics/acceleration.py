@@ -1,9 +1,4 @@
-"""Acceleration: a rate of change of velocity.
-
-- `Velocity / Time -> Acceleration`, and its inverse, `Acceleration * Time -> Velocity`.
-- `Mass * Acceleration -> Force`, Newton's second law, and its inverse,
-  `Force / Acceleration -> Mass`.
-"""
+"""Acceleration: a rate of change of velocity."""
 
 from __future__ import annotations
 
@@ -35,35 +30,41 @@ class Acceleration(LinearQuantity):
     dimension: ClassVar[Dimension] = ACCELERATION
     __slots__ = ()
 
-    @overload
-    def __mul__(self, other: Time) -> Velocity: ...
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Mass) -> Force: ...
     @overload
     def __mul__(self, other: Proportion) -> Acceleration: ...
     @overload
+    def __mul__(self, other: Time) -> Velocity: ...
+    @overload
     def __mul__(self, other: Numeric) -> Acceleration: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: Frequency) -> Velocity: ...
-    @overload
-    def __truediv__(self, other: Velocity) -> Frequency: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Acceleration) -> Proportion: ...
     @overload
+    def __truediv__(self, other: Frequency) -> Velocity: ...
+    @overload
     def __truediv__(self, other: Proportion) -> Acceleration: ...
+    @overload
+    def __truediv__(self, other: Velocity) -> Frequency: ...
     @overload
     def __truediv__(self, other: Numeric) -> Acceleration: ...
     @overload
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

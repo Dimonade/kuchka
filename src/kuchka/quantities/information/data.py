@@ -3,8 +3,6 @@
 `Data` is a count of bits.
 It has a dimension of its own (the information axis), so a bit count is never mistaken
 for a `Frequency`, a `SampleRate`, or a `BaudRate`.
-`Data / Time` is a `DataRate` and `DataRate * Time` is `Data`, the way `Current * Time`
-is a `Charge`.
 """
 
 from __future__ import annotations
@@ -35,6 +33,7 @@ class Data(LinearQuantity):
     dimension: ClassVar[Dimension] = DATA
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Frequency) -> DataRate: ...
     @overload
@@ -44,24 +43,29 @@ class Data(LinearQuantity):
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: Time) -> DataRate: ...
-    @overload
-    def __truediv__(self, other: DataRate) -> Time: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Data) -> Proportion: ...
     @overload
+    def __truediv__(self, other: DataRate) -> Time: ...
+    @overload
     def __truediv__(self, other: Proportion) -> Data: ...
+    @overload
+    def __truediv__(self, other: Time) -> DataRate: ...
     @overload
     def __truediv__(self, other: Numeric) -> Data: ...
     @overload
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

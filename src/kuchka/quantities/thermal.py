@@ -44,6 +44,7 @@ class TemperatureDelta(LinearQuantity):
     dimension: ClassVar[Dimension] = TEMPERATURE_DELTA
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Proportion) -> TemperatureDelta: ...
     @overload
@@ -51,20 +52,25 @@ class TemperatureDelta(LinearQuantity):
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: TemperatureDelta) -> Proportion: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Proportion) -> TemperatureDelta: ...
+    @overload
+    def __truediv__(self, other: TemperatureDelta) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> TemperatureDelta: ...
     @overload
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

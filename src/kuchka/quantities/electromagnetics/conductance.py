@@ -1,11 +1,4 @@
-"""Conductance: how readily a circuit element passes current.
-
-`Conductance` is the reciprocal of `Resistance`.
-
-Ohm's law works from either side of the reciprocal: `Voltage * Conductance -> Current`
-alongside `Voltage / Resistance -> Current`, and `Current / Voltage -> Conductance`
-alongside `Voltage / Current -> Resistance`.
-"""
+"""Conductance: how readily a circuit element passes current."""
 
 from __future__ import annotations
 
@@ -35,21 +28,25 @@ class Conductance(LinearQuantity):
     dimension: ClassVar[Dimension] = CONDUCTANCE
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
     @overload
-    def __mul__(self, other: Voltage) -> Current: ...
+    def __mul__(self, other: Proportion) -> Conductance: ...
     @overload
     def __mul__(self, other: Resistance) -> Fraction: ...
     @overload
-    def __mul__(self, other: Proportion) -> Conductance: ...
+    def __mul__(self, other: Voltage) -> Current: ...
     @overload
     def __mul__(self, other: Numeric) -> Conductance: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Conductance) -> Proportion: ...
     @overload
@@ -61,16 +58,21 @@ class Conductance(LinearQuantity):
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
+    # BEGIN GENERATED __rtruediv__
     @overload
     def __rtruediv__(self, other: Numeric) -> Resistance: ...
     @overload
     def __rtruediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __rtruediv__(

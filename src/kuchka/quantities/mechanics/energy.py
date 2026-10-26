@@ -1,15 +1,4 @@
-"""Energy: the capacity to do work, e.g. a laser pulse's delivered energy.
-
-Defined alongside two relationships:
-- `Power * Time -> Energy`, and its two inverses, `Energy / Time -> Power` and
-  `Energy / Power -> Time`.
-- `Pressure * Volume -> Energy`, the P-V work relationship, and its inverse
-  `Energy / Pressure -> Volume`, whose other overload halves live on `Pressure` and
-  `Volume` themselves.
-
-Also carries the other overload halves of `Energy / Volume -> EnergyDensity` and its
-inverse `Energy / EnergyDensity -> Volume` (see `EnergyDensity`).
-"""
+"""Energy: the capacity to do work, e.g. a laser pulse's delivered energy."""
 
 from __future__ import annotations
 
@@ -48,6 +37,7 @@ class Energy(LinearQuantity):
     dimension: ClassVar[Dimension] = ENERGY
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Frequency) -> Power: ...
     @overload
@@ -57,42 +47,47 @@ class Energy(LinearQuantity):
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: Time) -> Power: ...
-    @overload
-    def __truediv__(self, other: Power) -> Time: ...
-    @overload
-    def __truediv__(self, other: Pressure) -> Volume: ...
-    @overload
-    def __truediv__(self, other: Volume) -> EnergyDensity: ...
-    @overload
-    def __truediv__(self, other: EnergyDensity) -> Volume: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: AngularDisplacement) -> Torque: ...
     @overload
-    def __truediv__(self, other: Torque) -> AngularDisplacement: ...
-    @overload
     def __truediv__(self, other: Charge) -> Voltage: ...
     @overload
-    def __truediv__(self, other: Voltage) -> Charge: ...
-    @overload
     def __truediv__(self, other: Energy) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: EnergyDensity) -> Volume: ...
     @overload
     def __truediv__(self, other: Force) -> Length: ...
     @overload
     def __truediv__(self, other: Length) -> Force: ...
     @overload
+    def __truediv__(self, other: Power) -> Time: ...
+    @overload
+    def __truediv__(self, other: Pressure) -> Volume: ...
+    @overload
     def __truediv__(self, other: Proportion) -> Energy: ...
+    @overload
+    def __truediv__(self, other: Time) -> Power: ...
+    @overload
+    def __truediv__(self, other: Torque) -> AngularDisplacement: ...
+    @overload
+    def __truediv__(self, other: Voltage) -> Charge: ...
+    @overload
+    def __truediv__(self, other: Volume) -> EnergyDensity: ...
     @overload
     def __truediv__(self, other: Numeric) -> Energy: ...
     @overload
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

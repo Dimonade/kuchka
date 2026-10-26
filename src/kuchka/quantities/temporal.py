@@ -74,35 +74,39 @@ class Time(LinearQuantity):
     dimension: ClassVar[Dimension] = TIME
     __slots__ = ()
 
-    @overload
-    def __mul__(self, other: Frequency) -> Fraction: ...
-    @overload
-    def __mul__(self, other: Current) -> Charge: ...
-    @overload
-    def __mul__(self, other: DataRate) -> Data: ...
-    @overload
-    def __mul__(self, other: Power) -> Energy: ...
-    @overload
-    def __mul__(self, other: Velocity) -> Length: ...
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Acceleration) -> Velocity: ...
     @overload
     def __mul__(self, other: AngularVelocity) -> AngularDisplacement: ...
     @overload
+    def __mul__(self, other: Current) -> Charge: ...
+    @overload
+    def __mul__(self, other: DataRate) -> Data: ...
+    @overload
+    def __mul__(self, other: Frequency) -> Fraction: ...
+    @overload
+    def __mul__(self, other: Power) -> Energy: ...
+    @overload
     def __mul__(self, other: Proportion) -> Time: ...
+    @overload
+    def __mul__(self, other: Velocity) -> Length: ...
     @overload
     def __mul__(self, other: Numeric) -> Time: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: Time) -> Proportion: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Proportion) -> Time: ...
+    @overload
+    def __truediv__(self, other: Time) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Time: ...
     @overload
@@ -110,16 +114,21 @@ class Time(LinearQuantity):
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
+    # BEGIN GENERATED __rtruediv__
     @overload
     def __rtruediv__(self, other: Numeric) -> Frequency: ...
     @overload
     def __rtruediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __rtruediv__(
@@ -182,8 +191,7 @@ class Frequency(LinearQuantity):
     dimension: ClassVar[Dimension] = FREQUENCY
     __slots__ = ()
 
-    @overload
-    def __mul__(self, other: Time) -> Fraction: ...
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: AngularDisplacement) -> AngularVelocity: ...
     @overload
@@ -195,18 +203,23 @@ class Frequency(LinearQuantity):
     @overload
     def __mul__(self, other: Length) -> Velocity: ...
     @overload
-    def __mul__(self, other: Velocity) -> Acceleration: ...
-    @overload
     def __mul__(self, other: Proportion) -> Frequency: ...
+    @overload
+    def __mul__(self, other: Time) -> Fraction: ...
+    @overload
+    def __mul__(self, other: Velocity) -> Acceleration: ...
     @overload
     def __mul__(self, other: Numeric) -> Frequency: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Frequency) -> Proportion: ...
     @overload
@@ -218,16 +231,21 @@ class Frequency(LinearQuantity):
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
+    # BEGIN GENERATED __rtruediv__
     @overload
     def __rtruediv__(self, other: Numeric) -> Time: ...
     @overload
     def __rtruediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __rtruediv__(
@@ -297,23 +315,27 @@ class SamplingPeriod(LinearQuantity):
     dimension: ClassVar[Dimension] = TIME
     __slots__ = ()
 
-    @overload
-    def __mul__(self, other: SampleRate) -> Fraction: ...
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Proportion) -> SamplingPeriod: ...
+    @overload
+    def __mul__(self, other: SampleRate) -> Fraction: ...
     @overload
     def __mul__(self, other: Numeric) -> SamplingPeriod: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: SamplingPeriod) -> Proportion: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Proportion) -> SamplingPeriod: ...
+    @overload
+    def __truediv__(self, other: SamplingPeriod) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> SamplingPeriod: ...
     @overload
@@ -321,16 +343,21 @@ class SamplingPeriod(LinearQuantity):
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
+    # BEGIN GENERATED __rtruediv__
     @overload
     def __rtruediv__(self, other: Numeric) -> SampleRate: ...
     @overload
     def __rtruediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __rtruediv__(
@@ -374,23 +401,27 @@ class SampleRate(LinearQuantity):
     dimension: ClassVar[Dimension] = FREQUENCY
     __slots__ = ()
 
-    @overload
-    def __mul__(self, other: SamplingPeriod) -> Fraction: ...
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Proportion) -> SampleRate: ...
+    @overload
+    def __mul__(self, other: SamplingPeriod) -> Fraction: ...
     @overload
     def __mul__(self, other: Numeric) -> SampleRate: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: SampleRate) -> Proportion: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Proportion) -> SampleRate: ...
+    @overload
+    def __truediv__(self, other: SampleRate) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> SampleRate: ...
     @overload
@@ -398,16 +429,21 @@ class SampleRate(LinearQuantity):
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
+    # BEGIN GENERATED __rtruediv__
     @overload
     def __rtruediv__(self, other: Numeric) -> SamplingPeriod: ...
     @overload
     def __rtruediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __rtruediv__(
@@ -448,6 +484,7 @@ class BaudRate(LinearQuantity):
     dimension: ClassVar[Dimension] = FREQUENCY
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Proportion) -> BaudRate: ...
     @overload
@@ -455,10 +492,13 @@ class BaudRate(LinearQuantity):
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: BaudRate) -> Proportion: ...
     @overload
@@ -469,6 +509,8 @@ class BaudRate(LinearQuantity):
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

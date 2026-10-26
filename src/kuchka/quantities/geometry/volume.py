@@ -1,17 +1,4 @@
-"""Volume: a three-dimensional extent.
-
-Defined as:
-- `Volume / Length -> Area` and,
-- `Volume / Area -> Length`, are the two inverses of
-- `Length * Area -> Volume` (spelled out on `Length`), and,
--  `Area * Length -> Volume`.
-
-Also carries the other overload halves of two relationships defined on their own types:
-- `Volume * Density -> Mass` (see `Density`) and
-- `Volume * Pressure -> Energy` (see `Pressure`), the P-V work relationship, and
-- `Volume * EnergyDensity -> Energy` (see `EnergyDensity`), alongside its inverse
-  `Energy / Volume -> EnergyDensity` (see `Energy`).
-"""
+"""Volume: a three-dimensional extent."""
 
 from __future__ import annotations
 
@@ -45,14 +32,15 @@ class Volume(LinearQuantity):
     dimension: ClassVar[Dimension] = VOLUME
     __slots__ = ()
 
-    @overload
-    def __truediv__(self, other: Length) -> Area: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Area) -> Length: ...
     @overload
-    def __truediv__(self, other: Volume) -> Proportion: ...
+    def __truediv__(self, other: Length) -> Area: ...
     @overload
     def __truediv__(self, other: Proportion) -> Volume: ...
+    @overload
+    def __truediv__(self, other: Volume) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> Volume: ...
     @overload
@@ -60,22 +48,27 @@ class Volume(LinearQuantity):
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Density) -> Mass: ...
     @overload
-    def __mul__(self, other: Pressure) -> Energy: ...
-    @overload
     def __mul__(self, other: EnergyDensity) -> Energy: ...
+    @overload
+    def __mul__(self, other: Pressure) -> Energy: ...
     @overload
     def __mul__(self, other: Proportion) -> Volume: ...
     @overload
     def __mul__(self, other: Numeric) -> Volume: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

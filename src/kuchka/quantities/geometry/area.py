@@ -1,15 +1,4 @@
-"""Area: a two-dimensional extent.
-
-Defined alongside its relationships to `Length` and `Volume`:
-- `Length * Length -> Area`, its inverse,
-- `Area / Length -> Length`, and
-- `Area * Length -> Volume`, and its inverse,
-- `Volume / Area -> Length`.
-
-The other halves defined and derived on `Length` and `Volume` accordingly.
-
-Also carries the other overload half of `Area * Pressure -> Force` (see `Pressure`).
-"""
+"""Area: a two-dimensional extent."""
 
 from __future__ import annotations
 
@@ -41,12 +30,13 @@ class Area(LinearQuantity):
     dimension: ClassVar[Dimension] = AREA
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: EnergyDensity) -> Force: ...
     @overload
     def __mul__(self, other: Length) -> Volume: ...
     @overload
     def __mul__(self, other: Pressure) -> Force: ...
-    @overload
-    def __mul__(self, other: EnergyDensity) -> Force: ...
     @overload
     def __mul__(self, other: Proportion) -> Area: ...
     @overload
@@ -54,14 +44,17 @@ class Area(LinearQuantity):
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: Length) -> Length: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Area) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Length) -> Length: ...
     @overload
     def __truediv__(self, other: Proportion) -> Area: ...
     @overload
@@ -70,6 +63,8 @@ class Area(LinearQuantity):
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

@@ -9,19 +9,6 @@ and `AngularDisplacement.to_angle()` move between them.
 
 Turn is the canonical unit.
 See `kuchka.units.angular` for how Radian relates to it.
-
-The relationships that involve an angular displacement:
-
-- `AngularDisplacement / Time -> AngularVelocity` and its inverses,
-  `AngularVelocity * Time -> AngularDisplacement` and
-  `AngularDisplacement / AngularVelocity -> Time`;
-- `Torque * AngularDisplacement -> Energy` and its inverses,
-  `Energy / AngularDisplacement -> Torque` and `Energy / Torque -> AngularDisplacement`;
-- `AngularDisplacement * Frequency -> AngularVelocity`, the angle swept per cycle times
-  the cycles per second.
-
-The other overload halves live on `Time`, `Energy`, `Frequency`, `AngularVelocity`,
-and `Torque`.
 """
 
 from __future__ import annotations
@@ -122,35 +109,41 @@ class AngularDisplacement(LinearQuantity):
     dimension: ClassVar[Dimension] = ANGLE
     __slots__ = ()
 
-    @overload
-    def __mul__(self, other: Torque) -> Energy: ...
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Frequency) -> AngularVelocity: ...
     @overload
     def __mul__(self, other: Proportion) -> AngularDisplacement: ...
     @overload
+    def __mul__(self, other: Torque) -> Energy: ...
+    @overload
     def __mul__(self, other: Numeric) -> AngularDisplacement: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: Time) -> AngularVelocity: ...
-    @overload
-    def __truediv__(self, other: AngularVelocity) -> Time: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: AngularDisplacement) -> Proportion: ...
     @overload
+    def __truediv__(self, other: AngularVelocity) -> Time: ...
+    @overload
     def __truediv__(self, other: Proportion) -> AngularDisplacement: ...
+    @overload
+    def __truediv__(self, other: Time) -> AngularVelocity: ...
     @overload
     def __truediv__(self, other: Numeric) -> AngularDisplacement: ...
     @overload
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

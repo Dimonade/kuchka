@@ -1,9 +1,4 @@
-"""Charge: an accumulated flow of electric current over time.
-
-Defined alongside its one relationship to `Current` and `Time`
-(`Current * Time -> Charge`, and its two inverses, `Charge / Time -> Current` and
-`Charge / Current -> Time`).
-"""
+"""Charge: an accumulated flow of electric current over time."""
 
 from __future__ import annotations
 
@@ -35,35 +30,41 @@ class Charge(LinearQuantity):
     dimension: ClassVar[Dimension] = CHARGE
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Frequency) -> Current: ...
     @overload
-    def __mul__(self, other: Voltage) -> Energy: ...
-    @overload
     def __mul__(self, other: Proportion) -> Charge: ...
+    @overload
+    def __mul__(self, other: Voltage) -> Energy: ...
     @overload
     def __mul__(self, other: Numeric) -> Charge: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: Time) -> Current: ...
-    @overload
-    def __truediv__(self, other: Current) -> Time: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Charge) -> Proportion: ...
     @overload
+    def __truediv__(self, other: Current) -> Time: ...
+    @overload
     def __truediv__(self, other: Proportion) -> Charge: ...
+    @overload
+    def __truediv__(self, other: Time) -> Current: ...
     @overload
     def __truediv__(self, other: Numeric) -> Charge: ...
     @overload
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

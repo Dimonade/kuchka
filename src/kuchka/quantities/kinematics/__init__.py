@@ -1,9 +1,4 @@
-"""Quantity types for motion: Velocity, Acceleration, and AngularVelocity.
-
-    from kuchka import Acceleration, AngularVelocity, Velocity
-
-These describe motion, whatever causes it.
-"""
+"""Quantity types for motion, whatever causes it."""
 
 from __future__ import annotations
 

@@ -1,11 +1,4 @@
-"""Voltage: an electric potential difference.
-
-Ohm's law and the power triangle give `Voltage` its relationships:
-
-- `Voltage / Current -> Resistance` and `Voltage / Resistance -> Current`,
-- `Voltage * Conductance -> Current`,
-- `Voltage * Current -> Power`, and `Voltage * Charge -> Energy`.
-"""
+"""Voltage: an electric potential difference."""
 
 from __future__ import annotations
 
@@ -38,12 +31,13 @@ class Voltage(LinearQuantity):
     dimension: ClassVar[Dimension] = VOLTAGE
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
     @overload
-    def __mul__(self, other: Current) -> Power: ...
+    def __mul__(self, other: Charge) -> Energy: ...
     @overload
     def __mul__(self, other: Conductance) -> Current: ...
     @overload
-    def __mul__(self, other: Charge) -> Energy: ...
+    def __mul__(self, other: Current) -> Power: ...
     @overload
     def __mul__(self, other: Proportion) -> Voltage: ...
     @overload
@@ -51,24 +45,29 @@ class Voltage(LinearQuantity):
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Current) -> Resistance: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> Voltage: ...
     @overload
     def __truediv__(self, other: Resistance) -> Current: ...
     @overload
     def __truediv__(self, other: Voltage) -> Proportion: ...
-    @overload
-    def __truediv__(self, other: Proportion) -> Voltage: ...
     @overload
     def __truediv__(self, other: Numeric) -> Voltage: ...
     @overload
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

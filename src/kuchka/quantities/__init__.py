@@ -12,19 +12,15 @@ their multiplication and division overloads.
 The base dimensions and the axes that are not dimensions of their own each have a
 module at this level, and `temporal` is one module because its types construct one
 another.
-Related derived types live in themed packages that mirror those of `kuchka.units`:
-`geometry`, `kinematics`, `mechanics`, `electromagnetics`, `information`, and
-`radiation`.
-A package imports only from the top level and from the packages before it in that
-order, at import time; an overload may name any type, because it is read by type
-checkers and never run.
+Related derived types live in themed packages that mirror those of `kuchka.units`.
 
 Runtime arithmetic (`+`, `-`, `*`, `/`) is fully general and lives on `LinearQuantity`:
 it derives any product or quotient from `Dimension` exponent-vector algebra.
 Type checkers cannot infer "Voltage times Current is Power" from that algebra, so each
-type spells out its relationships as explicit `@overload` declarations, and every
-overload list ends with a fallback matching the signature declared on `LinearQuantity`,
-which keeps the overrides compatible with the base class under strict checking.
+type declares its relationships as explicit `@overload`s, which
+`tools/generate_overloads.py` writes from the registry, and every overload list ends
+with a fallback matching the signature declared on `LinearQuantity`, which keeps the
+overrides compatible with the base class under strict checking.
 """
 
 from __future__ import annotations
