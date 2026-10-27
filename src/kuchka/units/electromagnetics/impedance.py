@@ -34,6 +34,7 @@ Impedance and resistance share the ohm, but they are not interchangeable concept
 The example above is deliberately restricted to a purely resistive load. General AC
 impedance can depend on frequency and include reactance; these scalar constructors
 do not derive that complex impedance from resistance, inductance, and capacitance.
+
 """
 
 from __future__ import annotations

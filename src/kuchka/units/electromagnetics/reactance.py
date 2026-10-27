@@ -77,6 +77,7 @@ https://openstax.org/books/college-physics-2e/pages/23-11-reactance-inductive-an
 
 EMF Portal, Microwave oven: operating frequency and magnetron use
 https://www.emf-portal.org/en/emf-source/603
+
 """
 
 from __future__ import annotations

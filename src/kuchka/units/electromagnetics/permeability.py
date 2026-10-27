@@ -9,7 +9,7 @@ Relative permeability is the dimensionless ratio μᵣ = μ / μ₀.
 Permeability has the same dimensions as inductance per unit length, but they are not
 the same physical quantity.
 For example, the inductance of a sufficiently long solenoid is approximately
-L = μN²A / ℓ: the medium's permeability contributes to the result, while turn count,
+L = μN²A / l: the medium's permeability contributes to the result, while turn count,
 cross-sectional area, and coil length determine how that property becomes an
 inductance.
 
@@ -43,10 +43,9 @@ nonlinear near saturation.
 
 Notes
 -----
-
 The 2022 CODATA recommended value of vacuum permeability is
-μ₀ = 1.256 637 061 27(20) × 10⁻⁶ H/m.
-The older approximation μ₀ ≈ 4π × 10⁻⁷ H/m remains useful for many engineering
+μ₀ = 1.256 637 061 27(20) x 10⁻⁶ H/m.
+The older approximation μ₀ ≈ 4π x 10⁻⁷ H/m remains useful for many engineering
 calculations, but it is no longer an exact consequence of the SI definition.
 
 Material permeability is often quoted as a relative value μᵣ, rather than as an
@@ -65,6 +64,7 @@ References
 ----------
 OpenStax, *College Physics 2e*, inductance of a solenoid:
 https://openstax.org/books/college-physics-2e/pages/23-9-inductance
+
 """
 
 from __future__ import annotations
@@ -142,6 +142,7 @@ def NanohenryPerMetre(value: Numeric) -> Permeability:
     >>> vacuum = NanohenryPerMetre(1256.63706127)
     >>> f"{vacuum.to(NANOHENRY_PER_METRE):.3f}"
     '1256.637 nH/m'
+
     """
     return Permeability(
         to_exact(value) * NANOHENRY_PER_METRE.scale, NANOHENRY_PER_METRE
@@ -169,9 +170,10 @@ def MicrohenryPerMetre(value: Numeric) -> Permeability:
 
     >>> vacuum = MicrohenryPerMetre(1.25663706127)
     >>> magnetic_field_strength_A_per_m = 800
-    >>> flux_density_mT = float(vacuum.magnitude) * magnetic_field_strength_A_per_m * 1e3
-    >>> f"{flux_density_mT:.3f} mT"
+    >>> flux_density = vacuum * magnetic_field_strength_A_per_m * 1e3
+    >>> f"{flux_density:.3f}"
     '1.005 mT'
+
     """
     return Permeability(
         to_exact(value) * MICROHENRY_PER_METRE.scale, MICROHENRY_PER_METRE
@@ -206,6 +208,7 @@ def MillihenryPerMetre(value: Numeric) -> Permeability:
     >>> core = MillihenryPerMetre(800 * 1.25663706127e-3)
     >>> f"{core.to(MILLIHENRY_PER_METRE):.3f}"
     '1.005 mH/m'
+
     """
     return Permeability(
         to_exact(value) * MILLIHENRY_PER_METRE.scale, MILLIHENRY_PER_METRE
@@ -243,6 +246,7 @@ def HenryPerMetre(value: Numeric) -> Permeability:
     >>> flux_density_T = float(confinement_medium.magnitude) * field_strength_A_per_m
     >>> f"{flux_density_T:.1f} T"
     '0.5 T'
+
     """
     return Permeability(to_exact(value) * HENRY_PER_METRE.scale, HENRY_PER_METRE)
 

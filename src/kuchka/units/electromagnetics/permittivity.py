@@ -26,7 +26,7 @@ gives about 19.92 pF/m:
 '19.92 pF/m'
 
 For a coaxial geometry with inner-conductor radius 0.292 mm and shield radius 1.855 mm,
-the ideal capacitance per length is C′ = 2πε / ln(b/a).
+the ideal capacitance per length is C` = 2πε / ln(b/a).
 The geometry turns the material permittivity into a different quantity, capacitance per
 length:
 
@@ -46,7 +46,7 @@ stores about 9.96 J/m³ of electric-field energy:
 Notes
 -----
 The vacuum value used above is the 2022 CODATA recommended value,
-ε₀ = 8.8541878188(14) × 10⁻¹² F/m.
+ε₀ = 8.8541878188(14) x 10⁻¹² F/m.
 Material permittivity depends on the dielectric and may vary with frequency,
 temperature, and measurement conditions.
 The polyethylene value here is the nominal value used in the cited coaxial-cable
@@ -63,6 +63,7 @@ https://physics.nist.gov/cgi-bin/cuu/Value?ep0
 
 Engineering LibreTexts, coaxial-line equations and the RG-59 example:
 https://phys.libretexts.org/Bookshelves/Electricity_and_Magnetism/Electromagnetics_I_%28Ellingson%29/05%3A_Electrostatics/5.24%3A_Capacitance_of_a_Coaxial_Structure
+
 """
 
 from __future__ import annotations
@@ -145,6 +146,7 @@ def PicofaradPerMetre(value: Numeric) -> Permittivity:
     >>> vacuum = PicofaradPerMetre(8.8541878188)
     >>> f"{vacuum.to(PICOFARAD_PER_METRE):.4f}"
     '8.8542 pF/m'
+
     """
     return Permittivity(
         to_exact(value) * PICOFARAD_PER_METRE.scale, PICOFARAD_PER_METRE
@@ -176,6 +178,7 @@ def NanofaradPerMetre(value: Numeric) -> Permittivity:
 
     >>> f"{NanofaradPerMetre(1).to(PICOFARAD_PER_METRE):.0f}"
     '1000 pF/m'
+
     """
     return Permittivity(
         to_exact(value) * NANOFARAD_PER_METRE.scale, NANOFARAD_PER_METRE
@@ -208,6 +211,7 @@ def MicrofaradPerMetre(value: Numeric) -> Permittivity:
 
     >>> f"{MicrofaradPerMetre(0.4).to(MICROFARAD_PER_METRE):.1f}"
     '0.4 µF/m'
+
     """
     return Permittivity(
         to_exact(value) * MICROFARAD_PER_METRE.scale, MICROFARAD_PER_METRE
@@ -240,6 +244,7 @@ def MillifaradPerMetre(value: Numeric) -> Permittivity:
 
     >>> f"{MillifaradPerMetre(3).to(MILLIFARAD_PER_METRE):.0f}"
     '3 mF/m'
+
     """
     return Permittivity(
         to_exact(value) * MILLIFARAD_PER_METRE.scale, MILLIFARAD_PER_METRE
@@ -272,6 +277,7 @@ def FaradPerMetre(value: Numeric) -> Permittivity:
 
     >>> f"{FaradPerMetre(0.75).to(FARAD_PER_METRE):.2f}"
     '0.75 F/m'
+
     """
     return Permittivity(to_exact(value) * FARAD_PER_METRE.scale, FARAD_PER_METRE)
 
