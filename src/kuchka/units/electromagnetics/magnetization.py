@@ -1,20 +1,22 @@
 """Magnetization constructors, from microamperes per metre to megaamperes per metre.
 
 Magnetization (M) is the magnetic dipole moment per unit volume of a material.
-Its SI unit is the ampere per metre (A/m), the same unit as magnetic field
-strength (H). The two quantities are physically distinct: H describes the
-applied magnetic field, while M describes the material's magnetic response.
+Its SI unit is the ampere per metre (A/m), the same unit as magnetic
+field strength (H).
+The two quantities are physically distinct: H describes the applied magnetic field,
+while M describes the material's magnetic response.
 
-In SI, magnetic flux density is related to both quantities by
-B = μ₀(H + M). Ferromagnetic materials can retain magnetization after the
-applied field is removed, and their magnetization approaches a saturation
-value as their magnetic moments become increasingly aligned.
+In SI, magnetic flux density is related to both quantities by B = μ₀(H + M).
+Ferromagnetic materials can retain magnetization after the applied field is removed,
+and their magnetization approaches a saturation value as their magnetic moments become
+increasingly aligned.
 
 Examples
 --------
 A paleomagnetist measures a rock core before and after alternating-field
-demagnetization. The component along the measured axis falls from 0.12 A/m
-to 0.03 A/m. The difference estimates the component removed by treatment:
+demagnetization.
+The component along the measured axis falls from 0.12 A/m to 0.03 A/m.
+The difference estimates the component removed by treatment:
 
 >>> from kuchka import AmperePerMetre
 >>> before_treatment = AmperePerMetre(0.12)
@@ -22,13 +24,13 @@ to 0.03 A/m. The difference estimates the component removed by treatment:
 >>> before_treatment - after_treatment
 0.09 A/m
 
-The readings are illustrative. In practice, paleomagnetic measurements help
-researchers investigate the history of Earth's magnetic field recorded by
-rocks.
+The readings are illustrative.
+In practice, paleomagnetic measurements help researchers investigate the history of
+Earth's magnetic field recorded by rocks.
 
-Near room temperature, iron has a saturation magnetization of approximately
-1.71 MA/m. Multiplying this by vacuum permeability gives the μ₀M contribution
-to the magnetic-flux-density relation, about 2.15 T:
+Near room temperature, iron has a saturation magnetization of approximately 1.71 MA/m.
+Multiplying this by vacuum permeability gives the μ₀M contribution to the
+magnetic-flux-density relation, about 2.15 T:
 
 >>> from kuchka import MegaamperePerMetre, MicrohenryPerMetre
 >>> from kuchka.units.electromagnetics.magnetic_flux_density import TESLA
@@ -37,20 +39,22 @@ to the magnetic-flux-density relation, about 2.15 T:
 >>> (vacuum_permeability * iron_saturation).to(TESLA)
 2.1488493747717 T
 
-This is the μ₀M term, not a prediction of the total flux density in an
-arbitrary iron specimen. The applied field, sample geometry, and magnetic
-state also affect the measured result.
+This is the μ₀M term, not a prediction of the total flux density in an arbitrary iron
+specimen.
+The applied field, sample geometry, and magnetic state also affect the measured result.
 
 Notes
 -----
-Magnetization depends on material composition, temperature, magnetic history,
-and applied field. Ferromagnets exhibit hysteresis, so the magnetization at
-a given applied field can depend on how that field was reached.
+Magnetization depends on material composition, temperature, magnetic history, and
+applied field.
+Ferromagnets exhibit hysteresis, so the magnetization at a given applied field can
+depend on how that field was reached.
 
 `MAGNETIZATION_UNITS` maps symbols such as ``"µA/m"``, ``"mA/m"``, ``"A/m"``,
-``"kA/m"``, and ``"MA/m"`` to their constructors. It is intended for
-boundary code that reads measurements from geological surveys, material
-characterisation, and magnetic simulation data.
+``"kA/m"``, and ``"MA/m"`` to their constructors.
+It is intended for boundary code that reads measurements from geological surveys,
+material characterisation, and magnetic simulation data.
+
 """
 
 from __future__ import annotations
@@ -113,7 +117,22 @@ Magnetization._canonical_unit = AMPERE_PER_METRE  # noqa: SLF001 -- this module 
 
 
 def MicroamperePerMetre(value: Numeric) -> Magnetization:
-    """Construct magnetization from a magnitude in microamperes per metre."""
+    """Construct magnetization from a magnitude in microamperes per metre.
+
+        Examples
+    --------
+    After background correction, a weakly magnetized specimen has a component of
+    80 µA/m.
+    A second measurement after treatment gives 30 µA/m.
+    The difference is the component removed during treatment:
+
+    >>> from kuchka import MicroamperePerMetre
+    >>> initial = MicroamperePerMetre(80)
+    >>> treated = MicroamperePerMetre(30)
+    >>> initial - treated
+    50 µA/m
+
+    """
     return Magnetization(
         to_exact(value) * MICROAMPERE_PER_METRE.scale, MICROAMPERE_PER_METRE
     )
