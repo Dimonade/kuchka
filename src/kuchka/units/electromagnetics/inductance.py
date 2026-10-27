@@ -39,7 +39,7 @@ opening the circuit:
 
 Notes
 -----
-The energy expression E = ½LI² assumes a linear inductor with constant inductance. 
+The energy expression E = ½LI² assumes a linear inductor with constant inductance.
 Magnetic cores can saturate, causing inductance to change with current.
 Real component selection must also account for winding resistance, current ratings,
 thermal limits, and self-resonance.
