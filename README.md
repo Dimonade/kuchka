@@ -451,6 +451,7 @@ The complete unit vocabulary is available in the API reference.
 | Impedance            | reached via `Resistance.to_impedance()`                                                                            |
 | Permittivity         | `PicofaradPerMetre` through `FaradPerMetre`                                                                        |
 | Permeability         | `NanohenryPerMetre` through `HenryPerMetre`                                                                        |
+| Magnetization        | `MicroamperePerMetre` through `MegaamperePerMetre`                                                                 |
 | Energy               | `Picojoule` through `Petajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour` |
 | _energy, countinued_ | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                             |
 

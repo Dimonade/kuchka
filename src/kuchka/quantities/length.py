@@ -16,8 +16,10 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.inductance import Inductance
+    from kuchka.quantities.electromagnetics.magnetization import Magnetization
     from kuchka.quantities.electromagnetics.permeability import Permeability
     from kuchka.quantities.electromagnetics.permittivity import Permittivity
     from kuchka.quantities.geometry.area import Area
@@ -45,6 +47,8 @@ class Length(LinearQuantity):
     def __mul__(self, other: Frequency) -> Velocity: ...
     @overload
     def __mul__(self, other: Length) -> Area: ...
+    @overload
+    def __mul__(self, other: Magnetization) -> Current: ...
     @overload
     def __mul__(self, other: Permeability) -> Inductance: ...
     @overload

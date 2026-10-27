@@ -325,6 +325,14 @@ ACCEPTED = [
     ("MAGNETIC_FLUX_DENSITY_UNITS", "pT", "pT"),
     ("MAGNETIC_FLUX_DENSITY_UNITS", "mT", "mT"),
     ("MAGNETIC_FLUX_DENSITY_UNITS", "millitesla", "mT"),
+    # Magnetization, per metre.
+    ("MAGNETIZATION_UNITS", "A/m", "A/m"),
+    ("MAGNETIZATION_UNITS", "kA/m", "kA/m"),
+    ("MAGNETIZATION_UNITS", "mA/m", "mA/m"),
+    ("MAGNETIZATION_UNITS", "uA/m", "\u00b5A/m"),
+    ("MAGNETIZATION_UNITS", "MA/m", "MA/m"),
+    ("MAGNETIZATION_UNITS", "ampere per metre", "A/m"),
+    ("MAGNETIZATION_UNITS", "kiloampere per meter", "kA/m"),
     ("POWER_UNITS", "hp", "hp"),
     ("POWER_UNITS", "HP", "hp"),
     ("POWER_UNITS", "horsepower", "hp"),
@@ -594,6 +602,10 @@ REJECTED = [
     ("PERMEABILITY_UNITS", "F/m", "a permittivity unit"),
     ("PERMEABILITY_UNITS", "MH/m", "no megahenry per metre unit"),
     ("REACTANCE_UNITS", "S", "a conductance unit"),
+    # Magnetization: the per-metre form only.
+    ("MAGNETIZATION_UNITS", "A", "a current unit"),
+    ("MAGNETIZATION_UNITS", "a/m", "the symbol is an upper-case A"),
+    ("MAGNETIZATION_UNITS", "Oe", "no oersted unit"),
     # Squared and cubed notations: only the exponent that belongs to the quantity.
     ("AREA_UNITS", "m3", "a volume, not an area"),
     ("VOLUME_UNITS", "m2", "an area, not a volume"),

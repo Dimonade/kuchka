@@ -17,7 +17,7 @@ Every other quantity lives in the themed package of the relation that defines it
 | `kinematics`                    | motion: velocity, acceleration, angular velocity                                                    |
 | `mechanics`                     | force and the work it does: force, torque, pressure, stress, density, energy, power, energy density |
 | `electromagnetics`              | charge, voltage, resistance, conductance, capacitance, inductance                                   |
-| _`electromagnetics`, continued_ | permittivity, permeability, AC power, magnetic flux, magnetic flux density                          |
+| _`electromagnetics`, continued_ | permittivity, permeability, AC power, magnetic flux, magnetic flux density, magnetization           |
 | `information`                   | data and data rate                                                                                  |
 | `radiation`                     | radioactive activity                                                                                |
 

@@ -9,20 +9,18 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
-#### Magnetic flux and flux density
+**#### Electromagnetics**
 
-`MagneticFlux` (`Nanoweber` through `Kiloweber`) and `MagneticFluxDensity` (`Femtotesla` through `Kilotesla`).
-`Voltage * Time` is a `MagneticFlux`, and `MagneticFlux / Area` is a `MagneticFluxDensity`.
+- magnetic flux (`Nanoweber` through `Kiloweber`),
+- magnetic flux density (`Femtotesla` through `Kilotesla`, plus Gauss and its prefixes),
+- capacitance (`Femtofarad` through `Kilofarad`),
+- inductance (`Picohenry` through `Kilohenry`), and
+- magnetization (`MicroamperePerMetre` through `MegaamperePerMetre`).
+- permittivity and permeability, measured in farads per metre and henries per metre, respectively.
 
-#### Capacitance and inductance
+Dimensional arithmetic derives `MagneticFlux` from `Voltage * Time`, `MagneticFluxDensity` from `MagneticFlux / Area`, `Capacitance` from `Charge / Voltage` or `Conductance * Time`, `Inductance` from `MagneticFlux / Current` or `Resistance * Time`, and `MagneticFluxDensity` from `Permeability * Magnetization`.
 
-`Capacitance` (`Femtofarad` through `Kilofarad`) and `Inductance` (`Picohenry` through `Kilohenry`).
-`Charge / Voltage` is a `Capacitance`, `MagneticFlux / Current` is an `Inductance`, `Conductance * Time` is a `Capacitance`, and `Resistance * Time` is an `Inductance`.
-
-#### Reactance, impedance, permittivity, and permeability
-
-`Reactance` and `Impedance` are roles of `Resistance` that read its units, reached through `Resistance.to_reactance()` and `Resistance.to_impedance()`, with `REACTANCE_UNITS` and `IMPEDANCE_UNITS` for text.
-`Permittivity` (`PicofaradPerMetre` through `FaradPerMetre`) and `Permeability` (`NanohenryPerMetre` through `HenryPerMetre`) are `Capacitance / Length` and `Inductance / Length`.
+`Reactance` and `Impedance` are distinct roles of `Resistance`, reached through `Resistance.to_reactance()` and `Resistance.to_impedance()`. Both reuse resistance units through `REACTANCE_UNITS` and `IMPEDANCE_UNITS`. `Permittivity` is `Capacitance / Length`, while `Permeability` is `Inductance / Length`.
 
 ### Changed
 

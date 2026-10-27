@@ -52,6 +52,7 @@ from kuchka.units.electromagnetics.charge import *
 from kuchka.units.electromagnetics.conductance import *
 from kuchka.units.electromagnetics.impedance import *
 from kuchka.units.electromagnetics.inductance import *
+from kuchka.units.electromagnetics.magnetization import *
 from kuchka.units.electromagnetics.magnetic_flux import *
 from kuchka.units.electromagnetics.magnetic_flux_density import *
 from kuchka.units.electromagnetics.permeability import *
@@ -123,6 +124,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.LuminousIntensity: LUMINOUS_INTENSITY_UNITS,
     quantities.MagneticFlux: MAGNETIC_FLUX_UNITS,
     quantities.MagneticFluxDensity: MAGNETIC_FLUX_DENSITY_UNITS,
+    quantities.Magnetization: MAGNETIZATION_UNITS,
     quantities.Mass: MASS_UNITS,
     quantities.Permeability: PERMEABILITY_UNITS,
     quantities.Permittivity: PERMITTIVITY_UNITS,

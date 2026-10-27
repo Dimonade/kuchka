@@ -34,6 +34,7 @@ from kuchka.quantities import LogarithmicRatio
 from kuchka.quantities import LuminousIntensity
 from kuchka.quantities import MagneticFlux
 from kuchka.quantities import MagneticFluxDensity
+from kuchka.quantities import Magnetization
 from kuchka.quantities import Mass
 from kuchka.quantities import Permeability
 from kuchka.quantities import Permittivity
@@ -56,6 +57,7 @@ from kuchka.quantities import Volume
 from kuchka.units import Acre
 from kuchka.units import Ampere
 from kuchka.units import AmpereHour
+from kuchka.units import AmperePerMetre
 from kuchka.units import AmpereSecond
 from kuchka.units import ArcMinute
 from kuchka.units import ArcMinuteDisplacement
@@ -159,6 +161,7 @@ from kuchka.units import KibibitPerSecond
 from kuchka.units import Kibibyte
 from kuchka.units import KibibytePerSecond
 from kuchka.units import Kiloampere
+from kuchka.units import KiloamperePerMetre
 from kuchka.units import Kilobaud
 from kuchka.units import Kilobecquerel
 from kuchka.units import Kilobit
@@ -212,6 +215,7 @@ from kuchka.units import MebibitPerSecond
 from kuchka.units import Mebibyte
 from kuchka.units import MebibytePerSecond
 from kuchka.units import Megaampere
+from kuchka.units import MegaamperePerMetre
 from kuchka.units import Megabaud
 from kuchka.units import Megabecquerel
 from kuchka.units import Megabit
@@ -241,6 +245,7 @@ from kuchka.units import MetrePerSecond
 from kuchka.units import MetrePerSecondSquared
 from kuchka.units import MetricHorsepower
 from kuchka.units import Microampere
+from kuchka.units import MicroamperePerMetre
 from kuchka.units import Microcoulomb
 from kuchka.units import Microcurie
 from kuchka.units import Microelectronvolt
@@ -270,6 +275,7 @@ from kuchka.units import Mile
 from kuchka.units import MilePerHour
 from kuchka.units import Milliampere
 from kuchka.units import MilliampereHour
+from kuchka.units import MilliamperePerMetre
 from kuchka.units import MilliampereSecond
 from kuchka.units import Millibar
 from kuchka.units import Millibecquerel
@@ -421,6 +427,7 @@ __all__ = [
     "AmountOfSubstance",
     "Ampere",
     "AmpereHour",
+    "AmperePerMetre",
     "AmpereSecond",
     "Angle",
     "AngularDisplacement",
@@ -545,6 +552,7 @@ __all__ = [
     "Kibibyte",
     "KibibytePerSecond",
     "Kiloampere",
+    "KiloamperePerMetre",
     "Kilobaud",
     "Kilobecquerel",
     "Kilobit",
@@ -598,12 +606,14 @@ __all__ = [
     "LuminousIntensity",
     "MagneticFlux",
     "MagneticFluxDensity",
+    "Magnetization",
     "Mass",
     "Mebibit",
     "MebibitPerSecond",
     "Mebibyte",
     "MebibytePerSecond",
     "Megaampere",
+    "MegaamperePerMetre",
     "Megabaud",
     "Megabecquerel",
     "Megabit",
@@ -633,6 +643,7 @@ __all__ = [
     "MetrePerSecondSquared",
     "MetricHorsepower",
     "Microampere",
+    "MicroamperePerMetre",
     "Microcoulomb",
     "Microcurie",
     "Microelectronvolt",
@@ -662,6 +673,7 @@ __all__ = [
     "MilePerHour",
     "Milliampere",
     "MilliampereHour",
+    "MilliamperePerMetre",
     "MilliampereSecond",
     "Millibar",
     "Millibecquerel",

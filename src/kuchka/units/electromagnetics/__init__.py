@@ -17,6 +17,7 @@ from kuchka.units.electromagnetics import charge
 from kuchka.units.electromagnetics import conductance
 from kuchka.units.electromagnetics import impedance
 from kuchka.units.electromagnetics import inductance
+from kuchka.units.electromagnetics import magnetization
 from kuchka.units.electromagnetics import magnetic_flux
 from kuchka.units.electromagnetics import magnetic_flux_density
 from kuchka.units.electromagnetics import permeability
@@ -30,6 +31,7 @@ from kuchka.units.electromagnetics.charge import *
 from kuchka.units.electromagnetics.conductance import *
 from kuchka.units.electromagnetics.impedance import *
 from kuchka.units.electromagnetics.inductance import *
+from kuchka.units.electromagnetics.magnetization import *
 from kuchka.units.electromagnetics.magnetic_flux import *
 from kuchka.units.electromagnetics.magnetic_flux_density import *
 from kuchka.units.electromagnetics.permeability import *
@@ -47,6 +49,7 @@ __all__ += impedance.__all__
 __all__ += inductance.__all__
 __all__ += magnetic_flux.__all__
 __all__ += magnetic_flux_density.__all__
+__all__ += magnetization.__all__
 __all__ += permeability.__all__
 __all__ += permittivity.__all__
 __all__ += reactance.__all__
