@@ -16,6 +16,10 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.permeability import Permeability
+    from kuchka.quantities.electromagnetics.permittivity import Permittivity
+    from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.force import Force
@@ -36,6 +40,10 @@ class Velocity(LinearQuantity):
     def __mul__(self, other: Force) -> Power: ...
     @overload
     def __mul__(self, other: Frequency) -> Acceleration: ...
+    @overload
+    def __mul__(self, other: Permeability) -> Resistance: ...
+    @overload
+    def __mul__(self, other: Permittivity) -> Conductance: ...
     @overload
     def __mul__(self, other: Proportion) -> Velocity: ...
     @overload
