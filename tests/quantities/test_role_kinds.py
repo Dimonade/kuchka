@@ -10,7 +10,9 @@ import pytest
 from kuchka import Activity
 from kuchka import ApparentPower
 from kuchka import BaudRate
+from kuchka import Impedance
 from kuchka import IncompatibleDimensionError
+from kuchka import Reactance
 from kuchka import ReactivePower
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
@@ -31,6 +33,8 @@ CONVERSION = {
     Activity: "to_frequency",
     ApparentPower: "to_power",
     BaudRate: "no conversion",
+    Impedance: "to_resistance",
+    Reactance: "to_resistance",
     ReactivePower: "to_power",
     SampleRate: "to_frequency",
     SamplingPeriod: "to_time",

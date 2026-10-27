@@ -132,9 +132,11 @@ CURRENT = Dimension(current=1)
 TEMPERATURE_DELTA = Dimension(temperature=1)
 AMOUNT_OF_SUBSTANCE = Dimension(amount=1)
 LUMINOUS_INTENSITY = Dimension(luminous_intensity=1)
+
+# Not strictly SI dimensions, but required to separate concepts.
+
 ANGLE = Dimension(angle=1)
 DATA = Dimension(information=1)
-
 """The dimension of a plane angle: `Angle`'s dimension.
 
 See the module docstring for why this is tracked as its own axis rather than reusing
@@ -142,10 +144,17 @@ See the module docstring for why this is tracked as its own axis rather than reu
 """
 
 # Derived, by explicit rules.
+
 ENERGY_DENSITY = ENERGY / VOLUME
 ANGULAR_VELOCITY = ANGLE / TIME
 TORQUE = ENERGY / ANGLE
 DATA_RATE = DATA / TIME
+MAGNETIC_FLUX = VOLTAGE * TIME
+MAGNETIC_FLUX_DENSITY = MAGNETIC_FLUX / AREA
+CAPACITANCE = CHARGE / VOLTAGE
+INDUCTANCE = MAGNETIC_FLUX / CURRENT
+PERMITTIVITY = CAPACITANCE / LENGTH
+PERMEABILITY = INDUCTANCE / LENGTH
 
 __all__ = [
     "ACCELERATION",
@@ -153,6 +162,7 @@ __all__ = [
     "ANGLE",
     "ANGULAR_VELOCITY",
     "AREA",
+    "CAPACITANCE",
     "CHARGE",
     "CONDUCTANCE",
     "CURRENT",
@@ -164,9 +174,14 @@ __all__ = [
     "ENERGY_DENSITY",
     "FORCE",
     "FREQUENCY",
+    "INDUCTANCE",
     "LENGTH",
     "LUMINOUS_INTENSITY",
+    "MAGNETIC_FLUX",
+    "MAGNETIC_FLUX_DENSITY",
     "MASS",
+    "PERMEABILITY",
+    "PERMITTIVITY",
     "POWER",
     "PRESSURE",
     "RESISTANCE",

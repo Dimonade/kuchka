@@ -11,12 +11,15 @@ from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import EnergyDensity
 from kuchka import Frequency
+from kuchka import Impedance
 from kuchka import Instant
 from kuchka import LogarithmicRatio
 from kuchka import Power
 from kuchka import Pressure
 from kuchka import Proportion
+from kuchka import Reactance
 from kuchka import ReactivePower
+from kuchka import Resistance
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
 from kuchka import Stress
@@ -28,6 +31,7 @@ from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import FREQUENCY
 from kuchka.dimensions import POWER
 from kuchka.dimensions import PRESSURE
+from kuchka.dimensions import RESISTANCE
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.dimensions import TIME
 from kuchka.dimensions import Dimension
@@ -44,6 +48,7 @@ SHARED = {
     DIMENSIONLESS: (Proportion, LogarithmicRatio),
     PRESSURE: (Pressure, Stress, EnergyDensity),
     POWER: (Power, ApparentPower, ReactivePower),
+    RESISTANCE: (Resistance, Reactance, Impedance),
     ANGLE: (Angle, AngularDisplacement),
 }
 

@@ -8,9 +8,12 @@ from kuchka import Activity
 from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import Frequency
+from kuchka import Impedance
 from kuchka import Power
 from kuchka import Pressure
+from kuchka import Reactance
 from kuchka import ReactivePower
+from kuchka import Resistance
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
 from kuchka import Stress
@@ -30,6 +33,8 @@ from tests.support.synthetic import registry_state
         (Activity, Frequency),
         (ApparentPower, Power),
         (BaudRate, Frequency),
+        (Impedance, Resistance),
+        (Reactance, Resistance),
         (ReactivePower, Power),
         (SampleRate, Frequency),
         (SamplingPeriod, Time),
@@ -46,6 +51,8 @@ def test_only_the_listed_kinds_are_specialisations() -> None:
         Activity,
         ApparentPower,
         BaudRate,
+        Impedance,
+        Reactance,
         ReactivePower,
         SampleRate,
         SamplingPeriod,
