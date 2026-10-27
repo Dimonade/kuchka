@@ -103,12 +103,14 @@ from kuchka.units import Fahrenheit
 from kuchka.units import Farad
 from kuchka.units import FaradPerMetre
 from kuchka.units import Femtofarad
+from kuchka.units import Femtogauss
 from kuchka.units import Femtomole
 from kuchka.units import Femtosecond
 from kuchka.units import Femtotesla
 from kuchka.units import Foot
 from kuchka.units import Fortnight
 from kuchka.units import Gal
+from kuchka.units import Gauss
 from kuchka.units import Gibibit
 from kuchka.units import GibibitPerSecond
 from kuchka.units import Gibibyte
@@ -166,6 +168,7 @@ from kuchka.units import KilobytePerSecond
 from kuchka.units import Kilocalorie
 from kuchka.units import Kiloelectronvolt
 from kuchka.units import Kilofarad
+from kuchka.units import Kilogauss
 from kuchka.units import Kilogram
 from kuchka.units import KilogramForce
 from kuchka.units import KilogramPerCubicMeter
@@ -244,6 +247,7 @@ from kuchka.units import Microelectronvolt
 from kuchka.units import Microfarad
 from kuchka.units import MicrofaradPerMetre
 from kuchka.units import Microgal
+from kuchka.units import Microgauss
 from kuchka.units import Microgram
 from kuchka.units import Microhenry
 from kuchka.units import MicrohenryPerMetre
@@ -275,6 +279,7 @@ from kuchka.units import Millielectronvolt
 from kuchka.units import Millifarad
 from kuchka.units import MillifaradPerMetre
 from kuchka.units import Milligal
+from kuchka.units import Milligauss
 from kuchka.units import Milligram
 from kuchka.units import Millihenry
 from kuchka.units import MillihenryPerMetre
@@ -304,6 +309,7 @@ from kuchka.units import Nanoampere
 from kuchka.units import Nanocoulomb
 from kuchka.units import Nanofarad
 from kuchka.units import NanofaradPerMetre
+from kuchka.units import Nanogauss
 from kuchka.units import Nanogram
 from kuchka.units import Nanohenry
 from kuchka.units import NanohenryPerMetre
@@ -344,6 +350,7 @@ from kuchka.units import Picocoulomb
 from kuchka.units import Picocurie
 from kuchka.units import Picofarad
 from kuchka.units import PicofaradPerMetre
+from kuchka.units import Picogauss
 from kuchka.units import Picogram
 from kuchka.units import Picohenry
 from kuchka.units import Picojoule
@@ -477,6 +484,7 @@ __all__ = [
     "Farad",
     "FaradPerMetre",
     "Femtofarad",
+    "Femtogauss",
     "Femtomole",
     "Femtosecond",
     "Femtotesla",
@@ -485,6 +493,7 @@ __all__ = [
     "Fortnight",
     "Frequency",
     "Gal",
+    "Gauss",
     "Gibibit",
     "GibibitPerSecond",
     "Gibibyte",
@@ -545,6 +554,7 @@ __all__ = [
     "Kilocalorie",
     "Kiloelectronvolt",
     "Kilofarad",
+    "Kilogauss",
     "Kilogram",
     "KilogramForce",
     "KilogramPerCubicMeter",
@@ -629,6 +639,7 @@ __all__ = [
     "Microfarad",
     "MicrofaradPerMetre",
     "Microgal",
+    "Microgauss",
     "Microgram",
     "Microhenry",
     "MicrohenryPerMetre",
@@ -660,6 +671,7 @@ __all__ = [
     "Millifarad",
     "MillifaradPerMetre",
     "Milligal",
+    "Milligauss",
     "Milligram",
     "Millihenry",
     "MillihenryPerMetre",
@@ -689,6 +701,7 @@ __all__ = [
     "Nanocoulomb",
     "Nanofarad",
     "NanofaradPerMetre",
+    "Nanogauss",
     "Nanogram",
     "Nanohenry",
     "NanohenryPerMetre",
@@ -731,6 +744,7 @@ __all__ = [
     "Picocurie",
     "Picofarad",
     "PicofaradPerMetre",
+    "Picogauss",
     "Picogram",
     "Picohenry",
     "Picojoule",

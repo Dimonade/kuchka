@@ -1,81 +1,91 @@
-"""Magnetic flux density constructors, from femtoteslas to kiloteslas.
+"""Magnetic flux density constructors: teslas and gauss.
 
 The tesla (T) is the SI unit of magnetic flux density: 1 T = 1 Wb/m².
-Magnetic flux density (B) describes the magnetic flux passing through a unit area
-perpendicular to the field.
-It is distinct from magnetic field strength (H), which is measured in amperes per
-metre, and from magnetic permeability (μ), which describes a material's magnetic
-response.
+The gauss (G, also Gs) is the corresponding CGS unit, defined by 1 G = 10⁻⁴ T.
+Both measure magnetic flux density B, not magnetic field strength H, which is measured
+in amperes per metre.
 
-The useful scale depends on the application.
-Femtoteslas describe the weak signals detected by magnetoencephalography; nanoteslas
-are convenient for geophysical surveys and planetary magnetometers; microteslas
-describe Earth's surface field and parts of planetary magnetospheres.
-Milliteslas and teslas appear in magnetic separation, laboratory magnets, and medical
-imaging.
-Kiloteslas describe exceptionally intense pulsed fields.
+The two unit families cover very different scales.
+Femtoteslas describe weak biomagnetic signals; nanoteslas are useful in planetary and
+geological surveys; microteslas describe Earth's surface field and parts of planetary
+magnetospheres.
+Gauss is common in astrophysics and magnet specifications, while milliteslas and teslas
+are common in engineering and medicine.
+Kiloteslas describe exceptionally intense pulsed-field experiments.
 
 Examples
 --------
-A geomagnetic survey uses a 10 cm square loop to estimate the flux through the loop
-when its plane is perpendicular to a representative 50 µT field at Earth's surface.
-The field varies by location, but this gives a useful scale for the measurement:
+A geomagnetic survey estimates a local field of 0.5 G.
+A square loop with 10 cm sides is oriented perpendicular to the field.
+Assuming the field is uniform across the loop, the flux through it is:
 
->>> from kuchka import Metre, Microtesla
+>>> from kuchka import Gauss, Metre
 >>> from kuchka.units.electromagnetics.magnetic_flux import MICROWEBER
->>> terrestrial_field = Microtesla(50)
+>>> terrestrial_field = Gauss(0.5)
 >>> loop_side = Metre(0.1)
 >>> loop_area = loop_side * loop_side
->>> terrestrial_flux = terrestrial_field * loop_area
->>> terrestrial_flux.to(MICROWEBER)
+>>> (terrestrial_field * loop_area).to(MICROWEBER)
 0.5 µWb
 
-A planetary scientist encounters a different scale at Jupiter.
-Its equatorial dipole field at the 1 R_J reference radius is about 4.3 gauss, or
-430 µT.
-A 5 cm square reference loop normal to this field would intercept:
+In 2018, the University of Tokyo reported a pulsed magnetic field of 985 T.
+That is 9850 kG.
+For a hypothetical 1 mm square loop placed in a uniform region at the peak field, the
+corresponding flux would be:
 
->>> jovian_field = Microtesla(430)
->>> reference_side = Metre(0.05)
->>> reference_area = reference_side * reference_side
->>> (jovian_field * reference_area).to(MICROWEBER)
-1.075 µWb
+>>> from kuchka import Millimetre, Tesla
+>>> from kuchka.units.electromagnetics.magnetic_flux import MILLIWEBER
+>>> peak_field = Tesla(985)
+>>> peak_field.to(KILOGAUSS)
+9850 kG
+>>> loop_side = Millimetre(1)
+>>> loop_area = loop_side * loop_side
+>>> (peak_field * loop_area).to(MILLIWEBER)
+0.985 mWb
 
 Notes
 -----
-Magnetic flux density is a signed/vector quantity physically, but these scalar
-constructors represent its magnitude or a selected component.
-Subtraction of readings therefore assumes that they refer to the same component and
+The gauss family uses the same prefix range as the existing Tesla family.
+The `G` symbol is canonical; `Gs` is an accepted alias.
+Prefix aliases follow automatically from the base alias, so `mGs` and `kGs` are
+accepted alongside `mG` and `kG`.
+
+Magnetic flux density is a vector quantity.
+These scalar constructors represent a magnitude or a selected component.
+Subtracting measurements therefore assumes that they refer to the same component and
 axis.
 
-The flux calculation B x A assumes a uniform field over the surface and a surface
-normal aligned with the field.
-For a nonuniform field or arbitrary orientation, magnetic flux requires integration
+Flux through a surface is calculated as B x A only when the field is uniform and
+perpendicular to the surface.
+For nonuniform fields or arbitrary orientations, magnetic flux requires integration
 over the surface.
 
-`MAGNETIC_FLUX_DENSITY_UNITS` maps symbols such as ``"fT"``, ``"pT"``, ``"nT"``,
-``"µT"``, ``"mT"``, ``"T"``, and ``"kT"`` to their constructors.
-It is intended for boundary code that reads a measurement unit from instrument reports,
-geological surveys, simulation inputs, and configuration files.
+Magnetar surface fields can reach 10¹⁴-10¹⁵ G, equivalent to 10¹⁰-10¹¹ T.
+These are inferred astrophysical field strengths; the `Gauss` and `Tesla` constructors
+can represent them without additional unit prefixes.
+
+`MAGNETIC_FLUX_DENSITY_UNITS` maps symbols such as ``"fT"``, ``"nT"``, ``"µT"``,
+``"T"``, ``"fG"``, ``"nG"``, ``"µG"``, ``"G"``, ``"Gs"``, ``"mG"``, ``"mGs"``,
+``"kG"``, and ``"kGs"`` to their constructors.
 
 References
 ----------
+NIST, Guide to the SI, conversion factors for electricity and magnetism:
+https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9
+
 NOAA National Centers for Environmental Information, Geomagnetism FAQs:
 https://www.ncei.noaa.gov/products/geomagnetism-frequently-asked-questions
-
-Langlais et al., A New Model of the Crustal Magnetic Field of Mars Using
-MGS and MAVEN, Journal of Geophysical Research: Planets, 2019:
-https://doi.org/10.1029/2018JE005854
 
 NASA Goddard Space Flight Center, Jupiter Fact Sheet:
 https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html
 
-National Institute of Mental Health, Magnetoencephalography Core Facility:
-https://www.nimh.nih.gov/research/research-conducted-at-nimh/research-areas/research-support-services/meg
-
-Institute for Solid State Physics, University of Tokyo, 985 T pulsed-field
-experiment:
+University of Tokyo, 985 T pulsed-field experiment:
 https://www.issp.u-tokyo.ac.jp/maincontents/news2_en.html?pid=4437
+
+Rea et al., SGR J1745-2900 near the Galactic Centre:
+https://doi.org/10.1088/2041-8205/775/2/l34
+
+NASA Goddard Space Flight Center, magnetar magnetic fields:
+https://ntrs.nasa.gov/citations/20030034659
 
 """
 
@@ -127,6 +137,75 @@ KILOTESLA = prefixed_unit(
     prefixes.KILO, TESLA_NAME, TESLA_SYMBOL, MAGNETIC_FLUX_DENSITY
 )
 
+GAUSS_NAME = "gauss"
+GAUSS_SYMBOL = "G"
+GAUSS_BASE_ALIASES = ("Gs",)
+GAUSS_BASE_WORDS = ("gausses",)
+
+FEMTOGAUSS = prefixed_unit(
+    prefixes.FEMTO,
+    GAUSS_NAME,
+    GAUSS_SYMBOL,
+    MAGNETIC_FLUX_DENSITY,
+    coherent_offset=-4,
+    base_aliases=GAUSS_BASE_ALIASES,
+    base_words=GAUSS_BASE_WORDS,
+)
+PICOGAUSS = prefixed_unit(
+    prefixes.PICO,
+    GAUSS_NAME,
+    GAUSS_SYMBOL,
+    MAGNETIC_FLUX_DENSITY,
+    coherent_offset=-4,
+    base_aliases=GAUSS_BASE_ALIASES,
+    base_words=GAUSS_BASE_WORDS,
+)
+NANOGAUSS = prefixed_unit(
+    prefixes.NANO,
+    GAUSS_NAME,
+    GAUSS_SYMBOL,
+    MAGNETIC_FLUX_DENSITY,
+    coherent_offset=-4,
+    base_aliases=GAUSS_BASE_ALIASES,
+    base_words=GAUSS_BASE_WORDS,
+)
+MICROGAUSS = prefixed_unit(
+    prefixes.MICRO,
+    GAUSS_NAME,
+    GAUSS_SYMBOL,
+    MAGNETIC_FLUX_DENSITY,
+    coherent_offset=-4,
+    base_aliases=GAUSS_BASE_ALIASES,
+    base_words=GAUSS_BASE_WORDS,
+)
+MILLIGAUSS = prefixed_unit(
+    prefixes.MILLI,
+    GAUSS_NAME,
+    GAUSS_SYMBOL,
+    MAGNETIC_FLUX_DENSITY,
+    coherent_offset=-4,
+    base_aliases=GAUSS_BASE_ALIASES,
+    base_words=GAUSS_BASE_WORDS,
+)
+GAUSS = prefixed_unit(
+    prefixes.UNIT,
+    GAUSS_NAME,
+    GAUSS_SYMBOL,
+    MAGNETIC_FLUX_DENSITY,
+    coherent_offset=-4,
+    base_aliases=GAUSS_BASE_ALIASES,
+    base_words=GAUSS_BASE_WORDS,
+)
+KILOGAUSS = prefixed_unit(
+    prefixes.KILO,
+    GAUSS_NAME,
+    GAUSS_SYMBOL,
+    MAGNETIC_FLUX_DENSITY,
+    coherent_offset=-4,
+    base_aliases=GAUSS_BASE_ALIASES,
+    base_words=GAUSS_BASE_WORDS,
+)
+
 MagneticFluxDensity._canonical_unit = TESLA  # noqa: SLF001 -- this module owns MagneticFluxDensity's canonical unit
 
 
@@ -145,54 +224,33 @@ def Femtotesla(value: Numeric) -> MagneticFluxDensity:
 
     Examples
     --------
-    A low-noise magnetometer in a magnetoencephalography setup measures a 42 fT
-    component, while a reference channel records 27 fT of environmental pickup along
-    the same axis.
-    Subtracting the reference leaves the corrected signal component:
+    A biomagnetic sensor records 480 fT while its reference channel measures 310 fT of
+    common pickup along the same axis.
+    Subtracting the reference leaves the corrected signal:
 
     >>> from kuchka import Femtotesla
-    >>> measured_signal = Femtotesla(42)
-    >>> reference_pickup = Femtotesla(27)
-    >>> measured_signal - reference_pickup
-    15 fT
-
-    These are illustrative readings at the scale of weak brain-generated magnetic
-    signals, not measurements from a particular subject.
+    >>> signal = Femtotesla(480)
+    >>> reference = Femtotesla(310)
+    >>> signal - reference
+    170 fT
 
     """
     return MagneticFluxDensity(to_exact(value) * FEMTOTESLA.scale, FEMTOTESLA)
 
 
 def Picotesla(value: Numeric) -> MagneticFluxDensity:
-    """Construct a magnetic flux density from picoteslas.
-
-    Parameters
-    ----------
-    value : Numeric
-        Magnetic flux density in pT.
-
-    Returns
-    -------
-    MagneticFluxDensity
-        The supplied value represented in picoteslas.
+    """Construct magnetic flux density from picoteslas.
 
     Examples
     --------
-    A geological gradiometer records a 250 pT difference between its reference and
-    nearby sensors.
-    Adding the measured difference to a reference reading of 1.10 nT reconstructs the
-    nearby reading:
+    A precision magnetometer measures a 1.8 nT background and a 250 pT local anomaly.
+    Combining the readings gives the total field component:
 
     >>> from kuchka import Nanotesla, Picotesla
-    >>> reference_reading = Nanotesla(1.10)
-    >>> differential_reading = Picotesla(250)
-    >>> nearby_reading = reference_reading + differential_reading
-    >>> nearby_reading.to(NANOTESLA)
-    1.35 nT
-
-    The readings are illustrative.
-    Their purpose is to show how a small magnetic anomaly can be combined with a larger
-    background measurement.
+    >>> background = Nanotesla(1.8)
+    >>> anomaly = Picotesla(250)
+    >>> (background + anomaly).to(NANOTESLA)
+    2.05 nT
 
     """
     return MagneticFluxDensity(to_exact(value) * PICOTESLA.scale, PICOTESLA)
@@ -213,18 +271,16 @@ def Nanotesla(value: Numeric) -> MagneticFluxDensity:
 
     Examples
     --------
-    Mars has no present global magnetic dynamo, but remanent magnetization of its crust
-    produces local magnetic anomalies reaching several thousand nanoteslas.
-    Consider a 3000 nT anomaly across a one-square-metre surface normal to the field.
-    The magnetic flux through that surface is:
+    A Mars crustal-field model includes a 3000 nT local anomaly.
+    Estimate the magnetic flux through a square metre whose normal is aligned with the
+    field:
 
     >>> from kuchka import Metre, Nanotesla
     >>> from kuchka.units.electromagnetics.magnetic_flux import MICROWEBER
     >>> crustal_anomaly = Nanotesla(3000)
     >>> survey_side = Metre(1)
     >>> survey_area = survey_side * survey_side
-    >>> crustal_flux = crustal_anomaly * survey_area
-    >>> crustal_flux.to(MICROWEBER)
+    >>> (crustal_anomaly * survey_area).to(MICROWEBER)
     3 µWb
 
     """
@@ -246,17 +302,16 @@ def Microtesla(value: Numeric) -> MagneticFluxDensity:
 
     Examples
     --------
-    Jupiter's equatorial dipole field is about 4.3 gauss at the 1 R_J reference radius,
-    approximately 430 µT.
-    For a 5 cm square reference loop oriented perpendicular to this field, calculate
-    the magnetic flux:
+    Jupiter's equatorial dipole field at the 1 R_J reference radius is about 4.3 G, or
+    430 µT.
+    Estimate the flux through a 5 cm square loop perpendicular to that field:
 
     >>> from kuchka import Metre, Microtesla
     >>> from kuchka.units.electromagnetics.magnetic_flux import MICROWEBER
     >>> jovian_field = Microtesla(430)
-    >>> reference_side = Metre(0.05)
-    >>> reference_area = reference_side * reference_side
-    >>> (jovian_field * reference_area).to(MICROWEBER)
+    >>> loop_side = Metre(0.05)
+    >>> loop_area = loop_side * loop_side
+    >>> (jovian_field * loop_area).to(MICROWEBER)
     1.075 µWb
 
     """
@@ -279,20 +334,18 @@ def Millitesla(value: Numeric) -> MagneticFluxDensity:
     Examples
     --------
     A 200-turn pickup coil has a 1 cm square area.
-    As a laboratory field rises from zero to 15 mT over 2 ms, the change in magnetic
-    flux induces an average voltage across the coil:
+    If the field rises from zero to 15 mT in 2 ms, Faraday's law predicts the average
+    induced voltage across the winding:
 
     >>> from kuchka import Metre, Millisecond, Millitesla
     >>> field_change = Millitesla(15)
     >>> loop_side = Metre(0.01)
     >>> loop_area = loop_side * loop_side
     >>> flux_change = field_change * loop_area
-    >>> induced_voltage = 200 * flux_change / Millisecond(2)
+    >>> turns = 200
+    >>> induced_voltage = turns * flux_change / Millisecond(2)
     >>> induced_voltage
     0.15 V
-
-    This uses Faraday's law, with the flux change assumed uniform over the loop and
-    the winding turns linked by the same flux.
 
     """
     return MagneticFluxDensity(to_exact(value) * MILLITESLA.scale, MILLITESLA)
@@ -313,16 +366,16 @@ def Tesla(value: Numeric) -> MagneticFluxDensity:
 
     Examples
     --------
-    A 3 T research magnet is used to map the flux through a 10 cm square calibration
-    loop placed perpendicular to the magnetic field:
+    A 3 T MRI field passes through a 10 cm square calibration loop placed perpendicular
+    to the field.
+    The flux through the loop is:
 
     >>> from kuchka import Metre, Tesla
     >>> from kuchka.units.electromagnetics.magnetic_flux import MILLIWEBER
-    >>> research_field = Tesla(3)
+    >>> scanner_field = Tesla(3)
     >>> loop_side = Metre(0.1)
     >>> loop_area = loop_side * loop_side
-    >>> calibration_flux = research_field * loop_area
-    >>> calibration_flux.to(MILLIWEBER)
+    >>> (scanner_field * loop_area).to(MILLIWEBER)
     30 mWb
 
     """
@@ -350,25 +403,232 @@ def Kilotesla(value: Numeric) -> MagneticFluxDensity:
 
     Examples
     --------
-    A 2018 University of Tokyo experiment reported a pulsed magnetic field of 985 T,
-    or 0.985 kT.
-    If a 1 mm square loop were entirely within a region of that peak field, with its
-    plane perpendicular to the field, the corresponding flux would be:
+    The University of Tokyo reported a short pulsed magnetic field of 985 T.
+    Consider a 1 mm square loop placed in a region where the peak field is uniform.
+    Calculate the flux linked by that loop:
 
     >>> from kuchka import Kilotesla, Millimetre
     >>> from kuchka.units.electromagnetics.magnetic_flux import MILLIWEBER
     >>> peak_field = Kilotesla(0.985)
     >>> loop_side = Millimetre(1)
     >>> loop_area = loop_side * loop_side
-    >>> peak_flux = peak_field * loop_area
-    >>> peak_flux.to(MILLIWEBER)
+    >>> (peak_field * loop_area).to(MILLIWEBER)
     0.985 mWb
-
-    The small-loop calculation is a uniform-field estimate, not a claim that the
-    reported peak field filled a loop of this size.
 
     """
     return MagneticFluxDensity(to_exact(value) * KILOTESLA.scale, KILOTESLA)
+
+
+def Femtogauss(value: Numeric) -> MagneticFluxDensity:
+    """Construct magnetic flux density from femtogauss.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnetic flux density in fG.
+
+    Returns
+    -------
+    MagneticFluxDensity
+        The supplied value represented in femtogauss.
+
+    Examples
+    --------
+    A fictional deep-space gradiometer stores readings in femtogauss.
+    Its sensor reports 1,050,000 fG and the reference channel reports 250,000 fG.
+    Subtracting the reference and expressing the residual in femtoteslas gives:
+
+    >>> from kuchka import Femtogauss
+    >>> residual = Femtogauss(1_050_000) - Femtogauss(250_000)
+    >>> residual.to(FEMTOTESLA)
+    80 fT
+
+    """
+    return MagneticFluxDensity(to_exact(value) * FEMTOGAUSS.scale, FEMTOGAUSS)
+
+
+def Picogauss(value: Numeric) -> MagneticFluxDensity:
+    """Construct magnetic flux density from picogauss.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnetic flux density in pG.
+
+    Returns
+    -------
+    MagneticFluxDensity
+        The supplied value represented in picogauss.
+
+    Examples
+    --------
+    A molecular-cloud simulation uses a 5 µG background field and resolves a 250,000 pG
+    enhancement around a denser clump.
+    Combine the two readings:
+
+    >>> from kuchka import Microgauss, Picogauss
+    >>> background_field = Microgauss(5)
+    >>> local_enhancement = Picogauss(250_000)
+    >>> (background_field + local_enhancement).to(MICROGAUSS)
+    5.25 µG
+
+    """
+    return MagneticFluxDensity(to_exact(value) * PICOGAUSS.scale, PICOGAUSS)
+
+
+def Nanogauss(value: Numeric) -> MagneticFluxDensity:
+    """Construct magnetic flux density from nanogauss.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnetic flux density in nG.
+
+    Returns
+    -------
+    MagneticFluxDensity
+        The supplied value represented in nanogauss.
+
+    Examples
+    --------
+    A biomagnetic channel records 8 nG, while the reference channel contains 3 nG of
+    common pickup.
+    The corrected component is 5 nG, equivalent to 500 fT:
+
+    >>> from kuchka import Nanogauss
+    >>> corrected_signal = Nanogauss(8) - Nanogauss(3)
+    >>> corrected_signal.to(FEMTOTESLA)
+    500 fT
+
+    """
+    return MagneticFluxDensity(to_exact(value) * NANOGAUSS.scale, NANOGAUSS)
+
+
+def Microgauss(value: Numeric) -> MagneticFluxDensity:
+    """Construct magnetic flux density from microgauss.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnetic flux density in µG.
+
+    Returns
+    -------
+    MagneticFluxDensity
+        The supplied value represented in microgauss.
+
+    Examples
+    --------
+    A Milky Way molecular-cloud model uses a field of 5 µG.
+    Estimate the flux through a one-square-kilometre simulation cell perpendicular to
+    the field:
+
+    >>> from kuchka import Metre, Microgauss
+    >>> from kuchka.units.electromagnetics.magnetic_flux import MILLIWEBER
+    >>> cloud_field = Microgauss(5)
+    >>> cell_side = Metre(1000)
+    >>> cell_area = cell_side * cell_side
+    >>> (cloud_field * cell_area).to(MILLIWEBER)
+    0.5 mWb
+
+    """
+    return MagneticFluxDensity(to_exact(value) * MICROGAUSS.scale, MICROGAUSS)
+
+
+def Milligauss(value: Numeric) -> MagneticFluxDensity:
+    """Construct magnetic flux density from milligauss.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnetic flux density in mG.
+
+    Returns
+    -------
+    MagneticFluxDensity
+        The supplied value represented in milligauss.
+
+    Examples
+    --------
+    During a magnetic-shielding test, the field through a 10 cm square, 1000-turn
+    pickup coil changes by 6 mG over 10 ms.
+    Faraday's law gives the average induced voltage:
+
+    >>> from kuchka import Metre, Milligauss, Millisecond
+    >>> from kuchka.units.electromagnetics.voltage import MILLIVOLT
+    >>> field_change = Milligauss(6)
+    >>> loop_side = Metre(0.1)
+    >>> loop_area = loop_side * loop_side
+    >>> turns = 1000
+    >>> induced_voltage = turns * field_change * loop_area / Millisecond(10)
+    >>> induced_voltage.to(MILLIVOLT)
+    0.6 mV
+
+    """
+    return MagneticFluxDensity(to_exact(value) * MILLIGAUSS.scale, MILLIGAUSS)
+
+
+def Gauss(value: Numeric) -> MagneticFluxDensity:
+    """Construct magnetic flux density from gauss.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnetic flux density in G.
+
+    Returns
+    -------
+    MagneticFluxDensity
+        The supplied value represented in gauss.
+
+    Examples
+    --------
+    A refrigerator magnet is approximated as producing 50 G over a 1 cm square probe
+    area.
+    Assuming the field is uniform and perpendicular to the area, estimate the flux:
+
+    >>> from kuchka import Gauss, Metre
+    >>> from kuchka.units.electromagnetics.magnetic_flux import MICROWEBER
+    >>> magnet_field = Gauss(50)
+    >>> probe_side = Metre(0.01)
+    >>> probe_area = probe_side * probe_side
+    >>> (magnet_field * probe_area).to(MICROWEBER)
+    0.5 µWb
+
+    """
+    return MagneticFluxDensity(to_exact(value) * GAUSS.scale, GAUSS)
+
+
+def Kilogauss(value: Numeric) -> MagneticFluxDensity:
+    """Construct magnetic flux density from kilogauss.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnetic flux density in kG.
+
+    Returns
+    -------
+    MagneticFluxDensity
+        The supplied value represented in kilogauss.
+
+    Examples
+    --------
+    A neodymium magnet's remanence may be around 13 kG.
+    As a simplified flux estimate, suppose that field fills a 1 cm square gap in a
+    magnetic fixture.
+    The actual gap field depends on the magnet and geometry:
+
+    >>> from kuchka import Kilogauss, Metre
+    >>> from kuchka.units.electromagnetics.magnetic_flux import MILLIWEBER
+    >>> field = Kilogauss(13)
+    >>> gap_side = Metre(0.01)
+    >>> gap_area = gap_side * gap_side
+    >>> (field * gap_area).to(MILLIWEBER)
+    0.13 mWb
+
+    """
+    return MagneticFluxDensity(to_exact(value) * KILOGAUSS.scale, KILOGAUSS)
 
 
 MAGNETIC_FLUX_DENSITY_UNITS: Mapping[str, Callable[[Numeric], MagneticFluxDensity]] = (
@@ -382,24 +642,45 @@ MAGNETIC_FLUX_DENSITY_UNITS: Mapping[str, Callable[[Numeric], MagneticFluxDensit
             MILLITESLA: Millitesla,
             TESLA: Tesla,
             KILOTESLA: Kilotesla,
+            FEMTOGAUSS: Femtogauss,
+            PICOGAUSS: Picogauss,
+            NANOGAUSS: Nanogauss,
+            MICROGAUSS: Microgauss,
+            MILLIGAUSS: Milligauss,
+            GAUSS: Gauss,
+            KILOGAUSS: Kilogauss,
         },
     )
 )
 
 __all__ = [
+    "FEMTOGAUSS",
     "FEMTOTESLA",
+    "GAUSS",
+    "KILOGAUSS",
     "KILOTESLA",
     "MAGNETIC_FLUX_DENSITY_UNITS",
+    "MICROGAUSS",
     "MICROTESLA",
+    "MILLIGAUSS",
     "MILLITESLA",
+    "NANOGAUSS",
     "NANOTESLA",
+    "PICOGAUSS",
     "PICOTESLA",
     "TESLA",
+    "Femtogauss",
     "Femtotesla",
+    "Gauss",
+    "Kilogauss",
     "Kilotesla",
+    "Microgauss",
     "Microtesla",
+    "Milligauss",
     "Millitesla",
+    "Nanogauss",
     "Nanotesla",
+    "Picogauss",
     "Picotesla",
     "Tesla",
 ]
