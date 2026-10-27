@@ -18,8 +18,11 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.inductance import Inductance
+    from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
@@ -33,6 +36,10 @@ class Current(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: Inductance) -> MagneticFlux: ...
+    @overload
+    def __mul__(self, other: MagneticFlux) -> Energy: ...
     @overload
     def __mul__(self, other: Proportion) -> Current: ...
     @overload

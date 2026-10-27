@@ -17,12 +17,16 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.current import Current
+    from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
 
 
 class Voltage(LinearQuantity):
@@ -33,6 +37,8 @@ class Voltage(LinearQuantity):
 
     # BEGIN GENERATED __mul__
     @overload
+    def __mul__(self, other: Capacitance) -> Charge: ...
+    @overload
     def __mul__(self, other: Charge) -> Energy: ...
     @overload
     def __mul__(self, other: Conductance) -> Current: ...
@@ -40,6 +46,8 @@ class Voltage(LinearQuantity):
     def __mul__(self, other: Current) -> Power: ...
     @overload
     def __mul__(self, other: Proportion) -> Voltage: ...
+    @overload
+    def __mul__(self, other: Time) -> MagneticFlux: ...
     @overload
     def __mul__(self, other: Numeric) -> Voltage: ...
     @overload
@@ -54,6 +62,10 @@ class Voltage(LinearQuantity):
     # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Current) -> Resistance: ...
+    @overload
+    def __truediv__(self, other: Frequency) -> MagneticFlux: ...
+    @overload
+    def __truediv__(self, other: MagneticFlux) -> Frequency: ...
     @overload
     def __truediv__(self, other: Proportion) -> Voltage: ...
     @overload

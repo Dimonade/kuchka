@@ -16,6 +16,10 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
+    from kuchka.quantities.electromagnetics.magnetic_flux_density import (
+        MagneticFluxDensity,
+    )
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
@@ -35,6 +39,8 @@ class Area(LinearQuantity):
     def __mul__(self, other: EnergyDensity) -> Force: ...
     @overload
     def __mul__(self, other: Length) -> Volume: ...
+    @overload
+    def __mul__(self, other: MagneticFluxDensity) -> MagneticFlux: ...
     @overload
     def __mul__(self, other: Pressure) -> Force: ...
     @overload
