@@ -1,30 +1,34 @@
-"""Magnetization is a distinct quantity type that uses the ampere-per-metre units.
+"""Magnetization constructors, using the ampere-per-metre units.
 
 Magnetization (M) is the magnetic dipole moment per unit volume of a material.
-It has the same dimension and unit as magnetic field strength (H), but they are
-different physical quantities: H is the magnetising field set by free currents, and M is
-the material's own magnetic response to the total field.
-In SI, magnetic flux density relates to both as B = μ0(H + M).
+Its SI unit is the ampere per metre (A/m), the same unit as
+magnetic field strength (H).
+The quantities are physically distinct: H describes the magnetising field associated
+with free currents, while M describes the material's magnetic response.
+
+In SI, magnetic flux density is related to both by B = μ₀(H + M).
+In `kuchka`'s quantity-kind model, `Magnetization` is registered as a role of
+`MagneticFieldStrength`.
+The two types share dimensions and units, while the role conversion preserves the
+numerical reading.
+It does not calculate magnetization from an applied field or assert that H and M are
+the same physical quantity.
 
 No unit definitions live here: `kuchka.units.electromagnetics.magnetic_field_strength`
 owns the ampere per metre and its multiples.
-Each entry of `MAGNETIZATION_UNITS` reads the corresponding field-strength constructor's
-result through `MagneticFieldStrength.to_magnetization()`.
-That conversion preserves the numerical reading and changes its quantity kind.
-`Magnetization.to_magnetic_field_strength()` converts back, which is how a magnetization
-joins an applied field or meets a permeability.
-
-Ferromagnets retain magnetization after the applied field is removed, and it approaches
-a saturation value as the moments align.
-It also depends on temperature and on magnetic history, so the value at a given applied
-field can depend on how that field was reached.
+Each entry of `MAGNETIZATION_UNITS` reads the corresponding field-strength
+constructor's result through `MagneticFieldStrength.to_magnetization()`.
+`Magnetization.to_magnetic_field_strength()` converts back to the field-strength role
+when dimensional arithmetic needs H and M to be expressed as compatible terms in an
+equation such as B = μ₀(H + M).
 
 Examples
 --------
-Near room temperature, iron has a saturation magnetization of about 1.71 MA/m.
-An iron core in a solenoid with an applied field of 7.5 kA/m is close to saturation,
-so the total flux density is B = μ0(H + M).
-Adding the two needs the same kind on both sides, which makes the step explicit:
+Near room temperature, iron's saturation magnetization is approximately 1.71 MA/m.
+To illustrate the SI relationship, consider a sample already at that magnetization with
+an applied field strength of 7.5 kA/m.
+Expressing the magnetization as a field-strength role allows the two A/m terms to be
+combined before applying vacuum permeability:
 
 >>> from kuchka import KiloamperePerMetre, MicrohenryPerMetre
 >>> from kuchka.units.electromagnetics.magnetic_flux_density import TESLA
@@ -33,17 +37,17 @@ Adding the two needs the same kind on both sides, which makes the step explicit:
 >>> iron_saturation = MAGNETIZATION_UNITS["MA/m"](1.71)
 >>> vacuum_permeability = MicrohenryPerMetre(1.25663706127)
 >>> total = applied + iron_saturation.to_magnetic_field_strength()
->>> f"{(vacuum_permeability * total).to(TESLA):.3f}"
-'2.158 T'
+>>> (vacuum_permeability * total).to(TESLA)
+2.158274152731225 T
 
-The magnetization contributes almost all of it: the applied field alone would give
-about 9.4 mT.
-The value is an upper estimate for a core at saturation, since the real magnetization
-depends on the core material, its temperature, and its magnetic history.
+The example assumes the specimen is already at saturation; it does not claim that the
+applied field alone drives an arbitrary iron core to that state.
+The applied-field contribution on its own is about 9.4 mT.
 
-A paleomagnetist demagnetizes a rock core in steps of alternating field.
-The natural remanent magnetization along the measured axis falls from 0.12 A/m to
-0.03 A/m, and the ratio gives the fraction that survives treatment:
+A paleomagnetist measures a rock core before and after alternating-field
+demagnetization.
+The magnetization component along the measured axis falls from 0.12 A/m to 0.03 A/m.
+The remaining component is one quarter of the initial reading:
 
 >>> from kuchka.units.proportion import PERCENT
 >>> before = MAGNETIZATION_UNITS["A/m"](0.12)
@@ -51,12 +55,17 @@ The natural remanent magnetization along the measured axis falls from 0.12 A/m t
 >>> (after / before).to(PERCENT)
 25 %
 
-The readings are illustrative.
-Such measurements let researchers investigate the history of Earth's magnetic field
-recorded by rocks.
+These readings are illustrative.
+Paleomagnetic measurements of natural remanent magnetization help researchers
+investigate the history of Earth's magnetic field recorded by rocks.
 
 Notes
 -----
+Magnetization depends on material composition, temperature, applied field, and magnetic
+history.
+Ferromagnets exhibit hysteresis, so magnetization at a given applied field may depend
+on how that field was reached.
+
 `MAGNETIZATION_UNITS` accepts the same spellings as `MAGNETIC_FIELD_STRENGTH_UNITS`.
 It is intended for boundary code that reads magnetization from material
 characterisation, geological surveys, and magnetic simulation data.
