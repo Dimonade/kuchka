@@ -17,9 +17,17 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.current import Current
+    from kuchka.quantities.electromagnetics.capacitance import Capacitance
+    from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.inductance import Inductance
+    from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
+    from kuchka.quantities.electromagnetics.permittivity import Permittivity
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
 
 
 class Conductance(LinearQuantity):
@@ -30,9 +38,15 @@ class Conductance(LinearQuantity):
 
     # BEGIN GENERATED __mul__
     @overload
+    def __mul__(self, other: Inductance) -> Time: ...
+    @overload
+    def __mul__(self, other: MagneticFlux) -> Charge: ...
+    @overload
     def __mul__(self, other: Proportion) -> Conductance: ...
     @overload
     def __mul__(self, other: Resistance) -> Fraction: ...
+    @overload
+    def __mul__(self, other: Time) -> Capacitance: ...
     @overload
     def __mul__(self, other: Voltage) -> Current: ...
     @overload
@@ -48,9 +62,17 @@ class Conductance(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: Capacitance) -> Frequency: ...
+    @overload
     def __truediv__(self, other: Conductance) -> Proportion: ...
     @overload
+    def __truediv__(self, other: Frequency) -> Capacitance: ...
+    @overload
+    def __truediv__(self, other: Permittivity) -> Velocity: ...
+    @overload
     def __truediv__(self, other: Proportion) -> Conductance: ...
+    @overload
+    def __truediv__(self, other: Velocity) -> Permittivity: ...
     @overload
     def __truediv__(self, other: Numeric) -> Conductance: ...
     @overload

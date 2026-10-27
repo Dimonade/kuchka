@@ -29,6 +29,12 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.electromagnetics.magnetic_field_strength import (
+        MagneticFieldStrength,
+    )
+    from kuchka.quantities.electromagnetics.magnetic_flux_density import (
+        MagneticFluxDensity,
+    )
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.proportion import Proportion
@@ -61,6 +67,10 @@ class EnergyDensity(LinearQuantity):
     # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: EnergyDensity) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: MagneticFieldStrength) -> MagneticFluxDensity: ...
+    @overload
+    def __truediv__(self, other: MagneticFluxDensity) -> MagneticFieldStrength: ...
     @overload
     def __truediv__(self, other: Pressure) -> Proportion: ...
     @overload

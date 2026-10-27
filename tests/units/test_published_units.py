@@ -15,7 +15,14 @@ from tests.support.kinds import PUBLISHED_UNITS
 from tests.support.kinds import UNIT_TABLES
 
 # Tables derived from another by wrapping its constructors, which are not exported.
-DERIVED_TABLES = ("INSTANT_UNITS", "SAMPLING_PERIOD_UNITS", "STRESS_UNITS")
+DERIVED_TABLES = (
+    "IMPEDANCE_UNITS",
+    "INSTANT_UNITS",
+    "MAGNETIZATION_UNITS",
+    "REACTANCE_UNITS",
+    "SAMPLING_PERIOD_UNITS",
+    "STRESS_UNITS",
+)
 
 
 @pytest.mark.parametrize("name", UNIT_TABLES)

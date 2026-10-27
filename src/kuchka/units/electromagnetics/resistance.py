@@ -130,8 +130,7 @@ from kuchka.numeric import to_exact
 from kuchka.quantities import Resistance
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-    from collections.abc import Mapping
+    from kuchka.internal.unit_table import UnitTable
 
 
 OHM_NAME = "ohm"
@@ -350,7 +349,7 @@ def Gigaohm(value: Numeric) -> Resistance:
     return Resistance(to_exact(value) * GIGAOHM.scale, GIGAOHM)
 
 
-RESISTANCE_UNITS: Mapping[str, Callable[[Numeric], Resistance]] = unit_table(
+RESISTANCE_UNITS: UnitTable[Resistance] = unit_table(
     "RESISTANCE_UNITS",
     {
         MICROOHM: Microohm,

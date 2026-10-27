@@ -47,8 +47,18 @@ from kuchka.units.amount import *
 from kuchka.units.angular import *
 from kuchka.units.current import *
 from kuchka.units.electromagnetics.ac_power import *
+from kuchka.units.electromagnetics.capacitance import *
 from kuchka.units.electromagnetics.charge import *
 from kuchka.units.electromagnetics.conductance import *
+from kuchka.units.electromagnetics.impedance import *
+from kuchka.units.electromagnetics.inductance import *
+from kuchka.units.electromagnetics.magnetic_field_strength import *
+from kuchka.units.electromagnetics.magnetic_flux import *
+from kuchka.units.electromagnetics.magnetic_flux_density import *
+from kuchka.units.electromagnetics.magnetization import *
+from kuchka.units.electromagnetics.permeability import *
+from kuchka.units.electromagnetics.permittivity import *
+from kuchka.units.electromagnetics.reactance import *
 from kuchka.units.electromagnetics.resistance import *
 from kuchka.units.electromagnetics.voltage import *
 from kuchka.units.geometry.area import *
@@ -96,6 +106,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Torque: TORQUE_UNITS,
     quantities.Area: AREA_UNITS,
     quantities.BaudRate: BAUD_RATE_UNITS,
+    quantities.Capacitance: CAPACITANCE_UNITS,
     quantities.Charge: CHARGE_UNITS,
     quantities.Conductance: CONDUCTANCE_UNITS,
     quantities.Current: CURRENT_UNITS,
@@ -106,15 +117,24 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.EnergyDensity: ENERGY_DENSITY_UNITS,
     quantities.Force: FORCE_UNITS,
     quantities.Frequency: FREQUENCY_UNITS,
+    quantities.Impedance: IMPEDANCE_UNITS,
+    quantities.Inductance: INDUCTANCE_UNITS,
     quantities.Instant: INSTANT_UNITS,
     quantities.Length: LENGTH_UNITS,
     quantities.LogarithmicRatio: LOGARITHMIC_RATIO_UNITS,
     quantities.LuminousIntensity: LUMINOUS_INTENSITY_UNITS,
+    quantities.MagneticFieldStrength: MAGNETIC_FIELD_STRENGTH_UNITS,
+    quantities.MagneticFlux: MAGNETIC_FLUX_UNITS,
+    quantities.MagneticFluxDensity: MAGNETIC_FLUX_DENSITY_UNITS,
+    quantities.Magnetization: MAGNETIZATION_UNITS,
     quantities.Mass: MASS_UNITS,
+    quantities.Permeability: PERMEABILITY_UNITS,
+    quantities.Permittivity: PERMITTIVITY_UNITS,
     quantities.Power: POWER_UNITS,
     quantities.Pressure: PRESSURE_UNITS,
     quantities.Stress: STRESS_UNITS,
     quantities.Proportion: PROPORTION_UNITS,
+    quantities.Reactance: REACTANCE_UNITS,
     quantities.Resistance: RESISTANCE_UNITS,
     quantities.SampleRate: SAMPLE_RATE_UNITS,
     quantities.SamplingPeriod: SAMPLING_PERIOD_UNITS,

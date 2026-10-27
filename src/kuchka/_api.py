@@ -14,6 +14,7 @@ from kuchka.quantities import AngularVelocity
 from kuchka.quantities import ApparentPower
 from kuchka.quantities import Area
 from kuchka.quantities import BaudRate
+from kuchka.quantities import Capacitance
 from kuchka.quantities import Charge
 from kuchka.quantities import Conductance
 from kuchka.quantities import ConvertibleToFrequency
@@ -25,14 +26,23 @@ from kuchka.quantities import Energy
 from kuchka.quantities import EnergyDensity
 from kuchka.quantities import Force
 from kuchka.quantities import Frequency
+from kuchka.quantities import Impedance
+from kuchka.quantities import Inductance
 from kuchka.quantities import Instant
 from kuchka.quantities import Length
 from kuchka.quantities import LogarithmicRatio
 from kuchka.quantities import LuminousIntensity
+from kuchka.quantities import MagneticFieldStrength
+from kuchka.quantities import MagneticFlux
+from kuchka.quantities import MagneticFluxDensity
+from kuchka.quantities import Magnetization
 from kuchka.quantities import Mass
+from kuchka.quantities import Permeability
+from kuchka.quantities import Permittivity
 from kuchka.quantities import Power
 from kuchka.quantities import Pressure
 from kuchka.quantities import Proportion
+from kuchka.quantities import Reactance
 from kuchka.quantities import ReactivePower
 from kuchka.quantities import Resistance
 from kuchka.quantities import SampleRate
@@ -48,6 +58,7 @@ from kuchka.quantities import Volume
 from kuchka.units import Acre
 from kuchka.units import Ampere
 from kuchka.units import AmpereHour
+from kuchka.units import AmperePerMetre
 from kuchka.units import AmpereSecond
 from kuchka.units import ArcMinute
 from kuchka.units import ArcMinuteDisplacement
@@ -92,11 +103,17 @@ from kuchka.units import EarthMass
 from kuchka.units import Electronvolt
 from kuchka.units import Erg
 from kuchka.units import Fahrenheit
+from kuchka.units import Farad
+from kuchka.units import FaradPerMetre
+from kuchka.units import Femtofarad
+from kuchka.units import Femtogauss
 from kuchka.units import Femtomole
 from kuchka.units import Femtosecond
+from kuchka.units import Femtotesla
 from kuchka.units import Foot
 from kuchka.units import Fortnight
 from kuchka.units import Gal
+from kuchka.units import Gauss
 from kuchka.units import Gibibit
 from kuchka.units import GibibitPerSecond
 from kuchka.units import Gibibyte
@@ -127,6 +144,8 @@ from kuchka.units import GramPerMilliliter
 from kuchka.units import GramPerMillilitre
 from kuchka.units import Hectare
 from kuchka.units import Hectopascal
+from kuchka.units import Henry
+from kuchka.units import HenryPerMetre
 from kuchka.units import Hertz
 from kuchka.units import Horsepower
 from kuchka.units import Hour
@@ -143,6 +162,7 @@ from kuchka.units import KibibitPerSecond
 from kuchka.units import Kibibyte
 from kuchka.units import KibibytePerSecond
 from kuchka.units import Kiloampere
+from kuchka.units import KiloamperePerMetre
 from kuchka.units import Kilobaud
 from kuchka.units import Kilobecquerel
 from kuchka.units import Kilobit
@@ -151,12 +171,15 @@ from kuchka.units import Kilobyte
 from kuchka.units import KilobytePerSecond
 from kuchka.units import Kilocalorie
 from kuchka.units import Kiloelectronvolt
+from kuchka.units import Kilofarad
+from kuchka.units import Kilogauss
 from kuchka.units import Kilogram
 from kuchka.units import KilogramForce
 from kuchka.units import KilogramPerCubicMeter
 from kuchka.units import KilogramPerCubicMetre
 from kuchka.units import KilogramPerLiter
 from kuchka.units import KilogramPerLitre
+from kuchka.units import Kilohenry
 from kuchka.units import Kilohertz
 from kuchka.units import Kilojoule
 from kuchka.units import KilojoulePerCubicMeter
@@ -176,12 +199,14 @@ from kuchka.units import Kilopascal
 from kuchka.units import KilopoundPerSquareInch
 from kuchka.units import KilosamplesPerSecond
 from kuchka.units import Kilosiemens
+from kuchka.units import Kilotesla
 from kuchka.units import KilotonneOfTNT
 from kuchka.units import Kilovar
 from kuchka.units import Kilovolt
 from kuchka.units import KilovoltAmpere
 from kuchka.units import Kilowatt
 from kuchka.units import KilowattHour
+from kuchka.units import Kiloweber
 from kuchka.units import Knot
 from kuchka.units import LightYear
 from kuchka.units import Liter
@@ -191,6 +216,7 @@ from kuchka.units import MebibitPerSecond
 from kuchka.units import Mebibyte
 from kuchka.units import MebibytePerSecond
 from kuchka.units import Megaampere
+from kuchka.units import MegaamperePerMetre
 from kuchka.units import Megabaud
 from kuchka.units import Megabecquerel
 from kuchka.units import Megabit
@@ -220,11 +246,17 @@ from kuchka.units import MetrePerSecond
 from kuchka.units import MetrePerSecondSquared
 from kuchka.units import MetricHorsepower
 from kuchka.units import Microampere
+from kuchka.units import MicroamperePerMetre
 from kuchka.units import Microcoulomb
 from kuchka.units import Microcurie
 from kuchka.units import Microelectronvolt
+from kuchka.units import Microfarad
+from kuchka.units import MicrofaradPerMetre
 from kuchka.units import Microgal
+from kuchka.units import Microgauss
 from kuchka.units import Microgram
+from kuchka.units import Microhenry
+from kuchka.units import MicrohenryPerMetre
 from kuchka.units import Microhertz
 from kuchka.units import Microjoule
 from kuchka.units import Microliter
@@ -236,20 +268,28 @@ from kuchka.units import Micronewton
 from kuchka.units import Microohm
 from kuchka.units import Microsecond
 from kuchka.units import Microsiemens
+from kuchka.units import Microtesla
 from kuchka.units import Microvolt
 from kuchka.units import Microwatt
+from kuchka.units import Microweber
 from kuchka.units import Mile
 from kuchka.units import MilePerHour
 from kuchka.units import Milliampere
 from kuchka.units import MilliampereHour
+from kuchka.units import MilliamperePerMetre
 from kuchka.units import MilliampereSecond
 from kuchka.units import Millibar
 from kuchka.units import Millibecquerel
 from kuchka.units import Millicoulomb
 from kuchka.units import Millicurie
 from kuchka.units import Millielectronvolt
+from kuchka.units import Millifarad
+from kuchka.units import MillifaradPerMetre
 from kuchka.units import Milligal
+from kuchka.units import Milligauss
 from kuchka.units import Milligram
+from kuchka.units import Millihenry
+from kuchka.units import MillihenryPerMetre
 from kuchka.units import Millihertz
 from kuchka.units import Millijoule
 from kuchka.units import Milliliter
@@ -263,16 +303,23 @@ from kuchka.units import MillinewtonMetre
 from kuchka.units import Milliohm
 from kuchka.units import Millisecond
 from kuchka.units import Millisiemens
+from kuchka.units import Millitesla
 from kuchka.units import Millivar
 from kuchka.units import Millivolt
 from kuchka.units import MillivoltAmpere
 from kuchka.units import Milliwatt
 from kuchka.units import MilliwattHour
+from kuchka.units import Milliweber
 from kuchka.units import Minute
 from kuchka.units import Mole
 from kuchka.units import Nanoampere
 from kuchka.units import Nanocoulomb
+from kuchka.units import Nanofarad
+from kuchka.units import NanofaradPerMetre
+from kuchka.units import Nanogauss
 from kuchka.units import Nanogram
+from kuchka.units import Nanohenry
+from kuchka.units import NanohenryPerMetre
 from kuchka.units import Nanohertz
 from kuchka.units import Nanojoule
 from kuchka.units import Nanometer
@@ -280,8 +327,10 @@ from kuchka.units import Nanometre
 from kuchka.units import Nanomole
 from kuchka.units import Nanosecond
 from kuchka.units import Nanosiemens
+from kuchka.units import Nanotesla
 from kuchka.units import Nanovolt
 from kuchka.units import Nanowatt
+from kuchka.units import Nanoweber
 from kuchka.units import NauticalMile
 from kuchka.units import Newton
 from kuchka.units import NewtonMeter
@@ -306,12 +355,17 @@ from kuchka.units import Petawatt
 from kuchka.units import Picoampere
 from kuchka.units import Picocoulomb
 from kuchka.units import Picocurie
+from kuchka.units import Picofarad
+from kuchka.units import PicofaradPerMetre
+from kuchka.units import Picogauss
 from kuchka.units import Picogram
+from kuchka.units import Picohenry
 from kuchka.units import Picojoule
 from kuchka.units import Picometer
 from kuchka.units import Picometre
 from kuchka.units import Picomole
 from kuchka.units import Picosecond
+from kuchka.units import Picotesla
 from kuchka.units import Picowatt
 from kuchka.units import Pound
 from kuchka.units import PoundForce
@@ -349,6 +403,7 @@ from kuchka.units import Teraelectronvolt
 from kuchka.units import Terahertz
 from kuchka.units import Terajoule
 from kuchka.units import Terawatt
+from kuchka.units import Tesla
 from kuchka.units import ThermochemicalCalorie
 from kuchka.units import Tonne
 from kuchka.units import TonneOfTNT
@@ -362,6 +417,7 @@ from kuchka.units import Watt
 from kuchka.units import WattHour
 from kuchka.units import WattHourPerLiter
 from kuchka.units import WattHourPerLitre
+from kuchka.units import Weber
 from kuchka.units import Week
 from kuchka.units import Yard
 
@@ -372,6 +428,7 @@ __all__ = [
     "AmountOfSubstance",
     "Ampere",
     "AmpereHour",
+    "AmperePerMetre",
     "AmpereSecond",
     "Angle",
     "AngularDisplacement",
@@ -395,6 +452,7 @@ __all__ = [
     "BytePerSecond",
     "Calorie",
     "Candela",
+    "Capacitance",
     "Celsius",
     "Centimeter",
     "Centimetre",
@@ -431,13 +489,19 @@ __all__ = [
     "EnergyDensity",
     "Erg",
     "Fahrenheit",
+    "Farad",
+    "FaradPerMetre",
+    "Femtofarad",
+    "Femtogauss",
     "Femtomole",
     "Femtosecond",
+    "Femtotesla",
     "Foot",
     "Force",
     "Fortnight",
     "Frequency",
     "Gal",
+    "Gauss",
     "Gibibit",
     "GibibitPerSecond",
     "Gibibyte",
@@ -468,10 +532,14 @@ __all__ = [
     "GramPerMillilitre",
     "Hectare",
     "Hectopascal",
+    "Henry",
+    "HenryPerMetre",
     "Hertz",
     "Horsepower",
     "Hour",
+    "Impedance",
     "Inch",
+    "Inductance",
     "Instant",
     "Jiffy",
     "Joule",
@@ -485,6 +553,7 @@ __all__ = [
     "Kibibyte",
     "KibibytePerSecond",
     "Kiloampere",
+    "KiloamperePerMetre",
     "Kilobaud",
     "Kilobecquerel",
     "Kilobit",
@@ -493,12 +562,15 @@ __all__ = [
     "KilobytePerSecond",
     "Kilocalorie",
     "Kiloelectronvolt",
+    "Kilofarad",
+    "Kilogauss",
     "Kilogram",
     "KilogramForce",
     "KilogramPerCubicMeter",
     "KilogramPerCubicMetre",
     "KilogramPerLiter",
     "KilogramPerLitre",
+    "Kilohenry",
     "Kilohertz",
     "Kilojoule",
     "KilojoulePerCubicMeter",
@@ -518,12 +590,14 @@ __all__ = [
     "KilopoundPerSquareInch",
     "KilosamplesPerSecond",
     "Kilosiemens",
+    "Kilotesla",
     "KilotonneOfTNT",
     "Kilovar",
     "Kilovolt",
     "KilovoltAmpere",
     "Kilowatt",
     "KilowattHour",
+    "Kiloweber",
     "Knot",
     "Length",
     "LightYear",
@@ -531,12 +605,17 @@ __all__ = [
     "Litre",
     "LogarithmicRatio",
     "LuminousIntensity",
+    "MagneticFieldStrength",
+    "MagneticFlux",
+    "MagneticFluxDensity",
+    "Magnetization",
     "Mass",
     "Mebibit",
     "MebibitPerSecond",
     "Mebibyte",
     "MebibytePerSecond",
     "Megaampere",
+    "MegaamperePerMetre",
     "Megabaud",
     "Megabecquerel",
     "Megabit",
@@ -566,11 +645,17 @@ __all__ = [
     "MetrePerSecondSquared",
     "MetricHorsepower",
     "Microampere",
+    "MicroamperePerMetre",
     "Microcoulomb",
     "Microcurie",
     "Microelectronvolt",
+    "Microfarad",
+    "MicrofaradPerMetre",
     "Microgal",
+    "Microgauss",
     "Microgram",
+    "Microhenry",
+    "MicrohenryPerMetre",
     "Microhertz",
     "Microjoule",
     "Microliter",
@@ -582,20 +667,28 @@ __all__ = [
     "Microohm",
     "Microsecond",
     "Microsiemens",
+    "Microtesla",
     "Microvolt",
     "Microwatt",
+    "Microweber",
     "Mile",
     "MilePerHour",
     "Milliampere",
     "MilliampereHour",
+    "MilliamperePerMetre",
     "MilliampereSecond",
     "Millibar",
     "Millibecquerel",
     "Millicoulomb",
     "Millicurie",
     "Millielectronvolt",
+    "Millifarad",
+    "MillifaradPerMetre",
     "Milligal",
+    "Milligauss",
     "Milligram",
+    "Millihenry",
+    "MillihenryPerMetre",
     "Millihertz",
     "Millijoule",
     "Milliliter",
@@ -609,16 +702,23 @@ __all__ = [
     "Milliohm",
     "Millisecond",
     "Millisiemens",
+    "Millitesla",
     "Millivar",
     "Millivolt",
     "MillivoltAmpere",
     "Milliwatt",
     "MilliwattHour",
+    "Milliweber",
     "Minute",
     "Mole",
     "Nanoampere",
     "Nanocoulomb",
+    "Nanofarad",
+    "NanofaradPerMetre",
+    "Nanogauss",
     "Nanogram",
+    "Nanohenry",
+    "NanohenryPerMetre",
     "Nanohertz",
     "Nanojoule",
     "Nanometer",
@@ -626,8 +726,10 @@ __all__ = [
     "Nanomole",
     "Nanosecond",
     "Nanosiemens",
+    "Nanotesla",
     "Nanovolt",
     "Nanowatt",
+    "Nanoweber",
     "NauticalMile",
     "Newton",
     "NewtonMeter",
@@ -640,6 +742,8 @@ __all__ = [
     "Pebibyte",
     "PebibytePerSecond",
     "Percent",
+    "Permeability",
+    "Permittivity",
     "Petabit",
     "PetabitPerSecond",
     "Petabyte",
@@ -652,12 +756,17 @@ __all__ = [
     "Picoampere",
     "Picocoulomb",
     "Picocurie",
+    "Picofarad",
+    "PicofaradPerMetre",
+    "Picogauss",
     "Picogram",
+    "Picohenry",
     "Picojoule",
     "Picometer",
     "Picometre",
     "Picomole",
     "Picosecond",
+    "Picotesla",
     "Picowatt",
     "Pound",
     "PoundForce",
@@ -671,6 +780,7 @@ __all__ = [
     "RadianDisplacement",
     "RadianPerSecond",
     "Ratio",
+    "Reactance",
     "ReactivePower",
     "Resistance",
     "RevolutionPerMinute",
@@ -705,6 +815,7 @@ __all__ = [
     "Terahertz",
     "Terajoule",
     "Terawatt",
+    "Tesla",
     "ThermochemicalCalorie",
     "Time",
     "Tonne",
@@ -723,6 +834,7 @@ __all__ = [
     "WattHour",
     "WattHourPerLiter",
     "WattHourPerLitre",
+    "Weber",
     "Week",
     "Yard",
 ]

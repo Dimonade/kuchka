@@ -17,7 +17,9 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.angular import AngularDisplacement
+    from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.length import Length
@@ -59,6 +61,8 @@ class Energy(LinearQuantity):
     @overload
     def __truediv__(self, other: Charge) -> Voltage: ...
     @overload
+    def __truediv__(self, other: Current) -> MagneticFlux: ...
+    @overload
     def __truediv__(self, other: Energy) -> Proportion: ...
     @overload
     def __truediv__(self, other: EnergyDensity) -> Volume: ...
@@ -66,6 +70,8 @@ class Energy(LinearQuantity):
     def __truediv__(self, other: Force) -> Length: ...
     @overload
     def __truediv__(self, other: Length) -> Force: ...
+    @overload
+    def __truediv__(self, other: MagneticFlux) -> Current: ...
     @overload
     def __truediv__(self, other: Power) -> Time: ...
     @overload

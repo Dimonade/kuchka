@@ -222,7 +222,7 @@ def fix_imports(text: str, homes: dict[str, str]) -> str:
         if isinstance(n, ast.If) and "TYPE_CHECKING" in ast.unparse(n.test)
     )
     wanted = _needed_type_imports(tree, homes)
-    drop = {n.lineno - 1 for n in owned}
+    drop = {i for n in owned for i in range(n.lineno - 1, n.end_lineno or n.lineno)}
     anchor = block.body[0].lineno - 1
     new = [f"{INDENT}from {module} import {name}" for name, module in wanted.items()]
     out = []

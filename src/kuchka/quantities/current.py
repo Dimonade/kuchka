@@ -18,8 +18,15 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.inductance import Inductance
+    from kuchka.quantities.electromagnetics.magnetic_field_strength import (
+        MagneticFieldStrength,
+    )
+    from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.length import Length
+    from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
@@ -33,6 +40,10 @@ class Current(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: Inductance) -> MagneticFlux: ...
+    @overload
+    def __mul__(self, other: MagneticFlux) -> Energy: ...
     @overload
     def __mul__(self, other: Proportion) -> Current: ...
     @overload
@@ -61,6 +72,10 @@ class Current(LinearQuantity):
     def __truediv__(self, other: Current) -> Proportion: ...
     @overload
     def __truediv__(self, other: Frequency) -> Charge: ...
+    @overload
+    def __truediv__(self, other: Length) -> MagneticFieldStrength: ...
+    @overload
+    def __truediv__(self, other: MagneticFieldStrength) -> Length: ...
     @overload
     def __truediv__(self, other: Proportion) -> Current: ...
     @overload
