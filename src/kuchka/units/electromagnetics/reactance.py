@@ -74,6 +74,9 @@ Both conventions describe the same physical circuit when applied consistently.
 For a derivation of the ideal inductive and capacitive formulas, see OpenStax, *College
 Physics 2e*, “Reactance, Inductive and Capacitive”:
 https://openstax.org/books/college-physics-2e/pages/23-11-reactance-inductive-and-capacitive
+
+EMF Portal, Microwave oven: operating frequency and magnetron use
+https://www.emf-portal.org/en/emf-source/603
 """
 
 from __future__ import annotations
