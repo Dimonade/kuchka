@@ -51,9 +51,9 @@ from kuchka.quantities.electromagnetics.capacitance import *
 from kuchka.quantities.electromagnetics.charge import *
 from kuchka.quantities.electromagnetics.conductance import *
 from kuchka.quantities.electromagnetics.inductance import *
-from kuchka.quantities.electromagnetics.magnetization import *
 from kuchka.quantities.electromagnetics.magnetic_flux import *
 from kuchka.quantities.electromagnetics.magnetic_flux_density import *
+from kuchka.quantities.electromagnetics.magnetization import *
 from kuchka.quantities.electromagnetics.permeability import *
 from kuchka.quantities.electromagnetics.permittivity import *
 from kuchka.quantities.electromagnetics.resistance import *

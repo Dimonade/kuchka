@@ -17,10 +17,10 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.electromagnetics.inductance import Inductance
-    from kuchka.quantities.electromagnetics.magnetization import Magnetization
     from kuchka.quantities.electromagnetics.magnetic_flux_density import (
         MagneticFluxDensity,
     )
+    from kuchka.quantities.electromagnetics.magnetization import Magnetization
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length

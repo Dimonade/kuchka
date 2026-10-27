@@ -16,8 +16,8 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
-    from kuchka.quantities.electromagnetics.magnetization import Magnetization
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
+    from kuchka.quantities.electromagnetics.magnetization import Magnetization
     from kuchka.quantities.electromagnetics.permeability import Permeability
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.proportion import Proportion
@@ -47,9 +47,9 @@ class MagneticFluxDensity(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
-    def __truediv__(self, other: Magnetization) -> Permeability: ...
-    @overload
     def __truediv__(self, other: MagneticFluxDensity) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Magnetization) -> Permeability: ...
     @overload
     def __truediv__(self, other: Permeability) -> Magnetization: ...
     @overload

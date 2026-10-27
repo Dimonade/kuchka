@@ -11,13 +11,13 @@ import pytest
 from kuchka import Current
 from kuchka import IncompatibleDimensionError
 from kuchka import Length
-from kuchka import Magnetization
 from kuchka import MagneticFluxDensity
+from kuchka import Magnetization
 from kuchka import Permeability
 from kuchka.units import current
 from kuchka.units import length
-from kuchka.units.electromagnetics import magnetization as field
 from kuchka.units.electromagnetics import magnetic_flux_density
+from kuchka.units.electromagnetics import magnetization as field
 from kuchka.units.electromagnetics import permeability
 
 
@@ -59,7 +59,7 @@ def test_a_flux_density_over_a_permeability_is_a_magnetization() -> None:
 
 def test_a_magnetization_is_not_a_current() -> None:
     with pytest.raises(IncompatibleDimensionError):
-        field.AmperePerMetre(1) + current.Ampere(1)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+        field.AmperePerMetre(1) + current.Ampere(1)  # type: ignore[operator]
 
 
 def test_the_boundary_reads_the_spoken_forms() -> None:

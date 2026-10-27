@@ -444,7 +444,7 @@ The complete unit vocabulary is available in the API reference.
 | Conductance          | `Nanosiemens` through `Kilosiemens`                                                                                |
 | Charge               | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                              |
 | Magnetic Flux        | `Nanoweber` through `Kiloweber`                                                                                    |
-| Flux Density         | `Femtotesla` through `Kilotesla`                                                                                   |
+| Flux Density         | `Femtotesla` through `Kilotesla`, `Femtogauss` through `Kilogauss`                                                 |
 | Capacitance          | `Femtofarad` through `Kilofarad`                                                                                   |
 | Inductance           | `Picohenry` through `Kilohenry`                                                                                    |
 | Reactance            | reached via `Resistance.to_reactance()`                                                                            |

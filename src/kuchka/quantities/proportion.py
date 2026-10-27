@@ -35,11 +35,11 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
     from kuchka.quantities.electromagnetics.inductance import Inductance
-    from kuchka.quantities.electromagnetics.magnetization import Magnetization
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.magnetic_flux_density import (
         MagneticFluxDensity,
     )
+    from kuchka.quantities.electromagnetics.magnetization import Magnetization
     from kuchka.quantities.electromagnetics.permeability import Permeability
     from kuchka.quantities.electromagnetics.permittivity import Permittivity
     from kuchka.quantities.electromagnetics.resistance import Impedance
@@ -127,11 +127,11 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: LuminousIntensity) -> LuminousIntensity: ...
     @overload
-    def __mul__(self, other: Magnetization) -> Magnetization: ...
-    @overload
     def __mul__(self, other: MagneticFlux) -> MagneticFlux: ...
     @overload
     def __mul__(self, other: MagneticFluxDensity) -> MagneticFluxDensity: ...
+    @overload
+    def __mul__(self, other: Magnetization) -> Magnetization: ...
     @overload
     def __mul__(self, other: Mass) -> Mass: ...
     @overload

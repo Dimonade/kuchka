@@ -1,7 +1,7 @@
 """MagneticFluxDensity: the weber per square metre, and the quantities it relates to.
 
 The generic behaviour of a quantity type is covered once for every type;
-this module covers what is specific to the tesla.
+this module covers what is specific to the tesla and the gauss.
 """
 
 from __future__ import annotations
@@ -50,3 +50,19 @@ def test_the_tesla_is_known_by_its_weber_per_square_metre_spellings() -> None:
 
     assert MAGNETIC_FLUX_DENSITY_UNITS["Wb/m²"] is magnetic_flux_density.Tesla
     assert isinstance(MAGNETIC_FLUX_DENSITY_UNITS["mT"](3), MagneticFluxDensity)
+
+
+def test_a_gauss_is_a_ten_thousandth_of_a_tesla() -> None:
+    assert magnetic_flux_density.Gauss(10_000) == magnetic_flux_density.Tesla(1)
+
+
+def test_a_gauss_through_a_square_centimetre_is_ten_nanoweber() -> None:
+    flux = magnetic_flux_density.Gauss(1) * area.SquareCentimetre(1)
+    assert flux == magnetic_flux.Nanoweber(10)
+
+
+def test_the_gauss_is_known_by_its_plural_and_by_gs() -> None:
+    from kuchka.units import MAGNETIC_FLUX_DENSITY_UNITS
+
+    assert MAGNETIC_FLUX_DENSITY_UNITS["Gs"] is magnetic_flux_density.Gauss
+    assert MAGNETIC_FLUX_DENSITY_UNITS["gausses"] is magnetic_flux_density.Gauss

@@ -52,9 +52,9 @@ from kuchka.units.electromagnetics.charge import *
 from kuchka.units.electromagnetics.conductance import *
 from kuchka.units.electromagnetics.impedance import *
 from kuchka.units.electromagnetics.inductance import *
-from kuchka.units.electromagnetics.magnetization import *
 from kuchka.units.electromagnetics.magnetic_flux import *
 from kuchka.units.electromagnetics.magnetic_flux_density import *
+from kuchka.units.electromagnetics.magnetization import *
 from kuchka.units.electromagnetics.permeability import *
 from kuchka.units.electromagnetics.permittivity import *
 from kuchka.units.electromagnetics.reactance import *
