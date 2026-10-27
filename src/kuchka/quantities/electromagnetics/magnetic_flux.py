@@ -20,10 +20,12 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
     from kuchka.quantities.electromagnetics.inductance import Inductance
+    from kuchka.quantities.electromagnetics.magnetic_field_strength import (
+        MagneticFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.magnetic_flux_density import (
         MagneticFluxDensity,
     )
-    from kuchka.quantities.electromagnetics.magnetization import Magnetization
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.geometry.area import Area
@@ -48,7 +50,7 @@ class MagneticFlux(LinearQuantity):
     @overload
     def __mul__(self, other: Frequency) -> Voltage: ...
     @overload
-    def __mul__(self, other: Magnetization) -> Force: ...
+    def __mul__(self, other: MagneticFieldStrength) -> Force: ...
     @overload
     def __mul__(self, other: Proportion) -> MagneticFlux: ...
     @overload

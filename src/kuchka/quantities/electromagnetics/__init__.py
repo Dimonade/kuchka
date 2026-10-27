@@ -7,9 +7,9 @@ from kuchka.quantities.electromagnetics import capacitance
 from kuchka.quantities.electromagnetics import charge
 from kuchka.quantities.electromagnetics import conductance
 from kuchka.quantities.electromagnetics import inductance
+from kuchka.quantities.electromagnetics import magnetic_field_strength
 from kuchka.quantities.electromagnetics import magnetic_flux
 from kuchka.quantities.electromagnetics import magnetic_flux_density
-from kuchka.quantities.electromagnetics import magnetization
 from kuchka.quantities.electromagnetics import permeability
 from kuchka.quantities.electromagnetics import permittivity
 from kuchka.quantities.electromagnetics import resistance
@@ -19,9 +19,9 @@ from kuchka.quantities.electromagnetics.capacitance import *
 from kuchka.quantities.electromagnetics.charge import *
 from kuchka.quantities.electromagnetics.conductance import *
 from kuchka.quantities.electromagnetics.inductance import *
+from kuchka.quantities.electromagnetics.magnetic_field_strength import *
 from kuchka.quantities.electromagnetics.magnetic_flux import *
 from kuchka.quantities.electromagnetics.magnetic_flux_density import *
-from kuchka.quantities.electromagnetics.magnetization import *
 from kuchka.quantities.electromagnetics.permeability import *
 from kuchka.quantities.electromagnetics.permittivity import *
 from kuchka.quantities.electromagnetics.resistance import *
@@ -33,7 +33,7 @@ __all__ += capacitance.__all__
 __all__ += charge.__all__
 __all__ += conductance.__all__
 __all__ += inductance.__all__
-__all__ += magnetization.__all__
+__all__ += magnetic_field_strength.__all__
 __all__ += magnetic_flux.__all__
 __all__ += magnetic_flux_density.__all__
 __all__ += permeability.__all__

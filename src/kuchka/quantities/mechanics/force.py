@@ -16,8 +16,10 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.electromagnetics.magnetic_field_strength import (
+        MagneticFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
-    from kuchka.quantities.electromagnetics.magnetization import Magnetization
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.velocity import Velocity
@@ -64,9 +66,9 @@ class Force(LinearQuantity):
     @overload
     def __truediv__(self, other: Force) -> Proportion: ...
     @overload
-    def __truediv__(self, other: MagneticFlux) -> Magnetization: ...
+    def __truediv__(self, other: MagneticFieldStrength) -> MagneticFlux: ...
     @overload
-    def __truediv__(self, other: Magnetization) -> MagneticFlux: ...
+    def __truediv__(self, other: MagneticFlux) -> MagneticFieldStrength: ...
     @overload
     def __truediv__(self, other: Mass) -> Acceleration: ...
     @overload

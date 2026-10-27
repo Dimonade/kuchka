@@ -32,6 +32,7 @@ from kuchka.quantities import Instant
 from kuchka.quantities import Length
 from kuchka.quantities import LogarithmicRatio
 from kuchka.quantities import LuminousIntensity
+from kuchka.quantities import MagneticFieldStrength
 from kuchka.quantities import MagneticFlux
 from kuchka.quantities import MagneticFluxDensity
 from kuchka.quantities import Magnetization
@@ -604,6 +605,7 @@ __all__ = [
     "Litre",
     "LogarithmicRatio",
     "LuminousIntensity",
+    "MagneticFieldStrength",
     "MagneticFlux",
     "MagneticFluxDensity",
     "Magnetization",

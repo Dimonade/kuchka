@@ -14,6 +14,8 @@ from kuchka import Frequency
 from kuchka import Impedance
 from kuchka import Instant
 from kuchka import LogarithmicRatio
+from kuchka import MagneticFieldStrength
+from kuchka import Magnetization
 from kuchka import Power
 from kuchka import Pressure
 from kuchka import Proportion
@@ -29,6 +31,7 @@ from kuchka import Time
 from kuchka.dimensions import ANGLE
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import FREQUENCY
+from kuchka.dimensions import MAGNETIC_FIELD_STRENGTH
 from kuchka.dimensions import POWER
 from kuchka.dimensions import PRESSURE
 from kuchka.dimensions import RESISTANCE
@@ -48,6 +51,7 @@ SHARED = {
     DIMENSIONLESS: (Proportion, LogarithmicRatio),
     PRESSURE: (Pressure, Stress, EnergyDensity),
     POWER: (Power, ApparentPower, ReactivePower),
+    MAGNETIC_FIELD_STRENGTH: (MagneticFieldStrength, Magnetization),
     RESISTANCE: (Resistance, Reactance, Impedance),
     ANGLE: (Angle, AngularDisplacement),
 }

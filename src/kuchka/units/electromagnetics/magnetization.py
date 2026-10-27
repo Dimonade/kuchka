@@ -1,59 +1,65 @@
-"""Magnetization constructors, from microamperes per metre to megaamperes per metre.
+"""Magnetization is a distinct quantity type that uses the ampere-per-metre units.
 
 Magnetization (M) is the magnetic dipole moment per unit volume of a material.
-Its SI unit is the ampere per metre (A/m), the same unit as magnetic
-field strength (H).
-The two quantities are physically distinct: H describes the applied magnetic field,
-while M describes the material's magnetic response.
+It has the same dimension and unit as magnetic field strength (H), but they are
+different physical quantities: H is the magnetising field set by free currents, and M is
+the material's own magnetic response to the total field.
+In SI, magnetic flux density relates to both as B = μ0(H + M).
 
-In SI, magnetic flux density is related to both quantities by B = μ₀(H + M).
-Ferromagnetic materials can retain magnetization after the applied field is removed,
-and their magnetization approaches a saturation value as their magnetic moments become
-increasingly aligned.
+No unit definitions live here: `kuchka.units.electromagnetics.magnetic_field_strength`
+owns the ampere per metre and its multiples.
+Each entry of `MAGNETIZATION_UNITS` reads the corresponding field-strength constructor's
+result through `MagneticFieldStrength.to_magnetization()`.
+That conversion preserves the numerical reading and changes its quantity kind.
+`Magnetization.to_magnetic_field_strength()` converts back, which is how a magnetization
+joins an applied field or meets a permeability.
+
+Ferromagnets retain magnetization after the applied field is removed, and it approaches
+a saturation value as the moments align.
+It also depends on temperature and on magnetic history, so the value at a given applied
+field can depend on how that field was reached.
 
 Examples
 --------
-A paleomagnetist measures a rock core before and after alternating-field
-demagnetization.
-The component along the measured axis falls from 0.12 A/m to 0.03 A/m.
-The difference estimates the component removed by treatment:
+Near room temperature, iron has a saturation magnetization of about 1.71 MA/m.
+An iron core in a solenoid with an applied field of 7.5 kA/m is close to saturation,
+so the total flux density is B = μ0(H + M).
+Adding the two needs the same kind on both sides, which makes the step explicit:
 
->>> from kuchka import AmperePerMetre
->>> before_treatment = AmperePerMetre(0.12)
->>> after_treatment = AmperePerMetre(0.03)
->>> before_treatment - after_treatment
-0.09 A/m
+>>> from kuchka import KiloamperePerMetre, MicrohenryPerMetre
+>>> from kuchka.units.electromagnetics.magnetic_flux_density import TESLA
+>>> from kuchka.units.electromagnetics.magnetization import MAGNETIZATION_UNITS
+>>> applied = KiloamperePerMetre(7.5)
+>>> iron_saturation = MAGNETIZATION_UNITS["MA/m"](1.71)
+>>> vacuum_permeability = MicrohenryPerMetre(1.25663706127)
+>>> total = applied + iron_saturation.to_magnetic_field_strength()
+>>> f"{(vacuum_permeability * total).to(TESLA):.3f}"
+'2.158 T'
+
+The magnetization contributes almost all of it: the applied field alone would give
+about 9.4 mT.
+The value is an upper estimate for a core at saturation, since the real magnetization
+depends on the core material, its temperature, and its magnetic history.
+
+A paleomagnetist demagnetizes a rock core in steps of alternating field.
+The natural remanent magnetization along the measured axis falls from 0.12 A/m to
+0.03 A/m, and the ratio gives the fraction that survives treatment:
+
+>>> from kuchka.units.proportion import PERCENT
+>>> before = MAGNETIZATION_UNITS["A/m"](0.12)
+>>> after = MAGNETIZATION_UNITS["A/m"](0.03)
+>>> (after / before).to(PERCENT)
+25 %
 
 The readings are illustrative.
-In practice, paleomagnetic measurements help researchers investigate the history of
-Earth's magnetic field recorded by rocks.
-
-Near room temperature, iron has a saturation magnetization of approximately 1.71 MA/m.
-Multiplying this by vacuum permeability gives the μ₀M contribution to the
-magnetic-flux-density relation, about 2.15 T:
-
->>> from kuchka import MegaamperePerMetre, MicrohenryPerMetre
->>> from kuchka.units.electromagnetics.magnetic_flux_density import TESLA
->>> iron_saturation = MegaamperePerMetre(1.71)
->>> vacuum_permeability = MicrohenryPerMetre(1.25663706127)
->>> (vacuum_permeability * iron_saturation).to(TESLA)
-2.1488493747717 T
-
-This is the μ₀M term, not a prediction of the total flux density in an arbitrary iron
-specimen.
-The applied field, sample geometry, and magnetic state also affect the measured result.
+Such measurements let researchers investigate the history of Earth's magnetic field
+recorded by rocks.
 
 Notes
 -----
-Magnetization depends on material composition, temperature, magnetic history, and
-applied field.
-Ferromagnets exhibit hysteresis, so the magnetization at a given applied field can
-depend on how that field was reached.
-
-`MAGNETIZATION_UNITS` maps symbols such as ``"µA/m"``, ``"mA/m"``, ``"A/m"``,
-``"kA/m"``, and ``"MA/m"`` to their constructors.
-It is intended for boundary code that reads measurements from geological surveys,
-material characterisation, and magnetic simulation data.
+`MAGNETIZATION_UNITS` accepts the same spellings as `MAGNETIC_FIELD_STRENGTH_UNITS`.
+It is intended for boundary code that reads magnetization from material
+characterisation, geological surveys, and magnetic simulation data.
 
 """
 
@@ -61,130 +67,35 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from kuchka.dimensions import MAGNETIZATION
-from kuchka.internal import prefixes
-from kuchka.internal.prefixes import prefixed_unit
-from kuchka.internal.unit_table import unit_table
-from kuchka.numeric import Numeric
-from kuchka.numeric import to_exact
 from kuchka.quantities import Magnetization
+from kuchka.units.electromagnetics.magnetic_field_strength import AMPERE_PER_METRE
+from kuchka.units.electromagnetics.magnetic_field_strength import (
+    MAGNETIC_FIELD_STRENGTH_UNITS,
+)
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from kuchka.internal.unit_table import UnitTable
+    from kuchka.numeric import Numeric
+    from kuchka.quantities import MagneticFieldStrength
 
-AMPERE_PER_METRE_NAME = "ampere_per_metre"
-AMPERE_PER_METRE_SYMBOL = "A/m"
-AMPERE_PER_METRE_WORDS = ("ampere per metre", "ampere per meter")
-"""Spoken forms, which prefixed names follow: `milliampere per metre`."""
+Magnetization._canonical_unit = AMPERE_PER_METRE  # noqa: SLF001 -- reused from MagneticFieldStrength's own AMPERE_PER_METRE
 
-MICROAMPERE_PER_METRE = prefixed_unit(
-    prefixes.MICRO,
-    AMPERE_PER_METRE_NAME,
-    AMPERE_PER_METRE_SYMBOL,
-    MAGNETIZATION,
-    base_words=AMPERE_PER_METRE_WORDS,
-)
-MILLIAMPERE_PER_METRE = prefixed_unit(
-    prefixes.MILLI,
-    AMPERE_PER_METRE_NAME,
-    AMPERE_PER_METRE_SYMBOL,
-    MAGNETIZATION,
-    base_words=AMPERE_PER_METRE_WORDS,
-)
-AMPERE_PER_METRE = prefixed_unit(
-    prefixes.UNIT,
-    AMPERE_PER_METRE_NAME,
-    AMPERE_PER_METRE_SYMBOL,
-    MAGNETIZATION,
-    base_words=AMPERE_PER_METRE_WORDS,
-)
-KILOAMPERE_PER_METRE = prefixed_unit(
-    prefixes.KILO,
-    AMPERE_PER_METRE_NAME,
-    AMPERE_PER_METRE_SYMBOL,
-    MAGNETIZATION,
-    base_words=AMPERE_PER_METRE_WORDS,
-)
-MEGAAMPERE_PER_METRE = prefixed_unit(
-    prefixes.MEGA,
-    AMPERE_PER_METRE_NAME,
-    AMPERE_PER_METRE_SYMBOL,
-    MAGNETIZATION,
-    base_words=AMPERE_PER_METRE_WORDS,
+
+def _via_field_strength(
+    constructor: Callable[[Numeric], MagneticFieldStrength],
+) -> Callable[[Numeric], Magnetization]:
+    """Wrap a field-strength constructor so it reads its result as a `Magnetization`."""
+
+    def read_as_magnetization(value: Numeric) -> Magnetization:
+        return constructor(value).to_magnetization()
+
+    return read_as_magnetization
+
+
+MAGNETIZATION_UNITS: UnitTable[Magnetization] = MAGNETIC_FIELD_STRENGTH_UNITS.map(
+    "MAGNETIZATION_UNITS", _via_field_strength
 )
 
-Magnetization._canonical_unit = AMPERE_PER_METRE  # noqa: SLF001 -- this module owns Magnetization's canonical unit
-
-
-def MicroamperePerMetre(value: Numeric) -> Magnetization:
-    """Construct magnetization from a magnitude in microamperes per metre.
-
-        Examples
-    --------
-    After background correction, a weakly magnetized specimen has a component of
-    80 µA/m.
-    A second measurement after treatment gives 30 µA/m.
-    The difference is the component removed during treatment:
-
-    >>> from kuchka import MicroamperePerMetre
-    >>> initial = MicroamperePerMetre(80)
-    >>> treated = MicroamperePerMetre(30)
-    >>> initial - treated
-    50 µA/m
-
-    """
-    return Magnetization(
-        to_exact(value) * MICROAMPERE_PER_METRE.scale, MICROAMPERE_PER_METRE
-    )
-
-
-def MilliamperePerMetre(value: Numeric) -> Magnetization:
-    """Construct magnetization from a magnitude in milliamperes per metre."""
-    return Magnetization(
-        to_exact(value) * MILLIAMPERE_PER_METRE.scale, MILLIAMPERE_PER_METRE
-    )
-
-
-def AmperePerMetre(value: Numeric) -> Magnetization:
-    """Construct magnetization from a magnitude in amperes per metre."""
-    return Magnetization(to_exact(value) * AMPERE_PER_METRE.scale, AMPERE_PER_METRE)
-
-
-def KiloamperePerMetre(value: Numeric) -> Magnetization:
-    """Construct magnetization from a magnitude in kiloamperes per metre."""
-    return Magnetization(
-        to_exact(value) * KILOAMPERE_PER_METRE.scale, KILOAMPERE_PER_METRE
-    )
-
-
-def MegaamperePerMetre(value: Numeric) -> Magnetization:
-    """Construct magnetization from a magnitude in megaamperes per metre."""
-    return Magnetization(
-        to_exact(value) * MEGAAMPERE_PER_METRE.scale, MEGAAMPERE_PER_METRE
-    )
-
-
-MAGNETIZATION_UNITS: UnitTable[Magnetization] = unit_table(
-    "MAGNETIZATION_UNITS",
-    {
-        MICROAMPERE_PER_METRE: MicroamperePerMetre,
-        MILLIAMPERE_PER_METRE: MilliamperePerMetre,
-        AMPERE_PER_METRE: AmperePerMetre,
-        KILOAMPERE_PER_METRE: KiloamperePerMetre,
-        MEGAAMPERE_PER_METRE: MegaamperePerMetre,
-    },
-)
-
-__all__ = [
-    "AMPERE_PER_METRE",
-    "KILOAMPERE_PER_METRE",
-    "MAGNETIZATION_UNITS",
-    "MEGAAMPERE_PER_METRE",
-    "MICROAMPERE_PER_METRE",
-    "MILLIAMPERE_PER_METRE",
-    "AmperePerMetre",
-    "KiloamperePerMetre",
-    "MegaamperePerMetre",
-    "MicroamperePerMetre",
-    "MilliamperePerMetre",
-]
+__all__ = ["MAGNETIZATION_UNITS"]

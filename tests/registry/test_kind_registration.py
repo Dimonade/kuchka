@@ -9,6 +9,8 @@ from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import Frequency
 from kuchka import Impedance
+from kuchka import MagneticFieldStrength
+from kuchka import Magnetization
 from kuchka import Power
 from kuchka import Pressure
 from kuchka import Reactance
@@ -34,6 +36,7 @@ from tests.support.synthetic import registry_state
         (ApparentPower, Power),
         (BaudRate, Frequency),
         (Impedance, Resistance),
+        (Magnetization, MagneticFieldStrength),
         (Reactance, Resistance),
         (ReactivePower, Power),
         (SampleRate, Frequency),
@@ -52,6 +55,7 @@ def test_only_the_listed_kinds_are_specialisations() -> None:
         ApparentPower,
         BaudRate,
         Impedance,
+        Magnetization,
         Reactance,
         ReactivePower,
         SampleRate,

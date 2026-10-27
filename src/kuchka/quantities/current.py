@@ -19,8 +19,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
     from kuchka.quantities.electromagnetics.inductance import Inductance
+    from kuchka.quantities.electromagnetics.magnetic_field_strength import (
+        MagneticFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
-    from kuchka.quantities.electromagnetics.magnetization import Magnetization
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.length import Length
@@ -71,9 +73,9 @@ class Current(LinearQuantity):
     @overload
     def __truediv__(self, other: Frequency) -> Charge: ...
     @overload
-    def __truediv__(self, other: Length) -> Magnetization: ...
+    def __truediv__(self, other: Length) -> MagneticFieldStrength: ...
     @overload
-    def __truediv__(self, other: Magnetization) -> Length: ...
+    def __truediv__(self, other: MagneticFieldStrength) -> Length: ...
     @overload
     def __truediv__(self, other: Proportion) -> Current: ...
     @overload

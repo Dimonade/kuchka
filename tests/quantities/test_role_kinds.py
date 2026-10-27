@@ -12,6 +12,7 @@ from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import Impedance
 from kuchka import IncompatibleDimensionError
+from kuchka import Magnetization
 from kuchka import Reactance
 from kuchka import ReactivePower
 from kuchka import SampleRate
@@ -34,6 +35,7 @@ CONVERSION = {
     ApparentPower: "to_power",
     BaudRate: "no conversion",
     Impedance: "to_resistance",
+    Magnetization: "to_magnetic_field_strength",
     Reactance: "to_resistance",
     ReactivePower: "to_power",
     SampleRate: "to_frequency",
