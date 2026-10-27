@@ -15,31 +15,25 @@ inductance.
 
 Examples
 --------
-A long air-core solenoid has 400 turns, a radius of 8 mm, and a length of 20 cm.
-Using the recommended vacuum permeability gives an ideal inductance of about 202 µH.
-The long-solenoid approximation neglects end effects and assumes the field is nearly
-uniform inside the coil:
+A search-coil probe has 100 turns and a square sensing area 20 mm on each side.
+The magnetic field rises from zero to a field strength of 800 A/m over 2 ms.
+Using vacuum permeability, estimate the induced voltage.
+Assume the field is uniform and perpendicular to the coil.
 
->>> from math import pi
+>>> from kuchka import AmperePerMetre, Metre, MicrohenryPerMetre, Millisecond
 >>> vacuum = MicrohenryPerMetre(1.25663706127)
->>> mu0 = float(vacuum.magnitude)
->>> turns = 400
->>> radius_m = 8e-3
->>> length_m = 0.2
->>> inductance_microhenries = mu0 * turns**2 * pi * radius_m**2 / length_m * 1e6
->>> f"{inductance_microhenries:.1f} µH"
-'202.1 µH'
-
-A low-field model assigns a ferrite core a relative permeability of 800.
-This gives an absolute permeability of about 1.005 mH/m.
-The figure is a model parameter, not a universal ferrite constant: permeability depends
-on material grade, frequency, temperature, and operating field, and can become
-nonlinear near saturation.
-
->>> relative_permeability = 800
->>> core = MillihenryPerMetre(relative_permeability * 1.25663706127e-3)
->>> f"{core.to(MILLIHENRY_PER_METRE):.3f}"
-'1.005 mH/m'
+>>> field_strength = AmperePerMetre(800)
+>>> flux_density = vacuum * field_strength
+>>> sensor_side = Metre(0.02)
+>>> sensor_area = sensor_side * sensor_side
+>>> flux_change = flux_density * sensor_area
+>>> turns = 100
+>>> rise_time = Millisecond(2)
+>>> induced_voltage = turns * flux_change / rise_time
+>>> f"{flux_density:.6f}"
+'0.001005 T'
+>>> f"{induced_voltage:.5f}"
+'0.02011 V'
 
 Notes
 -----
@@ -143,6 +137,21 @@ def NanohenryPerMetre(value: Numeric) -> Permeability:
     >>> f"{vacuum.to(NANOHENRY_PER_METRE):.3f}"
     '1256.637 nH/m'
 
+    A 100-turn air-core winding is 5 cm long and has an effective square cross-section
+    2 mm on each side.
+    The long-solenoid approximation gives its inductance from the vacuum permeability
+    and the winding geometry:
+
+    >>> from kuchka import Metre
+    >>> from kuchka.units.electromagnetics.inductance import MICROHENRY
+    >>> vacuum = NanohenryPerMetre(1256.63706127)
+    >>> cross_section_side = Metre(0.002)
+    >>> winding_length = Metre(0.05)
+    >>> geometry_factor = cross_section_side * cross_section_side / winding_length
+    >>> winding = vacuum * geometry_factor * 100**2
+    >>> f"{winding.to(MICROHENRY):.2f}"
+    '1.01 µH'
+
     """
     return Permeability(
         to_exact(value) * NANOHENRY_PER_METRE.scale, NANOHENRY_PER_METRE
@@ -164,15 +173,17 @@ def MicrohenryPerMetre(value: Numeric) -> Permeability:
 
     Examples
     --------
-    Vacuum permeability is approximately 1.256637 µH/m.
-    For an ideal linear medium, multiplying this value by a field strength of 800 A/m
-    predicts a flux density of about 1.005 mT:
+    A material sample produces a flux density of 2 mT under a magnetic field strength
+    of 1600 A/m.
+    If the response is linear at the measurement point, the ratio of the two readings
+    gives its absolute permeability:
 
-    >>> vacuum = MicrohenryPerMetre(1.25663706127)
-    >>> magnetic_field_strength_A_per_m = 800
-    >>> flux_density = vacuum * magnetic_field_strength_A_per_m * 1e3
-    >>> f"{flux_density:.3f}"
-    '1.005 mT'
+    >>> from kuchka import AmperePerMetre, Millitesla
+    >>> measured_flux_density = Millitesla(2)
+    >>> field_strength = AmperePerMetre(1600)
+    >>> measured_permeability = measured_flux_density / field_strength
+    >>> f"{measured_permeability.to(MICROHENRY_PER_METRE):.2f}"
+    '1.25 µH/m'
 
     """
     return Permeability(
@@ -202,12 +213,21 @@ def MillihenryPerMetre(value: Numeric) -> Permeability:
 
     Examples
     --------
-    An idealized core model uses μᵣ = 800.
-    Multiplying that ratio by vacuum permeability gives approximately 1.005 mH/m:
+    A closed ferrite core has a measured absolute permeability of 1.005 mH/m.
+    An 80-turn winding has a square cross-section 1 cm on each side and a magnetic path
+    length of 10 cm.
+    Neglecting the effects of an air gap, leakage flux, and core nonlinearity, estimate
+    the winding inductance:
 
-    >>> core = MillihenryPerMetre(800 * 1.25663706127e-3)
-    >>> f"{core.to(MILLIHENRY_PER_METRE):.3f}"
-    '1.005 mH/m'
+    >>> from kuchka import Metre
+    >>> from kuchka.units.electromagnetics.inductance import MILLIHENRY
+    >>> core = MillihenryPerMetre(1.005)
+    >>> core_side = Metre(0.01)
+    >>> magnetic_path = Metre(0.1)
+    >>> geometry_factor = core_side * core_side / magnetic_path
+    >>> winding = core * geometry_factor * 80**2
+    >>> f"{winding.to(MILLIHENRY):.2f}"
+    '6.43 mH'
 
     """
     return Permeability(
@@ -236,17 +256,22 @@ def HenryPerMetre(value: Numeric) -> Permeability:
 
     Examples
     --------
-    In a clearly fictional spacecraft setting, a magnetic-field confinement medium is
-    assigned an effective permeability of 0.25 H/m.
-    If its response is treated as linear, a field strength of 2 A/m corresponds to a
-    flux density of 0.5 T:
+    In a fictional spacecraft, a field-confinement medium has an effective permeability
+    of 0.25 H/m.
+    A field strength of 2 A/m produces a flux density of 0.5 T.
+    Estimate the magnetic flux through a circular aperture of radius 2 m, assuming the
+    field is uniform and perpendicular to the aperture:
 
+    >>> from math import pi
+    >>> from kuchka import AmperePerMetre, Metre
     >>> confinement_medium = HenryPerMetre(0.25)
-    >>> field_strength_A_per_m = 2
-    >>> flux_density_T = float(confinement_medium.magnitude) * field_strength_A_per_m
-    >>> f"{flux_density_T:.1f} T"
-    '0.5 T'
-
+    >>> field_strength = AmperePerMetre(2)
+    >>> flux_density = confinement_medium * field_strength
+    >>> aperture_radius = Metre(2)
+    >>> aperture_area = pi * aperture_radius * aperture_radius
+    >>> magnetic_flux = flux_density * aperture_area
+    >>> f"{magnetic_flux:.2f}"
+    '6.28 Wb'
     """
     return Permeability(to_exact(value) * HENRY_PER_METRE.scale, HENRY_PER_METRE)
 

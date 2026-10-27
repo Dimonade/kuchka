@@ -25,23 +25,30 @@ gives about 19.92 pF/m:
 >>> f"{polyethylene.to(PICOFARAD_PER_METRE):.2f}"
 '19.92 pF/m'
 
-For a coaxial geometry with inner-conductor radius 0.292 mm and shield radius 1.855 mm,
-the ideal capacitance per length is C` = 2πε / ln(b/a).
-The geometry turns the material permittivity into a different quantity, capacitance per
-length:
+An RF engineer models a parallel-plate capacitor with a polyethylene dielectric whose
+relative permittivity is taken as 2.25.
+The plates are 10 cm square and separated by 1 mm of dielectric.
+Estimate the capacitance, then calculate the charge and stored energy when 100 V is
+applied.
+Neglect fringing fields and dielectric losses.
 
->>> epsilon_pF_per_m = 8.8541878188 * 2.25
->>> capacitance_pF_per_m = 2 * pi * epsilon_pF_per_m / log(1.855 / 0.292)
->>> round(capacitance_pF_per_m, 1)
-67.7
-
-A field-energy estimate uses the same material property.
-At an electric-field strength of 1 MV/m, a linear dielectric with this permittivity
-stores about 9.96 J/m³ of electric-field energy:
-
->>> energy_density_J_per_m3 = 0.5 * (8.8541878188e-12 * 2.25) * (1_000_000**2)
->>> round(energy_density_J_per_m3, 2)
-9.96
+>>> from kuchka import Metre, Millimetre, Volt
+>>> from kuchka.units.electromagnetics.capacitance import PICOFARAD
+>>> vacuum = PicofaradPerMetre(8.8541878188)
+>>> dielectric = vacuum * 2.25
+>>> plate_side = Metre(0.1)
+>>> separation = Millimetre(1)
+>>> geometry_factor = plate_side * plate_side / separation
+>>> capacitance = dielectric * geometry_factor
+>>> f"{capacitance.to(PICOFARAD):.1f}"
+'199.2 pF'
+>>> charging_voltage = Volt(100)
+>>> charge = capacitance * charging_voltage
+>>> f"{charge:.3g}"
+'1.99e-08 C'
+>>> stored_energy = capacitance * charging_voltage * charging_voltage / 2
+>>> f"{stored_energy:.3g}"
+'9.96e-07 J'
 
 Notes
 -----
@@ -60,10 +67,6 @@ References
 ----------
 NIST, 2022 CODATA value of vacuum electric permittivity:
 https://physics.nist.gov/cgi-bin/cuu/Value?ep0
-
-Engineering LibreTexts, coaxial-line equations and the RG-59 example:
-https://phys.libretexts.org/Bookshelves/Electricity_and_Magnetism/Electromagnetics_I_%28Ellingson%29/05%3A_Electrostatics/5.24%3A_Capacitance_of_a_Coaxial_Structure
-
 """
 
 from __future__ import annotations
@@ -147,6 +150,20 @@ def PicofaradPerMetre(value: Numeric) -> Permittivity:
     >>> f"{vacuum.to(PICOFARAD_PER_METRE):.4f}"
     '8.8542 pF/m'
 
+    A 10 cm square electrode pair separated by a 1 mm vacuum gap has a capacitance of
+    approximately 88.5 pF.
+    The calculation uses vacuum permittivity, with fringing effects neglected:
+
+    >>> from kuchka import Metre, Millimetre
+    >>> from kuchka.units.electromagnetics.capacitance import PICOFARAD
+    >>> vacuum = PicofaradPerMetre(8.8541878188)
+    >>> plate_side = Metre(0.1)
+    >>> separation = Millimetre(1)
+    >>> geometry_factor = plate_side * plate_side / separation
+    >>> capacitance = vacuum * geometry_factor
+    >>> f"{capacitance.to(PICOFARAD):.1f}"
+    '88.5 pF'
+
     """
     return Permittivity(
         to_exact(value) * PICOFARAD_PER_METRE.scale, PICOFARAD_PER_METRE
@@ -174,10 +191,27 @@ def NanofaradPerMetre(value: Numeric) -> Permittivity:
 
     Examples
     --------
-    A model with an absolute permittivity of 1 nF/m corresponds to 1000 pF/m:
+    A high-k dielectric coupon is characterised at 1 nF/m.
+    A sensor capacitor uses 20 mm square electrodes separated by a 100 µm dielectric
+    layer.
+    Calculate its capacitance, then determine the charge and stored energy at 48 V:
 
-    >>> f"{NanofaradPerMetre(1).to(PICOFARAD_PER_METRE):.0f}"
-    '1000 pF/m'
+    >>> from kuchka import Metre, Micrometre, Volt
+    >>> from kuchka.units.electromagnetics.capacitance import NANOFARAD
+    >>> dielectric = NanofaradPerMetre(1)
+    >>> electrode_side = Metre(0.02)
+    >>> separation = Micrometre(100)
+    >>> geometry_factor = electrode_side * electrode_side / separation
+    >>> capacitor = dielectric * geometry_factor
+    >>> f"{capacitor.to(NANOFARAD):.1f}"
+    '4.0 nF'
+    >>> charging_voltage = Volt(48)
+    >>> charge = capacitor * charging_voltage
+    >>> f"{charge:.3g}"
+    '1.92e-07 C'
+    >>> stored_energy = capacitor * charging_voltage * charging_voltage / 2
+    >>> f"{stored_energy:.3g}"
+    '4.61e-06 J'
 
     """
     return Permittivity(
@@ -206,12 +240,26 @@ def MicrofaradPerMetre(value: Numeric) -> Permittivity:
 
     Examples
     --------
-    A fictional starship's electrostatic sail uses an invented field-shaping dielectric
-    specified at 0.4 µF/m:
+    A fictional spacecraft uses two 10 m square conductive panels separated by 10 cm
+    of an invented field-shaping dielectric with permittivity 0.4 µF/m.
+    When charged to 5 kV, how much energy is stored in the panel assembly?
 
-    >>> f"{MicrofaradPerMetre(0.4).to(MICROFARAD_PER_METRE):.1f}"
-    '0.4 µF/m'
-
+    >>> from kuchka import Metre, Volt
+    >>> from kuchka.units.electromagnetics.capacitance import MICROFARAD
+    >>> sail_dielectric = MicrofaradPerMetre(0.4)
+    >>> panel_side = Metre(10)
+    >>> separation = Metre(0.1)
+    >>> geometry_factor = panel_side * panel_side / separation
+    >>> sail_capacitance = sail_dielectric * geometry_factor
+    >>> f"{sail_capacitance.to(MICROFARAD):.0f}"
+    '400 µF'
+    >>> charging_voltage = Volt(5000)
+    >>> charge = sail_capacitance * charging_voltage
+    >>> charge
+    2 C
+    >>> stored_energy = sail_capacitance * charging_voltage * charging_voltage / 2
+    >>> stored_energy
+    5000 J
     """
     return Permittivity(
         to_exact(value) * MICROFARAD_PER_METRE.scale, MICROFARAD_PER_METRE
@@ -239,11 +287,21 @@ def MillifaradPerMetre(value: Numeric) -> Permittivity:
 
     Examples
     --------
-    A fictional containment lattice is specified with an effective permittivity of
-    3 mF/m:
+    A fictional electromagnetic braking system uses a plate assembly with a 1 m²
+    electrode area, a 10 cm gap, and an effective permittivity of 3 mF/m.
+    A 20 Ω dump resistor discharges the resulting capacitor.
+    Calculate the circuit's RC time constant:
 
-    >>> f"{MillifaradPerMetre(3).to(MILLIFARAD_PER_METRE):.0f}"
-    '3 mF/m'
+    >>> from kuchka import Metre, Ohm
+    >>> braking_dielectric = MillifaradPerMetre(3)
+    >>> electrode_side = Metre(1)
+    >>> separation = Metre(0.1)
+    >>> geometry_factor = electrode_side * electrode_side / separation
+    >>> dump_capacitor = braking_dielectric * geometry_factor
+    >>> dump_resistor = Ohm(20)
+    >>> time_constant = dump_resistor * dump_capacitor
+    >>> time_constant
+    0.6 s
 
     """
     return Permittivity(
@@ -272,11 +330,24 @@ def FaradPerMetre(value: Numeric) -> Permittivity:
 
     Examples
     --------
-    A fictional reactor's field-confinement medium is assigned an effective
-    permittivity of 0.75 F/m:
+    A fictional reactor's pulse-buffer bank uses a field-confinement dielectric with an
+    effective permittivity of 0.75 F/m.
+    Its plates are 2 m square, separated by 10 cm.
+    At a charging voltage of 24 V, calculate the stored charge and energy:
 
-    >>> f"{FaradPerMetre(0.75).to(FARAD_PER_METRE):.2f}"
-    '0.75 F/m'
+    >>> from kuchka import Metre, Volt
+    >>> reactor_dielectric = FaradPerMetre(0.75)
+    >>> plate_side = Metre(2)
+    >>> separation = Metre(0.1)
+    >>> geometry_factor = plate_side * plate_side / separation
+    >>> buffer_capacitance = reactor_dielectric * geometry_factor
+    >>> charging_voltage = Volt(24)
+    >>> charge = buffer_capacitance * charging_voltage
+    >>> charge
+    720 C
+    >>> stored_energy = buffer_capacitance * charging_voltage * charging_voltage / 2
+    >>> stored_energy
+    8640 J
 
     """
     return Permittivity(to_exact(value) * FARAD_PER_METRE.scale, FARAD_PER_METRE)
