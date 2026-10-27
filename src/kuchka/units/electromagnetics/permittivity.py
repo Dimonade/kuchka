@@ -45,10 +45,10 @@ Neglect fringing fields and dielectric losses.
 >>> charging_voltage = Volt(100)
 >>> charge = capacitance * charging_voltage
 >>> f"{charge:.3g}"
-'1.99e-08 C'
+'1.99e-8 C'
 >>> stored_energy = capacitance * charging_voltage * charging_voltage / 2
 >>> f"{stored_energy:.3g}"
-'9.96e-07 J'
+'9.96e-7 J'
 
 Notes
 -----
@@ -67,6 +67,7 @@ References
 ----------
 NIST, 2022 CODATA value of vacuum electric permittivity:
 https://physics.nist.gov/cgi-bin/cuu/Value?ep0
+
 """
 
 from __future__ import annotations
@@ -208,10 +209,10 @@ def NanofaradPerMetre(value: Numeric) -> Permittivity:
     >>> charging_voltage = Volt(48)
     >>> charge = capacitor * charging_voltage
     >>> f"{charge:.3g}"
-    '1.92e-07 C'
+    '1.92e-7 C'
     >>> stored_energy = capacitor * charging_voltage * charging_voltage / 2
     >>> f"{stored_energy:.3g}"
-    '4.61e-06 J'
+    '0.00000461 J'
 
     """
     return Permittivity(
@@ -260,6 +261,7 @@ def MicrofaradPerMetre(value: Numeric) -> Permittivity:
     >>> stored_energy = sail_capacitance * charging_voltage * charging_voltage / 2
     >>> stored_energy
     5000 J
+
     """
     return Permittivity(
         to_exact(value) * MICROFARAD_PER_METRE.scale, MICROFARAD_PER_METRE

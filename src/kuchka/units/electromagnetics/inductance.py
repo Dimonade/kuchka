@@ -48,6 +48,7 @@ thermal limits, and self-resonance.
 ``"mH"``, ``"H"``, and ``"kH"`` to their constructors. It is intended for
 boundary code that reads a unit from configuration files, component databases,
 simulation inputs, or measurement instruments.
+
 """
 
 from __future__ import annotations
@@ -119,6 +120,7 @@ def Picohenry(value: Numeric) -> Inductance:
     >>> transition_time = Nanosecond(1)
     >>> package_loop * current_step / transition_time
     1 V
+
     """
     return Inductance(to_exact(value) * PICOHENRY.scale, PICOHENRY)
 
@@ -146,6 +148,7 @@ def Nanohenry(value: Numeric) -> Inductance:
     >>> pulse_current = Ampere(1000)
     >>> busbar_loop * pulse_current * pulse_current / 2
     0.001 J
+
     """
     return Inductance(to_exact(value) * NANOHENRY.scale, NANOHENRY)
 
@@ -174,6 +177,7 @@ def Microhenry(value: Numeric) -> Inductance:
     >>> on_time = Microsecond(2)
     >>> switch_voltage * on_time / choke
     1 A
+
     """
     return Inductance(to_exact(value) * MICROHENRY.scale, MICROHENRY)
 
@@ -203,6 +207,7 @@ def Millihenry(value: Numeric) -> Inductance:
     >>> turn_off_time = Millisecond(10)
     >>> actuator_coil * current_change / turn_off_time
     50 V
+
     """
     return Inductance(to_exact(value) * MILLIHENRY.scale, MILLIHENRY)
 
@@ -232,6 +237,7 @@ def Henry(value: Numeric) -> Inductance:
     >>> ramp_duration = Second(60)
     >>> ramp_voltage * ramp_duration / magnet_winding
     300 A
+
     """
     return Inductance(to_exact(value) * HENRY.scale, HENRY)
 
@@ -267,6 +273,7 @@ def Kilohenry(value: Numeric) -> Inductance:
     >>> drive_voltage = Volt(100)
     >>> containment_loop * current_step / drive_voltage
     1000 s
+
     """
     return Inductance(to_exact(value) * KILOHENRY.scale, KILOHENRY)
 

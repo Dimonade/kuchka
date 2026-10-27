@@ -48,7 +48,7 @@ constructors represent its magnitude or a selected component.
 Subtraction of readings therefore assumes that they refer to the same component and
 axis.
 
-The flux calculation B × A assumes a uniform field over the surface and a surface
+The flux calculation B x A assumes a uniform field over the surface and a surface
 normal aligned with the field.
 For a nonuniform field or arbitrary orientation, magnetic flux requires integration
 over the surface.
@@ -76,6 +76,7 @@ https://www.nimh.nih.gov/research/research-conducted-at-nimh/research-areas/rese
 Institute for Solid State Physics, University of Tokyo, 985 T pulsed-field
 experiment:
 https://www.issp.u-tokyo.ac.jp/maincontents/news2_en.html?pid=4437
+
 """
 
 from __future__ import annotations
@@ -157,6 +158,7 @@ def Femtotesla(value: Numeric) -> MagneticFluxDensity:
 
     These are illustrative readings at the scale of weak brain-generated magnetic
     signals, not measurements from a particular subject.
+
     """
     return MagneticFluxDensity(to_exact(value) * FEMTOTESLA.scale, FEMTOTESLA)
 
@@ -191,6 +193,7 @@ def Picotesla(value: Numeric) -> MagneticFluxDensity:
     The readings are illustrative.
     Their purpose is to show how a small magnetic anomaly can be combined with a larger
     background measurement.
+
     """
     return MagneticFluxDensity(to_exact(value) * PICOTESLA.scale, PICOTESLA)
 
@@ -223,6 +226,7 @@ def Nanotesla(value: Numeric) -> MagneticFluxDensity:
     >>> crustal_flux = crustal_anomaly * survey_area
     >>> crustal_flux.to(MICROWEBER)
     3 µWb
+
     """
     return MagneticFluxDensity(to_exact(value) * NANOTESLA.scale, NANOTESLA)
 
@@ -254,6 +258,7 @@ def Microtesla(value: Numeric) -> MagneticFluxDensity:
     >>> reference_area = reference_side * reference_side
     >>> (jovian_field * reference_area).to(MICROWEBER)
     1.075 µWb
+
     """
     return MagneticFluxDensity(to_exact(value) * MICROTESLA.scale, MICROTESLA)
 
@@ -288,6 +293,7 @@ def Millitesla(value: Numeric) -> MagneticFluxDensity:
 
     This uses Faraday's law, with the flux change assumed uniform over the loop and
     the winding turns linked by the same flux.
+
     """
     return MagneticFluxDensity(to_exact(value) * MILLITESLA.scale, MILLITESLA)
 
@@ -318,6 +324,7 @@ def Tesla(value: Numeric) -> MagneticFluxDensity:
     >>> calibration_flux = research_field * loop_area
     >>> calibration_flux.to(MILLIWEBER)
     30 mWb
+
     """
     return MagneticFluxDensity(to_exact(value) * TESLA.scale, TESLA)
 
@@ -359,6 +366,7 @@ def Kilotesla(value: Numeric) -> MagneticFluxDensity:
 
     The small-loop calculation is a uniform-field estimate, not a claim that the
     reported peak field filled a loop of this size.
+
     """
     return MagneticFluxDensity(to_exact(value) * KILOTESLA.scale, KILOTESLA)
 

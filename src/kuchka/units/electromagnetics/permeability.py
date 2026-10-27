@@ -272,6 +272,7 @@ def HenryPerMetre(value: Numeric) -> Permeability:
     >>> magnetic_flux = flux_density * aperture_area
     >>> f"{magnetic_flux:.2f}"
     '6.28 Wb'
+
     """
     return Permeability(to_exact(value) * HENRY_PER_METRE.scale, HENRY_PER_METRE)
 

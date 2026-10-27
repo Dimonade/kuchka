@@ -18,7 +18,7 @@ An input filter uses a 47 Ω resistor and a 100 nF capacitor.
 Its RC time constant sets the characteristic timescale of the filter response:
 
 >>> from kuchka import Nanofarad, Ohm
->>> from kuchka.units.time import MICROSECOND
+>>> from kuchka.units import MICROSECOND
 >>> filter_resistor = Ohm(47)
 >>> bypass_capacitor = Nanofarad(100)
 >>> time_constant = filter_resistor * bypass_capacitor
@@ -51,6 +51,7 @@ and runtime also depends on the load and conversion efficiency.
 ``"µF"``, ``"mF"``, ``"F"``, and ``"kF"`` to their constructors. It is intended
 for boundary code that reads measurements from configuration files, component
 databases, circuit simulations, or instruments.
+
 """
 
 from __future__ import annotations
@@ -108,6 +109,7 @@ def Femtofarad(value: Numeric) -> Capacitance:
     >>> gate_charge = gate_capacitance * logic_high
     >>> gate_charge.to(PICOCOULOMB)
     0.016 pC
+
     """
     return Capacitance(to_exact(value) * FEMTOFARAD.scale, FEMTOFARAD)
 
@@ -138,6 +140,7 @@ def Picofarad(value: Numeric) -> Capacitance:
     >>> electrode_charge = electrode * bias_voltage
     >>> electrode_charge.to(PICOCOULOMB)
     155.1 pC
+
     """
     return Capacitance(to_exact(value) * PICOFARAD.scale, PICOFARAD)
 
@@ -161,13 +164,14 @@ def Nanofarad(value: Numeric) -> Capacitance:
     The resulting capacitive current during the ramp is 24 mA:
 
     >>> from kuchka import Ampere, Nanofarad, Nanosecond, Volt
-    >>> from kuchka.units.electromagnetics.current import MILLIAMPERE
+    >>> from kuchka.units import MILLIAMPERE
     >>> ramp_capacitor = Nanofarad(1)
     >>> voltage_change = Volt(12)
     >>> ramp_duration = Nanosecond(500)
     >>> ramp_current = ramp_capacitor * voltage_change / ramp_duration
     >>> ramp_current.to(MILLIAMPERE)
     24 mA
+
     """
     return Capacitance(to_exact(value) * NANOFARAD.scale, NANOFARAD)
 
@@ -200,6 +204,7 @@ def Microfarad(value: Numeric) -> Capacitance:
     >>> pulse_energy = actuator_charge * driver_voltage / 2
     >>> pulse_energy
     0.00288 J
+
     """
     return Capacitance(to_exact(value) * MICROFARAD.scale, MICROFARAD)
 
@@ -235,6 +240,7 @@ def Millifarad(value: Numeric) -> Capacitance:
     ... ) / 2
     >>> available_energy
     12 J
+
     """
     return Capacitance(to_exact(value) * MILLIFARAD.scale, MILLIFARAD)
 
@@ -259,7 +265,7 @@ def Farad(value: Numeric) -> Capacitance:
     Assuming constant load current, it can sustain the load for 40 seconds:
 
     >>> from kuchka import Ampere, Farad, Volt
-    >>> from kuchka.units.time import SECOND
+    >>> from kuchka.units import SECOND
     >>> backup_capacitor = Farad(2)
     >>> voltage_drop = Volt(5) - Volt(3)
     >>> available_charge = backup_capacitor * voltage_drop
@@ -267,6 +273,7 @@ def Farad(value: Numeric) -> Capacitance:
     >>> hold_up_time = available_charge / load_current
     >>> hold_up_time.to(SECOND)
     40 s
+
     """
     return Capacitance(to_exact(value) * FARAD.scale, FARAD)
 
@@ -304,6 +311,7 @@ def Kilofarad(value: Numeric) -> Capacitance:
     >>> winch_power = Watt(20_000)
     >>> stored_energy / winch_power
     115.2 s
+
     """
     return Capacitance(to_exact(value) * KILOFARAD.scale, KILOFARAD)
 
