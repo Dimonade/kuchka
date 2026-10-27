@@ -145,6 +145,30 @@ def test_the_quantity_imports_are_recomputed_from_the_names_a_module_uses() -> N
     assert "from fractions import Fraction" in fixed
 
 
+def test_a_wrapped_quantity_import_is_replaced_whole() -> None:
+    text = textwrap.dedent(
+        """\
+        from __future__ import annotations
+
+        from typing import TYPE_CHECKING
+
+        if TYPE_CHECKING:
+            from fractions import Fraction
+            from kuchka.quantities.mass import (
+                Mass,
+            )
+
+
+        class Thing:
+            def a(self, other: Time) -> Fraction: ...
+        """
+    )
+    fixed = generator.fix_imports(text, {"Time": "kuchka.quantities.temporal"})
+    compile(fixed, "<fixed>", "exec")
+    assert "Mass" not in fixed
+    assert "import Time" in fixed
+
+
 def test_a_runtime_import_is_not_repeated_under_type_checking() -> None:
     text = textwrap.dedent(
         """\
