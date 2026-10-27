@@ -11,14 +11,15 @@ A base dimension (`length`, `mass`, `current`, `thermal`, `amount`, `luminous_in
 The time family is the `temporal` package, because its quantities share two dimensions.
 Every other quantity lives in the themed package of the relation that defines it:
 
-| Package            | Holds                                                                                               |
-| ------------------ | --------------------------------------------------------------------------------------------------- |
-| `geometry`         | measures built from length alone: area, volume                                                      |
-| `kinematics`       | motion: velocity, acceleration, angular velocity                                                    |
-| `mechanics`        | force and the work it does: force, torque, pressure, stress, density, energy, power, energy density |
-| `electromagnetics` | charge, voltage, resistance, conductance, AC power                                                  |
-| `information`      | data and data rate                                                                                  |
-| `radiation`        | radioactive activity                                                                                |
+| Package                         | Holds                                                                                               |
+| ------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `geometry`                      | measures built from length alone: area, volume                                                      |
+| `kinematics`                    | motion: velocity, acceleration, angular velocity                                                    |
+| `mechanics`                     | force and the work it does: force, torque, pressure, stress, density, energy, power, energy density |
+| `electromagnetics`              | charge, voltage, resistance, conductance, capacitance, inductance                                   |
+| _`electromagnetics`, continued_ | permittivity, permeability, AC power, magnetic flux, magnetic flux density                          |
+| `information`                   | data and data rate                                                                                  |
+| `radiation`                     | radioactive activity                                                                                |
 
 A quantity that fits two packages lives where its defining relation lives, and the other package imports it.
 `Energy` is `Force * Length`, so it is in `mechanics`, and the electrical units reuse it for the watt-hour.

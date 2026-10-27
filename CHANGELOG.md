@@ -9,6 +9,21 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
+#### Magnetic flux and flux density
+
+`MagneticFlux` (`Nanoweber` through `Kiloweber`) and `MagneticFluxDensity` (`Femtotesla` through `Kilotesla`).
+`Voltage * Time` is a `MagneticFlux`, and `MagneticFlux / Area` is a `MagneticFluxDensity`.
+
+#### Capacitance and inductance
+
+`Capacitance` (`Femtofarad` through `Kilofarad`) and `Inductance` (`Picohenry` through `Kilohenry`).
+`Charge / Voltage` is a `Capacitance`, `MagneticFlux / Current` is an `Inductance`, `Conductance * Time` is a `Capacitance`, and `Resistance * Time` is an `Inductance`.
+
+#### Reactance, impedance, permittivity, and permeability
+
+`Reactance` and `Impedance` are roles of `Resistance` that read its units, reached through `Resistance.to_reactance()` and `Resistance.to_impedance()`, with `REACTANCE_UNITS` and `IMPEDANCE_UNITS` for text.
+`Permittivity` (`PicofaradPerMetre` through `FaradPerMetre`) and `Permeability` (`NanohenryPerMetre` through `HenryPerMetre`) are `Capacitance / Length` and `Inductance / Length`.
+
 ### Changed
 
 #### Unit modules live in themed packages

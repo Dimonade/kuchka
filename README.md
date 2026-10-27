@@ -443,6 +443,14 @@ The complete unit vocabulary is available in the API reference.
 | Resistance           | `Microohm`, through `Gigaohm`                                                                                      |
 | Conductance          | `Nanosiemens` through `Kilosiemens`                                                                                |
 | Charge               | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                              |
+| Magnetic Flux        | `Nanoweber` through `Kiloweber`                                                                                    |
+| Flux Density         | `Femtotesla` through `Kilotesla`                                                                                   |
+| Capacitance          | `Femtofarad` through `Kilofarad`                                                                                   |
+| Inductance           | `Picohenry` through `Kilohenry`                                                                                    |
+| Reactance            | reached via `Resistance.to_reactance()`                                                                            |
+| Impedance            | reached via `Resistance.to_impedance()`                                                                            |
+| Permittivity         | `PicofaradPerMetre` through `FaradPerMetre`                                                                        |
+| Permeability         | `NanohenryPerMetre` through `HenryPerMetre`                                                                        |
 | Energy               | `Picojoule` through `Petajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour` |
 | _energy, countinued_ | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                             |
 
