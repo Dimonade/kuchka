@@ -143,6 +143,7 @@ def KilogramMetrePerSecond(value: Numeric) -> Momentum:
     >>> carriage_mass = Kilogram(2)
     >>> carriage_momentum / carriage_mass
     8 m/s
+
     """
     return Momentum(
         to_exact(value) * KILOGRAM_METRE_PER_SECOND.scale,
@@ -176,6 +177,7 @@ def GramCentimetrePerSecond(value: Numeric) -> Momentum:
 
     The CGS unit is convenient for small laboratory measurements, while `kuchka`
     resolves the resulting velocity in its own appropriate unit.
+
     """
     return Momentum(
         to_exact(value) * GRAM_CENTIMETRE_PER_SECOND.scale,
@@ -209,6 +211,7 @@ def PoundFootPerSecond(value: Numeric) -> Momentum:
 
     This illustrates how a momentum reading from an FPS-based record can participate in
     calculations with SI mass and velocity quantities.
+
     """
     return Momentum(
         to_exact(value) * POUND_FOOT_PER_SECOND.scale,

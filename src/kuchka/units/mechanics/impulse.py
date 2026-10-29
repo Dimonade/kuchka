@@ -159,6 +159,7 @@ def MillinewtonSecond(value: Numeric) -> Impulse:
     >>> measured_impulse = MillinewtonSecond(2.4)
     >>> measured_impulse.to_momentum() / test_mass
     0.2 m/s
+
     """
     return Impulse(
         to_exact(value) * MILLINEWTON_SECOND.scale,
@@ -189,6 +190,7 @@ def NewtonSecond(value: Numeric) -> Impulse:
     >>> payload_mass = Kilogram(15)
     >>> collision_impulse.to_momentum() / payload_mass
     2 m/s
+
     """
     return Impulse(to_exact(value) * NEWTON_SECOND.scale, NEWTON_SECOND)
 
@@ -217,6 +219,7 @@ def KilonewtonSecond(value: Numeric) -> Impulse:
     >>> vehicle_mass = Kilogram(15_000)
     >>> propulsion_impulse.to_momentum() / vehicle_mass
     3 m/s
+
     """
     return Impulse(
         to_exact(value) * KILONEWTON_SECOND.scale,
@@ -251,6 +254,7 @@ def DyneSecond(value: Numeric) -> Impulse:
 
     The CGS unit is useful when the force measurements and specimen mass are recorded
     in the centimetre-gram-second system.
+
     """
     return Impulse(to_exact(value) * DYNE_SECOND.scale, DYNE_SECOND)
 
@@ -281,6 +285,7 @@ def PoundForceSecond(value: Numeric) -> Impulse:
 
     The calculation neglects friction, aerodynamic drag, and any impulse delivered by
     external constraints during the launch.
+
     """
     return Impulse(
         to_exact(value) * POUND_FORCE_SECOND.scale,
