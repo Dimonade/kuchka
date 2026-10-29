@@ -17,11 +17,11 @@ HEADING = re.compile(r"(##|###) (.+)")
 
 
 def contents(text: str) -> str:
-    """Return the nested list of links to the `##` and `###` headings of `text`."""
+    """Return the nested list of links to the `##` and `###` headings after the TOC."""
     lines: list[str] = []
     seen: dict[str, int] = {}
     fenced = False
-    for line in text.splitlines():
+    for line in text.partition("<!-- END TOC -->")[2].splitlines():
         fenced ^= line.startswith("```")
         if fenced or not (match := HEADING.fullmatch(line)):
             continue

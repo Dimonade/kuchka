@@ -32,7 +32,7 @@ The important part is not the arithmetic itself.
 Each result is a real `kuchka` quantity, and the relationships between the inputs determine the resulting physical type.
 The same dimensional machinery is used whether the calculation is mechanical, electrical, geometric, or signal-related.
 
-**Contents**
+## Contents
 
 <!-- BEGIN TOC -->
 
