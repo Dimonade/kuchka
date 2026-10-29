@@ -15,6 +15,7 @@ alias ck := check
 check:
     uv run python tools/generate_api.py --check
     uv run python tools/generate_overloads.py --check
+    uv run python tools/generate_toc.py --check
     uv run ruff check
     uv run ruff format --check
     uv run mypy --strict --python-version 3.11 src/kuchka
@@ -47,6 +48,12 @@ alias go := generate-overloads
 # Regenerate the `*` and `/` overloads of the linear quantity types, after adding or changing a type.
 generate-overloads:
     uv run python tools/generate_overloads.py
+
+alias gt := generate-toc
+# Regenerate the table of contents of `README.md`, after adding or renaming a heading.
+generate-toc:
+    uv run python tools/generate_toc.py
+    prettier --write README.md
 
 alias dfp := develop-fetch-pull
 # Switch to develop, fetch, and pull changes.
