@@ -39,51 +39,44 @@ It reads a number named `accepted_voltage_min_mv` and has to trust the name.
 
 ```toml
 [red_led.accepted_voltage]
-min = { value = "-1.000", unit = "mV" }
-max = { value = "1.000", unit = "mV" }
+min = "-1.000 mV"
+max = "1.000 mV"
 
 [blue_led.accepted_voltage]
-min = { value = "0.000", unit = "V" }
-max = { value = "3.300", unit = "V" }
+min = "0.000 V"
+max = "3.300 V"
 ```
 
-The unit is now a field, not a naming convention.
-`device_config.py` reads it and checks it against the physical dimension the field expects.
+The unit is now part of the value, not a naming convention, and `device_config.py` reads it through the quantity the field expects.
 An engineer can still write the wrong unit -- but now something checks.
 
-One deliberate detail: `value` is a quoted string, not a bare TOML number.
-TOML's bare numbers are binary floats.
-Quoting the value means `device_config.py` parses the digits through `Decimal(str)`, the same reason `kuchka` itself stores magnitudes as `Fraction`.
+Each measurement is one quoted string.
+TOML's bare numbers are binary floats with no unit, so a bare number is refused, and the digits inside the string are read exactly by `parse`, the same reason `kuchka` itself stores magnitudes as `Fraction`.
 
 ## The boundary layer
 
-`device_config.py` is the only file in this example that ever sees a unit as a string.
+`device_config.py` is the only file in this example that ever reads a unit as text.
 Its job, in three parts:
 
-**1. Unit resolution is closed per dimension, using tables kuchka already maintains.**
+**1. Every field is closed to its own quantity by `parse`.**
 
 ```python
-from kuchka.units import VOLTAGE_UNITS, CURRENT_UNITS
+parse("-1.000 mV", Voltage)
 ```
 
-`kuchka.units` ships a `Mapping[str, Callable[[Numeric], Q]]` for every dimension it knows about.
-This includes (but not limited to) `VOLTAGE_UNITS`, `CURRENT_UNITS`, `TEMPERATURE_UNITS`, `FREQUENCY_UNITS`, `BAUD_RATE_UNITS`, and so on.
-Each one closed to that dimension's own constructors and immutable (`MappingProxyType`).
-
-A voltage field only ever looks its unit up in `VOLTAGE_UNITS`.
-Writing `unit = "mA"` for a voltage field isn't "the wrong prefix" -- `"mA"` simply isn't in that table, so it fails the same way a typo would.
-The code in this example does not hand-build these tables.
-Every application doing config-boundary work would otherwise be maintaining the same mapping independently, and `kuchka` is the one place that already knows every constructor it exports.
+`parse` reads the unit through the table of the type it is given.
+Writing `"-1.000 mA"` for a voltage field isn't "the wrong prefix" -- `mA` simply isn't a unit of `Voltage`, so it fails the same way a typo would, with `UnknownUnitError`.
+The code in this example builds no unit tables and splits no strings: `kuchka` is the one place that already knows every unit spelling.
 
 **2. A value becomes a quantity, once.**
 
 ```python
-def _build_quantity(raw, units, *, field):
-    magnitude = Decimal(raw["value"])
-    constructor = units[raw["unit"]]
-    return constructor(magnitude)
+def _read(section, path, quantity, *, field):
+    ...
+    return parse(node, quantity)
 ```
 
+The rest of `_read` finds the field and turns a `ParseError` into a `ConfigError` that names it.
 Everything past this function only ever sees a `Voltage`, a `Current`, a `Temperature`, a `Frequency`, or a `BaudRate`.
 From this point on, it is never a bare number again, unless explicitly converted.
 
@@ -112,8 +105,8 @@ python demo.py
 
 `demo.py` loads `config_modern.toml`, prints the parsed limits, then deliberately breaks the config three different ways and shows what `device_config.py` catches:
 
-1. **A unit from the wrong dimension** -- `unit = "mA"` written into a voltage field.
-2. **A unit nothing recognises** -- `unit = "dBm"`.
+1. **A unit from the wrong quantity** -- `"-1.000 mA"` written into a voltage field.
+2. **A value with no unit** -- a bare TOML number, `min = -1.0`.
 3. **An inverted range** -- a copy-paste swap of `min` and `max`.
 
 All three fail at load time, with a message that names the field and the reason, not three functions later as a `None` or a wrong comparison.
@@ -139,21 +132,17 @@ The conversion to the same unit happens at the boundary.
 
 ## Frequency and BaudRate, the same way
 
-The `comms` section in `config_modern.toml` exercises two more dimensions the same way:
+The `comms` section in `config_modern.toml` exercises two more quantities the same way:
 
 ```toml
 [comms]
-uart_baud_rate = { value = "9600", unit = "Bd" }
-sensor_poll_rate = { value = "500", unit = "Hz" }
+uart_baud_rate = "9600 Bd"
+sensor_poll_rate = "500 Hz"
 ```
 
-```python
-from kuchka.units import FREQUENCY_UNITS, BAUD_RATE_UNITS
-```
-
-`Frequency` and `BaudRate` share a physical dimension but are different concepts (see the main README's "Same dimension, different concepts").
+`Frequency` and `BaudRate` share a physical dimension but are different concepts (see the main README's "Same dimension does not always mean the same concept").
 Nothing about that distinction needed special handling here.
-Adding a new dimension to this config format is "import one more table, add one more dataclass field", the same shape as every dimension before it.
+Adding a new quantity to this config format is "add one more dataclass field and one more `_read`", the same shape as every quantity before it.
 
 ## What this example is not
 
