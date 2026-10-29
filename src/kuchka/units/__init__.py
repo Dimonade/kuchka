@@ -43,6 +43,7 @@ from kuchka.units import proportion
 from kuchka.units import radiation
 from kuchka.units import temporal
 from kuchka.units import thermal
+from kuchka.units import thermodynamics
 from kuchka.units.amount import *
 from kuchka.units.angular import *
 from kuchka.units.current import *
@@ -78,6 +79,7 @@ from kuchka.units.mechanics.energy_density import *
 from kuchka.units.mechanics.force import *
 from kuchka.units.mechanics.power import *
 from kuchka.units.mechanics.pressure import *
+from kuchka.units.mechanics.specific_energy import *
 from kuchka.units.mechanics.stress import *
 from kuchka.units.mechanics.torque import *
 from kuchka.units.proportion import *
@@ -89,6 +91,7 @@ from kuchka.units.temporal.sample_rate import *
 from kuchka.units.temporal.sampling_period import *
 from kuchka.units.temporal.time import *
 from kuchka.units.thermal import *
+from kuchka.units.thermodynamics.heating_rate import *
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -117,6 +120,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.EnergyDensity: ENERGY_DENSITY_UNITS,
     quantities.Force: FORCE_UNITS,
     quantities.Frequency: FREQUENCY_UNITS,
+    quantities.HeatingRate: HEATING_RATE_UNITS,
     quantities.Impedance: IMPEDANCE_UNITS,
     quantities.Inductance: INDUCTANCE_UNITS,
     quantities.Instant: INSTANT_UNITS,
@@ -132,6 +136,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Permittivity: PERMITTIVITY_UNITS,
     quantities.Power: POWER_UNITS,
     quantities.Pressure: PRESSURE_UNITS,
+    quantities.SpecificEnergy: SPECIFIC_ENERGY_UNITS,
     quantities.Stress: STRESS_UNITS,
     quantities.Proportion: PROPORTION_UNITS,
     quantities.Reactance: REACTANCE_UNITS,
@@ -184,3 +189,4 @@ __all__ += proportion.__all__
 __all__ += radiation.__all__
 __all__ += temporal.__all__
 __all__ += thermal.__all__
+__all__ += thermodynamics.__all__
