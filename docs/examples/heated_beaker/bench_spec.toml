@@ -1,0 +1,18 @@
+# Limits of one heated-beaker run.
+# Every measurement is one string: a number and its unit, read exactly by `parse`.
+# A bare TOML number would be a binary float with no unit, and is refused.
+
+[lever]
+home = "350 deg"               # The encoder wraps at 360, so home sits just below the wrap.
+max_travel = "40 deg"
+position_tolerance = "0.5 deg"
+
+[liquid]
+window_min = "58 °C"
+window_max = "66 °C"
+setpoint = "62 °C"
+setpoint_tolerance = "0.5 ΔK" # A temperature difference is not a temperature: "0.5 K" is refused.
+max_heating_rate = "1 K/s"
+
+[motor]
+max_voltage = "12 V"

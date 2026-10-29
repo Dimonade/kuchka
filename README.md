@@ -32,6 +32,51 @@ The important part is not the arithmetic itself.
 Each result is a real `kuchka` quantity, and the relationships between the inputs determine the resulting physical type.
 The same dimensional machinery is used whether the calculation is mechanical, electrical, geometric, or signal-related.
 
+## Contents
+
+<!-- BEGIN TOC -->
+
+- [Installation](#installation)
+- [Quick start](#quick-start)
+  - [1. Put the physical meaning in the signature](#1-put-the-physical-meaning-in-the-signature)
+  - [2. Read measurements from text and config](#2-read-measurements-from-text-and-config)
+  - [3. Compose real engineering relationships](#3-compose-real-engineering-relationships)
+  - [4. Bring raw sensor data into a control path](#4-bring-raw-sensor-data-into-a-control-path)
+- [Take a tour](#take-a-tour)
+  - [Linear quantities](#linear-quantities)
+  - [Affine quantities](#affine-quantities)
+  - [Modular quantities](#modular-quantities)
+  - [Logarithmic quantities](#logarithmic-quantities)
+- [Why `kuchka`?](#why-kuchka)
+- [Where `kuchka` fits](#where-kuchka-fits)
+- [What's included in 0.1.x](#whats-included-in-01x)
+  - [Electrical](#electrical)
+  - [Time and signals](#time-and-signals)
+  - [Geometry and mechanics](#geometry-and-mechanics)
+  - [Angle and rotation](#angle-and-rotation)
+  - [Chemistry and light](#chemistry-and-light)
+  - [Dimensionless quantities](#dimensionless-quantities)
+  - [Archaic and historical units](#archaic-and-historical-units)
+- [A few important distinctions](#a-few-important-distinctions)
+  - [Same dimension does not always mean the same concept](#same-dimension-does-not-always-mean-the-same-concept)
+  - [Canonical types and domain-specific types](#canonical-types-and-domain-specific-types)
+- [Conversions](#conversions)
+- [Exact arithmetic](#exact-arithmetic)
+  - [Angles and pi](#angles-and-pi)
+  - [Comparing with a tolerance](#comparing-with-a-tolerance)
+- [Physical constants](#physical-constants)
+- [Errors](#errors)
+- [Formatting](#formatting)
+- [Examples](#examples)
+- [Performance](#performance)
+- [What this is not yet](#what-this-is-not-yet)
+- [Stability](#stability)
+  - [Compatibility](#compatibility)
+- [Development](#development)
+- [Further reading](#further-reading)
+
+<!-- END TOC -->
+
 ## Installation
 
 ```bash
@@ -52,68 +97,61 @@ The development toolchain described later is separate from the package's runtime
 The useful part of `kuchka` is not just unit conversion.
 Values acquire a physical type, typed quantities can cross application boundaries, and ordinary arithmetic can produce other physical quantities.
 
-### 1. Type the values your application is already using
+### 1. Put the physical meaning in the signature
 
-A unit constructor such as `Volt` creates a `Voltage`; `Milliampere` creates a `Current`.
-The unit is part of construction, while the resulting object has the physical quantity type.
+In 1983 an Air Canada 767 ran out of fuel at altitude (the "Gimli Glider").
+The fuel table gave a density in pounds per litre, the flight plan wanted kilograms, and the tanks were loaded with about a quarter of the fuel the flight needed.
+Here is the calculation, with quantities in place of numbers:
 
 ```python
-from kuchka import Ampere
-from kuchka import Milliampere
-from kuchka import Millivolt
-from kuchka import Volt
-from kuchka import Voltage
-
-supply = Volt(5)
-load = Milliampere(150)
-power = supply * load
-
-print(power)
-# 0.75 W
+from kuchka import Density
+from kuchka import Kilogram
+from kuchka import Litre
+from kuchka import Mass
+from kuchka import Pound
+from kuchka import Volume
+from kuchka.units import LITRE
 
 
-def check_supply(voltage: Voltage) -> bool:
-    return voltage >= Volt(3)
+def fuel_to_load(required: Mass, on_board: Volume, density: Density) -> Volume:
+    return (required - on_board * density) / density
 
 
-check_supply(Volt(5))  # valid.
-check_supply(Millivolt(4200))  # valid.
-check_supply(Ampere(2))  # static type error (`IncompatibleDimensionError`).
-check_supply(4.2)  # static type error (`IncompatibleDimensionError`).
+density = Pound(1.77) / Litre(1)  # the table's pounds per litre, as a Density.
+load = fuel_to_load(Kilogram(22_300), Litre(7_682), density)
+
+print(f"{load.to(LITRE):.0f}")
+# 20094 L
+```
+
+The flight plan is in kilograms, the table in pounds and litres, and the dipstick in litres, and nothing in the calculation converts anything: the quantities carry their units and combine exactly.
+The signature is the contract, and the bare number from the table has nowhere to go:
+
+```python
+fuel_to_load(Kilogram(22_300), Litre(7_682), 1.77)
+# static type error (`IncompatibleDimensionError`).
+fuel_to_load(Kilogram(22_300), Litre(7_682), Pound(1.77))
+# static type error (`UnrepresentableDimensionError`).
 ```
 
 The type annotation gives static tools the contract.
-The comparison inside the function also exercises `kuchka`'s runtime dimensional checks when the function is called with an incompatible value.
+The arithmetic inside the function exercises `kuchka`'s runtime dimensional checks when it is called with an incompatible value.
 Python function annotations themselves remain ordinary annotations; `kuchka` does not add a runtime annotation enforcement mechanism.
 
-This is the basic idea: application functions can name the physical quantity they expect instead of accepting an unqualified `float`.
+`kuchka` cannot know that a `1.77` typed into `KilogramPerLitre(1.77)` meant pounds.
+What it removes is the unlabelled number: a value gets its unit once, where it is written, and everything after that is checked and exact.
 
-### 2. Validate units when data enters from configuration
+### 2. Read measurements from text and config
 
-Configuration formats have to represent units as data.
+Configuration files, CSV logs, command lines, and instrument replies write units as text.
 That does not mean the rest of the application has to become stringly typed.
-Resolve the unit once at the boundary, then construct a typed value.
-
-For example:
-
-```toml
-# device.toml
-led_critical_voltage = { value = "2800", unit = "mV" }
-```
-
-The corresponding loader can use `VOLTAGE_UNITS`, which contains only voltage units:
-
-<!-- doc-test: skip reads device.toml from disk -->
+`parse` reads the number and the unit together, through the table of units of the type you name, and returns a typed value:
 
 ```python
-from collections.abc import Mapping
-from dataclasses import dataclass
-from decimal import Decimal
-from pathlib import Path
 import tomllib
+from dataclasses import dataclass
 
-from kuchka import Voltage
-from kuchka.units import VOLTAGE_UNITS
+from kuchka import Voltage, parse
 
 
 @dataclass(frozen=True)
@@ -121,64 +159,50 @@ class DeviceConfig:
     led_critical_voltage: Voltage
 
 
-def parse_voltage(raw: Mapping[str, str]) -> Voltage:
-    try:
-        constructor = VOLTAGE_UNITS[raw["unit"]]
-    except KeyError as exc:
-        raise ValueError(f"invalid voltage unit: {raw['unit']!r}") from exc
-
-    return constructor(Decimal(raw["value"]))
-
-
-with Path("device.toml").open("rb") as file:
-    raw = tomllib.load(file)
-
-config = DeviceConfig(led_critical_voltage=parse_voltage(raw["led_critical_voltage"]))
+raw = tomllib.loads('led_critical_voltage = "2800 mV"')
+config = DeviceConfig(led_critical_voltage=parse(raw["led_critical_voltage"], Voltage))
 ```
 
-This is accepted:
-
-```toml
-led_critical_voltage = { value = "2800", unit = "mV" }
-```
-
-This is rejected while loading because `mA` is not a member of the voltage unit table:
-
-```toml
-led_critical_voltage = { value = "150", unit = "mA" }
-```
-
-The same boundary pattern exists for the other quantity families through their corresponding `*_UNITS` mappings.
-`kuchka` therefore allows strings where the data format requires them without making strings the normal application API.
-
-The tables accept the notations that real files use, so these all resolve to the same temperature unit:
+The unit is closed to the quantity the field expects, so these are rejected while loading:
 
 ```python
-from kuchka.units import TEMPERATURE_UNITS
+parse("150 mA", Voltage)  # rejected: `UnknownUnitError`.
+parse("five volts", Voltage)  # rejected: `ParseError`.
+parse(2.8, Voltage)  # rejected: `TypeError`.
+```
 
-for text in ("°C", "C", "degC", "degrees C", "Degrees Celsius"):
-    constructor = TEMPERATURE_UNITS[text]
-    constructor(21.5)  # 21.5 °C
+`mA` is no unit of `Voltage`, and the last line is what a bare TOML number would be: a binary float with no unit.
+Quote the value and keep the unit in the string, and the digits are read exactly:
+
+```python
+from fractions import Fraction
+
+from kuchka import Temperature, Volt
+
+parse("0.1 V", Voltage) == Volt(Fraction(1, 10))  # True: the number is read exactly
+parse("-40 °C", Temperature)  # -40 °C
+```
+
+The tables accept the notations that real files use, so these all read as the same temperature:
+
+```python
+for text in (
+    "21.5 °C",
+    "21.5 degC",
+    "21.5 degrees C",
+    "21.5 Degrees Celsius",
+    "21.5 C",
+):
+    parse(text, Temperature)  # 21.5 °C
 ```
 
 Symbols such as `mV` are compared exactly, because `mV` and `MV` are different units, and spoken forms such as `degrees celsius` are compared ignoring case.
 A spelling that could mean more than one unit in a table, like `deg` for temperature, is refused rather than guessed.
 See [Unit spellings](docs/concepts/unit_spellings.md).
 
-When the whole value arrives as one string, `parse` reads the number and the unit together through the table of the type you name:
-
-```python
-from fractions import Fraction
-
-from kuchka import Temperature, Volt, Voltage, parse
-
-parse("5 mV", Voltage)  # 5 mV
-parse("-40 °C", Temperature)  # -40 °C
-parse("0.1 V", Voltage) == Volt(Fraction(1, 10))  # True: the number is read exactly
-```
-
 The caller names the type because the same text can mean different quantities: `"5 s"` is a `Time`, an `Instant`, or a `SamplingPeriod`, so there is no untyped `parse`.
-Text that is no measurement of that type raises a `ParseError`, and a unit the type does not have raises an `UnknownUnitError`.
+
+When the unit arrives in a field of its own, such as a CSV column or a `{ value, unit }` pair, the `*_UNITS` table of the type resolves the spelling directly: `VOLTAGE_UNITS["mV"]` is the `Millivolt` constructor.
 
 ### 3. Compose real engineering relationships
 
@@ -186,6 +210,8 @@ The library is useful when a calculation crosses more than one physical domain. 
 
 ```text
 Voltage * Current -> Power
+Power * Time -> Energy
+Charge / Current -> Time
 Mass * Acceleration -> Force
 Mass * Velocity -> Momentum
 Force * Time -> Impulse
@@ -193,6 +219,8 @@ Velocity * Velocity -> VelocitySquared
 Force / Area -> Pressure
 Pressure * Volume -> Energy
 Energy / Volume -> EnergyDensity
+Energy / Mass -> SpecificEnergy
+TemperatureDelta / Time -> HeatingRate
 Torque * AngularDisplacement -> Energy
 Torque * AngularVelocity -> Power
 AngularDisplacement / Time -> AngularVelocity
@@ -229,7 +257,42 @@ print(energy)
 # 50 J
 ```
 
-No unit strings or manual conversion factors are needed in the calculation.
+Another chain goes from a motor's shaft to the energy bill:
+
+```python
+from kuchka import Hour
+from kuchka import NewtonMetre
+from kuchka import RevolutionPerMinute
+from kuchka.units import WATT_HOUR
+
+torque = NewtonMetre(2)
+speed = RevolutionPerMinute(3000)
+
+shaft_power = torque * speed  # Torque * AngularVelocity -> Power.
+energy = shaft_power * Hour(2)  # Power * Time -> Energy.
+
+print(f"{shaft_power:.1f}")
+# 628.3 W
+print(f"{energy.to(WATT_HOUR):.0f}")
+# 1257 Wh
+```
+
+The revolutions per minute become radians per second through pi, which `kuchka` holds as an exact rational, so the digits of the result are correct to the last one shown.
+
+A battery pack's figure of merit comes from one division:
+
+```python
+from kuchka import Kilogram
+from kuchka import WattHour
+from kuchka.units import WATT_HOUR_PER_KILOGRAM
+
+pack = WattHour(1800) / Kilogram(8)  # Energy / Mass -> SpecificEnergy.
+
+print(pack.to(WATT_HOUR_PER_KILOGRAM))
+# 225 Wh/kg
+```
+
+No unit strings or manual conversion factors are needed in any of these calculations.
 The operators determine the physical result types.
 
 ### 4. Bring raw sensor data into a control path
@@ -397,6 +460,9 @@ The mistake is hidden because the units exist only in variable names.
 With `kuchka`, physical meaning is part of the value itself:
 
 ```python
+from kuchka import Milliampere
+from kuchka import Millivolt
+
 voltage = Millivolt(4200)
 current = Milliampere(150)
 power = voltage * current
@@ -436,28 +502,28 @@ The complete unit vocabulary is available in the API reference.
 
 ### Electrical
 
-| Quantity             | Representative units                                                                                               |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Voltage              | `Nanovolt` though `Petavolt`                                                                                       |
-| Current              | `Picoampere`, through `Megaampere`                                                                                 |
-| Power                | `Picowatt` through `Petawatt`, `Horsepower` and `MetricHorsepower`                                                 |
-| Apparent Power       | `MillivoltAmpere` through `GigavoltAmpere`                                                                         |
-| Reactive Power       | `Millivar` through `Gigavar`                                                                                       |
-| Resistance           | `Microohm`, through `Gigaohm`                                                                                      |
-| Conductance          | `Nanosiemens` through `Kilosiemens`                                                                                |
-| Charge               | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                              |
-| Magnetic Flux        | `Nanoweber` through `Kiloweber`                                                                                    |
-| Flux Density         | `Femtotesla` through `Kilotesla`, `Femtogauss` through `Kilogauss`                                                 |
-| Capacitance          | `Femtofarad` through `Kilofarad`                                                                                   |
-| Inductance           | `Picohenry` through `Kilohenry`                                                                                    |
-| Reactance            | reached via `Resistance.to_reactance()`                                                                            |
-| Impedance            | reached via `Resistance.to_impedance()`                                                                            |
-| Permittivity         | `PicofaradPerMetre` through `FaradPerMetre`                                                                        |
-| Permeability         | `NanohenryPerMetre` through `HenryPerMetre`                                                                        |
-| Field Strength       | `MicroamperePerMetre` through `MegaamperePerMetre`                                                                 |
-| Magnetization        | reached via `MagneticFieldStrength.to_magnetization()`                                                             |
-| Energy               | `Picojoule` through `Petajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour` |
-| _energy, countinued_ | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                             |
+| Quantity            | Representative units                                                                                               |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Voltage             | `Nanovolt` through `Petavolt`                                                                                      |
+| Current             | `Picoampere`, through `Megaampere`                                                                                 |
+| Power               | `Picowatt` through `Petawatt`, `Horsepower` and `MetricHorsepower`                                                 |
+| Apparent Power      | `MillivoltAmpere` through `GigavoltAmpere`                                                                         |
+| Reactive Power      | `Millivar` through `Gigavar`                                                                                       |
+| Resistance          | `Microohm`, through `Gigaohm`                                                                                      |
+| Conductance         | `Nanosiemens` through `Kilosiemens`                                                                                |
+| Charge              | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                              |
+| Magnetic Flux       | `Nanoweber` through `Kiloweber`                                                                                    |
+| Flux Density        | `Femtotesla` through `Kilotesla`, `Femtogauss` through `Kilogauss`                                                 |
+| Capacitance         | `Femtofarad` through `Kilofarad`                                                                                   |
+| Inductance          | `Picohenry` through `Kilohenry`                                                                                    |
+| Reactance           | reached via `Resistance.to_reactance()`                                                                            |
+| Impedance           | reached via `Resistance.to_impedance()`                                                                            |
+| Permittivity        | `PicofaradPerMetre` through `FaradPerMetre`                                                                        |
+| Permeability        | `NanohenryPerMetre` through `HenryPerMetre`                                                                        |
+| Field Strength      | `MicroamperePerMetre` through `MegaamperePerMetre`                                                                 |
+| Magnetization       | reached via `MagneticFieldStrength.to_magnetization()`                                                             |
+| Energy              | `Picojoule` through `Petajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour` |
+| _energy, continued_ | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                             |
 
 ### Time and signals
 
@@ -520,7 +586,7 @@ The complete unit vocabulary is available in the API reference.
 | LogarithmicRatio | `Decibel`, `Bel`   |
 
 Most SI-derived families expose a selected set of SI prefixes appropriate to their engineering use.
-The README does not list every prefix individually;the API reference contains the complete constructor and unit vocabulary.
+The README does not list every prefix individually; the API reference contains the complete constructor and unit vocabulary.
 
 The canonical spelling of SI `metre` is used throughout `kuchka`.
 American-English `*meter` names are aliases of the corresponding `*metre`
@@ -629,7 +695,7 @@ print(voltage)
 
 There is no `voltage.to("mV")`.
 Application code uses Python unit definitions.
-String resolution belongs at boundaries such as configuration and import code, where the maintained `*_UNITS` mappings provide the bridge.
+String resolution belongs at boundaries such as configuration and import code, where `parse` and the maintained `*_UNITS` mappings provide the bridge.
 
 A conversion to another physical dimension is rejected:
 
@@ -785,7 +851,8 @@ Without a precision, a value that has no finite decimal form shows 28 significan
 
 The repository contains longer, task-oriented examples:
 
-- **[Migrating a config from unit-suffixed keys to `kuchka`](docs/examples/config_migration/README.md)** - moves units from names such as `accepted_voltage_min_mv` into TOML data and resolves them into typed dataclasses at the boundary.
+- **[A heated beaker on a stepper-driven lever](docs/examples/heated_beaker/README.md)** - reads a TOML spec and a CSV run log whose cells mix `V`, `mV`, `°C`, and `°F`, then measures the run with angles that wrap, temperature differences, tolerances, and power into energy.
+- **[Migrating a config from unit-suffixed keys to `kuchka`](docs/examples/config_migration/README.md)** - moves units from names such as `accepted_voltage_min_mv` into TOML strings such as `"-1.000 mV"` and reads them with `parse` into typed dataclasses at the boundary.
 - **[Working around an unrepresentable intermediate dimension](docs/examples/unrepresentable_dimensions/README.md)** - shows how to handle formulas such as `P = V²/R` and parallel resistor networks when an intermediate dimension has no registered type.
 
 These examples show `kuchka` in application code, with arithmetic serving the larger engineering task.
@@ -850,7 +917,7 @@ uv run ty check src/kuchka tests
 uv run coverage run -m pytest && uv run coverage report
 ```
 
-`just test` runs the doctests and the test suite, `just check` runs the generated-API check, `ruff`, `mypy --strict`, and `ty`, and `just ct` (or `just covtest`) runs the full testbench with coverage after `check` passes, so a lint or type error fails before the slower run.
+`just test` runs the doctests and the test suite, `just check` runs the generated-file checks (the API, the overloads, and the contents above), `ruff`, `mypy --strict`, and `ty`, and `just ct` (or `just covtest`) runs the full testbench with coverage after `check` passes, so a lint or type error fails before the slower run.
 `just tox` runs the doctests and the test suite on every supported Python version, plus a `lint` environment with the same checks as `just check`, a `typing-min` environment that checks the library and its consumer-side types on the oldest supported mypy, and a `pyright` environment that checks the same consumer-side types on pyright.
 
 `uv run` resolves the tools from `uv.lock`, while tox installs the newest versions the floors in `pyproject.toml` allow.

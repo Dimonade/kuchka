@@ -37,66 +37,33 @@ def main() -> None:
 
     print("\nNow, three ways a config file can go wrong:\n")
 
-    wrong_dimension_toml = """
-    [red_led.accepted_voltage]
-    min = { value = "-1.000", unit = "mA" }
-    max = { value = "1.000", unit = "mV" }
-    [red_led.accepted_current]
-    min = { value = "0.000", unit = "mA" }
-    max = { value = "20.000", unit = "mA" }
-    [red_led.accepted_temperature]
-    min = { value = "15.0", unit = "C" }
-    max = { value = "45.0", unit = "C" }
-    """
     _show_failure(
-        "1. A unit that belongs to the wrong dimension "
-        '(milliamps written into a voltage field, unit = "mA")',
-        wrong_dimension_toml,
-        section="red_led",
+        "1. A unit that belongs to the wrong quantity "
+        '(milliamps written into a voltage field, "-1.000 mA")',
+        old='min = "-1.000 mV"',
+        new='min = "-1.000 mA"',
     )
-
-    unknown_unit_toml = """
-    [red_led.accepted_voltage]
-    min = { value = "-1.000", unit = "dBm" }
-    max = { value = "1.000", unit = "mV" }
-    [red_led.accepted_current]
-    min = { value = "0.000", unit = "mA" }
-    max = { value = "20.000", unit = "mA" }
-    [red_led.accepted_temperature]
-    min = { value = "15.0", unit = "C" }
-    max = { value = "45.0", unit = "C" }
-    """
     _show_failure(
-        '2. A unit nothing recognises at all (unit = "dBm")',
-        unknown_unit_toml,
-        section="red_led",
+        "2. A value with no unit at all (a bare TOML number, which is a float)",
+        old='min = "-1.000 mV"',
+        new="min = -1.0",
     )
-
-    inverted_range_toml = """
-    [red_led.accepted_voltage]
-    min = { value = "1.000", unit = "mV" }
-    max = { value = "-1.000", unit = "mV" }
-    [red_led.accepted_current]
-    min = { value = "0.000", unit = "mA" }
-    max = { value = "20.000", unit = "mA" }
-    [red_led.accepted_temperature]
-    min = { value = "15.0", unit = "C" }
-    max = { value = "45.0", unit = "C" }
-    """
     _show_failure(
         "3. A minimum that is actually larger than the maximum (a copy-paste swap)",
-        inverted_range_toml,
-        section="red_led",
+        old='min = "-1.000 mV"\nmax = "1.000 mV"',
+        new='min = "1.000 mV"\nmax = "-1.000 mV"',
     )
 
 
-def _show_failure(description: str, broken_toml: str, *, section: str) -> None:
+def _show_failure(description: str, *, old: str, new: str) -> None:
+    """Break the shipped config by replacing `old` with `new`, and show the failure."""
     from device_config import _parse_led_limits  # noqa: PLC0415 -- demo-only.
 
     print(f"  {description}")
-    raw = tomllib.loads(broken_toml)
+    text = (Path(__file__).parent / "config_modern.toml").read_text(encoding="utf-8")
+    raw = tomllib.loads(text.replace(old, new, 1))
     try:
-        _parse_led_limits(raw[section], led_name=section)
+        _parse_led_limits(raw["red_led"], led_name="red_led")
     except ConfigError as error:
         print(f"     -> ConfigError: {error}\n")
     else:
