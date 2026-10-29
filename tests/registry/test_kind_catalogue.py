@@ -12,10 +12,12 @@ from kuchka import BaudRate
 from kuchka import EnergyDensity
 from kuchka import Frequency
 from kuchka import Impedance
+from kuchka import Impulse
 from kuchka import Instant
 from kuchka import LogarithmicRatio
 from kuchka import MagneticFieldStrength
 from kuchka import Magnetization
+from kuchka import Momentum
 from kuchka import Power
 from kuchka import Pressure
 from kuchka import Proportion
@@ -24,17 +26,21 @@ from kuchka import ReactivePower
 from kuchka import Resistance
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
+from kuchka import SpecificEnergy
 from kuchka import Stress
 from kuchka import Temperature
 from kuchka import TemperatureDelta
 from kuchka import Time
+from kuchka import VelocitySquared
 from kuchka.dimensions import ANGLE
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import FREQUENCY
 from kuchka.dimensions import MAGNETIC_FIELD_STRENGTH
+from kuchka.dimensions import MOMENTUM
 from kuchka.dimensions import POWER
 from kuchka.dimensions import PRESSURE
 from kuchka.dimensions import RESISTANCE
+from kuchka.dimensions import SPECIFIC_ENERGY
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.dimensions import TIME
 from kuchka.dimensions import Dimension
@@ -54,6 +60,8 @@ SHARED = {
     MAGNETIC_FIELD_STRENGTH: (MagneticFieldStrength, Magnetization),
     RESISTANCE: (Resistance, Reactance, Impedance),
     ANGLE: (Angle, AngularDisplacement),
+    SPECIFIC_ENERGY: (SpecificEnergy, VelocitySquared),
+    MOMENTUM: (Momentum, Impulse),
 }
 
 
@@ -111,6 +119,12 @@ def test_the_principal_kinds_are_linear_kinds_with_extent() -> None:
         assert registry._is_registered(kind)  # noqa: SLF001
 
 
-def test_only_pressure_and_energy_density_are_contested() -> None:
-    assert {PRESSURE: (Pressure, EnergyDensity)} == registry._CONTESTED  # noqa: SLF001
-    assert PRESSURE not in registry._DIMENSION_REGISTRY  # noqa: SLF001
+def test_the_contested_kinds_are_exactly_the_listed_ones() -> None:
+    contested = registry._CONTESTED  # noqa: SLF001
+    assert contested == {
+        PRESSURE: (Pressure, EnergyDensity),
+        SPECIFIC_ENERGY: (SpecificEnergy, VelocitySquared),
+        MOMENTUM: (Momentum, Impulse),
+    }
+    for dimension in contested:
+        assert dimension not in registry._DIMENSION_REGISTRY  # noqa: SLF001

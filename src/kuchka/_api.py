@@ -28,6 +28,7 @@ from kuchka.quantities import Force
 from kuchka.quantities import Frequency
 from kuchka.quantities import HeatingRate
 from kuchka.quantities import Impedance
+from kuchka.quantities import Impulse
 from kuchka.quantities import Inductance
 from kuchka.quantities import Instant
 from kuchka.quantities import Length
@@ -38,6 +39,7 @@ from kuchka.quantities import MagneticFlux
 from kuchka.quantities import MagneticFluxDensity
 from kuchka.quantities import Magnetization
 from kuchka.quantities import Mass
+from kuchka.quantities import Momentum
 from kuchka.quantities import Permeability
 from kuchka.quantities import Permittivity
 from kuchka.quantities import Power
@@ -55,6 +57,7 @@ from kuchka.quantities import TemperatureDelta
 from kuchka.quantities import Time
 from kuchka.quantities import Torque
 from kuchka.quantities import Velocity
+from kuchka.quantities import VelocitySquared
 from kuchka.quantities import Voltage
 from kuchka.quantities import Volume
 from kuchka.units import Acre
@@ -104,6 +107,7 @@ from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaFahrenheit
 from kuchka.units import DeltaKelvin
 from kuchka.units import Dyne
+from kuchka.units import DyneSecond
 from kuchka.units import EarthMass
 from kuchka.units import Electronvolt
 from kuchka.units import Erg
@@ -143,6 +147,7 @@ from kuchka.units import Gradian
 from kuchka.units import GradianDisplacement
 from kuchka.units import Grain
 from kuchka.units import Gram
+from kuchka.units import GramCentimetrePerSecond
 from kuchka.units import GramPerCubicCentimeter
 from kuchka.units import GramPerCubicCentimetre
 from kuchka.units import GramPerLiter
@@ -188,6 +193,7 @@ from kuchka.units import Kilofarad
 from kuchka.units import Kilogauss
 from kuchka.units import Kilogram
 from kuchka.units import KilogramForce
+from kuchka.units import KilogramMetrePerSecond
 from kuchka.units import KilogramPerCubicMeter
 from kuchka.units import KilogramPerCubicMetre
 from kuchka.units import KilogramPerLiter
@@ -208,6 +214,7 @@ from kuchka.units import Kilomole
 from kuchka.units import Kilonewton
 from kuchka.units import KilonewtonMeter
 from kuchka.units import KilonewtonMetre
+from kuchka.units import KilonewtonSecond
 from kuchka.units import Kiloohm
 from kuchka.units import Kilopascal
 from kuchka.units import KilopoundPerSquareInch
@@ -316,6 +323,7 @@ from kuchka.units import Millimole
 from kuchka.units import Millinewton
 from kuchka.units import MillinewtonMeter
 from kuchka.units import MillinewtonMetre
+from kuchka.units import MillinewtonSecond
 from kuchka.units import Milliohm
 from kuchka.units import Millisecond
 from kuchka.units import Millisiemens
@@ -351,6 +359,7 @@ from kuchka.units import NauticalMile
 from kuchka.units import Newton
 from kuchka.units import NewtonMeter
 from kuchka.units import NewtonMetre
+from kuchka.units import NewtonSecond
 from kuchka.units import Ohm
 from kuchka.units import Ounce
 from kuchka.units import Pascal
@@ -384,9 +393,11 @@ from kuchka.units import Picosecond
 from kuchka.units import Picotesla
 from kuchka.units import Picowatt
 from kuchka.units import Pound
+from kuchka.units import PoundFootPerSecond
 from kuchka.units import PoundForce
 from kuchka.units import PoundForceFoot
 from kuchka.units import PoundForceInch
+from kuchka.units import PoundForceSecond
 from kuchka.units import PoundPerSquareInch
 from kuchka.units import Radian
 from kuchka.units import RadianDisplacement
@@ -402,8 +413,10 @@ from kuchka.units import SquareCentimetre
 from kuchka.units import SquareInch
 from kuchka.units import SquareKilometer
 from kuchka.units import SquareKilometre
+from kuchka.units import SquareKilometrePerSecondSquared
 from kuchka.units import SquareMeter
 from kuchka.units import SquareMetre
+from kuchka.units import SquareMetrePerSecondSquared
 from kuchka.units import SquareMillimeter
 from kuchka.units import SquareMillimetre
 from kuchka.units import Tebibit
@@ -503,6 +516,7 @@ __all__ = [
     "DeltaKelvin",
     "Density",
     "Dyne",
+    "DyneSecond",
     "EarthMass",
     "Electronvolt",
     "Energy",
@@ -546,6 +560,7 @@ __all__ = [
     "GradianDisplacement",
     "Grain",
     "Gram",
+    "GramCentimetrePerSecond",
     "GramPerCubicCentimeter",
     "GramPerCubicCentimetre",
     "GramPerLiter",
@@ -561,6 +576,7 @@ __all__ = [
     "Horsepower",
     "Hour",
     "Impedance",
+    "Impulse",
     "Inch",
     "Inductance",
     "Instant",
@@ -595,6 +611,7 @@ __all__ = [
     "Kilogauss",
     "Kilogram",
     "KilogramForce",
+    "KilogramMetrePerSecond",
     "KilogramPerCubicMeter",
     "KilogramPerCubicMetre",
     "KilogramPerLiter",
@@ -615,6 +632,7 @@ __all__ = [
     "Kilonewton",
     "KilonewtonMeter",
     "KilonewtonMetre",
+    "KilonewtonSecond",
     "Kiloohm",
     "Kilopascal",
     "KilopoundPerSquareInch",
@@ -731,6 +749,7 @@ __all__ = [
     "Millinewton",
     "MillinewtonMeter",
     "MillinewtonMetre",
+    "MillinewtonSecond",
     "Milliohm",
     "Millisecond",
     "Millisiemens",
@@ -743,6 +762,7 @@ __all__ = [
     "Milliweber",
     "Minute",
     "Mole",
+    "Momentum",
     "Nanoampere",
     "Nanocoulomb",
     "Nanofarad",
@@ -766,6 +786,7 @@ __all__ = [
     "Newton",
     "NewtonMeter",
     "NewtonMetre",
+    "NewtonSecond",
     "Ohm",
     "Ounce",
     "Pascal",
@@ -801,9 +822,11 @@ __all__ = [
     "Picotesla",
     "Picowatt",
     "Pound",
+    "PoundFootPerSecond",
     "PoundForce",
     "PoundForceFoot",
     "PoundForceInch",
+    "PoundForceSecond",
     "PoundPerSquareInch",
     "Power",
     "Pressure",
@@ -828,8 +851,10 @@ __all__ = [
     "SquareInch",
     "SquareKilometer",
     "SquareKilometre",
+    "SquareKilometrePerSecondSquared",
     "SquareMeter",
     "SquareMetre",
+    "SquareMetrePerSecondSquared",
     "SquareMillimeter",
     "SquareMillimetre",
     "Stress",
@@ -859,6 +884,7 @@ __all__ = [
     "TurnPerSecond",
     "Var",
     "Velocity",
+    "VelocitySquared",
     "Volt",
     "VoltAmpere",
     "Voltage",

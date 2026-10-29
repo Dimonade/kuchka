@@ -16,7 +16,7 @@ Every other quantity lives in the themed package of the relation that defines it
 | `geometry`                      | measures built from length alone: area, volume                                                      |
 | `kinematics`                    | motion: velocity, acceleration, angular velocity                                                    |
 | `mechanics`                     | force and the work it does: force, torque, pressure, stress, density, energy, power, energy density |
-| _`mechanics`, continued_        | specific energy                                                                                     |
+| _`mechanics`, continued_        | specific energy, momentum, impulse, velocity squared                                                |
 | `electromagnetics`              | charge, voltage, resistance, conductance, capacitance, inductance                                   |
 | _`electromagnetics`, continued_ | permittivity, permeability, AC power, magnetic flux, magnetic flux density, magnetic field strength |
 | `information`                   | data and data rate                                                                                  |

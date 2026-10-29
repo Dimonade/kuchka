@@ -91,3 +91,5 @@ def test_the_types_sharing_a_dimension_are_found() -> None:
     assert frozenset(("Frequency", "SampleRate")) in names
     assert frozenset(("Time", "SamplingPeriod")) in names
     assert frozenset(("Pressure", "EnergyDensity")) in names
+    assert frozenset(("Momentum", "Impulse")) in names
+    assert frozenset(("SpecificEnergy", "VelocitySquared")) in names

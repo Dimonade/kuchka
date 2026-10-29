@@ -27,7 +27,16 @@ Dimensional arithmetic derives `MagneticFlux` from `Voltage * Time`, `MagneticFl
 - specific energy (`JoulePerKilogram`, `KilojoulePerKilogram`, `MegajoulePerKilogram`, `JoulePerGram`, `WattHourPerKilogram`, `KilowattHourPerKilogram`, `KilocaloriePerKilogram`), and
 - heating rate (`KelvinPerSecond`, `KelvinPerMinute`, `KelvinPerHour`, and the same for degrees Celsius, plus `FahrenheitPerSecond` and `FahrenheitPerMinute`), in the new `thermodynamics` package.
 
-Dimensional arithmetic derives `SpecificEnergy` from `Energy / Mass`, `Pressure / Density`, `EnergyDensity / Density`, `Acceleration * Length`, and `Velocity * Velocity`, and `HeatingRate` from `TemperatureDelta / Time` and `TemperatureDelta * Frequency`.
+Dimensional arithmetic derives `SpecificEnergy` from `Energy / Mass`, `Pressure / Density`, `EnergyDensity / Density`, and `Acceleration * Length`, `EnergyDensity` from `SpecificEnergy * Density`, and `HeatingRate` from `TemperatureDelta / Time` and `TemperatureDelta * Frequency`.
+
+**#### Momentum, impulse, and velocity squared**
+
+- momentum (`KilogramMetrePerSecond`, `GramCentimetrePerSecond`, `PoundFootPerSecond`),
+- impulse (`NewtonSecond`, `MillinewtonSecond`, `KilonewtonSecond`, `DyneSecond`, `PoundForceSecond`), and
+- velocity squared (`SquareMetrePerSecondSquared`, `SquareKilometrePerSecondSquared`).
+
+`Mass * Velocity` is a `Momentum`, `Force * Time` an `Impulse`, and `Velocity * Velocity` a `VelocitySquared`, so a kinetic energy is `mass * v * v / 2` without brackets, and `Density * VelocitySquared` is a `Pressure`.
+`Momentum` and `Impulse` share a dimension and are contested, as are `VelocitySquared` and `SpecificEnergy`; the conversions are `Impulse.to_momentum()`, `Impulse.from_momentum(...)`, `VelocitySquared.to_specific_energy()` (the half), and `VelocitySquared.from_specific_energy(...)` (the double).
 
 ### Changed
 

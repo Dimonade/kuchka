@@ -11,6 +11,7 @@ from decimal import Decimal
 import pytest
 
 from kuchka import Energy
+from kuchka import EnergyDensity
 from kuchka import IncompatibleDimensionError
 from kuchka import Kilogram
 from kuchka import SpecificEnergy
@@ -18,9 +19,9 @@ from kuchka import parse
 from kuchka.units import length
 from kuchka.units import mass
 from kuchka.units.kinematics import acceleration
-from kuchka.units.kinematics import velocity
 from kuchka.units.mechanics import density
 from kuchka.units.mechanics import energy
+from kuchka.units.mechanics import energy_density
 from kuchka.units.mechanics import pressure
 from kuchka.units.mechanics import specific_energy as se
 
@@ -60,10 +61,11 @@ def test_the_other_ways_to_reach_the_dimension_agree_with_energy_over_mass() -> 
     assert head == se.JoulePerKilogram(200)
 
 
-def test_a_velocity_squared_is_twice_the_kinetic_energy_per_mass() -> None:
-    squared = velocity.MetrePerSecond(3) * velocity.MetrePerSecond(4)
-    assert type(squared) is SpecificEnergy
-    assert squared / 2 == se.JoulePerKilogram(6)
+def test_a_specific_energy_times_a_density_is_an_energy_density() -> None:
+    pack = se.WattHourPerKilogram(250) * density.KilogramPerLitre(2)
+    assert type(pack) is EnergyDensity
+    assert pack == energy_density.WattHourPerLitre(500)
+    assert pack / density.KilogramPerLitre(2) == se.WattHourPerKilogram(250)
 
 
 def test_text_resolves_through_the_table() -> None:
