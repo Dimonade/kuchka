@@ -42,6 +42,7 @@ from kuchka.quantities import proportion
 from kuchka.quantities import radiation
 from kuchka.quantities import temporal
 from kuchka.quantities import thermal
+from kuchka.quantities import thermodynamics
 from kuchka.quantities.amount import *
 from kuchka.quantities.angular import *
 from kuchka.quantities.base import *
@@ -75,11 +76,13 @@ from kuchka.quantities.mechanics.energy_density import *
 from kuchka.quantities.mechanics.force import *
 from kuchka.quantities.mechanics.power import *
 from kuchka.quantities.mechanics.pressure import *
+from kuchka.quantities.mechanics.specific_energy import *
 from kuchka.quantities.mechanics.torque import *
 from kuchka.quantities.proportion import *
 from kuchka.quantities.radiation.activity import *
 from kuchka.quantities.temporal import *
 from kuchka.quantities.thermal import *
+from kuchka.quantities.thermodynamics.heating_rate import *
 
 __all__: list[str] = []
 __all__ += amount.__all__
@@ -99,3 +102,4 @@ __all__ += proportion.__all__
 __all__ += radiation.__all__
 __all__ += temporal.__all__
 __all__ += thermal.__all__
+__all__ += thermodynamics.__all__

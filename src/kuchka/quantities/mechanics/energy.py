@@ -23,10 +23,12 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.length import Length
+    from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
+    from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
@@ -73,11 +75,15 @@ class Energy(LinearQuantity):
     @overload
     def __truediv__(self, other: MagneticFlux) -> Current: ...
     @overload
+    def __truediv__(self, other: Mass) -> SpecificEnergy: ...
+    @overload
     def __truediv__(self, other: Power) -> Time: ...
     @overload
     def __truediv__(self, other: Pressure) -> Volume: ...
     @overload
     def __truediv__(self, other: Proportion) -> Energy: ...
+    @overload
+    def __truediv__(self, other: SpecificEnergy) -> Mass: ...
     @overload
     def __truediv__(self, other: Time) -> Power: ...
     @overload

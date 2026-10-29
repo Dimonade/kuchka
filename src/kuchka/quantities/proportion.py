@@ -66,6 +66,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.pressure import Stress
+    from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.radiation.activity import Activity
     from kuchka.quantities.temporal import BaudRate
@@ -74,6 +75,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.temporal import SamplingPeriod
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.thermal import TemperatureDelta
+    from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
 
 
 class Proportion(LinearQuantity):
@@ -122,6 +124,8 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: Frequency) -> Frequency: ...
     @overload
+    def __mul__(self, other: HeatingRate) -> HeatingRate: ...
+    @overload
     def __mul__(self, other: Impedance) -> Impedance: ...
     @overload
     def __mul__(self, other: Inductance) -> Inductance: ...
@@ -159,6 +163,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: SampleRate) -> SampleRate: ...
     @overload
     def __mul__(self, other: SamplingPeriod) -> SamplingPeriod: ...
+    @overload
+    def __mul__(self, other: SpecificEnergy) -> SpecificEnergy: ...
     @overload
     def __mul__(self, other: Stress) -> Stress: ...
     @overload

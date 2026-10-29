@@ -72,6 +72,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.thermal import TemperatureDelta
+    from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
 
 
 class Time(LinearQuantity):
@@ -93,6 +95,8 @@ class Time(LinearQuantity):
     def __mul__(self, other: DataRate) -> Data: ...
     @overload
     def __mul__(self, other: Frequency) -> Fraction: ...
+    @overload
+    def __mul__(self, other: HeatingRate) -> TemperatureDelta: ...
     @overload
     def __mul__(self, other: Power) -> Energy: ...
     @overload
@@ -230,6 +234,8 @@ class Frequency(LinearQuantity):
     def __mul__(self, other: MagneticFlux) -> Voltage: ...
     @overload
     def __mul__(self, other: Proportion) -> Frequency: ...
+    @overload
+    def __mul__(self, other: TemperatureDelta) -> HeatingRate: ...
     @overload
     def __mul__(self, other: Time) -> Fraction: ...
     @overload

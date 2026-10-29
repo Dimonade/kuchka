@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -48,6 +49,8 @@ class Velocity(LinearQuantity):
     def __mul__(self, other: Proportion) -> Velocity: ...
     @overload
     def __mul__(self, other: Time) -> Length: ...
+    @overload
+    def __mul__(self, other: Velocity) -> SpecificEnergy: ...
     @overload
     def __mul__(self, other: Numeric) -> Velocity: ...
     @overload
