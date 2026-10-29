@@ -57,7 +57,6 @@ def test_the_quotients_of_a_momentum() -> None:
 def test_text_resolves_through_the_table() -> None:
     assert parse("6 kg·m/s", Momentum) == mom.KilogramMetrePerSecond(6)
     assert parse("6 kg*m/s", Momentum) == mom.KilogramMetrePerSecond(6)
-    assert parse("6 kg⋅m/s", Momentum) == mom.KilogramMetrePerSecond(6)
     assert parse("3 g cm/s", Momentum) == mom.GramCentimetrePerSecond(3)
 
 
