@@ -458,35 +458,37 @@ The complete unit vocabulary is available in the API reference.
 
 ### Time and signals
 
-| Quantity          | Representative units                                                                                  |
-| ----------------- | ----------------------------------------------------------------------------------------------------- |
-| Time              | `Femtosecond` through `Second`, `Minute` through `JulianYear`, and `Jiffy`                            |
-| Instant           | reached via `Time.to_instant()`                                                                       |
-| Frequency         | `Nanohertz` through `Petahertz`                                                                       |
-| Sampling Period   | reached via `Time.to_sampling_period()`                                                               |
-| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`                                    |
-| Baud Rate         | `Baud` through `Gigabaud`                                                                             |
-| Activity          | `Millibecquerel` through `Terabecquerel`, `Curie`, `Millicurie`, `Microcurie`, and `Picocurie`        |
-| Data              | `Bit` and `Byte`, `Kilobyte` through `Petabyte`, `Kibibyte` through `Pebibyte`, and the same for bits |
-| Data Rate         | `BitPerSecond` and `BytePerSecond`, with the same SI and IEC multiples                                |
-| Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                                                     |
-| Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`                                                      |
+| Quantity          | Representative units                                                                                             |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Time              | `Femtosecond` through `Second`, `Minute` through `JulianYear`, and `Jiffy`                                       |
+| Instant           | reached via `Time.to_instant()`                                                                                  |
+| Frequency         | `Nanohertz` through `Petahertz`                                                                                  |
+| Sampling Period   | reached via `Time.to_sampling_period()`                                                                          |
+| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`                                               |
+| Baud Rate         | `Baud` through `Gigabaud`                                                                                        |
+| Activity          | `Millibecquerel` through `Terabecquerel`, `Curie`, `Millicurie`, `Microcurie`, and `Picocurie`                   |
+| Data              | `Bit` and `Byte`, `Kilobyte` through `Petabyte`, `Kibibyte` through `Pebibyte`, and the same for bits            |
+| Data Rate         | `BitPerSecond` and `BytePerSecond`, with the same SI and IEC multiples                                           |
+| Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                                                                |
+| Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`                                                                 |
+| Heating Rate      | `KelvinPerSecond`, `CelsiusPerMinute`, `FahrenheitPerMinute`, and the per-second, per-minute, and per-hour units |
 
 ### Geometry and mechanics
 
-| Quantity       | Representative units                                                                                                                               |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Length         | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit` and `LightYear`                                         |
-| Area           | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                                                                    |
-| Volume         | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                                                           |
-| Velocity       | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`, `Knot`                                                                                        |
-| Acceleration   | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                                                                  |
-| Mass           | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                                                                     |
-| Force          | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                                                                      |
-| Density        | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                                                              |
-| Pressure       | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Gigapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`, `KilopoundPerSquareInch` |
-| Stress         | the units of Pressure, reached with `Pressure.to_stress()`                                                                                         |
-| Energy density | `JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`                                                       |
+| Quantity        | Representative units                                                                                                                               |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Length          | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit` and `LightYear`                                         |
+| Area            | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                                                                    |
+| Volume          | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                                                           |
+| Velocity        | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`, `Knot`                                                                                        |
+| Acceleration    | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                                                                  |
+| Mass            | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                                                                     |
+| Force           | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                                                                      |
+| Density         | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                                                              |
+| Pressure        | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Gigapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`, `KilopoundPerSquareInch` |
+| Stress          | the units of Pressure, reached with `Pressure.to_stress()`                                                                                         |
+| Energy density  | `JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`                                                       |
+| Specific energy | `JoulePerKilogram`, `MegajoulePerKilogram`, `WattHourPerKilogram`, `KilowattHourPerKilogram`, `KilocaloriePerKilogram`                             |
 
 ### Angle and rotation
 

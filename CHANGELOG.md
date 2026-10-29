@@ -22,6 +22,13 @@ Dimensional arithmetic derives `MagneticFlux` from `Voltage * Time`, `MagneticFl
 
 `Reactance` and `Impedance` are distinct roles of `Resistance`, reached through `Resistance.to_reactance()` and `Resistance.to_impedance()`. Both reuse resistance units through `REACTANCE_UNITS` and `IMPEDANCE_UNITS`. `Magnetization` is a distinct role of `MagneticFieldStrength`, reached through `MagneticFieldStrength.to_magnetization()`, and reuses its units through `MAGNETIZATION_UNITS`. `Permittivity` is `Capacitance / Length`, while `Permeability` is `Inductance / Length`.
 
+**#### Thermal and mechanical**
+
+- specific energy (`JoulePerKilogram`, `KilojoulePerKilogram`, `MegajoulePerKilogram`, `JoulePerGram`, `WattHourPerKilogram`, `KilowattHourPerKilogram`, `KilocaloriePerKilogram`), and
+- heating rate (`KelvinPerSecond`, `KelvinPerMinute`, `KelvinPerHour`, and the same for degrees Celsius, plus `FahrenheitPerSecond` and `FahrenheitPerMinute`), in the new `thermodynamics` package.
+
+Dimensional arithmetic derives `SpecificEnergy` from `Energy / Mass`, `Pressure / Density`, `EnergyDensity / Density`, `Acceleration * Length`, and `Velocity * Velocity`, and `HeatingRate` from `TemperatureDelta / Time` and `TemperatureDelta * Frequency`.
+
 ### Changed
 
 #### Unit modules live in themed packages
