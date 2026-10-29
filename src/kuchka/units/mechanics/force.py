@@ -66,14 +66,13 @@ One pound-force is exactly 4.4482216152605 N:
 >>> PoundForce(1).to(NEWTON)
 4.4482216152605 N
 
-A force can also be integrated over time to produce impulse.
+A force acting over a time is an impulse.
 A constant 20 N force acting for 3 seconds produces 60 N s of impulse:
 
 >>> from kuchka import Newton
 >>> from kuchka import Second
->>> # impulse = Newton(20) * Second(3)
-
-# NOTE: While the example above should be valid, Impulse is currently not implemented.
+>>> Newton(20) * Second(3)
+60 N·s
 
 Notes
 -----

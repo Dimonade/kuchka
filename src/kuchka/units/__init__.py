@@ -77,11 +77,14 @@ from kuchka.units.mechanics.density import *
 from kuchka.units.mechanics.energy import *
 from kuchka.units.mechanics.energy_density import *
 from kuchka.units.mechanics.force import *
+from kuchka.units.mechanics.impulse import *
+from kuchka.units.mechanics.momentum import *
 from kuchka.units.mechanics.power import *
 from kuchka.units.mechanics.pressure import *
 from kuchka.units.mechanics.specific_energy import *
 from kuchka.units.mechanics.stress import *
 from kuchka.units.mechanics.torque import *
+from kuchka.units.mechanics.velocity_squared import *
 from kuchka.units.proportion import *
 from kuchka.units.radiation.activity import *
 from kuchka.units.temporal.baud_rate import *
@@ -121,6 +124,9 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Force: FORCE_UNITS,
     quantities.Frequency: FREQUENCY_UNITS,
     quantities.HeatingRate: HEATING_RATE_UNITS,
+    quantities.Impulse: IMPULSE_UNITS,
+    quantities.Momentum: MOMENTUM_UNITS,
+    quantities.VelocitySquared: VELOCITY_SQUARED_UNITS,
     quantities.Impedance: IMPEDANCE_UNITS,
     quantities.Inductance: INDUCTANCE_UNITS,
     quantities.Instant: INSTANT_UNITS,
