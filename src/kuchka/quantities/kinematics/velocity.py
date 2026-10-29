@@ -22,9 +22,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.length import Length
+    from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
-    from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+    from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -42,6 +46,12 @@ class Velocity(LinearQuantity):
     @overload
     def __mul__(self, other: Frequency) -> Acceleration: ...
     @overload
+    def __mul__(self, other: Impulse) -> Energy: ...
+    @overload
+    def __mul__(self, other: Mass) -> Momentum: ...
+    @overload
+    def __mul__(self, other: Momentum) -> Energy: ...
+    @overload
     def __mul__(self, other: Permeability) -> Resistance: ...
     @overload
     def __mul__(self, other: Permittivity) -> Conductance: ...
@@ -50,7 +60,7 @@ class Velocity(LinearQuantity):
     @overload
     def __mul__(self, other: Time) -> Length: ...
     @overload
-    def __mul__(self, other: Velocity) -> SpecificEnergy: ...
+    def __mul__(self, other: Velocity) -> VelocitySquared: ...
     @overload
     def __mul__(self, other: Numeric) -> Velocity: ...
     @overload

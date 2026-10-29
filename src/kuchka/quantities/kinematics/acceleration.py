@@ -20,6 +20,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.momentum import Momentum
+    from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
@@ -34,9 +37,13 @@ class Acceleration(LinearQuantity):
 
     # BEGIN GENERATED __mul__
     @overload
+    def __mul__(self, other: Impulse) -> Power: ...
+    @overload
     def __mul__(self, other: Length) -> SpecificEnergy: ...
     @overload
     def __mul__(self, other: Mass) -> Force: ...
+    @overload
+    def __mul__(self, other: Momentum) -> Power: ...
     @overload
     def __mul__(self, other: Proportion) -> Acceleration: ...
     @overload

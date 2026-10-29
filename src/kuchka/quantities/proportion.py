@@ -63,11 +63,14 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.pressure import Stress
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.torque import Torque
+    from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.radiation.activity import Activity
     from kuchka.quantities.temporal import BaudRate
     from kuchka.quantities.temporal import Frequency
@@ -128,6 +131,8 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: Impedance) -> Impedance: ...
     @overload
+    def __mul__(self, other: Impulse) -> Impulse: ...
+    @overload
     def __mul__(self, other: Inductance) -> Inductance: ...
     @overload
     def __mul__(self, other: Length) -> Length: ...
@@ -143,6 +148,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: Magnetization) -> Magnetization: ...
     @overload
     def __mul__(self, other: Mass) -> Mass: ...
+    @overload
+    def __mul__(self, other: Momentum) -> Momentum: ...
     @overload
     def __mul__(self, other: Permeability) -> Permeability: ...
     @overload
@@ -175,6 +182,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: Torque) -> Torque: ...
     @overload
     def __mul__(self, other: Velocity) -> Velocity: ...
+    @overload
+    def __mul__(self, other: VelocitySquared) -> VelocitySquared: ...
     @overload
     def __mul__(self, other: Voltage) -> Voltage: ...
     @overload

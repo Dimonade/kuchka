@@ -34,6 +34,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+    from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
 
 
@@ -76,6 +77,8 @@ class Pressure(LinearQuantity):
     def __truediv__(self, other: Proportion) -> Pressure: ...
     @overload
     def __truediv__(self, other: SpecificEnergy) -> Density: ...
+    @overload
+    def __truediv__(self, other: VelocitySquared) -> Density: ...
     @overload
     def __truediv__(self, other: Numeric) -> Pressure: ...
     @overload

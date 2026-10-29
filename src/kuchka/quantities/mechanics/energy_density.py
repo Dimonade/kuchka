@@ -21,8 +21,10 @@ from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.registry import _register
 from kuchka.quantities.base.registry import _rule
 from kuchka.quantities.geometry.volume import Volume
+from kuchka.quantities.mechanics.density import Density
 from kuchka.quantities.mechanics.energy import Energy
 from kuchka.quantities.mechanics.pressure import Pressure
+from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -36,9 +38,8 @@ if TYPE_CHECKING:
         MagneticFluxDensity,
     )
     from kuchka.quantities.geometry.area import Area
-    from kuchka.quantities.mechanics.density import Density
     from kuchka.quantities.mechanics.force import Force
-    from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+    from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
 
 
@@ -82,6 +83,8 @@ class EnergyDensity(LinearQuantity):
     @overload
     def __truediv__(self, other: SpecificEnergy) -> Density: ...
     @overload
+    def __truediv__(self, other: VelocitySquared) -> Density: ...
+    @overload
     def __truediv__(self, other: Numeric) -> EnergyDensity: ...
     @overload
     def __truediv__(
@@ -97,5 +100,7 @@ class EnergyDensity(LinearQuantity):
 
 _register(ENERGY_DENSITY, EnergyDensity, contested_with=Pressure)
 _rule(Energy, "/", Volume, EnergyDensity)
+_rule(SpecificEnergy, "*", Density, EnergyDensity)
+_rule(EnergyDensity, "/", Density, SpecificEnergy)
 
 __all__ = ["EnergyDensity"]

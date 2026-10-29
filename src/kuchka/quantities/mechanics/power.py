@@ -18,10 +18,13 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
@@ -61,6 +64,10 @@ class Power(LinearQuantity):
     def __truediv__(self, other: Force) -> Velocity: ...
     @overload
     def __truediv__(self, other: Frequency) -> Energy: ...
+    @overload
+    def __truediv__(self, other: Impulse) -> Acceleration: ...
+    @overload
+    def __truediv__(self, other: Momentum) -> Acceleration: ...
     @overload
     def __truediv__(self, other: Power) -> Proportion: ...
     @overload

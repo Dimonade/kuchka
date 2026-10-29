@@ -10,17 +10,22 @@ from kuchka.dimensions import SPECIFIC_ENERGY
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.registry import _register
+from kuchka.quantities.base.registry import _rule
+from kuchka.quantities.kinematics.acceleration import Acceleration
+from kuchka.quantities.length import Length
+from kuchka.quantities.mass import Mass
+from kuchka.quantities.mechanics.density import Density
+from kuchka.quantities.mechanics.energy import Energy
+from kuchka.quantities.mechanics.pressure import Pressure
 
 if TYPE_CHECKING:
     from fractions import Fraction
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
-    from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.velocity import Velocity
-    from kuchka.quantities.length import Length
-    from kuchka.quantities.mass import Mass
-    from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
 
 
@@ -31,14 +36,19 @@ class SpecificEnergy(LinearQuantity):
         fuel = MegajoulePerKilogram(43)
 
     It is the quotient `Energy / Mass`, and `SpecificEnergy * Mass` is an `Energy`.
-    The same dimension is the quotient `Pressure / Density` and the product
-    `Acceleration * Length`, the potential energy per mass of a height.
+    `Acceleration * Length` is the potential energy per mass of a height, and
+    `Pressure / Density` the pressure head of a fluid.
+    `SpecificEnergy * Density` is an `EnergyDensity`.
+    It shares its dimension with `VelocitySquared`: see
+    `VelocitySquared.to_specific_energy`.
     """
 
     dimension: ClassVar[Dimension] = SPECIFIC_ENERGY
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: Density) -> EnergyDensity: ...
     @overload
     def __mul__(self, other: Mass) -> Energy: ...
     @overload
@@ -66,6 +76,8 @@ class SpecificEnergy(LinearQuantity):
     @overload
     def __truediv__(self, other: Velocity) -> Velocity: ...
     @overload
+    def __truediv__(self, other: VelocitySquared) -> Proportion: ...
+    @overload
     def __truediv__(self, other: Numeric) -> SpecificEnergy: ...
     @overload
     def __truediv__(
@@ -80,5 +92,8 @@ class SpecificEnergy(LinearQuantity):
 
 
 _register(SPECIFIC_ENERGY, SpecificEnergy)
+_rule(Energy, "/", Mass, SpecificEnergy)
+_rule(Acceleration, "*", Length, SpecificEnergy)
+_rule(Pressure, "/", Density, SpecificEnergy)
 
 __all__ = ["SpecificEnergy"]

@@ -27,9 +27,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
 
 
 class Force(LinearQuantity):
@@ -43,6 +47,8 @@ class Force(LinearQuantity):
     def __mul__(self, other: Length) -> Energy: ...
     @overload
     def __mul__(self, other: Proportion) -> Force: ...
+    @overload
+    def __mul__(self, other: Time) -> Impulse: ...
     @overload
     def __mul__(self, other: Velocity) -> Power: ...
     @overload
@@ -66,11 +72,15 @@ class Force(LinearQuantity):
     @overload
     def __truediv__(self, other: Force) -> Proportion: ...
     @overload
+    def __truediv__(self, other: Impulse) -> Frequency: ...
+    @overload
     def __truediv__(self, other: MagneticFieldStrength) -> MagneticFlux: ...
     @overload
     def __truediv__(self, other: MagneticFlux) -> MagneticFieldStrength: ...
     @overload
     def __truediv__(self, other: Mass) -> Acceleration: ...
+    @overload
+    def __truediv__(self, other: Momentum) -> Frequency: ...
     @overload
     def __truediv__(self, other: Pressure) -> Area: ...
     @overload
