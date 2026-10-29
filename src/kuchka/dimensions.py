@@ -146,6 +146,11 @@ See the module docstring for why this is tracked as its own axis rather than reu
 # Derived, by explicit rules.
 
 ENERGY_DENSITY = ENERGY / VOLUME
+SPECIFIC_ENERGY = ENERGY / MASS
+VELOCITY_SQUARED = VELOCITY * VELOCITY
+MOMENTUM = MASS * VELOCITY
+IMPULSE = FORCE * TIME
+HEATING_RATE = TEMPERATURE_DELTA / TIME
 ANGULAR_VELOCITY = ANGLE / TIME
 TORQUE = ENERGY / ANGLE
 DATA_RATE = DATA / TIME
@@ -175,6 +180,8 @@ __all__ = [
     "ENERGY_DENSITY",
     "FORCE",
     "FREQUENCY",
+    "HEATING_RATE",
+    "IMPULSE",
     "INDUCTANCE",
     "LENGTH",
     "LUMINOUS_INTENSITY",
@@ -182,15 +189,18 @@ __all__ = [
     "MAGNETIC_FLUX",
     "MAGNETIC_FLUX_DENSITY",
     "MASS",
+    "MOMENTUM",
     "PERMEABILITY",
     "PERMITTIVITY",
     "POWER",
     "PRESSURE",
     "RESISTANCE",
+    "SPECIFIC_ENERGY",
     "TEMPERATURE_DELTA",
     "TIME",
     "TORQUE",
     "VELOCITY",
+    "VELOCITY_SQUARED",
     "VOLTAGE",
     "VOLUME",
     "Dimension",

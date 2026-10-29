@@ -63,10 +63,14 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.pressure import Stress
+    from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.torque import Torque
+    from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.radiation.activity import Activity
     from kuchka.quantities.temporal import BaudRate
     from kuchka.quantities.temporal import Frequency
@@ -74,6 +78,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.temporal import SamplingPeriod
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.thermal import TemperatureDelta
+    from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
 
 
 class Proportion(LinearQuantity):
@@ -122,7 +127,11 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: Frequency) -> Frequency: ...
     @overload
+    def __mul__(self, other: HeatingRate) -> HeatingRate: ...
+    @overload
     def __mul__(self, other: Impedance) -> Impedance: ...
+    @overload
+    def __mul__(self, other: Impulse) -> Impulse: ...
     @overload
     def __mul__(self, other: Inductance) -> Inductance: ...
     @overload
@@ -139,6 +148,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: Magnetization) -> Magnetization: ...
     @overload
     def __mul__(self, other: Mass) -> Mass: ...
+    @overload
+    def __mul__(self, other: Momentum) -> Momentum: ...
     @overload
     def __mul__(self, other: Permeability) -> Permeability: ...
     @overload
@@ -160,6 +171,8 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: SamplingPeriod) -> SamplingPeriod: ...
     @overload
+    def __mul__(self, other: SpecificEnergy) -> SpecificEnergy: ...
+    @overload
     def __mul__(self, other: Stress) -> Stress: ...
     @overload
     def __mul__(self, other: TemperatureDelta) -> TemperatureDelta: ...
@@ -169,6 +182,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: Torque) -> Torque: ...
     @overload
     def __mul__(self, other: Velocity) -> Velocity: ...
+    @overload
+    def __mul__(self, other: VelocitySquared) -> VelocitySquared: ...
     @overload
     def __mul__(self, other: Voltage) -> Voltage: ...
     @overload

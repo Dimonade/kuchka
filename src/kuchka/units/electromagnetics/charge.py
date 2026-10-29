@@ -48,6 +48,7 @@ measure of absorbed radiation dose.
 ``"mAs"``, ``"mAh"``, and ``"Ah"`` to their constructors.
 It is intended for boundary code that reads a charge unit from configuration files,
 instrument reports, battery specifications, and other external sources.
+
 """
 
 from __future__ import annotations
@@ -113,6 +114,7 @@ def Picocoulomb(value: Numeric) -> Charge:
 
     The calculation uses the magnitude of the charge transfer; signal polarity depends
     on the detector and amplifier configuration.
+
     """
     return Charge(to_exact(value) * PICOCOULOMB.scale, PICOCOULOMB)
 
@@ -136,11 +138,12 @@ def Nanocoulomb(value: Numeric) -> Charge:
     Determine the average current during that interval:
 
     >>> from kuchka import Millisecond, Nanocoulomb
-    >>> from kuchka.units.electromagnetics.current import MICROAMPERE
+    >>> from kuchka.units import MICROAMPERE
     >>> transferred_charge = Nanocoulomb(3)
     >>> pulse_duration = Millisecond(2)
     >>> (transferred_charge / pulse_duration).to(MICROAMPERE)
     1.5 µA
+
     """
     return Charge(to_exact(value) * NANOCOULOMB.scale, NANOCOULOMB)
 
@@ -172,6 +175,7 @@ def Microcoulomb(value: Numeric) -> Charge:
 
     The result assumes that the transferred charge is stored on the stated capacitance;
     the mechanics of a real piezoelectric sensor determine how much charge is produced.
+
     """
     return Charge(to_exact(value) * MICROCOULOMB.scale, MICROCOULOMB)
 
@@ -202,6 +206,7 @@ def Millicoulomb(value: Numeric) -> Charge:
 
     This is the time-averaged current over the pulse interval; a shaped pulse can have
     a different peak current.
+
     """
     return Charge(to_exact(value) * MILLICOULOMB.scale, MILLICOULOMB)
 
@@ -233,6 +238,7 @@ def Coulomb(value: Numeric) -> Charge:
 
     This describes stored electrical energy, not the energy necessarily delivered to a
     load during a discharge.
+
     """
     return Charge(to_exact(value) * COULOMB.scale, COULOMB)
 
@@ -277,6 +283,7 @@ def MilliampereSecond(value: Numeric) -> Charge:
 
     The mAs value describes electrical charge through the tube; radiation dose also
     depends on tube voltage, filtration, geometry, and other factors.
+
     """
     return Charge(to_exact(value) * MILLIAMPERE_SECOND.scale, MILLIAMPERE_SECOND)
 
@@ -300,7 +307,7 @@ def MilliampereHour(value: Numeric) -> Charge:
     Estimate the operating time from the rated capacity:
 
     >>> from kuchka import Milliampere, MilliampereHour
-    >>> from kuchka.units.time import HOUR
+    >>> from kuchka.units import HOUR
     >>> battery_capacity = MilliampereHour(3000)
     >>> device_current = Milliampere(150)
     >>> (battery_capacity / device_current).to(HOUR)
@@ -309,6 +316,7 @@ def MilliampereHour(value: Numeric) -> Charge:
     This is a capacity-based estimate.
     Real runtime varies with discharge conditions, battery ageing, and the device's
     cutoff voltage.
+
     """
     return Charge(to_exact(value) * MILLIAMPERE_HOUR.scale, MILLIAMPERE_HOUR)
 
@@ -333,7 +341,7 @@ def AmpereHour(value: Numeric) -> Charge:
     energy:
 
     >>> from kuchka import AmpereHour, Volt
-    >>> from kuchka.units.energy import KILOWATT_HOUR
+    >>> from kuchka.units import KILOWATT_HOUR
     >>> battery_capacity = AmpereHour(60)
     >>> nominal_voltage = Volt(48)
     >>> (battery_capacity * nominal_voltage).to(KILOWATT_HOUR)
@@ -341,6 +349,7 @@ def AmpereHour(value: Numeric) -> Charge:
 
     Actual battery energy depends on voltage throughout the discharge cycle;
     multiplying rated ampere-hours by nominal voltage is an estimate.
+
     """
     return Charge(to_exact(value) * AMPERE_HOUR.scale, AMPERE_HOUR)
 

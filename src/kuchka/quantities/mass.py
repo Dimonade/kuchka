@@ -18,8 +18,13 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mechanics.density import Density
+    from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.momentum import Momentum
+    from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+    from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
 
 
@@ -34,6 +39,12 @@ class Mass(LinearQuantity):
     def __mul__(self, other: Acceleration) -> Force: ...
     @overload
     def __mul__(self, other: Proportion) -> Mass: ...
+    @overload
+    def __mul__(self, other: SpecificEnergy) -> Energy: ...
+    @overload
+    def __mul__(self, other: Velocity) -> Momentum: ...
+    @overload
+    def __mul__(self, other: VelocitySquared) -> Energy: ...
     @overload
     def __mul__(self, other: Numeric) -> Mass: ...
     @overload

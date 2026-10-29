@@ -187,6 +187,9 @@ The library is useful when a calculation crosses more than one physical domain. 
 ```text
 Voltage * Current -> Power
 Mass * Acceleration -> Force
+Mass * Velocity -> Momentum
+Force * Time -> Impulse
+Velocity * Velocity -> VelocitySquared
 Force / Area -> Pressure
 Pressure * Volume -> Energy
 Energy / Volume -> EnergyDensity
@@ -458,35 +461,40 @@ The complete unit vocabulary is available in the API reference.
 
 ### Time and signals
 
-| Quantity          | Representative units                                                                                  |
-| ----------------- | ----------------------------------------------------------------------------------------------------- |
-| Time              | `Femtosecond` through `Second`, `Minute` through `JulianYear`, and `Jiffy`                            |
-| Instant           | reached via `Time.to_instant()`                                                                       |
-| Frequency         | `Nanohertz` through `Petahertz`                                                                       |
-| Sampling Period   | reached via `Time.to_sampling_period()`                                                               |
-| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`                                    |
-| Baud Rate         | `Baud` through `Gigabaud`                                                                             |
-| Activity          | `Millibecquerel` through `Terabecquerel`, `Curie`, `Millicurie`, `Microcurie`, and `Picocurie`        |
-| Data              | `Bit` and `Byte`, `Kilobyte` through `Petabyte`, `Kibibyte` through `Pebibyte`, and the same for bits |
-| Data Rate         | `BitPerSecond` and `BytePerSecond`, with the same SI and IEC multiples                                |
-| Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                                                     |
-| Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`                                                      |
+| Quantity          | Representative units                                                                                             |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Time              | `Femtosecond` through `Second`, `Minute` through `JulianYear`, and `Jiffy`                                       |
+| Instant           | reached via `Time.to_instant()`                                                                                  |
+| Frequency         | `Nanohertz` through `Petahertz`                                                                                  |
+| Sampling Period   | reached via `Time.to_sampling_period()`                                                                          |
+| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`                                               |
+| Baud Rate         | `Baud` through `Gigabaud`                                                                                        |
+| Activity          | `Millibecquerel` through `Terabecquerel`, `Curie`, `Millicurie`, `Microcurie`, and `Picocurie`                   |
+| Data              | `Bit` and `Byte`, `Kilobyte` through `Petabyte`, `Kibibyte` through `Pebibyte`, and the same for bits            |
+| Data Rate         | `BitPerSecond` and `BytePerSecond`, with the same SI and IEC multiples                                           |
+| Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                                                                |
+| Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`                                                                 |
+| Heating Rate      | `KelvinPerSecond`, `CelsiusPerMinute`, `FahrenheitPerMinute`, and the per-second, per-minute, and per-hour units |
 
 ### Geometry and mechanics
 
-| Quantity       | Representative units                                                                                                                               |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Length         | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit` and `LightYear`                                         |
-| Area           | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                                                                    |
-| Volume         | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                                                           |
-| Velocity       | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`, `Knot`                                                                                        |
-| Acceleration   | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                                                                  |
-| Mass           | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                                                                     |
-| Force          | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                                                                      |
-| Density        | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                                                              |
-| Pressure       | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Gigapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`, `KilopoundPerSquareInch` |
-| Stress         | the units of Pressure, reached with `Pressure.to_stress()`                                                                                         |
-| Energy density | `JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`                                                       |
+| Quantity         | Representative units                                                                                                                               |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Length           | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit` and `LightYear`                                         |
+| Area             | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                                                                    |
+| Volume           | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                                                           |
+| Velocity         | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`, `Knot`                                                                                        |
+| Acceleration     | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                                                                  |
+| Mass             | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                                                                     |
+| Force            | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                                                                      |
+| Density          | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                                                              |
+| Pressure         | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Gigapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`, `KilopoundPerSquareInch` |
+| Stress           | the units of Pressure, reached with `Pressure.to_stress()`                                                                                         |
+| Energy density   | `JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`                                                       |
+| Momentum         | `KilogramMetrePerSecond`, `GramCentimetrePerSecond`, `PoundFootPerSecond`                                                                          |
+| Impulse          | `NewtonSecond`, `MillinewtonSecond`, `KilonewtonSecond`, `DyneSecond`, `PoundForceSecond`                                                          |
+| Velocity squared | `SquareMetrePerSecondSquared`, `SquareKilometrePerSecondSquared`                                                                                   |
+| Specific energy  | `JoulePerKilogram`, `MegajoulePerKilogram`, `WattHourPerKilogram`, `KilowattHourPerKilogram`, `KilocaloriePerKilogram`                             |
 
 ### Angle and rotation
 
@@ -578,6 +586,24 @@ from kuchka import Frequency
 def nyquist_ok(signal: ConvertibleToFrequency, sample_rate: Frequency) -> bool:
     return signal.to_frequency() * 2 <= sample_rate
 ```
+
+An impulse and a momentum are both newton seconds, and still different concepts: a force over a time delivers one, a mass moving at a velocity has the other.
+Each product returns its own type, and converting is explicit:
+
+```python
+from kuchka import Kilogram
+from kuchka import MetrePerSecond
+from kuchka import Newton
+from kuchka import Second
+
+push = Newton(20) * Second(3)  # an Impulse
+cart = Kilogram(12) * MetrePerSecond(5)  # a Momentum
+
+push + cart  # rejected: `IncompatibleDimensionError`.
+push.to_momentum() == cart  # True: the push brings the cart from rest to 5 m/s.
+```
+
+Likewise a velocity squared and a specific energy share m²/s², and `VelocitySquared.to_specific_energy()` is its half, the kinetic energy per mass.
 
 ### Canonical types and domain-specific types
 
@@ -782,7 +808,7 @@ A future persistence layer may use a representation such as `{"value": 4.2, "uni
 
 Quantities have no exponentiation:
 `Second(2) ** 2` raises a `TypeError`.
-Multiply the factors instead, since every step lands on a registered type: `v0 * t + a * t * t / 2` is a `Length`.
+Multiply the factors instead, since every step lands on a registered type: `v0 * t + a * t * t / 2` is a `Length`, and `mass * v * v / 2` is an `Energy`.
 
 ## Stability
 

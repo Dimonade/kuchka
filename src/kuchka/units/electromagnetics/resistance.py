@@ -33,7 +33,7 @@ Their product gives the RC time constant used when estimating the filter's
 step response:
 
 >>> from kuchka import Kiloohm, Nanofarad
->>> from kuchka.units.time import MICROSECOND
+>>> from kuchka.units import MICROSECOND
 >>> filter_resistance = Kiloohm(4.7)
 >>> filter_capacitance = Nanofarad(100)
 >>> (filter_resistance * filter_capacitance).to(MICROSECOND)
@@ -144,7 +144,7 @@ def Microohm(value: Numeric) -> Resistance:
     Ten watts concentrated at a small contact can cause significant heating.
     The actual temperature rise depends on the contact's thermal resistance and the
     surrounding assembly.
-    
+
     """
     return Resistance(to_exact(value) * MICROOHM.scale, MICROOHM)
 
@@ -176,6 +176,7 @@ def Milliohm(value: Numeric) -> Resistance:
     50 mV
     >>> shunt * shunt_current * shunt_current
     0.5 W
+
     """
     return Resistance(to_exact(value) * MILLIOHM.scale, MILLIOHM)
 
@@ -199,7 +200,7 @@ def Ohm(value: Numeric) -> Resistance:
     For a purely resistive load, the RMS current and average power are:
 
     >>> from kuchka import Volt
-    >>> from kuchka.units.electromagnetics.current import MILLIAMPERE
+    >>> from kuchka.units import MILLIAMPERE
     >>> signal_voltage = Volt(1)
     >>> termination = Ohm(50)
     >>> termination_current = signal_voltage / termination
@@ -217,6 +218,7 @@ def Ohm(value: Numeric) -> Resistance:
     For example, an active circuit can exhibit negative differential resistance over
     part of its operating curve.
     Such a value does not describe an ordinary passive resistor.
+
     """
     return Resistance(to_exact(value) * OHM.scale, OHM)
 
@@ -241,7 +243,7 @@ def Kiloohm(value: Numeric) -> Resistance:
     of this first-order RC network:
 
     >>> from kuchka import Nanofarad
-    >>> from kuchka.units.time import MICROSECOND
+    >>> from kuchka.units import MICROSECOND
     >>> source_resistance = Kiloohm(4.7)
     >>> input_capacitance = Nanofarad(100)
     >>> (source_resistance * input_capacitance).to(MICROSECOND)
@@ -250,6 +252,7 @@ def Kiloohm(value: Numeric) -> Resistance:
     The time constant is the product RC.
     The actual settling time depends on the response criterion; reaching approximately
     99% of a step response takes about five time constants.
+
     """
     return Resistance(to_exact(value) * KILOOHM.scale, KILOOHM)
 
@@ -280,6 +283,7 @@ def Megaohm(value: Numeric) -> Resistance:
 
     This is why contamination, PCB surface leakage, and input bias currents can matter
     in electrometers and other high-impedance measurement circuits.
+
     """
     return Resistance(to_exact(value) * MEGAOHM.scale, MEGAOHM)
 
@@ -303,7 +307,7 @@ def Gigaohm(value: Numeric) -> Resistance:
     Calculate the leakage current and the power dissipated in the insulation:
 
     >>> from kuchka import Volt
-    >>> from kuchka.units.electromagnetics.current import MICROAMPERE
+    >>> from kuchka.units import MICROAMPERE
     >>> test_voltage = Volt(500)
     >>> insulation_resistance = Gigaohm(1)
     >>> leakage_current = test_voltage / insulation_resistance
@@ -315,6 +319,7 @@ def Gigaohm(value: Numeric) -> Resistance:
     This illustrates the electrical consequence of a finite insulation resistance.
     Actual insulation testing must also respect the equipment's rated test voltage and
     safety requirements.
+
     """
     return Resistance(to_exact(value) * GIGAOHM.scale, GIGAOHM)
 

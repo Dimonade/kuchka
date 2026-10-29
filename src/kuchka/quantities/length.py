@@ -26,9 +26,11 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.permittivity import Permittivity
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
+    from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -41,6 +43,8 @@ class Length(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: Acceleration) -> SpecificEnergy: ...
     @overload
     def __mul__(self, other: Area) -> Volume: ...
     @overload

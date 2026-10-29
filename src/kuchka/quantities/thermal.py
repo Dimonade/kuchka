@@ -36,6 +36,9 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
 
 
 class TemperatureDelta(LinearQuantity):
@@ -45,6 +48,8 @@ class TemperatureDelta(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: Frequency) -> HeatingRate: ...
     @overload
     def __mul__(self, other: Proportion) -> TemperatureDelta: ...
     @overload
@@ -60,9 +65,13 @@ class TemperatureDelta(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: HeatingRate) -> Time: ...
+    @overload
     def __truediv__(self, other: Proportion) -> TemperatureDelta: ...
     @overload
     def __truediv__(self, other: TemperatureDelta) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Time) -> HeatingRate: ...
     @overload
     def __truediv__(self, other: Numeric) -> TemperatureDelta: ...
     @overload
