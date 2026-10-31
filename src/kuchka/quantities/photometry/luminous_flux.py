@@ -18,9 +18,14 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.luminous_intensity import LuminousIntensity
+    from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.photometry.illuminance import Illuminance
+    from kuchka.quantities.photometry.luminous_efficacy import LuminousEfficacy
+    from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.solid_angle import SolidAngle
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
 
 
 class LuminousFlux(LinearQuantity):
@@ -32,6 +37,8 @@ class LuminousFlux(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Proportion) -> LuminousFlux: ...
+    @overload
+    def __mul__(self, other: Time) -> LuminousEnergy: ...
     @overload
     def __mul__(self, other: Numeric) -> LuminousFlux: ...
     @overload
@@ -47,11 +54,19 @@ class LuminousFlux(LinearQuantity):
     @overload
     def __truediv__(self, other: Area) -> Illuminance: ...
     @overload
+    def __truediv__(self, other: Frequency) -> LuminousEnergy: ...
+    @overload
     def __truediv__(self, other: Illuminance) -> Area: ...
+    @overload
+    def __truediv__(self, other: LuminousEfficacy) -> Power: ...
+    @overload
+    def __truediv__(self, other: LuminousEnergy) -> Frequency: ...
     @overload
     def __truediv__(self, other: LuminousFlux) -> Proportion: ...
     @overload
     def __truediv__(self, other: LuminousIntensity) -> SolidAngle: ...
+    @overload
+    def __truediv__(self, other: Power) -> LuminousEfficacy: ...
     @overload
     def __truediv__(self, other: Proportion) -> LuminousFlux: ...
     @overload

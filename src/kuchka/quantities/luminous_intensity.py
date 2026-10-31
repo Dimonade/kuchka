@@ -19,6 +19,8 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.photometry.luminance import Luminance
     from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.solid_angle import SolidAngle
@@ -47,6 +49,10 @@ class LuminousIntensity(LinearQuantity):
         return super().__mul__(other)
 
     # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: Area) -> Luminance: ...
+    @overload
+    def __truediv__(self, other: Luminance) -> Area: ...
     @overload
     def __truediv__(self, other: LuminousIntensity) -> Proportion: ...
     @overload

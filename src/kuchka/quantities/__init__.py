@@ -84,6 +84,10 @@ from kuchka.quantities.mechanics.specific_energy import *
 from kuchka.quantities.mechanics.torque import *
 from kuchka.quantities.mechanics.velocity_squared import *
 from kuchka.quantities.photometry.illuminance import *
+from kuchka.quantities.photometry.luminance import *
+from kuchka.quantities.photometry.luminous_efficacy import *
+from kuchka.quantities.photometry.luminous_energy import *
+from kuchka.quantities.photometry.luminous_exposure import *
 from kuchka.quantities.photometry.luminous_flux import *
 from kuchka.quantities.proportion import *
 from kuchka.quantities.radiation.activity import *

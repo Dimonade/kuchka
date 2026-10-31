@@ -33,6 +33,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.length import Length
     from kuchka.quantities.luminous_intensity import LuminousIntensity
+    from kuchka.quantities.photometry.illuminance import Illuminance
+    from kuchka.quantities.photometry.luminance import Luminance
     from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.proportion import Proportion
 
@@ -44,6 +46,8 @@ class SolidAngle(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: Luminance) -> Illuminance: ...
     @overload
     def __mul__(self, other: LuminousIntensity) -> LuminousFlux: ...
     @overload

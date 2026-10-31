@@ -72,6 +72,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.photometry.illuminance import Illuminance
+    from kuchka.quantities.photometry.luminance import Luminance
+    from kuchka.quantities.photometry.luminous_efficacy import LuminousEfficacy
+    from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
+    from kuchka.quantities.photometry.luminous_exposure import LuminousExposure
     from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.radiation.activity import Activity
     from kuchka.quantities.solid_angle import SolidAngle
@@ -141,6 +145,14 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: Inductance) -> Inductance: ...
     @overload
     def __mul__(self, other: Length) -> Length: ...
+    @overload
+    def __mul__(self, other: Luminance) -> Luminance: ...
+    @overload
+    def __mul__(self, other: LuminousEfficacy) -> LuminousEfficacy: ...
+    @overload
+    def __mul__(self, other: LuminousEnergy) -> LuminousEnergy: ...
+    @overload
+    def __mul__(self, other: LuminousExposure) -> LuminousExposure: ...
     @overload
     def __mul__(self, other: LuminousFlux) -> LuminousFlux: ...
     @overload
