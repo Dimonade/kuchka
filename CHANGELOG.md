@@ -38,11 +38,20 @@ Dimensional arithmetic derives `SpecificEnergy` from `Energy / Mass`, `Pressure 
 `Mass * Velocity` is a `Momentum`, `Force * Time` an `Impulse`, and `Velocity * Velocity` a `VelocitySquared`, so a kinetic energy is `mass * v * v / 2` without brackets, and `Density * VelocitySquared` is a `Pressure`.
 `Momentum` and `Impulse` share a dimension and are contested, as are `VelocitySquared` and `SpecificEnergy`; the conversions are `Impulse.to_momentum()`, `Impulse.from_momentum(...)`, `VelocitySquared.to_specific_energy()` (the half), and `VelocitySquared.from_specific_energy(...)` (the double).
 
+**#### Photometry and solid angle**
+
+- solid angle (`Steradian`, `Millisteradian`, `Microsteradian`, `SquareDegree`, `SquareArcMinute`, `SquareArcSecond`),
+- luminous flux (`Millilumen`, `Lumen`, `Kilolumen`), and
+- illuminance (`Millilux`, `Lux`, `Kilolux`, `Phot`, `FootCandle`), in the new `photometry` package.
+
+`Dimension` gains a solid angle axis, so a lumen is a candela steradian and not a candela: `LuminousIntensity * SolidAngle` is a `LuminousFlux`, `LuminousFlux / Area` an `Illuminance`, and `Area / Area` stays a `Proportion`.
+`SolidAngle.from_area(area, radius)` builds a solid angle from the area it cuts from a sphere.
+
 ### Changed
 
 #### Unit modules live in themed packages
 
-`kuchka.units` keeps the base dimensions and the angle, proportion, and logarithmic axes at its top level, and groups the other modules in `geometry`, `kinematics`, `mechanics`, `electromagnetics`, `information`, and `radiation`.
+`kuchka.units` keeps the base dimensions and the angle, solid angle, proportion, and logarithmic axes at its top level, and groups the other modules in `geometry`, `kinematics`, `mechanics`, `electromagnetics`, `information`, `photometry`, and `radiation`.
 Every constructor and table is still imported from `kuchka` and `kuchka.units`.
 A unit module is imported from its package, so `from kuchka.units import voltage` is now `from kuchka.units.electromagnetics import voltage`, and `kuchka.units.kinematics.force` is now `kuchka.units.mechanics.force`.
 

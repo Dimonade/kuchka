@@ -1,6 +1,6 @@
 # Adding a dimension
 
-A `Dimension` is a vector of exponents over the base quantities: time, length, mass, current, temperature, amount, luminous intensity, angle, and information.
+A `Dimension` is a vector of exponents over the base quantities: time, length, mass, current, temperature, amount, luminous intensity, angle, solid angle, and information.
 Two dimensions are equal when every exponent matches, and the arithmetic engine reads products and quotients straight off the exponents.
 
 ## Do you need one?
@@ -49,7 +49,7 @@ Once `Absement` is registered as the first linear kind of `ABSEMENT`, it is the 
 ## Adding an axis
 
 An axis is rarer than a dimension.
-Add one when SI's own accounting folds two concepts into one dimension and a model needs to tell them apart: angle separates torque from energy, and information separates a count of bits from a plain number and a data rate from a frequency.
+Add one when SI's own accounting folds two concepts into one dimension and a model needs to tell them apart: angle separates torque from energy, solid angle separates the lumen from the candela, and information separates a count of bits from a plain number and a data rate from a frequency.
 An axis takes four edits in `kuchka/dimensions.py` and one in `kuchka/internal/symbols.py`:
 
 <!-- doc-test: skip a fragment of the dimensions module, not a program -->

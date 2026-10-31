@@ -64,6 +64,19 @@ That separates torque from energy and angular velocity from the hertz, which hav
 Turn is the canonical angle, so the canonical units are the turn, the turn per second, and the joule per turn, and a radian enters as the exact factor `1 / (2 pi)`.
 Arithmetic results display in the radian, the radian per second, and the newton-metre.
 
+## The solid angle axis
+
+`Dimension` counts solid angle as an axis of its own, so luminous flux is luminous intensity times solid angle and illuminance is flux per area.
+That separates the lumen from the candela, which have the same dimension in SI's base-quantity accounting, where the steradian is a square metre per square metre.
+
+The axis is not the square of the angle axis, because a solid angle is not the product of two plane angles: `AngularDisplacement * AngularDisplacement` has no registered type.
+It is not reached by cancelling areas either, because `Area / Area` is a `Proportion`.
+A `SolidAngle` comes from a constructor, or from `SolidAngle.from_area(area, radius)`, the area an object cuts from a sphere over the radius squared.
+
+The steradian is the canonical solid angle, so a candela steradian is a lumen and a lumen per square metre is a lux, with no factor between them.
+Only the square degree and its relatives, which are the angle units squared, carry pi.
+`Candela * Steradian` is a `LuminousFlux`, `LuminousFlux / Area` an `Illuminance`, and `LuminousIntensity / Area` has no registered type until a luminance exists.
+
 ## The information axis
 
 `Dimension` counts information as an axis of its own, so data is a dimension and a data rate is data per time.
