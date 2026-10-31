@@ -38,8 +38,10 @@ from kuchka.quantities import logarithmic
 from kuchka.quantities import luminous_intensity
 from kuchka.quantities import mass
 from kuchka.quantities import mechanics
+from kuchka.quantities import photometry
 from kuchka.quantities import proportion
 from kuchka.quantities import radiation
+from kuchka.quantities import solid_angle
 from kuchka.quantities import temporal
 from kuchka.quantities import thermal
 from kuchka.quantities import thermodynamics
@@ -81,8 +83,11 @@ from kuchka.quantities.mechanics.pressure import *
 from kuchka.quantities.mechanics.specific_energy import *
 from kuchka.quantities.mechanics.torque import *
 from kuchka.quantities.mechanics.velocity_squared import *
+from kuchka.quantities.photometry.illuminance import *
+from kuchka.quantities.photometry.luminous_flux import *
 from kuchka.quantities.proportion import *
 from kuchka.quantities.radiation.activity import *
+from kuchka.quantities.solid_angle import *
 from kuchka.quantities.temporal import *
 from kuchka.quantities.thermal import *
 from kuchka.quantities.thermodynamics.heating_rate import *
@@ -101,8 +106,10 @@ __all__ += logarithmic.__all__
 __all__ += luminous_intensity.__all__
 __all__ += mass.__all__
 __all__ += mechanics.__all__
+__all__ += photometry.__all__
 __all__ += proportion.__all__
 __all__ += radiation.__all__
+__all__ += solid_angle.__all__
 __all__ += temporal.__all__
 __all__ += thermal.__all__
 __all__ += thermodynamics.__all__

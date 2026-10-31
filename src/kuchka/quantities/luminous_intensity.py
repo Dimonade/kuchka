@@ -19,7 +19,9 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.solid_angle import SolidAngle
 
 
 class LuminousIntensity(LinearQuantity):
@@ -31,6 +33,8 @@ class LuminousIntensity(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Proportion) -> LuminousIntensity: ...
+    @overload
+    def __mul__(self, other: SolidAngle) -> LuminousFlux: ...
     @overload
     def __mul__(self, other: Numeric) -> LuminousIntensity: ...
     @overload
