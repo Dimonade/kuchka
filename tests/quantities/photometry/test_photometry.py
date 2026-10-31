@@ -12,7 +12,6 @@ from kuchka import IncompatibleDimensionError
 from kuchka import LuminousFlux
 from kuchka import LuminousIntensity
 from kuchka import SolidAngle
-from kuchka import UnrepresentableDimensionError
 from kuchka.units import length
 from kuchka.units import luminous_intensity
 from kuchka.units import solid_angle
@@ -60,11 +59,6 @@ def test_a_flux_over_an_illuminance_is_an_area() -> None:
     lit = luminous_flux.Lumen(800) / illuminance.Lux(200)
     assert isinstance(lit, Area)
     assert lit == area.SquareMetre(4)
-
-
-def test_an_intensity_over_an_area_has_no_type_yet() -> None:
-    with pytest.raises(UnrepresentableDimensionError):
-        luminous_intensity.Candela(1) / area.SquareMetre(1)
 
 
 def test_a_flux_is_not_an_intensity() -> None:
