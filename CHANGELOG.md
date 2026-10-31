@@ -42,9 +42,13 @@ Dimensional arithmetic derives `SpecificEnergy` from `Energy / Mass`, `Pressure 
 
 - solid angle (`Steradian`, `Millisteradian`, `Microsteradian`, `SquareDegree`, `SquareArcMinute`, `SquareArcSecond`),
 - luminous flux (`Millilumen`, `Lumen`, `Kilolumen`), and
-- illuminance (`Millilux`, `Lux`, `Kilolux`, `Phot`, `FootCandle`), in the new `photometry` package.
+- illuminance (`Millilux`, `Lux`, `Kilolux`, `Phot`, `FootCandle`),
+- luminous energy (`LumenSecond`, `LumenHour`), the talbot being the lumen second,
+- luminous exposure (`LuxSecond`, `LuxHour`, `KiloluxHour`),
+- luminance (`CandelaPerSquareMetre`, `MillicandelaPerSquareMetre`, `KilocandelaPerSquareMetre`, `Stilb`, `FootLambert`), the nit being the candela per square metre, and
+- luminous efficacy (`LumenPerWatt`), in the new `photometry` package.
 
-`Dimension` gains a solid angle axis, so a lumen is a candela steradian and not a candela: `LuminousIntensity * SolidAngle` is a `LuminousFlux`, `LuminousFlux / Area` an `Illuminance`, and `Area / Area` stays a `Proportion`.
+`Dimension` gains a solid angle axis, so a lumen is a candela steradian and not a candela: `LuminousIntensity * SolidAngle` is a `LuminousFlux`, `LuminousFlux / Area` an `Illuminance`, `LuminousFlux * Time` a `LuminousEnergy`, `Illuminance * Time` a `LuminousExposure`, `LuminousIntensity / Area` a `Luminance`, `LuminousFlux / Power` a `LuminousEfficacy`, and `Area / Area` stays a `Proportion`.
 `SolidAngle.from_area(area, radius)` builds a solid angle from the area it cuts from a sphere.
 
 ### Changed

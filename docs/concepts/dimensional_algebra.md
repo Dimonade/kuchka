@@ -75,7 +75,8 @@ A `SolidAngle` comes from a constructor, or from `SolidAngle.from_area(area, rad
 
 The steradian is the canonical solid angle, so a candela steradian is a lumen and a lumen per square metre is a lux, with no factor between them.
 Only the square degree and its relatives, which are the angle units squared, carry pi.
-`Candela * Steradian` is a `LuminousFlux`, `LuminousFlux / Area` an `Illuminance`, and `LuminousIntensity / Area` has no registered type until a luminance exists.
+`Candela * Steradian` is a `LuminousFlux`, `LuminousFlux / Area` an `Illuminance`, and `LuminousFlux * Time` a `LuminousEnergy`, which `/ Area` turns into a `LuminousExposure`.
+`LuminousIntensity / Area` is a `Luminance`, which has no solid angle in it, and `LuminousFlux / Power` is a `LuminousEfficacy`.
 
 ## The information axis
 
