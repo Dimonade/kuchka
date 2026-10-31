@@ -1,36 +1,127 @@
-"""Unit constructors for Time, Frequency, and the acquisition-domain vocabulary.
+"""Unit constructors for time, frequency, and data-acquisition quantities.
 
-    from kuchka import Second, Millisecond, Hertz
+The module covers temporal coordinates, durations, periodic phenomena, and
+acquisition-domain rates.
+Several quantities share physical dimensions and unit scales without representing
+interchangeable concepts:
 
-    period = Millisecond(2)
-    rate = Hertz(500)
-    reading = Second(1_700_000_000).to_instant()
-    window = period.to_sampling_period()
+- `Time` (T¹) represents a duration, timeout, or elapsed interval.
+- `Instant` represents a point on a timeline. Subtracting two instants gives a
+  `Time`; adding a `Time` to an `Instant` shifts the point in time.
+- `Frequency` (T⁻¹) measures cycles or recurring events per second.
+- `SamplingPeriod` represents the interval between successive samples.
+- `SampleRate` measures samples acquired per second and is reciprocal to
+  `SamplingPeriod`.
+- `BaudRate` measures symbols transmitted per second, not necessarily bits or
+  cycles.
 
-A number of families share this package because they share two physical dimensions and
-one recurring theme -- a dimension is not a concept, and a symbol is not a type:
+Examples
+--------
+A spacecraft's mission clock records events relative to a mission epoch.
+Mission control receives an acknowledgement three seconds after sending a command.
+A five-second response timeout therefore has two seconds remaining:
 
-- `time.py` -- `Time` (T¹), the SI-general span: a duration, a timeout, an interval.
-- `instant.py` -- `Instant`'s canonical unit.
-  `Time.to_instant()` is the point-in-time counterpart to `Time` itself.
-  Subtracting two instants gives a `Time`, adding a `Time` to an `Instant` shifts the
-  reading.
-- `frequency.py` -- `Frequency` (T⁻¹), the SI-general rate.
-- `sampling_period.py` -- `SamplingPeriod`'s canonical unit.
-  `Time.to_sampling_period()` reaches it, and it converts to and from `SampleRate`
-  directly, since a sample period genuinely is the reciprocal of a sample rate.
-- `sample_rate.py` -- `SampleRate`, an acquisition-domain rate sharing `Frequency`'s
-  dimension, reciprocal to `SamplingPeriod`.
-- `baud_rate.py` -- `BaudRate`, sharing `Frequency`'s dimension without being its
-  reciprocal partner.
-  Baud counts symbols per second, not bits or cycles.
+>>> from kuchka import Second
+>>> command_sent = Second(84_500).to_instant()
+>>> acknowledgement = Second(84_503).to_instant()
+>>> acknowledgement - command_sent
+3 s
+>>> command_sent + Second(5) - acknowledgement
+2 s
 
-`SamplingPeriod` and `Instant` share `Time`'s own coordinate units outright.
-A millisecond sampling period is measured with the same `MILLISECOND` `Time` already
-defines, reached through `.to_sampling_period()` / `.to_instant()`.
-`SampleRate` shares its display symbols with `Frequency` the same way, while remaining
-its own type.
-`BaudRate` gets its own symbol, `Bd`, as that is how it actually appears in the wild.
+The same distinction is useful in distributed systems, medical monitoring, and
+industrial automation: an event timestamp identifies when something happened, whereas a
+timeout describes how long an operation may take.
+
+Astronomical observations often involve counting periodic events over long intervals.
+A pulsar producing 30 radio pulses per second emits 18,000 pulses during a ten-minute
+observation:
+
+>>> from kuchka import Hertz, Second
+>>> Hertz(30) * Second(10 * 60)
+18000
+
+Data acquisition introduces two reciprocal quantities.
+An ECG recorder sampling every 2 milliseconds acquires 500 samples per second:
+
+>>> from kuchka import Millisecond, SamplesPerSecond
+>>> sampling_period = Millisecond(2).to_sampling_period()
+>>> 1 / sampling_period == SamplesPerSecond(500)
+True
+
+The distinction between signal frequency and sample rate becomes particularly important
+when examining mains interference in medical recordings.
+A 50 Hz interference component completes one cycle every 20 milliseconds.
+At a sampling period of 2 milliseconds, the recorder acquires ten sample intervals per
+cycle:
+
+>>> Millisecond(20).to_sampling_period() / sampling_period
+10
+
+The signal frequency describes the phenomenon being measured.
+The sample rate describes the acquisition system observing it.
+Their ratio expresses how many samples are collected during each signal cycle.
+
+Digital communication introduces another rate with dimension T⁻¹.
+A binary UART connection operating at 115200 Bd with 8-N-1 framing uses ten symbol
+periods per payload byte: one start bit, eight data bits, and one stop bit.
+Under continuous transmission, its theoretical payload throughput is:
+
+>>> from kuchka import Baud
+>>> Baud(115_200) * Second(1) / 10
+11520
+
+That is 11,520 bytes per second, excluding idle periods and higher-level protocol
+overhead.
+This calculation assumes binary signalling, where each symbol represents one bit.
+With other modulation schemes, the relationship between symbol rate and bit rate can be
+different.
+
+Notes
+-----
+`Time.to_instant()` and `Time.to_sampling_period()` reinterpret a time measurement in
+different semantic domains.
+Both use the underlying time units already defined by `Time`; they do not introduce
+competing unit scales.
+
+An `Instant` has no implicit UTC or Unix epoch.
+Its origin belongs to the timeline defined by the application.
+Subtracting two instants produces a `Time`, while adding or subtracting a `Time` shifts
+an instant.
+
+`SamplingPeriod` and `SampleRate` form a genuine reciprocal pair:
+`1 / sampling_period` produces a `SampleRate`, and `1 / sample_rate` produces a
+`SamplingPeriod`.
+
+`Frequency`, `SampleRate`, and `BaudRate` all have dimension T⁻¹, but their meanings
+are different.
+`Frequency` counts cycles or recurring events, `SampleRate` counts acquired samples,
+and `BaudRate` counts transmitted symbols.
+
+`SampleRate` shares its display symbols with `Frequency`, including Hz, while remaining
+a distinct quantity type.
+`BaudRate` has its own symbol, Bd.
+A shared dimension or display symbol does not establish semantic equivalence.
+
+See Also
+--------
+~kuchka.quantities.Time
+Quantity type representing a duration or time interval.
+
+~kuchka.quantities.Instant
+Quantity type representing a point in time.
+
+~kuchka.quantities.Frequency
+Quantity type representing cycles or recurring events per unit time.
+
+~kuchka.quantities.SamplingPeriod
+Quantity type representing the interval between successive samples.
+
+~kuchka.quantities.SampleRate
+Quantity type representing samples acquired per unit time.
+
+~kuchka.quantities.BaudRate
+Quantity type representing symbols transmitted per unit time.
 """
 
 from __future__ import annotations
