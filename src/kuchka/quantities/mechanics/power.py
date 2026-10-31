@@ -26,6 +26,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.torque import Torque
+    from kuchka.quantities.photometry.luminous_efficacy import LuminousEfficacy
+    from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -38,6 +40,8 @@ class Power(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: LuminousEfficacy) -> LuminousFlux: ...
     @overload
     def __mul__(self, other: Proportion) -> Power: ...
     @overload

@@ -34,6 +34,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
+    from kuchka.quantities.photometry.luminous_efficacy import LuminousEfficacy
+    from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -48,6 +50,8 @@ class Energy(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Frequency) -> Power: ...
+    @overload
+    def __mul__(self, other: LuminousEfficacy) -> LuminousEnergy: ...
     @overload
     def __mul__(self, other: Proportion) -> Energy: ...
     @overload

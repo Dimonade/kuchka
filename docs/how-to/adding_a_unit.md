@@ -20,7 +20,7 @@ Every other quantity lives in the themed package of the relation that defines it
 | `electromagnetics`              | charge, voltage, resistance, conductance, capacitance, inductance                                   |
 | _`electromagnetics`, continued_ | permittivity, permeability, AC power, magnetic flux, magnetic flux density, magnetic field strength |
 | `information`                   | data and data rate                                                                                  |
-| `photometry`                    | light as the eye sees it: luminous flux, illuminance                                                |
+| `photometry`                    | light as the eye sees it: flux, energy, exposure, illuminance, luminance, efficacy                  |
 | `radiation`                     | radioactive activity                                                                                |
 | `thermodynamics`                | how heat changes a temperature: heating rate                                                        |
 

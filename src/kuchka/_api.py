@@ -34,6 +34,10 @@ from kuchka.quantities import Inductance
 from kuchka.quantities import Instant
 from kuchka.quantities import Length
 from kuchka.quantities import LogarithmicRatio
+from kuchka.quantities import Luminance
+from kuchka.quantities import LuminousEfficacy
+from kuchka.quantities import LuminousEnergy
+from kuchka.quantities import LuminousExposure
 from kuchka.quantities import LuminousFlux
 from kuchka.quantities import LuminousIntensity
 from kuchka.quantities import MagneticFieldStrength
@@ -84,6 +88,7 @@ from kuchka.units import Byte
 from kuchka.units import BytePerSecond
 from kuchka.units import Calorie
 from kuchka.units import Candela
+from kuchka.units import CandelaPerSquareMetre
 from kuchka.units import Celsius
 from kuchka.units import CelsiusPerHour
 from kuchka.units import CelsiusPerMinute
@@ -126,6 +131,7 @@ from kuchka.units import Femtosecond
 from kuchka.units import Femtotesla
 from kuchka.units import Foot
 from kuchka.units import FootCandle
+from kuchka.units import FootLambert
 from kuchka.units import Fortnight
 from kuchka.units import Gal
 from kuchka.units import Gauss
@@ -192,6 +198,7 @@ from kuchka.units import Kilobyte
 from kuchka.units import KilobytePerSecond
 from kuchka.units import Kilocalorie
 from kuchka.units import KilocaloriePerKilogram
+from kuchka.units import KilocandelaPerSquareMetre
 from kuchka.units import Kiloelectronvolt
 from kuchka.units import Kilofarad
 from kuchka.units import Kilogauss
@@ -212,6 +219,7 @@ from kuchka.units import Kiloliter
 from kuchka.units import Kilolitre
 from kuchka.units import Kilolumen
 from kuchka.units import Kilolux
+from kuchka.units import KiloluxHour
 from kuchka.units import Kilometer
 from kuchka.units import KilometerPerHour
 from kuchka.units import Kilometre
@@ -240,7 +248,12 @@ from kuchka.units import LightYear
 from kuchka.units import Liter
 from kuchka.units import Litre
 from kuchka.units import Lumen
+from kuchka.units import LumenHour
+from kuchka.units import LumenPerWatt
+from kuchka.units import LumenSecond
 from kuchka.units import Lux
+from kuchka.units import LuxHour
+from kuchka.units import LuxSecond
 from kuchka.units import Mebibit
 from kuchka.units import MebibitPerSecond
 from kuchka.units import Mebibyte
@@ -312,6 +325,7 @@ from kuchka.units import MilliamperePerMetre
 from kuchka.units import MilliampereSecond
 from kuchka.units import Millibar
 from kuchka.units import Millibecquerel
+from kuchka.units import MillicandelaPerSquareMetre
 from kuchka.units import Millicoulomb
 from kuchka.units import Millicurie
 from kuchka.units import Millielectronvolt
@@ -436,6 +450,7 @@ from kuchka.units import SquareMetrePerSecondSquared
 from kuchka.units import SquareMillimeter
 from kuchka.units import SquareMillimetre
 from kuchka.units import Steradian
+from kuchka.units import Stilb
 from kuchka.units import Tebibit
 from kuchka.units import TebibitPerSecond
 from kuchka.units import Tebibyte
@@ -499,6 +514,7 @@ __all__ = [
     "BytePerSecond",
     "Calorie",
     "Candela",
+    "CandelaPerSquareMetre",
     "Capacitance",
     "Celsius",
     "CelsiusPerHour",
@@ -551,6 +567,7 @@ __all__ = [
     "Femtotesla",
     "Foot",
     "FootCandle",
+    "FootLambert",
     "Force",
     "Fortnight",
     "Frequency",
@@ -625,6 +642,7 @@ __all__ = [
     "KilobytePerSecond",
     "Kilocalorie",
     "KilocaloriePerKilogram",
+    "KilocandelaPerSquareMetre",
     "Kiloelectronvolt",
     "Kilofarad",
     "Kilogauss",
@@ -645,6 +663,7 @@ __all__ = [
     "Kilolitre",
     "Kilolumen",
     "Kilolux",
+    "KiloluxHour",
     "Kilometer",
     "KilometerPerHour",
     "Kilometre",
@@ -675,9 +694,18 @@ __all__ = [
     "Litre",
     "LogarithmicRatio",
     "Lumen",
+    "LumenHour",
+    "LumenPerWatt",
+    "LumenSecond",
+    "Luminance",
+    "LuminousEfficacy",
+    "LuminousEnergy",
+    "LuminousExposure",
     "LuminousFlux",
     "LuminousIntensity",
     "Lux",
+    "LuxHour",
+    "LuxSecond",
     "MagneticFieldStrength",
     "MagneticFlux",
     "MagneticFluxDensity",
@@ -754,6 +782,7 @@ __all__ = [
     "MilliampereSecond",
     "Millibar",
     "Millibecquerel",
+    "MillicandelaPerSquareMetre",
     "Millicoulomb",
     "Millicurie",
     "Millielectronvolt",
@@ -891,6 +920,7 @@ __all__ = [
     "SquareMillimeter",
     "SquareMillimetre",
     "Steradian",
+    "Stilb",
     "Stress",
     "Tebibit",
     "TebibitPerSecond",

@@ -17,8 +17,13 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.photometry.luminance import Luminance
+    from kuchka.quantities.photometry.luminous_exposure import LuminousExposure
     from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.solid_angle import SolidAngle
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
 
 
 class Illuminance(LinearQuantity):
@@ -33,6 +38,8 @@ class Illuminance(LinearQuantity):
     @overload
     def __mul__(self, other: Proportion) -> Illuminance: ...
     @overload
+    def __mul__(self, other: Time) -> LuminousExposure: ...
+    @overload
     def __mul__(self, other: Numeric) -> Illuminance: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
@@ -45,9 +52,17 @@ class Illuminance(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: Frequency) -> LuminousExposure: ...
+    @overload
     def __truediv__(self, other: Illuminance) -> Proportion: ...
     @overload
+    def __truediv__(self, other: Luminance) -> SolidAngle: ...
+    @overload
+    def __truediv__(self, other: LuminousExposure) -> Frequency: ...
+    @overload
     def __truediv__(self, other: Proportion) -> Illuminance: ...
+    @overload
+    def __truediv__(self, other: SolidAngle) -> Luminance: ...
     @overload
     def __truediv__(self, other: Numeric) -> Illuminance: ...
     @overload
