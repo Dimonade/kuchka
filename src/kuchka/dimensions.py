@@ -7,8 +7,8 @@ and unit constructors (``Volt``, ``Milliampere``, ...) exposed from the top-leve
 
 Dimensions are represented as exponent vectors over the seven SI base quantities:
 mass, length, time, electric current, thermodynamic temperature, amount of substance,
-and luminous intensity -- plus two supplementary axes, ``angle`` and ``information``,
-tracked separately from the seven base quantities.
+and luminous intensity -- plus three supplementary axes, ``angle``, ``solid_angle`` and
+``information``, tracked separately from the seven base quantities.
 
 SI itself treats plane angle as a quantity of dimension one (the radian is a
 dimensionless derived unit), and `kuchka` is not taking a position against that.
@@ -19,6 +19,13 @@ Torque is energy per angle (M L² T⁻² angle⁻¹) and angular velocity is ang
 base-quantity accounting cannot tell apart.
 `Proportion` (genuinely dimensionless, ``Percent``/``Ratio``) and angles are different
 dimensions for the same reason.
+
+The ``solid_angle`` field does the same for the steradian, which SI also treats as a
+dimensionless derived unit (a square metre per square metre).
+It is an axis of its own and not the square of the angle axis, because a solid angle
+is not the product of two plane angles.
+Luminous flux is luminous intensity times solid angle (J solid_angle), so the lumen
+differs from the candela, and illuminance is flux per area.
 
 The ``information`` field does the same for data: a count of bits is neither a
 `Proportion` nor a number of cycles.
@@ -58,6 +65,7 @@ class Dimension:
     amount: int = 0
     luminous_intensity: int = 0
     angle: int = 0
+    solid_angle: int = 0
     information: int = 0
 
     def __mul__(self, other: Dimension) -> Dimension:
@@ -70,6 +78,7 @@ class Dimension:
             amount=self.amount + other.amount,
             luminous_intensity=self.luminous_intensity + other.luminous_intensity,
             angle=self.angle + other.angle,
+            solid_angle=self.solid_angle + other.solid_angle,
             information=self.information + other.information,
         )
 
@@ -83,6 +92,7 @@ class Dimension:
             amount=self.amount - other.amount,
             luminous_intensity=self.luminous_intensity - other.luminous_intensity,
             angle=self.angle - other.angle,
+            solid_angle=self.solid_angle - other.solid_angle,
             information=self.information - other.information,
         )
 
@@ -97,6 +107,7 @@ class Dimension:
             ("amount", "N"),
             ("luminous_intensity", "J"),
             ("angle", symbols.ANGLE),
+            ("solid_angle", symbols.SOLID_ANGLE),
             ("information", symbols.INFORMATION),
         )
 
@@ -136,12 +147,14 @@ LUMINOUS_INTENSITY = Dimension(luminous_intensity=1)
 # Not strictly SI dimensions, but required to separate concepts.
 
 ANGLE = Dimension(angle=1)
-DATA = Dimension(information=1)
 """The dimension of a plane angle: `Angle`'s dimension.
 
 See the module docstring for why this is tracked as its own axis rather than reusing
 :data:`DIMENSIONLESS`, even though SI itself treats plane angle as dimensionless.
 """
+SOLID_ANGLE = Dimension(solid_angle=1)
+"""The dimension of a solid angle: `SolidAngle`'s dimension."""
+DATA = Dimension(information=1)
 
 # Derived, by explicit rules.
 
@@ -161,6 +174,8 @@ INDUCTANCE = MAGNETIC_FLUX / CURRENT
 PERMITTIVITY = CAPACITANCE / LENGTH
 PERMEABILITY = INDUCTANCE / LENGTH
 MAGNETIC_FIELD_STRENGTH = CURRENT / LENGTH
+LUMINOUS_FLUX = LUMINOUS_INTENSITY * SOLID_ANGLE
+ILLUMINANCE = LUMINOUS_FLUX / AREA
 
 __all__ = [
     "ACCELERATION",
@@ -181,9 +196,11 @@ __all__ = [
     "FORCE",
     "FREQUENCY",
     "HEATING_RATE",
+    "ILLUMINANCE",
     "IMPULSE",
     "INDUCTANCE",
     "LENGTH",
+    "LUMINOUS_FLUX",
     "LUMINOUS_INTENSITY",
     "MAGNETIC_FIELD_STRENGTH",
     "MAGNETIC_FLUX",
@@ -195,6 +212,7 @@ __all__ = [
     "POWER",
     "PRESSURE",
     "RESISTANCE",
+    "SOLID_ANGLE",
     "SPECIFIC_ENERGY",
     "TEMPERATURE_DELTA",
     "TIME",

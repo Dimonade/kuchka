@@ -8,6 +8,7 @@ and others, to avoid redefining them everywhere.
 """
 
 ANGLE = "\u2220"
+SOLID_ANGLE = "\u2222"
 INFORMATION = "D"
 DEGREE = "\u00b0"
 DELTA = "\u0394"

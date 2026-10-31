@@ -27,12 +27,14 @@ from kuchka.quantities import EnergyDensity
 from kuchka.quantities import Force
 from kuchka.quantities import Frequency
 from kuchka.quantities import HeatingRate
+from kuchka.quantities import Illuminance
 from kuchka.quantities import Impedance
 from kuchka.quantities import Impulse
 from kuchka.quantities import Inductance
 from kuchka.quantities import Instant
 from kuchka.quantities import Length
 from kuchka.quantities import LogarithmicRatio
+from kuchka.quantities import LuminousFlux
 from kuchka.quantities import LuminousIntensity
 from kuchka.quantities import MagneticFieldStrength
 from kuchka.quantities import MagneticFlux
@@ -50,6 +52,7 @@ from kuchka.quantities import ReactivePower
 from kuchka.quantities import Resistance
 from kuchka.quantities import SampleRate
 from kuchka.quantities import SamplingPeriod
+from kuchka.quantities import SolidAngle
 from kuchka.quantities import SpecificEnergy
 from kuchka.quantities import Stress
 from kuchka.quantities import Temperature
@@ -122,6 +125,7 @@ from kuchka.units import Femtomole
 from kuchka.units import Femtosecond
 from kuchka.units import Femtotesla
 from kuchka.units import Foot
+from kuchka.units import FootCandle
 from kuchka.units import Fortnight
 from kuchka.units import Gal
 from kuchka.units import Gauss
@@ -206,6 +210,8 @@ from kuchka.units import KilojoulePerCubicMetre
 from kuchka.units import KilojoulePerKilogram
 from kuchka.units import Kiloliter
 from kuchka.units import Kilolitre
+from kuchka.units import Kilolumen
+from kuchka.units import Kilolux
 from kuchka.units import Kilometer
 from kuchka.units import KilometerPerHour
 from kuchka.units import Kilometre
@@ -233,6 +239,8 @@ from kuchka.units import Knot
 from kuchka.units import LightYear
 from kuchka.units import Liter
 from kuchka.units import Litre
+from kuchka.units import Lumen
+from kuchka.units import Lux
 from kuchka.units import Mebibit
 from kuchka.units import MebibitPerSecond
 from kuchka.units import Mebibyte
@@ -291,6 +299,7 @@ from kuchka.units import Micronewton
 from kuchka.units import Microohm
 from kuchka.units import Microsecond
 from kuchka.units import Microsiemens
+from kuchka.units import Microsteradian
 from kuchka.units import Microtesla
 from kuchka.units import Microvolt
 from kuchka.units import Microwatt
@@ -317,6 +326,8 @@ from kuchka.units import Millihertz
 from kuchka.units import Millijoule
 from kuchka.units import Milliliter
 from kuchka.units import Millilitre
+from kuchka.units import Millilumen
+from kuchka.units import Millilux
 from kuchka.units import Millimeter
 from kuchka.units import Millimetre
 from kuchka.units import Millimole
@@ -327,6 +338,7 @@ from kuchka.units import MillinewtonSecond
 from kuchka.units import Milliohm
 from kuchka.units import Millisecond
 from kuchka.units import Millisiemens
+from kuchka.units import Millisteradian
 from kuchka.units import Millitesla
 from kuchka.units import Millivar
 from kuchka.units import Millivolt
@@ -377,6 +389,7 @@ from kuchka.units import Petahertz
 from kuchka.units import Petajoule
 from kuchka.units import Petavolt
 from kuchka.units import Petawatt
+from kuchka.units import Phot
 from kuchka.units import Picoampere
 from kuchka.units import Picocoulomb
 from kuchka.units import Picocurie
@@ -408,8 +421,11 @@ from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
 from kuchka.units import Siemens
 from kuchka.units import SolarMass
+from kuchka.units import SquareArcMinute
+from kuchka.units import SquareArcSecond
 from kuchka.units import SquareCentimeter
 from kuchka.units import SquareCentimetre
+from kuchka.units import SquareDegree
 from kuchka.units import SquareInch
 from kuchka.units import SquareKilometer
 from kuchka.units import SquareKilometre
@@ -419,6 +435,7 @@ from kuchka.units import SquareMetre
 from kuchka.units import SquareMetrePerSecondSquared
 from kuchka.units import SquareMillimeter
 from kuchka.units import SquareMillimetre
+from kuchka.units import Steradian
 from kuchka.units import Tebibit
 from kuchka.units import TebibitPerSecond
 from kuchka.units import Tebibyte
@@ -533,6 +550,7 @@ __all__ = [
     "Femtosecond",
     "Femtotesla",
     "Foot",
+    "FootCandle",
     "Force",
     "Fortnight",
     "Frequency",
@@ -575,6 +593,7 @@ __all__ = [
     "Hertz",
     "Horsepower",
     "Hour",
+    "Illuminance",
     "Impedance",
     "Impulse",
     "Inch",
@@ -624,6 +643,8 @@ __all__ = [
     "KilojoulePerKilogram",
     "Kiloliter",
     "Kilolitre",
+    "Kilolumen",
+    "Kilolux",
     "Kilometer",
     "KilometerPerHour",
     "Kilometre",
@@ -653,7 +674,10 @@ __all__ = [
     "Liter",
     "Litre",
     "LogarithmicRatio",
+    "Lumen",
+    "LuminousFlux",
     "LuminousIntensity",
+    "Lux",
     "MagneticFieldStrength",
     "MagneticFlux",
     "MagneticFluxDensity",
@@ -717,6 +741,7 @@ __all__ = [
     "Microohm",
     "Microsecond",
     "Microsiemens",
+    "Microsteradian",
     "Microtesla",
     "Microvolt",
     "Microwatt",
@@ -743,6 +768,8 @@ __all__ = [
     "Millijoule",
     "Milliliter",
     "Millilitre",
+    "Millilumen",
+    "Millilux",
     "Millimeter",
     "Millimetre",
     "Millimole",
@@ -753,6 +780,7 @@ __all__ = [
     "Milliohm",
     "Millisecond",
     "Millisiemens",
+    "Millisteradian",
     "Millitesla",
     "Millivar",
     "Millivolt",
@@ -806,6 +834,7 @@ __all__ = [
     "Petajoule",
     "Petavolt",
     "Petawatt",
+    "Phot",
     "Picoampere",
     "Picocoulomb",
     "Picocurie",
@@ -845,9 +874,13 @@ __all__ = [
     "Second",
     "Siemens",
     "SolarMass",
+    "SolidAngle",
     "SpecificEnergy",
+    "SquareArcMinute",
+    "SquareArcSecond",
     "SquareCentimeter",
     "SquareCentimetre",
+    "SquareDegree",
     "SquareInch",
     "SquareKilometer",
     "SquareKilometre",
@@ -857,6 +890,7 @@ __all__ = [
     "SquareMetrePerSecondSquared",
     "SquareMillimeter",
     "SquareMillimetre",
+    "Steradian",
     "Stress",
     "Tebibit",
     "TebibitPerSecond",
