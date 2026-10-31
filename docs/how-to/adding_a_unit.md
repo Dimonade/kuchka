@@ -7,7 +7,7 @@ Both start the same way.
 
 ## Where the module goes
 
-A base dimension (`length`, `mass`, `current`, `thermal`, `amount`, `luminous_intensity`) and an axis that is not a dimension of its own (`angular`, `proportion`, `logarithmic`) have a module at the top level of `kuchka.units`.
+A base dimension (`length`, `mass`, `current`, `thermal`, `amount`, `luminous_intensity`) and an axis that is not a dimension of its own (`angular`, `solid_angle`, `proportion`, `logarithmic`) have a module at the top level of `kuchka.units`.
 The time family is the `temporal` package, because its quantities share two dimensions.
 Every other quantity lives in the themed package of the relation that defines it:
 
@@ -20,6 +20,7 @@ Every other quantity lives in the themed package of the relation that defines it
 | `electromagnetics`              | charge, voltage, resistance, conductance, capacitance, inductance                                   |
 | _`electromagnetics`, continued_ | permittivity, permeability, AC power, magnetic flux, magnetic flux density, magnetic field strength |
 | `information`                   | data and data rate                                                                                  |
+| `photometry`                    | light as the eye sees it: luminous flux, illuminance                                                |
 | `radiation`                     | radioactive activity                                                                                |
 | `thermodynamics`                | how heat changes a temperature: heating rate                                                        |
 
@@ -28,7 +29,7 @@ A quantity that fits two packages lives where its defining relation lives, and t
 A package imports only from the top level and from the packages before it, in the order `RANK` fixes in `tests/units/test_package_layering.py`, and the test fails when an import runs the other way.
 
 A package exists as soon as one quantity has its home in it.
-A quantity with no package yet, such as a luminous flux, starts the package it belongs to (`photometry`), with its own `__init__.py` listing its leaves.
+A quantity with no package yet, such as a luminance, starts the package it belongs to, with its own `__init__.py` listing its leaves.
 
 ## Define the unit
 

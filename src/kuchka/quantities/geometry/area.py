@@ -25,6 +25,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.pressure import Pressure
+    from kuchka.quantities.photometry.illuminance import Illuminance
+    from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.proportion import Proportion
 
 
@@ -37,6 +39,8 @@ class Area(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: EnergyDensity) -> Force: ...
+    @overload
+    def __mul__(self, other: Illuminance) -> LuminousFlux: ...
     @overload
     def __mul__(self, other: Length) -> Volume: ...
     @overload

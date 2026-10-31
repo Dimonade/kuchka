@@ -39,8 +39,10 @@ from kuchka.units import logarithmic
 from kuchka.units import luminous_intensity
 from kuchka.units import mass
 from kuchka.units import mechanics
+from kuchka.units import photometry
 from kuchka.units import proportion
 from kuchka.units import radiation
+from kuchka.units import solid_angle
 from kuchka.units import temporal
 from kuchka.units import thermal
 from kuchka.units import thermodynamics
@@ -85,8 +87,11 @@ from kuchka.units.mechanics.specific_energy import *
 from kuchka.units.mechanics.stress import *
 from kuchka.units.mechanics.torque import *
 from kuchka.units.mechanics.velocity_squared import *
+from kuchka.units.photometry.illuminance import *
+from kuchka.units.photometry.luminous_flux import *
 from kuchka.units.proportion import *
 from kuchka.units.radiation.activity import *
+from kuchka.units.solid_angle import *
 from kuchka.units.temporal.baud_rate import *
 from kuchka.units.temporal.frequency import *
 from kuchka.units.temporal.instant import *
@@ -127,11 +132,13 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Impulse: IMPULSE_UNITS,
     quantities.Momentum: MOMENTUM_UNITS,
     quantities.VelocitySquared: VELOCITY_SQUARED_UNITS,
+    quantities.Illuminance: ILLUMINANCE_UNITS,
     quantities.Impedance: IMPEDANCE_UNITS,
     quantities.Inductance: INDUCTANCE_UNITS,
     quantities.Instant: INSTANT_UNITS,
     quantities.Length: LENGTH_UNITS,
     quantities.LogarithmicRatio: LOGARITHMIC_RATIO_UNITS,
+    quantities.LuminousFlux: LUMINOUS_FLUX_UNITS,
     quantities.LuminousIntensity: LUMINOUS_INTENSITY_UNITS,
     quantities.MagneticFieldStrength: MAGNETIC_FIELD_STRENGTH_UNITS,
     quantities.MagneticFlux: MAGNETIC_FLUX_UNITS,
@@ -149,6 +156,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Resistance: RESISTANCE_UNITS,
     quantities.SampleRate: SAMPLE_RATE_UNITS,
     quantities.SamplingPeriod: SAMPLING_PERIOD_UNITS,
+    quantities.SolidAngle: SOLID_ANGLE_UNITS,
     quantities.Temperature: TEMPERATURE_UNITS,
     quantities.TemperatureDelta: TEMPERATURE_DELTA_UNITS,
     quantities.Time: TIME_UNITS,
@@ -191,8 +199,10 @@ __all__ += logarithmic.__all__
 __all__ += luminous_intensity.__all__
 __all__ += mass.__all__
 __all__ += mechanics.__all__
+__all__ += photometry.__all__
 __all__ += proportion.__all__
 __all__ += radiation.__all__
+__all__ += solid_angle.__all__
 __all__ += temporal.__all__
 __all__ += thermal.__all__
 __all__ += thermodynamics.__all__

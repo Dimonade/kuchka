@@ -570,13 +570,16 @@ The complete unit vocabulary is available in the API reference.
 | Angular displacement | `RadianDisplacement`, `DegreeDisplacement`, `TurnDisplacement`, `GradianDisplacement`, `ArcMinuteDisplacement`, `ArcSecondDisplacement` |
 | Angular velocity     | `RadianPerSecond`, `DegreePerSecond`, `TurnPerSecond`, `RevolutionPerMinute`                                                            |
 | Torque               | `NewtonMetre`, `MillinewtonMetre`, `KilonewtonMetre`, `PoundForceFoot`, `PoundForceInch`, `JoulePerTurn`                                |
+| Solid angle          | `Steradian` family, `SquareDegree`, `SquareArcMinute`, `SquareArcSecond`                                                                |
 
 ### Chemistry and light
 
-| Quantity            | Units                           |
-| ------------------- | ------------------------------- |
-| Amount of Substance | `Femtoomole` through `Kilomole` |
-| Luminous Intensity  | `Candela`                       |
+| Quantity            | Units                                                 |
+| ------------------- | ----------------------------------------------------- |
+| Amount of substance | `Femtoomole` through `Kilomole`                       |
+| Luminous intensity  | `Candela`                                             |
+| Luminous flux       | `Millilumen` through `Kilolumen`                      |
+| Illuminance         | `Millilux` through `Kilolux`, `Phot` and `FootCandle` |
 
 ### Dimensionless quantities
 
