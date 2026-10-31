@@ -1,12 +1,113 @@
-"""Unit constructors for force and the work it does.
+"""Unit constructors for common mechanical quantities.
 
-from kuchka import Bar, Joule, Newton, NewtonMetre, Watt
+The module brings together quantities used to describe forces, motion, material
+properties, and mechanical energy:
 
-push = Newton(10)
-load = Bar(6)
-twist = NewtonMetre(20)
-work = Joule(500)
-rate_of_work = Watt(750)
+- `Force`, `Pressure`, and `Stress` describe mechanical loading.
+- `Momentum` and `Impulse` describe motion and the effects of applied forces.
+- `Torque` describes rotational loading.
+- `Energy` and `Power` describe mechanical work and its rate of transfer.
+- `Density`, `EnergyDensity`, and `SpecificEnergy` describe material and energy
+  properties.
+- `VelocitySquared` provides the squared-velocity quantity used in energy and
+  dynamics calculations.
+
+Examples
+--------
+Hydraulic systems use pressure acting over an area to generate substantial forces.
+A hydraulic press operating at 300 bar applies a force of 18 kN to a piston with a
+cross-sectional area of 6 cm²:
+
+>>> from kuchka import Bar, SquareCentimetre
+>>> Bar(300) * SquareCentimetre(6)
+18000 N
+
+Momentum and impulse describe two sides of a change in motion.
+Consider a 1200 kg car travelling at 20 m/s that comes to a complete stop over
+four seconds.
+Its initial momentum determines the magnitude of the average braking force:
+
+>>> from kuchka import Kilogram, Metre, Newton, Second
+>>> initial_momentum = Kilogram(1200) * (Metre(20) / Second(1))
+>>> initial_momentum / Second(4)
+6000 N
+
+The corresponding braking impulse has the same magnitude as the change in momentum:
+
+>>> Newton(6000) * Second(4)
+24000 N·s
+
+Mechanical power describes how quickly work is performed or energy is transferred.
+A 750 W electric motor running continuously for 20 seconds supplies 15 kJ of energy:
+
+>>> from kuchka import Watt
+>>> Watt(750) * Second(20)
+15000 J
+
+Material density is particularly useful when estimating the mass of manufactured
+components and structural materials.
+A solid steel billet occupying 0.25 m³, assuming a density of 7850 kg/m³, has a mass
+of:
+
+>>> from kuchka import CubicMetre, KilogramPerCubicMetre
+>>> KilogramPerCubicMetre(7850) * CubicMetre(0.25)
+1962.5 kg
+
+Notes
+-----
+The module covers several important relationships in classical mechanics:
+
+    force = pressure * area
+    impulse = force * time
+    momentum = mass * velocity
+    energy = power * time
+    mass = density * volume
+
+Some mechanical quantities share physical dimensions without representing the same
+concept.
+This is particularly important in mechanics, where mathematical dimensional equivalence
+does not necessarily imply physical interchangeability:
+
+- `Energy` and `Torque` both have dimension ML²T⁻².
+- `Pressure`, `Stress`, and `EnergyDensity` all have dimension ML⁻¹T⁻².
+- `SpecificEnergy` and `VelocitySquared` both have dimension L²T⁻².
+
+The quantities retain their distinct meanings and types even when their SI dimensions
+coincide.
+For example, torque is not energy, stress is not pressure, and specific energy is not
+velocity squared.
+
+The individual submodules provide the corresponding unit systems, including
+international and customary engineering units.
+
+`DENSITY_UNITS`, `ENERGY_UNITS`, `FORCE_UNITS`, `IMPULSE_UNITS`,
+`MOMENTUM_UNITS`, `POWER_UNITS`, `PRESSURE_UNITS`, `STRESS_UNITS`,
+`TORQUE_UNITS`, and the other family-specific mappings expose unit symbols
+and their constructors for applications that resolve units dynamically.
+
+See Also
+--------
+~kuchka.quantities.Force
+Quantity type representing mechanical force.
+
+~kuchka.quantities.Pressure
+Quantity type representing force per unit area.
+
+~kuchka.quantities.Momentum
+Quantity type representing the motion of a body.
+
+~kuchka.quantities.Impulse
+Quantity type representing the effect of force over time.
+
+~kuchka.quantities.Energy
+Quantity type representing mechanical work and energy transfer.
+
+~kuchka.quantities.Power
+Quantity type representing energy transferred per unit time.
+
+~kuchka.quantities.Density
+Quantity type representing mass per unit volume.
+
 """
 
 from __future__ import annotations
