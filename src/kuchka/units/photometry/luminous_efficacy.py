@@ -1,7 +1,7 @@
 """Luminous efficacy constructors: LumenPerWatt.
 
-Luminous efficacy is the luminous flux a source gives per watt it takes in, so it
-rates a lamp: `1 lm/W = 1 cd·sr/W`, and the lumen per watt is the canonical unit.
+Luminous efficacy is the luminous flux a source gives per watt it takes in, so it rates
+a lamp: `1 lm/W = 1 cd·sr/W`, and the lumen per watt is the canonical unit.
 A filament lamp gives about 15 lm/W and a good LED more than 100 lm/W.
 No source can exceed 683 lm/W, the efficacy of ideal green light at 555 nm.
 
