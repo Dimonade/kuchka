@@ -35,11 +35,12 @@ assuming the rainfall is uniform across the entire area:
 200000 L
 
 Volume units also reflect different measurement traditions.
-Laboratory work commonly uses millilitres, while geometric calculations and material 
+Laboratory work commonly uses millilitres, while geometric calculations and material
 pecifications often use cubic centimetres.
 The two scales are numerically identical:
 
->>> from kuchka import Millilitre, CUBIC_CENTIMETRE
+>>> from kuchka import Millilitre
+>>> from kuchka.units import CUBIC_CENTIMETRE
 >>> sample = Millilitre(250)
 >>> sample.to(CUBIC_CENTIMETRE)
 250 cm³
