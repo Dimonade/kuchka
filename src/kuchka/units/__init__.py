@@ -88,6 +88,10 @@ from kuchka.units.mechanics.stress import *
 from kuchka.units.mechanics.torque import *
 from kuchka.units.mechanics.velocity_squared import *
 from kuchka.units.photometry.illuminance import *
+from kuchka.units.photometry.luminance import *
+from kuchka.units.photometry.luminous_efficacy import *
+from kuchka.units.photometry.luminous_energy import *
+from kuchka.units.photometry.luminous_exposure import *
 from kuchka.units.photometry.luminous_flux import *
 from kuchka.units.proportion import *
 from kuchka.units.radiation.activity import *
@@ -138,6 +142,10 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Instant: INSTANT_UNITS,
     quantities.Length: LENGTH_UNITS,
     quantities.LogarithmicRatio: LOGARITHMIC_RATIO_UNITS,
+    quantities.Luminance: LUMINANCE_UNITS,
+    quantities.LuminousEfficacy: LUMINOUS_EFFICACY_UNITS,
+    quantities.LuminousEnergy: LUMINOUS_ENERGY_UNITS,
+    quantities.LuminousExposure: LUMINOUS_EXPOSURE_UNITS,
     quantities.LuminousFlux: LUMINOUS_FLUX_UNITS,
     quantities.LuminousIntensity: LUMINOUS_INTENSITY_UNITS,
     quantities.MagneticFieldStrength: MAGNETIC_FIELD_STRENGTH_UNITS,
