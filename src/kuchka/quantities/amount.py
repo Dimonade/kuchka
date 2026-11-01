@@ -16,6 +16,13 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
+    from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
+    from kuchka.quantities.chemistry.molar_energy import MolarEnergy
+    from kuchka.quantities.chemistry.molar_mass import MolarMass
+    from kuchka.quantities.geometry.volume import Volume
+    from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.proportion import Proportion
 
 
@@ -26,6 +33,12 @@ class AmountOfSubstance(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: EntitiesPerAmount) -> Fraction: ...
+    @overload
+    def __mul__(self, other: MolarEnergy) -> Energy: ...
+    @overload
+    def __mul__(self, other: MolarMass) -> Mass: ...
     @overload
     def __mul__(self, other: Proportion) -> AmountOfSubstance: ...
     @overload
@@ -43,7 +56,11 @@ class AmountOfSubstance(LinearQuantity):
     @overload
     def __truediv__(self, other: AmountOfSubstance) -> Proportion: ...
     @overload
+    def __truediv__(self, other: MolarConcentration) -> Volume: ...
+    @overload
     def __truediv__(self, other: Proportion) -> AmountOfSubstance: ...
+    @overload
+    def __truediv__(self, other: Volume) -> MolarConcentration: ...
     @overload
     def __truediv__(self, other: Numeric) -> AmountOfSubstance: ...
     @overload
@@ -56,6 +73,22 @@ class AmountOfSubstance(LinearQuantity):
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
+
+    # BEGIN GENERATED __rtruediv__
+    @overload
+    def __rtruediv__(self, other: Numeric) -> EntitiesPerAmount: ...
+    @overload
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction:
+        return super().__rtruediv__(other)
 
 
 _register(AMOUNT_OF_SUBSTANCE, AmountOfSubstance)

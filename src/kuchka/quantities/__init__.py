@@ -28,6 +28,7 @@ from __future__ import annotations
 from kuchka.quantities import amount
 from kuchka.quantities import angular
 from kuchka.quantities import base
+from kuchka.quantities import chemistry
 from kuchka.quantities import current
 from kuchka.quantities import electromagnetics
 from kuchka.quantities import geometry
@@ -48,6 +49,10 @@ from kuchka.quantities import thermodynamics
 from kuchka.quantities.amount import *
 from kuchka.quantities.angular import *
 from kuchka.quantities.base import *
+from kuchka.quantities.chemistry.entities_per_amount import *
+from kuchka.quantities.chemistry.molar_concentration import *
+from kuchka.quantities.chemistry.molar_energy import *
+from kuchka.quantities.chemistry.molar_mass import *
 from kuchka.quantities.current import *
 from kuchka.quantities.electromagnetics.ac_power import *
 from kuchka.quantities.electromagnetics.capacitance import *
@@ -102,6 +107,7 @@ __all__: list[str] = []
 __all__ += amount.__all__
 __all__ += angular.__all__
 __all__ += base.__all__
+__all__ += chemistry.__all__
 __all__ += current.__all__
 __all__ += electromagnetics.__all__
 __all__ += geometry.__all__

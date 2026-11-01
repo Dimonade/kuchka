@@ -23,6 +23,8 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.chemistry.molar_energy import MolarEnergy
+    from kuchka.quantities.chemistry.molar_mass import MolarMass
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
@@ -55,6 +57,8 @@ class SpecificEnergy(LinearQuantity):
     def __mul__(self, other: Mass) -> Energy: ...
     @overload
     def __mul__(self, other: MassFlowRate) -> Power: ...
+    @overload
+    def __mul__(self, other: MolarMass) -> MolarEnergy: ...
     @overload
     def __mul__(self, other: Proportion) -> SpecificEnergy: ...
     @overload

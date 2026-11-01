@@ -31,6 +31,8 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
+    from kuchka.quantities.chemistry.molar_energy import MolarEnergy
     from kuchka.quantities.electromagnetics.magnetic_field_strength import (
         MagneticFieldStrength,
     )
@@ -80,6 +82,10 @@ class EnergyDensity(LinearQuantity):
     def __truediv__(self, other: MagneticFieldStrength) -> MagneticFluxDensity: ...
     @overload
     def __truediv__(self, other: MagneticFluxDensity) -> MagneticFieldStrength: ...
+    @overload
+    def __truediv__(self, other: MolarConcentration) -> MolarEnergy: ...
+    @overload
+    def __truediv__(self, other: MolarEnergy) -> MolarConcentration: ...
     @overload
     def __truediv__(self, other: Pressure) -> Proportion: ...
     @overload

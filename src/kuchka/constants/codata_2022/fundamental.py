@@ -39,12 +39,14 @@ from kuchka.units import Kilogram as _Kilogram
 from kuchka.units import Metre as _Metre
 from kuchka.units import MetrePerSecond as _MetrePerSecond
 from kuchka.units import MetrePerSecondSquared as _MetrePerSecondSquared
+from kuchka.units import PerMole as _PerMole
 from kuchka.units import Second as _Second
 
 if TYPE_CHECKING:
     from kuchka.quantities import Acceleration
     from kuchka.quantities import Charge
     from kuchka.quantities import Energy
+    from kuchka.quantities import EntitiesPerAmount
     from kuchka.quantities import Length
     from kuchka.quantities import Mass
     from kuchka.quantities import Temperature
@@ -58,6 +60,15 @@ Accuracy: Measured.
 Value: 6.644 657 3450 e-27 kg.
 Uncertainty: 0.000 000 0021 e-27 kg.
 Link: https://en.wikipedia.org/wiki/Alpha_particle
+"""
+
+AVOGADRO_CONSTANT: Final[EntitiesPerAmount] = _PerMole(_Decimal("6.02214076e23"))
+"""The Avogadro constant, N_A.
+
+Accuracy: Exact.
+Value: 6.022 140 76 e23 mol⁻¹.
+Uncertainty: None.
+Link: https://en.wikipedia.org/wiki/Avogadro_constant
 """
 
 ELECTRON_MASS: Final[Mass] = _Kilogram(_Decimal("9.1093837139E-31"))
@@ -166,6 +177,7 @@ Link: https://en.wikipedia.org/wiki/Gravitational_acceleration
 
 __all__ = [
     "ALPHA_PARTICLE_MASS",
+    "AVOGADRO_CONSTANT",
     "ELECTRON_MASS",
     "ELEMENTARY_CHARGE",
     "NEUTRON_MASS",

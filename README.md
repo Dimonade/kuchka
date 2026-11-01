@@ -228,6 +228,10 @@ Mass / Volume -> Density
 Volume / Time -> VolumetricFlowRate
 Area * Velocity -> VolumetricFlowRate
 Mass / Time -> MassFlowRate
+Mass / Amount -> MolarMass
+Amount / Volume -> MolarConcentration
+Energy / Amount -> MolarEnergy
+MolarConcentration * MolarMass -> Density
 Density * VolumetricFlowRate -> MassFlowRate
 Length * Length -> Area
 Area * Length -> Volume
@@ -559,7 +563,7 @@ The complete unit vocabulary is available in the API reference.
 | Force            | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                                                                      |
 | Volumetric flow  | `CubicMetrePerSecond`, `LitrePerSecond`, `LitrePerMinute`, `CubicMetrePerHour`, `MillilitrePerMinute`, `UsGallonPerMinute`, `CubicFootPerMinute`   |
 | Mass flow        | `KilogramPerSecond`, `GramPerSecond`, `KilogramPerHour`, `TonnePerHour`, `PoundPerHour`                                                            |
-| Density          | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                                                              |
+| Density          | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`, `GramPerLitre`, `MilligramPerLitre`, `MicrogramPerLitre`                    |
 | Pressure         | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Gigapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`, `KilopoundPerSquareInch` |
 | Stress           | the units of Pressure, reached with `Pressure.to_stress()`                                                                                         |
 | Energy density   | `JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`                                                       |
@@ -582,6 +586,10 @@ The complete unit vocabulary is available in the API reference.
 | Quantity            | Units                                                                                                      |
 | ------------------- | ---------------------------------------------------------------------------------------------------------- |
 | Amount of Substance | `Femtoomole` through `Kilomole`                                                                            |
+| Molar mass          | `KilogramPerMole`, `GramPerMole`, `KilogramPerKilomole`                                                    |
+| Molar concentration | `MolePerCubicMetre`, `MolePerLitre`, `MillimolePerLitre`, `MicromolePerLitre`, `NanomolePerLitre`          |
+| Molar energy        | `JoulePerMole`, `KilojoulePerMole`, `KilocaloriePerMole`                                                   |
+| Entities per amount | `PerMole`                                                                                                  |
 | Luminous Intensity  | `Candela`                                                                                                  |
 | Solid angle         | `Steradian`, `Millisteradian`, `Microsteradian`, `SquareDegree`, `SquareArcMinute`, `SquareArcSecond`      |
 | Luminous flux       | `Millilumen`, `Lumen`, `Kilolumen`                                                                         |

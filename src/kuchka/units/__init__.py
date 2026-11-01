@@ -29,6 +29,7 @@ from kuchka.quantities.base.units import bind_table
 from kuchka.quantities.base.units import bind_units
 from kuchka.units import amount
 from kuchka.units import angular
+from kuchka.units import chemistry
 from kuchka.units import current
 from kuchka.units import electromagnetics
 from kuchka.units import geometry
@@ -48,6 +49,10 @@ from kuchka.units import thermal
 from kuchka.units import thermodynamics
 from kuchka.units.amount import *
 from kuchka.units.angular import *
+from kuchka.units.chemistry.entities_per_amount import *
+from kuchka.units.chemistry.molar_concentration import *
+from kuchka.units.chemistry.molar_energy import *
+from kuchka.units.chemistry.molar_mass import *
 from kuchka.units.current import *
 from kuchka.units.electromagnetics.ac_power import *
 from kuchka.units.electromagnetics.capacitance import *
@@ -130,6 +135,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Data: DATA_UNITS,
     quantities.DataRate: DATA_RATE_UNITS,
     quantities.Density: DENSITY_UNITS,
+    quantities.EntitiesPerAmount: ENTITIES_PER_AMOUNT_UNITS,
     quantities.Energy: ENERGY_UNITS,
     quantities.EnergyDensity: ENERGY_DENSITY_UNITS,
     quantities.Force: FORCE_UNITS,
@@ -137,6 +143,9 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.HeatingRate: HEATING_RATE_UNITS,
     quantities.Impulse: IMPULSE_UNITS,
     quantities.MassFlowRate: MASS_FLOW_RATE_UNITS,
+    quantities.MolarConcentration: MOLAR_CONCENTRATION_UNITS,
+    quantities.MolarEnergy: MOLAR_ENERGY_UNITS,
+    quantities.MolarMass: MOLAR_MASS_UNITS,
     quantities.Momentum: MOMENTUM_UNITS,
     quantities.VelocitySquared: VELOCITY_SQUARED_UNITS,
     quantities.Illuminance: ILLUMINANCE_UNITS,
@@ -201,6 +210,7 @@ not accepted by another.
 __all__: list[str] = []
 __all__ += amount.__all__
 __all__ += angular.__all__
+__all__ += chemistry.__all__
 __all__ += current.__all__
 __all__ += electromagnetics.__all__
 __all__ += geometry.__all__

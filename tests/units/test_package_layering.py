@@ -22,6 +22,7 @@ RANK = {
     "kinematics": 2,
     "mechanics": 3,
     "electromagnetics": 4,
+    "chemistry": 4,
 }
 """Packages in dependency order; the top level is rank zero.
 

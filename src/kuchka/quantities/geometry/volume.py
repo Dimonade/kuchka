@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.amount import AmountOfSubstance
+    from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
@@ -68,6 +70,8 @@ class Volume(LinearQuantity):
     def __mul__(self, other: EnergyDensity) -> Energy: ...
     @overload
     def __mul__(self, other: Frequency) -> VolumetricFlowRate: ...
+    @overload
+    def __mul__(self, other: MolarConcentration) -> AmountOfSubstance: ...
     @overload
     def __mul__(self, other: Pressure) -> Energy: ...
     @overload
