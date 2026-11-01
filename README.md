@@ -232,6 +232,10 @@ Mass / Amount -> MolarMass
 Amount / Volume -> MolarConcentration
 Energy / Amount -> MolarEnergy
 MolarConcentration * MolarMass -> Density
+Amount / Mass -> Molality
+Volume / Amount -> MolarVolume
+Amount / Time -> MolarFlowRate
+Charge / Amount -> MolarCharge
 Density * VolumetricFlowRate -> MassFlowRate
 Length * Length -> Area
 Area * Length -> Volume
@@ -583,21 +587,26 @@ The complete unit vocabulary is available in the API reference.
 
 ### Chemistry and light
 
-| Quantity            | Units                                                                                                      |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Amount of Substance | `Femtoomole` through `Kilomole`                                                                            |
-| Molar mass          | `KilogramPerMole`, `GramPerMole`, `KilogramPerKilomole`                                                    |
-| Molar concentration | `MolePerCubicMetre`, `MolePerLitre`, `MillimolePerLitre`, `MicromolePerLitre`, `NanomolePerLitre`          |
-| Molar energy        | `JoulePerMole`, `KilojoulePerMole`, `KilocaloriePerMole`                                                   |
-| Entities per amount | `PerMole`                                                                                                  |
-| Luminous Intensity  | `Candela`                                                                                                  |
-| Solid angle         | `Steradian`, `Millisteradian`, `Microsteradian`, `SquareDegree`, `SquareArcMinute`, `SquareArcSecond`      |
-| Luminous flux       | `Millilumen`, `Lumen`, `Kilolumen`                                                                         |
-| Luminous energy     | `LumenSecond`, `LumenHour`                                                                                 |
-| Illuminance         | `Millilux`, `Lux`, `Kilolux`, `Phot`, `FootCandle`                                                         |
-| Luminous exposure   | `LuxSecond`, `LuxHour`, `KiloluxHour`                                                                      |
-| Luminance           | `CandelaPerSquareMetre`, `MillicandelaPerSquareMetre`, `KilocandelaPerSquareMetre`, `Stilb`, `FootLambert` |
-| Luminous efficacy   | `LumenPerWatt`                                                                                             |
+| Quantity            | Units                                                                                                         |
+| ------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Amount of Substance | `Femtoomole` through `Kilomole`                                                                               |
+| Molar mass          | `KilogramPerMole`, `GramPerMole`, `KilogramPerKilomole`                                                       |
+| Molar concentration | `MolePerCubicMetre`, `MolePerLitre`, `MillimolePerLitre`, `MicromolePerLitre`, `NanomolePerLitre`             |
+| Molar energy        | `JoulePerMole`, `KilojoulePerMole`, `KilocaloriePerMole`                                                      |
+| Entities per amount | `PerMole`                                                                                                     |
+| Molality            | `MolePerKilogram`, `MillimolePerKilogram`, `MicromolePerKilogram`                                             |
+| Molar volume        | `CubicMetrePerMole`, `LitrePerMole`, `CubicCentimetrePerMole`                                                 |
+| Molar flow rate     | `MolePerSecond`, `KilomolePerSecond`, `MillimolePerMinute`, `MolePerMinute`, `MolePerHour`, `KilomolePerHour` |
+| Catalytic activity  | `Nanokatal`, `Microkatal`, `Millikatal`, `Katal`, `EnzymeUnit`                                                |
+| Molar charge        | `CoulombPerMole`, `KilocoulombPerMole`                                                                        |
+| Luminous Intensity  | `Candela`                                                                                                     |
+| Solid angle         | `Steradian`, `Millisteradian`, `Microsteradian`, `SquareDegree`, `SquareArcMinute`, `SquareArcSecond`         |
+| Luminous flux       | `Millilumen`, `Lumen`, `Kilolumen`                                                                            |
+| Luminous energy     | `LumenSecond`, `LumenHour`                                                                                    |
+| Illuminance         | `Millilux`, `Lux`, `Kilolux`, `Phot`, `FootCandle`                                                            |
+| Luminous exposure   | `LuxSecond`, `LuxHour`, `KiloluxHour`                                                                         |
+| Luminance           | `CandelaPerSquareMetre`, `MillicandelaPerSquareMetre`, `KilocandelaPerSquareMetre`, `Stilb`, `FootLambert`    |
+| Luminous efficacy   | `LumenPerWatt`                                                                                                |
 
 ### Dimensionless quantities
 
