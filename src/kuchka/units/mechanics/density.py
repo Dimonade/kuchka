@@ -219,6 +219,22 @@ GramPerCubicCentimeter = GramPerCubicCentimetre
 
 GRAM_PER_LITRE = UnitDef("gram_per_litre", "g/L", Decimal(1), DENSITY)
 GRAM_PER_MILLILITRE = UnitDef("gram_per_millilitre", "g/mL", Decimal(1000), DENSITY)
+MILLIGRAM_PER_LITRE = UnitDef(
+    "milligram_per_litre",
+    "mg/L",
+    Decimal("0.001"),
+    DENSITY,
+    aliases=("mg/l",),
+    words=("milligram per liter", "milligram per litre"),
+)
+MICROGRAM_PER_LITRE = UnitDef(
+    "microgram_per_litre",
+    f"{symbols.MICRO}g/L",
+    Decimal("0.000001"),
+    DENSITY,
+    aliases=("ug/L", "ug/l", f"{symbols.MICRO}g/l"),
+    words=("microgram per liter", "microgram per litre"),
+)
 KILOGRAM_PER_LITRE = UnitDef("kilogram_per_litre", "kg/L", Decimal(1000), DENSITY)
 
 GRAM_PER_LITER = GRAM_PER_LITRE
@@ -314,7 +330,57 @@ def KilogramPerLitre(value: Numeric) -> Density:
     )
 
 
+def MilligramPerLitre(value: Numeric) -> Density:
+    """Construct a Density from a magnitude expressed in milligrams per litre.
+
+    Parameters
+    ----------
+    value : Numeric
+        Density magnitude in milligrams per litre.
+
+    Returns
+    -------
+    Density
+        Density represented in milligrams per litre.
+
+    Examples
+    --------
+    The mass concentration of a solute is a density: a river with 8 mg/L of dissolved
+    oxygen holds 4 mg of it in 0.5 L:
+
+    >>> from kuchka import Litre
+    >>> MilligramPerLitre(8) * Litre(0.5)
+    0.000004 kg
+
+    """
+    return Density(to_exact(value) * MILLIGRAM_PER_LITRE.scale, MILLIGRAM_PER_LITRE)
+
+
+def MicrogramPerLitre(value: Numeric) -> Density:
+    """Construct a Density from a magnitude expressed in micrograms per litre.
+
+    Parameters
+    ----------
+    value : Numeric
+        Density magnitude in micrograms per litre.
+
+    Returns
+    -------
+    Density
+        Density represented in micrograms per litre.
+
+    Examples
+    --------
+    >>> MicrogramPerLitre(500).to(MILLIGRAM_PER_LITRE)
+    0.5 mg/L
+
+    """
+    return Density(to_exact(value) * MICROGRAM_PER_LITRE.scale, MICROGRAM_PER_LITRE)
+
+
 GramPerLiter = GramPerLitre
+MilligramPerLiter = MilligramPerLitre
+MicrogramPerLiter = MicrogramPerLitre
 GramPerMilliliter = GramPerMillilitre
 KilogramPerLiter = KilogramPerLitre
 
@@ -327,6 +393,8 @@ DENSITY_UNITS: Mapping[str, Callable[[Numeric], Density]] = unit_table(
         KILOGRAM_PER_LITRE: KilogramPerLitre,
         GRAM_PER_LITRE: GramPerLitre,
         GRAM_PER_MILLILITRE: GramPerMillilitre,
+        MILLIGRAM_PER_LITRE: MilligramPerLitre,
+        MICROGRAM_PER_LITRE: MicrogramPerLitre,
     },
 )
 
@@ -342,6 +410,8 @@ __all__ = [
     "KILOGRAM_PER_CUBIC_METRE",
     "KILOGRAM_PER_LITER",
     "KILOGRAM_PER_LITRE",
+    "MICROGRAM_PER_LITRE",
+    "MILLIGRAM_PER_LITRE",
     "GramPerCubicCentimeter",
     "GramPerCubicCentimetre",
     "GramPerLiter",
@@ -352,4 +422,8 @@ __all__ = [
     "KilogramPerCubicMetre",
     "KilogramPerLiter",
     "KilogramPerLitre",
+    "MicrogramPerLiter",
+    "MicrogramPerLitre",
+    "MilligramPerLiter",
+    "MilligramPerLitre",
 ]

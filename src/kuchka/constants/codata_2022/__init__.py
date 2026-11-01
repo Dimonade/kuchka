@@ -5,6 +5,7 @@ Access is via this dataset's own namespace (`kuchka.constants.codata_2022`, or
 """
 
 from kuchka.constants.codata_2022.fundamental import ALPHA_PARTICLE_MASS
+from kuchka.constants.codata_2022.fundamental import AVOGADRO_CONSTANT
 from kuchka.constants.codata_2022.fundamental import ELECTRON_MASS
 from kuchka.constants.codata_2022.fundamental import ELEMENTARY_CHARGE
 from kuchka.constants.codata_2022.fundamental import NEUTRON_MASS
@@ -22,6 +23,7 @@ from kuchka.constants.codata_2022.fundamental import STANDARD_ACCELERATION_OF_GR
 
 __all__ = [
     "ALPHA_PARTICLE_MASS",
+    "AVOGADRO_CONSTANT",
     "ELECTRON_MASS",
     "ELEMENTARY_CHARGE",
     "NEUTRON_MASS",
