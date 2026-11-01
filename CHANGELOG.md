@@ -9,56 +9,32 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
-**#### Electromagnetics**
+#### Added
 
-- magnetic flux (`Nanoweber` through `Kiloweber`),
-- magnetic flux density (`Femtotesla` through `Kilotesla`, plus Gauss and its prefixes),
-- capacitance (`Femtofarad` through `Kilofarad`),
-- inductance (`Picohenry` through `Kilohenry`), and
-- magnetic field strength (`MicroamperePerMetre` through `MegaamperePerMetre`), and
-- permittivity and permeability, measured in farads per metre and henries per metre, respectively.
+- **Electromagnetics:**
+  Added magnetic flux and flux density (weber, tesla, and gauss families), capacitance, inductance, resistance-based `Reactance` and `Impedance` roles, magnetic field strength and its `Magnetization` role, permittivity, and permeability.
+  Dimensional arithmetic now derives these quantities through relationships such as `Voltage * Time`, `MagneticFlux / Area`, `Charge / Voltage`, `Resistance * Time`, `Current / Length`, and `Permeability * MagneticFieldStrength`.
+  Both role families reuse their parent units through explicit conversions and dedicated unit tables.
 
-Dimensional arithmetic derives `MagneticFlux` from `Voltage * Time`, `MagneticFluxDensity` from `MagneticFlux / Area`, `Capacitance` from `Charge / Voltage` or `Conductance * Time`, `Inductance` from `MagneticFlux / Current` or `Resistance * Time`, `MagneticFieldStrength` from `Current / Length`, and `MagneticFluxDensity` from `Permeability * MagneticFieldStrength`.
+- **Thermodynamics and mechanics:**
+  Added specific energy (including J/kg, Wh/kg, and cal/kg), heating rates in Kelvin, Celsius, and Fahrenheit scales, momentum (SI, CGS, and FPS), impulse (N·s, mN·s, kN·s, dyn·s, and lbf·s), velocity squared, and volumetric and mass flow rates.
+  Added `CubicFoot` and `UsGallon` volume units.
+  Derived quantities now include `SpecificEnergy` from energy, pressure, density, and acceleration relationships; `HeatingRate` from temperature change and time; `Momentum` from `Mass * Velocity`; `Impulse` from `Force * Time`; `VelocitySquared` from `Velocity * Velocity`; and flow rates from volume, mass, density, area, and velocity.
+  `Pressure * VolumetricFlowRate` produces `Power`.
 
-`Reactance` and `Impedance` are distinct roles of `Resistance`, reached through `Resistance.to_reactance()` and `Resistance.to_impedance()`. Both reuse resistance units through `REACTANCE_UNITS` and `IMPEDANCE_UNITS`. `Magnetization` is a distinct role of `MagneticFieldStrength`, reached through `MagneticFieldStrength.to_magnetization()`, and reuses its units through `MAGNETIZATION_UNITS`. `Permittivity` is `Capacitance / Length`, while `Permeability` is `Inductance / Length`.
+- **Photometry:**
+  Added solid angle, luminous flux, illuminance, luminous energy, luminous exposure, luminance, and luminous efficacy, with SI and customary units including steradians, square degrees, lumens, lux, phot, foot-candle, talbot, nit, stilb, foot-lambert, and lumens per watt.
 
-**#### Thermal and mechanical**
+- **Chemistry:**
+  Added molar mass, molar concentration, molar energy, and entities per amount, alongside milligrams and micrograms per litre.
+  Derived relationships include `Mass / Amount`, `Amount / Volume`, `Energy / Amount`, and `MolarConcentration * MolarMass` yielding `Density`.
+  Added `AVOGADRO_CONSTANT` to `codata_2022`, allowing an amount of substance to produce an entity count.
 
-- specific energy (`JoulePerKilogram`, `KilojoulePerKilogram`, `MegajoulePerKilogram`, `JoulePerGram`, `WattHourPerKilogram`, `KilowattHourPerKilogram`, `KilocaloriePerKilogram`), and
-- heating rate (`KelvinPerSecond`, `KelvinPerMinute`, `KelvinPerHour`, and the same for degrees Celsius, plus `FahrenheitPerSecond` and `FahrenheitPerMinute`), in the new `thermodynamics` package.
-
-Dimensional arithmetic derives `SpecificEnergy` from `Energy / Mass`, `Pressure / Density`, `EnergyDensity / Density`, and `Acceleration * Length`, `EnergyDensity` from `SpecificEnergy * Density`, and `HeatingRate` from `TemperatureDelta / Time` and `TemperatureDelta * Frequency`.
-
-**#### Momentum, impulse, and velocity squared**
-
-- momentum (`KilogramMetrePerSecond`, `GramCentimetrePerSecond`, `PoundFootPerSecond`),
-- impulse (`NewtonSecond`, `MillinewtonSecond`, `KilonewtonSecond`, `DyneSecond`, `PoundForceSecond`), and
-- velocity squared (`SquareMetrePerSecondSquared`, `SquareKilometrePerSecondSquared`).
-
-`Mass * Velocity` is a `Momentum`, `Force * Time` an `Impulse`, and `Velocity * Velocity` a `VelocitySquared`, so a kinetic energy is `mass * v * v / 2` without brackets, and `Density * VelocitySquared` is a `Pressure`.
-`Momentum` and `Impulse` share a dimension and are contested, as are `VelocitySquared` and `SpecificEnergy`; the conversions are `Impulse.to_momentum()`, `Impulse.from_momentum(...)`, `VelocitySquared.to_specific_energy()` (the half), and `VelocitySquared.from_specific_energy(...)` (the double).
-
-**#### Photometry and solid angle**
-
-- solid angle (`Steradian`, `Millisteradian`, `Microsteradian`, `SquareDegree`, `SquareArcMinute`, `SquareArcSecond`),
-- luminous flux (`Millilumen`, `Lumen`, `Kilolumen`), and
-- illuminance (`Millilux`, `Lux`, `Kilolux`, `Phot`, `FootCandle`),
-- luminous energy (`LumenSecond`, `LumenHour`), the talbot being the lumen second,
-- luminous exposure (`LuxSecond`, `LuxHour`, `KiloluxHour`),
-- luminance (`CandelaPerSquareMetre`, `MillicandelaPerSquareMetre`, `KilocandelaPerSquareMetre`, `Stilb`, `FootLambert`), the nit being the candela per square metre, and
-- luminous efficacy (`LumenPerWatt`), in the new `photometry` package.
-
-#### Flow rates
-
-- volumetric flow rate (`CubicMetrePerSecond`, `CubicMetrePerMinute`, `CubicMetrePerHour`, `LitrePerSecond`, `LitrePerMinute`, `MillilitrePerMinute`, `UsGallonPerMinute`, `CubicFootPerMinute`),
-- mass flow rate (`KilogramPerSecond`, `GramPerSecond`, `KilogramPerHour`, `TonnePerHour`, `PoundPerHour`), in `mechanics`, and
-- two volume units, `CubicFoot` and `UsGallon`.
-
-`Volume / Time` and `Area * Velocity` are a `VolumetricFlowRate`, `Mass / Time` and `Density * VolumetricFlowRate` a `MassFlowRate`, and `Pressure * VolumetricFlowRate` a `Power`.
-A bare `gal` or `gpm`, and flows at standard or normal conditions (`scfm`, `Nm3/h`), are refused.
-
-`Dimension` gains a solid angle axis, so a lumen is a candela steradian and not a candela: `LuminousIntensity * SolidAngle` is a `LuminousFlux`, `LuminousFlux / Area` an `Illuminance`, `LuminousFlux * Time` a `LuminousEnergy`, `Illuminance * Time` a `LuminousExposure`, `LuminousIntensity / Area` a `Luminance`, `LuminousFlux / Power` a `LuminousEfficacy`, and `Area / Area` stays a `Proportion`.
-`SolidAngle.from_area(area, radius)` builds a solid angle from the area it cuts from a sphere.
+- **Dimensional model:**
+  Added solid angle as an independent dimension axis.
+  Photometric arithmetic now distinguishes luminous intensity from luminous flux, derives illuminance and luminance separately, and supports luminous energy, exposure, and efficacy.
+  `Area / Area` remains a `Proportion`.
+  Added explicit conversions between contested kinds: `Impulse` and `Momentum`, and `VelocitySquared` and `SpecificEnergy`, with the latter conversion accounting for the factor of two in kinetic energy.
 
 ### Changed
 
