@@ -16,7 +16,10 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.amount import AmountOfSubstance
     from kuchka.quantities.angular import AngularDisplacement
+    from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
+    from kuchka.quantities.chemistry.molar_energy import MolarEnergy
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
@@ -49,6 +52,8 @@ class Energy(LinearQuantity):
 
     # BEGIN GENERATED __mul__
     @overload
+    def __mul__(self, other: EntitiesPerAmount) -> MolarEnergy: ...
+    @overload
     def __mul__(self, other: Frequency) -> Power: ...
     @overload
     def __mul__(self, other: LuminousEfficacy) -> LuminousEnergy: ...
@@ -66,6 +71,8 @@ class Energy(LinearQuantity):
         return super().__mul__(other)
 
     # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: AmountOfSubstance) -> MolarEnergy: ...
     @overload
     def __truediv__(self, other: AngularDisplacement) -> Torque: ...
     @overload
@@ -86,6 +93,8 @@ class Energy(LinearQuantity):
     def __truediv__(self, other: MagneticFlux) -> Current: ...
     @overload
     def __truediv__(self, other: Mass) -> SpecificEnergy: ...
+    @overload
+    def __truediv__(self, other: MolarEnergy) -> AmountOfSubstance: ...
     @overload
     def __truediv__(self, other: Momentum) -> Velocity: ...
     @overload
