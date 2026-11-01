@@ -26,6 +26,7 @@ as a string from outside the application.
 from __future__ import annotations
 
 from decimal import Decimal
+from fractions import Fraction
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import VOLUME
@@ -38,6 +39,7 @@ from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import UnitDef
 from kuchka.quantities import Volume
+from kuchka.units.length import FOOT
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -149,6 +151,39 @@ KILOLITRE = prefixed_unit(
 )
 
 
+# Customary volumes, exact from the foot and the cubic inch.
+
+CUBIC_FOOT = UnitDef(
+    "cubic_foot",
+    f"ft{symbols.SUPERSCRIPT_THREE}",
+    FOOT.scale * FOOT.scale * FOOT.scale,
+    VOLUME,
+    aliases=powered("ft", 3),
+    words=("cubic foot", "cubic feet"),
+)
+US_GALLON = UnitDef(
+    "us_gallon",
+    "US gal",
+    Fraction(231) * Fraction(254, 10_000) ** 3,
+    VOLUME,
+    aliases=("gal(US)", "gal (US)", "USgal"),
+    words=("us gallon", "us liquid gallon"),
+)
+"""The US liquid gallon: 231 cubic inches, exactly 3.785411784 litres.
+
+A bare `gal` is not a spelling of it, because the imperial gallon is another unit."""
+
+
+def CubicFoot(value: Numeric) -> Volume:
+    """Construct a Volume from a magnitude expressed in cubic feet."""
+    return Volume(to_exact(value) * CUBIC_FOOT.scale, CUBIC_FOOT)
+
+
+def UsGallon(value: Numeric) -> Volume:
+    """Construct a Volume from a magnitude expressed in US liquid gallons."""
+    return Volume(to_exact(value) * US_GALLON.scale, US_GALLON)
+
+
 def Microlitre(value: Numeric) -> Volume:
     """Construct a Volume from a magnitude expressed in microlitres."""
     return Volume(to_exact(value) * MICROLITRE.scale, MICROLITRE)
@@ -180,6 +215,8 @@ VOLUME_UNITS: Mapping[str, Callable[[Numeric], Volume]] = unit_table(
         CUBIC_MILLIMETRE: CubicMillimetre,
         CUBIC_CENTIMETRE: CubicCentimetre,
         CUBIC_METRE: CubicMetre,
+        CUBIC_FOOT: CubicFoot,
+        US_GALLON: UsGallon,
         MICROLITRE: Microlitre,
         MILLILITRE: Millilitre,
         LITRE: Litre,
@@ -190,6 +227,7 @@ VOLUME_UNITS: Mapping[str, Callable[[Numeric], Volume]] = unit_table(
 __all__ = [
     "CUBIC_CENTIMETER",
     "CUBIC_CENTIMETRE",
+    "CUBIC_FOOT",
     "CUBIC_METER",
     "CUBIC_METRE",
     "CUBIC_MILLIMETER",
@@ -198,9 +236,11 @@ __all__ = [
     "LITRE",
     "MICROLITRE",
     "MILLILITRE",
+    "US_GALLON",
     "VOLUME_UNITS",
     "CubicCentimeter",
     "CubicCentimetre",
+    "CubicFoot",
     "CubicMeter",
     "CubicMetre",
     "CubicMillimeter",
@@ -213,4 +253,5 @@ __all__ = [
     "Microlitre",
     "Milliliter",
     "Millilitre",
+    "UsGallon",
 ]

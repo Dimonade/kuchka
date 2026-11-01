@@ -45,6 +45,7 @@ from kuchka.quantities import MagneticFlux
 from kuchka.quantities import MagneticFluxDensity
 from kuchka.quantities import Magnetization
 from kuchka.quantities import Mass
+from kuchka.quantities import MassFlowRate
 from kuchka.quantities import Momentum
 from kuchka.quantities import Permeability
 from kuchka.quantities import Permittivity
@@ -67,6 +68,7 @@ from kuchka.quantities import Velocity
 from kuchka.quantities import VelocitySquared
 from kuchka.quantities import Voltage
 from kuchka.quantities import Volume
+from kuchka.quantities import VolumetricFlowRate
 from kuchka.units import Acre
 from kuchka.units import Ampere
 from kuchka.units import AmpereHour
@@ -98,8 +100,16 @@ from kuchka.units import Centimetre
 from kuchka.units import Coulomb
 from kuchka.units import CubicCentimeter
 from kuchka.units import CubicCentimetre
+from kuchka.units import CubicFoot
+from kuchka.units import CubicFootPerMinute
 from kuchka.units import CubicMeter
+from kuchka.units import CubicMeterPerHour
+from kuchka.units import CubicMeterPerMinute
+from kuchka.units import CubicMeterPerSecond
 from kuchka.units import CubicMetre
+from kuchka.units import CubicMetrePerHour
+from kuchka.units import CubicMetrePerMinute
+from kuchka.units import CubicMetrePerSecond
 from kuchka.units import CubicMillimeter
 from kuchka.units import CubicMillimetre
 from kuchka.units import Curie
@@ -164,6 +174,7 @@ from kuchka.units import GramPerLiter
 from kuchka.units import GramPerLitre
 from kuchka.units import GramPerMilliliter
 from kuchka.units import GramPerMillilitre
+from kuchka.units import GramPerSecond
 from kuchka.units import Hectare
 from kuchka.units import Hectopascal
 from kuchka.units import Henry
@@ -207,8 +218,10 @@ from kuchka.units import KilogramForce
 from kuchka.units import KilogramMetrePerSecond
 from kuchka.units import KilogramPerCubicMeter
 from kuchka.units import KilogramPerCubicMetre
+from kuchka.units import KilogramPerHour
 from kuchka.units import KilogramPerLiter
 from kuchka.units import KilogramPerLitre
+from kuchka.units import KilogramPerSecond
 from kuchka.units import Kilohenry
 from kuchka.units import Kilohertz
 from kuchka.units import Kilojoule
@@ -246,7 +259,11 @@ from kuchka.units import Kiloweber
 from kuchka.units import Knot
 from kuchka.units import LightYear
 from kuchka.units import Liter
+from kuchka.units import LiterPerMinute
+from kuchka.units import LiterPerSecond
 from kuchka.units import Litre
+from kuchka.units import LitrePerMinute
+from kuchka.units import LitrePerSecond
 from kuchka.units import Lumen
 from kuchka.units import LumenHour
 from kuchka.units import LumenPerWatt
@@ -339,7 +356,9 @@ from kuchka.units import MillihenryPerMetre
 from kuchka.units import Millihertz
 from kuchka.units import Millijoule
 from kuchka.units import Milliliter
+from kuchka.units import MilliliterPerMinute
 from kuchka.units import Millilitre
+from kuchka.units import MillilitrePerMinute
 from kuchka.units import Millilumen
 from kuchka.units import Millilux
 from kuchka.units import Millimeter
@@ -425,6 +444,7 @@ from kuchka.units import PoundForce
 from kuchka.units import PoundForceFoot
 from kuchka.units import PoundForceInch
 from kuchka.units import PoundForceSecond
+from kuchka.units import PoundPerHour
 from kuchka.units import PoundPerSquareInch
 from kuchka.units import Radian
 from kuchka.units import RadianDisplacement
@@ -468,9 +488,12 @@ from kuchka.units import Tesla
 from kuchka.units import ThermochemicalCalorie
 from kuchka.units import Tonne
 from kuchka.units import TonneOfTNT
+from kuchka.units import TonnePerHour
 from kuchka.units import Turn
 from kuchka.units import TurnDisplacement
 from kuchka.units import TurnPerSecond
+from kuchka.units import UsGallon
+from kuchka.units import UsGallonPerMinute
 from kuchka.units import Var
 from kuchka.units import Volt
 from kuchka.units import VoltAmpere
@@ -528,8 +551,16 @@ __all__ = [
     "Coulomb",
     "CubicCentimeter",
     "CubicCentimetre",
+    "CubicFoot",
+    "CubicFootPerMinute",
     "CubicMeter",
+    "CubicMeterPerHour",
+    "CubicMeterPerMinute",
+    "CubicMeterPerSecond",
     "CubicMetre",
+    "CubicMetrePerHour",
+    "CubicMetrePerMinute",
+    "CubicMetrePerSecond",
     "CubicMillimeter",
     "CubicMillimetre",
     "Curie",
@@ -602,6 +633,7 @@ __all__ = [
     "GramPerLitre",
     "GramPerMilliliter",
     "GramPerMillilitre",
+    "GramPerSecond",
     "HeatingRate",
     "Hectare",
     "Hectopascal",
@@ -651,8 +683,10 @@ __all__ = [
     "KilogramMetrePerSecond",
     "KilogramPerCubicMeter",
     "KilogramPerCubicMetre",
+    "KilogramPerHour",
     "KilogramPerLiter",
     "KilogramPerLitre",
+    "KilogramPerSecond",
     "Kilohenry",
     "Kilohertz",
     "Kilojoule",
@@ -691,7 +725,11 @@ __all__ = [
     "Length",
     "LightYear",
     "Liter",
+    "LiterPerMinute",
+    "LiterPerSecond",
     "Litre",
+    "LitrePerMinute",
+    "LitrePerSecond",
     "LogarithmicRatio",
     "Lumen",
     "LumenHour",
@@ -711,6 +749,7 @@ __all__ = [
     "MagneticFluxDensity",
     "Magnetization",
     "Mass",
+    "MassFlowRate",
     "Mebibit",
     "MebibitPerSecond",
     "Mebibyte",
@@ -796,7 +835,9 @@ __all__ = [
     "Millihertz",
     "Millijoule",
     "Milliliter",
+    "MilliliterPerMinute",
     "Millilitre",
+    "MillilitrePerMinute",
     "Millilumen",
     "Millilux",
     "Millimeter",
@@ -885,6 +926,7 @@ __all__ = [
     "PoundForceFoot",
     "PoundForceInch",
     "PoundForceSecond",
+    "PoundPerHour",
     "PoundPerSquareInch",
     "Power",
     "Pressure",
@@ -942,10 +984,13 @@ __all__ = [
     "Time",
     "Tonne",
     "TonneOfTNT",
+    "TonnePerHour",
     "Torque",
     "Turn",
     "TurnDisplacement",
     "TurnPerSecond",
+    "UsGallon",
+    "UsGallonPerMinute",
     "Var",
     "Velocity",
     "VelocitySquared",
@@ -953,6 +998,7 @@ __all__ = [
     "VoltAmpere",
     "Voltage",
     "Volume",
+    "VolumetricFlowRate",
     "Watt",
     "WattHour",
     "WattHourPerKilogram",

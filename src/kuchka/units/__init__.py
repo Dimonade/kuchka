@@ -80,6 +80,7 @@ from kuchka.units.mechanics.energy import *
 from kuchka.units.mechanics.energy_density import *
 from kuchka.units.mechanics.force import *
 from kuchka.units.mechanics.impulse import *
+from kuchka.units.mechanics.mass_flow_rate import *
 from kuchka.units.mechanics.momentum import *
 from kuchka.units.mechanics.power import *
 from kuchka.units.mechanics.pressure import *
@@ -87,6 +88,7 @@ from kuchka.units.mechanics.specific_energy import *
 from kuchka.units.mechanics.stress import *
 from kuchka.units.mechanics.torque import *
 from kuchka.units.mechanics.velocity_squared import *
+from kuchka.units.mechanics.volumetric_flow_rate import *
 from kuchka.units.photometry.illuminance import *
 from kuchka.units.photometry.luminance import *
 from kuchka.units.photometry.luminous_efficacy import *
@@ -134,6 +136,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Frequency: FREQUENCY_UNITS,
     quantities.HeatingRate: HEATING_RATE_UNITS,
     quantities.Impulse: IMPULSE_UNITS,
+    quantities.MassFlowRate: MASS_FLOW_RATE_UNITS,
     quantities.Momentum: MOMENTUM_UNITS,
     quantities.VelocitySquared: VELOCITY_SQUARED_UNITS,
     quantities.Illuminance: ILLUMINANCE_UNITS,
@@ -171,6 +174,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Velocity: VELOCITY_UNITS,
     quantities.Voltage: VOLTAGE_UNITS,
     quantities.Volume: VOLUME_UNITS,
+    quantities.VolumetricFlowRate: VOLUMETRIC_FLOW_RATE_UNITS,
 }
 
 for _quantity_type, _table in _TABLE_OF.items():

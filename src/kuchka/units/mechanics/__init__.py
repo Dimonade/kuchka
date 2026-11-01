@@ -7,6 +7,8 @@ properties, and mechanical energy:
 - `Momentum` and `Impulse` describe motion and the effects of applied forces.
 - `Torque` describes rotational loading.
 - `Energy` and `Power` describe mechanical work and its rate of transfer.
+- `MassFlowRate` and `VolumetricFlowRate` describe how much material passes a section
+  per unit of time, of a liquid, a gas, or a solid.
 - `Density`, `EnergyDensity`, and `SpecificEnergy` describe material and energy
   properties.
 - `VelocitySquared` provides the squared-velocity quantity used in energy and
@@ -62,6 +64,7 @@ The module covers several important relationships in classical mechanics:
     momentum = mass * velocity
     energy = power * time
     mass = density * volume
+    volume = area * velocity * time
 
 Some mechanical quantities share physical dimensions without representing the same
 concept.
@@ -117,6 +120,7 @@ from kuchka.units.mechanics import energy
 from kuchka.units.mechanics import energy_density
 from kuchka.units.mechanics import force
 from kuchka.units.mechanics import impulse
+from kuchka.units.mechanics import mass_flow_rate
 from kuchka.units.mechanics import momentum
 from kuchka.units.mechanics import power
 from kuchka.units.mechanics import pressure
@@ -124,11 +128,13 @@ from kuchka.units.mechanics import specific_energy
 from kuchka.units.mechanics import stress
 from kuchka.units.mechanics import torque
 from kuchka.units.mechanics import velocity_squared
+from kuchka.units.mechanics import volumetric_flow_rate
 from kuchka.units.mechanics.density import *
 from kuchka.units.mechanics.energy import *
 from kuchka.units.mechanics.energy_density import *
 from kuchka.units.mechanics.force import *
 from kuchka.units.mechanics.impulse import *
+from kuchka.units.mechanics.mass_flow_rate import *
 from kuchka.units.mechanics.momentum import *
 from kuchka.units.mechanics.power import *
 from kuchka.units.mechanics.pressure import *
@@ -136,6 +142,7 @@ from kuchka.units.mechanics.specific_energy import *
 from kuchka.units.mechanics.stress import *
 from kuchka.units.mechanics.torque import *
 from kuchka.units.mechanics.velocity_squared import *
+from kuchka.units.mechanics.volumetric_flow_rate import *
 
 __all__: list[str] = []
 __all__ += density.__all__
@@ -143,6 +150,7 @@ __all__ += energy.__all__
 __all__ += energy_density.__all__
 __all__ += force.__all__
 __all__ += impulse.__all__
+__all__ += mass_flow_rate.__all__
 __all__ += momentum.__all__
 __all__ += power.__all__
 __all__ += pressure.__all__
@@ -150,3 +158,4 @@ __all__ += specific_energy.__all__
 __all__ += stress.__all__
 __all__ += torque.__all__
 __all__ += velocity_squared.__all__
+__all__ += volumetric_flow_rate.__all__
