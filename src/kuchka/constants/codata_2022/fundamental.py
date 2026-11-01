@@ -33,6 +33,7 @@ from typing import TYPE_CHECKING
 from typing import Final
 
 from kuchka.units import Coulomb as _Coulomb
+from kuchka.units import CoulombPerMole as _CoulombPerMole
 from kuchka.units import Gigaelectronvolt as _Gigaelectronvolt
 from kuchka.units import Kelvin as _Kelvin
 from kuchka.units import Kilogram as _Kilogram
@@ -49,6 +50,7 @@ if TYPE_CHECKING:
     from kuchka.quantities import EntitiesPerAmount
     from kuchka.quantities import Length
     from kuchka.quantities import Mass
+    from kuchka.quantities import MolarCharge
     from kuchka.quantities import Temperature
     from kuchka.quantities import Time
     from kuchka.quantities import Velocity
@@ -96,6 +98,15 @@ Accuracy: Exact.
 Value: 299 792 458 m s⁻¹.
 Uncertainty: None.
 Link: https://en.wikipedia.org/wiki/Speed_of_light
+"""
+
+FARADAY_CONSTANT: Final[MolarCharge] = _CoulombPerMole(_Decimal("96485.3321233100184"))
+"""The Faraday constant, F, the charge of one mole of electrons.
+
+Accuracy: Exact.
+Value: 96 485.332 123 310 0184 C mol⁻¹.
+Uncertainty: None.
+Link: https://en.wikipedia.org/wiki/Faraday_constant
 """
 
 NEUTRON_MASS: Final[Mass] = _Kilogram(_Decimal("1.67492750056E-27"))
@@ -180,6 +191,7 @@ __all__ = [
     "AVOGADRO_CONSTANT",
     "ELECTRON_MASS",
     "ELEMENTARY_CHARGE",
+    "FARADAY_CONSTANT",
     "NEUTRON_MASS",
     "PLANCK_ENERGY",
     "PLANCK_LENGTH",
