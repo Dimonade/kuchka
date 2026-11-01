@@ -39,7 +39,9 @@ if TYPE_CHECKING:
     )
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
+    from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
 
 
@@ -56,6 +58,8 @@ class EnergyDensity(LinearQuantity):
     def __mul__(self, other: Proportion) -> EnergyDensity: ...
     @overload
     def __mul__(self, other: Volume) -> Energy: ...
+    @overload
+    def __mul__(self, other: VolumetricFlowRate) -> Power: ...
     @overload
     def __mul__(self, other: Numeric) -> EnergyDensity: ...
     @overload

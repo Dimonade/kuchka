@@ -48,6 +48,15 @@ Dimensional arithmetic derives `SpecificEnergy` from `Energy / Mass`, `Pressure 
 - luminance (`CandelaPerSquareMetre`, `MillicandelaPerSquareMetre`, `KilocandelaPerSquareMetre`, `Stilb`, `FootLambert`), the nit being the candela per square metre, and
 - luminous efficacy (`LumenPerWatt`), in the new `photometry` package.
 
+#### Flow rates
+
+- volumetric flow rate (`CubicMetrePerSecond`, `CubicMetrePerMinute`, `CubicMetrePerHour`, `LitrePerSecond`, `LitrePerMinute`, `MillilitrePerMinute`, `UsGallonPerMinute`, `CubicFootPerMinute`),
+- mass flow rate (`KilogramPerSecond`, `GramPerSecond`, `KilogramPerHour`, `TonnePerHour`, `PoundPerHour`), in `mechanics`, and
+- two volume units, `CubicFoot` and `UsGallon`.
+
+`Volume / Time` and `Area * Velocity` are a `VolumetricFlowRate`, `Mass / Time` and `Density * VolumetricFlowRate` a `MassFlowRate`, and `Pressure * VolumetricFlowRate` a `Power`.
+A bare `gal` or `gpm`, and flows at standard or normal conditions (`scfm`, `Nm3/h`), are refused.
+
 `Dimension` gains a solid angle axis, so a lumen is a candela steradian and not a candela: `LuminousIntensity * SolidAngle` is a `LuminousFlux`, `LuminousFlux / Area` an `Illuminance`, `LuminousFlux * Time` a `LuminousEnergy`, `Illuminance * Time` a `LuminousExposure`, `LuminousIntensity / Area` a `Luminance`, `LuminousFlux / Power` a `LuminousEfficacy`, and `Area / Area` stays a `Proportion`.
 `SolidAngle.from_area(area, radius)` builds a solid angle from the area it cuts from a sphere.
 

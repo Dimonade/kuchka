@@ -20,15 +20,18 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.permeability import Permeability
     from kuchka.quantities.electromagnetics.permittivity import Permittivity
     from kuchka.quantities.electromagnetics.resistance import Resistance
+    from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
+    from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -42,6 +45,8 @@ class Velocity(LinearQuantity):
 
     # BEGIN GENERATED __mul__
     @overload
+    def __mul__(self, other: Area) -> VolumetricFlowRate: ...
+    @overload
     def __mul__(self, other: Force) -> Power: ...
     @overload
     def __mul__(self, other: Frequency) -> Acceleration: ...
@@ -49,6 +54,8 @@ class Velocity(LinearQuantity):
     def __mul__(self, other: Impulse) -> Energy: ...
     @overload
     def __mul__(self, other: Mass) -> Momentum: ...
+    @overload
+    def __mul__(self, other: MassFlowRate) -> Force: ...
     @overload
     def __mul__(self, other: Momentum) -> Energy: ...
     @overload

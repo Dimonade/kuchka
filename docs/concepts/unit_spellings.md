@@ -82,15 +82,17 @@ Anything that is not claimed by a unit in that table raises `KeyError`:
 
 Some spellings are common and still refused, because accepting them would mean choosing between two real meanings:
 
-| Spelling         | Table               | Why                                                                                         |
-| ---------------- | ------------------- | ------------------------------------------------------------------------------------------- |
-| `year`, `years`  | `TIME_UNITS`        | A civil, tropical, and Julian year differ; `yr` and `julian year` are exact.                |
-| `mwh`            | `ENERGY_UNITS`      | Milliwatt-hour or megawatt-hour; `mWh` is the former.                                       |
-| `calorie`        | `ENERGY_UNITS`      | A small or a large calorie; `cal` and `Cal` are exact.                                      |
-| `kt`, `Mt`, `t`  | `ENERGY_UNITS`      | Kilotonnes of what: the TNT equivalent has to be named, `kt TNT`.                           |
-| `deg`, `degrees` | `TEMPERATURE_UNITS` | Celsius, Fahrenheit, or Kelvin.                                                             |
-| `bhp`            | `POWER_UNITS`       | Brake horsepower is not the mechanical horsepower `hp`.                                     |
-| `KB`, `Kb`       | `DATA_UNITS`        | The SI prefix is a lower-case k and the IEC one is `Ki`: `kB` is 1000 bytes, `KiB` is 1024. |
+| Spelling         | Table                                        | Why                                                                                               |
+| ---------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `year`, `years`  | `TIME_UNITS`                                 | A civil, tropical, and Julian year differ; `yr` and `julian year` are exact.                      |
+| `mwh`            | `ENERGY_UNITS`                               | Milliwatt-hour or megawatt-hour; `mWh` is the former.                                             |
+| `calorie`        | `ENERGY_UNITS`                               | A small or a large calorie; `cal` and `Cal` are exact.                                            |
+| `kt`, `Mt`, `t`  | `ENERGY_UNITS`                               | Kilotonnes of what: the TNT equivalent has to be named, `kt TNT`.                                 |
+| `deg`, `degrees` | `TEMPERATURE_UNITS`                          | Celsius, Fahrenheit, or Kelvin.                                                                   |
+| `bhp`            | `POWER_UNITS`                                | Brake horsepower is not the mechanical horsepower `hp`.                                           |
+| `gal`, `gpm`     | `VOLUME_UNITS`, `VOLUMETRIC_FLOW_RATE_UNITS` | The US and the imperial gallon differ; `US gal` and `US gal/min` are exact.                       |
+| `scfm`, `Nm3/h`  | `VOLUMETRIC_FLOW_RATE_UNITS`                 | A flow at standard or normal conditions is another measurement and not a unit of volume per time. |
+| `KB`, `Kb`       | `DATA_UNITS`                                 | The SI prefix is a lower-case k and the IEC one is `Ki`: `kB` is 1000 bytes, `KiB` is 1024.       |
 
 A spelling that is refused today can be added to the unit definition when the meaning is settled, and it will be checked against every other spelling of the table.
 

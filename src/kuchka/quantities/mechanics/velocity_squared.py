@@ -28,6 +28,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
+    from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.proportion import Proportion
 
 
@@ -54,6 +56,8 @@ class VelocitySquared(LinearQuantity):
     def __mul__(self, other: Density) -> Pressure: ...
     @overload
     def __mul__(self, other: Mass) -> Energy: ...
+    @overload
+    def __mul__(self, other: MassFlowRate) -> Power: ...
     @overload
     def __mul__(self, other: Proportion) -> VelocitySquared: ...
     @overload

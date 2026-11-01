@@ -64,6 +64,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
@@ -71,6 +72,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
+    from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.photometry.illuminance import Illuminance
     from kuchka.quantities.photometry.luminance import Luminance
     from kuchka.quantities.photometry.luminous_efficacy import LuminousEfficacy
@@ -168,6 +170,8 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: Mass) -> Mass: ...
     @overload
+    def __mul__(self, other: MassFlowRate) -> MassFlowRate: ...
+    @overload
     def __mul__(self, other: Momentum) -> Momentum: ...
     @overload
     def __mul__(self, other: Permeability) -> Permeability: ...
@@ -209,6 +213,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: Voltage) -> Voltage: ...
     @overload
     def __mul__(self, other: Volume) -> Volume: ...
+    @overload
+    def __mul__(self, other: VolumetricFlowRate) -> VolumetricFlowRate: ...
     @overload
     def __mul__(self, other: Numeric) -> Proportion: ...
     @overload

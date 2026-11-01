@@ -25,6 +25,8 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
+    from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
 
@@ -51,6 +53,8 @@ class SpecificEnergy(LinearQuantity):
     def __mul__(self, other: Density) -> EnergyDensity: ...
     @overload
     def __mul__(self, other: Mass) -> Energy: ...
+    @overload
+    def __mul__(self, other: MassFlowRate) -> Power: ...
     @overload
     def __mul__(self, other: Proportion) -> SpecificEnergy: ...
     @overload
