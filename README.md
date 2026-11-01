@@ -225,6 +225,10 @@ Torque * AngularDisplacement -> Energy
 Torque * AngularVelocity -> Power
 AngularDisplacement / Time -> AngularVelocity
 Mass / Volume -> Density
+Volume / Time -> VolumetricFlowRate
+Area * Velocity -> VolumetricFlowRate
+Mass / Time -> MassFlowRate
+Density * VolumetricFlowRate -> MassFlowRate
 Length * Length -> Area
 Area * Length -> Volume
 ```
@@ -548,11 +552,13 @@ The complete unit vocabulary is available in the API reference.
 | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Length           | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit` and `LightYear`                                         |
 | Area             | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                                                                    |
-| Volume           | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                                                           |
+| Volume           | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`, `CubicFoot`, `UsGallon`                                  |
 | Velocity         | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`, `Knot`                                                                                        |
 | Acceleration     | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                                                                  |
 | Mass             | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                                                                     |
 | Force            | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                                                                      |
+| Volumetric flow  | `CubicMetrePerSecond`, `LitrePerSecond`, `LitrePerMinute`, `CubicMetrePerHour`, `MillilitrePerMinute`, `UsGallonPerMinute`, `CubicFootPerMinute`   |
+| Mass flow        | `KilogramPerSecond`, `GramPerSecond`, `KilogramPerHour`, `TonnePerHour`, `PoundPerHour`                                                            |
 | Density          | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                                                              |
 | Pressure         | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Gigapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`, `KilopoundPerSquareInch` |
 | Stress           | the units of Pressure, reached with `Pressure.to_stress()`                                                                                         |
@@ -575,8 +581,8 @@ The complete unit vocabulary is available in the API reference.
 
 | Quantity            | Units                                                                                                      |
 | ------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Amount of substance | `Femtoomole` through `Kilomole`                                                                            |
-| Luminous intensity  | `Candela`                                                                                                  |
+| Amount of Substance | `Femtoomole` through `Kilomole`                                                                            |
+| Luminous Intensity  | `Candela`                                                                                                  |
 | Solid angle         | `Steradian`, `Millisteradian`, `Microsteradian`, `SquareDegree`, `SquareArcMinute`, `SquareArcSecond`      |
 | Luminous flux       | `Millilumen`, `Lumen`, `Kilolumen`                                                                         |
 | Luminous energy     | `LumenSecond`, `LumenHour`                                                                                 |
@@ -584,6 +590,7 @@ The complete unit vocabulary is available in the API reference.
 | Luminous exposure   | `LuxSecond`, `LuxHour`, `KiloluxHour`                                                                      |
 | Luminance           | `CandelaPerSquareMetre`, `MillicandelaPerSquareMetre`, `KilocandelaPerSquareMetre`, `Stilb`, `FootLambert` |
 | Luminous efficacy   | `LumenPerWatt`                                                                                             |
+
 ### Dimensionless quantities
 
 | Quantity         | Units              |
