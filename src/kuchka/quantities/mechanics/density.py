@@ -19,9 +19,11 @@ if TYPE_CHECKING:
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
+    from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
 
 
@@ -40,6 +42,8 @@ class Density(LinearQuantity):
     def __mul__(self, other: VelocitySquared) -> Pressure: ...
     @overload
     def __mul__(self, other: Volume) -> Mass: ...
+    @overload
+    def __mul__(self, other: VolumetricFlowRate) -> MassFlowRate: ...
     @overload
     def __mul__(self, other: Numeric) -> Density: ...
     @overload

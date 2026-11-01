@@ -22,10 +22,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.density import Density
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
 
 
 class Mass(LinearQuantity):
@@ -37,6 +40,8 @@ class Mass(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Acceleration) -> Force: ...
+    @overload
+    def __mul__(self, other: Frequency) -> MassFlowRate: ...
     @overload
     def __mul__(self, other: Proportion) -> Mass: ...
     @overload
@@ -62,7 +67,11 @@ class Mass(LinearQuantity):
     @overload
     def __truediv__(self, other: Mass) -> Proportion: ...
     @overload
+    def __truediv__(self, other: MassFlowRate) -> Time: ...
+    @overload
     def __truediv__(self, other: Proportion) -> Mass: ...
+    @overload
+    def __truediv__(self, other: Time) -> MassFlowRate: ...
     @overload
     def __truediv__(self, other: Volume) -> Density: ...
     @overload

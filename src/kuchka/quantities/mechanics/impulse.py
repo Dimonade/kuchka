@@ -25,8 +25,10 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.velocity import Velocity
+    from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
@@ -75,7 +77,11 @@ class Impulse(LinearQuantity):
     @overload
     def __truediv__(self, other: Impulse) -> Proportion: ...
     @overload
+    def __truediv__(self, other: Length) -> MassFlowRate: ...
+    @overload
     def __truediv__(self, other: Mass) -> Velocity: ...
+    @overload
+    def __truediv__(self, other: MassFlowRate) -> Length: ...
     @overload
     def __truediv__(self, other: Momentum) -> Proportion: ...
     @overload

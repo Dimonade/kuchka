@@ -77,12 +77,14 @@ from kuchka.quantities.mechanics.energy import *
 from kuchka.quantities.mechanics.energy_density import *
 from kuchka.quantities.mechanics.force import *
 from kuchka.quantities.mechanics.impulse import *
+from kuchka.quantities.mechanics.mass_flow_rate import *
 from kuchka.quantities.mechanics.momentum import *
 from kuchka.quantities.mechanics.power import *
 from kuchka.quantities.mechanics.pressure import *
 from kuchka.quantities.mechanics.specific_energy import *
 from kuchka.quantities.mechanics.torque import *
 from kuchka.quantities.mechanics.velocity_squared import *
+from kuchka.quantities.mechanics.volumetric_flow_rate import *
 from kuchka.quantities.photometry.illuminance import *
 from kuchka.quantities.photometry.luminance import *
 from kuchka.quantities.photometry.luminous_efficacy import *

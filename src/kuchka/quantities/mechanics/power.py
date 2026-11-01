@@ -22,10 +22,16 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.momentum import Momentum
+    from kuchka.quantities.mechanics.pressure import Pressure
+    from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.torque import Torque
+    from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
+    from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.photometry.luminous_efficacy import LuminousEfficacy
     from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.proportion import Proportion
@@ -65,6 +71,8 @@ class Power(LinearQuantity):
     @overload
     def __truediv__(self, other: Energy) -> Frequency: ...
     @overload
+    def __truediv__(self, other: EnergyDensity) -> VolumetricFlowRate: ...
+    @overload
     def __truediv__(self, other: Force) -> Velocity: ...
     @overload
     def __truediv__(self, other: Frequency) -> Energy: ...
@@ -75,11 +83,17 @@ class Power(LinearQuantity):
     @overload
     def __truediv__(self, other: Power) -> Proportion: ...
     @overload
+    def __truediv__(self, other: Pressure) -> VolumetricFlowRate: ...
+    @overload
     def __truediv__(self, other: Proportion) -> Power: ...
+    @overload
+    def __truediv__(self, other: SpecificEnergy) -> MassFlowRate: ...
     @overload
     def __truediv__(self, other: Torque) -> AngularVelocity: ...
     @overload
     def __truediv__(self, other: Velocity) -> Force: ...
+    @overload
+    def __truediv__(self, other: VelocitySquared) -> MassFlowRate: ...
     @overload
     def __truediv__(self, other: Voltage) -> Current: ...
     @overload

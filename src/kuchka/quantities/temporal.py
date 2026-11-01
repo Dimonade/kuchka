@@ -63,17 +63,21 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.information.data import Data
     from kuchka.quantities.information.data_rate import DataRate
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
+    from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.photometry.illuminance import Illuminance
     from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
     from kuchka.quantities.photometry.luminous_exposure import LuminousExposure
@@ -111,6 +115,8 @@ class Time(LinearQuantity):
     @overload
     def __mul__(self, other: LuminousFlux) -> LuminousEnergy: ...
     @overload
+    def __mul__(self, other: MassFlowRate) -> Mass: ...
+    @overload
     def __mul__(self, other: Power) -> Energy: ...
     @overload
     def __mul__(self, other: Proportion) -> Time: ...
@@ -120,6 +126,8 @@ class Time(LinearQuantity):
     def __mul__(self, other: Velocity) -> Length: ...
     @overload
     def __mul__(self, other: Voltage) -> MagneticFlux: ...
+    @overload
+    def __mul__(self, other: VolumetricFlowRate) -> Volume: ...
     @overload
     def __mul__(self, other: Numeric) -> Time: ...
     @overload
@@ -252,6 +260,8 @@ class Frequency(LinearQuantity):
     @overload
     def __mul__(self, other: MagneticFlux) -> Voltage: ...
     @overload
+    def __mul__(self, other: Mass) -> MassFlowRate: ...
+    @overload
     def __mul__(self, other: Momentum) -> Force: ...
     @overload
     def __mul__(self, other: Proportion) -> Frequency: ...
@@ -261,6 +271,8 @@ class Frequency(LinearQuantity):
     def __mul__(self, other: Time) -> Fraction: ...
     @overload
     def __mul__(self, other: Velocity) -> Acceleration: ...
+    @overload
+    def __mul__(self, other: Volume) -> VolumetricFlowRate: ...
     @overload
     def __mul__(self, other: Numeric) -> Frequency: ...
     @overload

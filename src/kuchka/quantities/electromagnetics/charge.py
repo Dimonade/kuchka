@@ -20,9 +20,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.conductance import Conductance
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
+    from kuchka.quantities.electromagnetics.magnetic_flux_density import (
+        MagneticFluxDensity,
+    )
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -37,6 +41,8 @@ class Charge(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Frequency) -> Current: ...
+    @overload
+    def __mul__(self, other: MagneticFluxDensity) -> MassFlowRate: ...
     @overload
     def __mul__(self, other: Proportion) -> Charge: ...
     @overload
