@@ -18,10 +18,14 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.amount import AmountOfSubstance
     from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
+    from kuchka.quantities.chemistry.molality import Molality
     from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
     from kuchka.quantities.chemistry.molar_energy import MolarEnergy
+    from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
+    from kuchka.quantities.chemistry.molar_volume import MolarVolume
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.density import Density
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
@@ -37,7 +41,11 @@ class MolarMass(LinearQuantity):
     @overload
     def __mul__(self, other: AmountOfSubstance) -> Mass: ...
     @overload
+    def __mul__(self, other: Molality) -> Fraction: ...
+    @overload
     def __mul__(self, other: MolarConcentration) -> Density: ...
+    @overload
+    def __mul__(self, other: MolarFlowRate) -> MassFlowRate: ...
     @overload
     def __mul__(self, other: Proportion) -> MolarMass: ...
     @overload
@@ -57,11 +65,15 @@ class MolarMass(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: Density) -> MolarVolume: ...
+    @overload
     def __truediv__(self, other: EntitiesPerAmount) -> Mass: ...
     @overload
     def __truediv__(self, other: Mass) -> EntitiesPerAmount: ...
     @overload
     def __truediv__(self, other: MolarMass) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: MolarVolume) -> Density: ...
     @overload
     def __truediv__(self, other: Proportion) -> MolarMass: ...
     @overload
@@ -76,6 +88,22 @@ class MolarMass(LinearQuantity):
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
+
+    # BEGIN GENERATED __rtruediv__
+    @overload
+    def __rtruediv__(self, other: Numeric) -> Molality: ...
+    @overload
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction:
+        return super().__rtruediv__(other)
 
 
 _register(MOLAR_MASS, MolarMass)

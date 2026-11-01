@@ -17,7 +17,9 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.amount import AmountOfSubstance
+    from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
     from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
+    from kuchka.quantities.chemistry.molar_volume import MolarVolume
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
@@ -39,9 +41,13 @@ class Volume(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: AmountOfSubstance) -> MolarVolume: ...
+    @overload
     def __truediv__(self, other: Area) -> Length: ...
     @overload
     def __truediv__(self, other: Length) -> Area: ...
+    @overload
+    def __truediv__(self, other: MolarVolume) -> AmountOfSubstance: ...
     @overload
     def __truediv__(self, other: Proportion) -> Volume: ...
     @overload
@@ -68,6 +74,8 @@ class Volume(LinearQuantity):
     def __mul__(self, other: Density) -> Mass: ...
     @overload
     def __mul__(self, other: EnergyDensity) -> Energy: ...
+    @overload
+    def __mul__(self, other: EntitiesPerAmount) -> MolarVolume: ...
     @overload
     def __mul__(self, other: Frequency) -> VolumetricFlowRate: ...
     @overload

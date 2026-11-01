@@ -16,6 +16,9 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.amount import AmountOfSubstance
+    from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
+    from kuchka.quantities.chemistry.molar_charge import MolarCharge
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.conductance import Conductance
@@ -40,6 +43,8 @@ class Charge(LinearQuantity):
 
     # BEGIN GENERATED __mul__
     @overload
+    def __mul__(self, other: EntitiesPerAmount) -> MolarCharge: ...
+    @overload
     def __mul__(self, other: Frequency) -> Current: ...
     @overload
     def __mul__(self, other: MagneticFluxDensity) -> MassFlowRate: ...
@@ -62,6 +67,8 @@ class Charge(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: AmountOfSubstance) -> MolarCharge: ...
+    @overload
     def __truediv__(self, other: Capacitance) -> Voltage: ...
     @overload
     def __truediv__(self, other: Charge) -> Proportion: ...
@@ -71,6 +78,8 @@ class Charge(LinearQuantity):
     def __truediv__(self, other: Current) -> Time: ...
     @overload
     def __truediv__(self, other: MagneticFlux) -> Conductance: ...
+    @overload
+    def __truediv__(self, other: MolarCharge) -> AmountOfSubstance: ...
     @overload
     def __truediv__(self, other: Proportion) -> Charge: ...
     @overload

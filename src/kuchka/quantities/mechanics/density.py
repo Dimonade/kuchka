@@ -16,8 +16,10 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.chemistry.molality import Molality
     from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
     from kuchka.quantities.chemistry.molar_mass import MolarMass
+    from kuchka.quantities.chemistry.molar_volume import MolarVolume
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
@@ -36,6 +38,10 @@ class Density(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: Molality) -> MolarConcentration: ...
+    @overload
+    def __mul__(self, other: MolarVolume) -> MolarMass: ...
     @overload
     def __mul__(self, other: Proportion) -> Density: ...
     @overload

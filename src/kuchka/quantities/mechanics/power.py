@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.chemistry.molar_energy import MolarEnergy
+    from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.kinematics.acceleration import Acceleration
@@ -78,6 +80,10 @@ class Power(LinearQuantity):
     def __truediv__(self, other: Frequency) -> Energy: ...
     @overload
     def __truediv__(self, other: Impulse) -> Acceleration: ...
+    @overload
+    def __truediv__(self, other: MolarEnergy) -> MolarFlowRate: ...
+    @overload
+    def __truediv__(self, other: MolarFlowRate) -> MolarEnergy: ...
     @overload
     def __truediv__(self, other: Momentum) -> Acceleration: ...
     @overload

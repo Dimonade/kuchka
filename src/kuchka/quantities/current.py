@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.chemistry.molar_charge import MolarCharge
+    from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
     from kuchka.quantities.electromagnetics.inductance import Inductance
@@ -76,6 +78,10 @@ class Current(LinearQuantity):
     def __truediv__(self, other: Length) -> MagneticFieldStrength: ...
     @overload
     def __truediv__(self, other: MagneticFieldStrength) -> Length: ...
+    @overload
+    def __truediv__(self, other: MolarCharge) -> MolarFlowRate: ...
+    @overload
+    def __truediv__(self, other: MolarFlowRate) -> MolarCharge: ...
     @overload
     def __truediv__(self, other: Proportion) -> Current: ...
     @overload

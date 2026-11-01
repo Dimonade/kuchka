@@ -17,11 +17,17 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.amount import AmountOfSubstance
+    from kuchka.quantities.chemistry.molar_charge import MolarCharge
     from kuchka.quantities.chemistry.molar_energy import MolarEnergy
+    from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
     from kuchka.quantities.chemistry.molar_mass import MolarMass
+    from kuchka.quantities.chemistry.molar_volume import MolarVolume
+    from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.temporal import Frequency
 
 
 class EntitiesPerAmount(LinearQuantity):
@@ -34,11 +40,17 @@ class EntitiesPerAmount(LinearQuantity):
     @overload
     def __mul__(self, other: AmountOfSubstance) -> Fraction: ...
     @overload
+    def __mul__(self, other: Charge) -> MolarCharge: ...
+    @overload
     def __mul__(self, other: Energy) -> MolarEnergy: ...
     @overload
     def __mul__(self, other: Mass) -> MolarMass: ...
     @overload
+    def __mul__(self, other: MolarFlowRate) -> Frequency: ...
+    @overload
     def __mul__(self, other: Proportion) -> EntitiesPerAmount: ...
+    @overload
+    def __mul__(self, other: Volume) -> MolarVolume: ...
     @overload
     def __mul__(self, other: Numeric) -> EntitiesPerAmount: ...
     @overload

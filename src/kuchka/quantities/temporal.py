@@ -54,7 +54,10 @@ if TYPE_CHECKING:
     from fractions import Fraction
 
     from kuchka.dimensions import Dimension
+    from kuchka.quantities.amount import AmountOfSubstance
     from kuchka.quantities.angular import AngularDisplacement
+    from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
+    from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.charge import Charge
@@ -116,6 +119,8 @@ class Time(LinearQuantity):
     def __mul__(self, other: LuminousFlux) -> LuminousEnergy: ...
     @overload
     def __mul__(self, other: MassFlowRate) -> Mass: ...
+    @overload
+    def __mul__(self, other: MolarFlowRate) -> AmountOfSubstance: ...
     @overload
     def __mul__(self, other: Power) -> Energy: ...
     @overload
@@ -238,6 +243,8 @@ class Frequency(LinearQuantity):
 
     # BEGIN GENERATED __mul__
     @overload
+    def __mul__(self, other: AmountOfSubstance) -> MolarFlowRate: ...
+    @overload
     def __mul__(self, other: AngularDisplacement) -> AngularVelocity: ...
     @overload
     def __mul__(self, other: Capacitance) -> Conductance: ...
@@ -286,7 +293,11 @@ class Frequency(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: EntitiesPerAmount) -> MolarFlowRate: ...
+    @overload
     def __truediv__(self, other: Frequency) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: MolarFlowRate) -> EntitiesPerAmount: ...
     @overload
     def __truediv__(self, other: Proportion) -> Frequency: ...
     @overload

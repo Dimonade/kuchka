@@ -49,10 +49,15 @@ from kuchka.quantities import thermodynamics
 from kuchka.quantities.amount import *
 from kuchka.quantities.angular import *
 from kuchka.quantities.base import *
+from kuchka.quantities.chemistry.catalytic_activity import *
 from kuchka.quantities.chemistry.entities_per_amount import *
+from kuchka.quantities.chemistry.molality import *
+from kuchka.quantities.chemistry.molar_charge import *
 from kuchka.quantities.chemistry.molar_concentration import *
 from kuchka.quantities.chemistry.molar_energy import *
+from kuchka.quantities.chemistry.molar_flow_rate import *
 from kuchka.quantities.chemistry.molar_mass import *
+from kuchka.quantities.chemistry.molar_volume import *
 from kuchka.quantities.current import *
 from kuchka.quantities.electromagnetics.ac_power import *
 from kuchka.quantities.electromagnetics.capacitance import *
