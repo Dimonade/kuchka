@@ -18,8 +18,15 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.amount import AmountOfSubstance
     from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
+    from kuchka.quantities.chemistry.molar_charge import MolarCharge
+    from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
     from kuchka.quantities.chemistry.molar_mass import MolarMass
+    from kuchka.quantities.chemistry.molar_volume import MolarVolume
+    from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
@@ -34,6 +41,8 @@ class MolarEnergy(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: AmountOfSubstance) -> Energy: ...
+    @overload
+    def __mul__(self, other: MolarFlowRate) -> Power: ...
     @overload
     def __mul__(self, other: Proportion) -> MolarEnergy: ...
     @overload
@@ -51,15 +60,23 @@ class MolarEnergy(LinearQuantity):
     @overload
     def __truediv__(self, other: Energy) -> EntitiesPerAmount: ...
     @overload
+    def __truediv__(self, other: EnergyDensity) -> MolarVolume: ...
+    @overload
     def __truediv__(self, other: EntitiesPerAmount) -> Energy: ...
     @overload
+    def __truediv__(self, other: MolarCharge) -> Voltage: ...
+    @overload
     def __truediv__(self, other: MolarEnergy) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Pressure) -> MolarVolume: ...
     @overload
     def __truediv__(self, other: Proportion) -> MolarEnergy: ...
     @overload
     def __truediv__(self, other: SpecificEnergy) -> MolarMass: ...
     @overload
     def __truediv__(self, other: VelocitySquared) -> MolarMass: ...
+    @overload
+    def __truediv__(self, other: Voltage) -> MolarCharge: ...
     @overload
     def __truediv__(self, other: Numeric) -> MolarEnergy: ...
     @overload

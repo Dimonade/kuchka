@@ -25,6 +25,7 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
     from kuchka.quantities.chemistry.molar_energy import MolarEnergy
+    from kuchka.quantities.chemistry.molar_volume import MolarVolume
     from kuchka.quantities.electromagnetics.magnetic_field_strength import (
         MagneticFieldStrength,
     )
@@ -51,6 +52,8 @@ class Pressure(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Area) -> Force: ...
+    @overload
+    def __mul__(self, other: MolarVolume) -> MolarEnergy: ...
     @overload
     def __mul__(self, other: Proportion) -> Pressure: ...
     @overload

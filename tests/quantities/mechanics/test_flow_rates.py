@@ -87,7 +87,7 @@ def test_a_mass_flow_rate_times_a_specific_energy_is_a_power() -> None:
 
 def test_a_volumetric_flow_rate_is_not_a_mass_flow_rate() -> None:
     with pytest.raises(IncompatibleDimensionError):
-        vfr.LitrePerSecond(1) + mass_flow_rate.KilogramPerSecond(1)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+        vfr.LitrePerSecond(1) + mass_flow_rate.KilogramPerSecond(1)  # type: ignore[operator]
 
 
 def test_a_cubic_foot_is_exactly_the_foot_cubed() -> None:

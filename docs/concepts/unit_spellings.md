@@ -91,6 +91,8 @@ Some spellings are common and still refused, because accepting them would mean c
 | `deg`, `degrees` | `TEMPERATURE_UNITS`                          | Celsius, Fahrenheit, or Kelvin.                                                                   |
 | `bhp`            | `POWER_UNITS`                                | Brake horsepower is not the mechanical horsepower `hp`.                                           |
 | `gal`, `gpm`     | `VOLUME_UNITS`, `VOLUMETRIC_FLOW_RATE_UNITS` | The US and the imperial gallon differ; `US gal` and `US gal/min` are exact.                       |
+| `IU`             | `CATALYTIC_ACTIVITY_UNITS`                   | The international unit also measures vitamins and hormones; `U` is the enzyme unit.               |
+| `m` (molal)      | `MOLALITY_UNITS`                             | A bare `m` reads as a metre; `mol/kg` and `molal` are spellings.                                  |
 | `Da`, `u`        | `MOLAR_MASS_UNITS`                           | A dalton is a mass, not a molar mass, even though `g/mol` has its number.                         |
 | `ppm`, `ppb`     | `DENSITY_UNITS`                              | A part per million is a ratio, and `mg/L` is its value only in dilute water.                      |
 | `scfm`, `Nm3/h`  | `VOLUMETRIC_FLOW_RATE_UNITS`                 | A flow at standard or normal conditions is another measurement and not a unit of volume per time. |

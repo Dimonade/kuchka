@@ -88,7 +88,7 @@ def test_a_luminance_over_a_solid_angle_is_an_illuminance() -> None:
 
 def test_a_luminance_is_not_an_illuminance() -> None:
     with pytest.raises(IncompatibleDimensionError):
-        luminance.CandelaPerSquareMetre(1) + illuminance.Lux(1)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+        luminance.CandelaPerSquareMetre(1) + illuminance.Lux(1)  # type: ignore[operator]
 
 
 def test_a_nit_is_a_candela_per_square_metre() -> None:

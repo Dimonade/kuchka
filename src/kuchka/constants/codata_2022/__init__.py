@@ -8,6 +8,7 @@ from kuchka.constants.codata_2022.fundamental import ALPHA_PARTICLE_MASS
 from kuchka.constants.codata_2022.fundamental import AVOGADRO_CONSTANT
 from kuchka.constants.codata_2022.fundamental import ELECTRON_MASS
 from kuchka.constants.codata_2022.fundamental import ELEMENTARY_CHARGE
+from kuchka.constants.codata_2022.fundamental import FARADAY_CONSTANT
 from kuchka.constants.codata_2022.fundamental import NEUTRON_MASS
 from kuchka.constants.codata_2022.fundamental import PLANCK_ENERGY
 from kuchka.constants.codata_2022.fundamental import PLANCK_LENGTH
@@ -26,6 +27,7 @@ __all__ = [
     "AVOGADRO_CONSTANT",
     "ELECTRON_MASS",
     "ELEMENTARY_CHARGE",
+    "FARADAY_CONSTANT",
     "NEUTRON_MASS",
     "PLANCK_ENERGY",
     "PLANCK_LENGTH",

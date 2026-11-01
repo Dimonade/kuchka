@@ -16,6 +16,9 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
+    from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
+    from kuchka.quantities.chemistry.molar_volume import MolarVolume
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.velocity import Velocity
@@ -41,6 +44,8 @@ class VolumetricFlowRate(LinearQuantity):
     @overload
     def __mul__(self, other: EnergyDensity) -> Power: ...
     @overload
+    def __mul__(self, other: MolarConcentration) -> MolarFlowRate: ...
+    @overload
     def __mul__(self, other: Pressure) -> Power: ...
     @overload
     def __mul__(self, other: Proportion) -> VolumetricFlowRate: ...
@@ -62,6 +67,10 @@ class VolumetricFlowRate(LinearQuantity):
     def __truediv__(self, other: Area) -> Velocity: ...
     @overload
     def __truediv__(self, other: Frequency) -> Volume: ...
+    @overload
+    def __truediv__(self, other: MolarFlowRate) -> MolarVolume: ...
+    @overload
+    def __truediv__(self, other: MolarVolume) -> MolarFlowRate: ...
     @overload
     def __truediv__(self, other: Proportion) -> VolumetricFlowRate: ...
     @overload

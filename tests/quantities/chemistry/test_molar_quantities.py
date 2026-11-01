@@ -127,7 +127,7 @@ def test_a_millimolar_is_a_millimole_per_litre() -> None:
 
 def test_a_molar_mass_is_not_a_molar_energy() -> None:
     with pytest.raises(IncompatibleDimensionError):
-        molar_mass.GramPerMole(1) + molar_energy.JoulePerMole(1)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+        molar_mass.GramPerMole(1) + molar_energy.JoulePerMole(1)  # type: ignore[operator]
 
 
 def test_the_molar_symbols_are_known_with_the_prefixes() -> None:

@@ -63,12 +63,12 @@ def test_a_flux_over_an_illuminance_is_an_area() -> None:
 
 def test_a_flux_is_not_an_intensity() -> None:
     with pytest.raises(IncompatibleDimensionError):
-        luminous_flux.Lumen(1) + luminous_intensity.Candela(1)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+        luminous_flux.Lumen(1) + luminous_intensity.Candela(1)  # type: ignore[operator]
 
 
 def test_a_flux_is_not_an_illuminance() -> None:
     with pytest.raises(IncompatibleDimensionError):
-        luminous_flux.Lumen(1) + illuminance.Lux(1)  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+        luminous_flux.Lumen(1) + illuminance.Lux(1)  # type: ignore[operator]
 
 
 def test_the_lumen_is_known_by_its_candela_steradian_spellings() -> None:

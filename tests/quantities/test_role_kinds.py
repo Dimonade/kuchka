@@ -10,6 +10,7 @@ import pytest
 from kuchka import Activity
 from kuchka import ApparentPower
 from kuchka import BaudRate
+from kuchka import CatalyticActivity
 from kuchka import Impedance
 from kuchka import IncompatibleDimensionError
 from kuchka import Magnetization
@@ -34,6 +35,7 @@ CONVERSION = {
     Activity: "to_frequency",
     ApparentPower: "to_power",
     BaudRate: "no conversion",
+    CatalyticActivity: "to_molar_flow_rate",
     Impedance: "to_resistance",
     Magnetization: "to_magnetic_field_strength",
     Reactance: "to_resistance",

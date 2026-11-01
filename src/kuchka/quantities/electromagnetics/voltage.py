@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.chemistry.molar_charge import MolarCharge
+    from kuchka.quantities.chemistry.molar_energy import MolarEnergy
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.charge import Charge
@@ -44,6 +46,8 @@ class Voltage(LinearQuantity):
     def __mul__(self, other: Conductance) -> Current: ...
     @overload
     def __mul__(self, other: Current) -> Power: ...
+    @overload
+    def __mul__(self, other: MolarCharge) -> MolarEnergy: ...
     @overload
     def __mul__(self, other: Proportion) -> Voltage: ...
     @overload

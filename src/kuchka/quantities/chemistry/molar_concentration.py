@@ -17,9 +17,13 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.amount import AmountOfSubstance
+    from kuchka.quantities.chemistry.molality import Molality
+    from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
     from kuchka.quantities.chemistry.molar_mass import MolarMass
+    from kuchka.quantities.chemistry.molar_volume import MolarVolume
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.mechanics.density import Density
+    from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
 
 
@@ -33,9 +37,13 @@ class MolarConcentration(LinearQuantity):
     @overload
     def __mul__(self, other: MolarMass) -> Density: ...
     @overload
+    def __mul__(self, other: MolarVolume) -> Fraction: ...
+    @overload
     def __mul__(self, other: Proportion) -> MolarConcentration: ...
     @overload
     def __mul__(self, other: Volume) -> AmountOfSubstance: ...
+    @overload
+    def __mul__(self, other: VolumetricFlowRate) -> MolarFlowRate: ...
     @overload
     def __mul__(self, other: Numeric) -> MolarConcentration: ...
     @overload
@@ -48,6 +56,10 @@ class MolarConcentration(LinearQuantity):
         return super().__mul__(other)
 
     # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: Density) -> Molality: ...
+    @overload
+    def __truediv__(self, other: Molality) -> Density: ...
     @overload
     def __truediv__(self, other: MolarConcentration) -> Proportion: ...
     @overload
@@ -64,6 +76,22 @@ class MolarConcentration(LinearQuantity):
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
+
+    # BEGIN GENERATED __rtruediv__
+    @overload
+    def __rtruediv__(self, other: Numeric) -> MolarVolume: ...
+    @overload
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __rtruediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction:
+        return super().__rtruediv__(other)
 
 
 _register(MOLAR_CONCENTRATION, MolarConcentration)

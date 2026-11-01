@@ -26,9 +26,11 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   Added solid angle, luminous flux, illuminance, luminous energy, luminous exposure, luminance, and luminous efficacy, with SI and customary units including steradians, square degrees, lumens, lux, phot, foot-candle, talbot, nit, stilb, foot-lambert, and lumens per watt.
 
 - **Chemistry:**
-  Added molar mass, molar concentration, molar energy, and entities per amount, alongside milligrams and micrograms per litre.
-  Derived relationships include `Mass / Amount`, `Amount / Volume`, `Energy / Amount`, and `MolarConcentration * MolarMass` yielding `Density`.
-  Added `AVOGADRO_CONSTANT` to `codata_2022`, allowing an amount of substance to produce an entity count.
+  Added molar mass, molar concentration (M, mM, µM, nM), molar energy, entities per amount, molality, molar volume, molar flow rate, catalytic activity (katal and enzyme unit), and molar charge, alongside milligram-per-litre and microgram-per-litre density units.
+  Dimensional arithmetic derives these from `Mass / Amount`, `Amount / Volume`, `Energy / Amount`, `Amount / Mass`, `Volume / Amount`, `Amount / Time`, and `Charge / Amount`; `MolarConcentration * MolarMass` produces `Density`.
+  `CatalyticActivity` is a role of `MolarFlowRate`, with explicit conversion through `to_molar_flow_rate()`.
+  Added `AVOGADRO_CONSTANT` and `FARADAY_CONSTANT` to `codata_2022` for entity counts and molar charge calculations.
+  Ambiguous bare spellings `Da`, `u`, `ppm`, `IU`, and molal `m` are refused.
 
 - **Dimensional model:**
   Added solid angle as an independent dimension axis.

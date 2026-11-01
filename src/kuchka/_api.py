@@ -15,6 +15,7 @@ from kuchka.quantities import ApparentPower
 from kuchka.quantities import Area
 from kuchka.quantities import BaudRate
 from kuchka.quantities import Capacitance
+from kuchka.quantities import CatalyticActivity
 from kuchka.quantities import Charge
 from kuchka.quantities import Conductance
 from kuchka.quantities import ConvertibleToFrequency
@@ -47,9 +48,13 @@ from kuchka.quantities import MagneticFluxDensity
 from kuchka.quantities import Magnetization
 from kuchka.quantities import Mass
 from kuchka.quantities import MassFlowRate
+from kuchka.quantities import Molality
+from kuchka.quantities import MolarCharge
 from kuchka.quantities import MolarConcentration
 from kuchka.quantities import MolarEnergy
+from kuchka.quantities import MolarFlowRate
 from kuchka.quantities import MolarMass
+from kuchka.quantities import MolarVolume
 from kuchka.quantities import Momentum
 from kuchka.quantities import Permeability
 from kuchka.quantities import Permittivity
@@ -102,17 +107,22 @@ from kuchka.units import CelsiusPerSecond
 from kuchka.units import Centimeter
 from kuchka.units import Centimetre
 from kuchka.units import Coulomb
+from kuchka.units import CoulombPerMole
 from kuchka.units import CubicCentimeter
+from kuchka.units import CubicCentimeterPerMole
 from kuchka.units import CubicCentimetre
+from kuchka.units import CubicCentimetrePerMole
 from kuchka.units import CubicFoot
 from kuchka.units import CubicFootPerMinute
 from kuchka.units import CubicMeter
 from kuchka.units import CubicMeterPerHour
 from kuchka.units import CubicMeterPerMinute
+from kuchka.units import CubicMeterPerMole
 from kuchka.units import CubicMeterPerSecond
 from kuchka.units import CubicMetre
 from kuchka.units import CubicMetrePerHour
 from kuchka.units import CubicMetrePerMinute
+from kuchka.units import CubicMetrePerMole
 from kuchka.units import CubicMetrePerSecond
 from kuchka.units import CubicMillimeter
 from kuchka.units import CubicMillimetre
@@ -132,6 +142,7 @@ from kuchka.units import Dyne
 from kuchka.units import DyneSecond
 from kuchka.units import EarthMass
 from kuchka.units import Electronvolt
+from kuchka.units import EnzymeUnit
 from kuchka.units import Erg
 from kuchka.units import Fahrenheit
 from kuchka.units import FahrenheitPerMinute
@@ -197,6 +208,7 @@ from kuchka.units import JoulePerKilogram
 from kuchka.units import JoulePerMole
 from kuchka.units import JoulePerTurn
 from kuchka.units import JulianYear
+from kuchka.units import Katal
 from kuchka.units import Kelvin
 from kuchka.units import KelvinPerHour
 from kuchka.units import KelvinPerMinute
@@ -217,6 +229,7 @@ from kuchka.units import Kilocalorie
 from kuchka.units import KilocaloriePerKilogram
 from kuchka.units import KilocaloriePerMole
 from kuchka.units import KilocandelaPerSquareMetre
+from kuchka.units import KilocoulombPerMole
 from kuchka.units import Kiloelectronvolt
 from kuchka.units import Kilofarad
 from kuchka.units import Kilogauss
@@ -248,6 +261,8 @@ from kuchka.units import KilometerPerHour
 from kuchka.units import Kilometre
 from kuchka.units import KilometrePerHour
 from kuchka.units import Kilomole
+from kuchka.units import KilomolePerHour
+from kuchka.units import KilomolePerSecond
 from kuchka.units import Kilonewton
 from kuchka.units import KilonewtonMeter
 from kuchka.units import KilonewtonMetre
@@ -270,9 +285,11 @@ from kuchka.units import Knot
 from kuchka.units import LightYear
 from kuchka.units import Liter
 from kuchka.units import LiterPerMinute
+from kuchka.units import LiterPerMole
 from kuchka.units import LiterPerSecond
 from kuchka.units import Litre
 from kuchka.units import LitrePerMinute
+from kuchka.units import LitrePerMole
 from kuchka.units import LitrePerSecond
 from kuchka.units import Lumen
 from kuchka.units import LumenHour
@@ -332,11 +349,13 @@ from kuchka.units import Microhenry
 from kuchka.units import MicrohenryPerMetre
 from kuchka.units import Microhertz
 from kuchka.units import Microjoule
+from kuchka.units import Microkatal
 from kuchka.units import Microliter
 from kuchka.units import Microlitre
 from kuchka.units import Micrometer
 from kuchka.units import Micrometre
 from kuchka.units import Micromole
+from kuchka.units import MicromolePerKilogram
 from kuchka.units import MicromolePerLiter
 from kuchka.units import MicromolePerLitre
 from kuchka.units import Micronewton
@@ -371,6 +390,7 @@ from kuchka.units import Millihenry
 from kuchka.units import MillihenryPerMetre
 from kuchka.units import Millihertz
 from kuchka.units import Millijoule
+from kuchka.units import Millikatal
 from kuchka.units import Milliliter
 from kuchka.units import MilliliterPerMinute
 from kuchka.units import Millilitre
@@ -380,8 +400,10 @@ from kuchka.units import Millilux
 from kuchka.units import Millimeter
 from kuchka.units import Millimetre
 from kuchka.units import Millimole
+from kuchka.units import MillimolePerKilogram
 from kuchka.units import MillimolePerLiter
 from kuchka.units import MillimolePerLitre
+from kuchka.units import MillimolePerMinute
 from kuchka.units import Millinewton
 from kuchka.units import MillinewtonMeter
 from kuchka.units import MillinewtonMetre
@@ -401,8 +423,12 @@ from kuchka.units import Minute
 from kuchka.units import Mole
 from kuchka.units import MolePerCubicMeter
 from kuchka.units import MolePerCubicMetre
+from kuchka.units import MolePerHour
+from kuchka.units import MolePerKilogram
 from kuchka.units import MolePerLiter
 from kuchka.units import MolePerLitre
+from kuchka.units import MolePerMinute
+from kuchka.units import MolePerSecond
 from kuchka.units import Nanoampere
 from kuchka.units import Nanocoulomb
 from kuchka.units import Nanofarad
@@ -413,6 +439,7 @@ from kuchka.units import Nanohenry
 from kuchka.units import NanohenryPerMetre
 from kuchka.units import Nanohertz
 from kuchka.units import Nanojoule
+from kuchka.units import Nanokatal
 from kuchka.units import Nanometer
 from kuchka.units import Nanometre
 from kuchka.units import Nanomole
@@ -564,6 +591,7 @@ __all__ = [
     "Candela",
     "CandelaPerSquareMetre",
     "Capacitance",
+    "CatalyticActivity",
     "Celsius",
     "CelsiusPerHour",
     "CelsiusPerMinute",
@@ -574,17 +602,22 @@ __all__ = [
     "Conductance",
     "ConvertibleToFrequency",
     "Coulomb",
+    "CoulombPerMole",
     "CubicCentimeter",
+    "CubicCentimeterPerMole",
     "CubicCentimetre",
+    "CubicCentimetrePerMole",
     "CubicFoot",
     "CubicFootPerMinute",
     "CubicMeter",
     "CubicMeterPerHour",
     "CubicMeterPerMinute",
+    "CubicMeterPerMole",
     "CubicMeterPerSecond",
     "CubicMetre",
     "CubicMetrePerHour",
     "CubicMetrePerMinute",
+    "CubicMetrePerMole",
     "CubicMetrePerSecond",
     "CubicMillimeter",
     "CubicMillimetre",
@@ -611,6 +644,7 @@ __all__ = [
     "Energy",
     "EnergyDensity",
     "EntitiesPerAmount",
+    "EnzymeUnit",
     "Erg",
     "Fahrenheit",
     "FahrenheitPerMinute",
@@ -684,6 +718,7 @@ __all__ = [
     "JoulePerMole",
     "JoulePerTurn",
     "JulianYear",
+    "Katal",
     "Kelvin",
     "KelvinPerHour",
     "KelvinPerMinute",
@@ -704,6 +739,7 @@ __all__ = [
     "KilocaloriePerKilogram",
     "KilocaloriePerMole",
     "KilocandelaPerSquareMetre",
+    "KilocoulombPerMole",
     "Kiloelectronvolt",
     "Kilofarad",
     "Kilogauss",
@@ -735,6 +771,8 @@ __all__ = [
     "Kilometre",
     "KilometrePerHour",
     "Kilomole",
+    "KilomolePerHour",
+    "KilomolePerSecond",
     "Kilonewton",
     "KilonewtonMeter",
     "KilonewtonMetre",
@@ -758,9 +796,11 @@ __all__ = [
     "LightYear",
     "Liter",
     "LiterPerMinute",
+    "LiterPerMole",
     "LiterPerSecond",
     "Litre",
     "LitrePerMinute",
+    "LitrePerMole",
     "LitrePerSecond",
     "LogarithmicRatio",
     "Lumen",
@@ -833,11 +873,13 @@ __all__ = [
     "MicrohenryPerMetre",
     "Microhertz",
     "Microjoule",
+    "Microkatal",
     "Microliter",
     "Microlitre",
     "Micrometer",
     "Micrometre",
     "Micromole",
+    "MicromolePerKilogram",
     "MicromolePerLiter",
     "MicromolePerLitre",
     "Micronewton",
@@ -872,6 +914,7 @@ __all__ = [
     "MillihenryPerMetre",
     "Millihertz",
     "Millijoule",
+    "Millikatal",
     "Milliliter",
     "MilliliterPerMinute",
     "Millilitre",
@@ -881,8 +924,10 @@ __all__ = [
     "Millimeter",
     "Millimetre",
     "Millimole",
+    "MillimolePerKilogram",
     "MillimolePerLiter",
     "MillimolePerLitre",
+    "MillimolePerMinute",
     "Millinewton",
     "MillinewtonMeter",
     "MillinewtonMetre",
@@ -899,14 +944,22 @@ __all__ = [
     "MilliwattHour",
     "Milliweber",
     "Minute",
+    "Molality",
+    "MolarCharge",
     "MolarConcentration",
     "MolarEnergy",
+    "MolarFlowRate",
     "MolarMass",
+    "MolarVolume",
     "Mole",
     "MolePerCubicMeter",
     "MolePerCubicMetre",
+    "MolePerHour",
+    "MolePerKilogram",
     "MolePerLiter",
     "MolePerLitre",
+    "MolePerMinute",
+    "MolePerSecond",
     "Momentum",
     "Nanoampere",
     "Nanocoulomb",
@@ -918,6 +971,7 @@ __all__ = [
     "NanohenryPerMetre",
     "Nanohertz",
     "Nanojoule",
+    "Nanokatal",
     "Nanometer",
     "Nanometre",
     "Nanomole",
