@@ -7,10 +7,12 @@ import pytest
 from kuchka import Activity
 from kuchka import ApparentPower
 from kuchka import BaudRate
+from kuchka import CatalyticActivity
 from kuchka import Frequency
 from kuchka import Impedance
 from kuchka import MagneticFieldStrength
 from kuchka import Magnetization
+from kuchka import MolarFlowRate
 from kuchka import Power
 from kuchka import Pressure
 from kuchka import Reactance
@@ -33,6 +35,7 @@ from tests.support.synthetic import registry_state
     ("kind", "target"),
     [
         (Activity, Frequency),
+        (CatalyticActivity, MolarFlowRate),
         (ApparentPower, Power),
         (BaudRate, Frequency),
         (Impedance, Resistance),
@@ -54,6 +57,7 @@ def test_only_the_listed_kinds_are_specialisations() -> None:
         Activity,
         ApparentPower,
         BaudRate,
+        CatalyticActivity,
         Impedance,
         Magnetization,
         Reactance,

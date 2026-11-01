@@ -9,6 +9,7 @@ from kuchka import Angle
 from kuchka import AngularDisplacement
 from kuchka import ApparentPower
 from kuchka import BaudRate
+from kuchka import CatalyticActivity
 from kuchka import EnergyDensity
 from kuchka import Frequency
 from kuchka import Impedance
@@ -17,6 +18,7 @@ from kuchka import Instant
 from kuchka import LogarithmicRatio
 from kuchka import MagneticFieldStrength
 from kuchka import Magnetization
+from kuchka import MolarFlowRate
 from kuchka import Momentum
 from kuchka import Power
 from kuchka import Pressure
@@ -36,6 +38,7 @@ from kuchka.dimensions import ANGLE
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import FREQUENCY
 from kuchka.dimensions import MAGNETIC_FIELD_STRENGTH
+from kuchka.dimensions import MOLAR_FLOW_RATE
 from kuchka.dimensions import MOMENTUM
 from kuchka.dimensions import POWER
 from kuchka.dimensions import PRESSURE
@@ -62,6 +65,7 @@ SHARED = {
     ANGLE: (Angle, AngularDisplacement),
     SPECIFIC_ENERGY: (SpecificEnergy, VelocitySquared),
     MOMENTUM: (Momentum, Impulse),
+    MOLAR_FLOW_RATE: (MolarFlowRate, CatalyticActivity),
 }
 
 
