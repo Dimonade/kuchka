@@ -20,7 +20,7 @@ RANK = {
     "geometry": 1,
     "information": 1,
     "photometry": 1,
-    "radiation": 1,
+    "radiation": 5,
     "thermodynamics": 1,
     "kinematics": 2,
     "mechanics": 3,

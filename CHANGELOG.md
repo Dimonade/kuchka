@@ -32,6 +32,15 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   Added `AVOGADRO_CONSTANT` and `FARADAY_CONSTANT` to `codata_2022` for entity counts and molar charge calculations.
   Ambiguous bare spellings `Da`, `u`, `ppm`, `IU`, and molal `m` are refused.
 
+- **Radiation:**
+  Added absorbed dose (gray, rad), equivalent dose (sievert, rem), and exposure (roentgen), with `SpecificCharge` (C/kg, Ah/kg, mAh/g) as the principal kind behind exposure.
+  `AbsorbedDose` and `EquivalentDose` are roles of `SpecificEnergy`, and `Exposure` is a role of `SpecificCharge`, so each takes part in arithmetic only when scaled, divided by itself, or converted first.
+  `AbsorbedDose.to_specific_energy()` takes a dose as an energy per mass, and `EquivalentDose` has no way into one: a sievert times a kilogram is refused.
+  `EquivalentDose.from_absorbed_dose(dose, weighting_factor)` is the one way from grays to sieverts, and takes a plain `Proportion`.
+  `Charge / Mass` now derives `SpecificCharge`, and `SpecificCharge * MagneticFluxDensity` a `Frequency`.
+  Added `kuchka.constants.icrp_103`, the radiation weighting factors of ICRP Publication 103 as proportions.
+  The `radiation` package moves up the layering order, because it now builds on mechanics and electromagnetics.
+
 - **Dimensional model:**
   Added solid angle as an independent dimension axis.
   Photometric arithmetic now distinguishes luminous intensity from luminous flux, derives illuminance and luminance separately, and supports luminous energy, exposure, and efficacy.

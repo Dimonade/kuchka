@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import pytest
 
+from kuchka import AbsorbedDose
 from kuchka import Activity
 from kuchka import Angle
 from kuchka import AngularDisplacement
@@ -11,6 +12,8 @@ from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import CatalyticActivity
 from kuchka import EnergyDensity
+from kuchka import EquivalentDose
+from kuchka import Exposure
 from kuchka import Frequency
 from kuchka import Impedance
 from kuchka import Impulse
@@ -28,6 +31,7 @@ from kuchka import ReactivePower
 from kuchka import Resistance
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
+from kuchka import SpecificCharge
 from kuchka import SpecificEnergy
 from kuchka import Stress
 from kuchka import Temperature
@@ -43,6 +47,7 @@ from kuchka.dimensions import MOMENTUM
 from kuchka.dimensions import POWER
 from kuchka.dimensions import PRESSURE
 from kuchka.dimensions import RESISTANCE
+from kuchka.dimensions import SPECIFIC_CHARGE
 from kuchka.dimensions import SPECIFIC_ENERGY
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.dimensions import TIME
@@ -63,7 +68,8 @@ SHARED = {
     MAGNETIC_FIELD_STRENGTH: (MagneticFieldStrength, Magnetization),
     RESISTANCE: (Resistance, Reactance, Impedance),
     ANGLE: (Angle, AngularDisplacement),
-    SPECIFIC_ENERGY: (SpecificEnergy, VelocitySquared),
+    SPECIFIC_ENERGY: (SpecificEnergy, VelocitySquared, AbsorbedDose, EquivalentDose),
+    SPECIFIC_CHARGE: (SpecificCharge, Exposure),
     MOMENTUM: (Momentum, Impulse),
     MOLAR_FLOW_RATE: (MolarFlowRate, CatalyticActivity),
 }

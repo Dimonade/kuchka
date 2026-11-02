@@ -7,10 +7,13 @@ from fractions import Fraction
 
 import pytest
 
+from kuchka import AbsorbedDose
 from kuchka import Activity
 from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import CatalyticActivity
+from kuchka import EquivalentDose
+from kuchka import Exposure
 from kuchka import Impedance
 from kuchka import IncompatibleDimensionError
 from kuchka import Magnetization
@@ -32,10 +35,13 @@ ROLES = [f for f in FAMILIES if f.quantity in registry._SPECIALISATIONS]  # noqa
 ROLE_IDS = [f.id for f in ROLES]
 OTHERS = [f for f in FAMILIES if f.canonical_unit.dimension != DIMENSIONLESS]
 CONVERSION = {
+    AbsorbedDose: "to_specific_energy",
     Activity: "to_frequency",
     ApparentPower: "to_power",
     BaudRate: "no conversion",
     CatalyticActivity: "to_molar_flow_rate",
+    EquivalentDose: "no conversion",
+    Exposure: "to_specific_charge",
     Impedance: "to_resistance",
     Magnetization: "to_magnetic_field_strength",
     Reactance: "to_resistance",
