@@ -556,6 +556,9 @@ The complete unit vocabulary is available in the API reference.
 | Abs. dose rate    | `GrayPerSecond`, `GrayPerMinute`, `GrayPerHour` through `NanograyPerHour`, and `RadPerHour`                      |
 | Equiv. dose rate  | `SievertPerSecond`, `SievertPerHour` through `NanosievertPerHour`, and `RemPerHour`                              |
 | Exposure rate     | `RoentgenPerSecond` through `RoentgenPerHour`, `MilliroentgenPerHour`, `MicroroentgenPerHour`                    |
+| Activity conc.    | `BecquerelPerCubicMetre`, `BecquerelPerLitre`, `PicocuriePerLitre`, and the kilo- and milli- multiples           |
+| Specific activity | `BecquerelPerKilogram`, `BecquerelPerGram`, `PicocuriePerGram`, `CuriePerGram`                                   |
+| Surface act.      | `BecquerelPerSquareCentimetre`, `DpmPer100SquareCentimetre`, `CuriePerSquareKilometre`                           |
 | Data              | `Bit` and `Byte`, `Kilobyte` through `Petabyte`, `Kibibyte` through `Pebibyte`, and the same for bits            |
 | Data Rate         | `BitPerSecond` and `BytePerSecond`, with the same SI and IEC multiples                                           |
 | Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                                                                |

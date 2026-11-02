@@ -32,6 +32,10 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   Added `AVOGADRO_CONSTANT` and `FARADAY_CONSTANT` to `codata_2022` for entity counts and molar charge calculations.
   Ambiguous bare spellings `Da`, `u`, `ppm`, `IU`, and molal `m` are refused.
 
+- **Activity densities:**
+  Added activity concentration (Bq/m³, Bq/L, pCi/L), specific activity (Bq/kg, pCi/g, Ci/g), and surface activity (Bq/cm², dpm/100 cm², Ci/km²), the readings of radon monitors, soil and food assays, and contamination monitors.
+  They are principal kinds of their own dimensions, and rules make `Activity / Volume`, `Activity / Mass`, and `Activity / Area` their quotients and `Activity` their product with the divisor.
+  `Frequency / Volume`, `Frequency / Mass`, and `Frequency / Area` are these kinds too.
 - **Dose rates:**
   Added absorbed dose rate (Gy/h, rad/h), equivalent dose rate (Sv/h, rem/h), and exposure rate (R/h), the readings of survey meters and dosimeters.
   They are roles of the new principal kinds `SpecificPower` (W/kg) and `SpecificCurrent` (A/kg), and a rate times a `Time` is the matching dose, an `Exposure` for exposure rate.
