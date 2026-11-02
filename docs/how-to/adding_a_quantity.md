@@ -50,9 +50,10 @@ A specialisation records meaning and shape and converts no value.
 Moving between it and its principal kind is explicit, with named conversions in the `to_x` and `from_x` style (`Time.to_sampling_period()`, `SamplingPeriod.to_time()`).
 `SampleRate`, `BaudRate`, and `Activity` are specialisations of `Frequency`, `ApparentPower` and `ReactivePower` of `Power`, `Stress` of `Pressure`, `AbsorbedDose` and `EquivalentDose` of `SpecificEnergy`, and `Exposure` of `SpecificCharge`.
 A role may have no conversion out: a sievert times a kilogram is not an energy, so `EquivalentDose` has no `to_specific_energy()`, and the refusal says so.
-A role takes part in arithmetic only when it is scaled by a dimensionless value, divided by itself, or multiplied by its reciprocal.
+A role takes part in arithmetic only when it is scaled by a dimensionless value, divided by itself, multiplied by its reciprocal, or named by a rule.
 Every other product goes through the conversion first, so `Stress * Area` is refused with a hint and `stress.to_pressure() * area` is a `Force`.
-A `_rule` names a result for the kinds that arithmetic reaches, which a role is not, so a role takes no rule.
+A `_rule` may name a role as an operand or as the result, and then only that product changes: `_rule(AbsorbedDoseRate, "*", Time, AbsorbedDose)` makes a dose rate times a duration a dose, and `AbsorbedDoseRate * Mass` stays refused.
+Declare a rule for a role when the product is what the instrument or the formula means, and not for a product that only has the right dimension.
 A real contested pair is `Pressure` and `EnergyDensity`: neither is principal, and a result in that dimension raises `AmbiguousKindError` naming the candidates.
 A second linear kind that states no relation is refused when the module is imported.
 
