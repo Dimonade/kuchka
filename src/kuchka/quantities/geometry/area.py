@@ -34,6 +34,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.photometry.luminous_exposure import LuminousExposure
     from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.activity import Activity
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
 
 
 class Area(LinearQuantity):
@@ -59,6 +61,8 @@ class Area(LinearQuantity):
     def __mul__(self, other: Pressure) -> Force: ...
     @overload
     def __mul__(self, other: Proportion) -> Area: ...
+    @overload
+    def __mul__(self, other: SurfaceActivity) -> Activity: ...
     @overload
     def __mul__(self, other: Velocity) -> VolumetricFlowRate: ...
     @overload

@@ -32,6 +32,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.activity_concentration import ActivityConcentration
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -45,6 +47,8 @@ class Length(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Acceleration) -> SpecificEnergy: ...
+    @overload
+    def __mul__(self, other: ActivityConcentration) -> SurfaceActivity: ...
     @overload
     def __mul__(self, other: Area) -> Volume: ...
     @overload

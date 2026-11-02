@@ -9,6 +9,7 @@ from kuchka.quantities import AbsorbedDose
 from kuchka.quantities import AbsorbedDoseRate
 from kuchka.quantities import Acceleration
 from kuchka.quantities import Activity
+from kuchka.quantities import ActivityConcentration
 from kuchka.quantities import AmountOfSubstance
 from kuchka.quantities import Angle
 from kuchka.quantities import AngularDisplacement
@@ -73,11 +74,13 @@ from kuchka.quantities import Resistance
 from kuchka.quantities import SampleRate
 from kuchka.quantities import SamplingPeriod
 from kuchka.quantities import SolidAngle
+from kuchka.quantities import SpecificActivity
 from kuchka.quantities import SpecificCharge
 from kuchka.quantities import SpecificCurrent
 from kuchka.quantities import SpecificEnergy
 from kuchka.quantities import SpecificPower
 from kuchka.quantities import Stress
+from kuchka.quantities import SurfaceActivity
 from kuchka.quantities import Temperature
 from kuchka.quantities import TemperatureDelta
 from kuchka.quantities import Time
@@ -103,6 +106,12 @@ from kuchka.units import Atmosphere
 from kuchka.units import Bar
 from kuchka.units import Baud
 from kuchka.units import Becquerel
+from kuchka.units import BecquerelPerCubicMetre
+from kuchka.units import BecquerelPerGram
+from kuchka.units import BecquerelPerKilogram
+from kuchka.units import BecquerelPerLitre
+from kuchka.units import BecquerelPerSquareCentimetre
+from kuchka.units import BecquerelPerSquareMetre
 from kuchka.units import Bel
 from kuchka.units import Bit
 from kuchka.units import BitPerSecond
@@ -141,6 +150,8 @@ from kuchka.units import CubicMetrePerSecond
 from kuchka.units import CubicMillimeter
 from kuchka.units import CubicMillimetre
 from kuchka.units import Curie
+from kuchka.units import CuriePerGram
+from kuchka.units import CuriePerSquareKilometre
 from kuchka.units import Dalton
 from kuchka.units import Day
 from kuchka.units import Decibel
@@ -152,6 +163,7 @@ from kuchka.units import DegreePerSecond
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaFahrenheit
 from kuchka.units import DeltaKelvin
+from kuchka.units import DpmPer100SquareCentimetre
 from kuchka.units import Dyne
 from kuchka.units import DyneSecond
 from kuchka.units import EarthMass
@@ -239,6 +251,9 @@ from kuchka.units import Kiloampere
 from kuchka.units import KiloamperePerMetre
 from kuchka.units import Kilobaud
 from kuchka.units import Kilobecquerel
+from kuchka.units import KilobecquerelPerCubicMetre
+from kuchka.units import KilobecquerelPerKilogram
+from kuchka.units import KilobecquerelPerSquareMetre
 from kuchka.units import Kilobit
 from kuchka.units import KilobitPerSecond
 from kuchka.units import Kilobyte
@@ -407,6 +422,7 @@ from kuchka.units import MilliamperePerMetre
 from kuchka.units import MilliampereSecond
 from kuchka.units import Millibar
 from kuchka.units import Millibecquerel
+from kuchka.units import MillibecquerelPerCubicMetre
 from kuchka.units import MillicandelaPerSquareMetre
 from kuchka.units import Millicoulomb
 from kuchka.units import MillicoulombPerKilogram
@@ -528,6 +544,8 @@ from kuchka.units import Phot
 from kuchka.units import Picoampere
 from kuchka.units import Picocoulomb
 from kuchka.units import Picocurie
+from kuchka.units import PicocuriePerGram
+from kuchka.units import PicocuriePerLitre
 from kuchka.units import Picofarad
 from kuchka.units import PicofaradPerMetre
 from kuchka.units import Picogauss
@@ -627,6 +645,7 @@ __all__ = [
     "Acceleration",
     "Acre",
     "Activity",
+    "ActivityConcentration",
     "AmountOfSubstance",
     "Ampere",
     "AmpereHour",
@@ -649,6 +668,12 @@ __all__ = [
     "Baud",
     "BaudRate",
     "Becquerel",
+    "BecquerelPerCubicMetre",
+    "BecquerelPerGram",
+    "BecquerelPerKilogram",
+    "BecquerelPerLitre",
+    "BecquerelPerSquareCentimetre",
+    "BecquerelPerSquareMetre",
     "Bel",
     "Bit",
     "BitPerSecond",
@@ -692,6 +717,8 @@ __all__ = [
     "CubicMillimeter",
     "CubicMillimetre",
     "Curie",
+    "CuriePerGram",
+    "CuriePerSquareKilometre",
     "Current",
     "Dalton",
     "Data",
@@ -707,6 +734,7 @@ __all__ = [
     "DeltaFahrenheit",
     "DeltaKelvin",
     "Density",
+    "DpmPer100SquareCentimetre",
     "Dyne",
     "DyneSecond",
     "EarthMass",
@@ -809,6 +837,9 @@ __all__ = [
     "KiloamperePerMetre",
     "Kilobaud",
     "Kilobecquerel",
+    "KilobecquerelPerCubicMetre",
+    "KilobecquerelPerKilogram",
+    "KilobecquerelPerSquareMetre",
     "Kilobit",
     "KilobitPerSecond",
     "Kilobyte",
@@ -991,6 +1022,7 @@ __all__ = [
     "MilliampereSecond",
     "Millibar",
     "Millibecquerel",
+    "MillibecquerelPerCubicMetre",
     "MillicandelaPerSquareMetre",
     "Millicoulomb",
     "MillicoulombPerKilogram",
@@ -1122,6 +1154,8 @@ __all__ = [
     "Picoampere",
     "Picocoulomb",
     "Picocurie",
+    "PicocuriePerGram",
+    "PicocuriePerLitre",
     "Picofarad",
     "PicofaradPerMetre",
     "Picogauss",
@@ -1171,6 +1205,7 @@ __all__ = [
     "SievertPerSecond",
     "SolarMass",
     "SolidAngle",
+    "SpecificActivity",
     "SpecificCharge",
     "SpecificCurrent",
     "SpecificEnergy",
@@ -1192,6 +1227,7 @@ __all__ = [
     "Steradian",
     "Stilb",
     "Stress",
+    "SurfaceActivity",
     "Tebibit",
     "TebibitPerSecond",
     "Tebibyte",

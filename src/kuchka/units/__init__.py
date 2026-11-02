@@ -112,10 +112,13 @@ from kuchka.units.proportion import *
 from kuchka.units.radiation.absorbed_dose import *
 from kuchka.units.radiation.absorbed_dose_rate import *
 from kuchka.units.radiation.activity import *
+from kuchka.units.radiation.activity_concentration import *
 from kuchka.units.radiation.equivalent_dose import *
 from kuchka.units.radiation.equivalent_dose_rate import *
 from kuchka.units.radiation.exposure import *
 from kuchka.units.radiation.exposure_rate import *
+from kuchka.units.radiation.specific_activity import *
+from kuchka.units.radiation.surface_activity import *
 from kuchka.units.solid_angle import *
 from kuchka.units.temporal.baud_rate import *
 from kuchka.units.temporal.frequency import *
@@ -132,6 +135,7 @@ if TYPE_CHECKING:
 
 _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.AbsorbedDose: ABSORBED_DOSE_UNITS,
+    quantities.ActivityConcentration: ACTIVITY_CONCENTRATION_UNITS,
     quantities.AbsorbedDoseRate: ABSORBED_DOSE_RATE_UNITS,
     quantities.Acceleration: ACCELERATION_UNITS,
     quantities.Activity: ACTIVITY_UNITS,
@@ -194,10 +198,12 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Permittivity: PERMITTIVITY_UNITS,
     quantities.Power: POWER_UNITS,
     quantities.Pressure: PRESSURE_UNITS,
+    quantities.SpecificActivity: SPECIFIC_ACTIVITY_UNITS,
     quantities.SpecificCharge: SPECIFIC_CHARGE_UNITS,
     quantities.SpecificCurrent: SPECIFIC_CURRENT_UNITS,
     quantities.SpecificEnergy: SPECIFIC_ENERGY_UNITS,
     quantities.SpecificPower: SPECIFIC_POWER_UNITS,
+    quantities.SurfaceActivity: SURFACE_ACTIVITY_UNITS,
     quantities.Stress: STRESS_UNITS,
     quantities.Proportion: PROPORTION_UNITS,
     quantities.Reactance: REACTANCE_UNITS,

@@ -35,11 +35,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+    from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.photometry.luminous_efficacy import LuminousEfficacy
     from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.specific_activity import SpecificActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -59,6 +61,8 @@ class Energy(LinearQuantity):
     def __mul__(self, other: LuminousEfficacy) -> LuminousEnergy: ...
     @overload
     def __mul__(self, other: Proportion) -> Energy: ...
+    @overload
+    def __mul__(self, other: SpecificActivity) -> SpecificPower: ...
     @overload
     def __mul__(self, other: Numeric) -> Energy: ...
     @overload

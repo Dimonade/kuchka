@@ -18,9 +18,11 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.photometry.luminance import Luminance
+    from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
     from kuchka.quantities.photometry.luminous_exposure import LuminousExposure
     from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.solid_angle import SolidAngle
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -58,11 +60,15 @@ class Illuminance(LinearQuantity):
     @overload
     def __truediv__(self, other: Luminance) -> SolidAngle: ...
     @overload
+    def __truediv__(self, other: LuminousEnergy) -> SurfaceActivity: ...
+    @overload
     def __truediv__(self, other: LuminousExposure) -> Frequency: ...
     @overload
     def __truediv__(self, other: Proportion) -> Illuminance: ...
     @overload
     def __truediv__(self, other: SolidAngle) -> Luminance: ...
+    @overload
+    def __truediv__(self, other: SurfaceActivity) -> LuminousEnergy: ...
     @overload
     def __truediv__(self, other: Numeric) -> Illuminance: ...
     @overload

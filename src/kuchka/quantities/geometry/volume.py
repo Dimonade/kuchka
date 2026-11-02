@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
     from kuchka.quantities.chemistry.molar_volume import MolarVolume
     from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.density import Density
@@ -29,6 +30,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.activity import Activity
+    from kuchka.quantities.radiation.activity_concentration import ActivityConcentration
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -71,6 +75,8 @@ class Volume(LinearQuantity):
 
     # BEGIN GENERATED __mul__
     @overload
+    def __mul__(self, other: ActivityConcentration) -> Activity: ...
+    @overload
     def __mul__(self, other: Density) -> Mass: ...
     @overload
     def __mul__(self, other: EnergyDensity) -> Energy: ...
@@ -84,6 +90,8 @@ class Volume(LinearQuantity):
     def __mul__(self, other: Pressure) -> Energy: ...
     @overload
     def __mul__(self, other: Proportion) -> Volume: ...
+    @overload
+    def __mul__(self, other: SurfaceActivity) -> Velocity: ...
     @overload
     def __mul__(self, other: Numeric) -> Volume: ...
     @overload

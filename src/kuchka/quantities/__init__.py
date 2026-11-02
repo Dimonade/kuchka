@@ -108,10 +108,13 @@ from kuchka.quantities.proportion import *
 from kuchka.quantities.radiation.absorbed_dose import *
 from kuchka.quantities.radiation.absorbed_dose_rate import *
 from kuchka.quantities.radiation.activity import *
+from kuchka.quantities.radiation.activity_concentration import *
 from kuchka.quantities.radiation.equivalent_dose import *
 from kuchka.quantities.radiation.equivalent_dose_rate import *
 from kuchka.quantities.radiation.exposure import *
 from kuchka.quantities.radiation.exposure_rate import *
+from kuchka.quantities.radiation.specific_activity import *
+from kuchka.quantities.radiation.surface_activity import *
 from kuchka.quantities.solid_angle import *
 from kuchka.quantities.temporal import *
 from kuchka.quantities.thermal import *

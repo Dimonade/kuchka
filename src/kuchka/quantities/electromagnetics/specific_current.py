@@ -17,11 +17,13 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.current import Current
+    from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.specific_activity import SpecificActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -64,9 +66,13 @@ class SpecificCurrent(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: Charge) -> SpecificActivity: ...
+    @overload
     def __truediv__(self, other: Frequency) -> SpecificCharge: ...
     @overload
     def __truediv__(self, other: Proportion) -> SpecificCurrent: ...
+    @overload
+    def __truediv__(self, other: SpecificActivity) -> Charge: ...
     @overload
     def __truediv__(self, other: SpecificCharge) -> Frequency: ...
     @overload

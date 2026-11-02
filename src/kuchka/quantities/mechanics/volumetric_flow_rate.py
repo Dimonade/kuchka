@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molar_volume import MolarVolume
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
+    from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mechanics.density import Density
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
@@ -28,6 +29,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -49,6 +51,8 @@ class VolumetricFlowRate(LinearQuantity):
     def __mul__(self, other: Pressure) -> Power: ...
     @overload
     def __mul__(self, other: Proportion) -> VolumetricFlowRate: ...
+    @overload
+    def __mul__(self, other: SurfaceActivity) -> Acceleration: ...
     @overload
     def __mul__(self, other: Time) -> Volume: ...
     @overload
