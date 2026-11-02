@@ -14,6 +14,9 @@ from kuchka.dimensions import MAGNETIC_FIELD_STRENGTH
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.registry import _register
+from kuchka.quantities.base.registry import _rule
+from kuchka.quantities.electromagnetics.magnetic_flux_density import MagneticFluxDensity
+from kuchka.quantities.mechanics.energy_density import EnergyDensity
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -22,9 +25,6 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
-    from kuchka.quantities.electromagnetics.magnetic_flux_density import (
-        MagneticFluxDensity,
-    )
     from kuchka.quantities.electromagnetics.permeability import Permeability
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.force import Force
@@ -37,6 +37,8 @@ class MagneticFieldStrength(LinearQuantity):
     Current per length, and the field that relates to flux density as `B = μH` in a
     linear medium.
     `to_magnetization()` reads it as a `Magnetization`.
+    `MagneticFluxDensity * MagneticFieldStrength` is an `EnergyDensity`, the product
+    `B·H`: the energy stored in a linear medium is half of it, `w = B·H / 2`.
     """
 
     dimension: ClassVar[Dimension] = MAGNETIC_FIELD_STRENGTH
@@ -55,6 +57,8 @@ class MagneticFieldStrength(LinearQuantity):
     def __mul__(self, other: Length) -> Current: ...
     @overload
     def __mul__(self, other: MagneticFlux) -> Force: ...
+    @overload
+    def __mul__(self, other: MagneticFluxDensity) -> EnergyDensity: ...
     @overload
     def __mul__(self, other: Permeability) -> MagneticFluxDensity: ...
     @overload
@@ -146,5 +150,7 @@ _register(MAGNETIC_FIELD_STRENGTH, MagneticFieldStrength)
 _register(
     MAGNETIC_FIELD_STRENGTH, Magnetization, specialisation_of=MagneticFieldStrength
 )
+
+_rule(MagneticFluxDensity, "*", MagneticFieldStrength, EnergyDensity)
 
 __all__ = ["MagneticFieldStrength", "Magnetization"]
