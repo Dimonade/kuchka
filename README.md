@@ -561,8 +561,8 @@ The complete unit vocabulary is available in the API reference.
 | Surface act.      | `BecquerelPerSquareCentimetre`, `DpmPer100SquareCentimetre`, `CuriePerSquareKilometre`                           |
 | Data              | `Bit` and `Byte`, `Kilobyte` through `Petabyte`, `Kibibyte` through `Pebibyte`, and the same for bits            |
 | Data Rate         | `BitPerSecond` and `BytePerSecond`, with the same SI and IEC multiples                                           |
-| Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                                                                |
-| Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`                                                                 |
+| Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`, `Rankine`                                                                     |
+| Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`, `DeltaRankine`                                                 |
 | Heating Rate      | `KelvinPerSecond`, `CelsiusPerMinute`, `FahrenheitPerMinute`, and the per-second, per-minute, and per-hour units |
 
 ### Geometry and mechanics
