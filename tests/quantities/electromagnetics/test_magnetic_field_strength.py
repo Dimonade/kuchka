@@ -1,7 +1,7 @@
 """MagneticFieldStrength: the ampere per metre, as a current per length.
 
 The generic behaviour of a quantity type is covered once for every type;
-this module covers what is specific to the magnetic_field_strength.
+this module covers what is specific to the magnetic_field.
 """
 
 from __future__ import annotations
@@ -9,6 +9,7 @@ from __future__ import annotations
 import pytest
 
 from kuchka import Current
+from kuchka import EnergyDensity
 from kuchka import IncompatibleDimensionError
 from kuchka import Length
 from kuchka import MagneticFieldStrength
@@ -19,6 +20,7 @@ from kuchka.units import length
 from kuchka.units.electromagnetics import magnetic_field_strength as field
 from kuchka.units.electromagnetics import magnetic_flux_density
 from kuchka.units.electromagnetics import permeability
+from kuchka.units.mechanics.energy_density import JoulePerCubicMetre
 
 
 def test_a_current_per_length_is_a_field_strength() -> None:
@@ -67,3 +69,27 @@ def test_the_boundary_reads_the_spoken_forms() -> None:
     assert (
         field.MAGNETIC_FIELD_STRENGTH_UNITS["ampere per meter"] is field.AmperePerMetre
     )
+
+
+def test_a_flux_density_times_a_field_is_an_energy_density_either_way() -> None:
+    product = magnetic_flux_density.Tesla(1) * field.AmperePerMetre(1)
+    assert type(product) is EnergyDensity
+    assert product == JoulePerCubicMetre(1)
+    reverse = field.AmperePerMetre(1) * magnetic_flux_density.Tesla(1)
+    assert type(reverse) is EnergyDensity
+    assert reverse == product
+
+
+def test_the_quotients_of_that_energy_density_return_the_two_fields() -> None:
+    stored = magnetic_flux_density.Tesla(2) * field.AmperePerMetre(3)
+    assert stored == JoulePerCubicMetre(6)
+    assert type(stored / magnetic_flux_density.Tesla(2)) is MagneticFieldStrength
+    assert type(stored / field.AmperePerMetre(3)) is MagneticFluxDensity
+
+
+def test_a_magnetization_is_not_part_of_that_product() -> None:
+    magnetization = field.AmperePerMetre(1).to_magnetization()
+    with pytest.raises(IncompatibleDimensionError):
+        magnetic_flux_density.Tesla(1) * magnetization
+    with pytest.raises(IncompatibleDimensionError):
+        magnetization * magnetic_flux_density.Tesla(1)

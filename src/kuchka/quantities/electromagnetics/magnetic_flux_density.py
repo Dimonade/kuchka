@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.permeability import Permeability
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
@@ -40,6 +41,8 @@ class MagneticFluxDensity(LinearQuantity):
     def __mul__(self, other: Area) -> MagneticFlux: ...
     @overload
     def __mul__(self, other: Charge) -> MassFlowRate: ...
+    @overload
+    def __mul__(self, other: MagneticFieldStrength) -> EnergyDensity: ...
     @overload
     def __mul__(self, other: Proportion) -> MagneticFluxDensity: ...
     @overload
