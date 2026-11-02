@@ -19,10 +19,12 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molality import Molality
     from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
     from kuchka.quantities.chemistry.molar_mass import MolarMass
+    from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.magnetic_flux_density import (
         MagneticFluxDensity,
     )
+    from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.density import Density
@@ -47,6 +49,8 @@ class MassFlowRate(LinearQuantity):
     def __mul__(self, other: Molality) -> MolarFlowRate: ...
     @overload
     def __mul__(self, other: Proportion) -> MassFlowRate: ...
+    @overload
+    def __mul__(self, other: SpecificCharge) -> Current: ...
     @overload
     def __mul__(self, other: SpecificEnergy) -> Power: ...
     @overload

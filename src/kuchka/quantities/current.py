@@ -26,9 +26,11 @@ if TYPE_CHECKING:
     )
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.resistance import Resistance
+    from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
@@ -79,11 +81,15 @@ class Current(LinearQuantity):
     @overload
     def __truediv__(self, other: MagneticFieldStrength) -> Length: ...
     @overload
+    def __truediv__(self, other: MassFlowRate) -> SpecificCharge: ...
+    @overload
     def __truediv__(self, other: MolarCharge) -> MolarFlowRate: ...
     @overload
     def __truediv__(self, other: MolarFlowRate) -> MolarCharge: ...
     @overload
     def __truediv__(self, other: Proportion) -> Current: ...
+    @overload
+    def __truediv__(self, other: SpecificCharge) -> MassFlowRate: ...
     @overload
     def __truediv__(self, other: Voltage) -> Conductance: ...
     @overload

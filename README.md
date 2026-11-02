@@ -524,6 +524,7 @@ The complete unit vocabulary is available in the API reference.
 | Resistance          | `Microohm`, through `Gigaohm`                                                                                      |
 | Conductance         | `Nanosiemens` through `Kilosiemens`                                                                                |
 | Charge              | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                              |
+| Specific charge     | `CoulombPerKilogram`, `AmpereHourPerKilogram`, `MilliampereHourPerGram`                                            |
 | Magnetic Flux       | `Nanoweber` through `Kiloweber`                                                                                    |
 | Flux Density        | `Femtotesla` through `Kilotesla`, `Femtogauss` through `Kilogauss`                                                 |
 | Capacitance         | `Femtofarad` through `Kilofarad`                                                                                   |
@@ -548,6 +549,9 @@ The complete unit vocabulary is available in the API reference.
 | Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`                                               |
 | Baud Rate         | `Baud` through `Gigabaud`                                                                                        |
 | Activity          | `Millibecquerel` through `Terabecquerel`, `Curie`, `Millicurie`, `Microcurie`, and `Picocurie`                   |
+| Absorbed dose     | `Nanogray` through `Megagray`, `Rad`, and `Millirad`                                                             |
+| Equivalent dose   | `Nanosievert` through `Kilosievert`, `Rem`, and `Millirem`                                                       |
+| Exposure          | `Roentgen`, `Milliroentgen`, `Microroentgen`, and `C/kg` through `EXPOSURE_UNITS`                                |
 | Data              | `Bit` and `Byte`, `Kilobyte` through `Petabyte`, `Kibibyte` through `Pebibyte`, and the same for bits            |
 | Data Rate         | `BitPerSecond` and `BytePerSecond`, with the same SI and IEC multiples                                           |
 | Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                                                                |
@@ -837,6 +841,17 @@ wifi_wavelength = kc.SPEED_OF_LIGHT_IN_VACUUM / Hertz(2_400_000_000)
 
 Some constants are exact by definition; others are CODATA 2022 recommended values.
 Each constant documents its own status and published precision.
+
+`kuchka.constants.icrp_103` holds the radiation weighting factors of ICRP Publication 103 as plain proportions, for `EquivalentDose.from_absorbed_dose`.
+They are the Commission's recommendations and not measurements, and the Commission has revised them before.
+
+```python
+from kuchka import EquivalentDose, Milligray
+from kuchka.constants import icrp_103
+
+EquivalentDose.from_absorbed_dose(Milligray(3), icrp_103.ALPHA_PARTICLES)
+# EquivalentDose: 60 mSv
+```
 
 ## Errors
 

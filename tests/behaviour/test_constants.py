@@ -7,6 +7,7 @@ ones exactly, the measured ones to CODATA 2022's own precision).
 from decimal import Decimal
 from fractions import Fraction
 
+import kuchka
 from kuchka import Acceleration
 from kuchka import Charge
 from kuchka import Energy
@@ -14,9 +15,11 @@ from kuchka import Frequency
 from kuchka import Length
 from kuchka import Mass
 from kuchka import Proportion
+from kuchka import Ratio
 from kuchka import Temperature
 from kuchka import Time
 from kuchka import Velocity
+from kuchka.constants import icrp_103
 from kuchka.constants.codata_2022 import ELECTRON_MASS
 from kuchka.constants.codata_2022 import ELEMENTARY_CHARGE
 from kuchka.constants.codata_2022 import NEUTRON_MASS
@@ -148,3 +151,24 @@ def test_pound_force_matches_the_defining_formula() -> None:
     one_pound = mass.Kilogram(Decimal("0.45359237"))
     force = one_pound * STANDARD_ACCELERATION_OF_GRAVITY
     assert force.value_in(POUND_FORCE) == Decimal(1)
+
+
+def test_the_radiation_weighting_factors_are_proportions_with_the_icrp_103_values() -> (
+    None
+):
+    expected = {
+        "PHOTONS": 1,
+        "ELECTRONS": 1,
+        "MUONS": 1,
+        "PROTONS": 2,
+        "CHARGED_PIONS": 2,
+        "ALPHA_PARTICLES": 20,
+        "FISSION_FRAGMENTS": 20,
+        "HEAVY_IONS": 20,
+    }
+    assert set(icrp_103.__all__) == set(expected)
+    for name, value in expected.items():
+        factor = getattr(icrp_103, name)
+        assert isinstance(factor, Proportion)
+        assert factor == Ratio(value)
+        assert getattr(kuchka.icrp_103, name) is factor

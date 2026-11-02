@@ -25,6 +25,7 @@ from kuchka.units.electromagnetics import permeability
 from kuchka.units.electromagnetics import permittivity
 from kuchka.units.electromagnetics import reactance
 from kuchka.units.electromagnetics import resistance
+from kuchka.units.electromagnetics import specific_charge
 from kuchka.units.electromagnetics import voltage
 from kuchka.units.electromagnetics.ac_power import *
 from kuchka.units.electromagnetics.capacitance import *
@@ -40,6 +41,7 @@ from kuchka.units.electromagnetics.permeability import *
 from kuchka.units.electromagnetics.permittivity import *
 from kuchka.units.electromagnetics.reactance import *
 from kuchka.units.electromagnetics.resistance import *
+from kuchka.units.electromagnetics.specific_charge import *
 from kuchka.units.electromagnetics.voltage import *
 
 __all__: list[str] = []
@@ -57,4 +59,5 @@ __all__ += permeability.__all__
 __all__ += permittivity.__all__
 __all__ += reactance.__all__
 __all__ += resistance.__all__
+__all__ += specific_charge.__all__
 __all__ += voltage.__all__

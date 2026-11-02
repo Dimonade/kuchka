@@ -64,7 +64,11 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.conductance import Conductance
     from kuchka.quantities.electromagnetics.inductance import Inductance
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
+    from kuchka.quantities.electromagnetics.magnetic_flux_density import (
+        MagneticFluxDensity,
+    )
     from kuchka.quantities.electromagnetics.resistance import Resistance
+    from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.information.data import Data
@@ -297,9 +301,13 @@ class Frequency(LinearQuantity):
     @overload
     def __truediv__(self, other: Frequency) -> Proportion: ...
     @overload
+    def __truediv__(self, other: MagneticFluxDensity) -> SpecificCharge: ...
+    @overload
     def __truediv__(self, other: MolarFlowRate) -> EntitiesPerAmount: ...
     @overload
     def __truediv__(self, other: Proportion) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: SpecificCharge) -> MagneticFluxDensity: ...
     @overload
     def __truediv__(self, other: Numeric) -> Frequency: ...
     @overload

@@ -24,6 +24,7 @@ Area * Length       -> Volume
 
 A quantity type displays in the units of its own `*_UNITS` table, and in no unit of another type, even one with the same dimension.
 `Frequency`, `BaudRate`, `SampleRate`, and `Activity` share the dimension T⁻¹, and each has its own units: the hertz, the baud, the sample per second, and the becquerel.
+`AbsorbedDose` and `EquivalentDose` share L²T⁻² with `SpecificEnergy`, with the gray and the sievert as their units and the rad and the rem as their older ones.
 `Hertz(1).to(BAUD)` raises `InvalidConversionError`, and `Frequency(Fraction(1), BAUD)` raises `InvalidMeasurementError`, and both name the type the unit belongs to.
 A unit can belong to several types: the second is a unit of `Time` and of `SamplingPeriod`.
 

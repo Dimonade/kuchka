@@ -18,11 +18,11 @@ Every other quantity lives in the themed package of the relation that defines it
 | `mechanics`                     | force and the work it does: force, torque, pressure, stress, density, energy, power, energy density   |
 | _`mechanics`, continued_        | specific energy, momentum, impulse, velocity squared                                                  |
 | `electromagnetics`              | charge, voltage, resistance, conductance, capacitance, inductance                                     |
-| _`electromagnetics`, continued_ | permittivity, permeability, AC power, magnetic flux, magnetic flux density, magnetic field strength   |
+| _`electromagnetics`, continued_ | permittivity, permeability, AC power, magnetic flux, flux density, field strength, specific charge    |
 | `information`                   | data and data rate                                                                                    |
 | `chemistry`                     | what is measured per mole: molar mass, concentration, energy, flow rate, catalytic activity, and more |
 | `photometry`                    | light as the eye sees it: flux, energy, exposure, illuminance, luminance, efficacy                    |
-| `radiation`                     | radioactive activity                                                                                  |
+| `radiation`                     | radioactive activity, and the doses it deposits: absorbed dose, equivalent dose, exposure             |
 | `thermodynamics`                | how heat changes a temperature: heating rate                                                          |
 
 A quantity that fits two packages lives where its defining relation lives, and the other package imports it.
