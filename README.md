@@ -525,6 +525,7 @@ The complete unit vocabulary is available in the API reference.
 | Conductance         | `Nanosiemens` through `Kilosiemens`                                                                                |
 | Charge              | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                              |
 | Specific charge     | `CoulombPerKilogram`, `AmpereHourPerKilogram`, `MilliampereHourPerGram`                                            |
+| Specific current    | `AmperePerKilogram`, `MilliamperePerKilogram`, `MicroamperePerKilogram`                                            |
 | Magnetic Flux       | `Nanoweber` through `Kiloweber`                                                                                    |
 | Flux Density        | `Femtotesla` through `Kilotesla`, `Femtogauss` through `Kilogauss`                                                 |
 | Capacitance         | `Femtofarad` through `Kilofarad`                                                                                   |
@@ -552,6 +553,9 @@ The complete unit vocabulary is available in the API reference.
 | Absorbed dose     | `Nanogray` through `Megagray`, `Rad`, and `Millirad`                                                             |
 | Equivalent dose   | `Nanosievert` through `Kilosievert`, `Rem`, and `Millirem`                                                       |
 | Exposure          | `Roentgen`, `Milliroentgen`, `Microroentgen`, and `C/kg` through `EXPOSURE_UNITS`                                |
+| Abs. dose rate    | `GrayPerSecond`, `GrayPerMinute`, `GrayPerHour` through `NanograyPerHour`, and `RadPerHour`                      |
+| Equiv. dose rate  | `SievertPerSecond`, `SievertPerHour` through `NanosievertPerHour`, and `RemPerHour`                              |
+| Exposure rate     | `RoentgenPerSecond` through `RoentgenPerHour`, `MilliroentgenPerHour`, `MicroroentgenPerHour`                    |
 | Data              | `Bit` and `Byte`, `Kilobyte` through `Petabyte`, `Kibibyte` through `Pebibyte`, and the same for bits            |
 | Data Rate         | `BitPerSecond` and `BytePerSecond`, with the same SI and IEC multiples                                           |
 | Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                                                                |
@@ -579,6 +583,7 @@ The complete unit vocabulary is available in the API reference.
 | Impulse          | `NewtonSecond`, `MillinewtonSecond`, `KilonewtonSecond`, `DyneSecond`, `PoundForceSecond`                                                          |
 | Velocity squared | `SquareMetrePerSecondSquared`, `SquareKilometrePerSecondSquared`                                                                                   |
 | Specific energy  | `JoulePerKilogram`, `MegajoulePerKilogram`, `WattHourPerKilogram`, `KilowattHourPerKilogram`, `KilocaloriePerKilogram`                             |
+| Specific power   | `WattPerKilogram`, `MilliwattPerKilogram`, `KilowattPerKilogram`, `WattPerGram`, `MilliwattPerGram`                                                |
 
 ### Angle and rotation
 

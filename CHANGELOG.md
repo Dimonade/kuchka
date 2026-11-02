@@ -32,6 +32,12 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   Added `AVOGADRO_CONSTANT` and `FARADAY_CONSTANT` to `codata_2022` for entity counts and molar charge calculations.
   Ambiguous bare spellings `Da`, `u`, `ppm`, `IU`, and molal `m` are refused.
 
+- **Dose rates:**
+  Added absorbed dose rate (Gy/h, rad/h), equivalent dose rate (Sv/h, rem/h), and exposure rate (R/h), the readings of survey meters and dosimeters.
+  They are roles of the new principal kinds `SpecificPower` (W/kg) and `SpecificCurrent` (A/kg), and a rate times a `Time` is the matching dose, an `Exposure` for exposure rate.
+  `Velocity * Acceleration`, `Power / Mass`, and `SpecificEnergy / Time` are now a `SpecificPower`, and `SpecificPower * Time` is a `SpecificEnergy`.
+  A `_rule` may now name a role as an operand or as its result, which is how `Sievert(1) / Hour(2)` is a dose rate while `Sv * kg` stays refused.
+  `EquivalentDoseRate.from_absorbed_dose_rate(rate, weighting_factor)` weights a rate as `EquivalentDose.from_absorbed_dose` weights a dose.
 - **Radiation:**
   Added absorbed dose (gray, rad), equivalent dose (sievert, rem), and exposure (roentgen), with `SpecificCharge` (C/kg, Ah/kg, mAh/g) as the principal kind behind exposure.
   `AbsorbedDose` and `EquivalentDose` are roles of `SpecificEnergy`, and `Exposure` is a role of `SpecificCharge`, so each takes part in arithmetic only when scaled, divided by itself, or converted first.
