@@ -37,6 +37,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.activity import Activity
+    from kuchka.quantities.radiation.specific_activity import SpecificActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -58,6 +60,8 @@ class Mass(LinearQuantity):
     def __mul__(self, other: Molality) -> AmountOfSubstance: ...
     @overload
     def __mul__(self, other: Proportion) -> Mass: ...
+    @overload
+    def __mul__(self, other: SpecificActivity) -> Activity: ...
     @overload
     def __mul__(self, other: SpecificCharge) -> Charge: ...
     @overload

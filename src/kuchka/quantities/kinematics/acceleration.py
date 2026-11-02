@@ -25,7 +25,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.specific_activity import SpecificActivity
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -68,9 +71,17 @@ class Acceleration(LinearQuantity):
     @overload
     def __truediv__(self, other: Frequency) -> Velocity: ...
     @overload
+    def __truediv__(self, other: Impulse) -> SpecificActivity: ...
+    @overload
+    def __truediv__(self, other: Momentum) -> SpecificActivity: ...
+    @overload
     def __truediv__(self, other: Proportion) -> Acceleration: ...
     @overload
+    def __truediv__(self, other: SurfaceActivity) -> VolumetricFlowRate: ...
+    @overload
     def __truediv__(self, other: Velocity) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: VolumetricFlowRate) -> SurfaceActivity: ...
     @overload
     def __truediv__(self, other: Numeric) -> Acceleration: ...
     @overload

@@ -42,10 +42,13 @@ if TYPE_CHECKING:
     )
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
 
 
 class EnergyDensity(LinearQuantity):
@@ -82,6 +85,8 @@ class EnergyDensity(LinearQuantity):
     @overload
     def __truediv__(self, other: EnergyDensity) -> Proportion: ...
     @overload
+    def __truediv__(self, other: Impulse) -> SurfaceActivity: ...
+    @overload
     def __truediv__(self, other: MagneticFieldStrength) -> MagneticFluxDensity: ...
     @overload
     def __truediv__(self, other: MagneticFluxDensity) -> MagneticFieldStrength: ...
@@ -89,6 +94,8 @@ class EnergyDensity(LinearQuantity):
     def __truediv__(self, other: MolarConcentration) -> MolarEnergy: ...
     @overload
     def __truediv__(self, other: MolarEnergy) -> MolarConcentration: ...
+    @overload
+    def __truediv__(self, other: Momentum) -> SurfaceActivity: ...
     @overload
     def __truediv__(self, other: Pressure) -> Proportion: ...
     @overload

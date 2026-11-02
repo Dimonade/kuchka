@@ -71,6 +71,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.information.data import Data
     from kuchka.quantities.information.data_rate import DataRate
@@ -96,10 +97,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.absorbed_dose import AbsorbedDose
     from kuchka.quantities.radiation.absorbed_dose_rate import AbsorbedDoseRate
+    from kuchka.quantities.radiation.activity_concentration import ActivityConcentration
     from kuchka.quantities.radiation.equivalent_dose import EquivalentDose
     from kuchka.quantities.radiation.equivalent_dose_rate import EquivalentDoseRate
     from kuchka.quantities.radiation.exposure import Exposure
     from kuchka.quantities.radiation.exposure_rate import ExposureRate
+    from kuchka.quantities.radiation.specific_activity import SpecificActivity
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.thermal import TemperatureDelta
     from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
 
@@ -323,17 +327,29 @@ class Frequency(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: ActivityConcentration) -> Volume: ...
+    @overload
+    def __truediv__(self, other: Area) -> SurfaceActivity: ...
+    @overload
     def __truediv__(self, other: EntitiesPerAmount) -> MolarFlowRate: ...
     @overload
     def __truediv__(self, other: Frequency) -> Proportion: ...
     @overload
     def __truediv__(self, other: MagneticFluxDensity) -> SpecificCharge: ...
     @overload
+    def __truediv__(self, other: Mass) -> SpecificActivity: ...
+    @overload
     def __truediv__(self, other: MolarFlowRate) -> EntitiesPerAmount: ...
     @overload
     def __truediv__(self, other: Proportion) -> Frequency: ...
     @overload
+    def __truediv__(self, other: SpecificActivity) -> Mass: ...
+    @overload
     def __truediv__(self, other: SpecificCharge) -> MagneticFluxDensity: ...
+    @overload
+    def __truediv__(self, other: SurfaceActivity) -> Area: ...
+    @overload
+    def __truediv__(self, other: Volume) -> ActivityConcentration: ...
     @overload
     def __truediv__(self, other: Numeric) -> Frequency: ...
     @overload

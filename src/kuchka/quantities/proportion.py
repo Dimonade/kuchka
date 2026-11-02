@@ -94,10 +94,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.radiation.absorbed_dose import AbsorbedDose
     from kuchka.quantities.radiation.absorbed_dose_rate import AbsorbedDoseRate
     from kuchka.quantities.radiation.activity import Activity
+    from kuchka.quantities.radiation.activity_concentration import ActivityConcentration
     from kuchka.quantities.radiation.equivalent_dose import EquivalentDose
     from kuchka.quantities.radiation.equivalent_dose_rate import EquivalentDoseRate
     from kuchka.quantities.radiation.exposure import Exposure
     from kuchka.quantities.radiation.exposure_rate import ExposureRate
+    from kuchka.quantities.radiation.specific_activity import SpecificActivity
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.solid_angle import SolidAngle
     from kuchka.quantities.temporal import BaudRate
     from kuchka.quantities.temporal import Frequency
@@ -123,6 +126,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: Acceleration) -> Acceleration: ...
     @overload
     def __mul__(self, other: Activity) -> Activity: ...
+    @overload
+    def __mul__(self, other: ActivityConcentration) -> ActivityConcentration: ...
     @overload
     def __mul__(self, other: AmountOfSubstance) -> AmountOfSubstance: ...
     @overload
@@ -244,6 +249,8 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: SolidAngle) -> SolidAngle: ...
     @overload
+    def __mul__(self, other: SpecificActivity) -> SpecificActivity: ...
+    @overload
     def __mul__(self, other: SpecificCharge) -> SpecificCharge: ...
     @overload
     def __mul__(self, other: SpecificCurrent) -> SpecificCurrent: ...
@@ -253,6 +260,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: SpecificPower) -> SpecificPower: ...
     @overload
     def __mul__(self, other: Stress) -> Stress: ...
+    @overload
+    def __mul__(self, other: SurfaceActivity) -> SurfaceActivity: ...
     @overload
     def __mul__(self, other: TemperatureDelta) -> TemperatureDelta: ...
     @overload

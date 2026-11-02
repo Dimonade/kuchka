@@ -17,7 +17,13 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.geometry.volume import Volume
+    from kuchka.quantities.mass import Mass
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.activity_concentration import ActivityConcentration
+    from kuchka.quantities.radiation.specific_activity import SpecificActivity
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
 
 
 class Activity(LinearQuantity):
@@ -54,7 +60,19 @@ class Activity(LinearQuantity):
     @overload
     def __truediv__(self, other: Activity) -> Proportion: ...
     @overload
+    def __truediv__(self, other: ActivityConcentration) -> Volume: ...
+    @overload
+    def __truediv__(self, other: Area) -> SurfaceActivity: ...
+    @overload
+    def __truediv__(self, other: Mass) -> SpecificActivity: ...
+    @overload
     def __truediv__(self, other: Proportion) -> Activity: ...
+    @overload
+    def __truediv__(self, other: SpecificActivity) -> Mass: ...
+    @overload
+    def __truediv__(self, other: SurfaceActivity) -> Area: ...
+    @overload
+    def __truediv__(self, other: Volume) -> ActivityConcentration: ...
     @overload
     def __truediv__(self, other: Numeric) -> Activity: ...
     @overload

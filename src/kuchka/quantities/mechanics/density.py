@@ -29,6 +29,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.activity_concentration import ActivityConcentration
+    from kuchka.quantities.radiation.specific_activity import SpecificActivity
 
 
 class Density(LinearQuantity):
@@ -44,6 +46,8 @@ class Density(LinearQuantity):
     def __mul__(self, other: MolarVolume) -> MolarMass: ...
     @overload
     def __mul__(self, other: Proportion) -> Density: ...
+    @overload
+    def __mul__(self, other: SpecificActivity) -> ActivityConcentration: ...
     @overload
     def __mul__(self, other: SpecificEnergy) -> EnergyDensity: ...
     @overload

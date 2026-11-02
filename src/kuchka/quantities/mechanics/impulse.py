@@ -31,6 +31,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.specific_activity import SpecificActivity
     from kuchka.quantities.temporal import Frequency
 
 
@@ -58,6 +59,8 @@ class Impulse(LinearQuantity):
     def __mul__(self, other: Frequency) -> Force: ...
     @overload
     def __mul__(self, other: Proportion) -> Impulse: ...
+    @overload
+    def __mul__(self, other: SpecificActivity) -> Acceleration: ...
     @overload
     def __mul__(self, other: Velocity) -> Energy: ...
     @overload

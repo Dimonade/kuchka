@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.permittivity import Permittivity
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
@@ -34,6 +35,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -92,9 +94,13 @@ class Velocity(LinearQuantity):
     @overload
     def __truediv__(self, other: Proportion) -> Velocity: ...
     @overload
+    def __truediv__(self, other: SurfaceActivity) -> Volume: ...
+    @overload
     def __truediv__(self, other: Time) -> Acceleration: ...
     @overload
     def __truediv__(self, other: Velocity) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Volume) -> SurfaceActivity: ...
     @overload
     def __truediv__(self, other: Numeric) -> Velocity: ...
     @overload

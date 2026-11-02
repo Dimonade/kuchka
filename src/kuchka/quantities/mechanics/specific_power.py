@@ -24,9 +24,11 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.specific_activity import SpecificActivity
     from kuchka.quantities.temporal import Frequency
 
 
@@ -69,7 +71,11 @@ class SpecificPower(LinearQuantity):
     @overload
     def __truediv__(self, other: Acceleration) -> Velocity: ...
     @overload
+    def __truediv__(self, other: Energy) -> SpecificActivity: ...
+    @overload
     def __truediv__(self, other: Proportion) -> SpecificPower: ...
+    @overload
+    def __truediv__(self, other: SpecificActivity) -> Energy: ...
     @overload
     def __truediv__(self, other: SpecificCurrent) -> Voltage: ...
     @overload
