@@ -77,7 +77,7 @@ A specialisation is a role of a kind of its dimension and of its shape, such as
 It is reached only by explicit construction, and every conversion between it and
 another kind is a named operation on the type.
 The relation records meaning: it does not convert values, and it does not pick an
-arithmetic result.
+arithmetic result unless a rule in ``_RULES`` names the role.
 The target is a kind that is not itself a specialisation.
 """
 
@@ -87,6 +87,9 @@ _RULES: dict[tuple[_Kind, str, _Kind], _Kind] = {}
 The operation is ``"*"`` or ``"/"``, and the kinds are the exact types of the operands.
 An explicit rule decides the result type before the dimension is consulted, so it is
 what separates two kinds that share a dimension.
+It is also the only way a role takes part in a product or quotient beyond scaling,
+dividing by itself, and multiplying by its reciprocal: ``AbsorbedDoseRate * Time`` is
+an ``AbsorbedDose`` by a rule.
 For instance, ``Force / Area`` is a ``Pressure`` and ``Energy / Volume`` an
 ``EnergyDensity`` although both results are M L⁻¹ T⁻².
 A product is entered in both operand orders.
@@ -374,9 +377,13 @@ def _rule(
     """Declare that `left <operation> right` is a `result`.
 
     A product holds in both operand orders.
-    The operands are registered linear kinds with a dimension, and the result is the
-    principal kind of the dimension the operation produces or one of its contested
-    kinds, because only those are results of arithmetic.
+    The operands are registered linear kinds with a dimension, and a role may be one.
+    The result is the principal kind of the dimension the operation produces, one of its
+    contested kinds, or a role of a kind of that dimension.
+    A role is reached by explicit construction and left by a named conversion, so only
+    a rule that names it makes arithmetic produce or take one.
+    `AbsorbedDoseRate * Time` is an `AbsorbedDose` because a rule says so, and
+    `AbsorbedDoseRate * Mass` is refused.
 
     Raises `TypeError` for a rule that does not fit or contradicts another, and
     `RuntimeError` once the registry is closed.
@@ -403,13 +410,15 @@ def _rule(
         if operation == "*"
         else left.dimension / right.dimension
     )
-    if result.dimension != dimension or result not in _arithmetic_roots(dimension):
+    if result.dimension != dimension or not (
+        result in _arithmetic_roots(dimension) or result in _SPECIALISATIONS
+    ):
         names = ", ".join(kind.__name__ for kind in _arithmetic_roots(dimension))
         msg = (
             f"{left.__name__} {operation} {right.__name__} has dimension "
             f"{dimension!r}, so {result.__name__} cannot be its result: the result is "
             f"the principal kind or a contested kind of that dimension "
-            f"({names or 'none registered'})."
+            f"({names or 'none registered'}), or a role of one."
         )
         raise TypeError(msg)
     keys = [(left, operation, right)]
@@ -500,6 +509,8 @@ def _refuse_a_role(
         return
     if operation == "*" and _RECIPROCALS.get(left_kind) is right_kind:
         return
+    if (left_kind, operation, right_kind) in _RULES:
+        return
     hint = " ".join(_conversion_hint(role) for role in dict.fromkeys(roles))
     verb = "multiply" if operation == "*" else "divide"
     raise IncompatibleDimensionError(verb, left, right, hint=hint)
@@ -574,8 +585,8 @@ def _combine(
     """Build the correctly-typed result of multiplying or dividing two quantities.
 
     A specialisation is refused unless it is scaled by a dimensionless operand,
-    divided by itself, or multiplied by its reciprocal; a dimensionless operand over a
-    specialisation is its reciprocal specialisation.
+    divided by itself, multiplied by its reciprocal, or named by a rule; a dimensionless
+    operand over a specialisation is its reciprocal specialisation.
     Then, in order: a ratio of like quantities is the ratio kind; any other
     dimensionless result is a plain ``Fraction``; a dimensionless operand keeps the
     other operand's kind; an explicit rule names the kind; otherwise the dimension

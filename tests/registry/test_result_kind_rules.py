@@ -16,9 +16,11 @@ from kuchka import Velocity
 from kuchka import Voltage
 from kuchka.dimensions import FREQUENCY
 from kuchka.dimensions import TIME
+from kuchka.dimensions import Dimension
 from kuchka.quantities.base import registry
 from kuchka.units import length
 from kuchka.units.kinematics import velocity
+from tests.support.synthetic import linear_kind
 
 
 def test_a_rule_after_the_close_is_refused() -> None:
@@ -98,9 +100,38 @@ def test_every_shipped_rule_fits_the_dimension_it_produces() -> None:
             else left.dimension / right.dimension
         )
         assert result.dimension == expected
-        assert result in registry._arithmetic_roots(expected)  # noqa: SLF001
+        assert (
+            result in registry._arithmetic_roots(expected)  # noqa: SLF001
+            or result in registry._SPECIALISATIONS  # noqa: SLF001
+        )
 
 
 def test_time_and_frequency_are_unaffected() -> None:
     assert registry._DIMENSION_REGISTRY[TIME] is Time  # noqa: SLF001
     assert registry._DIMENSION_REGISTRY[FREQUENCY] is Frequency  # noqa: SLF001
+
+
+@pytest.mark.usefixtures("open_registry")
+def test_a_role_can_be_the_result_and_an_operand_of_a_rule(novel: Dimension) -> None:
+    rate_dimension = novel / TIME
+    dose, dose_role = linear_kind("Dose", novel), linear_kind("DoseRole", novel)
+    rate = linear_kind("Rate", rate_dimension)
+    rate_role = linear_kind("RateRole", rate_dimension)
+    registry._register(novel, dose)  # noqa: SLF001
+    registry._register(novel, dose_role, specialisation_of=dose)  # noqa: SLF001
+    registry._register(rate_dimension, rate)  # noqa: SLF001
+    registry._register(rate_dimension, rate_role, specialisation_of=rate)  # noqa: SLF001
+    registry._rule(rate_role, "*", Time, dose_role)  # noqa: SLF001
+    registry._rule(dose_role, "/", Time, rate_role)  # noqa: SLF001
+    assert registry._RULES[(rate_role, "*", Time)] is dose_role  # noqa: SLF001
+    assert registry._RULES[(Time, "*", rate_role)] is dose_role  # noqa: SLF001
+    assert registry._RULES[(dose_role, "/", Time)] is rate_role  # noqa: SLF001
+
+
+@pytest.mark.usefixtures("open_registry")
+def test_a_role_of_another_dimension_is_still_not_a_result(novel: Dimension) -> None:
+    general, role = linear_kind("General", novel), linear_kind("Role", novel)
+    registry._register(novel, general)  # noqa: SLF001
+    registry._register(novel, role, specialisation_of=general)  # noqa: SLF001
+    with pytest.raises(TypeError, match="or a role of one"):
+        registry._rule(Voltage, "*", Current, role)  # noqa: SLF001
