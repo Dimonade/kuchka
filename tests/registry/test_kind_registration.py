@@ -5,12 +5,15 @@ from __future__ import annotations
 import pytest
 
 from kuchka import AbsorbedDose
+from kuchka import AbsorbedDoseRate
 from kuchka import Activity
 from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import CatalyticActivity
 from kuchka import EquivalentDose
+from kuchka import EquivalentDoseRate
 from kuchka import Exposure
+from kuchka import ExposureRate
 from kuchka import Frequency
 from kuchka import Impedance
 from kuchka import MagneticFieldStrength
@@ -24,7 +27,9 @@ from kuchka import Resistance
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
 from kuchka import SpecificCharge
+from kuchka import SpecificCurrent
 from kuchka import SpecificEnergy
+from kuchka import SpecificPower
 from kuchka import Stress
 from kuchka import Time
 from kuchka.dimensions import DIMENSIONLESS
@@ -40,10 +45,13 @@ from tests.support.synthetic import registry_state
     ("kind", "target"),
     [
         (AbsorbedDose, SpecificEnergy),
+        (AbsorbedDoseRate, SpecificPower),
         (Activity, Frequency),
         (CatalyticActivity, MolarFlowRate),
         (EquivalentDose, SpecificEnergy),
+        (EquivalentDoseRate, SpecificPower),
         (Exposure, SpecificCharge),
+        (ExposureRate, SpecificCurrent),
         (ApparentPower, Power),
         (BaudRate, Frequency),
         (Impedance, Resistance),
@@ -63,12 +71,15 @@ def test_a_role_of_a_kind_is_its_specialisation(kind: type, target: type) -> Non
 def test_only_the_listed_kinds_are_specialisations() -> None:
     assert set(registry._SPECIALISATIONS) == {  # noqa: SLF001
         AbsorbedDose,
+        AbsorbedDoseRate,
         Activity,
         ApparentPower,
         BaudRate,
         CatalyticActivity,
         EquivalentDose,
+        EquivalentDoseRate,
         Exposure,
+        ExposureRate,
         Impedance,
         Magnetization,
         Reactance,

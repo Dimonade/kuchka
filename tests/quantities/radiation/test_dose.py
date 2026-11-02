@@ -31,7 +31,6 @@ from kuchka.units.proportion import Ratio
 from kuchka.units.radiation import absorbed_dose
 from kuchka.units.radiation import equivalent_dose
 from kuchka.units.radiation import exposure
-from kuchka.units.temporal import time
 
 
 def test_a_gray_is_a_joule_per_kilogram() -> None:
@@ -75,11 +74,6 @@ def test_a_sievert_has_no_way_into_energy() -> None:
         dose * Kilogram(3)
     with pytest.raises(IncompatibleDimensionError, match="no conversion"):
         Kilogram(3) * dose
-
-
-def test_a_dose_rate_is_not_a_dose_over_a_time() -> None:
-    with pytest.raises(IncompatibleDimensionError):
-        equivalent_dose.Sievert(2) / time.Hour(1)
 
 
 def test_the_two_doses_and_a_specific_energy_do_not_mix() -> None:
