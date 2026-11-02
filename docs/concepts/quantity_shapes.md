@@ -40,7 +40,7 @@ abs(reading - setpoint) <= tolerance
 Kelvin(20) * 2  # rejected: no __mul__ on an affine quantity.
 ```
 
-Kelvin, Celsius, and Fahrenheit readings are all `Temperature`.
+Kelvin, Celsius, Fahrenheit, and Rankine readings are all `Temperature`.
 Their units differ by a scale and an offset, and kuchka keeps both exact: a Fahrenheit degree is exactly 5/9 of a kelvin, and 0 °F sits at exactly 459.67 x 5/9 K.
 
 ```python

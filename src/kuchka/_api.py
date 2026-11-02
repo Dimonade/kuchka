@@ -163,6 +163,7 @@ from kuchka.units import DegreePerSecond
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaFahrenheit
 from kuchka.units import DeltaKelvin
+from kuchka.units import DeltaRankine
 from kuchka.units import DpmPer100SquareCentimetre
 from kuchka.units import Dyne
 from kuchka.units import DyneSecond
@@ -571,6 +572,7 @@ from kuchka.units import Radian
 from kuchka.units import RadianDisplacement
 from kuchka.units import RadianPerSecond
 from kuchka.units import RadPerHour
+from kuchka.units import Rankine
 from kuchka.units import Ratio
 from kuchka.units import Rem
 from kuchka.units import RemPerHour
@@ -733,6 +735,7 @@ __all__ = [
     "DeltaCelsius",
     "DeltaFahrenheit",
     "DeltaKelvin",
+    "DeltaRankine",
     "Density",
     "DpmPer100SquareCentimetre",
     "Dyne",
@@ -1184,6 +1187,7 @@ __all__ = [
     "Radian",
     "RadianDisplacement",
     "RadianPerSecond",
+    "Rankine",
     "Ratio",
     "Reactance",
     "ReactivePower",

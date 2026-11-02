@@ -32,6 +32,9 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   Added `AVOGADRO_CONSTANT` and `FARADAY_CONSTANT` to `codata_2022` for entity counts and molar charge calculations.
   Ambiguous bare spellings `Da`, `u`, `ppm`, `IU`, and molal `m` are refused.
 
+- **Temperature:**
+  Added `Rankine` and `DeltaRankine`: a Rankine degree is exactly 5/9 of a kelvin, and 0 °R is absolute zero, so 0 °F is exactly 459.67 °R.
+  The spellings `deg`, `degrees`, `degree`, and `Grad` stay ambiguous between the scales and are still refused.
 - **Magnetic energy density:**
   `MagneticFluxDensity * MagneticFieldStrength` is now an `EnergyDensity`, in either order, and no longer raises `AmbiguousKindError`.
   It is the product `B·H`, twice the energy stored in a linear medium, and `Magnetization` stays refused in it.
