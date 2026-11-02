@@ -58,6 +58,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.resistance import Reactance
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
+    from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
@@ -80,6 +81,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.pressure import Stress
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+    from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
@@ -90,9 +92,12 @@ if TYPE_CHECKING:
     from kuchka.quantities.photometry.luminous_exposure import LuminousExposure
     from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.radiation.absorbed_dose import AbsorbedDose
+    from kuchka.quantities.radiation.absorbed_dose_rate import AbsorbedDoseRate
     from kuchka.quantities.radiation.activity import Activity
     from kuchka.quantities.radiation.equivalent_dose import EquivalentDose
+    from kuchka.quantities.radiation.equivalent_dose_rate import EquivalentDoseRate
     from kuchka.quantities.radiation.exposure import Exposure
+    from kuchka.quantities.radiation.exposure_rate import ExposureRate
     from kuchka.quantities.solid_angle import SolidAngle
     from kuchka.quantities.temporal import BaudRate
     from kuchka.quantities.temporal import Frequency
@@ -112,6 +117,8 @@ class Proportion(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: AbsorbedDose) -> AbsorbedDose: ...
+    @overload
+    def __mul__(self, other: AbsorbedDoseRate) -> AbsorbedDoseRate: ...
     @overload
     def __mul__(self, other: Acceleration) -> Acceleration: ...
     @overload
@@ -153,7 +160,11 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: EquivalentDose) -> EquivalentDose: ...
     @overload
+    def __mul__(self, other: EquivalentDoseRate) -> EquivalentDoseRate: ...
+    @overload
     def __mul__(self, other: Exposure) -> Exposure: ...
+    @overload
+    def __mul__(self, other: ExposureRate) -> ExposureRate: ...
     @overload
     def __mul__(self, other: Force) -> Force: ...
     @overload
@@ -235,7 +246,11 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: SpecificCharge) -> SpecificCharge: ...
     @overload
+    def __mul__(self, other: SpecificCurrent) -> SpecificCurrent: ...
+    @overload
     def __mul__(self, other: SpecificEnergy) -> SpecificEnergy: ...
+    @overload
+    def __mul__(self, other: SpecificPower) -> SpecificPower: ...
     @overload
     def __mul__(self, other: Stress) -> Stress: ...
     @overload

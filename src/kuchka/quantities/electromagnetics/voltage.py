@@ -24,8 +24,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.conductance import Conductance
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.resistance import Resistance
+    from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -50,6 +52,8 @@ class Voltage(LinearQuantity):
     def __mul__(self, other: MolarCharge) -> MolarEnergy: ...
     @overload
     def __mul__(self, other: Proportion) -> Voltage: ...
+    @overload
+    def __mul__(self, other: SpecificCurrent) -> SpecificPower: ...
     @overload
     def __mul__(self, other: Time) -> MagneticFlux: ...
     @overload

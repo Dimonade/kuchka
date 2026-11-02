@@ -12,6 +12,7 @@ from kuchka.quantities.mechanics import momentum
 from kuchka.quantities.mechanics import power
 from kuchka.quantities.mechanics import pressure
 from kuchka.quantities.mechanics import specific_energy
+from kuchka.quantities.mechanics import specific_power
 from kuchka.quantities.mechanics import torque
 from kuchka.quantities.mechanics import velocity_squared
 from kuchka.quantities.mechanics import volumetric_flow_rate
@@ -25,6 +26,7 @@ from kuchka.quantities.mechanics.momentum import *
 from kuchka.quantities.mechanics.power import *
 from kuchka.quantities.mechanics.pressure import *
 from kuchka.quantities.mechanics.specific_energy import *
+from kuchka.quantities.mechanics.specific_power import *
 from kuchka.quantities.mechanics.torque import *
 from kuchka.quantities.mechanics.velocity_squared import *
 from kuchka.quantities.mechanics.volumetric_flow_rate import *
@@ -40,6 +42,7 @@ __all__ += momentum.__all__
 __all__ += power.__all__
 __all__ += pressure.__all__
 __all__ += specific_energy.__all__
+__all__ += specific_power.__all__
 __all__ += torque.__all__
 __all__ += velocity_squared.__all__
 __all__ += volumetric_flow_rate.__all__

@@ -69,6 +69,7 @@ if TYPE_CHECKING:
     )
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
+    from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.information.data import Data
@@ -84,12 +85,21 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+    from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.photometry.illuminance import Illuminance
     from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
     from kuchka.quantities.photometry.luminous_exposure import LuminousExposure
     from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.absorbed_dose import AbsorbedDose
+    from kuchka.quantities.radiation.absorbed_dose_rate import AbsorbedDoseRate
+    from kuchka.quantities.radiation.equivalent_dose import EquivalentDose
+    from kuchka.quantities.radiation.equivalent_dose_rate import EquivalentDoseRate
+    from kuchka.quantities.radiation.exposure import Exposure
+    from kuchka.quantities.radiation.exposure_rate import ExposureRate
     from kuchka.quantities.thermal import TemperatureDelta
     from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
 
@@ -102,6 +112,8 @@ class Time(LinearQuantity):
 
     # BEGIN GENERATED __mul__
     @overload
+    def __mul__(self, other: AbsorbedDoseRate) -> AbsorbedDose: ...
+    @overload
     def __mul__(self, other: Acceleration) -> Velocity: ...
     @overload
     def __mul__(self, other: AngularVelocity) -> AngularDisplacement: ...
@@ -111,6 +123,10 @@ class Time(LinearQuantity):
     def __mul__(self, other: Current) -> Charge: ...
     @overload
     def __mul__(self, other: DataRate) -> Data: ...
+    @overload
+    def __mul__(self, other: EquivalentDoseRate) -> EquivalentDose: ...
+    @overload
+    def __mul__(self, other: ExposureRate) -> Exposure: ...
     @overload
     def __mul__(self, other: Force) -> Impulse: ...
     @overload
@@ -131,6 +147,10 @@ class Time(LinearQuantity):
     def __mul__(self, other: Proportion) -> Time: ...
     @overload
     def __mul__(self, other: Resistance) -> Inductance: ...
+    @overload
+    def __mul__(self, other: SpecificCurrent) -> SpecificCharge: ...
+    @overload
+    def __mul__(self, other: SpecificPower) -> SpecificEnergy: ...
     @overload
     def __mul__(self, other: Velocity) -> Length: ...
     @overload
@@ -277,11 +297,17 @@ class Frequency(LinearQuantity):
     @overload
     def __mul__(self, other: Proportion) -> Frequency: ...
     @overload
+    def __mul__(self, other: SpecificCharge) -> SpecificCurrent: ...
+    @overload
+    def __mul__(self, other: SpecificEnergy) -> SpecificPower: ...
+    @overload
     def __mul__(self, other: TemperatureDelta) -> HeatingRate: ...
     @overload
     def __mul__(self, other: Time) -> Fraction: ...
     @overload
     def __mul__(self, other: Velocity) -> Acceleration: ...
+    @overload
+    def __mul__(self, other: VelocitySquared) -> SpecificPower: ...
     @overload
     def __mul__(self, other: Volume) -> VolumetricFlowRate: ...
     @overload

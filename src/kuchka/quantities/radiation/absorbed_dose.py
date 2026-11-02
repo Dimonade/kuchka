@@ -20,6 +20,8 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.absorbed_dose_rate import AbsorbedDoseRate
+    from kuchka.quantities.temporal import Time
 
 
 class AbsorbedDose(LinearQuantity):
@@ -58,7 +60,11 @@ class AbsorbedDose(LinearQuantity):
     @overload
     def __truediv__(self, other: AbsorbedDose) -> Proportion: ...
     @overload
+    def __truediv__(self, other: AbsorbedDoseRate) -> Time: ...
+    @overload
     def __truediv__(self, other: Proportion) -> AbsorbedDose: ...
+    @overload
+    def __truediv__(self, other: Time) -> AbsorbedDoseRate: ...
     @overload
     def __truediv__(self, other: Numeric) -> AbsorbedDose: ...
     @overload
