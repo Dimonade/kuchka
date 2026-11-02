@@ -32,6 +32,9 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   Added `AVOGADRO_CONSTANT` and `FARADAY_CONSTANT` to `codata_2022` for entity counts and molar charge calculations.
   Ambiguous bare spellings `Da`, `u`, `ppm`, `IU`, and molal `m` are refused.
 
+- **Impulse:**
+  `Force / Frequency` is now an `Impulse`, the force times a period, and no longer raises `AmbiguousKindError`.
+  The roles of `Frequency`, such as `Activity` and `SampleRate`, stay refused in that quotient.
 - **Activity densities:**
   Added activity concentration (Bq/m³, Bq/L, pCi/L), specific activity (Bq/kg, pCi/g, Ci/g), and surface activity (Bq/cm², dpm/100 cm², Ci/km²), the readings of radon monitors, soil and food assays, and contamination monitors.
   They are principal kinds of their own dimensions, and rules make `Activity / Volume`, `Activity / Mass`, and `Activity / Area` their quotients and `Activity` their product with the divisor.
