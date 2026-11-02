@@ -13,6 +13,7 @@ import pytest
 from kuchka import AmbiguousKindError
 from kuchka import Force
 from kuchka import Impulse
+from kuchka import IncompatibleDimensionError
 from kuchka import InvalidConversionError
 from kuchka import Momentum
 from kuchka import Time
@@ -25,6 +26,7 @@ from kuchka.units.mechanics import energy
 from kuchka.units.mechanics import force
 from kuchka.units.mechanics import impulse as imp
 from kuchka.units.mechanics import momentum
+from kuchka.units.radiation import activity
 
 
 def test_a_dyne_second_is_exactly_a_gram_centimetre_per_second_of_impulse() -> None:
@@ -51,6 +53,20 @@ def test_a_force_times_a_time_is_an_impulse_in_either_order() -> None:
     assert type(burn) is Impulse
     assert burn == imp.NewtonSecond(60)
     assert type(temporal.Second(3) * force.Newton(20)) is Impulse
+
+
+def test_a_force_over_a_frequency_is_an_impulse() -> None:
+    burn = force.Newton(1) / temporal.Hertz(1)
+    assert type(burn) is Impulse
+    assert burn == imp.NewtonSecond(1)
+    assert force.Newton(60) / temporal.Hertz(20) == imp.NewtonSecond(3)
+
+
+def test_the_roles_of_frequency_do_not_take_part_in_that_quotient() -> None:
+    with pytest.raises(IncompatibleDimensionError):
+        force.Newton(1) / activity.Becquerel(1)
+    with pytest.raises(IncompatibleDimensionError):
+        force.Newton(1) / temporal.sample_rate.SamplesPerSecond(1)
 
 
 def test_the_quotients_of_an_impulse() -> None:

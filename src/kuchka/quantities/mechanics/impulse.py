@@ -16,6 +16,7 @@ from kuchka.quantities.base.registry import _register
 from kuchka.quantities.base.registry import _rule
 from kuchka.quantities.mechanics.force import Force
 from kuchka.quantities.mechanics.momentum import Momentum
+from kuchka.quantities.temporal import Frequency
 from kuchka.quantities.temporal import Time
 
 if TYPE_CHECKING:
@@ -32,7 +33,6 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.specific_activity import SpecificActivity
-    from kuchka.quantities.temporal import Frequency
 
 
 class Impulse(LinearQuantity):
@@ -130,6 +130,7 @@ class Impulse(LinearQuantity):
 
 _register(IMPULSE, Impulse, contested_with=Momentum)
 _rule(Force, "*", Time, Impulse)
+_rule(Force, "/", Frequency, Impulse)
 _register_hint(
     Impulse,
     Momentum,
