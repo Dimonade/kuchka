@@ -74,6 +74,7 @@ from kuchka.units.electromagnetics.permittivity import *
 from kuchka.units.electromagnetics.reactance import *
 from kuchka.units.electromagnetics.resistance import *
 from kuchka.units.electromagnetics.specific_charge import *
+from kuchka.units.electromagnetics.specific_current import *
 from kuchka.units.electromagnetics.voltage import *
 from kuchka.units.geometry.area import *
 from kuchka.units.geometry.volume import *
@@ -96,6 +97,7 @@ from kuchka.units.mechanics.momentum import *
 from kuchka.units.mechanics.power import *
 from kuchka.units.mechanics.pressure import *
 from kuchka.units.mechanics.specific_energy import *
+from kuchka.units.mechanics.specific_power import *
 from kuchka.units.mechanics.stress import *
 from kuchka.units.mechanics.torque import *
 from kuchka.units.mechanics.velocity_squared import *
@@ -108,9 +110,12 @@ from kuchka.units.photometry.luminous_exposure import *
 from kuchka.units.photometry.luminous_flux import *
 from kuchka.units.proportion import *
 from kuchka.units.radiation.absorbed_dose import *
+from kuchka.units.radiation.absorbed_dose_rate import *
 from kuchka.units.radiation.activity import *
 from kuchka.units.radiation.equivalent_dose import *
+from kuchka.units.radiation.equivalent_dose_rate import *
 from kuchka.units.radiation.exposure import *
+from kuchka.units.radiation.exposure_rate import *
 from kuchka.units.solid_angle import *
 from kuchka.units.temporal.baud_rate import *
 from kuchka.units.temporal.frequency import *
@@ -127,6 +132,7 @@ if TYPE_CHECKING:
 
 _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.AbsorbedDose: ABSORBED_DOSE_UNITS,
+    quantities.AbsorbedDoseRate: ABSORBED_DOSE_RATE_UNITS,
     quantities.Acceleration: ACCELERATION_UNITS,
     quantities.Activity: ACTIVITY_UNITS,
     quantities.ApparentPower: APPARENT_POWER_UNITS,
@@ -148,7 +154,9 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Density: DENSITY_UNITS,
     quantities.EntitiesPerAmount: ENTITIES_PER_AMOUNT_UNITS,
     quantities.EquivalentDose: EQUIVALENT_DOSE_UNITS,
+    quantities.EquivalentDoseRate: EQUIVALENT_DOSE_RATE_UNITS,
     quantities.Exposure: EXPOSURE_UNITS,
+    quantities.ExposureRate: EXPOSURE_RATE_UNITS,
     quantities.Energy: ENERGY_UNITS,
     quantities.EnergyDensity: ENERGY_DENSITY_UNITS,
     quantities.Force: FORCE_UNITS,
@@ -187,7 +195,9 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Power: POWER_UNITS,
     quantities.Pressure: PRESSURE_UNITS,
     quantities.SpecificCharge: SPECIFIC_CHARGE_UNITS,
+    quantities.SpecificCurrent: SPECIFIC_CURRENT_UNITS,
     quantities.SpecificEnergy: SPECIFIC_ENERGY_UNITS,
+    quantities.SpecificPower: SPECIFIC_POWER_UNITS,
     quantities.Stress: STRESS_UNITS,
     quantities.Proportion: PROPORTION_UNITS,
     quantities.Reactance: REACTANCE_UNITS,
