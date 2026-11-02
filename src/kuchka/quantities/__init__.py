@@ -71,6 +71,7 @@ from kuchka.quantities.electromagnetics.permeability import *
 from kuchka.quantities.electromagnetics.permittivity import *
 from kuchka.quantities.electromagnetics.resistance import *
 from kuchka.quantities.electromagnetics.specific_charge import *
+from kuchka.quantities.electromagnetics.specific_current import *
 from kuchka.quantities.electromagnetics.voltage import *
 from kuchka.quantities.geometry.area import *
 from kuchka.quantities.geometry.volume import *
@@ -93,6 +94,7 @@ from kuchka.quantities.mechanics.momentum import *
 from kuchka.quantities.mechanics.power import *
 from kuchka.quantities.mechanics.pressure import *
 from kuchka.quantities.mechanics.specific_energy import *
+from kuchka.quantities.mechanics.specific_power import *
 from kuchka.quantities.mechanics.torque import *
 from kuchka.quantities.mechanics.velocity_squared import *
 from kuchka.quantities.mechanics.volumetric_flow_rate import *
@@ -104,9 +106,12 @@ from kuchka.quantities.photometry.luminous_exposure import *
 from kuchka.quantities.photometry.luminous_flux import *
 from kuchka.quantities.proportion import *
 from kuchka.quantities.radiation.absorbed_dose import *
+from kuchka.quantities.radiation.absorbed_dose_rate import *
 from kuchka.quantities.radiation.activity import *
 from kuchka.quantities.radiation.equivalent_dose import *
+from kuchka.quantities.radiation.equivalent_dose_rate import *
 from kuchka.quantities.radiation.exposure import *
+from kuchka.quantities.radiation.exposure_rate import *
 from kuchka.quantities.solid_angle import *
 from kuchka.quantities.temporal import *
 from kuchka.quantities.thermal import *

@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+    from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -48,6 +49,8 @@ class Acceleration(LinearQuantity):
     def __mul__(self, other: Proportion) -> Acceleration: ...
     @overload
     def __mul__(self, other: Time) -> Velocity: ...
+    @overload
+    def __mul__(self, other: Velocity) -> SpecificPower: ...
     @overload
     def __mul__(self, other: Numeric) -> Acceleration: ...
     @overload

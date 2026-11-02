@@ -20,6 +20,8 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.exposure_rate import ExposureRate
+    from kuchka.quantities.temporal import Time
 
 
 class Exposure(LinearQuantity):
@@ -57,7 +59,11 @@ class Exposure(LinearQuantity):
     @overload
     def __truediv__(self, other: Exposure) -> Proportion: ...
     @overload
+    def __truediv__(self, other: ExposureRate) -> Time: ...
+    @overload
     def __truediv__(self, other: Proportion) -> Exposure: ...
+    @overload
+    def __truediv__(self, other: Time) -> ExposureRate: ...
     @overload
     def __truediv__(self, other: Numeric) -> Exposure: ...
     @overload

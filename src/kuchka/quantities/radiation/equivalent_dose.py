@@ -22,6 +22,8 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.radiation.equivalent_dose_rate import EquivalentDoseRate
+    from kuchka.quantities.temporal import Time
 
 
 class EquivalentDose(LinearQuantity):
@@ -65,7 +67,11 @@ class EquivalentDose(LinearQuantity):
     @overload
     def __truediv__(self, other: EquivalentDose) -> Proportion: ...
     @overload
+    def __truediv__(self, other: EquivalentDoseRate) -> Time: ...
+    @overload
     def __truediv__(self, other: Proportion) -> EquivalentDose: ...
+    @overload
+    def __truediv__(self, other: Time) -> EquivalentDoseRate: ...
     @overload
     def __truediv__(self, other: Numeric) -> EquivalentDose: ...
     @overload

@@ -27,7 +27,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molality import Molality
     from kuchka.quantities.chemistry.molar_energy import MolarEnergy
     from kuchka.quantities.chemistry.molar_mass import MolarMass
+    from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
+    from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.length import Length
@@ -35,7 +37,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
 
 
 class VelocitySquared(LinearQuantity):
@@ -59,6 +64,8 @@ class VelocitySquared(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Density) -> Pressure: ...
+    @overload
+    def __mul__(self, other: Frequency) -> SpecificPower: ...
     @overload
     def __mul__(self, other: Mass) -> Energy: ...
     @overload
@@ -84,6 +91,8 @@ class VelocitySquared(LinearQuantity):
     @overload
     def __truediv__(self, other: Length) -> Acceleration: ...
     @overload
+    def __truediv__(self, other: MagneticFlux) -> SpecificCurrent: ...
+    @overload
     def __truediv__(self, other: Molality) -> MolarEnergy: ...
     @overload
     def __truediv__(self, other: MolarEnergy) -> Molality: ...
@@ -92,7 +101,13 @@ class VelocitySquared(LinearQuantity):
     @overload
     def __truediv__(self, other: SpecificCharge) -> Voltage: ...
     @overload
+    def __truediv__(self, other: SpecificCurrent) -> MagneticFlux: ...
+    @overload
     def __truediv__(self, other: SpecificEnergy) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: SpecificPower) -> Time: ...
+    @overload
+    def __truediv__(self, other: Time) -> SpecificPower: ...
     @overload
     def __truediv__(self, other: Velocity) -> Velocity: ...
     @overload

@@ -30,6 +30,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
@@ -44,6 +45,8 @@ class Velocity(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: Acceleration) -> SpecificPower: ...
     @overload
     def __mul__(self, other: Area) -> VolumetricFlowRate: ...
     @overload
