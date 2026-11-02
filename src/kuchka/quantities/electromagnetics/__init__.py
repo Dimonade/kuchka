@@ -13,6 +13,7 @@ from kuchka.quantities.electromagnetics import magnetic_flux_density
 from kuchka.quantities.electromagnetics import permeability
 from kuchka.quantities.electromagnetics import permittivity
 from kuchka.quantities.electromagnetics import resistance
+from kuchka.quantities.electromagnetics import specific_charge
 from kuchka.quantities.electromagnetics import voltage
 from kuchka.quantities.electromagnetics.ac_power import *
 from kuchka.quantities.electromagnetics.capacitance import *
@@ -25,6 +26,7 @@ from kuchka.quantities.electromagnetics.magnetic_flux_density import *
 from kuchka.quantities.electromagnetics.permeability import *
 from kuchka.quantities.electromagnetics.permittivity import *
 from kuchka.quantities.electromagnetics.resistance import *
+from kuchka.quantities.electromagnetics.specific_charge import *
 from kuchka.quantities.electromagnetics.voltage import *
 
 __all__: list[str] = []
@@ -39,4 +41,5 @@ __all__ += magnetic_flux_density.__all__
 __all__ += permeability.__all__
 __all__ += permittivity.__all__
 __all__ += resistance.__all__
+__all__ += specific_charge.__all__
 __all__ += voltage.__all__

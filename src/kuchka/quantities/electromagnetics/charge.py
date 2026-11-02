@@ -27,7 +27,9 @@ if TYPE_CHECKING:
         MagneticFluxDensity,
     )
     from kuchka.quantities.electromagnetics.resistance import Resistance
+    from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.proportion import Proportion
@@ -79,9 +81,13 @@ class Charge(LinearQuantity):
     @overload
     def __truediv__(self, other: MagneticFlux) -> Conductance: ...
     @overload
+    def __truediv__(self, other: Mass) -> SpecificCharge: ...
+    @overload
     def __truediv__(self, other: MolarCharge) -> AmountOfSubstance: ...
     @overload
     def __truediv__(self, other: Proportion) -> Charge: ...
+    @overload
+    def __truediv__(self, other: SpecificCharge) -> Mass: ...
     @overload
     def __truediv__(self, other: Time) -> Current: ...
     @overload

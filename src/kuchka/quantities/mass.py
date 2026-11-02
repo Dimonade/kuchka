@@ -20,6 +20,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
     from kuchka.quantities.chemistry.molality import Molality
     from kuchka.quantities.chemistry.molar_mass import MolarMass
+    from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.velocity import Velocity
@@ -52,6 +54,8 @@ class Mass(LinearQuantity):
     def __mul__(self, other: Molality) -> AmountOfSubstance: ...
     @overload
     def __mul__(self, other: Proportion) -> Mass: ...
+    @overload
+    def __mul__(self, other: SpecificCharge) -> Charge: ...
     @overload
     def __mul__(self, other: SpecificEnergy) -> Energy: ...
     @overload

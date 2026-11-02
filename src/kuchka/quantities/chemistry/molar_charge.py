@@ -18,10 +18,13 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.amount import AmountOfSubstance
     from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
+    from kuchka.quantities.chemistry.molality import Molality
     from kuchka.quantities.chemistry.molar_energy import MolarEnergy
     from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
+    from kuchka.quantities.chemistry.molar_mass import MolarMass
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.proportion import Proportion
 
@@ -35,6 +38,8 @@ class MolarCharge(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: AmountOfSubstance) -> Charge: ...
+    @overload
+    def __mul__(self, other: Molality) -> SpecificCharge: ...
     @overload
     def __mul__(self, other: MolarFlowRate) -> Current: ...
     @overload
@@ -60,7 +65,11 @@ class MolarCharge(LinearQuantity):
     @overload
     def __truediv__(self, other: MolarCharge) -> Proportion: ...
     @overload
+    def __truediv__(self, other: MolarMass) -> SpecificCharge: ...
+    @overload
     def __truediv__(self, other: Proportion) -> MolarCharge: ...
+    @overload
+    def __truediv__(self, other: SpecificCharge) -> MolarMass: ...
     @overload
     def __truediv__(self, other: Numeric) -> MolarCharge: ...
     @overload

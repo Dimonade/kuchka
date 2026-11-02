@@ -27,6 +27,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molality import Molality
     from kuchka.quantities.chemistry.molar_energy import MolarEnergy
     from kuchka.quantities.chemistry.molar_mass import MolarMass
+    from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
+    from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
@@ -88,11 +90,15 @@ class VelocitySquared(LinearQuantity):
     @overload
     def __truediv__(self, other: Proportion) -> VelocitySquared: ...
     @overload
+    def __truediv__(self, other: SpecificCharge) -> Voltage: ...
+    @overload
     def __truediv__(self, other: SpecificEnergy) -> Proportion: ...
     @overload
     def __truediv__(self, other: Velocity) -> Velocity: ...
     @overload
     def __truediv__(self, other: VelocitySquared) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Voltage) -> SpecificCharge: ...
     @overload
     def __truediv__(self, other: Numeric) -> VelocitySquared: ...
     @overload

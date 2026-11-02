@@ -57,6 +57,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.resistance import Impedance
     from kuchka.quantities.electromagnetics.resistance import Reactance
     from kuchka.quantities.electromagnetics.resistance import Resistance
+    from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
@@ -88,7 +89,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
     from kuchka.quantities.photometry.luminous_exposure import LuminousExposure
     from kuchka.quantities.photometry.luminous_flux import LuminousFlux
+    from kuchka.quantities.radiation.absorbed_dose import AbsorbedDose
     from kuchka.quantities.radiation.activity import Activity
+    from kuchka.quantities.radiation.equivalent_dose import EquivalentDose
+    from kuchka.quantities.radiation.exposure import Exposure
     from kuchka.quantities.solid_angle import SolidAngle
     from kuchka.quantities.temporal import BaudRate
     from kuchka.quantities.temporal import Frequency
@@ -106,6 +110,8 @@ class Proportion(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: AbsorbedDose) -> AbsorbedDose: ...
     @overload
     def __mul__(self, other: Acceleration) -> Acceleration: ...
     @overload
@@ -144,6 +150,10 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: EnergyDensity) -> EnergyDensity: ...
     @overload
     def __mul__(self, other: EntitiesPerAmount) -> EntitiesPerAmount: ...
+    @overload
+    def __mul__(self, other: EquivalentDose) -> EquivalentDose: ...
+    @overload
+    def __mul__(self, other: Exposure) -> Exposure: ...
     @overload
     def __mul__(self, other: Force) -> Force: ...
     @overload
@@ -222,6 +232,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: SamplingPeriod) -> SamplingPeriod: ...
     @overload
     def __mul__(self, other: SolidAngle) -> SolidAngle: ...
+    @overload
+    def __mul__(self, other: SpecificCharge) -> SpecificCharge: ...
     @overload
     def __mul__(self, other: SpecificEnergy) -> SpecificEnergy: ...
     @overload
