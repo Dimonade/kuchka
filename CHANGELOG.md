@@ -9,7 +9,7 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 
 ### Added
 
-#### Added
+#### New quantity families, units, relationships, and more
 
 - **Electromagnetics:**
   Added magnetic flux and flux density (weber, tesla, and gauss families), capacitance, inductance, resistance-based `Reactance` and `Impedance` roles, magnetic field strength and its `Magnetization` role, permittivity, and permeability.
@@ -32,6 +32,12 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   Added `AVOGADRO_CONSTANT` and `FARADAY_CONSTANT` to `codata_2022` for entity counts and molar charge calculations.
   Ambiguous bare spellings `Da`, `u`, `ppm`, `IU`, and molal `m` are refused.
 
+- **Heat capacity:**
+  Added `HeatCapacity` (J/K, kJ/K) and `SpecificHeatCapacity` (J/(kg·K), kJ/(kg·K), cal/(g·K)), so the heat `Q = m * c * dT` is an `Energy` however it is grouped.
+  `Energy / TemperatureDelta` is a `HeatCapacity`, `HeatCapacity / Mass` and `SpecificEnergy / TemperatureDelta` are a `SpecificHeatCapacity`, and `SpecificHeatCapacity * TemperatureDelta` is a `SpecificEnergy` by a rule.
+  A degree Celsius in the denominator is a kelvin, so `J/°C` and `J/(kg·°C)` are accepted spellings.
+  Entropy and the gas constants are not in this release; they are planned as closed roles of these kinds.
+  The `thermodynamics` units package moves up the layering order, because it now builds on the energy units.
 - **Length:**
   Added `Parsec`, `Kiloparsec`, `Megaparsec`, and `Gigaparsec`.
   A parsec is exactly 648000/pi astronomical units, so it is held as that quotient with pi to 100 decimal places, within one part in 1E+100 of its defined length, and the multiples of it are exact.

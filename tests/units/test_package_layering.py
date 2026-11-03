@@ -18,7 +18,7 @@ RANK = {
     "information": 1,
     "photometry": 2,
     "radiation": 5,
-    "thermodynamics": 1,
+    "thermodynamics": 4,
     "kinematics": 2,
     "mechanics": 3,
     "electromagnetics": 4,
