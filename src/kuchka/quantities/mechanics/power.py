@@ -41,6 +41,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermodynamics.heat_capacity import HeatCapacity
+    from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
 
 
 class Power(LinearQuantity):
@@ -80,6 +82,10 @@ class Power(LinearQuantity):
     def __truediv__(self, other: Force) -> Velocity: ...
     @overload
     def __truediv__(self, other: Frequency) -> Energy: ...
+    @overload
+    def __truediv__(self, other: HeatCapacity) -> HeatingRate: ...
+    @overload
+    def __truediv__(self, other: HeatingRate) -> HeatCapacity: ...
     @overload
     def __truediv__(self, other: Impulse) -> Acceleration: ...
     @overload

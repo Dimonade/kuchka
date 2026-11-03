@@ -221,6 +221,8 @@ Pressure * Volume -> Energy
 Energy / Volume -> EnergyDensity
 Energy / Mass -> SpecificEnergy
 TemperatureDelta / Time -> HeatingRate
+Energy / TemperatureDelta -> HeatCapacity
+HeatCapacity / Mass -> SpecificHeatCapacity
 Torque * AngularDisplacement -> Energy
 Torque * AngularVelocity -> Power
 AngularDisplacement / Time -> AngularVelocity
@@ -564,6 +566,8 @@ The complete unit vocabulary is available in the API reference.
 | Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`, `Rankine`                                                                     |
 | Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`, `DeltaRankine`                                                 |
 | Heating Rate      | `KelvinPerSecond`, `CelsiusPerMinute`, `FahrenheitPerMinute`, and the per-second, per-minute, and per-hour units |
+| Heat capacity     | `JoulePerKelvin`, `KilojoulePerKelvin`                                                                           |
+| Specific heat     | `JoulePerKilogramKelvin`, `KilojoulePerKilogramKelvin`, `ThermochemicalCaloriePerGramKelvin`                     |
 
 ### Geometry and mechanics
 
