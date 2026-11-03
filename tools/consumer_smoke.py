@@ -13,7 +13,9 @@ if version_info < (3, 12) and find_spec("typing_extensions") is None:
     raise RuntimeError("typing_extensions is missing from the runtime installation")
 
 # Import through the public API.
-from kuchka import AmpereHour, Ohm, Volt
+from kuchka import AmpereHour
+from kuchka import Ohm
+from kuchka import Volt
 from kuchka.units import HOUR
 
 # Exercise a representative engineering calculation.
