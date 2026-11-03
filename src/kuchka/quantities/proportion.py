@@ -108,7 +108,11 @@ if TYPE_CHECKING:
     from kuchka.quantities.temporal import SamplingPeriod
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.thermal import TemperatureDelta
+    from kuchka.quantities.thermodynamics.heat_capacity import HeatCapacity
     from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
+    from kuchka.quantities.thermodynamics.specific_heat_capacity import (
+        SpecificHeatCapacity,
+    )
 
 
 class Proportion(LinearQuantity):
@@ -174,6 +178,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: Force) -> Force: ...
     @overload
     def __mul__(self, other: Frequency) -> Frequency: ...
+    @overload
+    def __mul__(self, other: HeatCapacity) -> HeatCapacity: ...
     @overload
     def __mul__(self, other: HeatingRate) -> HeatingRate: ...
     @overload
@@ -256,6 +262,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: SpecificCurrent) -> SpecificCurrent: ...
     @overload
     def __mul__(self, other: SpecificEnergy) -> SpecificEnergy: ...
+    @overload
+    def __mul__(self, other: SpecificHeatCapacity) -> SpecificHeatCapacity: ...
     @overload
     def __mul__(self, other: SpecificPower) -> SpecificPower: ...
     @overload

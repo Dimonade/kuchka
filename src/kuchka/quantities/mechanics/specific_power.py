@@ -30,6 +30,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.specific_activity import SpecificActivity
     from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
+    from kuchka.quantities.thermodynamics.specific_heat_capacity import (
+        SpecificHeatCapacity,
+    )
 
 
 class SpecificPower(LinearQuantity):
@@ -73,6 +77,8 @@ class SpecificPower(LinearQuantity):
     @overload
     def __truediv__(self, other: Energy) -> SpecificActivity: ...
     @overload
+    def __truediv__(self, other: HeatingRate) -> SpecificHeatCapacity: ...
+    @overload
     def __truediv__(self, other: Proportion) -> SpecificPower: ...
     @overload
     def __truediv__(self, other: SpecificActivity) -> Energy: ...
@@ -80,6 +86,8 @@ class SpecificPower(LinearQuantity):
     def __truediv__(self, other: SpecificCurrent) -> Voltage: ...
     @overload
     def __truediv__(self, other: SpecificEnergy) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: SpecificHeatCapacity) -> HeatingRate: ...
     @overload
     def __truediv__(self, other: SpecificPower) -> Proportion: ...
     @overload

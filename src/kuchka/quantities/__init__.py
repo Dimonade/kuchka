@@ -118,7 +118,9 @@ from kuchka.quantities.radiation.surface_activity import *
 from kuchka.quantities.solid_angle import *
 from kuchka.quantities.temporal import *
 from kuchka.quantities.thermal import *
+from kuchka.quantities.thermodynamics.heat_capacity import *
 from kuchka.quantities.thermodynamics.heating_rate import *
+from kuchka.quantities.thermodynamics.specific_heat_capacity import *
 
 __all__: list[str] = []
 __all__ += amount.__all__

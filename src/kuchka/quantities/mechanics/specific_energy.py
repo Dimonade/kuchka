@@ -17,6 +17,8 @@ from kuchka.quantities.mass import Mass
 from kuchka.quantities.mechanics.density import Density
 from kuchka.quantities.mechanics.energy import Energy
 from kuchka.quantities.mechanics.pressure import Pressure
+from kuchka.quantities.thermal import TemperatureDelta
+from kuchka.quantities.thermodynamics.specific_heat_capacity import SpecificHeatCapacity
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -102,7 +104,11 @@ class SpecificEnergy(LinearQuantity):
     @overload
     def __truediv__(self, other: SpecificEnergy) -> Proportion: ...
     @overload
+    def __truediv__(self, other: SpecificHeatCapacity) -> TemperatureDelta: ...
+    @overload
     def __truediv__(self, other: SpecificPower) -> Time: ...
+    @overload
+    def __truediv__(self, other: TemperatureDelta) -> SpecificHeatCapacity: ...
     @overload
     def __truediv__(self, other: Time) -> SpecificPower: ...
     @overload
@@ -129,5 +135,6 @@ _register(SPECIFIC_ENERGY, SpecificEnergy)
 _rule(Energy, "/", Mass, SpecificEnergy)
 _rule(Acceleration, "*", Length, SpecificEnergy)
 _rule(Pressure, "/", Density, SpecificEnergy)
+_rule(SpecificHeatCapacity, "*", TemperatureDelta, SpecificEnergy)
 
 __all__ = ["SpecificEnergy"]

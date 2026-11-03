@@ -41,6 +41,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermal import TemperatureDelta
+    from kuchka.quantities.thermodynamics.specific_heat_capacity import (
+        SpecificHeatCapacity,
+    )
 
 
 class VelocitySquared(LinearQuantity):
@@ -105,7 +109,11 @@ class VelocitySquared(LinearQuantity):
     @overload
     def __truediv__(self, other: SpecificEnergy) -> Proportion: ...
     @overload
+    def __truediv__(self, other: SpecificHeatCapacity) -> TemperatureDelta: ...
+    @overload
     def __truediv__(self, other: SpecificPower) -> Time: ...
+    @overload
+    def __truediv__(self, other: TemperatureDelta) -> SpecificHeatCapacity: ...
     @overload
     def __truediv__(self, other: Time) -> SpecificPower: ...
     @overload

@@ -44,6 +44,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.radiation.specific_activity import SpecificActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermal import TemperatureDelta
+    from kuchka.quantities.thermodynamics.heat_capacity import HeatCapacity
 
 
 class Energy(LinearQuantity):
@@ -90,6 +92,8 @@ class Energy(LinearQuantity):
     @overload
     def __truediv__(self, other: Force) -> Length: ...
     @overload
+    def __truediv__(self, other: HeatCapacity) -> TemperatureDelta: ...
+    @overload
     def __truediv__(self, other: Impulse) -> Velocity: ...
     @overload
     def __truediv__(self, other: Length) -> Force: ...
@@ -109,6 +113,8 @@ class Energy(LinearQuantity):
     def __truediv__(self, other: Proportion) -> Energy: ...
     @overload
     def __truediv__(self, other: SpecificEnergy) -> Mass: ...
+    @overload
+    def __truediv__(self, other: TemperatureDelta) -> HeatCapacity: ...
     @overload
     def __truediv__(self, other: Time) -> Power: ...
     @overload

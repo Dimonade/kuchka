@@ -41,6 +41,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.radiation.specific_activity import SpecificActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermodynamics.heat_capacity import HeatCapacity
+    from kuchka.quantities.thermodynamics.specific_heat_capacity import (
+        SpecificHeatCapacity,
+    )
 
 
 class Mass(LinearQuantity):
@@ -68,6 +72,8 @@ class Mass(LinearQuantity):
     def __mul__(self, other: SpecificCurrent) -> Current: ...
     @overload
     def __mul__(self, other: SpecificEnergy) -> Energy: ...
+    @overload
+    def __mul__(self, other: SpecificHeatCapacity) -> HeatCapacity: ...
     @overload
     def __mul__(self, other: SpecificPower) -> Power: ...
     @overload

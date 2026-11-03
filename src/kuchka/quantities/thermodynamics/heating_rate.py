@@ -16,10 +16,16 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.thermal import TemperatureDelta
+    from kuchka.quantities.thermodynamics.heat_capacity import HeatCapacity
+    from kuchka.quantities.thermodynamics.specific_heat_capacity import (
+        SpecificHeatCapacity,
+    )
 
 
 class HeatingRate(LinearQuantity):
@@ -38,7 +44,11 @@ class HeatingRate(LinearQuantity):
 
     # BEGIN GENERATED __mul__
     @overload
+    def __mul__(self, other: HeatCapacity) -> Power: ...
+    @overload
     def __mul__(self, other: Proportion) -> HeatingRate: ...
+    @overload
+    def __mul__(self, other: SpecificHeatCapacity) -> SpecificPower: ...
     @overload
     def __mul__(self, other: Time) -> TemperatureDelta: ...
     @overload
