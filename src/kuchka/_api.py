@@ -201,6 +201,7 @@ from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gigajoule
 from kuchka.units import Gigaohm
+from kuchka.units import Gigaparsec
 from kuchka.units import Gigapascal
 from kuchka.units import Gigavar
 from kuchka.units import GigavoltAmpere
@@ -303,6 +304,7 @@ from kuchka.units import KilonewtonMeter
 from kuchka.units import KilonewtonMetre
 from kuchka.units import KilonewtonSecond
 from kuchka.units import Kiloohm
+from kuchka.units import Kiloparsec
 from kuchka.units import Kilopascal
 from kuchka.units import KilopoundPerSquareInch
 from kuchka.units import KilosamplesPerSecond
@@ -357,6 +359,7 @@ from kuchka.units import MegajoulePerCubicMetre
 from kuchka.units import MegajoulePerKilogram
 from kuchka.units import Meganewton
 from kuchka.units import Megaohm
+from kuchka.units import Megaparsec
 from kuchka.units import Megapascal
 from kuchka.units import MegasamplesPerSecond
 from kuchka.units import MegatonneOfTNT
@@ -525,6 +528,7 @@ from kuchka.units import NewtonMetre
 from kuchka.units import NewtonSecond
 from kuchka.units import Ohm
 from kuchka.units import Ounce
+from kuchka.units import Parsec
 from kuchka.units import Pascal
 from kuchka.units import Pebibit
 from kuchka.units import PebibitPerSecond
@@ -783,6 +787,7 @@ __all__ = [
     "Gigahertz",
     "Gigajoule",
     "Gigaohm",
+    "Gigaparsec",
     "Gigapascal",
     "Gigavar",
     "GigavoltAmpere",
@@ -891,6 +896,7 @@ __all__ = [
     "KilonewtonMetre",
     "KilonewtonSecond",
     "Kiloohm",
+    "Kiloparsec",
     "Kilopascal",
     "KilopoundPerSquareInch",
     "KilosamplesPerSecond",
@@ -959,6 +965,7 @@ __all__ = [
     "MegajoulePerKilogram",
     "Meganewton",
     "Megaohm",
+    "Megaparsec",
     "Megapascal",
     "MegasamplesPerSecond",
     "MegatonneOfTNT",
@@ -1135,6 +1142,7 @@ __all__ = [
     "NewtonSecond",
     "Ohm",
     "Ounce",
+    "Parsec",
     "Pascal",
     "Pebibit",
     "PebibitPerSecond",

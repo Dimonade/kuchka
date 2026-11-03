@@ -17,6 +17,12 @@ precision guarantees as SI prefixes.
 The astronomical unit and light-year extend the same `Length` quantity to astronomical
 scales. The astronomical unit (`au`) is an exact conventional length, while the
 light-year (`ly`) is the exact distance light travels in a Julian year.
+The parsec (`pc`) is defined as exactly 648000/pi astronomical units, the distance at
+which one astronomical unit subtends one arcsecond.
+Pi is irrational, so `kuchka` holds a parsec as that quotient with pi to 100 decimal
+places (`kuchka.internal.constants.PI`), the same pi `Radian` uses: the parsec is within
+one part in 1E+100 of its defined length, and the parsecs, kiloparsecs, and megaparsecs
+among themselves stay exact.
 
 Examples
 --------
@@ -91,13 +97,18 @@ The astronomical unit is defined exactly as:
 
     1 au = 149597870700 m
 
+The parsec is defined by the IAU (2015, resolution B2) as:
+
+    1 pc = 648000 / pi au = 3.0856775814913672789139...e16 m
+
 The light-year is defined from the exact speed of light and the Julian year of
 365.25 days:
 
     1 ly = 9460730472580800 m
 
-`LENGTH_UNITS` maps symbols such as ``"mm"``, ``"km"``, ``"in"``, ``"au"``, and
-``"ly"`` to their constructors for configuration files and other external interfaces.
+`LENGTH_UNITS` maps symbols such as ``"mm"``, ``"km"``, ``"in"``, ``"au"``,
+``"ly"``, and ``"pc"`` to their constructors for configuration files and other
+external interfaces.
 
 See Also
 --------
@@ -113,12 +124,15 @@ See Also
 from __future__ import annotations
 
 from decimal import Decimal
+from fractions import Fraction
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LENGTH
 from kuchka.internal import prefixes
 from kuchka.internal import symbols
+from kuchka.internal.constants import PI
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.prefixes import with_prefix
 from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
@@ -556,6 +570,17 @@ LIGHT_YEAR = UnitDef(
     aliases=("lyr", "l.y."),
     words=("light-year", "lightyear"),
 )
+PARSEC = UnitDef(
+    "parsec",
+    "pc",
+    Fraction(648000) * ASTRONOMICAL_UNIT.scale / PI,
+    LENGTH,
+    words=("parsec",),
+)
+"""The parsec: exactly 648000/pi astronomical units, with pi to 100 decimal places."""
+KILOPARSEC = with_prefix(prefixes.KILO, PARSEC)
+MEGAPARSEC = with_prefix(prefixes.MEGA, PARSEC)
+GIGAPARSEC = with_prefix(prefixes.GIGA, PARSEC)
 
 
 def AstronomicalUnit(value: Numeric) -> Length:
@@ -609,6 +634,102 @@ def LightYear(value: Numeric) -> Length:
     return Length(to_exact(value) * LIGHT_YEAR.scale, LIGHT_YEAR)
 
 
+def Parsec(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in parsecs.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in parsecs.
+
+    Returns
+    -------
+    Length
+        Length represented in parsecs.
+
+    Notes
+    -----
+    A parsec is exactly 648000/pi astronomical units.
+    kuchka holds pi to 100 decimal places, so a parsec is within one part in 1E+100 of
+    that length, and the kiloparsec, megaparsec, and gigaparsec are exact multiples of
+    it.
+
+    Examples
+    --------
+    A parsec is about 3.26 light-years:
+
+    >>> from kuchka.units.length import LIGHT_YEAR
+    >>> Parsec(1).to(LIGHT_YEAR)
+    3.261563777167433562138639707 ly
+
+    A parsec is the distance at which an astronomical unit subtends one arcsecond:
+
+    >>> from kuchka.units.angular import RADIAN, ArcSecond
+    >>> Parsec(1).value_in(ASTRONOMICAL_UNIT) * ArcSecond(1).value_in(RADIAN) == 1
+    True
+
+    """
+    return Length(to_exact(value) * PARSEC.scale, PARSEC)
+
+
+def Kiloparsec(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in kiloparsecs.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in kiloparsecs.
+
+    Returns
+    -------
+    Length
+        Length represented in kiloparsecs.
+
+    """
+    return Length(to_exact(value) * KILOPARSEC.scale, KILOPARSEC)
+
+
+def Megaparsec(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in megaparsecs.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in megaparsecs.
+
+    Returns
+    -------
+    Length
+        Length represented in megaparsecs.
+
+    Examples
+    --------
+    The Andromeda galaxy is about 0.78 Mpc away:
+
+    >>> Megaparsec(0.78).to(KILOPARSEC)
+    780 kpc
+
+    """
+    return Length(to_exact(value) * MEGAPARSEC.scale, MEGAPARSEC)
+
+
+def Gigaparsec(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in gigaparsecs.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in gigaparsecs.
+
+    Returns
+    -------
+    Length
+        Length represented in gigaparsecs.
+
+    """
+    return Length(to_exact(value) * GIGAPARSEC.scale, GIGAPARSEC)
+
+
 LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = unit_table(
     "LENGTH_UNITS",
     {
@@ -627,6 +748,10 @@ LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = unit_table(
         NAUTICAL_MILE: NauticalMile,
         ASTRONOMICAL_UNIT: AstronomicalUnit,
         LIGHT_YEAR: LightYear,
+        PARSEC: Parsec,
+        KILOPARSEC: Kiloparsec,
+        MEGAPARSEC: Megaparsec,
+        GIGAPARSEC: Gigaparsec,
     },
 )
 
@@ -637,11 +762,14 @@ __all__ = [
     "DECIMETER",
     "DECIMETRE",
     "FOOT",
+    "GIGAPARSEC",
     "INCH",
     "KILOMETER",
     "KILOMETRE",
+    "KILOPARSEC",
     "LENGTH_UNITS",
     "LIGHT_YEAR",
+    "MEGAPARSEC",
     "METER",
     "METRE",
     "MICROMETER",
@@ -652,6 +780,7 @@ __all__ = [
     "NANOMETER",
     "NANOMETRE",
     "NAUTICAL_MILE",
+    "PARSEC",
     "PICOMETER",
     "PICOMETRE",
     "YARD",
@@ -661,10 +790,13 @@ __all__ = [
     "Decimeter",
     "Decimetre",
     "Foot",
+    "Gigaparsec",
     "Inch",
     "Kilometer",
     "Kilometre",
+    "Kiloparsec",
     "LightYear",
+    "Megaparsec",
     "Meter",
     "Metre",
     "Micrometer",
@@ -675,6 +807,7 @@ __all__ = [
     "Nanometer",
     "Nanometre",
     "NauticalMile",
+    "Parsec",
     "Picometer",
     "Picometre",
     "Yard",
