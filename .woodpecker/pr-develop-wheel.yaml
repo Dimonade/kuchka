@@ -1,0 +1,49 @@
+when:
+  - event: pull_request
+    branch: develop
+
+steps:
+  - name: install-pr-wheel
+    image: ghcr.io/astral-sh/uv:0.13.7-python3.11-trixie-slim
+
+    commands:
+      - |
+        set -eu
+
+        repo_root="$(pwd -P)"
+        wheel_dir="$(mktemp -d)"
+        consumer_dir="$(mktemp -d)"
+
+        trap 'rm -rf "$wheel_dir" "$consumer_dir"' EXIT
+
+        # Build the wheel from the current PR checkout.
+        uv build --wheel --out-dir "$wheel_dir"
+
+        # Ensure exactly one wheel was produced.
+        set -- "$wheel_dir"/*.whl
+        if [ "$#" -ne 1 ] || [ ! -f "$1" ]; then
+          echo "Expected exactly one wheel in $wheel_dir"
+          exit 1
+        fi
+        wheel="$1"
+
+        echo "Testing wheel: $wheel"
+
+        # Create an independent consumer project.
+        cat > "$consumer_dir/pyproject.toml" <<'TOML'
+        [project]
+        name = "kuchka-wheel-consumer"
+        version = "0.0.0"
+        requires-python = ">=3.11"
+
+        [tool.uv]
+        package = false
+        TOML
+
+        cd "$consumer_dir"
+
+        # Install the locally built wheel and its runtime dependencies.
+        uv add "$wheel"
+
+        # Run the consumer smoke test without importing from the repository.
+        uv run python -I "$repo_root/tools/consumer_smoke.py"

@@ -68,7 +68,7 @@ covtest: check
     if [ -z "${CI:-}" ]; then clear; fi
     uv run coverage erase
     uv run coverage run --branch -m pytest --doctest-modules src/kuchka
-    uv run coverage run --branch --append -m pytest -s -vv
+    uv run coverage run --branch --append -m pytest -s
     uv run coverage report --show-missing
     uv run coverage html
     if [ -z "${CI:-}" ]; then {{ browser }} htmlcov/ & fi
