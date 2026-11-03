@@ -35,6 +35,7 @@ from kuchka.quantities import Exposure
 from kuchka.quantities import ExposureRate
 from kuchka.quantities import Force
 from kuchka.quantities import Frequency
+from kuchka.quantities import HeatCapacity
 from kuchka.quantities import HeatingRate
 from kuchka.quantities import Illuminance
 from kuchka.quantities import Impedance
@@ -78,6 +79,7 @@ from kuchka.quantities import SpecificActivity
 from kuchka.quantities import SpecificCharge
 from kuchka.quantities import SpecificCurrent
 from kuchka.quantities import SpecificEnergy
+from kuchka.quantities import SpecificHeatCapacity
 from kuchka.quantities import SpecificPower
 from kuchka.quantities import Stress
 from kuchka.quantities import SurfaceActivity
@@ -236,7 +238,9 @@ from kuchka.units import Joule
 from kuchka.units import JoulePerCubicMeter
 from kuchka.units import JoulePerCubicMetre
 from kuchka.units import JoulePerGram
+from kuchka.units import JoulePerKelvin
 from kuchka.units import JoulePerKilogram
+from kuchka.units import JoulePerKilogramKelvin
 from kuchka.units import JoulePerMole
 from kuchka.units import JoulePerTurn
 from kuchka.units import JulianYear
@@ -285,7 +289,9 @@ from kuchka.units import Kilohertz
 from kuchka.units import Kilojoule
 from kuchka.units import KilojoulePerCubicMeter
 from kuchka.units import KilojoulePerCubicMetre
+from kuchka.units import KilojoulePerKelvin
 from kuchka.units import KilojoulePerKilogram
+from kuchka.units import KilojoulePerKilogramKelvin
 from kuchka.units import KilojoulePerMole
 from kuchka.units import Kiloliter
 from kuchka.units import Kilolitre
@@ -623,6 +629,7 @@ from kuchka.units import Terajoule
 from kuchka.units import Terawatt
 from kuchka.units import Tesla
 from kuchka.units import ThermochemicalCalorie
+from kuchka.units import ThermochemicalCaloriePerGramKelvin
 from kuchka.units import Tonne
 from kuchka.units import TonneOfTNT
 from kuchka.units import TonnePerHour
@@ -809,6 +816,7 @@ __all__ = [
     "GrayPerHour",
     "GrayPerMinute",
     "GrayPerSecond",
+    "HeatCapacity",
     "HeatingRate",
     "Hectare",
     "Hectopascal",
@@ -828,7 +836,9 @@ __all__ = [
     "JoulePerCubicMeter",
     "JoulePerCubicMetre",
     "JoulePerGram",
+    "JoulePerKelvin",
     "JoulePerKilogram",
+    "JoulePerKilogramKelvin",
     "JoulePerMole",
     "JoulePerTurn",
     "JulianYear",
@@ -877,7 +887,9 @@ __all__ = [
     "Kilojoule",
     "KilojoulePerCubicMeter",
     "KilojoulePerCubicMetre",
+    "KilojoulePerKelvin",
     "KilojoulePerKilogram",
+    "KilojoulePerKilogramKelvin",
     "KilojoulePerMole",
     "Kiloliter",
     "Kilolitre",
@@ -1221,6 +1233,7 @@ __all__ = [
     "SpecificCharge",
     "SpecificCurrent",
     "SpecificEnergy",
+    "SpecificHeatCapacity",
     "SpecificPower",
     "SquareArcMinute",
     "SquareArcSecond",
@@ -1257,6 +1270,7 @@ __all__ = [
     "Terawatt",
     "Tesla",
     "ThermochemicalCalorie",
+    "ThermochemicalCaloriePerGramKelvin",
     "Time",
     "Tonne",
     "TonneOfTNT",
