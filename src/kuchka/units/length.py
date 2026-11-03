@@ -19,7 +19,7 @@ scales. The astronomical unit (`au`) is an exact conventional length, while the
 light-year (`ly`) is the exact distance light travels in a Julian year.
 The parsec (`pc`) is defined as exactly 648000/pi astronomical units, the distance at
 which one astronomical unit subtends one arcsecond.
-Pi is irrational, so kuchka holds a parsec as that quotient with pi to 100 decimal
+Pi is irrational, so `kuchka` holds a parsec as that quotient with pi to 100 decimal
 places (`kuchka.internal.constants.PI`), the same pi `Radian` uses: the parsec is within
 one part in 1E+100 of its defined length, and the parsecs, kiloparsecs, and megaparsecs
 among themselves stay exact.
