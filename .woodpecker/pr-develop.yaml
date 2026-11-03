@@ -1,0 +1,16 @@
+when:
+  event: pull_request
+  branch: develop
+
+steps:
+  - name: coverage
+    image: ghcr.io/astral-sh/uv:0.13.7-python3.11-trixie-slim
+    environment:
+      UV_LOCKED: "1"
+    commands:
+      - apt-get update
+      - apt-get install -y --no-install-recommends bash ca-certificates curl
+      - rm -rf /var/lib/apt/lists/*
+      - curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --tag 1.59.0 --to /usr/local/bin
+      - just --version
+      - just ct
