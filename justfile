@@ -36,7 +36,7 @@ alias wt := watch-tools
 # Run the checks on the newest tool versions the dependency floors allow, as a scheduled job would.
 # `uv run` uses `uv.lock` while tox resolves fresh, so a failure here with `just check` green means a tool moved.
 watch-tools:
-    uv run tox -e lint,pyright,3.14
+    uv run tox -e lint,pyright,3.15
 
 alias ga := generate-api
 # Regenerate `src/kuchka/_api.py`, the names promoted to the top level, after changing a leaf `__all__`.
@@ -65,10 +65,10 @@ develop-fetch-pull:
 alias ct := covtest
 # Run coverage on tests and present results.
 covtest: check
-    clear
-    coverage erase
-    coverage run --branch -m pytest --doctest-modules src/kuchka
-    coverage run --branch --append -m pytest -s -vv
-    coverage report --show-missing
-    coverage html
-    {{ browser }} htmlcov/ &
+    if [ -z "${CI:-}" ]; then clear; fi
+    uv run coverage erase
+    uv run coverage run --branch -m pytest --doctest-modules src/kuchka
+    uv run coverage run --branch --append -m pytest -s
+    uv run coverage report --show-missing
+    uv run coverage html
+    if [ -z "${CI:-}" ]; then {{ browser }} htmlcov/ & fi
