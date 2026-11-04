@@ -8,22 +8,4 @@ steps:
     environment:
       UV_LINK_MODE: copy
     commands:
-      - |
-        set -eu
-
-        wheel_dir="$(mktemp -d)"
-        trap 'rm -rf "$wheel_dir"' EXIT
-
-        # Build the wheel from the current PR checkout.
-        uv build --wheel --out-dir "$wheel_dir"
-
-        # Ensure exactly one wheel was produced.
-        set -- "$wheel_dir"/*.whl
-
-        if [ "$#" -ne 1 ] || [ ! -f "$1" ]; then
-          echo "Expected exactly one wheel in $wheel_dir" >&2
-          exit 1
-        fi
-
-        # Install it into an independent consumer project.
-        sh .ci/run-consumer-tests.sh wheel "$1"
+      - python3 .ci/run_consumer_tests.py wheel

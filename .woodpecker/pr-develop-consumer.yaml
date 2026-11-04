@@ -8,4 +8,4 @@ steps:
     environment:
       UV_LINK_MODE: copy
     commands:
-      - sh .ci/run-consumer-tests.sh pypi
+      - python3 .ci/run_consumer_tests.py pypi
