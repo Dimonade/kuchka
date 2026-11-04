@@ -32,6 +32,12 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   Added `AVOGADRO_CONSTANT` and `FARADAY_CONSTANT` to `codata_2022` for entity counts and molar charge calculations.
   Ambiguous bare spellings `Da`, `u`, `ppm`, `IU`, and molal `m` are refused.
 
+- **Molar heat capacity:**
+  Added `MolarHeatCapacity` (J/(mol·K), kJ/(mol·K), cal/(mol·K)) and `MolarEntropy`, a closed role of it, the quantities the molar gas constant and the entropy tables of chemistry are measured in.
+  `HeatCapacity / AmountOfSubstance` and `MolarEnergy / TemperatureDelta` are a `MolarHeatCapacity`, and the heat `Q = n * C * dT` is an `Energy` however it is grouped.
+  `Entropy / AmountOfSubstance` is a `MolarEntropy`, `MolarEntropy * AmountOfSubstance` an `Entropy`, and `Entropy / MolarEntropy` an `AmountOfSubstance`.
+  The calorie per mole kelvin is the classical entropy unit of chemistry tables.
+
 - **Entropy:**
   Added `Entropy` and `SpecificEntropy`, closed roles of `HeatCapacity` and `SpecificHeatCapacity`, so that `Entropy * TemperatureDelta` is refused and never silently an `Energy`.
   `HeatCapacity.to_entropy()` and `Entropy.to_heat_capacity()` move between them, and the same pair exists for the specific kinds.

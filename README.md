@@ -570,6 +570,8 @@ The complete unit vocabulary is available in the API reference.
 | Specific heat     | `JoulePerKilogramKelvin`, `KilojoulePerKilogramKelvin`, `ThermochemicalCaloriePerGramKelvin`                     |
 | Entropy           | `HeatCapacity.to_entropy()`, and `ENTROPY_UNITS` for the same units as text                                      |
 | Specific entropy  | `SpecificHeatCapacity.to_specific_entropy()`, and `SPECIFIC_ENTROPY_UNITS`                                       |
+| Molar heat cap.   | `JoulePerMoleKelvin`, `KilojoulePerMoleKelvin`, `ThermochemicalCaloriePerMoleKelvin`                             |
+| Molar entropy     | `MolarHeatCapacity.to_molar_entropy()`, and `MOLAR_ENTROPY_UNITS`                                                |
 
 ### Geometry and mechanics
 
