@@ -7,21 +7,31 @@ ones exactly, the measured ones to CODATA 2022's own precision).
 from decimal import Decimal
 from fractions import Fraction
 
+import pytest
+
 import kuchka
 from kuchka import Acceleration
 from kuchka import Charge
+from kuchka import DeltaKelvin
 from kuchka import Energy
+from kuchka import Entropy
 from kuchka import Frequency
+from kuchka import IncompatibleDimensionError
 from kuchka import Length
 from kuchka import Mass
+from kuchka import MolarEnergy
+from kuchka import MolarEntropy
 from kuchka import Proportion
 from kuchka import Ratio
 from kuchka import Temperature
 from kuchka import Time
 from kuchka import Velocity
 from kuchka.constants import icrp_103
+from kuchka.constants.codata_2022 import AVOGADRO_CONSTANT
+from kuchka.constants.codata_2022 import BOLTZMANN_CONSTANT
 from kuchka.constants.codata_2022 import ELECTRON_MASS
 from kuchka.constants.codata_2022 import ELEMENTARY_CHARGE
+from kuchka.constants.codata_2022 import MOLAR_GAS_CONSTANT
 from kuchka.constants.codata_2022 import NEUTRON_MASS
 from kuchka.constants.codata_2022 import PLANCK_ENERGY
 from kuchka.constants.codata_2022 import PLANCK_LENGTH
@@ -33,9 +43,13 @@ from kuchka.constants.codata_2022 import PROTON_MASS
 from kuchka.constants.codata_2022 import SPEED_OF_LIGHT_IN_VACUUM
 from kuchka.constants.codata_2022 import STANDARD_ACCELERATION_OF_GRAVITY
 from kuchka.units import mass
+from kuchka.units.chemistry import molar_energy
+from kuchka.units.chemistry import molar_heat_capacity
 from kuchka.units.kinematics import acceleration as acc
 from kuchka.units.kinematics import velocity
+from kuchka.units.mechanics import energy
 from kuchka.units.temporal import frequency
+from kuchka.units.thermodynamics import heat_capacity
 
 
 def test_speed_of_light_is_exact_by_definition() -> None:
@@ -172,3 +186,46 @@ def test_the_radiation_weighting_factors_are_proportions_with_the_icrp_103_value
         assert isinstance(factor, Proportion)
         assert factor == Ratio(value)
         assert getattr(kuchka.icrp_103, name) is factor
+
+
+def test_the_boltzmann_constant_is_an_exact_entropy() -> None:
+    assert isinstance(BOLTZMANN_CONSTANT, Entropy)
+    assert BOLTZMANN_CONSTANT.value_in(heat_capacity.JOULE_PER_KELVIN) == Fraction(
+        1_380_649, 10**29
+    )
+
+
+def test_the_molar_gas_constant_is_the_exact_product_of_n_a_and_k() -> None:
+    assert isinstance(MOLAR_GAS_CONSTANT, MolarEntropy)
+    assert MOLAR_GAS_CONSTANT.value_in(
+        molar_heat_capacity.JOULE_PER_MOLE_KELVIN
+    ) == Fraction(831_446_261_815_324, 10**14)
+    product = AVOGADRO_CONSTANT * BOLTZMANN_CONSTANT
+    assert type(product) is MolarEntropy
+    assert product == MOLAR_GAS_CONSTANT
+    assert MOLAR_GAS_CONSTANT / AVOGADRO_CONSTANT == BOLTZMANN_CONSTANT
+    assert (MOLAR_GAS_CONSTANT / BOLTZMANN_CONSTANT) == AVOGADRO_CONSTANT
+
+
+def test_the_thermal_energy_of_a_particle_goes_through_the_heat_capacity() -> None:
+    thermal = BOLTZMANN_CONSTANT.to_heat_capacity() * DeltaKelvin(300)
+    assert type(thermal) is Energy
+    assert thermal == energy.Joule(Decimal("4.141947e-21"))
+
+
+def test_the_gas_constant_gives_the_molar_energy_and_the_monatomic_heat() -> None:
+    per_mole = MOLAR_GAS_CONSTANT.to_molar_heat_capacity() * DeltaKelvin(
+        Decimal("298.15")
+    )
+    assert type(per_mole) is MolarEnergy
+    reference = molar_energy.JoulePerMole(Decimal("2478.957"))
+    assert abs(per_mole - reference) < molar_energy.JoulePerMole(Decimal("0.001"))
+    monatomic = MOLAR_GAS_CONSTANT.to_molar_heat_capacity() * 3 / 2
+    assert abs(
+        monatomic - molar_heat_capacity.JoulePerMoleKelvin(Decimal("12.4717"))
+    ) < molar_heat_capacity.JoulePerMoleKelvin(Decimal("0.0001"))
+
+
+def test_the_boltzmann_constant_is_refused_in_a_product_with_a_difference() -> None:
+    with pytest.raises(IncompatibleDimensionError, match="to_heat_capacity"):
+        BOLTZMANN_CONSTANT * DeltaKelvin(300)

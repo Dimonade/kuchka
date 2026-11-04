@@ -95,6 +95,13 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   `Area / Area` remains a `Proportion`.
   Added explicit conversions between contested kinds: `Impulse` and `Momentum`, and `VelocitySquared` and `SpecificEnergy`, with the latter conversion accounting for the factor of two in kinetic energy.
 
+#### New constants
+
+- **Boltzmann Constant (k_B) and Molar Gas Constant (R)**
+  Added `BOLTZMANN_CONSTANT` (an `Entropy`, 1.380649e-23 J/K, exact) and `MOLAR_GAS_CONSTANT` (a `MolarEntropy`, 8.31446261815324 J/(mol·K), exact) to `codata_2022`.
+  CODATA prints the gas constant with a trailing ellipsis because it shows a prefix: the product of the two exact defining constants has exactly those 15 digits, and the library stores all of them.
+  `AVOGADRO_CONSTANT * BOLTZMANN_CONSTANT` is `MOLAR_GAS_CONSTANT` by a rule, with no rounding, and the two quotients return the other factor.
+
 ### Changed
 
 #### Unit modules live in themed packages
