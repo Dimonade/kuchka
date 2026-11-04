@@ -61,7 +61,9 @@ from kuchka.quantities import Molality
 from kuchka.quantities import MolarCharge
 from kuchka.quantities import MolarConcentration
 from kuchka.quantities import MolarEnergy
+from kuchka.quantities import MolarEntropy
 from kuchka.quantities import MolarFlowRate
+from kuchka.quantities import MolarHeatCapacity
 from kuchka.quantities import MolarMass
 from kuchka.quantities import MolarVolume
 from kuchka.quantities import Momentum
@@ -244,6 +246,7 @@ from kuchka.units import JoulePerKelvin
 from kuchka.units import JoulePerKilogram
 from kuchka.units import JoulePerKilogramKelvin
 from kuchka.units import JoulePerMole
+from kuchka.units import JoulePerMoleKelvin
 from kuchka.units import JoulePerTurn
 from kuchka.units import JulianYear
 from kuchka.units import Katal
@@ -296,6 +299,7 @@ from kuchka.units import KilojoulePerKelvin
 from kuchka.units import KilojoulePerKilogram
 from kuchka.units import KilojoulePerKilogramKelvin
 from kuchka.units import KilojoulePerMole
+from kuchka.units import KilojoulePerMoleKelvin
 from kuchka.units import Kiloliter
 from kuchka.units import Kilolitre
 from kuchka.units import Kilolumen
@@ -634,6 +638,7 @@ from kuchka.units import Tesla
 from kuchka.units import ThermochemicalCalorie
 from kuchka.units import ThermochemicalCaloriePerGramKelvin
 from kuchka.units import ThermochemicalCaloriePerKelvin
+from kuchka.units import ThermochemicalCaloriePerMoleKelvin
 from kuchka.units import Tonne
 from kuchka.units import TonneOfTNT
 from kuchka.units import TonnePerHour
@@ -845,6 +850,7 @@ __all__ = [
     "JoulePerKilogram",
     "JoulePerKilogramKelvin",
     "JoulePerMole",
+    "JoulePerMoleKelvin",
     "JoulePerTurn",
     "JulianYear",
     "Katal",
@@ -897,6 +903,7 @@ __all__ = [
     "KilojoulePerKilogram",
     "KilojoulePerKilogramKelvin",
     "KilojoulePerMole",
+    "KilojoulePerMoleKelvin",
     "Kiloliter",
     "Kilolitre",
     "Kilolumen",
@@ -1114,7 +1121,9 @@ __all__ = [
     "MolarCharge",
     "MolarConcentration",
     "MolarEnergy",
+    "MolarEntropy",
     "MolarFlowRate",
+    "MolarHeatCapacity",
     "MolarMass",
     "MolarVolume",
     "Mole",
@@ -1279,6 +1288,7 @@ __all__ = [
     "ThermochemicalCalorie",
     "ThermochemicalCaloriePerGramKelvin",
     "ThermochemicalCaloriePerKelvin",
+    "ThermochemicalCaloriePerMoleKelvin",
     "Time",
     "Tonne",
     "TonneOfTNT",
