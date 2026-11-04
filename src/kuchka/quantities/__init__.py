@@ -56,6 +56,7 @@ from kuchka.quantities.chemistry.molar_charge import *
 from kuchka.quantities.chemistry.molar_concentration import *
 from kuchka.quantities.chemistry.molar_energy import *
 from kuchka.quantities.chemistry.molar_flow_rate import *
+from kuchka.quantities.chemistry.molar_heat_capacity import *
 from kuchka.quantities.chemistry.molar_mass import *
 from kuchka.quantities.chemistry.molar_volume import *
 from kuchka.quantities.current import *

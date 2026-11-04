@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
     from kuchka.quantities.chemistry.molar_charge import MolarCharge
     from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
+    from kuchka.quantities.chemistry.molar_heat_capacity import MolarHeatCapacity
     from kuchka.quantities.chemistry.molar_mass import MolarMass
     from kuchka.quantities.chemistry.molar_volume import MolarVolume
     from kuchka.quantities.electromagnetics.voltage import Voltage
@@ -30,6 +31,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.thermal import TemperatureDelta
 
 
 class MolarEnergy(LinearQuantity):
@@ -68,11 +70,15 @@ class MolarEnergy(LinearQuantity):
     @overload
     def __truediv__(self, other: MolarEnergy) -> Proportion: ...
     @overload
+    def __truediv__(self, other: MolarHeatCapacity) -> TemperatureDelta: ...
+    @overload
     def __truediv__(self, other: Pressure) -> MolarVolume: ...
     @overload
     def __truediv__(self, other: Proportion) -> MolarEnergy: ...
     @overload
     def __truediv__(self, other: SpecificEnergy) -> MolarMass: ...
+    @overload
+    def __truediv__(self, other: TemperatureDelta) -> MolarHeatCapacity: ...
     @overload
     def __truediv__(self, other: VelocitySquared) -> MolarMass: ...
     @overload

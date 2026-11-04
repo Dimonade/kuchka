@@ -22,6 +22,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
     from kuchka.quantities.chemistry.molar_energy import MolarEnergy
     from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
+    from kuchka.quantities.chemistry.molar_heat_capacity import MolarEntropy
+    from kuchka.quantities.chemistry.molar_heat_capacity import MolarHeatCapacity
     from kuchka.quantities.chemistry.molar_mass import MolarMass
     from kuchka.quantities.chemistry.molar_volume import MolarVolume
     from kuchka.quantities.electromagnetics.charge import Charge
@@ -31,6 +33,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermodynamics.heat_capacity import Entropy
+    from kuchka.quantities.thermodynamics.heat_capacity import HeatCapacity
 
 
 class AmountOfSubstance(LinearQuantity):
@@ -48,6 +52,10 @@ class AmountOfSubstance(LinearQuantity):
     def __mul__(self, other: MolarCharge) -> Charge: ...
     @overload
     def __mul__(self, other: MolarEnergy) -> Energy: ...
+    @overload
+    def __mul__(self, other: MolarEntropy) -> Entropy: ...
+    @overload
+    def __mul__(self, other: MolarHeatCapacity) -> HeatCapacity: ...
     @overload
     def __mul__(self, other: MolarMass) -> Mass: ...
     @overload
