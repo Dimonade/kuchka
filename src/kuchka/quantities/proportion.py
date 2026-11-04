@@ -108,8 +108,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.temporal import SamplingPeriod
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.thermal import TemperatureDelta
+    from kuchka.quantities.thermodynamics.heat_capacity import Entropy
     from kuchka.quantities.thermodynamics.heat_capacity import HeatCapacity
     from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
+    from kuchka.quantities.thermodynamics.specific_heat_capacity import SpecificEntropy
     from kuchka.quantities.thermodynamics.specific_heat_capacity import (
         SpecificHeatCapacity,
     )
@@ -166,6 +168,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: EnergyDensity) -> EnergyDensity: ...
     @overload
     def __mul__(self, other: EntitiesPerAmount) -> EntitiesPerAmount: ...
+    @overload
+    def __mul__(self, other: Entropy) -> Entropy: ...
     @overload
     def __mul__(self, other: EquivalentDose) -> EquivalentDose: ...
     @overload
@@ -262,6 +266,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: SpecificCurrent) -> SpecificCurrent: ...
     @overload
     def __mul__(self, other: SpecificEnergy) -> SpecificEnergy: ...
+    @overload
+    def __mul__(self, other: SpecificEntropy) -> SpecificEntropy: ...
     @overload
     def __mul__(self, other: SpecificHeatCapacity) -> SpecificHeatCapacity: ...
     @overload
