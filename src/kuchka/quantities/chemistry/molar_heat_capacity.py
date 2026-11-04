@@ -12,6 +12,7 @@ from kuchka.quantities.amount import AmountOfSubstance
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.registry import _register
 from kuchka.quantities.base.registry import _rule
+from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
 from kuchka.quantities.thermodynamics.heat_capacity import Entropy
 
 if TYPE_CHECKING:
@@ -19,7 +20,6 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
-    from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
     from kuchka.quantities.chemistry.molality import Molality
     from kuchka.quantities.chemistry.molar_energy import MolarEnergy
     from kuchka.quantities.chemistry.molar_mass import MolarMass
@@ -116,7 +116,8 @@ class MolarEntropy(LinearQuantity):
     a role of it with the closed arithmetic of `Entropy`.
     `MolarEntropy * AmountOfSubstance` is an `Entropy`, `Entropy / AmountOfSubstance` is
     a `MolarEntropy`, and `Entropy / MolarEntropy` is an `AmountOfSubstance`.
-    The molar gas constant is another quantity of this dimension.
+    `EntitiesPerAmount * Entropy` is a `MolarEntropy` too: the molar gas constant is the
+    Avogadro constant times the Boltzmann constant, `R = N_A * k`.
     `to_molar_heat_capacity()` and `MolarHeatCapacity.to_molar_entropy()` move between
     the two.
     """
@@ -141,6 +142,10 @@ class MolarEntropy(LinearQuantity):
         return super().__mul__(other)
 
     # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: EntitiesPerAmount) -> Entropy: ...
+    @overload
+    def __truediv__(self, other: Entropy) -> EntitiesPerAmount: ...
     @overload
     def __truediv__(self, other: MolarEntropy) -> Proportion: ...
     @overload
@@ -172,5 +177,8 @@ _register(MOLAR_HEAT_CAPACITY, MolarEntropy, specialisation_of=MolarHeatCapacity
 _rule(Entropy, "/", AmountOfSubstance, MolarEntropy)
 _rule(MolarEntropy, "*", AmountOfSubstance, Entropy)
 _rule(Entropy, "/", MolarEntropy, AmountOfSubstance)
+_rule(EntitiesPerAmount, "*", Entropy, MolarEntropy)
+_rule(MolarEntropy, "/", EntitiesPerAmount, Entropy)
+_rule(MolarEntropy, "/", Entropy, EntitiesPerAmount)
 
 __all__ = ["MolarEntropy", "MolarHeatCapacity"]

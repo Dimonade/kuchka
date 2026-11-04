@@ -35,6 +35,8 @@ from typing import Final
 from kuchka.units import Coulomb as _Coulomb
 from kuchka.units import CoulombPerMole as _CoulombPerMole
 from kuchka.units import Gigaelectronvolt as _Gigaelectronvolt
+from kuchka.units import JoulePerKelvin as _JoulePerKelvin
+from kuchka.units import JoulePerMoleKelvin as _JoulePerMoleKelvin
 from kuchka.units import Kelvin as _Kelvin
 from kuchka.units import Kilogram as _Kilogram
 from kuchka.units import Metre as _Metre
@@ -48,9 +50,11 @@ if TYPE_CHECKING:
     from kuchka.quantities import Charge
     from kuchka.quantities import Energy
     from kuchka.quantities import EntitiesPerAmount
+    from kuchka.quantities import Entropy
     from kuchka.quantities import Length
     from kuchka.quantities import Mass
     from kuchka.quantities import MolarCharge
+    from kuchka.quantities import MolarEntropy
     from kuchka.quantities import Temperature
     from kuchka.quantities import Time
     from kuchka.quantities import Velocity
@@ -71,6 +75,19 @@ Accuracy: Exact.
 Value: 6.022 140 76 e23 mol⁻¹.
 Uncertainty: None.
 Link: https://en.wikipedia.org/wiki/Avogadro_constant
+"""
+
+BOLTZMANN_CONSTANT: Final[Entropy] = _JoulePerKelvin(
+    _Decimal("1.380649e-23")
+).to_entropy()
+"""The Boltzmann constant, k: the entropy per particle linking temperature to energy.
+
+Accuracy: Exact.
+Value: 1.380 649 e-23 J K⁻¹.
+Uncertainty: None.
+Note: it is an `Entropy`, so the thermal energy `k * T` goes through
+`BOLTZMANN_CONSTANT.to_heat_capacity() * DeltaKelvin(300)`.
+Link: https://en.wikipedia.org/wiki/Boltzmann_constant
 """
 
 ELECTRON_MASS: Final[Mass] = _Kilogram(_Decimal("9.1093837139E-31"))
@@ -107,6 +124,20 @@ Accuracy: Exact.
 Value: 96 485.332 123 310 0184 C mol⁻¹.
 Uncertainty: None.
 Link: https://en.wikipedia.org/wiki/Faraday_constant
+"""
+
+MOLAR_GAS_CONSTANT: Final[MolarEntropy] = _JoulePerMoleKelvin(
+    _Decimal("8.31446261815324")
+).to_molar_entropy()
+"""The molar gas constant, R, the Avogadro constant times the Boltzmann constant.
+
+Accuracy: Exact.
+Value: 8.314 462 618 153 24 J mol⁻¹ K⁻¹.
+Uncertainty: None.
+Note: CODATA prints 8.314 462 618... because it shows a prefix of the value.
+The product of the two exact defining constants has exactly these 15 digits and no more.
+`AVOGADRO_CONSTANT * BOLTZMANN_CONSTANT` is this constant by a rule, with no rounding.
+Link: https://en.wikipedia.org/wiki/Gas_constant
 """
 
 NEUTRON_MASS: Final[Mass] = _Kilogram(_Decimal("1.67492750056E-27"))
@@ -189,9 +220,11 @@ Link: https://en.wikipedia.org/wiki/Gravitational_acceleration
 __all__ = [
     "ALPHA_PARTICLE_MASS",
     "AVOGADRO_CONSTANT",
+    "BOLTZMANN_CONSTANT",
     "ELECTRON_MASS",
     "ELEMENTARY_CHARGE",
     "FARADAY_CONSTANT",
+    "MOLAR_GAS_CONSTANT",
     "NEUTRON_MASS",
     "PLANCK_ENERGY",
     "PLANCK_LENGTH",
