@@ -32,35 +32,48 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   Added `AVOGADRO_CONSTANT` and `FARADAY_CONSTANT` to `codata_2022` for entity counts and molar charge calculations.
   Ambiguous bare spellings `Da`, `u`, `ppm`, `IU`, and molal `m` are refused.
 
+- **Entropy:**
+  Added `Entropy` and `SpecificEntropy`, closed roles of `HeatCapacity` and `SpecificHeatCapacity`, so that `Entropy * TemperatureDelta` is refused and never silently an `Energy`.
+  `HeatCapacity.to_entropy()` and `Entropy.to_heat_capacity()` move between them, and the same pair exists for the specific kinds.
+  `Entropy / Mass` is a `SpecificEntropy`, `SpecificEntropy * Mass` an `Entropy`, and `Entropy / SpecificEntropy` a `Mass`.
+  Added `cal/K` and `kcal/K` to the heat capacity units, which the entropy units share.
+
 - **Heat capacity:**
   Added `HeatCapacity` (J/K, kJ/K) and `SpecificHeatCapacity` (J/(kg·K), kJ/(kg·K), cal/(g·K)), so the heat `Q = m * c * dT` is an `Energy` however it is grouped.
   `Energy / TemperatureDelta` is a `HeatCapacity`, `HeatCapacity / Mass` and `SpecificEnergy / TemperatureDelta` are a `SpecificHeatCapacity`, and `SpecificHeatCapacity * TemperatureDelta` is a `SpecificEnergy` by a rule.
   A degree Celsius in the denominator is a kelvin, so `J/°C` and `J/(kg·°C)` are accepted spellings.
   Entropy and the gas constants are not in this release; they are planned as closed roles of these kinds.
   The `thermodynamics` units package moves up the layering order, because it now builds on the energy units.
+
 - **Length:**
   Added `Parsec`, `Kiloparsec`, `Megaparsec`, and `Gigaparsec`.
   A parsec is exactly 648000/pi astronomical units, so it is held as that quotient with pi to 100 decimal places, within one part in 1E+100 of its defined length, and the multiples of it are exact.
   The spelling `pc` is now a parsec, where it was refused before.
+
 - **Temperature:**
   Added `Rankine` and `DeltaRankine`: a Rankine degree is exactly 5/9 of a kelvin, and 0 °R is absolute zero, so 0 °F is exactly 459.67 °R.
   The spellings `deg`, `degrees`, `degree`, and `Grad` stay ambiguous between the scales and are still refused.
+
 - **Magnetic energy density:**
   `MagneticFluxDensity * MagneticFieldStrength` is now an `EnergyDensity`, in either order, and no longer raises `AmbiguousKindError`.
   It is the product `B·H`, twice the energy stored in a linear medium, and `Magnetization` stays refused in it.
+
 - **Impulse:**
   `Force / Frequency` is now an `Impulse`, the force times a period, and no longer raises `AmbiguousKindError`.
   The roles of `Frequency`, such as `Activity` and `SampleRate`, stay refused in that quotient.
+
 - **Activity densities:**
   Added activity concentration (Bq/m³, Bq/L, pCi/L), specific activity (Bq/kg, pCi/g, Ci/g), and surface activity (Bq/cm², dpm/100 cm², Ci/km²), the readings of radon monitors, soil and food assays, and contamination monitors.
   They are principal kinds of their own dimensions, and rules make `Activity / Volume`, `Activity / Mass`, and `Activity / Area` their quotients and `Activity` their product with the divisor.
   `Frequency / Volume`, `Frequency / Mass`, and `Frequency / Area` are these kinds too.
+
 - **Dose rates:**
   Added absorbed dose rate (Gy/h, rad/h), equivalent dose rate (Sv/h, rem/h), and exposure rate (R/h), the readings of survey meters and dosimeters.
   They are roles of the new principal kinds `SpecificPower` (W/kg) and `SpecificCurrent` (A/kg), and a rate times a `Time` is the matching dose, an `Exposure` for exposure rate.
   `Velocity * Acceleration`, `Power / Mass`, and `SpecificEnergy / Time` are now a `SpecificPower`, and `SpecificPower * Time` is a `SpecificEnergy`.
   A `_rule` may now name a role as an operand or as its result, which is how `Sievert(1) / Hour(2)` is a dose rate while `Sv * kg` stays refused.
   `EquivalentDoseRate.from_absorbed_dose_rate(rate, weighting_factor)` weights a rate as `EquivalentDose.from_absorbed_dose` weights a dose.
+
 - **Radiation:**
   Added absorbed dose (gray, rad), equivalent dose (sievert, rem), and exposure (roentgen), with `SpecificCharge` (C/kg, Ah/kg, mAh/g) as the principal kind behind exposure.
   `AbsorbedDose` and `EquivalentDose` are roles of `SpecificEnergy`, and `Exposure` is a role of `SpecificCharge`, so each takes part in arithmetic only when scaled, divided by itself, or converted first.

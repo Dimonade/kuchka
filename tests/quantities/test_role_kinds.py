@@ -13,6 +13,7 @@ from kuchka import Activity
 from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import CatalyticActivity
+from kuchka import Entropy
 from kuchka import EquivalentDose
 from kuchka import EquivalentDoseRate
 from kuchka import Exposure
@@ -24,6 +25,7 @@ from kuchka import Reactance
 from kuchka import ReactivePower
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
+from kuchka import SpecificEntropy
 from kuchka import Stress
 from kuchka import Time
 from kuchka.dimensions import DIMENSIONLESS
@@ -44,10 +46,12 @@ CONVERSION = {
     ApparentPower: "to_power",
     BaudRate: "no conversion",
     CatalyticActivity: "to_molar_flow_rate",
+    Entropy: "to_heat_capacity",
     EquivalentDose: "no conversion",
     EquivalentDoseRate: "no conversion",
     Exposure: "to_specific_charge",
     ExposureRate: "to_specific_current",
+    SpecificEntropy: "to_specific_heat_capacity",
     Impedance: "to_resistance",
     Magnetization: "to_magnetic_field_strength",
     Reactance: "to_resistance",

@@ -10,11 +10,13 @@ from kuchka import Activity
 from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import CatalyticActivity
+from kuchka import Entropy
 from kuchka import EquivalentDose
 from kuchka import EquivalentDoseRate
 from kuchka import Exposure
 from kuchka import ExposureRate
 from kuchka import Frequency
+from kuchka import HeatCapacity
 from kuchka import Impedance
 from kuchka import MagneticFieldStrength
 from kuchka import Magnetization
@@ -29,6 +31,8 @@ from kuchka import SamplingPeriod
 from kuchka import SpecificCharge
 from kuchka import SpecificCurrent
 from kuchka import SpecificEnergy
+from kuchka import SpecificEntropy
+from kuchka import SpecificHeatCapacity
 from kuchka import SpecificPower
 from kuchka import Stress
 from kuchka import Time
@@ -48,10 +52,12 @@ from tests.support.synthetic import registry_state
         (AbsorbedDoseRate, SpecificPower),
         (Activity, Frequency),
         (CatalyticActivity, MolarFlowRate),
+        (Entropy, HeatCapacity),
         (EquivalentDose, SpecificEnergy),
         (EquivalentDoseRate, SpecificPower),
         (Exposure, SpecificCharge),
         (ExposureRate, SpecificCurrent),
+        (SpecificEntropy, SpecificHeatCapacity),
         (ApparentPower, Power),
         (BaudRate, Frequency),
         (Impedance, Resistance),
@@ -76,6 +82,7 @@ def test_only_the_listed_kinds_are_specialisations() -> None:
         ApparentPower,
         BaudRate,
         CatalyticActivity,
+        Entropy,
         EquivalentDose,
         EquivalentDoseRate,
         Exposure,
@@ -87,6 +94,7 @@ def test_only_the_listed_kinds_are_specialisations() -> None:
         SampleRate,
         SamplingPeriod,
         Stress,
+        SpecificEntropy,
     }
 
 
