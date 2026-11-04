@@ -127,8 +127,10 @@ from kuchka.units.temporal.sample_rate import *
 from kuchka.units.temporal.sampling_period import *
 from kuchka.units.temporal.time import *
 from kuchka.units.thermal import *
+from kuchka.units.thermodynamics.entropy import *
 from kuchka.units.thermodynamics.heat_capacity import *
 from kuchka.units.thermodynamics.heating_rate import *
+from kuchka.units.thermodynamics.specific_entropy import *
 from kuchka.units.thermodynamics.specific_heat_capacity import *
 
 if TYPE_CHECKING:
@@ -167,6 +169,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.EnergyDensity: ENERGY_DENSITY_UNITS,
     quantities.Force: FORCE_UNITS,
     quantities.Frequency: FREQUENCY_UNITS,
+    quantities.Entropy: ENTROPY_UNITS,
     quantities.HeatCapacity: HEAT_CAPACITY_UNITS,
     quantities.HeatingRate: HEATING_RATE_UNITS,
     quantities.Impulse: IMPULSE_UNITS,
@@ -205,6 +208,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.SpecificCharge: SPECIFIC_CHARGE_UNITS,
     quantities.SpecificCurrent: SPECIFIC_CURRENT_UNITS,
     quantities.SpecificEnergy: SPECIFIC_ENERGY_UNITS,
+    quantities.SpecificEntropy: SPECIFIC_ENTROPY_UNITS,
     quantities.SpecificHeatCapacity: SPECIFIC_HEAT_CAPACITY_UNITS,
     quantities.SpecificPower: SPECIFIC_POWER_UNITS,
     quantities.SurfaceActivity: SURFACE_ACTIVITY_UNITS,

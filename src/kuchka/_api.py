@@ -29,6 +29,7 @@ from kuchka.quantities import Density
 from kuchka.quantities import Energy
 from kuchka.quantities import EnergyDensity
 from kuchka.quantities import EntitiesPerAmount
+from kuchka.quantities import Entropy
 from kuchka.quantities import EquivalentDose
 from kuchka.quantities import EquivalentDoseRate
 from kuchka.quantities import Exposure
@@ -79,6 +80,7 @@ from kuchka.quantities import SpecificActivity
 from kuchka.quantities import SpecificCharge
 from kuchka.quantities import SpecificCurrent
 from kuchka.quantities import SpecificEnergy
+from kuchka.quantities import SpecificEntropy
 from kuchka.quantities import SpecificHeatCapacity
 from kuchka.quantities import SpecificPower
 from kuchka.quantities import Stress
@@ -265,6 +267,7 @@ from kuchka.units import KilobitPerSecond
 from kuchka.units import Kilobyte
 from kuchka.units import KilobytePerSecond
 from kuchka.units import Kilocalorie
+from kuchka.units import KilocaloriePerKelvin
 from kuchka.units import KilocaloriePerKilogram
 from kuchka.units import KilocaloriePerMole
 from kuchka.units import KilocandelaPerSquareMetre
@@ -630,6 +633,7 @@ from kuchka.units import Terawatt
 from kuchka.units import Tesla
 from kuchka.units import ThermochemicalCalorie
 from kuchka.units import ThermochemicalCaloriePerGramKelvin
+from kuchka.units import ThermochemicalCaloriePerKelvin
 from kuchka.units import Tonne
 from kuchka.units import TonneOfTNT
 from kuchka.units import TonnePerHour
@@ -756,6 +760,7 @@ __all__ = [
     "Energy",
     "EnergyDensity",
     "EntitiesPerAmount",
+    "Entropy",
     "EnzymeUnit",
     "EquivalentDose",
     "EquivalentDoseRate",
@@ -863,6 +868,7 @@ __all__ = [
     "Kilobyte",
     "KilobytePerSecond",
     "Kilocalorie",
+    "KilocaloriePerKelvin",
     "KilocaloriePerKilogram",
     "KilocaloriePerMole",
     "KilocandelaPerSquareMetre",
@@ -1233,6 +1239,7 @@ __all__ = [
     "SpecificCharge",
     "SpecificCurrent",
     "SpecificEnergy",
+    "SpecificEntropy",
     "SpecificHeatCapacity",
     "SpecificPower",
     "SquareArcMinute",
@@ -1271,6 +1278,7 @@ __all__ = [
     "Tesla",
     "ThermochemicalCalorie",
     "ThermochemicalCaloriePerGramKelvin",
+    "ThermochemicalCaloriePerKelvin",
     "Time",
     "Tonne",
     "TonneOfTNT",
