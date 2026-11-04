@@ -7,10 +7,11 @@ steps:
     image: ghcr.io/astral-sh/uv:0.13.7-python3.11-trixie-slim
     environment:
       UV_LOCKED: "1"
+      UV_LINK_MODE: copy
       UV_PYTHON_BIN_DIR: /usr/local/bin
     commands:
       - apt-get update
-      - apt-get install -y --no-install-recommends bash ca-certificates curl
+      - DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends bash ca-certificates curl
       - rm -rf /var/lib/apt/lists/*
       - curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --tag 1.59.0 --to /usr/local/bin
       - just --version
