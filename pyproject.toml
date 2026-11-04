@@ -173,6 +173,9 @@ force-single-line = true
 "tools/consumer_smoke.py" = [
   "T201",
 ]
+".ci/run_consumer_tests.py" = [
+  "T201",
+]
 
 [tool.tox]
 requires = ["tox>=4.67"]

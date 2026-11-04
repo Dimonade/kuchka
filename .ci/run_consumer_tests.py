@@ -1,4 +1,3 @@
-
 """Build or install Kuchka in an isolated consumer project and test it."""
 
 from __future__ import annotations
@@ -9,9 +8,11 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from collections.abc import Sequence
 from pathlib import Path
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 CONSUMER_ROOT = REPOSITORY_ROOT / ".ci" / "consumer"
@@ -28,10 +29,13 @@ def run_step(
     print(f"\n=== {description} ===", flush=True)
     print(f"$ {shlex.join(command)}", flush=True)
 
-    subprocess.run(
+    # Commands are constructed internally from trusted executables and arguments.
+    # Dynamic arguments are generated filesystem paths.
+    subprocess.run(  # noqa: S603
         command,
         cwd=working_directory,
         check=True,
+        shell=False,
     )
 
 
@@ -55,8 +59,7 @@ def build_wheel(wheel_directory: Path) -> Path:
 
     if len(wheels) != 1:
         raise RuntimeError(
-            f"Expected exactly one wheel, found {len(wheels)} "
-            f"in {wheel_directory}"
+            f"Expected exactly one wheel, found {len(wheels)} in {wheel_directory}"
         )
 
     return wheels[0]
