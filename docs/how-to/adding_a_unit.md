@@ -20,7 +20,7 @@ Every other quantity lives in the themed package of the relation that defines it
 | `electromagnetics`              | charge, voltage, resistance, conductance, capacitance, inductance                                                                               |
 | _`electromagnetics`, continued_ | permittivity, permeability, AC power, magnetic flux, flux density, field strength, specific charge and current                                  |
 | `information`                   | data and data rate                                                                                                                              |
-| `chemistry`                     | what is measured per mole: molar mass, concentration, energy, flow rate, catalytic activity, and more                                           |
+| `chemistry`                     | what is measured per mole: molar mass, concentration, energy, flow rate, heat capacity, catalytic activity, and more                            |
 | `photometry`                    | light as the eye sees it: flux, energy, exposure, illuminance, luminance, efficacy                                                              |
 | `radiation`                     | radioactive activity, and the doses it deposits: absorbed dose, equivalent dose, exposure, their rates, and activity per volume, mass, and area |
 | `thermodynamics`                | how heat changes a temperature: heating rate, heat capacity, specific heat capacity, entropy                                                    |

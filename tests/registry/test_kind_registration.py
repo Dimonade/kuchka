@@ -20,7 +20,9 @@ from kuchka import HeatCapacity
 from kuchka import Impedance
 from kuchka import MagneticFieldStrength
 from kuchka import Magnetization
+from kuchka import MolarEntropy
 from kuchka import MolarFlowRate
+from kuchka import MolarHeatCapacity
 from kuchka import Power
 from kuchka import Pressure
 from kuchka import Reactance
@@ -57,6 +59,7 @@ from tests.support.synthetic import registry_state
         (EquivalentDoseRate, SpecificPower),
         (Exposure, SpecificCharge),
         (ExposureRate, SpecificCurrent),
+        (MolarEntropy, MolarHeatCapacity),
         (SpecificEntropy, SpecificHeatCapacity),
         (ApparentPower, Power),
         (BaudRate, Frequency),
@@ -95,6 +98,7 @@ def test_only_the_listed_kinds_are_specialisations() -> None:
         SamplingPeriod,
         Stress,
         SpecificEntropy,
+        MolarEntropy,
     }
 
 

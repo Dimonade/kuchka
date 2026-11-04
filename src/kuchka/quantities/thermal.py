@@ -35,6 +35,8 @@ from kuchka.quantities.base.registry import _register
 if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.chemistry.molar_energy import MolarEnergy
+    from kuchka.quantities.chemistry.molar_heat_capacity import MolarHeatCapacity
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.proportion import Proportion
@@ -58,6 +60,8 @@ class TemperatureDelta(LinearQuantity):
     def __mul__(self, other: Frequency) -> HeatingRate: ...
     @overload
     def __mul__(self, other: HeatCapacity) -> Energy: ...
+    @overload
+    def __mul__(self, other: MolarHeatCapacity) -> MolarEnergy: ...
     @overload
     def __mul__(self, other: Proportion) -> TemperatureDelta: ...
     @overload

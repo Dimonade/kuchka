@@ -19,6 +19,9 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.chemistry.molality import Molality
+    from kuchka.quantities.chemistry.molar_heat_capacity import MolarHeatCapacity
+    from kuchka.quantities.chemistry.molar_mass import MolarMass
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.proportion import Proportion
@@ -53,6 +56,8 @@ class SpecificHeatCapacity(LinearQuantity):
     @overload
     def __mul__(self, other: Mass) -> HeatCapacity: ...
     @overload
+    def __mul__(self, other: MolarMass) -> MolarHeatCapacity: ...
+    @overload
     def __mul__(self, other: Proportion) -> SpecificHeatCapacity: ...
     @overload
     def __mul__(self, other: TemperatureDelta) -> SpecificEnergy: ...
@@ -68,6 +73,10 @@ class SpecificHeatCapacity(LinearQuantity):
         return super().__mul__(other)
 
     # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: Molality) -> MolarHeatCapacity: ...
+    @overload
+    def __truediv__(self, other: MolarHeatCapacity) -> Molality: ...
     @overload
     def __truediv__(self, other: Proportion) -> SpecificHeatCapacity: ...
     @overload

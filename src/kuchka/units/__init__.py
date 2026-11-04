@@ -55,7 +55,9 @@ from kuchka.units.chemistry.molality import *
 from kuchka.units.chemistry.molar_charge import *
 from kuchka.units.chemistry.molar_concentration import *
 from kuchka.units.chemistry.molar_energy import *
+from kuchka.units.chemistry.molar_entropy import *
 from kuchka.units.chemistry.molar_flow_rate import *
+from kuchka.units.chemistry.molar_heat_capacity import *
 from kuchka.units.chemistry.molar_mass import *
 from kuchka.units.chemistry.molar_volume import *
 from kuchka.units.current import *
@@ -178,7 +180,9 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.MolarCharge: MOLAR_CHARGE_UNITS,
     quantities.MolarConcentration: MOLAR_CONCENTRATION_UNITS,
     quantities.MolarEnergy: MOLAR_ENERGY_UNITS,
+    quantities.MolarEntropy: MOLAR_ENTROPY_UNITS,
     quantities.MolarFlowRate: MOLAR_FLOW_RATE_UNITS,
+    quantities.MolarHeatCapacity: MOLAR_HEAT_CAPACITY_UNITS,
     quantities.MolarMass: MOLAR_MASS_UNITS,
     quantities.MolarVolume: MOLAR_VOLUME_UNITS,
     quantities.Momentum: MOMENTUM_UNITS,

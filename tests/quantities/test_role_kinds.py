@@ -21,6 +21,7 @@ from kuchka import ExposureRate
 from kuchka import Impedance
 from kuchka import IncompatibleDimensionError
 from kuchka import Magnetization
+from kuchka import MolarEntropy
 from kuchka import Reactance
 from kuchka import ReactivePower
 from kuchka import SampleRate
@@ -47,6 +48,7 @@ CONVERSION = {
     BaudRate: "no conversion",
     CatalyticActivity: "to_molar_flow_rate",
     Entropy: "to_heat_capacity",
+    MolarEntropy: "to_molar_heat_capacity",
     EquivalentDose: "no conversion",
     EquivalentDoseRate: "no conversion",
     Exposure: "to_specific_charge",

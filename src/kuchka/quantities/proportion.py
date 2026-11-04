@@ -35,6 +35,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
     from kuchka.quantities.chemistry.molar_energy import MolarEnergy
     from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
+    from kuchka.quantities.chemistry.molar_heat_capacity import MolarEntropy
+    from kuchka.quantities.chemistry.molar_heat_capacity import MolarHeatCapacity
     from kuchka.quantities.chemistry.molar_mass import MolarMass
     from kuchka.quantities.chemistry.molar_volume import MolarVolume
     from kuchka.quantities.current import Current
@@ -229,7 +231,11 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: MolarEnergy) -> MolarEnergy: ...
     @overload
+    def __mul__(self, other: MolarEntropy) -> MolarEntropy: ...
+    @overload
     def __mul__(self, other: MolarFlowRate) -> MolarFlowRate: ...
+    @overload
+    def __mul__(self, other: MolarHeatCapacity) -> MolarHeatCapacity: ...
     @overload
     def __mul__(self, other: MolarMass) -> MolarMass: ...
     @overload

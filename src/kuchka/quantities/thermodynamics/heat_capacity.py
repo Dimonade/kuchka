@@ -16,6 +16,10 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.amount import AmountOfSubstance
+    from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
+    from kuchka.quantities.chemistry.molar_heat_capacity import MolarEntropy
+    from kuchka.quantities.chemistry.molar_heat_capacity import MolarHeatCapacity
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.power import Power
@@ -51,6 +55,8 @@ class HeatCapacity(LinearQuantity):
 
     # BEGIN GENERATED __mul__
     @overload
+    def __mul__(self, other: EntitiesPerAmount) -> MolarHeatCapacity: ...
+    @overload
     def __mul__(self, other: HeatingRate) -> Power: ...
     @overload
     def __mul__(self, other: Proportion) -> HeatCapacity: ...
@@ -69,9 +75,13 @@ class HeatCapacity(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: AmountOfSubstance) -> MolarHeatCapacity: ...
+    @overload
     def __truediv__(self, other: HeatCapacity) -> Proportion: ...
     @overload
     def __truediv__(self, other: Mass) -> SpecificHeatCapacity: ...
+    @overload
+    def __truediv__(self, other: MolarHeatCapacity) -> AmountOfSubstance: ...
     @overload
     def __truediv__(self, other: Proportion) -> HeatCapacity: ...
     @overload
@@ -138,9 +148,13 @@ class Entropy(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: AmountOfSubstance) -> MolarEntropy: ...
+    @overload
     def __truediv__(self, other: Entropy) -> Proportion: ...
     @overload
     def __truediv__(self, other: Mass) -> SpecificEntropy: ...
+    @overload
+    def __truediv__(self, other: MolarEntropy) -> AmountOfSubstance: ...
     @overload
     def __truediv__(self, other: Proportion) -> Entropy: ...
     @overload

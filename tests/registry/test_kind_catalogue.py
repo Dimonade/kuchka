@@ -26,7 +26,9 @@ from kuchka import Instant
 from kuchka import LogarithmicRatio
 from kuchka import MagneticFieldStrength
 from kuchka import Magnetization
+from kuchka import MolarEntropy
 from kuchka import MolarFlowRate
+from kuchka import MolarHeatCapacity
 from kuchka import Momentum
 from kuchka import Power
 from kuchka import Pressure
@@ -53,6 +55,7 @@ from kuchka.dimensions import FREQUENCY
 from kuchka.dimensions import HEAT_CAPACITY
 from kuchka.dimensions import MAGNETIC_FIELD_STRENGTH
 from kuchka.dimensions import MOLAR_FLOW_RATE
+from kuchka.dimensions import MOLAR_HEAT_CAPACITY
 from kuchka.dimensions import MOMENTUM
 from kuchka.dimensions import POWER
 from kuchka.dimensions import PRESSURE
@@ -86,6 +89,7 @@ SHARED = {
     SPECIFIC_POWER: (SpecificPower, AbsorbedDoseRate, EquivalentDoseRate),
     SPECIFIC_CURRENT: (SpecificCurrent, ExposureRate),
     HEAT_CAPACITY: (HeatCapacity, Entropy),
+    MOLAR_HEAT_CAPACITY: (MolarHeatCapacity, MolarEntropy),
     SPECIFIC_HEAT_CAPACITY: (SpecificHeatCapacity, SpecificEntropy),
     MOMENTUM: (Momentum, Impulse),
     MOLAR_FLOW_RATE: (MolarFlowRate, CatalyticActivity),

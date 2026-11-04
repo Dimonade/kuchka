@@ -11,7 +11,9 @@ from kuchka.units.chemistry import molality
 from kuchka.units.chemistry import molar_charge
 from kuchka.units.chemistry import molar_concentration
 from kuchka.units.chemistry import molar_energy
+from kuchka.units.chemistry import molar_entropy
 from kuchka.units.chemistry import molar_flow_rate
+from kuchka.units.chemistry import molar_heat_capacity
 from kuchka.units.chemistry import molar_mass
 from kuchka.units.chemistry import molar_volume
 from kuchka.units.chemistry.catalytic_activity import *
@@ -20,7 +22,9 @@ from kuchka.units.chemistry.molality import *
 from kuchka.units.chemistry.molar_charge import *
 from kuchka.units.chemistry.molar_concentration import *
 from kuchka.units.chemistry.molar_energy import *
+from kuchka.units.chemistry.molar_entropy import *
 from kuchka.units.chemistry.molar_flow_rate import *
+from kuchka.units.chemistry.molar_heat_capacity import *
 from kuchka.units.chemistry.molar_mass import *
 from kuchka.units.chemistry.molar_volume import *
 
@@ -31,6 +35,8 @@ __all__ += molality.__all__
 __all__ += molar_charge.__all__
 __all__ += molar_concentration.__all__
 __all__ += molar_energy.__all__
+__all__ += molar_entropy.__all__
 __all__ += molar_flow_rate.__all__
+__all__ += molar_heat_capacity.__all__
 __all__ += molar_mass.__all__
 __all__ += molar_volume.__all__

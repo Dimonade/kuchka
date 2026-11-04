@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
     from kuchka.quantities.chemistry.molar_energy import MolarEnergy
     from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
+    from kuchka.quantities.chemistry.molar_heat_capacity import MolarHeatCapacity
     from kuchka.quantities.chemistry.molar_volume import MolarVolume
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.mass import Mass
@@ -31,6 +32,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.thermodynamics.specific_heat_capacity import (
+        SpecificHeatCapacity,
+    )
 
 
 class MolarMass(LinearQuantity):
@@ -54,6 +58,8 @@ class MolarMass(LinearQuantity):
     def __mul__(self, other: SpecificCharge) -> MolarCharge: ...
     @overload
     def __mul__(self, other: SpecificEnergy) -> MolarEnergy: ...
+    @overload
+    def __mul__(self, other: SpecificHeatCapacity) -> MolarHeatCapacity: ...
     @overload
     def __mul__(self, other: VelocitySquared) -> MolarEnergy: ...
     @overload
