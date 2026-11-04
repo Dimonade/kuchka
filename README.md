@@ -566,8 +566,10 @@ The complete unit vocabulary is available in the API reference.
 | Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`, `Rankine`                                                                     |
 | Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`, `DeltaRankine`                                                 |
 | Heating Rate      | `KelvinPerSecond`, `CelsiusPerMinute`, `FahrenheitPerMinute`, and the per-second, per-minute, and per-hour units |
-| Heat capacity     | `JoulePerKelvin`, `KilojoulePerKelvin`                                                                           |
+| Heat capacity     | `JoulePerKelvin`, `KilojoulePerKelvin`, `ThermochemicalCaloriePerKelvin`, `KilocaloriePerKelvin`                 |
 | Specific heat     | `JoulePerKilogramKelvin`, `KilojoulePerKilogramKelvin`, `ThermochemicalCaloriePerGramKelvin`                     |
+| Entropy           | `HeatCapacity.to_entropy()`, and `ENTROPY_UNITS` for the same units as text                                      |
+| Specific entropy  | `SpecificHeatCapacity.to_specific_entropy()`, and `SPECIFIC_ENTROPY_UNITS`                                       |
 
 ### Geometry and mechanics
 

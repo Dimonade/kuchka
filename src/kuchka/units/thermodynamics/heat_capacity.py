@@ -1,4 +1,4 @@
-"""Unit constructors for heat capacity: joules and kilojoules per kelvin.
+"""Unit constructors for heat capacity: joules, kilojoules, and calories per kelvin.
 
     from kuchka import JoulePerKelvin, KilojoulePerKelvin
 
@@ -7,7 +7,9 @@
 
 `HeatCapacity` is the energy that changes a body's temperature by one degree,
 `Energy / TemperatureDelta`.
-Its canonical unit is the joule per kelvin (`J/K`).
+Its canonical unit is the joule per kelvin (`J/K`), which is also the unit of `Entropy`.
+The calorie and kilocalorie per kelvin are the thermochemical ones, as a calorimeter is
+rated in.
 A degree Celsius in the denominator is a difference, so `J/°C` is the same unit.
 
 Examples
@@ -39,12 +41,12 @@ from kuchka.numeric import to_exact
 from kuchka.quantities import HeatCapacity
 from kuchka.quantities import UnitDef
 from kuchka.units.mechanics.energy import JOULE
+from kuchka.units.mechanics.energy import KILOCALORIE
 from kuchka.units.mechanics.energy import KILOJOULE
+from kuchka.units.mechanics.energy import THERMOCHEMICAL_CALORIE
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-    from collections.abc import Mapping
-
+    from kuchka.internal.unit_table import UnitTable
     from kuchka.numeric import Numeric
 
 JOULE_PER_KELVIN = UnitDef(
@@ -65,6 +67,23 @@ KILOJOULE_PER_KELVIN = UnitDef(
 )
 
 HeatCapacity._canonical_unit = JOULE_PER_KELVIN  # noqa: SLF001 -- this module owns HeatCapacity's canonical unit
+
+THERMOCHEMICAL_CALORIE_PER_KELVIN = UnitDef(
+    "thermochemical_calorie_per_kelvin",
+    "cal/K",
+    THERMOCHEMICAL_CALORIE.scale,
+    HEAT_CAPACITY,
+    aliases=("cal/\u00b0C", "cal/degC", "cal/C"),
+    words=("calories per kelvin", "calorie per kelvin"),
+)
+KILOCALORIE_PER_KELVIN = UnitDef(
+    "kilocalorie_per_kelvin",
+    "kcal/K",
+    KILOCALORIE.scale,
+    HEAT_CAPACITY,
+    aliases=("kcal/\u00b0C", "kcal/degC", "kcal/C"),
+    words=("kilocalories per kelvin", "kilocalorie per kelvin"),
+)
 
 
 def JoulePerKelvin(value: Numeric) -> HeatCapacity:
@@ -103,18 +122,63 @@ def KilojoulePerKelvin(value: Numeric) -> HeatCapacity:
     )
 
 
-HEAT_CAPACITY_UNITS: Mapping[str, Callable[[Numeric], HeatCapacity]] = unit_table(
+def ThermochemicalCaloriePerKelvin(value: Numeric) -> HeatCapacity:
+    """Construct a HeatCapacity from a magnitude in thermochemical calories per kelvin.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnitude in thermochemical calories per kelvin.
+
+    Returns
+    -------
+    HeatCapacity
+        HeatCapacity represented in thermochemical calories per kelvin.
+
+    """
+    return HeatCapacity(
+        to_exact(value) * THERMOCHEMICAL_CALORIE_PER_KELVIN.scale,
+        THERMOCHEMICAL_CALORIE_PER_KELVIN,
+    )
+
+
+def KilocaloriePerKelvin(value: Numeric) -> HeatCapacity:
+    """Construct a HeatCapacity from a magnitude in kilocalories per kelvin.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnitude in kilocalories per kelvin.
+
+    Returns
+    -------
+    HeatCapacity
+        HeatCapacity represented in kilocalories per kelvin.
+
+    """
+    return HeatCapacity(
+        to_exact(value) * KILOCALORIE_PER_KELVIN.scale, KILOCALORIE_PER_KELVIN
+    )
+
+
+HEAT_CAPACITY_UNITS: UnitTable[HeatCapacity] = unit_table(
     "HEAT_CAPACITY_UNITS",
     {
         JOULE_PER_KELVIN: JoulePerKelvin,
         KILOJOULE_PER_KELVIN: KilojoulePerKelvin,
+        THERMOCHEMICAL_CALORIE_PER_KELVIN: ThermochemicalCaloriePerKelvin,
+        KILOCALORIE_PER_KELVIN: KilocaloriePerKelvin,
     },
 )
 
 __all__ = [
     "HEAT_CAPACITY_UNITS",
     "JOULE_PER_KELVIN",
+    "KILOCALORIE_PER_KELVIN",
     "KILOJOULE_PER_KELVIN",
+    "THERMOCHEMICAL_CALORIE_PER_KELVIN",
     "JoulePerKelvin",
+    "KilocaloriePerKelvin",
     "KilojoulePerKelvin",
+    "ThermochemicalCaloriePerKelvin",
 ]

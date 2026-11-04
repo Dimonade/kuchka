@@ -50,9 +50,7 @@ from kuchka.units.mechanics.energy import KILOJOULE
 from kuchka.units.mechanics.energy import THERMOCHEMICAL_CALORIE
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-    from collections.abc import Mapping
-
+    from kuchka.internal.unit_table import UnitTable
     from kuchka.numeric import Numeric
 
 JOULE_PER_KILOGRAM_KELVIN = UnitDef(
@@ -172,9 +170,7 @@ def ThermochemicalCaloriePerGramKelvin(value: Numeric) -> SpecificHeatCapacity:
     )
 
 
-SPECIFIC_HEAT_CAPACITY_UNITS: Mapping[
-    str, Callable[[Numeric], SpecificHeatCapacity]
-] = unit_table(
+SPECIFIC_HEAT_CAPACITY_UNITS: UnitTable[SpecificHeatCapacity] = unit_table(
     "SPECIFIC_HEAT_CAPACITY_UNITS",
     {
         JOULE_PER_KILOGRAM_KELVIN: JoulePerKilogramKelvin,

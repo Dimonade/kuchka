@@ -23,7 +23,7 @@ Every other quantity lives in the themed package of the relation that defines it
 | `chemistry`                     | what is measured per mole: molar mass, concentration, energy, flow rate, catalytic activity, and more                                           |
 | `photometry`                    | light as the eye sees it: flux, energy, exposure, illuminance, luminance, efficacy                                                              |
 | `radiation`                     | radioactive activity, and the doses it deposits: absorbed dose, equivalent dose, exposure, their rates, and activity per volume, mass, and area |
-| `thermodynamics`                | how heat changes a temperature: heating rate, heat capacity, specific heat capacity                                                             |
+| `thermodynamics`                | how heat changes a temperature: heating rate, heat capacity, specific heat capacity, entropy                                                    |
 
 A quantity that fits two packages lives where its defining relation lives, and the other package imports it.
 `Energy` is `Force * Length`, so it is in `mechanics`, and the electrical units reuse it for the watt-hour.
