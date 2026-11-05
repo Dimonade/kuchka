@@ -411,6 +411,12 @@ class Frequency(LinearQuantity):
             Mains frequency as angular velocity: Hertz(50).to_angular_velocity()
 
         One hertz is one turn per second, which is two pi radians per second.
+
+        This fits a frequency counted in cycles.
+        A rate that arrives as a `Frequency` but counts radians, such as a speed over a
+        radius or a natural frequency `sqrt(k / m)`, reads two pi times too fast here:
+        `AngularVelocity.from_tangential(velocity, radius)` builds the first, and
+        `RadianPerSecond(rate.magnitude)` the second.
         """
         from kuchka.quantities.kinematics.angular_velocity import AngularVelocity  # noqa: PLC0415
 

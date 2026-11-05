@@ -47,19 +47,24 @@ Each bridge meets two conditions:
 
 The second condition is the one that keeps a bridge a fact about the physics:
 
-| Relation                            | Gap | Readings                                                  | Bridged            |
-| ----------------------------------- | --- | --------------------------------------------------------- | ------------------ |
-| `Mass * Area`                       | yes | one: the moment of inertia, in kg·m²                      | yes                |
-| `FirstMomentOfMass * Length`        | yes | one: the moment of inertia                                | yes                |
-| `MomentOfInertia / Mass`            | yes | one: the square of the radius of gyration                 | yes                |
-| `AngularVelocity * Length`          | yes | one: the tangential speed                                 | yes                |
-| `AngularAcceleration * Length`      | yes | one: the tangential acceleration                          | yes                |
-| `Torque / Force`, `Torque / Length` | yes | one: the lever arm, and the force at it                   | yes                |
-| `Force * Length`                    | no  | two: work, or torque                                      | by `from_force`    |
-| `Velocity / Length`                 | no  | two: `v / r` in rad/s, or `v / lambda` in Hz              | by a constructor   |
-| `Acceleration / Length`             | yes | two: `a / r` in rad/s², or `g / l` as the square of rad/s | by a constructor   |
-| `Momentum * Length`                 | yes | two: angular momentum, or action in J·s                   | by a constructor   |
-| `Frequency * Time`                  | no  | cycles, which are a count                                 | stays a `Fraction` |
+| Relation                              | Gap | Readings                                                  | Bridged            |
+| ------------------------------------- | --- | --------------------------------------------------------- | ------------------ |
+| `Mass * Area`                         | yes | one: the moment of inertia, in kg·m²                      | yes                |
+| `FirstMomentOfMass * Length`          | yes | one: the moment of inertia                                | yes                |
+| `MomentOfInertia / Mass`              | yes | one: the square of the radius of gyration                 | yes                |
+| `AngularVelocity * Length`            | yes | one: the tangential speed                                 | yes                |
+| `AngularAcceleration * Length`        | yes | one: the tangential acceleration                          | yes                |
+| `Torque / Force`, `Torque / Length`   | yes | one: the lever arm, and the force at it                   | yes                |
+| `AngularVelocity * Velocity`          | yes | one: the centripetal acceleration                         | yes                |
+| `AngularVelocity * Momentum`          | yes | one: the centripetal force                                | yes                |
+| `FirstMomentOfMass * AngularVelocity` | yes | one: the momentum of an unbalance on its circle           | yes                |
+| `AngularDisplacement * Length`        | yes | one: the length of the arc swept                          | yes                |
+| `Force * Length`                      | no  | two: work, or torque                                      | by `from_force`    |
+| `Velocity / Length`                   | no  | two: `v / r` in rad/s, or `v / lambda` in Hz              | by a constructor   |
+| `Length / Length`                     | no  | two: a ratio, or the angle of an arc over its radius      | by a constructor   |
+| `Acceleration / Length`               | yes | two: `a / r` in rad/s², or `g / l` as the square of rad/s | by a constructor   |
+| `Momentum * Length`                   | yes | two: angular momentum, or action in J·s                   | by a constructor   |
+| `Frequency * Time`                    | no  | cycles, which are a count                                 | stays a `Fraction` |
 
 Bridges cross the angle axis alone.
 The solid angle and information axes have no geometric relation of this kind, and the lumen closes through algebra.
@@ -97,9 +102,11 @@ rotor * omega  # an AngularMomentum
 0.5 * rotor * omega * omega  # an Energy
 speed = omega * Metre(0.2)  # a Velocity of 60 m/s
 speed * speed / Metre(0.2)  # an Acceleration, the centripetal one
+omega * speed  # the same Acceleration
 ```
 
 A product with no type yet, such as `omega * omega`, is a quantity that can be added like any other.
+`r * omega * omega` is an `Acceleration` already, through the rim speed, and `omega * omega * r` raises at its first step.
 The factor rule covers any exponent, so once an angular velocity squared (∠² T⁻²) exists, `omega * omega * rotor` is an `Energy` by algebra, and `omega * omega * r` an `Acceleration` by a bridge with `a_p - a_r = 2`.
 
 ## Named relations
@@ -108,9 +115,21 @@ A relation with two readings is a constructor or a conversion that names the one
 
 - `Torque.from_force(force, lever_arm)`, since `Force * Length` is the work a force does along a length.
 - `AngularVelocity.from_tangential(velocity, radius)`, since `Velocity / Length` is the `Frequency` of a wave of that wavelength.
+- `AngularDisplacement.from_arc(arc, radius)`, since `Length / Length` is a ratio, a strain or a scale.
+
+```python
+from kuchka import AngularDisplacement
+from kuchka import AngularVelocity
+from kuchka import Metre
+from kuchka import MetrePerSecond
+
+AngularVelocity.from_tangential(MetrePerSecond(60), Metre(0.2))  # 300 rad/s
+AngularDisplacement.from_arc(Metre(0.5), Metre(0.25))  # 2 rad
+```
 
 A natural frequency, `sqrt(k / m)`, is a radian rate whose dimension has no angle in it.
-`Frequency.to_angular_velocity()` reads a hertz as one turn per second, which fits a frequency counted in cycles, and its docstring points a radian rate to `AngularVelocity` constructed in radians per second.
+`Frequency.to_angular_velocity()` reads a hertz as one turn per second, which fits a frequency counted in cycles.
+A speed over a radius arrives as a `Frequency` that counts radians, and `(v / r).to_angular_velocity()` reads it two pi times too fast, so the method's docstring points such a rate to `from_tangential`, and a natural frequency to `RadianPerSecond`.
 
 ## Choices behind the model
 

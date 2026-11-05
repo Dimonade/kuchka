@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
@@ -66,6 +67,8 @@ class Force(LinearQuantity):
     # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Acceleration) -> Mass: ...
+    @overload
+    def __truediv__(self, other: AngularVelocity) -> Momentum: ...
     @overload
     def __truediv__(self, other: Area) -> Pressure: ...
     @overload

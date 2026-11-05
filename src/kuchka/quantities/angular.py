@@ -20,11 +20,14 @@ from typing import overload
 
 from kuchka.dimensions import ANGLE
 from kuchka.errors import IncompatibleDimensionError
+from kuchka.internal.constants import PI
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import ModularQuantity
+from kuchka.quantities.base.registry import _bridge
 from kuchka.quantities.base.registry import _register
 from kuchka.quantities.base.storage import _ScalarStorage
+from kuchka.quantities.length import Length
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -104,6 +107,8 @@ class AngularDisplacement(LinearQuantity):
     multiplies and divides like any linear quantity:
     `Torque * AngularDisplacement` is the work done, and `AngularDisplacement / Time` is
     an angular velocity.
+    Times a radius, it is the `Length` of the arc it sweeps, and
+    `AngularDisplacement.from_arc(arc, radius)` reads the angle back.
     """
 
     dimension: ClassVar[Dimension] = ANGLE
@@ -112,6 +117,8 @@ class AngularDisplacement(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Frequency) -> AngularVelocity: ...
+    @overload
+    def __mul__(self, other: Length) -> Length: ...
     @overload
     def __mul__(self, other: Proportion) -> AngularDisplacement: ...
     @overload
@@ -158,8 +165,24 @@ class AngularDisplacement(LinearQuantity):
         """
         return Angle(self._magnitude, self._display_unit).normalize()
 
+    @classmethod
+    def from_arc(cls, arc: Length, radius: Length) -> Self:
+        """Return the angle an arc of a length sweeps around a radius.
+
+            AngularDisplacement.from_arc(Metre(0.5), Metre(0.25))  # 2 rad
+
+        The angle is the arc over the radius, in radians.
+        `Length / Length` alone is a ratio, because most lengths over lengths are one.
+        """
+        if not isinstance(arc, Length) or not isinstance(radius, Length):
+            raise IncompatibleDimensionError("build an angle from", arc, radius)
+        radians = (arc / radius)._magnitude  # noqa: SLF001 -- same-package arithmetic on canonical magnitudes
+        return cls(radians / (2 * PI), cls._result_unit)
+
 
 _register(ANGLE, Angle)
 _register(ANGLE, AngularDisplacement)
+_bridge(AngularDisplacement, "*", Length, Length)
+_bridge(Length, "/", AngularDisplacement, Length)
 
 __all__ = ["Angle", "AngularDisplacement"]

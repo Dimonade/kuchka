@@ -226,6 +226,13 @@ HeatCapacity / Mass -> SpecificHeatCapacity
 Torque * AngularDisplacement -> Energy
 Torque * AngularVelocity -> Power
 AngularDisplacement / Time -> AngularVelocity
+AngularVelocity / Time -> AngularAcceleration
+Mass * Area -> MomentOfInertia
+MomentOfInertia * AngularAcceleration -> Torque
+MomentOfInertia * AngularVelocity -> AngularMomentum
+AngularVelocity * Length -> Velocity
+AngularVelocity * Velocity -> Acceleration
+AngularDisplacement * Length -> Length
 Mass / Volume -> Density
 Volume / Time -> VolumetricFlowRate
 Area * Velocity -> VolumetricFlowRate
@@ -603,7 +610,11 @@ The complete unit vocabulary is available in the API reference.
 | Angle                | `Radian`, `Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond`                                                                         |
 | Angular displacement | `RadianDisplacement`, `DegreeDisplacement`, `TurnDisplacement`, `GradianDisplacement`, `ArcMinuteDisplacement`, `ArcSecondDisplacement` |
 | Angular velocity     | `RadianPerSecond`, `DegreePerSecond`, `TurnPerSecond`, `RevolutionPerMinute`                                                            |
+| Angular acceleration | `RadianPerSecondSquared`, `DegreePerSecondSquared`, `TurnPerSecondSquared`, `RevolutionPerMinutePerSecond`                              |
 | Torque               | `NewtonMetre`, `MillinewtonMetre`, `KilonewtonMetre`, `PoundForceFoot`, `PoundForceInch`, `JoulePerTurn`                                |
+| Moment of inertia    | `KilogramSquareMetre`, `KilogramSquareCentimetre`, `GramSquareCentimetre`, `PoundSquareFoot`, `PoundSquareInch`                         |
+| Angular momentum     | `KilogramSquareMetrePerSecond`, `NewtonMetreSecond`, `JouleSecondPerTurn`                                                               |
+| First moment of mass | `KilogramMetre`, `GramCentimetre`, `GramMillimetre`, `OunceInch`                                                                        |
 
 ### Chemistry and light
 

@@ -114,6 +114,13 @@ A radius stays a `Length`; bridges, declared rules across the angle axis, carry 
 - **Bridges:**
   `AngularVelocity * Length` is a `Velocity`, `AngularAcceleration * Length` an `Acceleration`, `Torque / Force` the lever arm, and `Torque / Length` the force at it.
   A `MomentOfInertia` divides back into its mass, area, radius, and unbalance.
+- **Centripetal motion and arcs:**
+  `AngularVelocity * Velocity` is the centripetal `Acceleration`, so `r * omega * omega` is one too, and `AngularVelocity * Momentum` the centripetal `Force`.
+  `FirstMomentOfMass * AngularVelocity` is the `Momentum` of an unbalance on its circle, so `m * r * omega * omega` and `GramMillimetre(30) * omega * omega` are the force an unbalance pulls the axis with.
+  `AngularDisplacement * Length` is the `Length` of the arc swept, and an arc over its angle the radius.
+- **Named relations:**
+  `AngularVelocity.from_tangential(velocity, radius)` builds the radian rate of a rim speed, since `Velocity / Length` is a `Frequency`, and `AngularDisplacement.from_arc(arc, radius)` the angle of an arc, since `Length / Length` is a ratio.
+  The `Frequency.to_angular_velocity()` docstring now notes that a radian rate such as `v / r` reads two pi times too fast through it.
 - `Momentum * Time` and `Impulse * Time` are now a `FirstMomentOfMass`, and `AngularVelocity * Frequency` an `AngularAcceleration`; each raised `UnrepresentableDimensionError` before.
 
 #### New constants

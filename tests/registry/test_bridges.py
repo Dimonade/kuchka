@@ -16,6 +16,7 @@ from kuchka import Frequency
 from kuchka import Length
 from kuchka import Mass
 from kuchka import MomentOfInertia
+from kuchka import Momentum
 from kuchka import Power
 from kuchka import Proportion
 from kuchka import SampleRate
@@ -60,6 +61,32 @@ SHIPPED_BRIDGES: dict[tuple[type, str, type], tuple[type, str]] = {
     (MomentOfInertia, "/", FirstMomentOfMass): (Length, "the radius of an unbalance"),
     (Torque, "/", Force): (Length, "the lever arm of a force"),
     (Torque, "/", Length): (Force, "the force at a lever arm"),
+    (AngularVelocity, "*", Velocity): (
+        Acceleration,
+        "the centripetal acceleration of a point turning at a rim speed",
+    ),
+    (Acceleration, "/", AngularVelocity): (
+        Velocity,
+        "the rim speed at a centripetal acceleration",
+    ),
+    (AngularVelocity, "*", Momentum): (
+        Force,
+        "the centripetal force on a body turning with a momentum",
+    ),
+    (Force, "/", AngularVelocity): (
+        Momentum,
+        "the momentum a centripetal force turns",
+    ),
+    (FirstMomentOfMass, "*", AngularVelocity): (
+        Momentum,
+        "the momentum of an unbalance turning on its circle",
+    ),
+    (Momentum, "/", AngularVelocity): (
+        FirstMomentOfMass,
+        "the unbalance that turns with a momentum",
+    ),
+    (AngularDisplacement, "*", Length): (Length, "the arc an angle sweeps at a radius"),
+    (Length, "/", AngularDisplacement): (Length, "the radius of an arc"),
 }
 """Every bridge the library declares, with its result and the one reading of it."""
 

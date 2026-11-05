@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.angular import AngularDisplacement
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.inductance import Inductance
@@ -58,6 +59,8 @@ class Length(LinearQuantity):
     @overload
     def __mul__(self, other: AngularAcceleration) -> Acceleration: ...
     @overload
+    def __mul__(self, other: AngularDisplacement) -> Length: ...
+    @overload
     def __mul__(self, other: AngularVelocity) -> Velocity: ...
     @overload
     def __mul__(self, other: Area) -> Volume: ...
@@ -91,6 +94,8 @@ class Length(LinearQuantity):
         return super().__mul__(other)
 
     # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: AngularDisplacement) -> Length: ...
     @overload
     def __truediv__(self, other: Length) -> Proportion: ...
     @overload

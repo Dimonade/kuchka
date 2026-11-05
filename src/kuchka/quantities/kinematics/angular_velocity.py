@@ -11,13 +11,17 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import ClassVar
+from typing import Self
 from typing import overload
 
 from kuchka.dimensions import ANGULAR_VELOCITY
+from kuchka.errors import IncompatibleDimensionError
+from kuchka.internal.constants import PI
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.registry import _bridge
 from kuchka.quantities.base.registry import _register
+from kuchka.quantities.kinematics.acceleration import Acceleration
 from kuchka.quantities.kinematics.velocity import Velocity
 from kuchka.quantities.length import Length
 from kuchka.quantities.temporal import Frequency
@@ -31,7 +35,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
     from kuchka.quantities.mechanics.angular_momentum import AngularMomentum
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
+    from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
+    from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.proportion import Proportion
@@ -45,6 +52,8 @@ class AngularVelocity(LinearQuantity):
 
     Times the radius a point turns at, it is the tangential `Velocity`, and a
     tangential velocity over an angular velocity is that radius.
+    Times that tangential velocity, it is the centripetal `Acceleration`.
+    `AngularVelocity.from_tangential(velocity, radius)` reads the rate back.
     """
 
     dimension: ClassVar[Dimension] = ANGULAR_VELOCITY
@@ -54,17 +63,23 @@ class AngularVelocity(LinearQuantity):
     @overload
     def __mul__(self, other: AngularMomentum) -> Energy: ...
     @overload
+    def __mul__(self, other: FirstMomentOfMass) -> Momentum: ...
+    @overload
     def __mul__(self, other: Frequency) -> AngularAcceleration: ...
     @overload
     def __mul__(self, other: Length) -> Velocity: ...
     @overload
     def __mul__(self, other: MomentOfInertia) -> AngularMomentum: ...
     @overload
+    def __mul__(self, other: Momentum) -> Force: ...
+    @overload
     def __mul__(self, other: Proportion) -> AngularVelocity: ...
     @overload
     def __mul__(self, other: Time) -> AngularDisplacement: ...
     @overload
     def __mul__(self, other: Torque) -> Power: ...
+    @overload
+    def __mul__(self, other: Velocity) -> Acceleration: ...
     @overload
     def __mul__(self, other: Numeric) -> AngularVelocity: ...
     @overload
@@ -111,9 +126,28 @@ class AngularVelocity(LinearQuantity):
         """
         return Frequency(self._magnitude, Frequency._canonical_unit)  # noqa: SLF001 -- Frequency's own canonical unit
 
+    @classmethod
+    def from_tangential(cls, velocity: Velocity, radius: Length) -> Self:
+        """Return the angular velocity of a point moving at a speed around a radius.
+
+            AngularVelocity.from_tangential(MetrePerSecond(60), Metre(0.2))  # 300 rad/s
+
+        The angle swept is the arc travelled over the radius, in radians.
+        `Velocity / Length` alone is a `Frequency`, because a speed over a wavelength
+        is the cycles per second of a wave.
+        """
+        if not isinstance(velocity, Velocity) or not isinstance(radius, Length):
+            raise IncompatibleDimensionError(
+                "build an angular velocity from", velocity, radius
+            )
+        radians_per_second = (velocity / radius)._magnitude  # noqa: SLF001 -- same-package arithmetic on canonical magnitudes
+        return cls(radians_per_second / (2 * PI), cls._result_unit)
+
 
 _register(ANGULAR_VELOCITY, AngularVelocity)
 _bridge(AngularVelocity, "*", Length, Velocity)
 _bridge(Velocity, "/", AngularVelocity, Length)
+_bridge(AngularVelocity, "*", Velocity, Acceleration)
+_bridge(Acceleration, "/", AngularVelocity, Velocity)
 
 __all__ = ["AngularVelocity"]
