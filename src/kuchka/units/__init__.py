@@ -83,18 +83,22 @@ from kuchka.units.geometry.volume import *
 from kuchka.units.information.data import *
 from kuchka.units.information.data_rate import *
 from kuchka.units.kinematics.acceleration import *
+from kuchka.units.kinematics.angular_acceleration import *
 from kuchka.units.kinematics.angular_velocity import *
 from kuchka.units.kinematics.velocity import *
 from kuchka.units.length import *
 from kuchka.units.logarithmic import *
 from kuchka.units.luminous_intensity import *
 from kuchka.units.mass import *
+from kuchka.units.mechanics.angular_momentum import *
 from kuchka.units.mechanics.density import *
 from kuchka.units.mechanics.energy import *
 from kuchka.units.mechanics.energy_density import *
+from kuchka.units.mechanics.first_moment_of_mass import *
 from kuchka.units.mechanics.force import *
 from kuchka.units.mechanics.impulse import *
 from kuchka.units.mechanics.mass_flow_rate import *
+from kuchka.units.mechanics.moment_of_inertia import *
 from kuchka.units.mechanics.momentum import *
 from kuchka.units.mechanics.power import *
 from kuchka.units.mechanics.pressure import *
@@ -151,6 +155,10 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Angle: ANGLE_UNITS,
     quantities.AngularDisplacement: ANGULAR_DISPLACEMENT_UNITS,
     quantities.AngularVelocity: ANGULAR_VELOCITY_UNITS,
+    quantities.AngularAcceleration: ANGULAR_ACCELERATION_UNITS,
+    quantities.AngularMomentum: ANGULAR_MOMENTUM_UNITS,
+    quantities.FirstMomentOfMass: FIRST_MOMENT_OF_MASS_UNITS,
+    quantities.MomentOfInertia: MOMENT_OF_INERTIA_UNITS,
     quantities.Torque: TORQUE_UNITS,
     quantities.Area: AREA_UNITS,
     quantities.BaudRate: BAUD_RATE_UNITS,

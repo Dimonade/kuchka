@@ -226,6 +226,13 @@ HeatCapacity / Mass -> SpecificHeatCapacity
 Torque * AngularDisplacement -> Energy
 Torque * AngularVelocity -> Power
 AngularDisplacement / Time -> AngularVelocity
+AngularVelocity / Time -> AngularAcceleration
+Mass * Area -> MomentOfInertia
+MomentOfInertia * AngularAcceleration -> Torque
+MomentOfInertia * AngularVelocity -> AngularMomentum
+AngularVelocity * Length -> Velocity
+AngularVelocity * Velocity -> Acceleration
+AngularDisplacement * Length -> Length
 Mass / Volume -> Density
 Volume / Time -> VolumetricFlowRate
 Area * Velocity -> VolumetricFlowRate
@@ -603,7 +610,11 @@ The complete unit vocabulary is available in the API reference.
 | Angle                | `Radian`, `Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond`                                                                         |
 | Angular displacement | `RadianDisplacement`, `DegreeDisplacement`, `TurnDisplacement`, `GradianDisplacement`, `ArcMinuteDisplacement`, `ArcSecondDisplacement` |
 | Angular velocity     | `RadianPerSecond`, `DegreePerSecond`, `TurnPerSecond`, `RevolutionPerMinute`                                                            |
+| Angular acceleration | `RadianPerSecondSquared`, `DegreePerSecondSquared`, `TurnPerSecondSquared`, `RevolutionPerMinutePerSecond`                              |
 | Torque               | `NewtonMetre`, `MillinewtonMetre`, `KilonewtonMetre`, `PoundForceFoot`, `PoundForceInch`, `JoulePerTurn`                                |
+| Moment of inertia    | `KilogramSquareMetre`, `KilogramSquareCentimetre`, `GramSquareCentimetre`, `PoundSquareFoot`, `PoundSquareInch`                         |
+| Angular momentum     | `KilogramSquareMetrePerSecond`, `NewtonMetreSecond`, `JouleSecondPerTurn`                                                               |
+| First moment of mass | `KilogramMetre`, `GramCentimetre`, `GramMillimetre`, `OunceInch`                                                                        |
 
 ### Chemistry and light
 
@@ -995,6 +1006,7 @@ Deeper design material is kept separately:
 
 - **[Quantity shapes and semantics](docs/concepts/quantity_shapes.md)** - Linear, Affine, Modular, and Logarithmic quantities, including temperature, angle, and decibel semantics.
 - **[Dimensional algebra and derived quantities](docs/concepts/dimensional_algebra.md)** - exponent-vector arithmetic, registered results, reciprocal relationships, and the boundary between runtime algebra and static overloads.
+- **[Where the radian meets a length](docs/concepts/angle_bridges.md)** - how rotational quantities meet lengths: bridges, the moment of inertia, and the relations that stay named constructors.
 - **[Copying, pickling, and persistence](docs/concepts/persistence.md)** - what `copy` and `pickle` guarantee, why pickle is not a storage format, and how to store a value as exact text and a unit symbol.
 - **[Unit spellings](docs/concepts/unit_spellings.md)** - what the `*_UNITS` tables accept, how case and plurals are treated, and why no spelling can mean two units.
 - **[Exactness, angles, and tolerance](docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, angles and pi, and comparing with a tolerance.

@@ -9,10 +9,13 @@ from typing import overload
 from kuchka.dimensions import MOMENTUM
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
+from kuchka.quantities.base.registry import _bridge
 from kuchka.quantities.base.registry import _register
 from kuchka.quantities.base.registry import _rule
+from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
 from kuchka.quantities.kinematics.velocity import Velocity
 from kuchka.quantities.mass import Mass
+from kuchka.quantities.mechanics.force import Force
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -22,7 +25,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.energy import Energy
-    from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.power import Power
@@ -41,6 +44,8 @@ class Momentum(LinearQuantity):
     `Mass * Velocity` is a `Momentum`, and `Momentum * Velocity` an `Energy`, so a
     kinetic energy is written without brackets.
     `Momentum / Mass` is a `Velocity` and `Momentum / Time` a `Force`.
+    A body turning at an angular velocity needs the centripetal force
+    `AngularVelocity * Momentum`.
     The impulse that gives a body its momentum is an `Impulse`, which shares the
     dimension: see `Impulse.from_momentum`.
     """
@@ -52,11 +57,15 @@ class Momentum(LinearQuantity):
     @overload
     def __mul__(self, other: Acceleration) -> Power: ...
     @overload
+    def __mul__(self, other: AngularVelocity) -> Force: ...
+    @overload
     def __mul__(self, other: Frequency) -> Force: ...
     @overload
     def __mul__(self, other: Proportion) -> Momentum: ...
     @overload
     def __mul__(self, other: SpecificActivity) -> Acceleration: ...
+    @overload
+    def __mul__(self, other: Time) -> FirstMomentOfMass: ...
     @overload
     def __mul__(self, other: Velocity) -> Energy: ...
     @overload
@@ -72,7 +81,13 @@ class Momentum(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: AngularVelocity) -> FirstMomentOfMass: ...
+    @overload
+    def __truediv__(self, other: FirstMomentOfMass) -> Frequency: ...
+    @overload
     def __truediv__(self, other: Force) -> Time: ...
+    @overload
+    def __truediv__(self, other: Frequency) -> FirstMomentOfMass: ...
     @overload
     def __truediv__(self, other: Impulse) -> Proportion: ...
     @overload
@@ -105,5 +120,7 @@ class Momentum(LinearQuantity):
 
 _register(MOMENTUM, Momentum)
 _rule(Mass, "*", Velocity, Momentum)
+_bridge(AngularVelocity, "*", Momentum, Force)
+_bridge(Force, "/", AngularVelocity, Momentum)
 
 __all__ = ["Momentum"]

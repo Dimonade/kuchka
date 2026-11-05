@@ -10,6 +10,7 @@ accurate annotations, not needed to actually run `register()` or `_promote()`.
 
 from __future__ import annotations
 
+from dataclasses import replace
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Literal
@@ -20,6 +21,7 @@ from kuchka.errors import AmbiguousKindError
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import PlannedDimensionError
 from kuchka.errors import UnrepresentableDimensionError
+from kuchka.internal.constants import PI
 from kuchka.quantities.base.storage import _concrete_types
 
 if TYPE_CHECKING:
@@ -95,6 +97,19 @@ For instance, ``Force / Area`` is a ``Pressure`` and ``Energy / Volume`` an
 A product is entered in both operand orders.
 Every rule is declared through ``_rule`` while the package imports, and the table
 closes with the registry.
+"""
+
+_BRIDGES: dict[tuple[_Kind, str, _Kind], tuple[_Kind, Fraction]] = {}
+"""Maps (left kind, operation, right kind) to the kind a bridge gives, and its factor.
+
+A bridge is a rule whose result differs from the plain product or quotient on the
+angle axis alone: ``AngularVelocity * Length`` is a ``Velocity``.
+It states ``1 rad = 1`` for the operand kinds it names, so the canonical magnitude is
+multiplied by ``(2 pi) ** (a_p - a_r)``, with ``a_p`` the angle exponent of the plain
+product and ``a_r`` that of the result, because the turn is the canonical angle.
+The plain dimension of a bridge has no arithmetic kind, which the registry checks when
+it closes.
+A product is entered in both operand orders.
 """
 
 _RECIPROCALS: dict[_Kind, _Kind] = {}
@@ -421,19 +436,116 @@ def _rule(
             f"({names or 'none registered'}), or a role of one."
         )
         raise TypeError(msg)
-    keys = [(left, operation, right)]
+    for key in _declared_keys(left, operation, right, result):
+        _RULES[key] = result
+
+
+def _declared_keys(
+    left: _Kind, operation: Literal["*", "/"], right: _Kind, result: _Kind
+) -> list[tuple[_Kind, str, _Kind]]:
+    """Return the keys a rule or a bridge is entered under, both orders for a product.
+
+    Raises `TypeError` when a rule or a bridge already gives another result for one.
+    """
+    keys: list[tuple[_Kind, str, _Kind]] = [(left, operation, right)]
     if operation == "*" and left is not right:
         keys.append((right, operation, left))
     for key in keys:
-        known = _RULES.get(key)
+        known = _BRIDGES[key][0] if key in _BRIDGES else _RULES.get(key)
         if known is not None and known is not result:
             msg = (
                 f"{left.__name__} {operation} {right.__name__} is already "
                 f"{known.__name__}, not {result.__name__}."
             )
             raise TypeError(msg)
-    for key in keys:
-        _RULES[key] = result
+    return keys
+
+
+def _bridge(
+    left: _Kind,
+    operation: Literal["*", "/"],
+    right: _Kind,
+    result: _Kind,
+) -> None:
+    """Declare that `left <operation> right` is a `result`, across the angle axis.
+
+    The result differs from the plain product or quotient on the angle axis alone, and
+    the factor follows from the two angle exponents (see `_BRIDGES`).
+    A product holds in both operand orders.
+    The operands and the result are principal or contested kinds, and the plain
+    product or quotient has a dimension, since `Frequency * Time` counts cycles.
+    That the plain dimension has no arithmetic kind is checked when the registry
+    closes, since a later module may register one.
+
+    Raises `TypeError` for a bridge that does not fit or contradicts a rule or another
+    bridge, and `RuntimeError` once the registry is closed.
+    A refused bridge leaves the table unchanged.
+    """
+    if _closed:
+        msg = (
+            f"cannot add a bridge for {left.__name__} {operation} {right.__name__}: "
+            "the dimension registry is closed once `kuchka` has finished importing."
+        )
+        raise RuntimeError(msg)
+    if operation not in ("*", "/"):
+        msg = f"an operation is '*' or '/', not {operation!r}."
+        raise TypeError(msg)
+    for kind in (left, right, result):
+        if not (
+            _is_arithmetic_kind(kind) and kind in _arithmetic_roots(kind.dimension)
+        ):
+            msg = (
+                f"{kind.__name__} cannot take part in a bridge: its operands and its "
+                "result are principal or contested kinds."
+            )
+            raise TypeError(msg)
+    plain = _plain_dimension(left, operation, right)
+    if plain == DIMENSIONLESS or not _differs_in_angle_alone(plain, result.dimension):
+        msg = (
+            f"{left.__name__} {operation} {right.__name__} has dimension {plain!r}, "
+            f"so a bridge to {result.__name__} ({result.dimension!r}) does not fit: "
+            "a bridge changes the angle exponent of a dimension, and nothing else."
+        )
+        raise TypeError(msg)
+    factor = _TURN_IN_RADIANS ** (plain.angle - result.dimension.angle)
+    for key in _declared_keys(left, operation, right, result):
+        _BRIDGES[key] = (result, factor)
+
+
+_TURN_IN_RADIANS = 2 * PI
+"""The radians in a turn, the canonical angle: the base of every bridge factor."""
+
+
+def _plain_dimension(left: _Kind, operation: str, right: _Kind) -> Dimension:
+    """Return the dimension of `left <operation> right` by exponent arithmetic."""
+    if operation == "*":
+        return left.dimension * right.dimension
+    return left.dimension / right.dimension
+
+
+def _differs_in_angle_alone(first: Dimension, second: Dimension) -> bool:
+    """Return whether two dimensions differ, and only in their angle exponent."""
+    return first != second and replace(first, angle=0) == replace(second, angle=0)
+
+
+def _check_bridges() -> None:
+    """Refuse a bridge whose plain dimension has an arithmetic kind.
+
+    A bridge adds a result where arithmetic had none, so a kind registered for its
+    plain dimension conflicts with it.
+    Raises `TypeError` naming the bridge and the kind.
+    """
+    for (left, operation, right), (result, _) in _BRIDGES.items():
+        plain = _plain_dimension(left, operation, right)
+        kinds = _arithmetic_roots(plain)
+        if kinds:
+            names = ", ".join(kind.__name__ for kind in kinds)
+            msg = (
+                f"the bridge {left.__name__} {operation} {right.__name__} -> "
+                f"{result.__name__} conflicts with {names}, registered for its plain "
+                f"dimension {plain!r}: a bridge fills a dimension with no kind."
+            )
+            raise TypeError(msg)
 
 
 def _register_reciprocal(first: _Kind, second: _Kind) -> None:
@@ -607,6 +719,11 @@ def _combine(
         if ratio_kind is None or not _is_ratio(operation, left, right):
             return magnitude
         return _ratio(magnitude)
+    bridged = _BRIDGES.get((type(left), operation, type(right)))
+    if bridged is not None:
+        bridge_kind, factor = bridged
+        result_type = cast("type[LinearQuantity]", bridge_kind)
+        return result_type(magnitude * factor, _result_unit(result_type))
     kind = _result_kind(operation, type(left), type(right))
     if kind is None:
         return _promote(dimension, magnitude)
@@ -639,6 +756,7 @@ def _close() -> None:
             "quantity module registers its types while it is imported."
         )
         raise TypeError(msg)
+    _check_bridges()
     _closed = True
 
 

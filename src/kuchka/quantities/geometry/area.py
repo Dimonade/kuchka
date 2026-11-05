@@ -24,8 +24,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.luminous_intensity import LuminousIntensity
+    from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.photometry.illuminance import Illuminance
@@ -57,6 +59,8 @@ class Area(LinearQuantity):
     def __mul__(self, other: LuminousExposure) -> LuminousEnergy: ...
     @overload
     def __mul__(self, other: MagneticFluxDensity) -> MagneticFlux: ...
+    @overload
+    def __mul__(self, other: Mass) -> MomentOfInertia: ...
     @overload
     def __mul__(self, other: Pressure) -> Force: ...
     @overload

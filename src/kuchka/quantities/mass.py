@@ -24,13 +24,17 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
+    from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.velocity import Velocity
+    from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.density import Density
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
+    from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
@@ -59,9 +63,13 @@ class Mass(LinearQuantity):
     @overload
     def __mul__(self, other: Acceleration) -> Force: ...
     @overload
+    def __mul__(self, other: Area) -> MomentOfInertia: ...
+    @overload
     def __mul__(self, other: EntitiesPerAmount) -> MolarMass: ...
     @overload
     def __mul__(self, other: Frequency) -> MassFlowRate: ...
+    @overload
+    def __mul__(self, other: Length) -> FirstMomentOfMass: ...
     @overload
     def __mul__(self, other: Molality) -> AmountOfSubstance: ...
     @overload

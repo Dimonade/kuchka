@@ -19,6 +19,7 @@ from kuchka.errors import _register_hint
 from kuchka.internal.constants import PI
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
+from kuchka.quantities.base.registry import _bridge
 from kuchka.quantities.base.registry import _register
 from kuchka.quantities.length import Length
 from kuchka.quantities.mechanics.energy import Energy
@@ -30,9 +31,14 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.angular import AngularDisplacement
+    from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.mechanics.angular_momentum import AngularMomentum
+    from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
 
 
 class Torque(LinearQuantity):
@@ -49,6 +55,8 @@ class Torque(LinearQuantity):
     @overload
     def __mul__(self, other: Proportion) -> Torque: ...
     @overload
+    def __mul__(self, other: Time) -> AngularMomentum: ...
+    @overload
     def __mul__(self, other: Numeric) -> Torque: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
@@ -60,6 +68,18 @@ class Torque(LinearQuantity):
         return super().__mul__(other)
 
     # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: AngularAcceleration) -> MomentOfInertia: ...
+    @overload
+    def __truediv__(self, other: AngularMomentum) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: Force) -> Length: ...
+    @overload
+    def __truediv__(self, other: Frequency) -> AngularMomentum: ...
+    @overload
+    def __truediv__(self, other: Length) -> Force: ...
+    @overload
+    def __truediv__(self, other: MomentOfInertia) -> AngularAcceleration: ...
     @overload
     def __truediv__(self, other: Proportion) -> Torque: ...
     @overload
@@ -94,6 +114,8 @@ class Torque(LinearQuantity):
 
 
 _register(TORQUE, Torque)
+_bridge(Torque, "/", Force, Length)
+_bridge(Torque, "/", Length, Force)
 _register_hint(
     Energy,
     Torque,

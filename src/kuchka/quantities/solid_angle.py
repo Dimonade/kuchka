@@ -16,8 +16,6 @@ from typing import ClassVar
 from typing import Self
 from typing import overload
 
-from kuchka.dimensions import AREA
-from kuchka.dimensions import LENGTH
 from kuchka.dimensions import SOLID_ANGLE
 from kuchka.errors import IncompatibleDimensionError
 from kuchka.errors import InvalidMeasurementError
@@ -98,9 +96,10 @@ class SolidAngle(LinearQuantity):
             If the radius is not positive.
 
         """
-        if getattr(area, "dimension", None) != AREA:
-            raise IncompatibleDimensionError("build a solid angle from", area, radius)
-        if getattr(radius, "dimension", None) != LENGTH:
+        from kuchka.quantities.geometry.area import Area  # noqa: PLC0415
+        from kuchka.quantities.length import Length  # noqa: PLC0415
+
+        if not isinstance(area, Area) or not isinstance(radius, Length):
             raise IncompatibleDimensionError("build a solid angle from", area, radius)
         if radius._magnitude <= 0:  # noqa: SLF001 -- same-package arithmetic on canonical magnitudes
             msg = f"a sphere has a positive radius, got {radius}"

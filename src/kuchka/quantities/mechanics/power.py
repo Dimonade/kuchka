@@ -21,9 +21,11 @@ if TYPE_CHECKING:
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.angular_momentum import AngularMomentum
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.force import Force
@@ -70,6 +72,10 @@ class Power(LinearQuantity):
         return super().__mul__(other)
 
     # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: AngularAcceleration) -> AngularMomentum: ...
+    @overload
+    def __truediv__(self, other: AngularMomentum) -> AngularAcceleration: ...
     @overload
     def __truediv__(self, other: AngularVelocity) -> Torque: ...
     @overload

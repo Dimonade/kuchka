@@ -102,6 +102,33 @@ def test_a_missing_method_is_added_with_the_standard_implementation() -> None:
     assert "def keep" in text
 
 
+def test_a_missing_power_is_added_with_its_own_parameter() -> None:
+    new = generator.place(_source("value = 2\n"), "Thing", "__pow__", ["    x"])
+    text = "\n".join(new)
+    assert "def __pow__(self, exponent: int) -> LinearQuantity | Fraction:" in text
+    assert "return super().__pow__(exponent)" in text
+
+
+def test_literal_is_imported_when_a_module_names_it() -> None:
+    text = textwrap.dedent(
+        """\
+        from __future__ import annotations
+
+        from typing import TYPE_CHECKING
+
+        if TYPE_CHECKING:
+            from fractions import Fraction
+
+
+        class Thing:
+            def __pow__(self, exponent: Literal[2]) -> Fraction: ...
+        """
+    )
+    fixed = generator.fix_imports(text, {})
+    assert fixed.count("from typing import Literal") == 1
+    assert generator.fix_imports(fixed, {}).count("from typing import Literal") == 1
+
+
 def test_a_custom_implementation_after_the_region_is_left_alone() -> None:
     lines = _source(
         """\

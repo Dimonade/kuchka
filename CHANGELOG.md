@@ -95,6 +95,34 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   `Area / Area` remains a `Proportion`.
   Added explicit conversions between contested kinds: `Impulse` and `Momentum`, and `VelocitySquared` and `SpecificEnergy`, with the latter conversion accounting for the factor of two in kinetic energy.
 
+#### Integer powers
+
+A linear quantity takes an integer power: `Metre(3) ** 2` is `SquareMetre(9)`, `Second(2) ** -1` is `Hertz(0.5)`, and `q ** 0` is `Ratio(1)`.
+A power is the product written out, so the rules of each step apply, and type checkers see the square and the cube where those have a type.
+
+#### Rotational dynamics, and the moment of inertia
+
+`Mass * Area` is a `MomentOfInertia`, and so is a mass at a radius in any order: `m * r * r`, `r * m * r`, and `m * r ** 2`.
+A radius stays a `Length`; bridges, declared rules across the angle axis, carry the radian where a length meets a rotation.
+[Where the radian meets a length](docs/concepts/angle_bridges.md) describes the model, and [Adding a bridge](docs/how-to/adding_a_bridge.md) how one is declared.
+
+- **New quantities:**
+  `AngularAcceleration` (rad/s², tr/s², °/s², rpm/s), `MomentOfInertia` (kg·m², kg·cm², g·cm², lb·ft², lb·in²), `AngularMomentum` (kg·m²/s, N·m·s), and `FirstMomentOfMass` (kg·m, g·cm, g·mm, oz·in), the unbalance of a rotor.
+  `kg·m²` carries the scale `(2 pi) ** 2`, the way `N·m` carries `2 pi`, so a datasheet value is typed as written.
+- **Dynamics by algebra:**
+  `MomentOfInertia * AngularAcceleration` is a `Torque`, `MomentOfInertia * AngularVelocity` and `Torque * Time` are an `AngularMomentum`, and `0.5 * I * omega * omega` is an `Energy`.
+- **Bridges:**
+  `AngularVelocity * Length` is a `Velocity`, `AngularAcceleration * Length` an `Acceleration`, `Torque / Force` the lever arm, and `Torque / Length` the force at it.
+  A `MomentOfInertia` divides back into its mass, area, radius, and unbalance.
+- **Centripetal motion and arcs:**
+  `AngularVelocity * Velocity` is the centripetal `Acceleration`, so `r * omega * omega` is one too, and `AngularVelocity * Momentum` the centripetal `Force`.
+  `FirstMomentOfMass * AngularVelocity` is the `Momentum` of an unbalance on its circle, so `m * r * omega * omega` and `GramMillimetre(30) * omega * omega` are the force an unbalance pulls the axis with.
+  `AngularDisplacement * Length` is the `Length` of the arc swept, and an arc over its angle the radius.
+- **Named relations:**
+  `AngularVelocity.from_tangential(velocity, radius)` builds the radian rate of a rim speed, since `Velocity / Length` is a `Frequency`, and `AngularDisplacement.from_arc(arc, radius)` the angle of an arc, since `Length / Length` is a ratio.
+  The `Frequency.to_angular_velocity()` docstring now notes that a radian rate such as `v / r` reads two pi times too fast through it.
+- `Momentum * Time` and `Impulse * Time` are now a `FirstMomentOfMass`, and `AngularVelocity * Frequency` an `AngularAcceleration`; each raised `UnrepresentableDimensionError` before.
+
 #### New constants
 
 - **Boltzmann Constant (k_B) and Molar Gas Constant (R)**

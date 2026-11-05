@@ -16,9 +16,13 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
+    from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.momentum import Momentum
@@ -40,6 +44,8 @@ class Acceleration(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: FirstMomentOfMass) -> Energy: ...
     @overload
     def __mul__(self, other: Impulse) -> Power: ...
     @overload
@@ -68,6 +74,10 @@ class Acceleration(LinearQuantity):
     # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Acceleration) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: AngularAcceleration) -> Length: ...
+    @overload
+    def __truediv__(self, other: AngularVelocity) -> Velocity: ...
     @overload
     def __truediv__(self, other: Frequency) -> Velocity: ...
     @overload

@@ -17,6 +17,7 @@ REGISTRY_TABLES = (
     "_CONTESTED",
     "_SPECIALISATIONS",
     "_RULES",
+    "_BRIDGES",
     "_RATIO_KIND",
     "_RECIPROCALS",
 )

@@ -113,6 +113,7 @@ The type of a product or quotient is decided in this order:
 2. Any other dimensionless result is a plain `Fraction`: `Hertz(2) * Second(3)` counts cycles.
 3. A dimensionless operand, a `Proportion`, keeps the kind of the other operand: `SampleRate(...) * Percent(50)` is a `SampleRate`.
 4. A rule for the operand kinds names the kind, for a dimension that has several linear kinds: `Pressure` and `EnergyDensity` share M L⁻¹ T⁻², so `Force / Area` is a `Pressure` and `Energy / Volume` an `EnergyDensity`.
+   A bridge is a rule whose result differs from the plain product on the angle axis alone, described in [Where the radian meets a length](angle_bridges.md).
 5. Otherwise the principal kind of the dimension is the result, and a contested dimension raises `AmbiguousKindError`.
 
 A specialisation is checked before any of those.
@@ -129,6 +130,26 @@ Baud(9600) * Metre(1)  # rejected: `IncompatibleDimensionError`.
 SamplesPerSecond(48_000) * Second(2)  # rejected: `IncompatibleDimensionError`.
 SamplesPerSecond(48_000).to_frequency() * Second(2) == 96_000
 ```
+
+## Powers
+
+A linear quantity raised to an integer power is the product written out, so `side ** 3` is `side * side * side`, and each step is a product the registry gives a type:
+
+```python
+from kuchka import Metre
+from kuchka import MetrePerSecond
+from kuchka import Ratio
+from kuchka import Second
+from kuchka import SquareMetre
+
+Metre(3) ** 2 == SquareMetre(9)
+type(MetrePerSecond(3) ** 2).__name__ == "VelocitySquared"
+Second(2) ** -1  # a Frequency of 0.5 Hz
+Metre(3) ** 0 == Ratio(1)
+```
+
+A negative exponent gives the reciprocal of the positive power, and an exponent is an `int`.
+Type checkers see the square and the cube of a type whose power has a type of its own.
 
 ## Ratios
 
