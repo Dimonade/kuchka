@@ -50,6 +50,13 @@ OPERATIONS: dict[str, Callable[[LinearQuantity, LinearQuantity], object]] = {
     "__truediv__": operator.truediv,
 }
 RECIPROCAL = "__rtruediv__"
+POWER = "__pow__"
+POWERS = (2, 3)
+"""The exponents a power is declared for, the square and the cube."""
+PARAMETERS = {POWER: "exponent"}
+"""The parameter name of a method whose operand is not `other`."""
+FALLBACKS = {POWER: "exponent: int) -> LinearQuantity | Fraction"}
+"""The fallback signature of a method whose operand is not a quantity or a number."""
 
 
 def linear_types() -> list[type[LinearQuantity]]:
@@ -94,6 +101,15 @@ def reciprocal_of(cls: type[LinearQuantity]) -> str | None:
     return type(result).__name__
 
 
+def power_of(cls: type[LinearQuantity], exponent: int) -> str | None:
+    """Return the type `cls ** exponent` is, or `None` if the runtime refuses."""
+    try:
+        result = sample(cls, 3) ** exponent
+    except (MeasurementError, TypeError):
+        return None
+    return type(result).__name__
+
+
 def declarations(types: list[type[LinearQuantity]]) -> dict[str, dict[str, list[str]]]:
     """Return, per type name and method, the lines of its overloads in canonical order.
 
@@ -101,6 +117,8 @@ def declarations(types: list[type[LinearQuantity]]) -> dict[str, dict[str, list[
     and quantity operands are sorted by name.
     No operand type is a subclass of another, so the order never changes what a type
     checker infers.
+    A power is declared for each exponent of `POWERS` that has a result, and a type
+    with none inherits the general power of `LinearQuantity`.
     """
     for first in types:
         for second in types:
@@ -121,18 +139,27 @@ def declarations(types: list[type[LinearQuantity]]) -> dict[str, dict[str, list[
         reciprocal = reciprocal_of(left)
         if reciprocal is not None:
             methods[RECIPROCAL] = _overloads(RECIPROCAL, [("Numeric", reciprocal)])
+        powers = [
+            (f"Literal[{exponent}]", name)
+            for exponent in POWERS
+            if (name := power_of(left, exponent)) is not None
+        ]
+        if powers:
+            methods[POWER] = _overloads(POWER, powers)
         out[left.__name__] = methods
     return out
 
 
 def _overloads(method: str, pairs: list[tuple[str, str]]) -> list[str]:
+    parameter = PARAMETERS.get(method, "other")
     lines = []
     for operand, result in pairs:
         lines += [
             f"{INDENT}@overload",
-            f"{INDENT}def {method}(self, other: {operand}) -> {result}: ...",
+            f"{INDENT}def {method}(self, {parameter}: {operand}) -> {result}: ...",
         ]
-    lines += [f"{INDENT}@overload", f"{INDENT}def {method}(self, {FALLBACK}: ..."]
+    fallback = FALLBACKS.get(method, FALLBACK)
+    lines += [f"{INDENT}@overload", f"{INDENT}def {method}(self, {fallback}: ..."]
     return lines
 
 
@@ -147,10 +174,11 @@ def _is_overload(node: ast.stmt, method: str) -> bool:
 
 
 def _standard_implementation(method: str) -> list[str]:
+    parameter = PARAMETERS.get(method, "other")
     return [
         f"{INDENT}@override",
-        f"{INDENT}def {method}(self, {FALLBACK}:",
-        f"{INDENT * 2}return super().{method}(other)",
+        f"{INDENT}def {method}(self, {FALLBACKS.get(method, FALLBACK)}:",
+        f"{INDENT * 2}return super().{method}({parameter})",
     ]
 
 
@@ -231,7 +259,25 @@ def fix_imports(text: str, homes: dict[str, str]) -> str:
             out += new
         if index not in drop:
             out.append(line)
+        if line == FUTURE and _needs_literal(tree):
+            out.append(LITERAL)
     return "\n".join(out) + "\n"
+
+
+FUTURE = "from __future__ import annotations"
+LITERAL = "from typing import Literal"
+
+
+def _needs_literal(tree: ast.Module) -> bool:
+    """Return whether a module names `Literal` without importing it."""
+    used = any(isinstance(n, ast.Name) and n.id == "Literal" for n in ast.walk(tree))
+    imported = any(
+        isinstance(n, ast.ImportFrom)
+        and n.module == "typing"
+        and any(alias.name == "Literal" for alias in n.names)
+        for n in tree.body
+    )
+    return used and not imported
 
 
 def tidy(text: str, path: Path) -> str:
@@ -253,6 +299,7 @@ def tidy(text: str, path: Path) -> str:
             input=text,
             capture_output=True,
             text=True,
+            encoding="utf-8",
             check=True,
             cwd=ROOT,
         ).stdout

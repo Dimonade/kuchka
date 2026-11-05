@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import ClassVar
+from typing import Literal
 from typing import overload
 
 from kuchka.dimensions import LENGTH
@@ -97,6 +98,20 @@ class Length(LinearQuantity):
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
+
+    # BEGIN GENERATED __pow__
+    @overload
+    def __pow__(self, exponent: Literal[2]) -> Area: ...
+    @overload
+    def __pow__(self, exponent: Literal[3]) -> Volume: ...
+    @overload
+    def __pow__(self, exponent: int) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __pow__(self, exponent: int) -> LinearQuantity | Fraction:
+        return super().__pow__(exponent)
 
 
 _register(LENGTH, Length)

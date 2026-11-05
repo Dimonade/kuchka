@@ -10,7 +10,7 @@ that give multiplication and division a precise static type.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from fractions import Fraction
 from typing import ClassVar
 from typing import Self
 
@@ -26,11 +26,9 @@ from kuchka.quantities.base.ordering import _OrderedScalarMixin
 from kuchka.quantities.base.registry import _arithmetic_roots
 from kuchka.quantities.base.registry import _combine
 from kuchka.quantities.base.registry import _promote
+from kuchka.quantities.base.registry import _ratio
 from kuchka.quantities.base.storage import _ScalarStorage
 from kuchka.quantities.base.units import UnitDef
-
-if TYPE_CHECKING:
-    from fractions import Fraction
 
 
 class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
@@ -196,6 +194,25 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
             )
             return _promote(result_dimension, result_magnitude)
         return NotImplemented
+
+    def __pow__(self, exponent: int) -> LinearQuantity | Fraction:
+        """Return the product of `exponent` copies of this quantity.
+
+            Metre(3) ** 2 == SquareMetre(9)
+
+        `q ** 3` is `q * q * q`, so each step is a product with a type, and the rules
+        and bridges of those products apply.
+        A negative exponent gives the reciprocal of the positive power, and an exponent
+        of zero gives a ratio of one.
+        """
+        if isinstance(exponent, bool) or not isinstance(exponent, int):
+            return NotImplemented
+        if exponent == 0:
+            return _ratio(Fraction(1))
+        power: LinearQuantity | Fraction = self
+        for _ in range(abs(exponent) - 1):
+            power = power * self
+        return power if exponent > 0 else 1 / power
 
     def __neg__(self) -> Self:
         return type(self)(-self._magnitude, self._display_unit)

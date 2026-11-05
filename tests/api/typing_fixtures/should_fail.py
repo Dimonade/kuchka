@@ -91,6 +91,11 @@ resistance: Resistance = Volt(5) / Ampere(2)  # OK: statically known to be Resis
 # And things that are not OK to do.
 wrong: Current = Volt(5) * Ampere(2)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
 
+# A square and a cube are statically known where their type exists.
+square: Area = Meter(2) ** 2  # OK
+cube: Volume = Meter(2) ** 3  # OK
+wrong_power: Volume = Meter(2) ** 2  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+
 # Frequency and SampleRate share a dimension but must be rejected as statically
 # incompatible, the same way Voltage and Current are.
 _bad_temporal_add = Hertz(50) + SamplesPerSecond(50)  # type: ignore[operator]  # ty: ignore[unsupported-operator]

@@ -131,6 +131,26 @@ SamplesPerSecond(48_000) * Second(2)  # rejected: `IncompatibleDimensionError`.
 SamplesPerSecond(48_000).to_frequency() * Second(2) == 96_000
 ```
 
+## Powers
+
+A linear quantity raised to an integer power is the product written out, so `side ** 3` is `side * side * side`, and each step is a product the registry gives a type:
+
+```python
+from kuchka import Metre
+from kuchka import MetrePerSecond
+from kuchka import Ratio
+from kuchka import Second
+from kuchka import SquareMetre
+
+Metre(3) ** 2 == SquareMetre(9)
+type(MetrePerSecond(3) ** 2).__name__ == "VelocitySquared"
+Second(2) ** -1  # a Frequency of 0.5 Hz
+Metre(3) ** 0 == Ratio(1)
+```
+
+A negative exponent gives the reciprocal of the positive power, and an exponent is an `int`.
+Type checkers see the square and the cube of a type whose power has a type of its own.
+
 ## Ratios
 
 A ratio is a `Proportion`, and it displays as the coherent ratio:

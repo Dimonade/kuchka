@@ -13,6 +13,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import ClassVar
+from typing import Literal
 from typing import overload
 
 from kuchka.dimensions import DIMENSIONLESS
@@ -348,6 +349,20 @@ class Proportion(LinearQuantity):
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
+
+    # BEGIN GENERATED __pow__
+    @overload
+    def __pow__(self, exponent: Literal[2]) -> Proportion: ...
+    @overload
+    def __pow__(self, exponent: Literal[3]) -> Proportion: ...
+    @overload
+    def __pow__(self, exponent: int) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __pow__(self, exponent: int) -> LinearQuantity | Fraction:
+        return super().__pow__(exponent)
 
 
 _register(DIMENSIONLESS, Proportion)

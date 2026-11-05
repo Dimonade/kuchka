@@ -95,6 +95,11 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   `Area / Area` remains a `Proportion`.
   Added explicit conversions between contested kinds: `Impulse` and `Momentum`, and `VelocitySquared` and `SpecificEnergy`, with the latter conversion accounting for the factor of two in kinetic energy.
 
+#### Integer powers
+
+A linear quantity takes an integer power: `Metre(3) ** 2` is `SquareMetre(9)`, `Second(2) ** -1` is `Hertz(0.5)`, and `q ** 0` is `Ratio(1)`.
+A power is the product written out, so the rules of each step apply, and type checkers see the square and the cube where those have a type.
+
 #### New constants
 
 - **Boltzmann Constant (k_B) and Molar Gas Constant (R)**
