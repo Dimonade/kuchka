@@ -12,7 +12,9 @@ from kuchka.quantities import Activity
 from kuchka.quantities import ActivityConcentration
 from kuchka.quantities import AmountOfSubstance
 from kuchka.quantities import Angle
+from kuchka.quantities import AngularAcceleration
 from kuchka.quantities import AngularDisplacement
+from kuchka.quantities import AngularMomentum
 from kuchka.quantities import AngularVelocity
 from kuchka.quantities import ApparentPower
 from kuchka.quantities import Area
@@ -34,6 +36,7 @@ from kuchka.quantities import EquivalentDose
 from kuchka.quantities import EquivalentDoseRate
 from kuchka.quantities import Exposure
 from kuchka.quantities import ExposureRate
+from kuchka.quantities import FirstMomentOfMass
 from kuchka.quantities import Force
 from kuchka.quantities import Frequency
 from kuchka.quantities import HeatCapacity
@@ -66,6 +69,7 @@ from kuchka.quantities import MolarFlowRate
 from kuchka.quantities import MolarHeatCapacity
 from kuchka.quantities import MolarMass
 from kuchka.quantities import MolarVolume
+from kuchka.quantities import MomentOfInertia
 from kuchka.quantities import Momentum
 from kuchka.quantities import Permeability
 from kuchka.quantities import Permittivity
@@ -166,6 +170,7 @@ from kuchka.units import Decimetre
 from kuchka.units import Degree
 from kuchka.units import DegreeDisplacement
 from kuchka.units import DegreePerSecond
+from kuchka.units import DegreePerSecondSquared
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaFahrenheit
 from kuchka.units import DeltaKelvin
@@ -216,7 +221,11 @@ from kuchka.units import Gradian
 from kuchka.units import GradianDisplacement
 from kuchka.units import Grain
 from kuchka.units import Gram
+from kuchka.units import GramCentimeter
+from kuchka.units import GramCentimetre
 from kuchka.units import GramCentimetrePerSecond
+from kuchka.units import GramMillimeter
+from kuchka.units import GramMillimetre
 from kuchka.units import GramPerCubicCentimeter
 from kuchka.units import GramPerCubicCentimetre
 from kuchka.units import GramPerLiter
@@ -225,6 +234,8 @@ from kuchka.units import GramPerMilliliter
 from kuchka.units import GramPerMillilitre
 from kuchka.units import GramPerMole
 from kuchka.units import GramPerSecond
+from kuchka.units import GramSquareCentimeter
+from kuchka.units import GramSquareCentimetre
 from kuchka.units import Gray
 from kuchka.units import GrayPerHour
 from kuchka.units import GrayPerMinute
@@ -248,6 +259,7 @@ from kuchka.units import JoulePerKilogramKelvin
 from kuchka.units import JoulePerMole
 from kuchka.units import JoulePerMoleKelvin
 from kuchka.units import JoulePerTurn
+from kuchka.units import JouleSecondPerTurn
 from kuchka.units import JulianYear
 from kuchka.units import Katal
 from kuchka.units import Kelvin
@@ -280,6 +292,8 @@ from kuchka.units import Kilofarad
 from kuchka.units import Kilogauss
 from kuchka.units import Kilogram
 from kuchka.units import KilogramForce
+from kuchka.units import KilogramMeter
+from kuchka.units import KilogramMetre
 from kuchka.units import KilogramMetrePerSecond
 from kuchka.units import KilogramPerCubicMeter
 from kuchka.units import KilogramPerCubicMetre
@@ -289,6 +303,14 @@ from kuchka.units import KilogramPerLiter
 from kuchka.units import KilogramPerLitre
 from kuchka.units import KilogramPerMole
 from kuchka.units import KilogramPerSecond
+from kuchka.units import KilogramSquareCentimeter
+from kuchka.units import KilogramSquareCentimetre
+from kuchka.units import KilogramSquareMeter
+from kuchka.units import KilogramSquareMeterPerSecond
+from kuchka.units import KilogramSquareMeterPerSquareTurn
+from kuchka.units import KilogramSquareMetre
+from kuchka.units import KilogramSquareMetrePerSecond
+from kuchka.units import KilogramSquareMetrePerSquareTurn
 from kuchka.units import Kilogray
 from kuchka.units import Kilohenry
 from kuchka.units import Kilohertz
@@ -537,10 +559,13 @@ from kuchka.units import Nanoweber
 from kuchka.units import NauticalMile
 from kuchka.units import Newton
 from kuchka.units import NewtonMeter
+from kuchka.units import NewtonMeterSecond
 from kuchka.units import NewtonMetre
+from kuchka.units import NewtonMetreSecond
 from kuchka.units import NewtonSecond
 from kuchka.units import Ohm
 from kuchka.units import Ounce
+from kuchka.units import OunceInch
 from kuchka.units import Parsec
 from kuchka.units import Pascal
 from kuchka.units import Pebibit
@@ -584,16 +609,20 @@ from kuchka.units import PoundForceInch
 from kuchka.units import PoundForceSecond
 from kuchka.units import PoundPerHour
 from kuchka.units import PoundPerSquareInch
+from kuchka.units import PoundSquareFoot
+from kuchka.units import PoundSquareInch
 from kuchka.units import Rad
 from kuchka.units import Radian
 from kuchka.units import RadianDisplacement
 from kuchka.units import RadianPerSecond
+from kuchka.units import RadianPerSecondSquared
 from kuchka.units import RadPerHour
 from kuchka.units import Rankine
 from kuchka.units import Ratio
 from kuchka.units import Rem
 from kuchka.units import RemPerHour
 from kuchka.units import RevolutionPerMinute
+from kuchka.units import RevolutionPerMinutePerSecond
 from kuchka.units import Roentgen
 from kuchka.units import RoentgenPerHour
 from kuchka.units import RoentgenPerMinute
@@ -645,6 +674,7 @@ from kuchka.units import TonnePerHour
 from kuchka.units import Turn
 from kuchka.units import TurnDisplacement
 from kuchka.units import TurnPerSecond
+from kuchka.units import TurnPerSecondSquared
 from kuchka.units import UsGallon
 from kuchka.units import UsGallonPerMinute
 from kuchka.units import Var
@@ -676,7 +706,9 @@ __all__ = [
     "AmperePerMetre",
     "AmpereSecond",
     "Angle",
+    "AngularAcceleration",
     "AngularDisplacement",
+    "AngularMomentum",
     "AngularVelocity",
     "ApparentPower",
     "ArcMinute",
@@ -752,6 +784,7 @@ __all__ = [
     "Degree",
     "DegreeDisplacement",
     "DegreePerSecond",
+    "DegreePerSecondSquared",
     "DeltaCelsius",
     "DeltaFahrenheit",
     "DeltaKelvin",
@@ -782,6 +815,7 @@ __all__ = [
     "Femtomole",
     "Femtosecond",
     "Femtotesla",
+    "FirstMomentOfMass",
     "Foot",
     "FootCandle",
     "FootLambert",
@@ -813,7 +847,11 @@ __all__ = [
     "GradianDisplacement",
     "Grain",
     "Gram",
+    "GramCentimeter",
+    "GramCentimetre",
     "GramCentimetrePerSecond",
+    "GramMillimeter",
+    "GramMillimetre",
     "GramPerCubicCentimeter",
     "GramPerCubicCentimetre",
     "GramPerLiter",
@@ -822,6 +860,8 @@ __all__ = [
     "GramPerMillilitre",
     "GramPerMole",
     "GramPerSecond",
+    "GramSquareCentimeter",
+    "GramSquareCentimetre",
     "Gray",
     "GrayPerHour",
     "GrayPerMinute",
@@ -852,6 +892,7 @@ __all__ = [
     "JoulePerMole",
     "JoulePerMoleKelvin",
     "JoulePerTurn",
+    "JouleSecondPerTurn",
     "JulianYear",
     "Katal",
     "Kelvin",
@@ -884,6 +925,8 @@ __all__ = [
     "Kilogauss",
     "Kilogram",
     "KilogramForce",
+    "KilogramMeter",
+    "KilogramMetre",
     "KilogramMetrePerSecond",
     "KilogramPerCubicMeter",
     "KilogramPerCubicMetre",
@@ -893,6 +936,14 @@ __all__ = [
     "KilogramPerLitre",
     "KilogramPerMole",
     "KilogramPerSecond",
+    "KilogramSquareCentimeter",
+    "KilogramSquareCentimetre",
+    "KilogramSquareMeter",
+    "KilogramSquareMeterPerSecond",
+    "KilogramSquareMeterPerSquareTurn",
+    "KilogramSquareMetre",
+    "KilogramSquareMetrePerSecond",
+    "KilogramSquareMetrePerSquareTurn",
     "Kilogray",
     "Kilohenry",
     "Kilohertz",
@@ -1135,6 +1186,7 @@ __all__ = [
     "MolePerLitre",
     "MolePerMinute",
     "MolePerSecond",
+    "MomentOfInertia",
     "Momentum",
     "Nanoampere",
     "Nanocoulomb",
@@ -1165,10 +1217,13 @@ __all__ = [
     "NauticalMile",
     "Newton",
     "NewtonMeter",
+    "NewtonMeterSecond",
     "NewtonMetre",
+    "NewtonMetreSecond",
     "NewtonSecond",
     "Ohm",
     "Ounce",
+    "OunceInch",
     "Parsec",
     "Pascal",
     "Pebibit",
@@ -1214,6 +1269,8 @@ __all__ = [
     "PoundForceSecond",
     "PoundPerHour",
     "PoundPerSquareInch",
+    "PoundSquareFoot",
+    "PoundSquareInch",
     "Power",
     "Pressure",
     "Proportion",
@@ -1222,6 +1279,7 @@ __all__ = [
     "Radian",
     "RadianDisplacement",
     "RadianPerSecond",
+    "RadianPerSecondSquared",
     "Rankine",
     "Ratio",
     "Reactance",
@@ -1230,6 +1288,7 @@ __all__ = [
     "RemPerHour",
     "Resistance",
     "RevolutionPerMinute",
+    "RevolutionPerMinutePerSecond",
     "Roentgen",
     "RoentgenPerHour",
     "RoentgenPerMinute",
@@ -1297,6 +1356,7 @@ __all__ = [
     "Turn",
     "TurnDisplacement",
     "TurnPerSecond",
+    "TurnPerSecondSquared",
     "UsGallon",
     "UsGallonPerMinute",
     "Var",

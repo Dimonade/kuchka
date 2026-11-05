@@ -68,17 +68,21 @@ if TYPE_CHECKING:
     from kuchka.quantities.information.data import Data
     from kuchka.quantities.information.data_rate import DataRate
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.luminous_intensity import LuminousIntensity
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.angular_momentum import AngularMomentum
     from kuchka.quantities.mechanics.density import Density
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
+    from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
@@ -140,7 +144,11 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: AmountOfSubstance) -> AmountOfSubstance: ...
     @overload
+    def __mul__(self, other: AngularAcceleration) -> AngularAcceleration: ...
+    @overload
     def __mul__(self, other: AngularDisplacement) -> AngularDisplacement: ...
+    @overload
+    def __mul__(self, other: AngularMomentum) -> AngularMomentum: ...
     @overload
     def __mul__(self, other: AngularVelocity) -> AngularVelocity: ...
     @overload
@@ -181,6 +189,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: Exposure) -> Exposure: ...
     @overload
     def __mul__(self, other: ExposureRate) -> ExposureRate: ...
+    @overload
+    def __mul__(self, other: FirstMomentOfMass) -> FirstMomentOfMass: ...
     @overload
     def __mul__(self, other: Force) -> Force: ...
     @overload
@@ -241,6 +251,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: MolarMass) -> MolarMass: ...
     @overload
     def __mul__(self, other: MolarVolume) -> MolarVolume: ...
+    @overload
+    def __mul__(self, other: MomentOfInertia) -> MomentOfInertia: ...
     @overload
     def __mul__(self, other: Momentum) -> Momentum: ...
     @overload

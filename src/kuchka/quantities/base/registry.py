@@ -779,47 +779,8 @@ def _promote(dimension: Dimension, magnitude: Fraction) -> LinearQuantity | Frac
         planned_name = _PLANNED_DIMENSIONS.get(dimension)
         if planned_name is not None:
             raise PlannedDimensionError(dimension, planned_name) from None
-        raise UnrepresentableDimensionError(
-            dimension, hint=_angle_neighbours(dimension)
-        ) from None
+        raise UnrepresentableDimensionError(dimension) from None
     return quantity_type(magnitude, _result_unit(quantity_type))
-
-
-def _angle_neighbours(dimension: Dimension) -> str | None:
-    """Describe the kinds `dimension` differs from on the angle axis alone.
-
-    Names each kind with the angle exponent between them, nearest first, and the
-    bridges that give it.
-    Returns `None` when no kind is that close.
-    """
-    neighbours = sorted(
-        (
-            kind
-            for other in (*_DIMENSION_REGISTRY, *_CONTESTED)
-            if _differs_in_angle_alone(dimension, other)
-            for kind in _arithmetic_roots(other)
-        ),
-        key=lambda kind: abs(dimension.angle - kind.dimension.angle),
-    )
-    lines = []
-    for kind in neighbours:
-        offset = replace(DIMENSIONLESS, angle=dimension.angle - kind.dimension.angle)
-        line = f"It differs from `{kind.__name__}` by {offset!r} alone"
-        routes = _bridges_to(kind)
-        if routes:
-            line += f", and {' and '.join(routes)} gives one"
-        lines.append(f"{line}.")
-    return "\n".join(lines) or None
-
-
-def _bridges_to(kind: _Kind) -> list[str]:
-    """Return each bridge that gives `kind`, a product written in one operand order."""
-    routes: list[str] = []
-    for (left, operation, right), (result, _) in _BRIDGES.items():
-        reverse = f"`{right.__name__} {operation} {left.__name__}`"
-        if result is kind and not (operation == "*" and reverse in routes):
-            routes.append(f"`{left.__name__} {operation} {right.__name__}`")
-    return routes
 
 
 __all__: list[str] = []

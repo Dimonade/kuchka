@@ -22,8 +22,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mechanics.density import Density
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.specific_power import SpecificPower
@@ -53,6 +55,8 @@ class SpecificActivity(LinearQuantity):
     def __mul__(self, other: Density) -> ActivityConcentration: ...
     @overload
     def __mul__(self, other: Energy) -> SpecificPower: ...
+    @overload
+    def __mul__(self, other: FirstMomentOfMass) -> Velocity: ...
     @overload
     def __mul__(self, other: Impulse) -> Acceleration: ...
     @overload

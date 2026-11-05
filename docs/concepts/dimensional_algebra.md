@@ -206,7 +206,6 @@ This keeps arithmetic visible to mypy and ty while retaining a general runtime m
 
 A mathematically valid dimension does not automatically become a public quantity type.
 `Resistance * Resistance`, for example, raises `UnrepresentableDimensionError` because the resulting dimension has no registered engineering type.
-When the dimension differs from a registered kind on the angle axis alone, the message names that kind: `RadianPerSecond(3) * Metre(1)` is T⁻¹ L ∠, which differs from `Velocity` by ∠¹.
 
 If a dimension is deliberately planned for a future release, the more specific `PlannedDimensionError` names that scope gap.
 

@@ -20,7 +20,8 @@ When a pair has two readings, as `Velocity / Length` has (an angular velocity fr
 
 ## Declare it
 
-A bridge is declared in the module of its result type, after the registrations, with its inverse quotients beside it:
+A bridge is declared after the registrations, in the module of the newest kind it names, the one that can import all the others, with its inverse quotients beside it.
+`AngularVelocity * Length -> Velocity` lives in `angular_velocity.py`, since `velocity.py` sits below it and `length.py` below both:
 
 <!-- doc-test: skip a fragment of a quantity module, not a program -->
 
@@ -47,7 +48,7 @@ Each inverse quotient meets the two conditions on its own.
 ## Checklist
 
 - [ ] the gap and the reading, checked,
-- [ ] `_bridge(...)` in the result type's module, with the inverse quotients that are gaps,
+- [ ] `_bridge(...)` in the module of the newest kind it names, with the inverse quotients that are gaps,
 - [ ] `just generate-overloads`,
 - [ ] the reading in the bridge inventory test, and a test of the value across the bridge and back,
 - [ ] the row in [Where the radian meets a length](../concepts/angle_bridges.md),

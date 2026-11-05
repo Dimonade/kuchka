@@ -25,10 +25,14 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.geometry.volume import Volume
+    from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.angular_momentum import AngularMomentum
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.momentum import Momentum
@@ -78,9 +82,15 @@ class Energy(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: Acceleration) -> FirstMomentOfMass: ...
+    @overload
     def __truediv__(self, other: AmountOfSubstance) -> MolarEnergy: ...
     @overload
     def __truediv__(self, other: AngularDisplacement) -> Torque: ...
+    @overload
+    def __truediv__(self, other: AngularMomentum) -> AngularVelocity: ...
+    @overload
+    def __truediv__(self, other: AngularVelocity) -> AngularMomentum: ...
     @overload
     def __truediv__(self, other: Charge) -> Voltage: ...
     @overload
@@ -89,6 +99,8 @@ class Energy(LinearQuantity):
     def __truediv__(self, other: Energy) -> Proportion: ...
     @overload
     def __truediv__(self, other: EnergyDensity) -> Volume: ...
+    @overload
+    def __truediv__(self, other: FirstMomentOfMass) -> Acceleration: ...
     @overload
     def __truediv__(self, other: Force) -> Length: ...
     @overload

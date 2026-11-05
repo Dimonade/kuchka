@@ -76,11 +76,14 @@ if TYPE_CHECKING:
     from kuchka.quantities.information.data import Data
     from kuchka.quantities.information.data_rate import DataRate
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.angular_momentum import AngularMomentum
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
@@ -88,6 +91,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.photometry.illuminance import Illuminance
@@ -120,6 +124,8 @@ class Time(LinearQuantity):
     @overload
     def __mul__(self, other: Acceleration) -> Velocity: ...
     @overload
+    def __mul__(self, other: AngularAcceleration) -> AngularVelocity: ...
+    @overload
     def __mul__(self, other: AngularVelocity) -> AngularDisplacement: ...
     @overload
     def __mul__(self, other: Conductance) -> Capacitance: ...
@@ -140,11 +146,15 @@ class Time(LinearQuantity):
     @overload
     def __mul__(self, other: Illuminance) -> LuminousExposure: ...
     @overload
+    def __mul__(self, other: Impulse) -> FirstMomentOfMass: ...
+    @overload
     def __mul__(self, other: LuminousFlux) -> LuminousEnergy: ...
     @overload
     def __mul__(self, other: MassFlowRate) -> Mass: ...
     @overload
     def __mul__(self, other: MolarFlowRate) -> AmountOfSubstance: ...
+    @overload
+    def __mul__(self, other: Momentum) -> FirstMomentOfMass: ...
     @overload
     def __mul__(self, other: Power) -> Energy: ...
     @overload
@@ -155,6 +165,8 @@ class Time(LinearQuantity):
     def __mul__(self, other: SpecificCurrent) -> SpecificCharge: ...
     @overload
     def __mul__(self, other: SpecificPower) -> SpecificEnergy: ...
+    @overload
+    def __mul__(self, other: Torque) -> AngularMomentum: ...
     @overload
     def __mul__(self, other: Velocity) -> Length: ...
     @overload
@@ -274,6 +286,10 @@ class Frequency(LinearQuantity):
     def __mul__(self, other: AmountOfSubstance) -> MolarFlowRate: ...
     @overload
     def __mul__(self, other: AngularDisplacement) -> AngularVelocity: ...
+    @overload
+    def __mul__(self, other: AngularMomentum) -> Torque: ...
+    @overload
+    def __mul__(self, other: AngularVelocity) -> AngularAcceleration: ...
     @overload
     def __mul__(self, other: Capacitance) -> Conductance: ...
     @overload

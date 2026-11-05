@@ -28,9 +28,14 @@ if TYPE_CHECKING:
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
+    from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.velocity import Velocity
+    from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.activity_concentration import ActivityConcentration
@@ -51,7 +56,13 @@ class Length(LinearQuantity):
     @overload
     def __mul__(self, other: ActivityConcentration) -> SurfaceActivity: ...
     @overload
+    def __mul__(self, other: AngularAcceleration) -> Acceleration: ...
+    @overload
+    def __mul__(self, other: AngularVelocity) -> Velocity: ...
+    @overload
     def __mul__(self, other: Area) -> Volume: ...
+    @overload
+    def __mul__(self, other: FirstMomentOfMass) -> MomentOfInertia: ...
     @overload
     def __mul__(self, other: Force) -> Energy: ...
     @overload
@@ -60,6 +71,8 @@ class Length(LinearQuantity):
     def __mul__(self, other: Length) -> Area: ...
     @overload
     def __mul__(self, other: MagneticFieldStrength) -> Current: ...
+    @overload
+    def __mul__(self, other: Mass) -> FirstMomentOfMass: ...
     @overload
     def __mul__(self, other: Permeability) -> Inductance: ...
     @overload

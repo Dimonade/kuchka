@@ -24,9 +24,11 @@ if TYPE_CHECKING:
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
@@ -36,6 +38,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.specific_activity import SpecificActivity
     from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -89,11 +92,17 @@ class Velocity(LinearQuantity):
     @overload
     def __truediv__(self, other: Acceleration) -> Time: ...
     @overload
+    def __truediv__(self, other: AngularVelocity) -> Length: ...
+    @overload
+    def __truediv__(self, other: FirstMomentOfMass) -> SpecificActivity: ...
+    @overload
     def __truediv__(self, other: Frequency) -> Length: ...
     @overload
     def __truediv__(self, other: Length) -> Frequency: ...
     @overload
     def __truediv__(self, other: Proportion) -> Velocity: ...
+    @overload
+    def __truediv__(self, other: SpecificActivity) -> FirstMomentOfMass: ...
     @overload
     def __truediv__(self, other: SurfaceActivity) -> Volume: ...
     @overload

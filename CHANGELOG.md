@@ -100,6 +100,22 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 A linear quantity takes an integer power: `Metre(3) ** 2` is `SquareMetre(9)`, `Second(2) ** -1` is `Hertz(0.5)`, and `q ** 0` is `Ratio(1)`.
 A power is the product written out, so the rules of each step apply, and type checkers see the square and the cube where those have a type.
 
+#### Rotational dynamics, and the moment of inertia
+
+`Mass * Area` is a `MomentOfInertia`, and so is a mass at a radius in any order: `m * r * r`, `r * m * r`, and `m * r ** 2`.
+A radius stays a `Length`; bridges, declared rules across the angle axis, carry the radian where a length meets a rotation.
+[Where the radian meets a length](docs/concepts/angle_bridges.md) describes the model, and [Adding a bridge](docs/how-to/adding_a_bridge.md) how one is declared.
+
+- **New quantities:**
+  `AngularAcceleration` (rad/s², tr/s², °/s², rpm/s), `MomentOfInertia` (kg·m², kg·cm², g·cm², lb·ft², lb·in²), `AngularMomentum` (kg·m²/s, N·m·s), and `FirstMomentOfMass` (kg·m, g·cm, g·mm, oz·in), the unbalance of a rotor.
+  `kg·m²` carries the scale `(2 pi) ** 2`, the way `N·m` carries `2 pi`, so a datasheet value is typed as written.
+- **Dynamics by algebra:**
+  `MomentOfInertia * AngularAcceleration` is a `Torque`, `MomentOfInertia * AngularVelocity` and `Torque * Time` are an `AngularMomentum`, and `0.5 * I * omega * omega` is an `Energy`.
+- **Bridges:**
+  `AngularVelocity * Length` is a `Velocity`, `AngularAcceleration * Length` an `Acceleration`, `Torque / Force` the lever arm, and `Torque / Length` the force at it.
+  A `MomentOfInertia` divides back into its mass, area, radius, and unbalance.
+- `Momentum * Time` and `Impulse * Time` are now a `FirstMomentOfMass`, and `AngularVelocity * Frequency` an `AngularAcceleration`; each raised `UnrepresentableDimensionError` before.
+
 #### New constants
 
 - **Boltzmann Constant (k_B) and Molar Gas Constant (R)**
@@ -118,10 +134,6 @@ A unit module is imported from its package, so `from kuchka.units import voltage
 The quantity types follow the same layout, one module per type in the matching package of `kuchka.quantities`: `kuchka.quantities.electrical.Voltage` is now `kuchka.quantities.electromagnetics.voltage.Voltage`, and `Force`, `Power`, and `Torque` are in `kuchka.quantities.mechanics`.
 A quantity now pickles by the name `kuchka.quantities` publishes its class under, so a pickle no longer depends on the module that defines the class and survives such a move.
 A pickle made by an earlier version names the old module and does not load when its class moved.
-
-#### Unrepresentable results name the kind an angle away
-
-An `UnrepresentableDimensionError` whose dimension differs from a registered kind on the angle axis alone names that kind on a last line: `RadianPerSecond(3) * Metre(1)` differs from `Velocity` by ∠¹.
 
 ### Deprecated
 

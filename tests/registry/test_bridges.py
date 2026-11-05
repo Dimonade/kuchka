@@ -4,34 +4,63 @@ from __future__ import annotations
 
 import pytest
 
+from kuchka import Acceleration
+from kuchka import AngularAcceleration
 from kuchka import AngularDisplacement
 from kuchka import AngularVelocity
 from kuchka import Area
 from kuchka import Current
+from kuchka import FirstMomentOfMass
+from kuchka import Force
 from kuchka import Frequency
 from kuchka import Length
 from kuchka import Mass
+from kuchka import MomentOfInertia
 from kuchka import Power
 from kuchka import Proportion
 from kuchka import SampleRate
 from kuchka import Time
-from kuchka import UnrepresentableDimensionError
+from kuchka import Torque
 from kuchka import Velocity
 from kuchka import Voltage
 from kuchka.dimensions import Dimension
 from kuchka.internal.constants import PI
 from kuchka.quantities.base import registry
-from kuchka.units import angular
 from kuchka.units import length
-from kuchka.units.electromagnetics import resistance
 from kuchka.units.kinematics import angular_velocity
 from kuchka.units.kinematics import velocity
-from kuchka.units.mechanics import force
-from kuchka.units.mechanics import torque
 from tests.support.synthetic import linear_kind
 from tests.support.synthetic import registry_state
 
-SHIPPED_BRIDGES: dict[tuple[type, str, type], tuple[type, str]] = {}
+SHIPPED_BRIDGES: dict[tuple[type, str, type], tuple[type, str]] = {
+    (AngularVelocity, "*", Length): (
+        Velocity,
+        "the speed of a point turning at a radius",
+    ),
+    (Velocity, "/", AngularVelocity): (Length, "the radius turning at a rim speed"),
+    (AngularAcceleration, "*", Length): (
+        Acceleration,
+        "the tangential acceleration of a point at a radius",
+    ),
+    (Acceleration, "/", AngularAcceleration): (
+        Length,
+        "the radius at a tangential acceleration",
+    ),
+    (Mass, "*", Area): (MomentOfInertia, "a mass at a radius, times that radius"),
+    (FirstMomentOfMass, "*", Length): (
+        MomentOfInertia,
+        "an unbalance, times its radius",
+    ),
+    (MomentOfInertia, "/", Mass): (Area, "the square of the radius of gyration"),
+    (MomentOfInertia, "/", Area): (Mass, "the mass at the radius of gyration"),
+    (MomentOfInertia, "/", Length): (
+        FirstMomentOfMass,
+        "the unbalance at a radius",
+    ),
+    (MomentOfInertia, "/", FirstMomentOfMass): (Length, "the radius of an unbalance"),
+    (Torque, "/", Force): (Length, "the lever arm of a force"),
+    (Torque, "/", Length): (Force, "the force at a lever arm"),
+}
 """Every bridge the library declares, with its result and the one reading of it."""
 
 
@@ -59,14 +88,20 @@ def test_a_value_across_a_bridge_and_back_is_unchanged() -> None:
     assert type((rate * radius) / rate) is Length
 
 
-@pytest.mark.usefixtures("open_registry")
-def test_the_factor_follows_from_the_angle_exponents() -> None:
-    inertia = linear_kind("Inertia", Dimension(mass=1, length=2, angle=-2))
-    registry._register(inertia.dimension, inertia)  # noqa: SLF001
-    registry._bridge(Mass, "*", Area, inertia)  # noqa: SLF001
-    registry._bridge(AngularVelocity, "*", Length, Velocity)  # noqa: SLF001
-    assert registry._BRIDGES[Mass, "*", Area] == (inertia, (2 * PI) ** 2)  # noqa: SLF001
-    assert registry._BRIDGES[AngularVelocity, "*", Length][1] == 2 * PI  # noqa: SLF001
+@pytest.mark.parametrize(
+    ("key", "factor"),
+    [
+        ((Mass, "*", Area), (2 * PI) ** 2),
+        ((AngularVelocity, "*", Length), 2 * PI),
+        ((Velocity, "/", AngularVelocity), 1 / (2 * PI)),
+        ((Torque, "/", Force), 1 / (2 * PI)),
+    ],
+    ids=["inertia", "rim-speed", "radius", "lever-arm"],
+)
+def test_the_factor_follows_from_the_angle_exponents(
+    key: tuple[type, str, type], factor: object
+) -> None:
+    assert registry._BRIDGES[key][1] == factor  # noqa: SLF001  # type: ignore[index]
 
 
 @pytest.mark.usefixtures("open_registry")
@@ -134,26 +169,3 @@ def test_every_shipped_bridge_crosses_the_angle_axis_into_a_gap() -> None:
         plain = registry._plain_dimension(left, operation, right)  # noqa: SLF001
         assert registry._differs_in_angle_alone(plain, result.dimension)  # noqa: SLF001
         assert not registry._arithmetic_roots(plain)  # noqa: SLF001
-
-
-def test_an_unrepresentable_result_names_the_kind_an_angle_away() -> None:
-    with pytest.raises(UnrepresentableDimensionError, match="from `Velocity` by ∠¹"):
-        angular_velocity.RadianPerSecond(3) * length.Metre(1)
-    with pytest.raises(UnrepresentableDimensionError, match="from `Length` by ∠⁻¹"):
-        torque.NewtonMetre(10) / force.Newton(50)
-
-
-def test_an_unrepresentable_result_with_no_kind_an_angle_away_has_no_hint() -> None:
-    with pytest.raises(UnrepresentableDimensionError) as raised:
-        resistance.Ohm(2) * resistance.Ohm(3)
-    assert "differs" not in str(raised.value)
-
-
-@pytest.mark.usefixtures("open_registry")
-def test_the_hint_names_the_bridges_that_give_the_kind() -> None:
-    registry._bridge(AngularVelocity, "*", Length, Velocity)  # noqa: SLF001
-    with pytest.raises(
-        UnrepresentableDimensionError,
-        match=r"by ∠¹ alone, and `AngularVelocity \* Length` gives one\.",
-    ):
-        velocity.MetrePerSecond(1) * angular.RadianDisplacement(1)

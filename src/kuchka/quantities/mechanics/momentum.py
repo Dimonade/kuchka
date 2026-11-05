@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
@@ -58,6 +59,8 @@ class Momentum(LinearQuantity):
     @overload
     def __mul__(self, other: SpecificActivity) -> Acceleration: ...
     @overload
+    def __mul__(self, other: Time) -> FirstMomentOfMass: ...
+    @overload
     def __mul__(self, other: Velocity) -> Energy: ...
     @overload
     def __mul__(self, other: Numeric) -> Momentum: ...
@@ -72,7 +75,11 @@ class Momentum(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: FirstMomentOfMass) -> Frequency: ...
+    @overload
     def __truediv__(self, other: Force) -> Time: ...
+    @overload
+    def __truediv__(self, other: Frequency) -> FirstMomentOfMass: ...
     @overload
     def __truediv__(self, other: Impulse) -> Proportion: ...
     @overload

@@ -65,16 +65,6 @@ Bridges cross the angle axis alone.
 The solid angle and information axes have no geometric relation of this kind, and the lumen closes through algebra.
 The operands of a bridge are principal or contested kinds, and a role reaches one through its conversion.
 
-An `UnrepresentableDimensionError` whose dimension differs from a registered kind on the angle axis alone names that kind and the route to it:
-
-<!-- doc-test: skip the message of a later change in this series -->
-
-```text
-the result of this operation has dimension [T⁻² L¹ ∠¹], which has no registered
-engineering type in this version of the library.
-It differs from `Acceleration` by ∠¹ alone, and `AngularAcceleration * Length` gives one.
-```
-
 [Adding a bridge](../how-to/adding_a_bridge.md) describes how one is declared.
 
 ## The rotational chain
@@ -83,15 +73,13 @@ The dimensions of the rotational quantities are chosen so that dynamics closes b
 
 | Quantity              | Dimension    | Units                                | Displays as |
 | --------------------- | ------------ | ------------------------------------ | ----------- |
-| `AngularAcceleration` | ∠ T⁻²        | rad/s², tr/s², rpm/s                 | rad/s²      |
+| `AngularAcceleration` | ∠ T⁻²        | rad/s², tr/s², °/s², rpm/s           | rad/s²      |
 | `MomentOfInertia`     | M L² ∠⁻²     | kg·m², kg·cm², g·cm², lb·ft², lb·in² | kg·m²       |
 | `AngularMomentum`     | M L² ∠⁻¹ T⁻¹ | kg·m²/s, N·m·s                       | kg·m²/s     |
-| `FirstMomentOfMass`   | M L          | kg·m, g·mm                           | kg·m        |
+| `FirstMomentOfMass`   | M L          | kg·m, g·cm, g·mm, oz·in              | kg·m        |
 
 `kg·m²` carries the scale `(2 pi) ** 2` the way `N·m` carries `2 pi`, so a datasheet value is typed as written.
 `FirstMomentOfMass` is the unbalance of a rotor, in gram-millimetres, and it is also the step `m * r` of `m * r * r` in the order Python evaluates it.
-
-<!-- doc-test: skip the API of a later change in this series -->
 
 ```python
 from kuchka import Kilogram
