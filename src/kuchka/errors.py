@@ -136,13 +136,19 @@ class UnrepresentableDimensionError(MeasurementError):
     returning an untyped number.
     """
 
-    def __init__(self, dimension: object) -> None:
-        """Build the error message from the unregistered dimension."""
-        super().__init__(
+    def __init__(self, dimension: object, *, hint: str | None = None) -> None:
+        """Build the error message from the unregistered dimension.
+
+        A `hint` is appended as a last line, naming the kinds the dimension is close to.
+        """
+        message = (
             f"the result of this operation has dimension [{dimension!r}], "
             "which has no registered engineering type in this version of "
-            "the library.",
+            "the library."
         )
+        if hint is not None:
+            message = f"{message}\n{hint}"
+        super().__init__(message)
         self.dimension = dimension
 
 

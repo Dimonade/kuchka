@@ -113,6 +113,7 @@ The type of a product or quotient is decided in this order:
 2. Any other dimensionless result is a plain `Fraction`: `Hertz(2) * Second(3)` counts cycles.
 3. A dimensionless operand, a `Proportion`, keeps the kind of the other operand: `SampleRate(...) * Percent(50)` is a `SampleRate`.
 4. A rule for the operand kinds names the kind, for a dimension that has several linear kinds: `Pressure` and `EnergyDensity` share M L⁻¹ T⁻², so `Force / Area` is a `Pressure` and `Energy / Volume` an `EnergyDensity`.
+   A bridge is a rule whose result differs from the plain product on the angle axis alone, described in [Where the radian meets a length](angle_bridges.md).
 5. Otherwise the principal kind of the dimension is the result, and a contested dimension raises `AmbiguousKindError`.
 
 A specialisation is checked before any of those.
@@ -185,6 +186,7 @@ This keeps arithmetic visible to mypy and ty while retaining a general runtime m
 
 A mathematically valid dimension does not automatically become a public quantity type.
 `Resistance * Resistance`, for example, raises `UnrepresentableDimensionError` because the resulting dimension has no registered engineering type.
+When the dimension differs from a registered kind on the angle axis alone, the message names that kind: `RadianPerSecond(3) * Metre(1)` is T⁻¹ L ∠, which differs from `Velocity` by ∠¹.
 
 If a dimension is deliberately planned for a future release, the more specific `PlannedDimensionError` names that scope gap.
 

@@ -114,6 +114,10 @@ The quantity types follow the same layout, one module per type in the matching p
 A quantity now pickles by the name `kuchka.quantities` publishes its class under, so a pickle no longer depends on the module that defines the class and survives such a move.
 A pickle made by an earlier version names the old module and does not load when its class moved.
 
+#### Unrepresentable results name the kind an angle away
+
+An `UnrepresentableDimensionError` whose dimension differs from a registered kind on the angle axis alone names that kind on a last line: `RadianPerSecond(3) * Metre(1)` differs from `Velocity` by ∠¹.
+
 ### Deprecated
 
 ### Removed

@@ -70,9 +70,9 @@ An `UnrepresentableDimensionError` whose dimension differs from a registered kin
 <!-- doc-test: skip the message of a later change in this series -->
 
 ```text
-the result of this operation has dimension [T⁻² L¹ ∠¹], which differs from
-Acceleration only by ∠¹: multiply an AngularAcceleration by a Length for the
-tangential acceleration.
+the result of this operation has dimension [T⁻² L¹ ∠¹], which has no registered
+engineering type in this version of the library.
+It differs from `Acceleration` by ∠¹ alone, and `AngularAcceleration * Length` gives one.
 ```
 
 [Adding a bridge](../how-to/adding_a_bridge.md) describes how one is declared.
