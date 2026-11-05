@@ -995,6 +995,7 @@ Deeper design material is kept separately:
 
 - **[Quantity shapes and semantics](docs/concepts/quantity_shapes.md)** - Linear, Affine, Modular, and Logarithmic quantities, including temperature, angle, and decibel semantics.
 - **[Dimensional algebra and derived quantities](docs/concepts/dimensional_algebra.md)** - exponent-vector arithmetic, registered results, reciprocal relationships, and the boundary between runtime algebra and static overloads.
+- **[Where the radian meets a length](docs/concepts/angle_bridges.md)** - how rotational quantities meet lengths: bridges, the moment of inertia, and the relations that stay named constructors.
 - **[Copying, pickling, and persistence](docs/concepts/persistence.md)** - what `copy` and `pickle` guarantee, why pickle is not a storage format, and how to store a value as exact text and a unit symbol.
 - **[Unit spellings](docs/concepts/unit_spellings.md)** - what the `*_UNITS` tables accept, how case and plurals are treated, and why no spelling can mean two units.
 - **[Exactness, angles, and tolerance](docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, angles and pi, and comparing with a tolerance.

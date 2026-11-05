@@ -9,6 +9,7 @@ They are short on purpose: each covers one task and links to the neighbours.
 | a historical or cultural measurement set  | [Adding archaic units](adding_archaic_units.md)       |
 | a quantity, a type values are built from  | [Adding a quantity](adding_a_quantity.md)             |
 | a dimension, a vector of exponents        | [Adding a dimension](adding_a_dimension.md)           |
+| a product that crosses the angle axis     | [Adding a bridge](adding_a_bridge.md)                 |
 | submodules for a unit module that outgrew | [Splitting a unit module](splitting_a_unit_module.md) |
 | tests for any of the above                | [Adding tests](adding_tests.md)                       |
 | docstrings, doctests, examples, and pages | [Writing documentation](writing_documentation.md)     |
