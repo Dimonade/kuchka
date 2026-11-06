@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import ClassVar
+from typing import Literal
 from typing import Self
 from typing import overload
 
@@ -33,6 +34,9 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.angular import AngularDisplacement
     from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
+    from kuchka.quantities.kinematics.angular_velocity_squared import (
+        AngularVelocitySquared,
+    )
     from kuchka.quantities.mechanics.angular_momentum import AngularMomentum
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
@@ -62,6 +66,8 @@ class AngularVelocity(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: AngularMomentum) -> Energy: ...
+    @overload
+    def __mul__(self, other: AngularVelocity) -> AngularVelocitySquared: ...
     @overload
     def __mul__(self, other: FirstMomentOfMass) -> Momentum: ...
     @overload
@@ -142,6 +148,18 @@ class AngularVelocity(LinearQuantity):
             )
         radians_per_second = (velocity / radius)._magnitude  # noqa: SLF001 -- same-package arithmetic on canonical magnitudes
         return cls(radians_per_second / (2 * PI), cls._result_unit)
+
+    # BEGIN GENERATED __pow__
+    @overload
+    def __pow__(self, exponent: Literal[2]) -> AngularVelocitySquared: ...
+    @overload
+    def __pow__(self, exponent: int) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __pow__(self, exponent: int) -> LinearQuantity | Fraction:
+        return super().__pow__(exponent)
 
 
 _register(ANGULAR_VELOCITY, AngularVelocity)

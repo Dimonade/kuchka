@@ -9,8 +9,6 @@ own tests), and `Mass * Acceleration -> Force` -- F = ma -- and its two inverses
 
 from decimal import Decimal
 
-import pytest
-
 from kuchka.quantities import Acceleration
 from kuchka.units import length
 from kuchka.units import mass
@@ -70,15 +68,11 @@ def test_constant_braking_gives_expected_stopping_time() -> None:
     assert -initial_speed / braking == temporal.Second(5)
 
 
-@pytest.mark.xfail(
-    reason="Time ** int is not implemented yet",
-    strict=True,
-)
 def test_constant_braking_gives_expected_stopping_distance() -> None:
     initial_speed = velocity.KilometrePerHour(90)
     braking = acc.MetrePerSecondSquared(-5)
     stopping_time = -initial_speed / braking
 
-    stopping_distance = initial_speed * stopping_time + braking * stopping_time**2 / 2  # ty: ignore[unsupported-operator]  # type: ignore[operator]
+    stopping_distance = initial_speed * stopping_time + braking * stopping_time**2 / 2
 
     assert stopping_distance == length.Metre(62.5)

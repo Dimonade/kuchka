@@ -70,6 +70,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.angular_velocity_squared import (
+        AngularVelocitySquared,
+    )
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.luminous_intensity import LuminousIntensity
@@ -151,6 +155,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: AngularMomentum) -> AngularMomentum: ...
     @overload
     def __mul__(self, other: AngularVelocity) -> AngularVelocity: ...
+    @overload
+    def __mul__(self, other: AngularVelocitySquared) -> AngularVelocitySquared: ...
     @overload
     def __mul__(self, other: ApparentPower) -> ApparentPower: ...
     @overload
@@ -299,6 +305,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: TemperatureDelta) -> TemperatureDelta: ...
     @overload
     def __mul__(self, other: Time) -> Time: ...
+    @overload
+    def __mul__(self, other: TimeSquared) -> TimeSquared: ...
     @overload
     def __mul__(self, other: Torque) -> Torque: ...
     @overload

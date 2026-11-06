@@ -8,6 +8,7 @@ from kuchka import Acceleration
 from kuchka import AngularAcceleration
 from kuchka import AngularDisplacement
 from kuchka import AngularVelocity
+from kuchka import AngularVelocitySquared
 from kuchka import Area
 from kuchka import Current
 from kuchka import FirstMomentOfMass
@@ -46,6 +47,14 @@ SHIPPED_BRIDGES: dict[tuple[type, str, type], tuple[type, str]] = {
     (Acceleration, "/", AngularAcceleration): (
         Length,
         "the radius at a tangential acceleration",
+    ),
+    (AngularVelocitySquared, "*", Length): (
+        Acceleration,
+        "the centripetal acceleration of a point turning at a squared rate",
+    ),
+    (Acceleration, "/", AngularVelocitySquared): (
+        Length,
+        "the radius at a centripetal acceleration and a squared rate",
     ),
     (Mass, "*", Area): (MomentOfInertia, "a mass at a radius, times that radius"),
     (FirstMomentOfMass, "*", Length): (
@@ -122,8 +131,17 @@ def test_a_value_across_a_bridge_and_back_is_unchanged() -> None:
         ((AngularVelocity, "*", Length), 2 * PI),
         ((Velocity, "/", AngularVelocity), 1 / (2 * PI)),
         ((Torque, "/", Force), 1 / (2 * PI)),
+        ((AngularVelocitySquared, "*", Length), (2 * PI) ** 2),
+        ((Acceleration, "/", AngularVelocitySquared), 1 / (2 * PI) ** 2),
     ],
-    ids=["inertia", "rim-speed", "radius", "lever-arm"],
+    ids=[
+        "inertia",
+        "rim-speed",
+        "radius",
+        "lever-arm",
+        "rim-acceleration",
+        "rim-radius-squared",
+    ],
 )
 def test_the_factor_follows_from_the_angle_exponents(
     key: tuple[type, str, type], factor: object

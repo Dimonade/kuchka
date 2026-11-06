@@ -32,6 +32,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
@@ -73,6 +75,8 @@ class SpecificEnergy(LinearQuantity):
     def __mul__(self, other: MolarMass) -> MolarEnergy: ...
     @overload
     def __mul__(self, other: Proportion) -> SpecificEnergy: ...
+    @overload
+    def __mul__(self, other: TimeSquared) -> Area: ...
     @overload
     def __mul__(self, other: Numeric) -> SpecificEnergy: ...
     @overload

@@ -36,7 +36,12 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.angular_velocity_squared import (
+        AngularVelocitySquared,
+    )
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.proportion import Proportion
@@ -116,6 +121,8 @@ class AngularDisplacement(LinearQuantity):
 
     # BEGIN GENERATED __mul__
     @overload
+    def __mul__(self, other: AngularAcceleration) -> AngularVelocitySquared: ...
+    @overload
     def __mul__(self, other: Frequency) -> AngularVelocity: ...
     @overload
     def __mul__(self, other: Length) -> Length: ...
@@ -136,6 +143,8 @@ class AngularDisplacement(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: AngularAcceleration) -> TimeSquared: ...
+    @overload
     def __truediv__(self, other: AngularDisplacement) -> Proportion: ...
     @overload
     def __truediv__(self, other: AngularVelocity) -> Time: ...
@@ -143,6 +152,8 @@ class AngularDisplacement(LinearQuantity):
     def __truediv__(self, other: Proportion) -> AngularDisplacement: ...
     @overload
     def __truediv__(self, other: Time) -> AngularVelocity: ...
+    @overload
+    def __truediv__(self, other: TimeSquared) -> AngularAcceleration: ...
     @overload
     def __truediv__(self, other: Numeric) -> AngularDisplacement: ...
     @overload

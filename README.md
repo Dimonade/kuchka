@@ -50,12 +50,17 @@ The same dimensional machinery is used whether the calculation is mechanical, el
 - [Why `kuchka`?](#why-kuchka)
 - [Where `kuchka` fits](#where-kuchka-fits)
 - [What's included in 0.1.x](#whats-included-in-01x)
-  - [Electrical](#electrical)
-  - [Time and signals](#time-and-signals)
-  - [Geometry and mechanics](#geometry-and-mechanics)
-  - [Angle and rotation](#angle-and-rotation)
-  - [Chemistry and light](#chemistry-and-light)
-  - [Dimensionless quantities](#dimensionless-quantities)
+  - [Core](#core)
+  - [Chemistry](#chemistry)
+  - [Electromagnetics](#electromagnetics)
+  - [Geometry](#geometry)
+  - [Information](#information)
+  - [Kinematics](#kinematics)
+  - [Mechanics](#mechanics)
+  - [Photometry](#photometry)
+  - [Radiation](#radiation)
+  - [Temporal](#temporal)
+  - [Thermodynamics](#thermodynamics)
   - [Archaic and historical units](#archaic-and-historical-units)
 - [A few important distinctions](#a-few-important-distinctions)
   - [Same dimension does not always mean the same concept](#same-dimension-does-not-always-mean-the-same-concept)
@@ -99,9 +104,24 @@ Values acquire a physical type, typed quantities can cross application boundarie
 
 ### 1. Put the physical meaning in the signature
 
-In 1983 an Air Canada 767 ran out of fuel at altitude (the "Gimli Glider").
-The fuel table gave a density in pounds per litre, the flight plan wanted kilograms, and the tanks were loaded with about a quarter of the fuel the flight needed.
-Here is the calculation, with quantities in place of numbers:
+In 1983 an Air Canada Boeing 767 ran out of fuel in flight and glided down to a disused airfield at Gimli, Manitoba (the "Gimli Glider").
+The fuel gauges were out of service, so the ground crew worked the load out by hand: the flight needed 22,300 kg, the dipsticks showed 7,682 L in the tanks, and the fuel table gave a density of 1.77.
+That number was pounds per litre.
+It was used as kilograms per litre, and the tanks received about a quarter of the fuel they needed.
+
+Written with plain numbers, the calculation looks fine and runs without complaint:
+
+```python
+def compute_fuel_to_add(required, in_tanks, density):
+    return (required - in_tanks * density) / density
+
+
+print(f"{compute_fuel_to_add(22_300, 7_682, 1.77):.0f}")
+# 4917
+```
+
+Nothing in `4917` says litres, and nothing in `1.77` says pounds.
+With quantities, the same calculation says what each value is, and the table's number is written down once, in the unit it came in:
 
 ```python
 from kuchka import Density
@@ -113,25 +133,37 @@ from kuchka import Volume
 from kuchka.units import LITRE
 
 
-def fuel_to_load(required: Mass, on_board: Volume, density: Density) -> Volume:
-    return (required - on_board * density) / density
+def compute_fuel_to_add(required: Mass, in_tanks: Volume, density: Density) -> Volume:
+    in_tanks_mass = in_tanks * density
+    missing = required - in_tanks_mass
+    return missing / density
 
 
 density = Pound(1.77) / Litre(1)  # the table's pounds per litre, as a Density.
-load = fuel_to_load(Kilogram(22_300), Litre(7_682), density)
+fuel = compute_fuel_to_add(
+    required=Kilogram(22_300),
+    in_tanks=Litre(7_682),
+    density=density,
+)
 
-print(f"{load.to(LITRE):.0f}")
+print(f"{fuel.to(LITRE):.0f}")
 # 20094 L
 ```
 
 The flight plan is in kilograms, the table in pounds and litres, and the dipstick in litres, and nothing in the calculation converts anything: the quantities carry their units and combine exactly.
+Every line has a physical type, `Volume * Density` is a `Mass`, a `Mass` over a `Density` is a `Volume`, and the answer is the 20,094 L that was needed.
+
 The signature is the contract, and the bare number from the table has nowhere to go:
 
+<!-- doc-test: skip static type errors, shown for the checker -->
+
 ```python
-fuel_to_load(Kilogram(22_300), Litre(7_682), 1.77)
-# static type error (`IncompatibleDimensionError`).
-fuel_to_load(Kilogram(22_300), Litre(7_682), Pound(1.77))
-# static type error (`UnrepresentableDimensionError`).
+compute_fuel_to_add(
+    Kilogram(22_300), Litre(7_682), 1.77
+)  # static type error: a bare number is not a Density.
+compute_fuel_to_add(
+    Kilogram(22_300), Litre(7_682), Pound(1.77)
+)  # static type error: a Mass is not a Density.
 ```
 
 The type annotation gives static tools the contract.
@@ -140,6 +172,9 @@ Python function annotations themselves remain ordinary annotations; `kuchka` doe
 
 `kuchka` cannot know that a `1.77` typed into `KilogramPerLitre(1.77)` meant pounds.
 What it removes is the unlabelled number: a value gets its unit once, where it is written, and everything after that is checked and exact.
+
+The point is not to replace every unit library.
+The point is to make one particular style of engineering code feel natural: ordinary Python functions taking and returning ordinary Python types that happen to carry physical meaning.
 
 ### 2. Read measurements from text and config
 
@@ -216,6 +251,7 @@ Mass * Acceleration -> Force
 Mass * Velocity -> Momentum
 Force * Time -> Impulse
 Velocity * Velocity -> VelocitySquared
+Time * Time -> TimeSquared
 Force / Area -> Pressure
 Pressure * Volume -> Energy
 Energy / Volume -> EnergyDensity
@@ -232,6 +268,8 @@ MomentOfInertia * AngularAcceleration -> Torque
 MomentOfInertia * AngularVelocity -> AngularMomentum
 AngularVelocity * Length -> Velocity
 AngularVelocity * Velocity -> Acceleration
+AngularVelocity * AngularVelocity -> AngularVelocitySquared
+AngularVelocitySquared * Length -> Acceleration
 AngularDisplacement * Length -> Length
 Mass / Volume -> Density
 Volume / Time -> VolumetricFlowRate
@@ -518,109 +556,34 @@ The point is to make one particular style of engineering code feel natural: ordi
 `kuchka` currently covers a growing vocabulary of engineering and scientific quantities.
 Units are represented as typed values, with exact conversions where the unit definition permits them.
 
-The tables below show a number of representative units per field or domain.
+The tables below show a number of representative units per package of `kuchka.units`, with `Core` holding its top-level modules.
 The complete unit vocabulary is available in the API reference.
 
-### Electrical
+### Core
 
-| Quantity            | Representative units                                                                                               |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Voltage             | `Nanovolt` through `Petavolt`                                                                                      |
-| Current             | `Picoampere`, through `Megaampere`                                                                                 |
-| Power               | `Picowatt` through `Petawatt`, `Horsepower` and `MetricHorsepower`                                                 |
-| Apparent Power      | `MillivoltAmpere` through `GigavoltAmpere`                                                                         |
-| Reactive Power      | `Millivar` through `Gigavar`                                                                                       |
-| Resistance          | `Microohm`, through `Gigaohm`                                                                                      |
-| Conductance         | `Nanosiemens` through `Kilosiemens`                                                                                |
-| Charge              | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                              |
-| Specific charge     | `CoulombPerKilogram`, `AmpereHourPerKilogram`, `MilliampereHourPerGram`                                            |
-| Specific current    | `AmperePerKilogram`, `MilliamperePerKilogram`, `MicroamperePerKilogram`                                            |
-| Magnetic Flux       | `Nanoweber` through `Kiloweber`                                                                                    |
-| Flux Density        | `Femtotesla` through `Kilotesla`, `Femtogauss` through `Kilogauss`                                                 |
-| Capacitance         | `Femtofarad` through `Kilofarad`                                                                                   |
-| Inductance          | `Picohenry` through `Kilohenry`                                                                                    |
-| Reactance           | reached via `Resistance.to_reactance()`                                                                            |
-| Impedance           | reached via `Resistance.to_impedance()`                                                                            |
-| Permittivity        | `PicofaradPerMetre` through `FaradPerMetre`                                                                        |
-| Permeability        | `NanohenryPerMetre` through `HenryPerMetre`                                                                        |
-| Field Strength      | `MicroamperePerMetre` through `MegaamperePerMetre`                                                                 |
-| Magnetization       | reached via `MagneticFieldStrength.to_magnetization()`                                                             |
-| Energy              | `Picojoule` through `Petajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour` |
-| _energy, continued_ | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                             |
+The units of the top-level modules of `kuchka.units`.
 
-### Time and signals
+| Quantity             | Representative units                                                                                                                       |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Length               | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit`, `LightYear`, and `Parsec` through `Gigaparsec` |
+| Mass                 | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                                                             |
+| Current              | `Picoampere`, through `Megaampere`                                                                                                         |
+| Amount of Substance  | `Femtoomole` through `Kilomole`                                                                                                            |
+| Luminous Intensity   | `Candela`                                                                                                                                  |
+| Temperature          | `Celsius`, `Fahrenheit`, `Kelvin`, `Rankine`                                                                                               |
+| Temperature Delta    | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`, `DeltaRankine`                                                                           |
+| Angle                | `Radian`, `Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond`                                                                            |
+| Angular displacement | `RadianDisplacement`, `DegreeDisplacement`, `TurnDisplacement`, `GradianDisplacement`, `ArcMinuteDisplacement`, `ArcSecondDisplacement`    |
+| Solid angle          | `Steradian`, `Millisteradian`, `Microsteradian`, `SquareDegree`, `SquareArcMinute`, `SquareArcSecond`                                      |
+| Proportion           | `Ratio`, `Percent`                                                                                                                         |
+| LogarithmicRatio     | `Decibel`, `Bel`                                                                                                                           |
 
-| Quantity          | Representative units                                                                                             |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Time              | `Femtosecond` through `Second`, `Minute` through `JulianYear`, and `Jiffy`                                       |
-| Instant           | reached via `Time.to_instant()`                                                                                  |
-| Frequency         | `Nanohertz` through `Petahertz`                                                                                  |
-| Sampling Period   | reached via `Time.to_sampling_period()`                                                                          |
-| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`                                               |
-| Baud Rate         | `Baud` through `Gigabaud`                                                                                        |
-| Activity          | `Millibecquerel` through `Terabecquerel`, `Curie`, `Millicurie`, `Microcurie`, and `Picocurie`                   |
-| Absorbed dose     | `Nanogray` through `Megagray`, `Rad`, and `Millirad`                                                             |
-| Equivalent dose   | `Nanosievert` through `Kilosievert`, `Rem`, and `Millirem`                                                       |
-| Exposure          | `Roentgen`, `Milliroentgen`, `Microroentgen`, and `C/kg` through `EXPOSURE_UNITS`                                |
-| Abs. dose rate    | `GrayPerSecond`, `GrayPerMinute`, `GrayPerHour` through `NanograyPerHour`, and `RadPerHour`                      |
-| Equiv. dose rate  | `SievertPerSecond`, `SievertPerHour` through `NanosievertPerHour`, and `RemPerHour`                              |
-| Exposure rate     | `RoentgenPerSecond` through `RoentgenPerHour`, `MilliroentgenPerHour`, `MicroroentgenPerHour`                    |
-| Activity conc.    | `BecquerelPerCubicMetre`, `BecquerelPerLitre`, `PicocuriePerLitre`, and the kilo- and milli- multiples           |
-| Specific activity | `BecquerelPerKilogram`, `BecquerelPerGram`, `PicocuriePerGram`, `CuriePerGram`                                   |
-| Surface act.      | `BecquerelPerSquareCentimetre`, `DpmPer100SquareCentimetre`, `CuriePerSquareKilometre`                           |
-| Data              | `Bit` and `Byte`, `Kilobyte` through `Petabyte`, `Kibibyte` through `Pebibyte`, and the same for bits            |
-| Data Rate         | `BitPerSecond` and `BytePerSecond`, with the same SI and IEC multiples                                           |
-| Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`, `Rankine`                                                                     |
-| Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`, `DeltaRankine`                                                 |
-| Heating Rate      | `KelvinPerSecond`, `CelsiusPerMinute`, `FahrenheitPerMinute`, and the per-second, per-minute, and per-hour units |
-| Heat capacity     | `JoulePerKelvin`, `KilojoulePerKelvin`, `ThermochemicalCaloriePerKelvin`, `KilocaloriePerKelvin`                 |
-| Specific heat     | `JoulePerKilogramKelvin`, `KilojoulePerKilogramKelvin`, `ThermochemicalCaloriePerGramKelvin`                     |
-| Entropy           | `HeatCapacity.to_entropy()`, and `ENTROPY_UNITS` for the same units as text                                      |
-| Specific entropy  | `SpecificHeatCapacity.to_specific_entropy()`, and `SPECIFIC_ENTROPY_UNITS`                                       |
-| Molar heat cap.   | `JoulePerMoleKelvin`, `KilojoulePerMoleKelvin`, `ThermochemicalCaloriePerMoleKelvin`                             |
-| Molar entropy     | `MolarHeatCapacity.to_molar_entropy()`, and `MOLAR_ENTROPY_UNITS`                                                |
+### Chemistry
 
-### Geometry and mechanics
+The units of `kuchka.units.chemistry`.
 
-| Quantity         | Representative units                                                                                                                               |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Length           | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit`, `LightYear`, and `Parsec` through `Gigaparsec`         |
-| Area             | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                                                                    |
-| Volume           | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`, `CubicFoot`, `UsGallon`                                  |
-| Velocity         | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`, `Knot`                                                                                        |
-| Acceleration     | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                                                                  |
-| Mass             | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                                                                     |
-| Force            | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                                                                      |
-| Volumetric flow  | `CubicMetrePerSecond`, `LitrePerSecond`, `LitrePerMinute`, `CubicMetrePerHour`, `MillilitrePerMinute`, `UsGallonPerMinute`, `CubicFootPerMinute`   |
-| Mass flow        | `KilogramPerSecond`, `GramPerSecond`, `KilogramPerHour`, `TonnePerHour`, `PoundPerHour`                                                            |
-| Density          | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`, `GramPerLitre`, `MilligramPerLitre`, `MicrogramPerLitre`                    |
-| Pressure         | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Gigapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`, `KilopoundPerSquareInch` |
-| Stress           | the units of Pressure, reached with `Pressure.to_stress()`                                                                                         |
-| Energy density   | `JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`                                                       |
-| Momentum         | `KilogramMetrePerSecond`, `GramCentimetrePerSecond`, `PoundFootPerSecond`                                                                          |
-| Impulse          | `NewtonSecond`, `MillinewtonSecond`, `KilonewtonSecond`, `DyneSecond`, `PoundForceSecond`                                                          |
-| Velocity squared | `SquareMetrePerSecondSquared`, `SquareKilometrePerSecondSquared`                                                                                   |
-| Specific energy  | `JoulePerKilogram`, `MegajoulePerKilogram`, `WattHourPerKilogram`, `KilowattHourPerKilogram`, `KilocaloriePerKilogram`                             |
-| Specific power   | `WattPerKilogram`, `MilliwattPerKilogram`, `KilowattPerKilogram`, `WattPerGram`, `MilliwattPerGram`                                                |
-
-### Angle and rotation
-
-| Quantity             | Units                                                                                                                                   |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Angle                | `Radian`, `Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond`                                                                         |
-| Angular displacement | `RadianDisplacement`, `DegreeDisplacement`, `TurnDisplacement`, `GradianDisplacement`, `ArcMinuteDisplacement`, `ArcSecondDisplacement` |
-| Angular velocity     | `RadianPerSecond`, `DegreePerSecond`, `TurnPerSecond`, `RevolutionPerMinute`                                                            |
-| Angular acceleration | `RadianPerSecondSquared`, `DegreePerSecondSquared`, `TurnPerSecondSquared`, `RevolutionPerMinutePerSecond`                              |
-| Torque               | `NewtonMetre`, `MillinewtonMetre`, `KilonewtonMetre`, `PoundForceFoot`, `PoundForceInch`, `JoulePerTurn`                                |
-| Moment of inertia    | `KilogramSquareMetre`, `KilogramSquareCentimetre`, `GramSquareCentimetre`, `PoundSquareFoot`, `PoundSquareInch`                         |
-| Angular momentum     | `KilogramSquareMetrePerSecond`, `NewtonMetreSecond`, `JouleSecondPerTurn`                                                               |
-| First moment of mass | `KilogramMetre`, `GramCentimetre`, `GramMillimetre`, `OunceInch`                                                                        |
-
-### Chemistry and light
-
-| Quantity            | Units                                                                                                         |
+| Quantity            | Representative units                                                                                          |
 | ------------------- | ------------------------------------------------------------------------------------------------------------- |
-| Amount of Substance | `Femtoomole` through `Kilomole`                                                                               |
 | Molar mass          | `KilogramPerMole`, `GramPerMole`, `KilogramPerKilomole`                                                       |
 | Molar concentration | `MolePerCubicMetre`, `MolePerLitre`, `MillimolePerLitre`, `MicromolePerLitre`, `NanomolePerLitre`             |
 | Molar energy        | `JoulePerMole`, `KilojoulePerMole`, `KilocaloriePerMole`                                                      |
@@ -630,21 +593,145 @@ The complete unit vocabulary is available in the API reference.
 | Molar flow rate     | `MolePerSecond`, `KilomolePerSecond`, `MillimolePerMinute`, `MolePerMinute`, `MolePerHour`, `KilomolePerHour` |
 | Catalytic activity  | `Nanokatal`, `Microkatal`, `Millikatal`, `Katal`, `EnzymeUnit`                                                |
 | Molar charge        | `CoulombPerMole`, `KilocoulombPerMole`                                                                        |
-| Luminous Intensity  | `Candela`                                                                                                     |
-| Solid angle         | `Steradian`, `Millisteradian`, `Microsteradian`, `SquareDegree`, `SquareArcMinute`, `SquareArcSecond`         |
-| Luminous flux       | `Millilumen`, `Lumen`, `Kilolumen`                                                                            |
-| Luminous energy     | `LumenSecond`, `LumenHour`                                                                                    |
-| Illuminance         | `Millilux`, `Lux`, `Kilolux`, `Phot`, `FootCandle`                                                            |
-| Luminous exposure   | `LuxSecond`, `LuxHour`, `KiloluxHour`                                                                         |
-| Luminance           | `CandelaPerSquareMetre`, `MillicandelaPerSquareMetre`, `KilocandelaPerSquareMetre`, `Stilb`, `FootLambert`    |
-| Luminous efficacy   | `LumenPerWatt`                                                                                                |
+| Molar heat cap.     | `JoulePerMoleKelvin`, `KilojoulePerMoleKelvin`, `ThermochemicalCaloriePerMoleKelvin`                          |
+| Molar entropy       | `MolarHeatCapacity.to_molar_entropy()`, and `MOLAR_ENTROPY_UNITS`                                             |
 
-### Dimensionless quantities
+### Electromagnetics
 
-| Quantity         | Units              |
-| ---------------- | ------------------ |
-| Proportion       | `Ratio`, `Percent` |
-| LogarithmicRatio | `Decibel`, `Bel`   |
+The units of `kuchka.units.electromagnetics`.
+
+| Quantity         | Representative units                                                                  |
+| ---------------- | ------------------------------------------------------------------------------------- |
+| Voltage          | `Nanovolt` through `Petavolt`                                                         |
+| Apparent Power   | `MillivoltAmpere` through `GigavoltAmpere`                                            |
+| Reactive Power   | `Millivar` through `Gigavar`                                                          |
+| Resistance       | `Microohm`, through `Gigaohm`                                                         |
+| Conductance      | `Nanosiemens` through `Kilosiemens`                                                   |
+| Charge           | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour` |
+| Specific charge  | `CoulombPerKilogram`, `AmpereHourPerKilogram`, `MilliampereHourPerGram`               |
+| Specific current | `AmperePerKilogram`, `MilliamperePerKilogram`, `MicroamperePerKilogram`               |
+| Magnetic Flux    | `Nanoweber` through `Kiloweber`                                                       |
+| Flux Density     | `Femtotesla` through `Kilotesla`, `Femtogauss` through `Kilogauss`                    |
+| Capacitance      | `Femtofarad` through `Kilofarad`                                                      |
+| Inductance       | `Picohenry` through `Kilohenry`                                                       |
+| Reactance        | reached via `Resistance.to_reactance()`                                               |
+| Impedance        | reached via `Resistance.to_impedance()`                                               |
+| Permittivity     | `PicofaradPerMetre` through `FaradPerMetre`                                           |
+| Permeability     | `NanohenryPerMetre` through `HenryPerMetre`                                           |
+| Field Strength   | `MicroamperePerMetre` through `MegaamperePerMetre`                                    |
+| Magnetization    | reached via `MagneticFieldStrength.to_magnetization()`                                |
+
+### Geometry
+
+The units of `kuchka.units.geometry`.
+
+| Quantity | Representative units                                                                                              |
+| -------- | ----------------------------------------------------------------------------------------------------------------- |
+| Area     | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                                   |
+| Volume   | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`, `CubicFoot`, `UsGallon` |
+
+### Information
+
+The units of `kuchka.units.information`.
+
+| Quantity  | Representative units                                                                                  |
+| --------- | ----------------------------------------------------------------------------------------------------- |
+| Data      | `Bit` and `Byte`, `Kilobyte` through `Petabyte`, `Kibibyte` through `Pebibyte`, and the same for bits |
+| Data Rate | `BitPerSecond` and `BytePerSecond`, with the same SI and IEC multiples                                |
+
+### Kinematics
+
+The units of `kuchka.units.kinematics`.
+
+| Quantity                 | Representative units                                                                                       |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| Velocity                 | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`, `Knot`                                                |
+| Acceleration             | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                          |
+| Angular velocity         | `RadianPerSecond`, `DegreePerSecond`, `TurnPerSecond`, `RevolutionPerMinute`                               |
+| Angular acceleration     | `RadianPerSecondSquared`, `DegreePerSecondSquared`, `TurnPerSecondSquared`, `RevolutionPerMinutePerSecond` |
+| Angular velocity squared | `RadianSquaredPerSecondSquared`, `TurnSquaredPerSecondSquared`, `DegreeSquaredPerSecondSquared`            |
+| Time squared             | `NanosecondSquared` through `SecondSquared`, `MinuteSquared`, `HourSquared`                                |
+
+### Mechanics
+
+The units of `kuchka.units.mechanics`.
+
+| Quantity             | Representative units                                                                                                                               |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Force                | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                                                                      |
+| Pressure             | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Gigapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`, `KilopoundPerSquareInch` |
+| Stress               | the units of Pressure, reached with `Pressure.to_stress()`                                                                                         |
+| Energy               | `Picojoule` through `Petajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour`                                 |
+| _energy, continued_  | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                                                             |
+| Power                | `Picowatt` through `Petawatt`, `Horsepower` and `MetricHorsepower`                                                                                 |
+| Torque               | `NewtonMetre`, `MillinewtonMetre`, `KilonewtonMetre`, `PoundForceFoot`, `PoundForceInch`, `JoulePerTurn`                                           |
+| Density              | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`, `GramPerLitre`, `MilligramPerLitre`, `MicrogramPerLitre`                    |
+| Energy density       | `JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`                                                       |
+| Momentum             | `KilogramMetrePerSecond`, `GramCentimetrePerSecond`, `PoundFootPerSecond`                                                                          |
+| Impulse              | `NewtonSecond`, `MillinewtonSecond`, `KilonewtonSecond`, `DyneSecond`, `PoundForceSecond`                                                          |
+| Angular momentum     | `KilogramSquareMetrePerSecond`, `NewtonMetreSecond`, `JouleSecondPerTurn`                                                                          |
+| Moment of inertia    | `KilogramSquareMetre`, `KilogramSquareCentimetre`, `GramSquareCentimetre`, `PoundSquareFoot`, `PoundSquareInch`                                    |
+| First moment of mass | `KilogramMetre`, `GramCentimetre`, `GramMillimetre`, `OunceInch`                                                                                   |
+| Velocity squared     | `SquareMetrePerSecondSquared`, `SquareKilometrePerSecondSquared`                                                                                   |
+| Specific energy      | `JoulePerKilogram`, `MegajoulePerKilogram`, `WattHourPerKilogram`, `KilowattHourPerKilogram`, `KilocaloriePerKilogram`                             |
+| Specific power       | `WattPerKilogram`, `MilliwattPerKilogram`, `KilowattPerKilogram`, `WattPerGram`, `MilliwattPerGram`                                                |
+| Volumetric flow      | `CubicMetrePerSecond`, `LitrePerSecond`, `LitrePerMinute`, `CubicMetrePerHour`, `MillilitrePerMinute`, `UsGallonPerMinute`, `CubicFootPerMinute`   |
+| Mass flow            | `KilogramPerSecond`, `GramPerSecond`, `KilogramPerHour`, `TonnePerHour`, `PoundPerHour`                                                            |
+
+### Photometry
+
+The units of `kuchka.units.photometry`.
+
+| Quantity          | Representative units                                                                                       |
+| ----------------- | ---------------------------------------------------------------------------------------------------------- |
+| Luminous flux     | `Millilumen`, `Lumen`, `Kilolumen`                                                                         |
+| Luminous energy   | `LumenSecond`, `LumenHour`                                                                                 |
+| Illuminance       | `Millilux`, `Lux`, `Kilolux`, `Phot`, `FootCandle`                                                         |
+| Luminous exposure | `LuxSecond`, `LuxHour`, `KiloluxHour`                                                                      |
+| Luminance         | `CandelaPerSquareMetre`, `MillicandelaPerSquareMetre`, `KilocandelaPerSquareMetre`, `Stilb`, `FootLambert` |
+| Luminous efficacy | `LumenPerWatt`                                                                                             |
+
+### Radiation
+
+The units of `kuchka.units.radiation`.
+
+| Quantity          | Representative units                                                                                   |
+| ----------------- | ------------------------------------------------------------------------------------------------------ |
+| Activity          | `Millibecquerel` through `Terabecquerel`, `Curie`, `Millicurie`, `Microcurie`, and `Picocurie`         |
+| Absorbed dose     | `Nanogray` through `Megagray`, `Rad`, and `Millirad`                                                   |
+| Equivalent dose   | `Nanosievert` through `Kilosievert`, `Rem`, and `Millirem`                                             |
+| Exposure          | `Roentgen`, `Milliroentgen`, `Microroentgen`, and `C/kg` through `EXPOSURE_UNITS`                      |
+| Abs. dose rate    | `GrayPerSecond`, `GrayPerMinute`, `GrayPerHour` through `NanograyPerHour`, and `RadPerHour`            |
+| Equiv. dose rate  | `SievertPerSecond`, `SievertPerHour` through `NanosievertPerHour`, and `RemPerHour`                    |
+| Exposure rate     | `RoentgenPerSecond` through `RoentgenPerHour`, `MilliroentgenPerHour`, `MicroroentgenPerHour`          |
+| Activity conc.    | `BecquerelPerCubicMetre`, `BecquerelPerLitre`, `PicocuriePerLitre`, and the kilo- and milli- multiples |
+| Specific activity | `BecquerelPerKilogram`, `BecquerelPerGram`, `PicocuriePerGram`, `CuriePerGram`                         |
+| Surface act.      | `BecquerelPerSquareCentimetre`, `DpmPer100SquareCentimetre`, `CuriePerSquareKilometre`                 |
+
+### Temporal
+
+The units of `kuchka.units.temporal`.
+
+| Quantity        | Representative units                                                       |
+| --------------- | -------------------------------------------------------------------------- |
+| Time            | `Femtosecond` through `Second`, `Minute` through `JulianYear`, and `Jiffy` |
+| Instant         | reached via `Time.to_instant()`                                            |
+| Frequency       | `Nanohertz` through `Petahertz`                                            |
+| Sampling Period | reached via `Time.to_sampling_period()`                                    |
+| Sample Rate     | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`         |
+| Baud Rate       | `Baud` through `Gigabaud`                                                  |
+
+### Thermodynamics
+
+The units of `kuchka.units.thermodynamics`.
+
+| Quantity         | Representative units                                                                                             |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Heating Rate     | `KelvinPerSecond`, `CelsiusPerMinute`, `FahrenheitPerMinute`, and the per-second, per-minute, and per-hour units |
+| Heat capacity    | `JoulePerKelvin`, `KilojoulePerKelvin`, `ThermochemicalCaloriePerKelvin`, `KilocaloriePerKelvin`                 |
+| Specific heat    | `JoulePerKilogramKelvin`, `KilojoulePerKilogramKelvin`, `ThermochemicalCaloriePerGramKelvin`                     |
+| Entropy          | `HeatCapacity.to_entropy()`, and `ENTROPY_UNITS` for the same units as text                                      |
+| Specific entropy | `SpecificHeatCapacity.to_specific_entropy()`, and `SPECIFIC_ENTROPY_UNITS`                                       |
 
 Most SI-derived families expose a selected set of SI prefixes appropriate to their engineering use.
 The README does not list every prefix individually; the API reference contains the complete constructor and unit vocabulary.

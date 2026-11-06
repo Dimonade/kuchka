@@ -151,6 +151,31 @@ Metre(3) ** 0 == Ratio(1)
 A negative exponent gives the reciprocal of the positive power, and an exponent is an `int`.
 Type checkers see the square and the cube of a type whose power has a type of its own.
 
+## Products of three factors
+
+Python evaluates `a * b * c` as `(a * b) * c`, and each step is a product the registry gives a type.
+The squares in common formulas have kinds of their own (`TimeSquared`, `AngularVelocitySquared`, `VelocitySquared`, `Area`), so those formulas read the same in every order:
+
+```python
+from kuchka import Metre
+from kuchka import MetrePerSecondSquared
+from kuchka import Second
+
+g = MetrePerSecondSquared(9.81)
+t = Second(2)
+g * t * t == t * t * g == t**2 * g == Metre(39.24)
+```
+
+A first step with no kind raises, even where another grouping of the same factors closes:
+
+```python
+from kuchka import Hertz
+from kuchka import Metre
+
+Metre(1) * Hertz(2) * Hertz(2)  # an Acceleration of 4 m/s².
+Hertz(2) * Hertz(2) * Metre(1)  # rejected: `UnrepresentableDimensionError`.
+```
+
 ## Ratios
 
 A ratio is a `Proportion`, and it displays as the coherent ratio:
