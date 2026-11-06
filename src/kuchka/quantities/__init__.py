@@ -81,6 +81,8 @@ from kuchka.quantities.information.data_rate import *
 from kuchka.quantities.kinematics.acceleration import *
 from kuchka.quantities.kinematics.angular_acceleration import *
 from kuchka.quantities.kinematics.angular_velocity import *
+from kuchka.quantities.kinematics.angular_velocity_squared import *
+from kuchka.quantities.kinematics.time_squared import *
 from kuchka.quantities.kinematics.velocity import *
 from kuchka.quantities.length import *
 from kuchka.quantities.logarithmic import *

@@ -23,11 +23,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.momentum import Momentum
@@ -51,6 +53,8 @@ class Force(LinearQuantity):
     def __mul__(self, other: Proportion) -> Force: ...
     @overload
     def __mul__(self, other: Time) -> Impulse: ...
+    @overload
+    def __mul__(self, other: TimeSquared) -> FirstMomentOfMass: ...
     @overload
     def __mul__(self, other: Velocity) -> Power: ...
     @overload

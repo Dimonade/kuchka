@@ -36,6 +36,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import ClassVar
+from typing import Literal
 from typing import Protocol
 from typing import overload
 from typing import runtime_checkable
@@ -78,6 +79,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
@@ -166,6 +168,8 @@ class Time(LinearQuantity):
     @overload
     def __mul__(self, other: SpecificPower) -> SpecificEnergy: ...
     @overload
+    def __mul__(self, other: Time) -> TimeSquared: ...
+    @overload
     def __mul__(self, other: Torque) -> AngularMomentum: ...
     @overload
     def __mul__(self, other: Velocity) -> Length: ...
@@ -190,6 +194,8 @@ class Time(LinearQuantity):
     @overload
     def __truediv__(self, other: Conductance) -> Inductance: ...
     @overload
+    def __truediv__(self, other: Frequency) -> TimeSquared: ...
+    @overload
     def __truediv__(self, other: Inductance) -> Conductance: ...
     @overload
     def __truediv__(self, other: Proportion) -> Time: ...
@@ -197,6 +203,8 @@ class Time(LinearQuantity):
     def __truediv__(self, other: Resistance) -> Capacitance: ...
     @overload
     def __truediv__(self, other: Time) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: TimeSquared) -> Frequency: ...
     @overload
     def __truediv__(self, other: Numeric) -> Time: ...
     @overload
@@ -253,6 +261,18 @@ class Time(LinearQuantity):
         its own.
         """
         return Instant(self._magnitude, Instant._canonical_unit)  # noqa: SLF001 -- Instant's own canonical unit
+
+    # BEGIN GENERATED __pow__
+    @overload
+    def __pow__(self, exponent: Literal[2]) -> TimeSquared: ...
+    @overload
+    def __pow__(self, exponent: int) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __pow__(self, exponent: int) -> LinearQuantity | Fraction:
+        return super().__pow__(exponent)
 
 
 class Instant(AffineQuantity[Time]):
@@ -324,6 +344,8 @@ class Frequency(LinearQuantity):
     def __mul__(self, other: TemperatureDelta) -> HeatingRate: ...
     @overload
     def __mul__(self, other: Time) -> Fraction: ...
+    @overload
+    def __mul__(self, other: TimeSquared) -> Time: ...
     @overload
     def __mul__(self, other: Velocity) -> Acceleration: ...
     @overload

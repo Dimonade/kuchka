@@ -31,7 +31,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
@@ -78,6 +80,8 @@ class VelocitySquared(LinearQuantity):
     def __mul__(self, other: MolarMass) -> MolarEnergy: ...
     @overload
     def __mul__(self, other: Proportion) -> VelocitySquared: ...
+    @overload
+    def __mul__(self, other: TimeSquared) -> Area: ...
     @overload
     def __mul__(self, other: Numeric) -> VelocitySquared: ...
     @overload

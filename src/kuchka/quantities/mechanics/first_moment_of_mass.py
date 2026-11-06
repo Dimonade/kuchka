@@ -20,10 +20,12 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
     from kuchka.quantities.proportion import Proportion
@@ -71,6 +73,8 @@ class FirstMomentOfMass(LinearQuantity):
     @overload
     def __truediv__(self, other: FirstMomentOfMass) -> Proportion: ...
     @overload
+    def __truediv__(self, other: Force) -> TimeSquared: ...
+    @overload
     def __truediv__(self, other: Impulse) -> Time: ...
     @overload
     def __truediv__(self, other: Length) -> Mass: ...
@@ -80,6 +84,8 @@ class FirstMomentOfMass(LinearQuantity):
     def __truediv__(self, other: Momentum) -> Time: ...
     @overload
     def __truediv__(self, other: Proportion) -> FirstMomentOfMass: ...
+    @overload
+    def __truediv__(self, other: TimeSquared) -> Force: ...
     @overload
     def __truediv__(self, other: Numeric) -> FirstMomentOfMass: ...
     @overload

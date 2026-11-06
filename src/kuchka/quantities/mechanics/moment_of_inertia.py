@@ -34,7 +34,11 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.angular_velocity_squared import (
+        AngularVelocitySquared,
+    )
     from kuchka.quantities.mechanics.angular_momentum import AngularMomentum
+    from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.proportion import Proportion
 
@@ -58,6 +62,8 @@ class MomentOfInertia(LinearQuantity):
     def __mul__(self, other: AngularAcceleration) -> Torque: ...
     @overload
     def __mul__(self, other: AngularVelocity) -> AngularMomentum: ...
+    @overload
+    def __mul__(self, other: AngularVelocitySquared) -> Energy: ...
     @overload
     def __mul__(self, other: Proportion) -> MomentOfInertia: ...
     @overload

@@ -17,10 +17,12 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.current import Current
+    from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.conductance import Conductance
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.permeability import Permeability
     from kuchka.quantities.electromagnetics.resistance import Resistance
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.length import Length
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
@@ -34,6 +36,8 @@ class Inductance(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: Capacitance) -> TimeSquared: ...
     @overload
     def __mul__(self, other: Conductance) -> Time: ...
     @overload

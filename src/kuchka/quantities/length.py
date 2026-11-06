@@ -31,6 +31,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.angular_velocity_squared import (
+        AngularVelocitySquared,
+    )
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
@@ -62,6 +66,8 @@ class Length(LinearQuantity):
     def __mul__(self, other: AngularDisplacement) -> Length: ...
     @overload
     def __mul__(self, other: AngularVelocity) -> Velocity: ...
+    @overload
+    def __mul__(self, other: AngularVelocitySquared) -> Acceleration: ...
     @overload
     def __mul__(self, other: Area) -> Volume: ...
     @overload
@@ -95,6 +101,8 @@ class Length(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: Acceleration) -> TimeSquared: ...
+    @overload
     def __truediv__(self, other: AngularDisplacement) -> Length: ...
     @overload
     def __truediv__(self, other: Length) -> Proportion: ...
@@ -102,6 +110,8 @@ class Length(LinearQuantity):
     def __truediv__(self, other: Proportion) -> Length: ...
     @overload
     def __truediv__(self, other: Time) -> Velocity: ...
+    @overload
+    def __truediv__(self, other: TimeSquared) -> Acceleration: ...
     @overload
     def __truediv__(self, other: Velocity) -> Time: ...
     @overload

@@ -24,7 +24,12 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.angular import AngularDisplacement
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.angular_velocity_squared import (
+        AngularVelocitySquared,
+    )
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.mechanics.angular_momentum import AngularMomentum
     from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
     from kuchka.quantities.mechanics.power import Power
@@ -49,6 +54,8 @@ class AngularAcceleration(LinearQuantity):
 
     # BEGIN GENERATED __mul__
     @overload
+    def __mul__(self, other: AngularDisplacement) -> AngularVelocitySquared: ...
+    @overload
     def __mul__(self, other: AngularMomentum) -> Power: ...
     @overload
     def __mul__(self, other: Length) -> Acceleration: ...
@@ -58,6 +65,8 @@ class AngularAcceleration(LinearQuantity):
     def __mul__(self, other: Proportion) -> AngularAcceleration: ...
     @overload
     def __mul__(self, other: Time) -> AngularVelocity: ...
+    @overload
+    def __mul__(self, other: TimeSquared) -> AngularDisplacement: ...
     @overload
     def __mul__(self, other: Numeric) -> AngularAcceleration: ...
     @overload

@@ -27,6 +27,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.angular_velocity_squared import (
+        AngularVelocitySquared,
+    )
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
@@ -35,6 +38,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
@@ -92,6 +96,8 @@ class Energy(LinearQuantity):
     @overload
     def __truediv__(self, other: AngularVelocity) -> AngularMomentum: ...
     @overload
+    def __truediv__(self, other: AngularVelocitySquared) -> MomentOfInertia: ...
+    @overload
     def __truediv__(self, other: Charge) -> Voltage: ...
     @overload
     def __truediv__(self, other: Current) -> MagneticFlux: ...
@@ -115,6 +121,8 @@ class Energy(LinearQuantity):
     def __truediv__(self, other: Mass) -> SpecificEnergy: ...
     @overload
     def __truediv__(self, other: MolarEnergy) -> AmountOfSubstance: ...
+    @overload
+    def __truediv__(self, other: MomentOfInertia) -> AngularVelocitySquared: ...
     @overload
     def __truediv__(self, other: Momentum) -> Velocity: ...
     @overload
