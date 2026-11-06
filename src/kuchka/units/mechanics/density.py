@@ -11,7 +11,8 @@ The module also provides:
 - `GramPerCubicCentimetre`, `GramPerMillilitre`, and `KilogramPerLitre`, which are
     common in materials science, chemistry, and laboratory work,
 - `GramPerLitre` for low-density materials,
-- `PoundPerCubicFoot` for customary engineering literature.
+- `PoundPerLitre` for fuel tables and other customary references that give a density
+    in pounds per litre.
 
 Some of these units have numerically identical scales but belong to different naming
 traditions.
@@ -98,8 +99,8 @@ scale, just as `GramPerCubicCentimetre` and `KilogramPerLitre` do.
 They remain separate units because they arise naturally in different kinds of
 scientific and engineering literature.
 
-`PoundPerCubicFoot` is retained as a customary engineering unit for density,
-particularly where material properties are reported in US customary units.
+`PoundPerLitre` is the unit of fuel tables that report a density in pounds per litre,
+where the same figure in kilograms per litre would be more than twice as large.
 
 `DENSITY_UNITS` maps each symbol to its constructor, for boundary code that reads a
 unit as a string from outside the application.
@@ -127,6 +128,8 @@ from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Density
 from kuchka.quantities import UnitDef
+from kuchka.units.geometry.volume import LITRE
+from kuchka.units.mass import POUND
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -237,6 +240,20 @@ MICROGRAM_PER_LITRE = UnitDef(
 )
 KILOGRAM_PER_LITRE = UnitDef("kilogram_per_litre", "kg/L", Decimal(1000), DENSITY)
 
+POUND_PER_LITRE = UnitDef(
+    "pound_per_litre",
+    "lb/L",
+    POUND.scale / LITRE.scale,
+    DENSITY,
+    aliases=("lb/l", "lbs/L", "lbs/l"),
+    words=(
+        "pound per liter",
+        "pound per litre",
+        "pounds per liter",
+        "pounds per litre",
+    ),
+)
+
 GRAM_PER_LITER = GRAM_PER_LITRE
 GRAM_PER_MILLILITER = GRAM_PER_MILLILITRE
 KILOGRAM_PER_LITER = KILOGRAM_PER_LITRE
@@ -330,6 +347,32 @@ def KilogramPerLitre(value: Numeric) -> Density:
     )
 
 
+def PoundPerLitre(value: Numeric) -> Density:
+    """Construct a Density from a magnitude expressed in pounds per litre.
+
+    Parameters
+    ----------
+    value : Numeric
+        Density magnitude in pounds per litre.
+
+    Returns
+    -------
+    Density
+        Density represented in pounds per litre.
+
+    Examples
+    --------
+    A fuel table that gives 1.77 lb/L describes a fuel of about 0.803 kg/L:
+
+    >>> from kuchka import KilogramPerLitre
+    >>> fuel = PoundPerLitre(1.77)
+    >>> fuel.is_close(KilogramPerLitre(0.803), tolerance=KilogramPerLitre(0.001))
+    True
+
+    """
+    return Density(to_exact(value) * POUND_PER_LITRE.scale, POUND_PER_LITRE)
+
+
 def MilligramPerLitre(value: Numeric) -> Density:
     """Construct a Density from a magnitude expressed in milligrams per litre.
 
@@ -383,6 +426,7 @@ MilligramPerLiter = MilligramPerLitre
 MicrogramPerLiter = MicrogramPerLitre
 GramPerMilliliter = GramPerMillilitre
 KilogramPerLiter = KilogramPerLitre
+PoundPerLiter = PoundPerLitre
 
 
 DENSITY_UNITS: Mapping[str, Callable[[Numeric], Density]] = unit_table(
@@ -393,6 +437,7 @@ DENSITY_UNITS: Mapping[str, Callable[[Numeric], Density]] = unit_table(
         KILOGRAM_PER_LITRE: KilogramPerLitre,
         GRAM_PER_LITRE: GramPerLitre,
         GRAM_PER_MILLILITRE: GramPerMillilitre,
+        POUND_PER_LITRE: PoundPerLitre,
         MILLIGRAM_PER_LITRE: MilligramPerLitre,
         MICROGRAM_PER_LITRE: MicrogramPerLitre,
     },
@@ -412,6 +457,7 @@ __all__ = [
     "KILOGRAM_PER_LITRE",
     "MICROGRAM_PER_LITRE",
     "MILLIGRAM_PER_LITRE",
+    "POUND_PER_LITRE",
     "GramPerCubicCentimeter",
     "GramPerCubicCentimetre",
     "GramPerLiter",
@@ -426,4 +472,6 @@ __all__ = [
     "MicrogramPerLitre",
     "MilligramPerLiter",
     "MilligramPerLitre",
+    "PoundPerLiter",
+    "PoundPerLitre",
 ]

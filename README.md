@@ -121,16 +121,27 @@ print(f"{compute_fuel_to_add(22_300, 7_682, 1.77):.0f}")
 ```
 
 Nothing in `4917` says litres, and nothing in `1.77` says pounds.
-With quantities, the same calculation says what each value is, and the table's number is written down once, in the unit it came in:
+With quantities, the unit travels with the number from the moment it is read, and the checks that matter are written once, in the unit that is convenient:
 
 ```python
 from kuchka import Density
 from kuchka import Kilogram
+from kuchka import KilogramPerLitre
 from kuchka import Litre
 from kuchka import Mass
-from kuchka import Pound
 from kuchka import Volume
+from kuchka import parse
 from kuchka.units import LITRE
+
+JET_FUEL_MIN = KilogramPerLitre(0.775)
+JET_FUEL_MAX = KilogramPerLitre(0.840)
+
+
+def read_fuel_density(text: str) -> Density:
+    density = parse(text, Density)
+    if not JET_FUEL_MIN <= density <= JET_FUEL_MAX:
+        raise ValueError(f"{density} is not the density of jet fuel")
+    return density
 
 
 def compute_fuel_to_add(required: Mass, in_tanks: Volume, density: Density) -> Volume:
@@ -139,7 +150,7 @@ def compute_fuel_to_add(required: Mass, in_tanks: Volume, density: Density) -> V
     return missing / density
 
 
-density = Pound(1.77) / Litre(1)  # the table's pounds per litre, as a Density.
+density = read_fuel_density("1.77 lb/L")  # the fuel table, as it is printed.
 fuel = compute_fuel_to_add(
     required=Kilogram(22_300),
     in_tanks=Litre(7_682),
@@ -151,9 +162,21 @@ print(f"{fuel.to(LITRE):.0f}")
 ```
 
 The flight plan is in kilograms, the table in pounds and litres, and the dipstick in litres, and nothing in the calculation converts anything: the quantities carry their units and combine exactly.
-Every line has a physical type, `Volume * Density` is a `Mass`, a `Mass` over a `Density` is a `Volume`, and the answer is the 20,094 L that was needed.
+Every line has a physical type: `Volume * Density` is a `Mass`, a `Mass` over a `Density` is a `Volume`.
 
-The signature is the contract, and the bare number from the table has nowhere to go:
+`kuchka` cannot know what the table meant: the unit comes from whoever wrote it, and a card that says `1.77 kg/L` is as readable as one that says `1.77 lb/L`.
+What changes is where a mistake can hide:
+
+```python
+read_fuel_density("1.77")  # rejected: `ParseError`.
+read_fuel_density("1.77 kg")  # rejected: `UnknownUnitError`.
+read_fuel_density("1.77 kg/L")  # rejected: `ValueError`.
+```
+
+A number without a unit cannot enter the program, and the plausibility check is written once, in kilograms per litre, whichever unit the card uses: `1.77 lb/L` and `0.803 kg/L` pass, and `1.77 kg/L` is stopped on the ground.
+With plain numbers the same check needs the pounds-to-kilograms factor, which is the conversion the crew got wrong.
+
+The signature is the contract as well, and a bare number has nowhere to go:
 
 <!-- doc-test: skip static type errors, shown for the checker -->
 
@@ -162,16 +185,13 @@ compute_fuel_to_add(
     Kilogram(22_300), Litre(7_682), 1.77
 )  # static type error: a bare number is not a Density.
 compute_fuel_to_add(
-    Kilogram(22_300), Litre(7_682), Pound(1.77)
+    Kilogram(22_300), Litre(7_682), Kilogram(1.77)
 )  # static type error: a Mass is not a Density.
 ```
 
 The type annotation gives static tools the contract.
 The arithmetic inside the function exercises `kuchka`'s runtime dimensional checks when it is called with an incompatible value.
 Python function annotations themselves remain ordinary annotations; `kuchka` does not add a runtime annotation enforcement mechanism.
-
-`kuchka` cannot know that a `1.77` typed into `KilogramPerLitre(1.77)` meant pounds.
-What it removes is the unlabelled number: a value gets its unit once, where it is written, and everything after that is checked and exact.
 
 The point is not to replace every unit library.
 The point is to make one particular style of engineering code feel natural: ordinary Python functions taking and returning ordinary Python types that happen to carry physical meaning.
@@ -241,118 +261,84 @@ When the unit arrives in a field of its own, such as a CSV column or a `{ value,
 
 ### 3. Compose real engineering relationships
 
-The library is useful when a calculation crosses more than one physical domain. For example, an actuator calculation can derive several quantities in sequence:
+A calculation is most useful when it crosses physical domains and every step keeps its type.
+A winch lifts a 250 kg load by 12 m, and the same lift is followed from the weight on the hook to the heat in the motor winding:
 
-```text
-Voltage * Current -> Power
-Power * Time -> Energy
-Charge / Current -> Time
-Mass * Acceleration -> Force
-Mass * Velocity -> Momentum
-Force * Time -> Impulse
-Velocity * Velocity -> VelocitySquared
-Time * Time -> TimeSquared
-Force / Area -> Pressure
-Pressure * Volume -> Energy
-Energy / Volume -> EnergyDensity
-Energy / Mass -> SpecificEnergy
-TemperatureDelta / Time -> HeatingRate
-Energy / TemperatureDelta -> HeatCapacity
-HeatCapacity / Mass -> SpecificHeatCapacity
-Torque * AngularDisplacement -> Energy
-Torque * AngularVelocity -> Power
-AngularDisplacement / Time -> AngularVelocity
-AngularVelocity / Time -> AngularAcceleration
-Mass * Area -> MomentOfInertia
-MomentOfInertia * AngularAcceleration -> Torque
-MomentOfInertia * AngularVelocity -> AngularMomentum
-AngularVelocity * Length -> Velocity
-AngularVelocity * Velocity -> Acceleration
-AngularVelocity * AngularVelocity -> AngularVelocitySquared
-AngularVelocitySquared * Length -> Acceleration
-AngularDisplacement * Length -> Length
-Mass / Volume -> Density
-Volume / Time -> VolumetricFlowRate
-Area * Velocity -> VolumetricFlowRate
-Mass / Time -> MassFlowRate
-Mass / Amount -> MolarMass
-Amount / Volume -> MolarConcentration
-Energy / Amount -> MolarEnergy
-MolarConcentration * MolarMass -> Density
-Amount / Mass -> Molality
-Volume / Amount -> MolarVolume
-Amount / Time -> MolarFlowRate
-Charge / Amount -> MolarCharge
-Density * VolumetricFlowRate -> MassFlowRate
-Length * Length -> Area
-Area * Length -> Volume
-```
-
-That means a calculation can move through a chain such as:
+<details>
+<summary>Imports</summary>
 
 ```python
+from kuchka import Ampere
 from kuchka import Centimetre
+from kuchka import JoulePerKelvin
 from kuchka import Kilogram
+from kuchka import Metre
+from kuchka import MetrePerSecond
 from kuchka import MetrePerSecondSquared
-from kuchka import SquareCentimetre
-
-mass = Kilogram(1000)
-acceleration = MetrePerSecondSquared(0.5)
-piston_area = SquareCentimetre(20)
-stroke = Centimetre(10)
-
-force = mass * acceleration
-pressure = force / piston_area
-volume = piston_area * stroke
-energy = pressure * volume
-
-print(force)
-# 500 N
-print(pressure)
-# 250000 Pa
-print(volume)
-# 0.0002 m³
-print(energy)
-# 50 J
-```
-
-Another chain goes from a motor's shaft to the energy bill:
-
-```python
-from kuchka import Hour
-from kuchka import NewtonMetre
-from kuchka import RevolutionPerMinute
+from kuchka import RadianPerSecond
+from kuchka import Torque
+from kuchka import Volt
+from kuchka.units import PERCENT
 from kuchka.units import WATT_HOUR
-
-torque = NewtonMetre(2)
-speed = RevolutionPerMinute(3000)
-
-shaft_power = torque * speed  # Torque * AngularVelocity -> Power.
-energy = shaft_power * Hour(2)  # Power * Time -> Energy.
-
-print(f"{shaft_power:.1f}")
-# 628.3 W
-print(f"{energy.to(WATT_HOUR):.0f}")
-# 1257 Wh
 ```
 
-The revolutions per minute become radians per second through pi, which `kuchka` holds as an exact rational, so the digits of the result are correct to the last one shown.
-
-A battery pack's figure of merit comes from one division:
+</details>
 
 ```python
-from kuchka import Kilogram
-from kuchka import WattHour
-from kuchka.units import WATT_HOUR_PER_KILOGRAM
+load = Kilogram(250)
+height = Metre(12)
+lift_speed = MetrePerSecond(0.5)
+gravity = MetrePerSecondSquared(9.80665)
 
-pack = WattHour(1800) / Kilogram(8)  # Energy / Mass -> SpecificEnergy.
+supply = Volt(400)
+current = Ampere(6.5)
 
-print(pack.to(WATT_HOUR_PER_KILOGRAM))
-# 225 Wh/kg
+drum_radius = Centimetre(20)
+drum_speed = RadianPerSecond(2.5)  # 0.5 m/s on a 0.2 m drum.
+winding_heat_capacity = JoulePerKelvin(900)
+
+# Mechanics: the weight and the work of lifting it.
+weight = load * gravity  # Mass * Acceleration -> Force
+work = weight * height  # Force * Length -> Energy
+lift_time = height / lift_speed  # Length / Velocity -> Time
+useful_power = work / lift_time  # Energy / Time -> Power
+
+# Electrics: what the supply delivers for the same lift.
+supply_power = supply * current  # Voltage * Current -> Power
+supply_energy = supply_power * lift_time  # Power * Time -> Energy
+efficiency = useful_power / supply_power  # Power / Power -> Proportion
+
+# Rotation: the same power measured on the drum shaft.
+shaft_torque = Torque.from_force(weight, drum_radius)
+shaft_power = shaft_torque * drum_speed  # Torque * AngularVelocity -> Power
+
+# Heat: what the winding has to absorb.
+losses = supply_energy - work  # Energy - Energy -> Energy
+rise = losses / winding_heat_capacity  # Energy / HeatCapacity -> TemperatureDelta
+
+print(weight, work, lift_time)
+# 2451.6625 N 29419.95 J 24 s
+print(useful_power, supply_power)
+# 1225.83125 W 2600 W
+print(f"{efficiency.to(PERCENT):.1f}")
+# 47.1 %
+print(f"{supply_energy.to(WATT_HOUR):.1f}")
+# 17.3 Wh
+print(shaft_torque, shaft_power == useful_power)
+# 490.3325 N·m True
+print(f"{rise:.1f}")
+# 36.6 ΔK
 ```
 
-No unit strings or manual conversion factors are needed in any of these calculations.
-The operators determine the physical result types.
+No unit strings and no conversion factors appear in the calculation, and each quantity is the type its physics says it is.
+The shaft power computed from a torque and a rate in radians per second is exactly the power computed from a force and a speed, because `kuchka` holds pi as an exact rational.
+Mixing up two of these, say energy with power, is rejected as soon as it runs:
+
+```python
+supply_energy + supply_power  # rejected: `IncompatibleDimensionError`.
+```
+
+The products and quotients the library knows are declared on the quantity types, so editors and type checkers see them, and [Dimensional algebra](docs/concepts/dimensional_algebra.md) describes how a result gets its type.
 
 ### 4. Bring raw sensor data into a control path
 
