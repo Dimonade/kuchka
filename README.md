@@ -158,8 +158,12 @@ The signature is the contract, and the bare number from the table has nowhere to
 <!-- doc-test: skip static type errors, shown for the checker -->
 
 ```python
-compute_fuel_to_add(Kilogram(22_300), Litre(7_682), 1.77)  # static type error: a bare number is not a Density.
-compute_fuel_to_add(Kilogram(22_300), Litre(7_682), Pound(1.77))  # static type error: a Mass is not a Density.
+compute_fuel_to_add(
+    Kilogram(22_300), Litre(7_682), 1.77
+)  # static type error: a bare number is not a Density.
+compute_fuel_to_add(
+    Kilogram(22_300), Litre(7_682), Pound(1.77)
+)  # static type error: a Mass is not a Density.
 ```
 
 The type annotation gives static tools the contract.
