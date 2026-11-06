@@ -121,6 +121,9 @@ A radius stays a `Length`; bridges, declared rules across the angle axis, carry 
 - **Named relations:**
   `AngularVelocity.from_tangential(velocity, radius)` builds the radian rate of a rim speed, since `Velocity / Length` is a `Frequency`, and `AngularDisplacement.from_arc(arc, radius)` the angle of an arc, since `Length / Length` is a ratio.
   The `Frequency.to_angular_velocity()` docstring now notes that a radian rate such as `v / r` reads two pi times too fast through it.
+- **Squares:**
+  `AngularVelocitySquared` (rad²/s², tr²/s², °²/s²) and `TimeSquared` (s², ms², µs², ns², min², h²), so a product of three factors has one value in every order: `w * w * r`, `r * w * w`, and `w * (w * r)` are the same `Acceleration`, and `t * t * g` and `t ** 2 * g` the same `Length`.
+  `AngularVelocitySquared * Length` is the centripetal `Acceleration`, a bridge with the factor `(2 pi) ** 2`, and `Time ** 2` is a `TimeSquared`.
 - `Momentum * Time` and `Impulse * Time` are now a `FirstMomentOfMass`, and `AngularVelocity * Frequency` an `AngularAcceleration`; each raised `UnrepresentableDimensionError` before.
 
 #### New constants

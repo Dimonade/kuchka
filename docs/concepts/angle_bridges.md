@@ -31,11 +31,12 @@ Like a rule, it applies to the exact operand kinds it names.
 The factor follows from the exponents.
 The turn is the canonical angle, so with `a_p` the angle exponent of the plain product and `a_r` that of the result, the canonical magnitude is multiplied by `(2 pi) ** (a_p - a_r)`:
 
-| Relation                               | `a_p` | `a_r` | Factor        |
-| -------------------------------------- | ----- | ----- | ------------- |
-| `Torque.from_force(force, lever_arm)`  | 0     | -1    | `2 pi`        |
-| `Mass * Area -> MomentOfInertia`       | 0     | -2    | `(2 pi) ** 2` |
-| `AngularVelocity * Length -> Velocity` | 1     | 0     | `2 pi`        |
+| Relation                                          | `a_p` | `a_r` | Factor        |
+| ------------------------------------------------- | ----- | ----- | ------------- |
+| `Torque.from_force(force, lever_arm)`             | 0     | -1    | `2 pi`        |
+| `Mass * Area -> MomentOfInertia`                  | 0     | -2    | `(2 pi) ** 2` |
+| `AngularVelocity * Length -> Velocity`            | 1     | 0     | `2 pi`        |
+| `AngularVelocitySquared * Length -> Acceleration` | 2     | 0     | `(2 pi) ** 2` |
 
 Pi is the pinned rational of `kuchka.internal.constants.PI`, so a bridge and its inverse quotient cancel exactly, and a value that crosses a bridge and comes back is unchanged.
 
@@ -54,6 +55,7 @@ The second condition is the one that keeps a bridge a fact about the physics:
 | `MomentOfInertia / Mass`              | yes | one: the square of the radius of gyration                 | yes                |
 | `AngularVelocity * Length`            | yes | one: the tangential speed                                 | yes                |
 | `AngularAcceleration * Length`        | yes | one: the tangential acceleration                          | yes                |
+| `AngularVelocitySquared * Length`     | yes | one: the centripetal acceleration                         | yes                |
 | `Torque / Force`, `Torque / Length`   | yes | one: the lever arm, and the force at it                   | yes                |
 | `AngularVelocity * Velocity`          | yes | one: the centripetal acceleration                         | yes                |
 | `AngularVelocity * Momentum`          | yes | one: the centripetal force                                | yes                |
@@ -76,12 +78,13 @@ The operands of a bridge are principal or contested kinds, and a role reaches on
 
 The dimensions of the rotational quantities are chosen so that dynamics closes by algebra, and bridges appear where a length enters:
 
-| Quantity              | Dimension    | Units                                | Displays as |
-| --------------------- | ------------ | ------------------------------------ | ----------- |
-| `AngularAcceleration` | ∠ T⁻²        | rad/s², tr/s², °/s², rpm/s           | rad/s²      |
-| `MomentOfInertia`     | M L² ∠⁻²     | kg·m², kg·cm², g·cm², lb·ft², lb·in² | kg·m²       |
-| `AngularMomentum`     | M L² ∠⁻¹ T⁻¹ | kg·m²/s, N·m·s                       | kg·m²/s     |
-| `FirstMomentOfMass`   | M L          | kg·m, g·cm, g·mm, oz·in              | kg·m        |
+| Quantity                 | Dimension    | Units                                | Displays as |
+| ------------------------ | ------------ | ------------------------------------ | ----------- |
+| `AngularAcceleration`    | ∠ T⁻²        | rad/s², tr/s², °/s², rpm/s           | rad/s²      |
+| `AngularVelocitySquared` | ∠² T⁻²       | rad²/s², tr²/s², °²/s²               | rad²/s²     |
+| `MomentOfInertia`        | M L² ∠⁻²     | kg·m², kg·cm², g·cm², lb·ft², lb·in² | kg·m²       |
+| `AngularMomentum`        | M L² ∠⁻¹ T⁻¹ | kg·m²/s, N·m·s                       | kg·m²/s     |
+| `FirstMomentOfMass`      | M L          | kg·m, g·cm, g·mm, oz·in              | kg·m        |
 
 `kg·m²` carries the scale `(2 pi) ** 2` the way `N·m` carries `2 pi`, so a datasheet value is typed as written.
 `FirstMomentOfMass` is the unbalance of a rotor, in gram-millimetres, and it is also the step `m * r` of `m * r * r` in the order Python evaluates it.
@@ -103,11 +106,14 @@ rotor * omega  # an AngularMomentum
 speed = omega * Metre(0.2)  # a Velocity of 60 m/s
 speed * speed / Metre(0.2)  # an Acceleration, the centripetal one
 omega * speed  # the same Acceleration
+omega * omega  # an AngularVelocitySquared of 90000 rad²/s²
+omega**2 * Metre(0.2)  # the same Acceleration, in any order
+omega**2 * rotor  # an Energy
 ```
 
-A product with no type yet, such as `omega * omega`, is a quantity that can be added like any other.
-`r * omega * omega` is an `Acceleration` already, through the rim speed, and `omega * omega * r` raises at its first step.
-The factor rule covers any exponent, so once an angular velocity squared (∠² T⁻²) exists, `omega * omega * rotor` is an `Energy` by algebra, and `omega * omega * r` an `Acceleration` by a bridge with `a_p - a_r = 2`.
+`omega * omega` is an `AngularVelocitySquared` (∠² T⁻²), so a product of three factors has one value in every order.
+`omega * omega * r`, `r * omega * omega`, and `omega * (omega * r)` are the same `Acceleration`, the first by a bridge with `a_p - a_r = 2`.
+`omega * omega * rotor` and `rotor * omega * omega` are the same `Energy` by algebra.
 
 ## Named relations
 
