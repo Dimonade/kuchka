@@ -16,6 +16,7 @@ from kuchka.quantities import AngularAcceleration
 from kuchka.quantities import AngularDisplacement
 from kuchka.quantities import AngularMomentum
 from kuchka.quantities import AngularVelocity
+from kuchka.quantities import AngularVelocitySquared
 from kuchka.quantities import ApparentPower
 from kuchka.quantities import Area
 from kuchka.quantities import BaudRate
@@ -94,6 +95,7 @@ from kuchka.quantities import SurfaceActivity
 from kuchka.quantities import Temperature
 from kuchka.quantities import TemperatureDelta
 from kuchka.quantities import Time
+from kuchka.quantities import TimeSquared
 from kuchka.quantities import Torque
 from kuchka.quantities import Velocity
 from kuchka.quantities import VelocitySquared
@@ -171,6 +173,7 @@ from kuchka.units import Degree
 from kuchka.units import DegreeDisplacement
 from kuchka.units import DegreePerSecond
 from kuchka.units import DegreePerSecondSquared
+from kuchka.units import DegreeSquaredPerSecondSquared
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaFahrenheit
 from kuchka.units import DeltaKelvin
@@ -247,6 +250,7 @@ from kuchka.units import HenryPerMetre
 from kuchka.units import Hertz
 from kuchka.units import Horsepower
 from kuchka.units import Hour
+from kuchka.units import HourSquared
 from kuchka.units import Inch
 from kuchka.units import Jiffy
 from kuchka.units import Joule
@@ -443,6 +447,7 @@ from kuchka.units import Microohm
 from kuchka.units import Microroentgen
 from kuchka.units import MicroroentgenPerHour
 from kuchka.units import Microsecond
+from kuchka.units import MicrosecondSquared
 from kuchka.units import Microsiemens
 from kuchka.units import Microsievert
 from kuchka.units import MicrosievertPerHour
@@ -507,6 +512,7 @@ from kuchka.units import MilliremPerHour
 from kuchka.units import Milliroentgen
 from kuchka.units import MilliroentgenPerHour
 from kuchka.units import Millisecond
+from kuchka.units import MillisecondSquared
 from kuchka.units import Millisiemens
 from kuchka.units import Millisievert
 from kuchka.units import MillisievertPerHour
@@ -521,6 +527,7 @@ from kuchka.units import MilliwattPerGram
 from kuchka.units import MilliwattPerKilogram
 from kuchka.units import Milliweber
 from kuchka.units import Minute
+from kuchka.units import MinuteSquared
 from kuchka.units import Mole
 from kuchka.units import MolePerCubicMeter
 from kuchka.units import MolePerCubicMetre
@@ -549,6 +556,7 @@ from kuchka.units import Nanomole
 from kuchka.units import NanomolePerLiter
 from kuchka.units import NanomolePerLitre
 from kuchka.units import Nanosecond
+from kuchka.units import NanosecondSquared
 from kuchka.units import Nanosiemens
 from kuchka.units import Nanosievert
 from kuchka.units import NanosievertPerHour
@@ -616,6 +624,7 @@ from kuchka.units import Radian
 from kuchka.units import RadianDisplacement
 from kuchka.units import RadianPerSecond
 from kuchka.units import RadianPerSecondSquared
+from kuchka.units import RadianSquaredPerSecondSquared
 from kuchka.units import RadPerHour
 from kuchka.units import Rankine
 from kuchka.units import Ratio
@@ -629,6 +638,7 @@ from kuchka.units import RoentgenPerMinute
 from kuchka.units import RoentgenPerSecond
 from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
+from kuchka.units import SecondSquared
 from kuchka.units import Siemens
 from kuchka.units import Sievert
 from kuchka.units import SievertPerHour
@@ -675,6 +685,7 @@ from kuchka.units import Turn
 from kuchka.units import TurnDisplacement
 from kuchka.units import TurnPerSecond
 from kuchka.units import TurnPerSecondSquared
+from kuchka.units import TurnSquaredPerSecondSquared
 from kuchka.units import UsGallon
 from kuchka.units import UsGallonPerMinute
 from kuchka.units import Var
@@ -710,6 +721,7 @@ __all__ = [
     "AngularDisplacement",
     "AngularMomentum",
     "AngularVelocity",
+    "AngularVelocitySquared",
     "ApparentPower",
     "ArcMinute",
     "ArcMinuteDisplacement",
@@ -785,6 +797,7 @@ __all__ = [
     "DegreeDisplacement",
     "DegreePerSecond",
     "DegreePerSecondSquared",
+    "DegreeSquaredPerSecondSquared",
     "DeltaCelsius",
     "DeltaFahrenheit",
     "DeltaKelvin",
@@ -875,6 +888,7 @@ __all__ = [
     "Hertz",
     "Horsepower",
     "Hour",
+    "HourSquared",
     "Illuminance",
     "Impedance",
     "Impulse",
@@ -1090,6 +1104,7 @@ __all__ = [
     "Microroentgen",
     "MicroroentgenPerHour",
     "Microsecond",
+    "MicrosecondSquared",
     "Microsiemens",
     "Microsievert",
     "MicrosievertPerHour",
@@ -1154,6 +1169,7 @@ __all__ = [
     "Milliroentgen",
     "MilliroentgenPerHour",
     "Millisecond",
+    "MillisecondSquared",
     "Millisiemens",
     "Millisievert",
     "MillisievertPerHour",
@@ -1168,6 +1184,7 @@ __all__ = [
     "MilliwattPerKilogram",
     "Milliweber",
     "Minute",
+    "MinuteSquared",
     "Molality",
     "MolarCharge",
     "MolarConcentration",
@@ -1207,6 +1224,7 @@ __all__ = [
     "NanomolePerLiter",
     "NanomolePerLitre",
     "Nanosecond",
+    "NanosecondSquared",
     "Nanosiemens",
     "Nanosievert",
     "NanosievertPerHour",
@@ -1280,6 +1298,7 @@ __all__ = [
     "RadianDisplacement",
     "RadianPerSecond",
     "RadianPerSecondSquared",
+    "RadianSquaredPerSecondSquared",
     "Rankine",
     "Ratio",
     "Reactance",
@@ -1297,6 +1316,7 @@ __all__ = [
     "SamplesPerSecond",
     "SamplingPeriod",
     "Second",
+    "SecondSquared",
     "Siemens",
     "Sievert",
     "SievertPerHour",
@@ -1349,6 +1369,7 @@ __all__ = [
     "ThermochemicalCaloriePerKelvin",
     "ThermochemicalCaloriePerMoleKelvin",
     "Time",
+    "TimeSquared",
     "Tonne",
     "TonneOfTNT",
     "TonnePerHour",
@@ -1357,6 +1378,7 @@ __all__ = [
     "TurnDisplacement",
     "TurnPerSecond",
     "TurnPerSecondSquared",
+    "TurnSquaredPerSecondSquared",
     "UsGallon",
     "UsGallonPerMinute",
     "Var",
