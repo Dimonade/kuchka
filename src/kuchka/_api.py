@@ -616,6 +616,8 @@ from kuchka.units import PoundForceFoot
 from kuchka.units import PoundForceInch
 from kuchka.units import PoundForceSecond
 from kuchka.units import PoundPerHour
+from kuchka.units import PoundPerLiter
+from kuchka.units import PoundPerLitre
 from kuchka.units import PoundPerSquareInch
 from kuchka.units import PoundSquareFoot
 from kuchka.units import PoundSquareInch
@@ -1286,6 +1288,8 @@ __all__ = [
     "PoundForceInch",
     "PoundForceSecond",
     "PoundPerHour",
+    "PoundPerLiter",
+    "PoundPerLitre",
     "PoundPerSquareInch",
     "PoundSquareFoot",
     "PoundSquareInch",
