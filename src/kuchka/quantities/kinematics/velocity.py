@@ -26,6 +26,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.jerk import Jerk
+    from kuchka.quantities.kinematics.snap import Snap
+    from kuchka.quantities.kinematics.time_cubed import TimeCubed
     from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
@@ -108,11 +110,15 @@ class Velocity(LinearQuantity):
     @overload
     def __truediv__(self, other: Proportion) -> Velocity: ...
     @overload
+    def __truediv__(self, other: Snap) -> TimeCubed: ...
+    @overload
     def __truediv__(self, other: SpecificActivity) -> FirstMomentOfMass: ...
     @overload
     def __truediv__(self, other: SurfaceActivity) -> Volume: ...
     @overload
     def __truediv__(self, other: Time) -> Acceleration: ...
+    @overload
+    def __truediv__(self, other: TimeCubed) -> Snap: ...
     @overload
     def __truediv__(self, other: TimeSquared) -> Jerk: ...
     @overload

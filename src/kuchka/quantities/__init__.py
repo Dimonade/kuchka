@@ -83,7 +83,9 @@ from kuchka.quantities.kinematics.angular_acceleration import *
 from kuchka.quantities.kinematics.angular_velocity import *
 from kuchka.quantities.kinematics.angular_velocity_squared import *
 from kuchka.quantities.kinematics.jerk import *
+from kuchka.quantities.kinematics.snap import *
 from kuchka.quantities.kinematics.time_cubed import *
+from kuchka.quantities.kinematics.time_fourth_power import *
 from kuchka.quantities.kinematics.time_squared import *
 from kuchka.quantities.kinematics.velocity import *
 from kuchka.quantities.length import *

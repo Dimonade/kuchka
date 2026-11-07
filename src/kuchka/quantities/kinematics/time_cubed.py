@@ -18,7 +18,10 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.jerk import Jerk
+    from kuchka.quantities.kinematics.snap import Snap
+    from kuchka.quantities.kinematics.time_fourth_power import TimeFourthPower
     from kuchka.quantities.kinematics.time_squared import TimeSquared
+    from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.proportion import Proportion
@@ -48,7 +51,11 @@ class TimeCubed(LinearQuantity):
     @overload
     def __mul__(self, other: Proportion) -> TimeCubed: ...
     @overload
+    def __mul__(self, other: Snap) -> Velocity: ...
+    @overload
     def __mul__(self, other: SpecificPower) -> Area: ...
+    @overload
+    def __mul__(self, other: Time) -> TimeFourthPower: ...
     @overload
     def __mul__(self, other: Numeric) -> TimeCubed: ...
     @overload
@@ -62,11 +69,15 @@ class TimeCubed(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: Frequency) -> TimeFourthPower: ...
+    @overload
     def __truediv__(self, other: Proportion) -> TimeCubed: ...
     @overload
     def __truediv__(self, other: Time) -> TimeSquared: ...
     @overload
     def __truediv__(self, other: TimeCubed) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: TimeFourthPower) -> Frequency: ...
     @overload
     def __truediv__(self, other: TimeSquared) -> Time: ...
     @overload
