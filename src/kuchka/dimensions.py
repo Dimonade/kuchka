@@ -173,6 +173,10 @@ ANGULAR_VELOCITY_SQUARED = ANGULAR_VELOCITY * ANGULAR_VELOCITY
 """∠² T⁻²: the square of an angular velocity, so `omega * omega * I` is an energy."""
 TIME_SQUARED = TIME * TIME
 """T²: the square of a duration, so `t * t * g` is a length."""
+TIME_CUBED = TIME_SQUARED * TIME
+"""T³: the cube of a duration, so `j * t * t * t` is a length."""
+JERK = ACCELERATION / TIME
+"""T⁻³ L: the rate of change of an acceleration, so `j * t` is an acceleration."""
 TORQUE = ENERGY / ANGLE
 FIRST_MOMENT_OF_MASS = MASS * LENGTH
 MOMENT_OF_INERTIA = TORQUE / ANGULAR_ACCELERATION
@@ -238,6 +242,7 @@ __all__ = [
     "ILLUMINANCE",
     "IMPULSE",
     "INDUCTANCE",
+    "JERK",
     "LENGTH",
     "LUMINANCE",
     "LUMINOUS_EFFICACY",
@@ -274,6 +279,7 @@ __all__ = [
     "SURFACE_ACTIVITY",
     "TEMPERATURE_DELTA",
     "TIME",
+    "TIME_CUBED",
     "TIME_SQUARED",
     "TORQUE",
     "VELOCITY",

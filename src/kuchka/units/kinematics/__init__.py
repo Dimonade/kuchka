@@ -13,12 +13,16 @@ from kuchka.units.kinematics import acceleration
 from kuchka.units.kinematics import angular_acceleration
 from kuchka.units.kinematics import angular_velocity
 from kuchka.units.kinematics import angular_velocity_squared
+from kuchka.units.kinematics import jerk
+from kuchka.units.kinematics import time_cubed
 from kuchka.units.kinematics import time_squared
 from kuchka.units.kinematics import velocity
 from kuchka.units.kinematics.acceleration import *
 from kuchka.units.kinematics.angular_acceleration import *
 from kuchka.units.kinematics.angular_velocity import *
 from kuchka.units.kinematics.angular_velocity_squared import *
+from kuchka.units.kinematics.jerk import *
+from kuchka.units.kinematics.time_cubed import *
 from kuchka.units.kinematics.time_squared import *
 from kuchka.units.kinematics.velocity import *
 
@@ -27,5 +31,7 @@ __all__ += acceleration.__all__
 __all__ += angular_acceleration.__all__
 __all__ += angular_velocity.__all__
 __all__ += angular_velocity_squared.__all__
+__all__ += jerk.__all__
+__all__ += time_cubed.__all__
 __all__ += time_squared.__all__
 __all__ += velocity.__all__
