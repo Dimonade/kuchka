@@ -4,12 +4,16 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import ClassVar
+from typing import Self
 from typing import overload
 
 from kuchka.dimensions import HEAT_CAPACITY
+from kuchka.errors import IncompatibleDimensionError
+from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.registry import _register
+from kuchka.quantities.thermal import Temperature
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -127,6 +131,8 @@ class Entropy(LinearQuantity):
     `Entropy`.
     `to_heat_capacity()` and `HeatCapacity.to_entropy()` move between the two, for the
     products that are real, such as the thermal energy `k * T`.
+    `Entropy.from_heat(heat, temperature)` is the entropy a heat carries at an absolute
+    temperature, `dS = Q / T`.
     """
 
     dimension: ClassVar[Dimension] = HEAT_CAPACITY
@@ -173,6 +179,39 @@ class Entropy(LinearQuantity):
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
+
+    @classmethod
+    def from_heat(cls, heat: Energy, temperature: Temperature) -> Self:
+        """Return the entropy a heat carries at an absolute temperature.
+
+            Entropy.from_heat(Joule(300), Kelvin(300)) == JoulePerKelvin(1).to_entropy()
+
+        This is `dS = Q / T` for heat exchanged reversibly at one temperature.
+        The temperature is a reading on any scale, taken from absolute zero, so
+        `Celsius(27)` and `Kelvin(300.15)` give the same entropy.
+        `Energy / Temperature` alone has no result, because a temperature is a point
+        and not an interval.
+
+        Raises
+        ------
+        IncompatibleDimensionError
+            If `heat` is not an `Energy` or `temperature` is not a `Temperature`.
+        InvalidMeasurementError
+            If the temperature is at absolute zero, where `Q / T` has no value.
+
+        """
+        from kuchka.quantities.mechanics.energy import Energy  # noqa: PLC0415 -- Energy's module reaches this one through SpecificEnergy
+
+        if not isinstance(heat, Energy) or not isinstance(temperature, Temperature):
+            raise IncompatibleDimensionError("build an entropy from", heat, temperature)
+        kelvin = temperature.kelvin
+        if kelvin <= 0:
+            msg = (
+                f"cannot build an entropy at a temperature of {float(kelvin)} K: "
+                "Q / T has no value at absolute zero."
+            )
+            raise InvalidMeasurementError(msg)
+        return cls(heat._magnitude / kelvin, cls._canonical_unit)  # noqa: SLF001 -- same-package arithmetic on canonical magnitudes
 
     def to_heat_capacity(self) -> HeatCapacity:
         """View this entropy as a `HeatCapacity`, in the same joules per kelvin.

@@ -4,12 +4,15 @@ from __future__ import annotations
 
 import pytest
 
+from kuchka import Celsius
 from kuchka import DeltaKelvin
 from kuchka import Energy
 from kuchka import Entropy
 from kuchka import HeatCapacity
 from kuchka import IncompatibleDimensionError
+from kuchka import InvalidMeasurementError
 from kuchka import Joule
+from kuchka import Kelvin
 from kuchka import Kilogram
 from kuchka import Mass
 from kuchka import Proportion
@@ -118,3 +121,44 @@ def test_the_derived_tables_accept_what_their_origin_accepts() -> None:
     assert set(specific_entropy.SPECIFIC_ENTROPY_UNITS) == set(
         shc.SPECIFIC_HEAT_CAPACITY_UNITS
     )
+
+
+def test_a_heat_at_an_absolute_temperature_carries_an_entropy() -> None:
+    change = Entropy.from_heat(Joule(300), Kelvin(300))
+    assert type(change) is Entropy
+    assert change == hc.JoulePerKelvin(1).to_entropy()
+    assert repr(change) == "1 J/K"
+
+
+def test_the_entropy_of_a_heat_is_exact() -> None:
+    change = Entropy.from_heat(Joule(1), Kelvin(3))
+    assert change == hc.JoulePerKelvin(1).to_entropy() / 3
+
+
+def test_the_entropy_of_a_heat_does_not_depend_on_the_temperature_scale() -> None:
+    assert Entropy.from_heat(Joule(300), Celsius(26.85)) == Entropy.from_heat(
+        Joule(300), Kelvin(300)
+    )
+
+
+def test_a_heat_taken_out_gives_a_negative_entropy_change() -> None:
+    assert Entropy.from_heat(Joule(-300), Kelvin(300)) == (
+        hc.JoulePerKelvin(-1).to_entropy()
+    )
+
+
+def test_a_temperature_at_absolute_zero_has_no_entropy_of_heat() -> None:
+    with pytest.raises(InvalidMeasurementError, match="absolute zero"):
+        Entropy.from_heat(Joule(1), Kelvin(0))
+
+
+def test_a_temperature_below_absolute_zero_cannot_be_built() -> None:
+    with pytest.raises(InvalidMeasurementError):
+        Entropy.from_heat(Joule(1), Kelvin(-1))
+
+
+def test_entropy_from_heat_wants_an_energy_and_a_temperature() -> None:
+    with pytest.raises(IncompatibleDimensionError):
+        Entropy.from_heat(Kelvin(300), Joule(300))  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
+    with pytest.raises(IncompatibleDimensionError):
+        Entropy.from_heat(Joule(300), DeltaKelvin(300))  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
