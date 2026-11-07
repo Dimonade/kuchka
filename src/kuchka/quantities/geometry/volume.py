@@ -20,6 +20,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
     from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
     from kuchka.quantities.chemistry.molar_volume import MolarVolume
+    from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.volume_charge_density import (
+        VolumeChargeDensity,
+    )
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
@@ -92,6 +96,8 @@ class Volume(LinearQuantity):
     def __mul__(self, other: Proportion) -> Volume: ...
     @overload
     def __mul__(self, other: SurfaceActivity) -> Velocity: ...
+    @overload
+    def __mul__(self, other: VolumeChargeDensity) -> Charge: ...
     @overload
     def __mul__(self, other: Numeric) -> Volume: ...
     @overload

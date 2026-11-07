@@ -20,12 +20,22 @@ if TYPE_CHECKING:
     from kuchka.quantities.angular import AngularDisplacement
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
+    from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.inductance import Inductance
+    from kuchka.quantities.electromagnetics.linear_charge_density import (
+        LinearChargeDensity,
+    )
     from kuchka.quantities.electromagnetics.magnetic_field_strength import (
         MagneticFieldStrength,
     )
     from kuchka.quantities.electromagnetics.permeability import Permeability
     from kuchka.quantities.electromagnetics.permittivity import Permittivity
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        SurfaceChargeDensity,
+    )
+    from kuchka.quantities.electromagnetics.volume_charge_density import (
+        VolumeChargeDensity,
+    )
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
@@ -89,6 +99,8 @@ class Length(LinearQuantity):
     @overload
     def __mul__(self, other: Length) -> Area: ...
     @overload
+    def __mul__(self, other: LinearChargeDensity) -> Charge: ...
+    @overload
     def __mul__(self, other: MagneticFieldStrength) -> Current: ...
     @overload
     def __mul__(self, other: Mass) -> FirstMomentOfMass: ...
@@ -98,6 +110,10 @@ class Length(LinearQuantity):
     def __mul__(self, other: Permittivity) -> Capacitance: ...
     @overload
     def __mul__(self, other: Proportion) -> Length: ...
+    @overload
+    def __mul__(self, other: SurfaceChargeDensity) -> LinearChargeDensity: ...
+    @overload
+    def __mul__(self, other: VolumeChargeDensity) -> SurfaceChargeDensity: ...
     @overload
     def __mul__(self, other: Numeric) -> Length: ...
     @overload

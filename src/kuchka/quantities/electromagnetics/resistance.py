@@ -26,7 +26,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.conductance import Conductance
     from kuchka.quantities.electromagnetics.inductance import Inductance
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
+    from kuchka.quantities.electromagnetics.magnetic_flux_density import (
+        MagneticFluxDensity,
+    )
     from kuchka.quantities.electromagnetics.permeability import Permeability
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        SurfaceChargeDensity,
+    )
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.proportion import Proportion
@@ -51,6 +57,8 @@ class Resistance(LinearQuantity):
     def __mul__(self, other: Current) -> Voltage: ...
     @overload
     def __mul__(self, other: Proportion) -> Resistance: ...
+    @overload
+    def __mul__(self, other: SurfaceChargeDensity) -> MagneticFluxDensity: ...
     @overload
     def __mul__(self, other: Time) -> Inductance: ...
     @overload

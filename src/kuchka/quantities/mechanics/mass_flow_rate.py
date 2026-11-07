@@ -21,10 +21,14 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molar_mass import MolarMass
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.magnetic_flux_density import (
         MagneticFluxDensity,
     )
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        SurfaceChargeDensity,
+    )
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.density import Density
@@ -78,6 +82,8 @@ class MassFlowRate(LinearQuantity):
     @overload
     def __truediv__(self, other: Frequency) -> Mass: ...
     @overload
+    def __truediv__(self, other: MagneticFlux) -> SurfaceChargeDensity: ...
+    @overload
     def __truediv__(self, other: MagneticFluxDensity) -> Charge: ...
     @overload
     def __truediv__(self, other: Mass) -> Frequency: ...
@@ -89,6 +95,8 @@ class MassFlowRate(LinearQuantity):
     def __truediv__(self, other: MolarMass) -> MolarFlowRate: ...
     @overload
     def __truediv__(self, other: Proportion) -> MassFlowRate: ...
+    @overload
+    def __truediv__(self, other: SurfaceChargeDensity) -> MagneticFlux: ...
     @overload
     def __truediv__(self, other: VolumetricFlowRate) -> Density: ...
     @overload

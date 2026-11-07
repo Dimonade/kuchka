@@ -22,6 +22,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.linear_charge_density import (
+        LinearChargeDensity,
+    )
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.magnetic_flux_density import (
         MagneticFluxDensity,
@@ -29,7 +32,16 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        SurfaceChargeDensity,
+    )
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.electromagnetics.volume_charge_density import (
+        VolumeChargeDensity,
+    )
+    from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.geometry.volume import Volume
+    from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
@@ -75,6 +87,8 @@ class Charge(LinearQuantity):
     @overload
     def __truediv__(self, other: AmountOfSubstance) -> MolarCharge: ...
     @overload
+    def __truediv__(self, other: Area) -> SurfaceChargeDensity: ...
+    @overload
     def __truediv__(self, other: Capacitance) -> Voltage: ...
     @overload
     def __truediv__(self, other: Charge) -> Proportion: ...
@@ -82,6 +96,10 @@ class Charge(LinearQuantity):
     def __truediv__(self, other: Conductance) -> MagneticFlux: ...
     @overload
     def __truediv__(self, other: Current) -> Time: ...
+    @overload
+    def __truediv__(self, other: Length) -> LinearChargeDensity: ...
+    @overload
+    def __truediv__(self, other: LinearChargeDensity) -> Length: ...
     @overload
     def __truediv__(self, other: MagneticFlux) -> Conductance: ...
     @overload
@@ -93,9 +111,15 @@ class Charge(LinearQuantity):
     @overload
     def __truediv__(self, other: SpecificCharge) -> Mass: ...
     @overload
+    def __truediv__(self, other: SurfaceChargeDensity) -> Area: ...
+    @overload
     def __truediv__(self, other: Time) -> Current: ...
     @overload
     def __truediv__(self, other: Voltage) -> Capacitance: ...
+    @overload
+    def __truediv__(self, other: Volume) -> VolumeChargeDensity: ...
+    @overload
+    def __truediv__(self, other: VolumeChargeDensity) -> Volume: ...
     @overload
     def __truediv__(self, other: Numeric) -> Charge: ...
     @overload

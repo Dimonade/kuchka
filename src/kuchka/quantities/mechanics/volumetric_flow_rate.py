@@ -19,6 +19,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
     from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
     from kuchka.quantities.chemistry.molar_volume import MolarVolume
+    from kuchka.quantities.current import Current
+    from kuchka.quantities.electromagnetics.volume_charge_density import (
+        VolumeChargeDensity,
+    )
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
@@ -55,6 +59,8 @@ class VolumetricFlowRate(LinearQuantity):
     def __mul__(self, other: SurfaceActivity) -> Acceleration: ...
     @overload
     def __mul__(self, other: Time) -> Volume: ...
+    @overload
+    def __mul__(self, other: VolumeChargeDensity) -> Current: ...
     @overload
     def __mul__(self, other: Numeric) -> VolumetricFlowRate: ...
     @overload

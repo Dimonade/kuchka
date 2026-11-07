@@ -18,9 +18,13 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.amount import AmountOfSubstance
     from kuchka.quantities.chemistry.molality import Molality
+    from kuchka.quantities.chemistry.molar_charge import MolarCharge
     from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
     from kuchka.quantities.chemistry.molar_mass import MolarMass
     from kuchka.quantities.chemistry.molar_volume import MolarVolume
+    from kuchka.quantities.electromagnetics.volume_charge_density import (
+        VolumeChargeDensity,
+    )
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.mechanics.density import Density
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
@@ -34,6 +38,8 @@ class MolarConcentration(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: MolarCharge) -> VolumeChargeDensity: ...
     @overload
     def __mul__(self, other: MolarMass) -> Density: ...
     @overload

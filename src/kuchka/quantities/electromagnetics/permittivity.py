@@ -18,6 +18,10 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.linear_charge_density import (
+        LinearChargeDensity,
+    )
+    from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.proportion import Proportion
@@ -36,6 +40,8 @@ class Permittivity(LinearQuantity):
     def __mul__(self, other: Proportion) -> Permittivity: ...
     @overload
     def __mul__(self, other: Velocity) -> Conductance: ...
+    @overload
+    def __mul__(self, other: Voltage) -> LinearChargeDensity: ...
     @overload
     def __mul__(self, other: Numeric) -> Permittivity: ...
     @overload

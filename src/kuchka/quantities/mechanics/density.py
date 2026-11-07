@@ -20,6 +20,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
     from kuchka.quantities.chemistry.molar_mass import MolarMass
     from kuchka.quantities.chemistry.molar_volume import MolarVolume
+    from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
+    from kuchka.quantities.electromagnetics.volume_charge_density import (
+        VolumeChargeDensity,
+    )
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
@@ -48,6 +52,8 @@ class Density(LinearQuantity):
     def __mul__(self, other: Proportion) -> Density: ...
     @overload
     def __mul__(self, other: SpecificActivity) -> ActivityConcentration: ...
+    @overload
+    def __mul__(self, other: SpecificCharge) -> VolumeChargeDensity: ...
     @overload
     def __mul__(self, other: SpecificEnergy) -> EnergyDensity: ...
     @overload
