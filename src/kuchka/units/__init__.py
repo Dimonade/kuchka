@@ -67,6 +67,7 @@ from kuchka.units.electromagnetics.charge import *
 from kuchka.units.electromagnetics.conductance import *
 from kuchka.units.electromagnetics.impedance import *
 from kuchka.units.electromagnetics.inductance import *
+from kuchka.units.electromagnetics.linear_charge_density import *
 from kuchka.units.electromagnetics.magnetic_field_strength import *
 from kuchka.units.electromagnetics.magnetic_flux import *
 from kuchka.units.electromagnetics.magnetic_flux_density import *
@@ -77,7 +78,9 @@ from kuchka.units.electromagnetics.reactance import *
 from kuchka.units.electromagnetics.resistance import *
 from kuchka.units.electromagnetics.specific_charge import *
 from kuchka.units.electromagnetics.specific_current import *
+from kuchka.units.electromagnetics.surface_charge_density import *
 from kuchka.units.electromagnetics.voltage import *
+from kuchka.units.electromagnetics.volume_charge_density import *
 from kuchka.units.geometry.area import *
 from kuchka.units.geometry.volume import *
 from kuchka.units.information.data import *
@@ -210,6 +213,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Instant: INSTANT_UNITS,
     quantities.Jerk: JERK_UNITS,
     quantities.Length: LENGTH_UNITS,
+    quantities.LinearChargeDensity: LINEAR_CHARGE_DENSITY_UNITS,
     quantities.LogarithmicRatio: LOGARITHMIC_RATIO_UNITS,
     quantities.Luminance: LUMINANCE_UNITS,
     quantities.LuminousEfficacy: LUMINOUS_EFFICACY_UNITS,
@@ -234,6 +238,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.SpecificHeatCapacity: SPECIFIC_HEAT_CAPACITY_UNITS,
     quantities.SpecificPower: SPECIFIC_POWER_UNITS,
     quantities.SurfaceActivity: SURFACE_ACTIVITY_UNITS,
+    quantities.SurfaceChargeDensity: SURFACE_CHARGE_DENSITY_UNITS,
     quantities.Stress: STRESS_UNITS,
     quantities.Proportion: PROPORTION_UNITS,
     quantities.Reactance: REACTANCE_UNITS,
@@ -251,6 +256,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Velocity: VELOCITY_UNITS,
     quantities.Voltage: VOLTAGE_UNITS,
     quantities.Volume: VOLUME_UNITS,
+    quantities.VolumeChargeDensity: VOLUME_CHARGE_DENSITY_UNITS,
     quantities.VolumetricFlowRate: VOLUMETRIC_FLOW_RATE_UNITS,
 }
 

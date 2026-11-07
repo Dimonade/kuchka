@@ -50,6 +50,7 @@ from kuchka.quantities import Inductance
 from kuchka.quantities import Instant
 from kuchka.quantities import Jerk
 from kuchka.quantities import Length
+from kuchka.quantities import LinearChargeDensity
 from kuchka.quantities import LogarithmicRatio
 from kuchka.quantities import Luminance
 from kuchka.quantities import LuminousEfficacy
@@ -95,6 +96,7 @@ from kuchka.quantities import SpecificHeatCapacity
 from kuchka.quantities import SpecificPower
 from kuchka.quantities import Stress
 from kuchka.quantities import SurfaceActivity
+from kuchka.quantities import SurfaceChargeDensity
 from kuchka.quantities import Temperature
 from kuchka.quantities import TemperatureDelta
 from kuchka.quantities import Time
@@ -106,11 +108,13 @@ from kuchka.quantities import Velocity
 from kuchka.quantities import VelocitySquared
 from kuchka.quantities import Voltage
 from kuchka.quantities import Volume
+from kuchka.quantities import VolumeChargeDensity
 from kuchka.quantities import VolumetricFlowRate
 from kuchka.units import Acre
 from kuchka.units import Ampere
 from kuchka.units import AmpereHour
 from kuchka.units import AmpereHourPerKilogram
+from kuchka.units import AmpereHourPerLitre
 from kuchka.units import AmperePerKilogram
 from kuchka.units import AmperePerMetre
 from kuchka.units import AmpereSecond
@@ -146,8 +150,13 @@ from kuchka.units import CentigrayPerMinute
 from kuchka.units import Centimeter
 from kuchka.units import Centimetre
 from kuchka.units import Coulomb
+from kuchka.units import CoulombPerCubicCentimetre
+from kuchka.units import CoulombPerCubicMetre
 from kuchka.units import CoulombPerKilogram
+from kuchka.units import CoulombPerMetre
 from kuchka.units import CoulombPerMole
+from kuchka.units import CoulombPerSquareCentimetre
+from kuchka.units import CoulombPerSquareMetre
 from kuchka.units import CubicCentimeter
 from kuchka.units import CubicCentimeterPerMole
 from kuchka.units import CubicCentimetre
@@ -429,7 +438,11 @@ from kuchka.units import Microampere
 from kuchka.units import MicroamperePerKilogram
 from kuchka.units import MicroamperePerMetre
 from kuchka.units import Microcoulomb
+from kuchka.units import MicrocoulombPerCubicMetre
 from kuchka.units import MicrocoulombPerKilogram
+from kuchka.units import MicrocoulombPerMetre
+from kuchka.units import MicrocoulombPerSquareCentimetre
+from kuchka.units import MicrocoulombPerSquareMetre
 from kuchka.units import Microcurie
 from kuchka.units import Microelectronvolt
 from kuchka.units import Microfarad
@@ -475,6 +488,7 @@ from kuchka.units import MilePerHour
 from kuchka.units import Milliampere
 from kuchka.units import MilliampereHour
 from kuchka.units import MilliampereHourPerGram
+from kuchka.units import MilliampereHourPerSquareCentimetre
 from kuchka.units import MilliamperePerKilogram
 from kuchka.units import MilliamperePerMetre
 from kuchka.units import MilliampereSecond
@@ -483,7 +497,10 @@ from kuchka.units import Millibecquerel
 from kuchka.units import MillibecquerelPerCubicMetre
 from kuchka.units import MillicandelaPerSquareMetre
 from kuchka.units import Millicoulomb
+from kuchka.units import MillicoulombPerCubicMetre
 from kuchka.units import MillicoulombPerKilogram
+from kuchka.units import MillicoulombPerMetre
+from kuchka.units import MillicoulombPerSquareMetre
 from kuchka.units import Millicurie
 from kuchka.units import Millielectronvolt
 from kuchka.units import Millifarad
@@ -561,6 +578,9 @@ from kuchka.units import MolePerMinute
 from kuchka.units import MolePerSecond
 from kuchka.units import Nanoampere
 from kuchka.units import Nanocoulomb
+from kuchka.units import NanocoulombPerCubicMetre
+from kuchka.units import NanocoulombPerMetre
+from kuchka.units import NanocoulombPerSquareMetre
 from kuchka.units import Nanofarad
 from kuchka.units import NanofaradPerMetre
 from kuchka.units import Nanogauss
@@ -618,6 +638,7 @@ from kuchka.units import Petawatt
 from kuchka.units import Phot
 from kuchka.units import Picoampere
 from kuchka.units import Picocoulomb
+from kuchka.units import PicocoulombPerMetre
 from kuchka.units import Picocurie
 from kuchka.units import PicocuriePerGram
 from kuchka.units import PicocuriePerLitre
@@ -743,6 +764,7 @@ __all__ = [
     "Ampere",
     "AmpereHour",
     "AmpereHourPerKilogram",
+    "AmpereHourPerLitre",
     "AmperePerKilogram",
     "AmperePerMetre",
     "AmpereSecond",
@@ -793,8 +815,13 @@ __all__ = [
     "Conductance",
     "ConvertibleToFrequency",
     "Coulomb",
+    "CoulombPerCubicCentimetre",
+    "CoulombPerCubicMetre",
     "CoulombPerKilogram",
+    "CoulombPerMetre",
     "CoulombPerMole",
+    "CoulombPerSquareCentimetre",
+    "CoulombPerSquareMetre",
     "CubicCentimeter",
     "CubicCentimeterPerMole",
     "CubicCentimetre",
@@ -1040,6 +1067,7 @@ __all__ = [
     "Knot",
     "Length",
     "LightYear",
+    "LinearChargeDensity",
     "Liter",
     "LiterPerMinute",
     "LiterPerMole",
@@ -1113,7 +1141,11 @@ __all__ = [
     "MicroamperePerKilogram",
     "MicroamperePerMetre",
     "Microcoulomb",
+    "MicrocoulombPerCubicMetre",
     "MicrocoulombPerKilogram",
+    "MicrocoulombPerMetre",
+    "MicrocoulombPerSquareCentimetre",
+    "MicrocoulombPerSquareMetre",
     "Microcurie",
     "Microelectronvolt",
     "Microfarad",
@@ -1159,6 +1191,7 @@ __all__ = [
     "Milliampere",
     "MilliampereHour",
     "MilliampereHourPerGram",
+    "MilliampereHourPerSquareCentimetre",
     "MilliamperePerKilogram",
     "MilliamperePerMetre",
     "MilliampereSecond",
@@ -1167,7 +1200,10 @@ __all__ = [
     "MillibecquerelPerCubicMetre",
     "MillicandelaPerSquareMetre",
     "Millicoulomb",
+    "MillicoulombPerCubicMetre",
     "MillicoulombPerKilogram",
+    "MillicoulombPerMetre",
+    "MillicoulombPerSquareMetre",
     "Millicurie",
     "Millielectronvolt",
     "Millifarad",
@@ -1256,6 +1292,9 @@ __all__ = [
     "Momentum",
     "Nanoampere",
     "Nanocoulomb",
+    "NanocoulombPerCubicMetre",
+    "NanocoulombPerMetre",
+    "NanocoulombPerSquareMetre",
     "Nanofarad",
     "NanofaradPerMetre",
     "Nanogauss",
@@ -1315,6 +1354,7 @@ __all__ = [
     "Phot",
     "Picoampere",
     "Picocoulomb",
+    "PicocoulombPerMetre",
     "Picocurie",
     "PicocuriePerGram",
     "PicocuriePerLitre",
@@ -1405,6 +1445,7 @@ __all__ = [
     "Stilb",
     "Stress",
     "SurfaceActivity",
+    "SurfaceChargeDensity",
     "Tebibit",
     "TebibitPerSecond",
     "Tebibyte",
@@ -1448,6 +1489,7 @@ __all__ = [
     "VoltAmpere",
     "Voltage",
     "Volume",
+    "VolumeChargeDensity",
     "VolumetricFlowRate",
     "Watt",
     "WattHour",
