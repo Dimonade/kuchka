@@ -14,6 +14,7 @@ from kuchka.quantities import AmountOfSubstance
 from kuchka.quantities import Angle
 from kuchka.quantities import AngularAcceleration
 from kuchka.quantities import AngularDisplacement
+from kuchka.quantities import AngularJerk
 from kuchka.quantities import AngularMomentum
 from kuchka.quantities import AngularVelocity
 from kuchka.quantities import AngularVelocitySquared
@@ -176,6 +177,7 @@ from kuchka.units import Decimetre
 from kuchka.units import Degree
 from kuchka.units import DegreeDisplacement
 from kuchka.units import DegreePerSecond
+from kuchka.units import DegreePerSecondCubed
 from kuchka.units import DegreePerSecondSquared
 from kuchka.units import DegreeSquaredPerSecondSquared
 from kuchka.units import DeltaCelsius
@@ -647,6 +649,7 @@ from kuchka.units import Rad
 from kuchka.units import Radian
 from kuchka.units import RadianDisplacement
 from kuchka.units import RadianPerSecond
+from kuchka.units import RadianPerSecondCubed
 from kuchka.units import RadianPerSecondSquared
 from kuchka.units import RadianSquaredPerSecondSquared
 from kuchka.units import RadPerHour
@@ -710,6 +713,7 @@ from kuchka.units import TonnePerHour
 from kuchka.units import Turn
 from kuchka.units import TurnDisplacement
 from kuchka.units import TurnPerSecond
+from kuchka.units import TurnPerSecondCubed
 from kuchka.units import TurnPerSecondSquared
 from kuchka.units import TurnSquaredPerSecondSquared
 from kuchka.units import UsGallon
@@ -745,6 +749,7 @@ __all__ = [
     "Angle",
     "AngularAcceleration",
     "AngularDisplacement",
+    "AngularJerk",
     "AngularMomentum",
     "AngularVelocity",
     "AngularVelocitySquared",
@@ -822,6 +827,7 @@ __all__ = [
     "Degree",
     "DegreeDisplacement",
     "DegreePerSecond",
+    "DegreePerSecondCubed",
     "DegreePerSecondSquared",
     "DegreeSquaredPerSecondSquared",
     "DeltaCelsius",
@@ -1344,6 +1350,7 @@ __all__ = [
     "Radian",
     "RadianDisplacement",
     "RadianPerSecond",
+    "RadianPerSecondCubed",
     "RadianPerSecondSquared",
     "RadianSquaredPerSecondSquared",
     "Rankine",
@@ -1429,6 +1436,7 @@ __all__ = [
     "Turn",
     "TurnDisplacement",
     "TurnPerSecond",
+    "TurnPerSecondCubed",
     "TurnPerSecondSquared",
     "TurnSquaredPerSecondSquared",
     "UsGallon",
