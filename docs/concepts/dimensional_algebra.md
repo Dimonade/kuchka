@@ -264,3 +264,11 @@ isinstance(rate, Frequency)
 ```
 
 `BaudRate` has no automatic reciprocal relationship because baud counts symbols per second, not bits or cycles.
+
+## When a name earns a kind
+
+A name earns a kind when it changes an operation or a result.
+`Pressure` and `EnergyDensity` return different results from `Force / Area` and `Energy / Volume`, and `Entropy` refuses the `* TemperatureDelta` that `HeatCapacity` accepts.
+A name that changes neither belongs to the variable: a wavelength is a `Length`, and `wavelength: Length` says so.
+Wavenumber, curvature, optical power, and spatial frequency are all m⁻¹, and any number of concepts can claim a dimension, so a kind for each would turn the library into a catalogue of topics.
+Naming the concept stays with the code that uses it.

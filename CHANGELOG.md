@@ -140,6 +140,11 @@ A radius stays a `Length`; bridges, declared rules across the angle axis, carry 
   `AngularJerk` (rad/s³, tr/s³, °/s³), the rate of change of an angular acceleration: `AngularAcceleration / Time` and `AngularAcceleration * Frequency` are an `AngularJerk`, and `AngularJerk * Length` is the tangential `Jerk`, a bridge like the one of `AngularAcceleration`.
 - Each of these raised `UnrepresentableDimensionError` before.
 
+#### Entropy from heat
+
+- **Entropy from heat:**
+  `Entropy.from_heat(heat, temperature)` is `dS = Q / T` for an `Energy` and an absolute `Temperature` on any scale, and raises `InvalidMeasurementError` at absolute zero.
+
 #### New constants
 
 - **Boltzmann Constant (k_B) and Molar Gas Constant (R)**
