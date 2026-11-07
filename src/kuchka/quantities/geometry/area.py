@@ -21,6 +21,7 @@ if TYPE_CHECKING:
         MagneticFluxDensity,
     )
     from kuchka.quantities.geometry.volume import Volume
+    from kuchka.quantities.kinematics.time_cubed import TimeCubed
     from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
@@ -31,6 +32,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+    from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.photometry.illuminance import Illuminance
@@ -92,6 +94,10 @@ class Area(LinearQuantity):
     def __truediv__(self, other: Proportion) -> Area: ...
     @overload
     def __truediv__(self, other: SpecificEnergy) -> TimeSquared: ...
+    @overload
+    def __truediv__(self, other: SpecificPower) -> TimeCubed: ...
+    @overload
+    def __truediv__(self, other: TimeCubed) -> SpecificPower: ...
     @overload
     def __truediv__(self, other: VelocitySquared) -> TimeSquared: ...
     @overload

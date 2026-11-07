@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.jerk import Jerk
     from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
@@ -28,6 +29,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
+    from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.specific_activity import SpecificActivity
     from kuchka.quantities.temporal import Time
@@ -52,6 +54,8 @@ class FirstMomentOfMass(LinearQuantity):
     def __mul__(self, other: Acceleration) -> Energy: ...
     @overload
     def __mul__(self, other: AngularVelocity) -> Momentum: ...
+    @overload
+    def __mul__(self, other: Jerk) -> Power: ...
     @overload
     def __mul__(self, other: Length) -> MomentOfInertia: ...
     @overload

@@ -23,11 +23,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.jerk import Jerk
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.angular_momentum import AngularMomentum
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
@@ -85,6 +87,8 @@ class Power(LinearQuantity):
     @overload
     def __truediv__(self, other: EnergyDensity) -> VolumetricFlowRate: ...
     @overload
+    def __truediv__(self, other: FirstMomentOfMass) -> Jerk: ...
+    @overload
     def __truediv__(self, other: Force) -> Velocity: ...
     @overload
     def __truediv__(self, other: Frequency) -> Energy: ...
@@ -94,6 +98,8 @@ class Power(LinearQuantity):
     def __truediv__(self, other: HeatingRate) -> HeatCapacity: ...
     @overload
     def __truediv__(self, other: Impulse) -> Acceleration: ...
+    @overload
+    def __truediv__(self, other: Jerk) -> FirstMomentOfMass: ...
     @overload
     def __truediv__(self, other: Mass) -> SpecificPower: ...
     @overload
