@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import ClassVar
+from typing import Literal
 from typing import overload
 
 from kuchka.dimensions import TIME_SQUARED
@@ -23,7 +24,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
     from kuchka.quantities.kinematics.jerk import Jerk
+    from kuchka.quantities.kinematics.snap import Snap
     from kuchka.quantities.kinematics.time_cubed import TimeCubed
+    from kuchka.quantities.kinematics.time_fourth_power import TimeFourthPower
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
@@ -63,9 +66,13 @@ class TimeSquared(LinearQuantity):
     @overload
     def __mul__(self, other: Proportion) -> TimeSquared: ...
     @overload
+    def __mul__(self, other: Snap) -> Acceleration: ...
+    @overload
     def __mul__(self, other: SpecificEnergy) -> Area: ...
     @overload
     def __mul__(self, other: Time) -> TimeCubed: ...
+    @overload
+    def __mul__(self, other: TimeSquared) -> TimeFourthPower: ...
     @overload
     def __mul__(self, other: VelocitySquared) -> Area: ...
     @overload
@@ -106,6 +113,18 @@ class TimeSquared(LinearQuantity):
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
+
+    # BEGIN GENERATED __pow__
+    @overload
+    def __pow__(self, exponent: Literal[2]) -> TimeFourthPower: ...
+    @overload
+    def __pow__(self, exponent: int) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __pow__(self, exponent: int) -> LinearQuantity | Fraction:
+        return super().__pow__(exponent)
 
 
 _register(TIME_SQUARED, TimeSquared)

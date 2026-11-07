@@ -35,7 +35,9 @@ if TYPE_CHECKING:
         AngularVelocitySquared,
     )
     from kuchka.quantities.kinematics.jerk import Jerk
+    from kuchka.quantities.kinematics.snap import Snap
     from kuchka.quantities.kinematics.time_cubed import TimeCubed
+    from kuchka.quantities.kinematics.time_fourth_power import TimeFourthPower
     from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mass import Mass
@@ -116,9 +118,13 @@ class Length(LinearQuantity):
     @overload
     def __truediv__(self, other: Proportion) -> Length: ...
     @overload
+    def __truediv__(self, other: Snap) -> TimeFourthPower: ...
+    @overload
     def __truediv__(self, other: Time) -> Velocity: ...
     @overload
     def __truediv__(self, other: TimeCubed) -> Jerk: ...
+    @overload
+    def __truediv__(self, other: TimeFourthPower) -> Snap: ...
     @overload
     def __truediv__(self, other: TimeSquared) -> Acceleration: ...
     @overload

@@ -87,7 +87,9 @@ from kuchka.units.kinematics.angular_acceleration import *
 from kuchka.units.kinematics.angular_velocity import *
 from kuchka.units.kinematics.angular_velocity_squared import *
 from kuchka.units.kinematics.jerk import *
+from kuchka.units.kinematics.snap import *
 from kuchka.units.kinematics.time_cubed import *
+from kuchka.units.kinematics.time_fourth_power import *
 from kuchka.units.kinematics.time_squared import *
 from kuchka.units.kinematics.velocity import *
 from kuchka.units.length import *
@@ -236,11 +238,13 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Resistance: RESISTANCE_UNITS,
     quantities.SampleRate: SAMPLE_RATE_UNITS,
     quantities.SamplingPeriod: SAMPLING_PERIOD_UNITS,
+    quantities.Snap: SNAP_UNITS,
     quantities.SolidAngle: SOLID_ANGLE_UNITS,
     quantities.Temperature: TEMPERATURE_UNITS,
     quantities.TemperatureDelta: TEMPERATURE_DELTA_UNITS,
     quantities.Time: TIME_UNITS,
     quantities.TimeCubed: TIME_CUBED_UNITS,
+    quantities.TimeFourthPower: TIME_FOURTH_POWER_UNITS,
     quantities.TimeSquared: TIME_SQUARED_UNITS,
     quantities.Velocity: VELOCITY_UNITS,
     quantities.Voltage: VOLTAGE_UNITS,

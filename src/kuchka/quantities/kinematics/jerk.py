@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.snap import Snap
     from kuchka.quantities.kinematics.time_cubed import TimeCubed
     from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
@@ -47,6 +48,8 @@ class Jerk(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: FirstMomentOfMass) -> Power: ...
+    @overload
+    def __mul__(self, other: Frequency) -> Snap: ...
     @overload
     def __mul__(self, other: Length) -> SpecificPower: ...
     @overload
@@ -80,7 +83,11 @@ class Jerk(LinearQuantity):
     @overload
     def __truediv__(self, other: Proportion) -> Jerk: ...
     @overload
+    def __truediv__(self, other: Snap) -> Time: ...
+    @overload
     def __truediv__(self, other: SpecificActivity) -> Force: ...
+    @overload
+    def __truediv__(self, other: Time) -> Snap: ...
     @overload
     def __truediv__(self, other: Numeric) -> Jerk: ...
     @overload

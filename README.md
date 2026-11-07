@@ -634,11 +634,13 @@ The units of `kuchka.units.kinematics`.
 | Velocity                 | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`, `Knot`                                                |
 | Acceleration             | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                          |
 | Jerk                     | `MetrePerSecondCubed`, `MillimetrePerSecondCubed`                                                          |
+| Snap                     | `MetrePerSecondFourthPower`, `MillimetrePerSecondFourthPower`                                              |
 | Angular velocity         | `RadianPerSecond`, `DegreePerSecond`, `TurnPerSecond`, `RevolutionPerMinute`                               |
 | Angular acceleration     | `RadianPerSecondSquared`, `DegreePerSecondSquared`, `TurnPerSecondSquared`, `RevolutionPerMinutePerSecond` |
 | Angular velocity squared | `RadianSquaredPerSecondSquared`, `TurnSquaredPerSecondSquared`, `DegreeSquaredPerSecondSquared`            |
 | Time squared             | `NanosecondSquared` through `SecondSquared`, `MinuteSquared`, `HourSquared`                                |
 | Time cubed               | `NanosecondCubed` through `SecondCubed`, `MinuteCubed`, `HourCubed`                                        |
+| Time to the fourth power | `NanosecondFourthPower` through `SecondFourthPower`, `MinuteFourthPower`, `HourFourthPower`                |
 
 ### Mechanics
 
