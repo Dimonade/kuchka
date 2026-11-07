@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.angular_jerk import AngularJerk
     from kuchka.quantities.kinematics.snap import Snap
     from kuchka.quantities.kinematics.time_cubed import TimeCubed
     from kuchka.quantities.kinematics.time_squared import TimeSquared
@@ -74,6 +75,8 @@ class Jerk(LinearQuantity):
     # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Acceleration) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: AngularJerk) -> Length: ...
     @overload
     def __truediv__(self, other: Force) -> SpecificActivity: ...
     @overload

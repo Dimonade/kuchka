@@ -69,6 +69,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.information.data_rate import DataRate
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
+    from kuchka.quantities.kinematics.angular_jerk import AngularJerk
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.angular_velocity_squared import (
         AngularVelocitySquared,
@@ -155,6 +156,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: AngularAcceleration) -> AngularAcceleration: ...
     @overload
     def __mul__(self, other: AngularDisplacement) -> AngularDisplacement: ...
+    @overload
+    def __mul__(self, other: AngularJerk) -> AngularJerk: ...
     @overload
     def __mul__(self, other: AngularMomentum) -> AngularMomentum: ...
     @overload

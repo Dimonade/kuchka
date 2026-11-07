@@ -16,7 +16,9 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.angular import AngularDisplacement
     from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.kinematics.angular_jerk import AngularJerk
     from kuchka.quantities.kinematics.jerk import Jerk
     from kuchka.quantities.kinematics.snap import Snap
     from kuchka.quantities.kinematics.time_fourth_power import TimeFourthPower
@@ -44,6 +46,8 @@ class TimeCubed(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: AngularJerk) -> AngularDisplacement: ...
     @overload
     def __mul__(self, other: Frequency) -> TimeSquared: ...
     @overload

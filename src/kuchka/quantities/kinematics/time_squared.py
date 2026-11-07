@@ -23,6 +23,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
+    from kuchka.quantities.kinematics.angular_jerk import AngularJerk
+    from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.jerk import Jerk
     from kuchka.quantities.kinematics.snap import Snap
     from kuchka.quantities.kinematics.time_cubed import TimeCubed
@@ -57,6 +59,8 @@ class TimeSquared(LinearQuantity):
     def __mul__(self, other: Acceleration) -> Length: ...
     @overload
     def __mul__(self, other: AngularAcceleration) -> AngularDisplacement: ...
+    @overload
+    def __mul__(self, other: AngularJerk) -> AngularVelocity: ...
     @overload
     def __mul__(self, other: Force) -> FirstMomentOfMass: ...
     @overload
