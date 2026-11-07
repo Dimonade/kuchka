@@ -7,6 +7,7 @@ import pytest
 from kuchka import Acceleration
 from kuchka import AngularAcceleration
 from kuchka import AngularDisplacement
+from kuchka import AngularJerk
 from kuchka import AngularVelocity
 from kuchka import AngularVelocitySquared
 from kuchka import Area
@@ -14,6 +15,7 @@ from kuchka import Current
 from kuchka import FirstMomentOfMass
 from kuchka import Force
 from kuchka import Frequency
+from kuchka import Jerk
 from kuchka import Length
 from kuchka import Mass
 from kuchka import MomentOfInertia
@@ -48,6 +50,11 @@ SHIPPED_BRIDGES: dict[tuple[type, str, type], tuple[type, str]] = {
         Length,
         "the radius at a tangential acceleration",
     ),
+    (AngularJerk, "*", Length): (
+        Jerk,
+        "the tangential jerk of a point at a radius",
+    ),
+    (Jerk, "/", AngularJerk): (Length, "the radius at a tangential jerk"),
     (AngularVelocitySquared, "*", Length): (
         Acceleration,
         "the centripetal acceleration of a point turning at a squared rate",

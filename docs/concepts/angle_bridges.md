@@ -55,6 +55,7 @@ The second condition is the one that keeps a bridge a fact about the physics:
 | `MomentOfInertia / Mass`              | yes | one: the square of the radius of gyration                 | yes                |
 | `AngularVelocity * Length`            | yes | one: the tangential speed                                 | yes                |
 | `AngularAcceleration * Length`        | yes | one: the tangential acceleration                          | yes                |
+| `AngularJerk * Length`                | yes | one: the tangential jerk                                  | yes                |
 | `AngularVelocitySquared * Length`     | yes | one: the centripetal acceleration                         | yes                |
 | `Torque / Force`, `Torque / Length`   | yes | one: the lever arm, and the force at it                   | yes                |
 | `AngularVelocity * Velocity`          | yes | one: the centripetal acceleration                         | yes                |
@@ -81,6 +82,7 @@ The dimensions of the rotational quantities are chosen so that dynamics closes b
 | Quantity                 | Dimension    | Units                                | Displays as |
 | ------------------------ | ------------ | ------------------------------------ | ----------- |
 | `AngularAcceleration`    | ∠ T⁻²        | rad/s², tr/s², °/s², rpm/s           | rad/s²      |
+| `AngularJerk`            | ∠ T⁻³        | rad/s³, tr/s³, °/s³                  | rad/s³      |
 | `AngularVelocitySquared` | ∠² T⁻²       | rad²/s², tr²/s², °²/s²               | rad²/s²     |
 | `MomentOfInertia`        | M L² ∠⁻²     | kg·m², kg·cm², g·cm², lb·ft², lb·in² | kg·m²       |
 | `AngularMomentum`        | M L² ∠⁻¹ T⁻¹ | kg·m²/s, N·m·s                       | kg·m²/s     |
