@@ -34,6 +34,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.angular_velocity_squared import (
         AngularVelocitySquared,
     )
+    from kuchka.quantities.kinematics.jerk import Jerk
+    from kuchka.quantities.kinematics.time_cubed import TimeCubed
     from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mass import Mass
@@ -42,6 +44,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+    from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.activity_concentration import ActivityConcentration
     from kuchka.quantities.radiation.surface_activity import SurfaceActivity
@@ -77,6 +80,8 @@ class Length(LinearQuantity):
     @overload
     def __mul__(self, other: Frequency) -> Velocity: ...
     @overload
+    def __mul__(self, other: Jerk) -> SpecificPower: ...
+    @overload
     def __mul__(self, other: Length) -> Area: ...
     @overload
     def __mul__(self, other: MagneticFieldStrength) -> Current: ...
@@ -105,11 +110,15 @@ class Length(LinearQuantity):
     @overload
     def __truediv__(self, other: AngularDisplacement) -> Length: ...
     @overload
+    def __truediv__(self, other: Jerk) -> TimeCubed: ...
+    @overload
     def __truediv__(self, other: Length) -> Proportion: ...
     @overload
     def __truediv__(self, other: Proportion) -> Length: ...
     @overload
     def __truediv__(self, other: Time) -> Velocity: ...
+    @overload
+    def __truediv__(self, other: TimeCubed) -> Jerk: ...
     @overload
     def __truediv__(self, other: TimeSquared) -> Acceleration: ...
     @overload

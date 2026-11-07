@@ -126,6 +126,14 @@ A radius stays a `Length`; bridges, declared rules across the angle axis, carry 
   `AngularVelocitySquared * Length` is the centripetal `Acceleration`, a bridge with the factor `(2 pi) ** 2`, and `Time ** 2` is a `TimeSquared`.
 - `Momentum * Time` and `Impulse * Time` are now a `FirstMomentOfMass`, and `AngularVelocity * Frequency` an `AngularAcceleration`; each raised `UnrepresentableDimensionError` before.
 
+#### Jerk, and the higher orders of time
+
+- **Jerk:**
+  `Jerk` (m/s³, mm/s³) is the rate of change of an acceleration: `Acceleration / Time`, `Acceleration * Frequency`, and `Velocity / TimeSquared` are a `Jerk`, and `Jerk * Time` is an `Acceleration`.
+- **Time cubed:**
+  `TimeCubed` (s³, ms³, µs³, ns³, min³, h³), so `j * t * t * t` and `j * t ** 3` are the same `Length`, and `Time ** 3` has a type.
+- Each of these raised `UnrepresentableDimensionError` before.
+
 #### New constants
 
 - **Boltzmann Constant (k_B) and Molar Gas Constant (R)**

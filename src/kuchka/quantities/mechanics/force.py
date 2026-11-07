@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.jerk import Jerk
     from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
@@ -36,6 +37,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.specific_activity import SpecificActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -51,6 +53,8 @@ class Force(LinearQuantity):
     def __mul__(self, other: Length) -> Energy: ...
     @overload
     def __mul__(self, other: Proportion) -> Force: ...
+    @overload
+    def __mul__(self, other: SpecificActivity) -> Jerk: ...
     @overload
     def __mul__(self, other: Time) -> Impulse: ...
     @overload

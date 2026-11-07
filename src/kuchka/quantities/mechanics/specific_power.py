@@ -21,8 +21,12 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.jerk import Jerk
+    from kuchka.quantities.kinematics.time_cubed import TimeCubed
     from kuchka.quantities.kinematics.velocity import Velocity
+    from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.power import Power
@@ -61,6 +65,8 @@ class SpecificPower(LinearQuantity):
     @overload
     def __mul__(self, other: Time) -> SpecificEnergy: ...
     @overload
+    def __mul__(self, other: TimeCubed) -> Area: ...
+    @overload
     def __mul__(self, other: Numeric) -> SpecificPower: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
@@ -78,6 +84,10 @@ class SpecificPower(LinearQuantity):
     def __truediv__(self, other: Energy) -> SpecificActivity: ...
     @overload
     def __truediv__(self, other: HeatingRate) -> SpecificHeatCapacity: ...
+    @overload
+    def __truediv__(self, other: Jerk) -> Length: ...
+    @overload
+    def __truediv__(self, other: Length) -> Jerk: ...
     @overload
     def __truediv__(self, other: Proportion) -> SpecificPower: ...
     @overload

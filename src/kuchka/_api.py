@@ -47,6 +47,7 @@ from kuchka.quantities import Impedance
 from kuchka.quantities import Impulse
 from kuchka.quantities import Inductance
 from kuchka.quantities import Instant
+from kuchka.quantities import Jerk
 from kuchka.quantities import Length
 from kuchka.quantities import LogarithmicRatio
 from kuchka.quantities import Luminance
@@ -95,6 +96,7 @@ from kuchka.quantities import SurfaceActivity
 from kuchka.quantities import Temperature
 from kuchka.quantities import TemperatureDelta
 from kuchka.quantities import Time
+from kuchka.quantities import TimeCubed
 from kuchka.quantities import TimeSquared
 from kuchka.quantities import Torque
 from kuchka.quantities import Velocity
@@ -250,6 +252,7 @@ from kuchka.units import HenryPerMetre
 from kuchka.units import Hertz
 from kuchka.units import Horsepower
 from kuchka.units import Hour
+from kuchka.units import HourCubed
 from kuchka.units import HourSquared
 from kuchka.units import Inch
 from kuchka.units import Jiffy
@@ -408,9 +411,11 @@ from kuchka.units import MegavoltAmpere
 from kuchka.units import Megawatt
 from kuchka.units import Meter
 from kuchka.units import MeterPerSecond
+from kuchka.units import MeterPerSecondCubed
 from kuchka.units import MeterPerSecondSquared
 from kuchka.units import Metre
 from kuchka.units import MetrePerSecond
+from kuchka.units import MetrePerSecondCubed
 from kuchka.units import MetrePerSecondSquared
 from kuchka.units import MetricHorsepower
 from kuchka.units import Microampere
@@ -447,6 +452,7 @@ from kuchka.units import Microohm
 from kuchka.units import Microroentgen
 from kuchka.units import MicroroentgenPerHour
 from kuchka.units import Microsecond
+from kuchka.units import MicrosecondCubed
 from kuchka.units import MicrosecondSquared
 from kuchka.units import Microsiemens
 from kuchka.units import Microsievert
@@ -494,7 +500,9 @@ from kuchka.units import MillilitrePerMinute
 from kuchka.units import Millilumen
 from kuchka.units import Millilux
 from kuchka.units import Millimeter
+from kuchka.units import MillimeterPerSecondCubed
 from kuchka.units import Millimetre
+from kuchka.units import MillimetrePerSecondCubed
 from kuchka.units import Millimole
 from kuchka.units import MillimolePerKilogram
 from kuchka.units import MillimolePerLiter
@@ -512,6 +520,7 @@ from kuchka.units import MilliremPerHour
 from kuchka.units import Milliroentgen
 from kuchka.units import MilliroentgenPerHour
 from kuchka.units import Millisecond
+from kuchka.units import MillisecondCubed
 from kuchka.units import MillisecondSquared
 from kuchka.units import Millisiemens
 from kuchka.units import Millisievert
@@ -527,6 +536,7 @@ from kuchka.units import MilliwattPerGram
 from kuchka.units import MilliwattPerKilogram
 from kuchka.units import Milliweber
 from kuchka.units import Minute
+from kuchka.units import MinuteCubed
 from kuchka.units import MinuteSquared
 from kuchka.units import Mole
 from kuchka.units import MolePerCubicMeter
@@ -556,6 +566,7 @@ from kuchka.units import Nanomole
 from kuchka.units import NanomolePerLiter
 from kuchka.units import NanomolePerLitre
 from kuchka.units import Nanosecond
+from kuchka.units import NanosecondCubed
 from kuchka.units import NanosecondSquared
 from kuchka.units import Nanosiemens
 from kuchka.units import Nanosievert
@@ -640,6 +651,7 @@ from kuchka.units import RoentgenPerMinute
 from kuchka.units import RoentgenPerSecond
 from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
+from kuchka.units import SecondCubed
 from kuchka.units import SecondSquared
 from kuchka.units import Siemens
 from kuchka.units import Sievert
@@ -890,6 +902,7 @@ __all__ = [
     "Hertz",
     "Horsepower",
     "Hour",
+    "HourCubed",
     "HourSquared",
     "Illuminance",
     "Impedance",
@@ -897,6 +910,7 @@ __all__ = [
     "Inch",
     "Inductance",
     "Instant",
+    "Jerk",
     "Jiffy",
     "Joule",
     "JoulePerCubicMeter",
@@ -1067,9 +1081,11 @@ __all__ = [
     "Megawatt",
     "Meter",
     "MeterPerSecond",
+    "MeterPerSecondCubed",
     "MeterPerSecondSquared",
     "Metre",
     "MetrePerSecond",
+    "MetrePerSecondCubed",
     "MetrePerSecondSquared",
     "MetricHorsepower",
     "Microampere",
@@ -1106,6 +1122,7 @@ __all__ = [
     "Microroentgen",
     "MicroroentgenPerHour",
     "Microsecond",
+    "MicrosecondCubed",
     "MicrosecondSquared",
     "Microsiemens",
     "Microsievert",
@@ -1153,7 +1170,9 @@ __all__ = [
     "Millilumen",
     "Millilux",
     "Millimeter",
+    "MillimeterPerSecondCubed",
     "Millimetre",
+    "MillimetrePerSecondCubed",
     "Millimole",
     "MillimolePerKilogram",
     "MillimolePerLiter",
@@ -1171,6 +1190,7 @@ __all__ = [
     "Milliroentgen",
     "MilliroentgenPerHour",
     "Millisecond",
+    "MillisecondCubed",
     "MillisecondSquared",
     "Millisiemens",
     "Millisievert",
@@ -1186,6 +1206,7 @@ __all__ = [
     "MilliwattPerKilogram",
     "Milliweber",
     "Minute",
+    "MinuteCubed",
     "MinuteSquared",
     "Molality",
     "MolarCharge",
@@ -1226,6 +1247,7 @@ __all__ = [
     "NanomolePerLiter",
     "NanomolePerLitre",
     "Nanosecond",
+    "NanosecondCubed",
     "NanosecondSquared",
     "Nanosiemens",
     "Nanosievert",
@@ -1320,6 +1342,7 @@ __all__ = [
     "SamplesPerSecond",
     "SamplingPeriod",
     "Second",
+    "SecondCubed",
     "SecondSquared",
     "Siemens",
     "Sievert",
@@ -1373,6 +1396,7 @@ __all__ = [
     "ThermochemicalCaloriePerKelvin",
     "ThermochemicalCaloriePerMoleKelvin",
     "Time",
+    "TimeCubed",
     "TimeSquared",
     "Tonne",
     "TonneOfTNT",

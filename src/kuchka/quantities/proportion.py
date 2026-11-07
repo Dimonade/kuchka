@@ -73,6 +73,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.angular_velocity_squared import (
         AngularVelocitySquared,
     )
+    from kuchka.quantities.kinematics.jerk import Jerk
+    from kuchka.quantities.kinematics.time_cubed import TimeCubed
     from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
@@ -214,6 +216,8 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: Inductance) -> Inductance: ...
     @overload
+    def __mul__(self, other: Jerk) -> Jerk: ...
+    @overload
     def __mul__(self, other: Length) -> Length: ...
     @overload
     def __mul__(self, other: Luminance) -> Luminance: ...
@@ -305,6 +309,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: TemperatureDelta) -> TemperatureDelta: ...
     @overload
     def __mul__(self, other: Time) -> Time: ...
+    @overload
+    def __mul__(self, other: TimeCubed) -> TimeCubed: ...
     @overload
     def __mul__(self, other: TimeSquared) -> TimeSquared: ...
     @overload
