@@ -154,7 +154,7 @@ Type checkers see the square and the cube of a type whose power has a type of it
 ## Products of three factors
 
 Python evaluates `a * b * c` as `(a * b) * c`, and each step is a product the registry gives a type.
-The squares in common formulas have kinds of their own (`TimeSquared`, `AngularVelocitySquared`, `VelocitySquared`, `Area`), so those formulas read the same in every order:
+The squares in common formulas have kinds of their own (`TimeSquared`, `TimeCubed`, `AngularVelocitySquared`, `VelocitySquared`, `Area`), so those formulas read the same in every order:
 
 ```python
 from kuchka import Metre

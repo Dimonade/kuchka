@@ -12,8 +12,8 @@ from kuchka import AngularVelocitySquared
 from kuchka import Energy
 from kuchka import Length
 from kuchka import Time
+from kuchka import TimeCubed
 from kuchka import TimeSquared
-from kuchka import UnrepresentableDimensionError
 from kuchka.internal.constants import PI
 from kuchka.units import angular
 from kuchka.units import length
@@ -21,6 +21,7 @@ from kuchka.units.kinematics import acceleration
 from kuchka.units.kinematics import angular_acceleration as angacc
 from kuchka.units.kinematics import angular_velocity as angvel
 from kuchka.units.kinematics import angular_velocity_squared as angvel2
+from kuchka.units.kinematics import time_cubed
 from kuchka.units.kinematics import time_squared
 from kuchka.units.mechanics import energy
 from kuchka.units.mechanics import moment_of_inertia as inertia
@@ -115,9 +116,13 @@ def test_the_squares_display_in_the_units_they_are_written_in() -> None:
     assert str(DURATION * DURATION) == "4 s²"
 
 
-def test_a_cube_of_a_time_has_no_type() -> None:
-    with pytest.raises(UnrepresentableDimensionError):
-        DURATION**3
+def test_a_product_of_three_durations_is_their_cube_in_every_order() -> None:
+    cubed = DURATION * DURATION * DURATION
+    assert type(cubed) is TimeCubed
+    assert cubed == time_cubed.SecondCubed(8)
+    assert cubed == DURATION**3
+    assert cubed == DURATION * DURATION**2
+    assert cubed == DURATION**2 * DURATION
 
 
 def test_an_angle_times_an_angular_acceleration_is_an_angular_velocity_squared() -> (
