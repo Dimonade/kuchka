@@ -175,8 +175,12 @@ TIME_SQUARED = TIME * TIME
 """T²: the square of a duration, so `t * t * g` is a length."""
 TIME_CUBED = TIME_SQUARED * TIME
 """T³: the cube of a duration, so `j * t * t * t` is a length."""
+TIME_FOURTH_POWER = TIME_CUBED * TIME
+"""T⁴: the fourth power of a duration, so `s * t * t * t * t` is a length."""
 JERK = ACCELERATION / TIME
 """T⁻³ L: the rate of change of an acceleration, so `j * t` is an acceleration."""
+SNAP = JERK / TIME
+"""T⁻⁴ L: the rate of change of a jerk, so `s * t` is a jerk."""
 TORQUE = ENERGY / ANGLE
 FIRST_MOMENT_OF_MASS = MASS * LENGTH
 MOMENT_OF_INERTIA = TORQUE / ANGULAR_ACCELERATION
@@ -269,6 +273,7 @@ __all__ = [
     "POWER",
     "PRESSURE",
     "RESISTANCE",
+    "SNAP",
     "SOLID_ANGLE",
     "SPECIFIC_ACTIVITY",
     "SPECIFIC_CHARGE",
@@ -280,6 +285,7 @@ __all__ = [
     "TEMPERATURE_DELTA",
     "TIME",
     "TIME_CUBED",
+    "TIME_FOURTH_POWER",
     "TIME_SQUARED",
     "TORQUE",
     "VELOCITY",
