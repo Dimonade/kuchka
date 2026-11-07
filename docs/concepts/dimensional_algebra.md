@@ -149,7 +149,7 @@ Metre(3) ** 0 == Ratio(1)
 ```
 
 A negative exponent gives the reciprocal of the positive power, and an exponent is an `int`.
-Type checkers see the square and the cube of a type whose power has a type of its own.
+Type checkers see the square, the cube, and the fourth power of a type whose power has a type of its own.
 
 ## Products of three factors
 

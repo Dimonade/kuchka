@@ -51,8 +51,8 @@ OPERATIONS: dict[str, Callable[[LinearQuantity, LinearQuantity], object]] = {
 }
 RECIPROCAL = "__rtruediv__"
 POWER = "__pow__"
-POWERS = (2, 3)
-"""The exponents a power is declared for, the square and the cube."""
+POWERS = (2, 3, 4)
+"""The exponents a power is declared for, the square, the cube, and the fourth power."""
 PARAMETERS = {POWER: "exponent"}
 """The parameter name of a method whose operand is not `other`."""
 FALLBACKS = {POWER: "exponent: int) -> LinearQuantity | Fraction"}
