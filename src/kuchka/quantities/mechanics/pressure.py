@@ -32,6 +32,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.magnetic_flux_density import (
         MagneticFluxDensity,
     )
+    from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.electromagnetics.volume_charge_density import (
+        VolumeChargeDensity,
+    )
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.mechanics.density import Density
     from kuchka.quantities.mechanics.energy import Energy
@@ -99,6 +103,10 @@ class Pressure(LinearQuantity):
     def __truediv__(self, other: SpecificEnergy) -> Density: ...
     @overload
     def __truediv__(self, other: VelocitySquared) -> Density: ...
+    @overload
+    def __truediv__(self, other: Voltage) -> VolumeChargeDensity: ...
+    @overload
+    def __truediv__(self, other: VolumeChargeDensity) -> Voltage: ...
     @overload
     def __truediv__(self, other: Numeric) -> Pressure: ...
     @overload

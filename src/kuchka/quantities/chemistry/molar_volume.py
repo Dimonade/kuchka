@@ -18,10 +18,14 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.amount import AmountOfSubstance
     from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
+    from kuchka.quantities.chemistry.molar_charge import MolarCharge
     from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
     from kuchka.quantities.chemistry.molar_energy import MolarEnergy
     from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
     from kuchka.quantities.chemistry.molar_mass import MolarMass
+    from kuchka.quantities.electromagnetics.volume_charge_density import (
+        VolumeChargeDensity,
+    )
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.mechanics.density import Density
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
@@ -51,6 +55,8 @@ class MolarVolume(LinearQuantity):
     def __mul__(self, other: Pressure) -> MolarEnergy: ...
     @overload
     def __mul__(self, other: Proportion) -> MolarVolume: ...
+    @overload
+    def __mul__(self, other: VolumeChargeDensity) -> MolarCharge: ...
     @overload
     def __mul__(self, other: Numeric) -> MolarVolume: ...
     @overload

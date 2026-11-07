@@ -40,6 +40,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.magnetic_flux_density import (
         MagneticFluxDensity,
     )
+    from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.electromagnetics.volume_charge_density import (
+        VolumeChargeDensity,
+    )
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
@@ -104,6 +108,10 @@ class EnergyDensity(LinearQuantity):
     def __truediv__(self, other: SpecificEnergy) -> Density: ...
     @overload
     def __truediv__(self, other: VelocitySquared) -> Density: ...
+    @overload
+    def __truediv__(self, other: Voltage) -> VolumeChargeDensity: ...
+    @overload
+    def __truediv__(self, other: VolumeChargeDensity) -> Voltage: ...
     @overload
     def __truediv__(self, other: Numeric) -> EnergyDensity: ...
     @overload

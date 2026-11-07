@@ -47,6 +47,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
     from kuchka.quantities.electromagnetics.inductance import Inductance
+    from kuchka.quantities.electromagnetics.linear_charge_density import (
+        LinearChargeDensity,
+    )
     from kuchka.quantities.electromagnetics.magnetic_field_strength import (
         MagneticFieldStrength,
     )
@@ -62,7 +65,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        SurfaceChargeDensity,
+    )
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.electromagnetics.volume_charge_density import (
+        VolumeChargeDensity,
+    )
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.information.data import Data
@@ -225,6 +234,8 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: Length) -> Length: ...
     @overload
+    def __mul__(self, other: LinearChargeDensity) -> LinearChargeDensity: ...
+    @overload
     def __mul__(self, other: Luminance) -> Luminance: ...
     @overload
     def __mul__(self, other: LuminousEfficacy) -> LuminousEfficacy: ...
@@ -313,6 +324,8 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: SurfaceActivity) -> SurfaceActivity: ...
     @overload
+    def __mul__(self, other: SurfaceChargeDensity) -> SurfaceChargeDensity: ...
+    @overload
     def __mul__(self, other: TemperatureDelta) -> TemperatureDelta: ...
     @overload
     def __mul__(self, other: Time) -> Time: ...
@@ -332,6 +345,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: Voltage) -> Voltage: ...
     @overload
     def __mul__(self, other: Volume) -> Volume: ...
+    @overload
+    def __mul__(self, other: VolumeChargeDensity) -> VolumeChargeDensity: ...
     @overload
     def __mul__(self, other: VolumetricFlowRate) -> VolumetricFlowRate: ...
     @overload

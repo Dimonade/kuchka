@@ -65,6 +65,7 @@ from kuchka.quantities.electromagnetics.capacitance import *
 from kuchka.quantities.electromagnetics.charge import *
 from kuchka.quantities.electromagnetics.conductance import *
 from kuchka.quantities.electromagnetics.inductance import *
+from kuchka.quantities.electromagnetics.linear_charge_density import *
 from kuchka.quantities.electromagnetics.magnetic_field_strength import *
 from kuchka.quantities.electromagnetics.magnetic_flux import *
 from kuchka.quantities.electromagnetics.magnetic_flux_density import *
@@ -73,7 +74,9 @@ from kuchka.quantities.electromagnetics.permittivity import *
 from kuchka.quantities.electromagnetics.resistance import *
 from kuchka.quantities.electromagnetics.specific_charge import *
 from kuchka.quantities.electromagnetics.specific_current import *
+from kuchka.quantities.electromagnetics.surface_charge_density import *
 from kuchka.quantities.electromagnetics.voltage import *
+from kuchka.quantities.electromagnetics.volume_charge_density import *
 from kuchka.quantities.geometry.area import *
 from kuchka.quantities.geometry.volume import *
 from kuchka.quantities.information.data import *

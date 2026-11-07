@@ -16,9 +16,19 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.linear_charge_density import (
+        LinearChargeDensity,
+    )
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.magnetic_flux_density import (
         MagneticFluxDensity,
+    )
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        SurfaceChargeDensity,
+    )
+    from kuchka.quantities.electromagnetics.volume_charge_density import (
+        VolumeChargeDensity,
     )
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.time_cubed import TimeCubed
@@ -73,7 +83,11 @@ class Area(LinearQuantity):
     @overload
     def __mul__(self, other: SurfaceActivity) -> Activity: ...
     @overload
+    def __mul__(self, other: SurfaceChargeDensity) -> Charge: ...
+    @overload
     def __mul__(self, other: Velocity) -> VolumetricFlowRate: ...
+    @overload
+    def __mul__(self, other: VolumeChargeDensity) -> LinearChargeDensity: ...
     @overload
     def __mul__(self, other: Numeric) -> Area: ...
     @overload

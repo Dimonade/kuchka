@@ -140,6 +140,12 @@ A radius stays a `Length`; bridges, declared rules across the angle axis, carry 
   `AngularJerk` (rad/s³, tr/s³, °/s³), the rate of change of an angular acceleration: `AngularAcceleration / Time` and `AngularAcceleration * Frequency` are an `AngularJerk`, and `AngularJerk * Length` is the tangential `Jerk`, a bridge like the one of `AngularAcceleration`.
 - Each of these raised `UnrepresentableDimensionError` before.
 
+#### Charge densities
+
+- **Charge per length, area, and volume:**
+  `LinearChargeDensity` (C/m, nC/m, ...), `SurfaceChargeDensity` (C/m², µC/cm², mAh/cm², ...), and `VolumeChargeDensity` (C/m³, C/cm³, Ah/L, ...), so `Charge / Length`, `Charge / Area`, and `Charge / Volume` have a result, and each steps to the next with a division by a `Length`.
+  An electric flux density and a polarization density are `SurfaceChargeDensity` values.
+
 #### Entropy from heat
 
 - **Entropy from heat:**

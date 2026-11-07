@@ -64,6 +64,12 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
     from kuchka.quantities.electromagnetics.inductance import Inductance
+    from kuchka.quantities.electromagnetics.linear_charge_density import (
+        LinearChargeDensity,
+    )
+    from kuchka.quantities.electromagnetics.magnetic_field_strength import (
+        MagneticFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.magnetic_flux_density import (
         MagneticFluxDensity,
@@ -160,6 +166,8 @@ class Time(LinearQuantity):
     def __mul__(self, other: Jerk) -> Acceleration: ...
     @overload
     def __mul__(self, other: LuminousFlux) -> LuminousEnergy: ...
+    @overload
+    def __mul__(self, other: MagneticFieldStrength) -> LinearChargeDensity: ...
     @overload
     def __mul__(self, other: MassFlowRate) -> Mass: ...
     @overload
@@ -349,6 +357,8 @@ class Frequency(LinearQuantity):
     def __mul__(self, other: Jerk) -> Snap: ...
     @overload
     def __mul__(self, other: Length) -> Velocity: ...
+    @overload
+    def __mul__(self, other: LinearChargeDensity) -> MagneticFieldStrength: ...
     @overload
     def __mul__(self, other: LuminousEnergy) -> LuminousFlux: ...
     @overload

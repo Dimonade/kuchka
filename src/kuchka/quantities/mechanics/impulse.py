@@ -24,6 +24,10 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.electromagnetics.linear_charge_density import (
+        LinearChargeDensity,
+    )
+    from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
@@ -88,6 +92,10 @@ class Impulse(LinearQuantity):
     def __truediv__(self, other: Impulse) -> Proportion: ...
     @overload
     def __truediv__(self, other: Length) -> MassFlowRate: ...
+    @overload
+    def __truediv__(self, other: LinearChargeDensity) -> MagneticFlux: ...
+    @overload
+    def __truediv__(self, other: MagneticFlux) -> LinearChargeDensity: ...
     @overload
     def __truediv__(self, other: Mass) -> Velocity: ...
     @overload

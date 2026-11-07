@@ -25,7 +25,11 @@ if TYPE_CHECKING:
         MagneticFluxDensity,
     )
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
+    from kuchka.quantities.electromagnetics.volume_charge_density import (
+        VolumeChargeDensity,
+    )
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.density import Density
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
@@ -48,6 +52,8 @@ class SpecificCharge(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: Density) -> VolumeChargeDensity: ...
     @overload
     def __mul__(self, other: Frequency) -> SpecificCurrent: ...
     @overload

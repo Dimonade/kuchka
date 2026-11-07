@@ -24,11 +24,20 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.current import Current
+    from kuchka.quantities.electromagnetics.linear_charge_density import (
+        LinearChargeDensity,
+    )
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.permeability import Permeability
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        SurfaceChargeDensity,
+    )
+    from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
 
 
 class MagneticFieldStrength(LinearQuantity):
@@ -64,6 +73,8 @@ class MagneticFieldStrength(LinearQuantity):
     @overload
     def __mul__(self, other: Proportion) -> MagneticFieldStrength: ...
     @overload
+    def __mul__(self, other: Time) -> LinearChargeDensity: ...
+    @overload
     def __mul__(self, other: Numeric) -> MagneticFieldStrength: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
@@ -76,9 +87,17 @@ class MagneticFieldStrength(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: Frequency) -> LinearChargeDensity: ...
+    @overload
+    def __truediv__(self, other: LinearChargeDensity) -> Frequency: ...
+    @overload
     def __truediv__(self, other: MagneticFieldStrength) -> Proportion: ...
     @overload
     def __truediv__(self, other: Proportion) -> MagneticFieldStrength: ...
+    @overload
+    def __truediv__(self, other: SurfaceChargeDensity) -> Velocity: ...
+    @overload
+    def __truediv__(self, other: Velocity) -> SurfaceChargeDensity: ...
     @overload
     def __truediv__(self, other: Numeric) -> MagneticFieldStrength: ...
     @overload

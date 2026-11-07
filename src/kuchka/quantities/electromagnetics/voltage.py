@@ -22,10 +22,15 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.linear_charge_density import (
+        LinearChargeDensity,
+    )
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
+    from kuchka.quantities.electromagnetics.permittivity import Permittivity
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.proportion import Proportion
@@ -49,7 +54,11 @@ class Voltage(LinearQuantity):
     @overload
     def __mul__(self, other: Current) -> Power: ...
     @overload
+    def __mul__(self, other: LinearChargeDensity) -> Force: ...
+    @overload
     def __mul__(self, other: MolarCharge) -> MolarEnergy: ...
+    @overload
+    def __mul__(self, other: Permittivity) -> LinearChargeDensity: ...
     @overload
     def __mul__(self, other: Proportion) -> Voltage: ...
     @overload

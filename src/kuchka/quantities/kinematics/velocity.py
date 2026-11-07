@@ -17,10 +17,20 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.linear_charge_density import (
+        LinearChargeDensity,
+    )
+    from kuchka.quantities.electromagnetics.magnetic_field_strength import (
+        MagneticFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.permeability import Permeability
     from kuchka.quantities.electromagnetics.permittivity import Permittivity
     from kuchka.quantities.electromagnetics.resistance import Resistance
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        SurfaceChargeDensity,
+    )
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
@@ -68,6 +78,8 @@ class Velocity(LinearQuantity):
     @overload
     def __mul__(self, other: Impulse) -> Energy: ...
     @overload
+    def __mul__(self, other: LinearChargeDensity) -> Current: ...
+    @overload
     def __mul__(self, other: Mass) -> Momentum: ...
     @overload
     def __mul__(self, other: MassFlowRate) -> Force: ...
@@ -79,6 +91,8 @@ class Velocity(LinearQuantity):
     def __mul__(self, other: Permittivity) -> Conductance: ...
     @overload
     def __mul__(self, other: Proportion) -> Velocity: ...
+    @overload
+    def __mul__(self, other: SurfaceChargeDensity) -> MagneticFieldStrength: ...
     @overload
     def __mul__(self, other: Time) -> Length: ...
     @overload
