@@ -37,10 +37,12 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
+    from kuchka.quantities.kinematics.angular_jerk import AngularJerk
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.angular_velocity_squared import (
         AngularVelocitySquared,
     )
+    from kuchka.quantities.kinematics.time_cubed import TimeCubed
     from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.torque import Torque
@@ -147,11 +149,15 @@ class AngularDisplacement(LinearQuantity):
     @overload
     def __truediv__(self, other: AngularDisplacement) -> Proportion: ...
     @overload
+    def __truediv__(self, other: AngularJerk) -> TimeCubed: ...
+    @overload
     def __truediv__(self, other: AngularVelocity) -> Time: ...
     @overload
     def __truediv__(self, other: Proportion) -> AngularDisplacement: ...
     @overload
     def __truediv__(self, other: Time) -> AngularVelocity: ...
+    @overload
+    def __truediv__(self, other: TimeCubed) -> AngularJerk: ...
     @overload
     def __truediv__(self, other: TimeSquared) -> AngularAcceleration: ...
     @overload

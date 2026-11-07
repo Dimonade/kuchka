@@ -84,6 +84,7 @@ from kuchka.units.information.data import *
 from kuchka.units.information.data_rate import *
 from kuchka.units.kinematics.acceleration import *
 from kuchka.units.kinematics.angular_acceleration import *
+from kuchka.units.kinematics.angular_jerk import *
 from kuchka.units.kinematics.angular_velocity import *
 from kuchka.units.kinematics.angular_velocity_squared import *
 from kuchka.units.kinematics.jerk import *
@@ -160,6 +161,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.AmountOfSubstance: AMOUNT_OF_SUBSTANCE_UNITS,
     quantities.Angle: ANGLE_UNITS,
     quantities.AngularDisplacement: ANGULAR_DISPLACEMENT_UNITS,
+    quantities.AngularJerk: ANGULAR_JERK_UNITS,
     quantities.AngularVelocity: ANGULAR_VELOCITY_UNITS,
     quantities.AngularAcceleration: ANGULAR_ACCELERATION_UNITS,
     quantities.AngularVelocitySquared: ANGULAR_VELOCITY_SQUARED_UNITS,

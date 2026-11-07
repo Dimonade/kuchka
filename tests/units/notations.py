@@ -264,6 +264,12 @@ ACCEPTED = [
     ("TIME_FOURTH_POWER_UNITS", "sec^4", "s\u2074"),
     ("TIME_FOURTH_POWER_UNITS", "ms**4", "ms\u2074"),
     ("TIME_FOURTH_POWER_UNITS", "seconds to the fourth power", "s\u2074"),
+    ("ANGULAR_JERK_UNITS", "rad/s\u00b3", "rad/s\u00b3"),
+    ("ANGULAR_JERK_UNITS", "rad/s3", "rad/s\u00b3"),
+    ("ANGULAR_JERK_UNITS", "rad/s^3", "rad/s\u00b3"),
+    ("ANGULAR_JERK_UNITS", "deg/s**3", "\u00b0/s\u00b3"),
+    ("ANGULAR_JERK_UNITS", "rev/s^3", "tr/s\u00b3"),
+    ("ANGULAR_JERK_UNITS", "radian per second cubed", "rad/s\u00b3"),
     # Time, including the larger units.
     ("TIME_UNITS", "fs", "fs"),
     ("TIME_UNITS", "fsec", "fs"),

@@ -637,6 +637,7 @@ The units of `kuchka.units.kinematics`.
 | Snap                     | `MetrePerSecondFourthPower`, `MillimetrePerSecondFourthPower`                                              |
 | Angular velocity         | `RadianPerSecond`, `DegreePerSecond`, `TurnPerSecond`, `RevolutionPerMinute`                               |
 | Angular acceleration     | `RadianPerSecondSquared`, `DegreePerSecondSquared`, `TurnPerSecondSquared`, `RevolutionPerMinutePerSecond` |
+| Angular jerk             | `RadianPerSecondCubed`, `DegreePerSecondCubed`, `TurnPerSecondCubed`                                       |
 | Angular velocity squared | `RadianSquaredPerSecondSquared`, `TurnSquaredPerSecondSquared`, `DegreeSquaredPerSecondSquared`            |
 | Time squared             | `NanosecondSquared` through `SecondSquared`, `MinuteSquared`, `HourSquared`                                |
 | Time cubed               | `NanosecondCubed` through `SecondCubed`, `MinuteCubed`, `HourCubed`                                        |

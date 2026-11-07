@@ -30,6 +30,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
+    from kuchka.quantities.kinematics.angular_jerk import AngularJerk
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.angular_velocity_squared import (
         AngularVelocitySquared,
@@ -69,6 +70,8 @@ class Length(LinearQuantity):
     def __mul__(self, other: AngularAcceleration) -> Acceleration: ...
     @overload
     def __mul__(self, other: AngularDisplacement) -> Length: ...
+    @overload
+    def __mul__(self, other: AngularJerk) -> Jerk: ...
     @overload
     def __mul__(self, other: AngularVelocity) -> Velocity: ...
     @overload

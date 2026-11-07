@@ -136,6 +136,8 @@ A radius stays a `Length`; bridges, declared rules across the angle axis, carry 
   `Snap` (m/s⁴, mm/s⁴), the rate of change of a jerk: `Jerk / Time`, `Jerk * Frequency`, `Acceleration / TimeSquared`, and `Velocity / TimeCubed` are a `Snap`.
 - **Time to the fourth power:**
   `TimeFourthPower` (s⁴, ms⁴, µs⁴, ns⁴, min⁴, h⁴), so `Time ** 4` and `TimeSquared ** 2` are the same `TimeFourthPower`; type checkers see the fourth power of any type that has one.
+- **Angular jerk:**
+  `AngularJerk` (rad/s³, tr/s³, °/s³), the rate of change of an angular acceleration: `AngularAcceleration / Time` and `AngularAcceleration * Frequency` are an `AngularJerk`, and `AngularJerk * Length` is the tangential `Jerk`, a bridge like the one of `AngularAcceleration`.
 - Each of these raised `UnrepresentableDimensionError` before.
 
 #### New constants
