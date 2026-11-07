@@ -586,26 +586,29 @@ The units of `kuchka.units.chemistry`.
 
 The units of `kuchka.units.electromagnetics`.
 
-| Quantity         | Representative units                                                                  |
-| ---------------- | ------------------------------------------------------------------------------------- |
-| Voltage          | `Nanovolt` through `Petavolt`                                                         |
-| Apparent Power   | `MillivoltAmpere` through `GigavoltAmpere`                                            |
-| Reactive Power   | `Millivar` through `Gigavar`                                                          |
-| Resistance       | `Microohm`, through `Gigaohm`                                                         |
-| Conductance      | `Nanosiemens` through `Kilosiemens`                                                   |
-| Charge           | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour` |
-| Specific charge  | `CoulombPerKilogram`, `AmpereHourPerKilogram`, `MilliampereHourPerGram`               |
-| Specific current | `AmperePerKilogram`, `MilliamperePerKilogram`, `MicroamperePerKilogram`               |
-| Magnetic Flux    | `Nanoweber` through `Kiloweber`                                                       |
-| Flux Density     | `Femtotesla` through `Kilotesla`, `Femtogauss` through `Kilogauss`                    |
-| Capacitance      | `Femtofarad` through `Kilofarad`                                                      |
-| Inductance       | `Picohenry` through `Kilohenry`                                                       |
-| Reactance        | reached via `Resistance.to_reactance()`                                               |
-| Impedance        | reached via `Resistance.to_impedance()`                                               |
-| Permittivity     | `PicofaradPerMetre` through `FaradPerMetre`                                           |
-| Permeability     | `NanohenryPerMetre` through `HenryPerMetre`                                           |
-| Field Strength   | `MicroamperePerMetre` through `MegaamperePerMetre`                                    |
-| Magnetization    | reached via `MagneticFieldStrength.to_magnetization()`                                |
+| Quantity               | Representative units                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------ |
+| Voltage                | `Nanovolt` through `Petavolt`                                                                    |
+| Apparent Power         | `MillivoltAmpere` through `GigavoltAmpere`                                                       |
+| Reactive Power         | `Millivar` through `Gigavar`                                                                     |
+| Resistance             | `Microohm`, through `Gigaohm`                                                                    |
+| Conductance            | `Nanosiemens` through `Kilosiemens`                                                              |
+| Charge                 | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`            |
+| Specific charge        | `CoulombPerKilogram`, `AmpereHourPerKilogram`, `MilliampereHourPerGram`                          |
+| Linear charge density  | `CoulombPerMetre`, `NanocoulombPerMetre`, `PicocoulombPerMetre`                                  |
+| Surface charge density | `CoulombPerSquareMetre`, `MicrocoulombPerSquareCentimetre`, `MilliampereHourPerSquareCentimetre` |
+| Volume charge density  | `CoulombPerCubicMetre`, `CoulombPerCubicCentimetre`, `AmpereHourPerLitre`                        |
+| Specific current       | `AmperePerKilogram`, `MilliamperePerKilogram`, `MicroamperePerKilogram`                          |
+| Magnetic Flux          | `Nanoweber` through `Kiloweber`                                                                  |
+| Flux Density           | `Femtotesla` through `Kilotesla`, `Femtogauss` through `Kilogauss`                               |
+| Capacitance            | `Femtofarad` through `Kilofarad`                                                                 |
+| Inductance             | `Picohenry` through `Kilohenry`                                                                  |
+| Reactance              | reached via `Resistance.to_reactance()`                                                          |
+| Impedance              | reached via `Resistance.to_impedance()`                                                          |
+| Permittivity           | `PicofaradPerMetre` through `FaradPerMetre`                                                      |
+| Permeability           | `NanohenryPerMetre` through `HenryPerMetre`                                                      |
+| Field Strength         | `MicroamperePerMetre` through `MegaamperePerMetre`                                               |
+| Magnetization          | reached via `MagneticFieldStrength.to_magnetization()`                                           |
 
 ### Geometry
 
