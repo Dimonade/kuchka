@@ -21,6 +21,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molar_mass import MolarMass
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.electric_field_strength import (
+        ElectricFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.magnetic_flux_density import (
         MagneticFluxDensity,
     )
@@ -28,6 +31,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.volume_charge_density import (
         VolumeChargeDensity,
     )
+    from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.density import Density
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
@@ -54,6 +58,8 @@ class SpecificCharge(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Density) -> VolumeChargeDensity: ...
+    @overload
+    def __mul__(self, other: ElectricFieldStrength) -> Acceleration: ...
     @overload
     def __mul__(self, other: Frequency) -> SpecificCurrent: ...
     @overload

@@ -21,6 +21,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.current_density import CurrentDensity
+    from kuchka.quantities.electromagnetics.electric_field_strength import (
+        ElectricFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.inductance import Inductance
     from kuchka.quantities.electromagnetics.linear_charge_density import (
         LinearChargeDensity,
@@ -33,6 +37,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.surface_charge_density import (
         SurfaceChargeDensity,
     )
+    from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.electromagnetics.volume_charge_density import (
         VolumeChargeDensity,
     )
@@ -88,6 +93,10 @@ class Length(LinearQuantity):
     def __mul__(self, other: AngularVelocitySquared) -> Acceleration: ...
     @overload
     def __mul__(self, other: Area) -> Volume: ...
+    @overload
+    def __mul__(self, other: CurrentDensity) -> MagneticFieldStrength: ...
+    @overload
+    def __mul__(self, other: ElectricFieldStrength) -> Voltage: ...
     @overload
     def __mul__(self, other: FirstMomentOfMass) -> MomentOfInertia: ...
     @overload

@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molar_volume import MolarVolume
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.current_density import CurrentDensity
     from kuchka.quantities.electromagnetics.linear_charge_density import (
         LinearChargeDensity,
     )
@@ -30,6 +31,7 @@ if TYPE_CHECKING:
     )
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
+    from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.density import Density
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
@@ -51,6 +53,8 @@ class VolumeChargeDensity(LinearQuantity):
     def __mul__(self, other: MolarVolume) -> MolarCharge: ...
     @overload
     def __mul__(self, other: Proportion) -> VolumeChargeDensity: ...
+    @overload
+    def __mul__(self, other: Velocity) -> CurrentDensity: ...
     @overload
     def __mul__(self, other: Volume) -> Charge: ...
     @overload

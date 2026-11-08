@@ -16,6 +16,10 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.electromagnetics.electric_field_strength import (
+        ElectricFieldStrength,
+    )
+    from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_jerk import AngularJerk
     from kuchka.quantities.kinematics.snap import Snap
@@ -78,6 +82,8 @@ class Jerk(LinearQuantity):
     @overload
     def __truediv__(self, other: AngularJerk) -> Length: ...
     @overload
+    def __truediv__(self, other: ElectricFieldStrength) -> SpecificCurrent: ...
+    @overload
     def __truediv__(self, other: Force) -> SpecificActivity: ...
     @overload
     def __truediv__(self, other: Frequency) -> Acceleration: ...
@@ -89,6 +95,8 @@ class Jerk(LinearQuantity):
     def __truediv__(self, other: Snap) -> Time: ...
     @overload
     def __truediv__(self, other: SpecificActivity) -> Force: ...
+    @overload
+    def __truediv__(self, other: SpecificCurrent) -> ElectricFieldStrength: ...
     @overload
     def __truediv__(self, other: Time) -> Snap: ...
     @overload

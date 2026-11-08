@@ -22,6 +22,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.electric_field_strength import (
+        ElectricFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.linear_charge_density import (
         LinearChargeDensity,
     )
@@ -29,6 +32,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.permittivity import Permittivity
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
+    from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.power import Power
@@ -80,7 +84,11 @@ class Voltage(LinearQuantity):
     @overload
     def __truediv__(self, other: Current) -> Resistance: ...
     @overload
+    def __truediv__(self, other: ElectricFieldStrength) -> Length: ...
+    @overload
     def __truediv__(self, other: Frequency) -> MagneticFlux: ...
+    @overload
+    def __truediv__(self, other: Length) -> ElectricFieldStrength: ...
     @overload
     def __truediv__(self, other: MagneticFlux) -> Frequency: ...
     @overload

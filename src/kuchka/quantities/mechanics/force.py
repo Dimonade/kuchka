@@ -16,6 +16,10 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.electric_field_strength import (
+        ElectricFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.linear_charge_density import (
         LinearChargeDensity,
     )
@@ -83,6 +87,10 @@ class Force(LinearQuantity):
     def __truediv__(self, other: AngularVelocity) -> Momentum: ...
     @overload
     def __truediv__(self, other: Area) -> Pressure: ...
+    @overload
+    def __truediv__(self, other: Charge) -> ElectricFieldStrength: ...
+    @overload
+    def __truediv__(self, other: ElectricFieldStrength) -> Charge: ...
     @overload
     def __truediv__(self, other: EnergyDensity) -> Area: ...
     @overload

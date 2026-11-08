@@ -34,11 +34,17 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
     from kuchka.quantities.chemistry.molar_energy import MolarEnergy
     from kuchka.quantities.chemistry.molar_volume import MolarVolume
+    from kuchka.quantities.electromagnetics.electric_field_strength import (
+        ElectricFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.magnetic_field_strength import (
         MagneticFieldStrength,
     )
     from kuchka.quantities.electromagnetics.magnetic_flux_density import (
         MagneticFluxDensity,
+    )
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        SurfaceChargeDensity,
     )
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.electromagnetics.volume_charge_density import (
@@ -87,6 +93,8 @@ class EnergyDensity(LinearQuantity):
     @overload
     def __truediv__(self, other: Density) -> SpecificEnergy: ...
     @overload
+    def __truediv__(self, other: ElectricFieldStrength) -> SurfaceChargeDensity: ...
+    @overload
     def __truediv__(self, other: EnergyDensity) -> Proportion: ...
     @overload
     def __truediv__(self, other: Impulse) -> SurfaceActivity: ...
@@ -106,6 +114,8 @@ class EnergyDensity(LinearQuantity):
     def __truediv__(self, other: Proportion) -> EnergyDensity: ...
     @overload
     def __truediv__(self, other: SpecificEnergy) -> Density: ...
+    @overload
+    def __truediv__(self, other: SurfaceChargeDensity) -> ElectricFieldStrength: ...
     @overload
     def __truediv__(self, other: VelocitySquared) -> Density: ...
     @overload

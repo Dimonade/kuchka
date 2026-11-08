@@ -22,6 +22,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.current_density import CurrentDensity
+    from kuchka.quantities.electromagnetics.electric_field_strength import (
+        ElectricFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.linear_charge_density import (
         LinearChargeDensity,
     )
@@ -44,9 +48,11 @@ if TYPE_CHECKING:
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.specific_activity import SpecificActivity
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -59,6 +65,8 @@ class Charge(LinearQuantity):
 
     # BEGIN GENERATED __mul__
     @overload
+    def __mul__(self, other: ElectricFieldStrength) -> Force: ...
+    @overload
     def __mul__(self, other: EntitiesPerAmount) -> MolarCharge: ...
     @overload
     def __mul__(self, other: Frequency) -> Current: ...
@@ -70,6 +78,8 @@ class Charge(LinearQuantity):
     def __mul__(self, other: Resistance) -> MagneticFlux: ...
     @overload
     def __mul__(self, other: SpecificActivity) -> SpecificCurrent: ...
+    @overload
+    def __mul__(self, other: SurfaceActivity) -> CurrentDensity: ...
     @overload
     def __mul__(self, other: Voltage) -> Energy: ...
     @overload

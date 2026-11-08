@@ -18,8 +18,12 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.electric_field_strength import (
+        ElectricFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.kinematics.jerk import Jerk
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.proportion import Proportion
@@ -45,6 +49,8 @@ class SpecificCurrent(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: ElectricFieldStrength) -> Jerk: ...
     @overload
     def __mul__(self, other: Mass) -> Current: ...
     @overload

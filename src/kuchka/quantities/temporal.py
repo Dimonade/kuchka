@@ -63,6 +63,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.current_density import CurrentDensity
     from kuchka.quantities.electromagnetics.inductance import Inductance
     from kuchka.quantities.electromagnetics.linear_charge_density import (
         LinearChargeDensity,
@@ -77,6 +78,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        SurfaceChargeDensity,
+    )
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
@@ -146,6 +150,8 @@ class Time(LinearQuantity):
     def __mul__(self, other: Conductance) -> Capacitance: ...
     @overload
     def __mul__(self, other: Current) -> Charge: ...
+    @overload
+    def __mul__(self, other: CurrentDensity) -> SurfaceChargeDensity: ...
     @overload
     def __mul__(self, other: DataRate) -> Data: ...
     @overload
@@ -375,6 +381,8 @@ class Frequency(LinearQuantity):
     def __mul__(self, other: SpecificCharge) -> SpecificCurrent: ...
     @overload
     def __mul__(self, other: SpecificEnergy) -> SpecificPower: ...
+    @overload
+    def __mul__(self, other: SurfaceChargeDensity) -> CurrentDensity: ...
     @overload
     def __mul__(self, other: TemperatureDelta) -> HeatingRate: ...
     @overload

@@ -19,6 +19,8 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.current_density import CurrentDensity
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.velocity import Velocity
@@ -48,6 +50,8 @@ class SurfaceActivity(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Area) -> Activity: ...
+    @overload
+    def __mul__(self, other: Charge) -> CurrentDensity: ...
     @overload
     def __mul__(self, other: LuminousEnergy) -> Illuminance: ...
     @overload

@@ -17,7 +17,11 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.current import Current
+    from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.electric_field_strength import (
+        ElectricFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.magnetic_field_strength import (
         MagneticFieldStrength,
     )
@@ -69,6 +73,10 @@ class LinearChargeDensity(LinearQuantity):
     # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Area) -> VolumeChargeDensity: ...
+    @overload
+    def __truediv__(self, other: Capacitance) -> ElectricFieldStrength: ...
+    @overload
+    def __truediv__(self, other: ElectricFieldStrength) -> Capacitance: ...
     @overload
     def __truediv__(self, other: Length) -> SurfaceChargeDensity: ...
     @overload

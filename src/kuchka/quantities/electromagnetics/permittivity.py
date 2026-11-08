@@ -18,8 +18,14 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.electric_field_strength import (
+        ElectricFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.linear_charge_density import (
         LinearChargeDensity,
+    )
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        ElectricFluxDensity,
     )
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.kinematics.velocity import Velocity
@@ -34,6 +40,8 @@ class Permittivity(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: ElectricFieldStrength) -> ElectricFluxDensity: ...
     @overload
     def __mul__(self, other: Length) -> Capacitance: ...
     @overload

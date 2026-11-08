@@ -46,6 +46,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.current_density import CurrentDensity
+    from kuchka.quantities.electromagnetics.electric_field_strength import (
+        ElectricFieldStrength,
+    )
     from kuchka.quantities.electromagnetics.inductance import Inductance
     from kuchka.quantities.electromagnetics.linear_charge_density import (
         LinearChargeDensity,
@@ -65,6 +69,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        ElectricFluxDensity,
+    )
     from kuchka.quantities.electromagnetics.surface_charge_density import (
         SurfaceChargeDensity,
     )
@@ -190,11 +197,17 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: Current) -> Current: ...
     @overload
+    def __mul__(self, other: CurrentDensity) -> CurrentDensity: ...
+    @overload
     def __mul__(self, other: Data) -> Data: ...
     @overload
     def __mul__(self, other: DataRate) -> DataRate: ...
     @overload
     def __mul__(self, other: Density) -> Density: ...
+    @overload
+    def __mul__(self, other: ElectricFieldStrength) -> ElectricFieldStrength: ...
+    @overload
+    def __mul__(self, other: ElectricFluxDensity) -> ElectricFluxDensity: ...
     @overload
     def __mul__(self, other: Energy) -> Energy: ...
     @overload
