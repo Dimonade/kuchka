@@ -1,18 +1,111 @@
-"""Catalytic activity constructors: Katal, Microkatal, EnzymeUnit, and more.
+"""Unit constructors for Catalytic Activity: katal and SI-prefixed multiples.
 
-Catalytic activity is the rate at which a catalyst converts a substrate: the katal
-(`kat`) is one mole converted per second, and is the canonical unit.
-Enzymes are measured in the prefixed forms (`mkat`, `µkat`, `nkat`) and in the enzyme
-unit (`U`), the older unit of one micromole converted per minute, so `1 U` is exactly
-`1/60 µkat`.
+    from kuchka import EnzymeUnit, Katal, Microkatal, Millikatal, Nanokatal, parse
+    from kuchka.quantities import CatalyticActivity
 
-A catalytic activity has the dimension of a `MolarFlowRate` and is not interchangeable
-with one: `CatalyticActivity.to_molar_flow_rate()` is the conversion.
-The international unit `IU` is not a spelling, because it also measures vitamins and
-hormones.
+    assay = EnzymeUnit(180)
+    pilot_reactor = Millikatal(2.5)
 
-`CATALYTIC_ACTIVITY_UNITS` maps each symbol to its constructor, for boundary code that
-reads a unit as a string from outside the application.
+`Katal` is the canonical, SI-coherent unit.
+One katal (kat) represents a catalytic activity of one mole converted per second.
+
+The practical scale of catalytic activity spans several areas of enzymology and
+bioprocess engineering:
+
+* nanokatals (nkat) describe small enzyme preparations, analytical assays, and highly
+    sensitive biochemical measurements;
+* microkatals (µkat) are useful for laboratory enzyme preparations and routine
+    biochemical assays;
+* millikatals (mkat) cover larger enzyme preparations and process-scale biocatalysis;
+* katals (kat) are the SI-coherent unit, particularly useful as a reference for large
+    catalytic rates;
+* enzyme units (U) remain common in laboratory reports and enzyme specifications,
+    despite being a non-SI unit.
+
+Examples
+--------
+A laboratory assay reports an enzyme preparation with an activity of 180 U under its
+specified assay conditions.
+Express the result in microkatals and as a molar flow rate:
+
+>>> assay = EnzymeUnit(180)
+>>> assay == Microkatal(3)
+True
+>>> assay.to_molar_flow_rate()
+0.000003 mol/s
+
+A microfluidic enzyme assay reports a catalytic activity of 120 nkat.
+The corresponding reaction rate is 120 nmol/s:
+
+>>> microfluidic_assay = Nanokatal(120)
+>>> microfluidic_assay.to_molar_flow_rate()
+0.00000012 mol/s
+
+Laboratory reports may represent the same activity using different units.
+`parse` reads the complete measurement and constructs the appropriate quantity:
+
+>>> from kuchka import parse
+>>> from kuchka.quantities import CatalyticActivity
+>>> parse("180 U", CatalyticActivity) == parse("3 µkat", CatalyticActivity)
+True
+
+Notes
+-----
+Catalytic activity describes the rate of conversion of a specified chemical reaction in
+an assay system.
+Its SI-coherent unit is the katal:
+
+``1 kat = 1 mol/s``
+
+The enzyme unit (U) is an older, non-SI unit defined as one micromole converted per
+minute under specified assay conditions:
+
+``1 U = 1 µmol/min = 1/60 µkat = 50/3 nkat``
+
+Consequently, one katal corresponds to exactly 60 million enzyme units.
+
+Enzyme activity depends on the reaction and measurement procedure.
+When reporting an experimental result, identify the assay procedure and indicator
+reaction, as well as relevant experimental conditions.
+
+The symbol `IU` is deliberately not accepted as an alias for `U`.
+International units are also used to express the biological activity of substances such
+as vitamins and hormones, and do not have one universal conversion factor.
+`EnzymeUnit` represents the specific enzyme-activity convention defined above.
+
+`CatalyticActivity` has the same physical dimension as `MolarFlowRate`, but the
+quantities have distinct meanings.
+Catalytic activity describes chemical conversion in a reaction system; molar flow rate
+describes the transport of an amount of substance per unit time.
+Use `CatalyticActivity.to_molar_flow_rate()` for the explicit conversion.
+
+These constructors represent total catalytic activity, not catalytic activity
+concentration.
+Measurements such as ``U/L`` and ``kat/L`` include a volume denominator and describe a
+different quantity.
+
+`parse` reads complete measurements such as ``"180 U"`` or ``"3 µkat"``, including
+registered alternative unit spellings.
+
+`CATALYTIC_ACTIVITY_UNITS` maps supported unit symbols to their constructors.
+It is useful when an application receives a unit symbol separately from its numeric
+value and needs to select a constructor programmatically.
+
+The katal was adopted by the 21st CGPM in Resolution 12 (1999):
+https://www.bipm.org/en/-/resolution-cgpm-21-12
+
+See Also
+--------
+~kuchka.quantities.CatalyticActivity
+    Quantity type representing catalytic activity.
+
+~kuchka.quantities.MolarFlowRate
+    Molar flow rate, which shares the physical dimension of catalytic activity
+    but represents a distinct quantity.
+
+~kuchka.units.chemistry.molar_flow_rate
+    Constructors for molar flow rate.
+
 """
 
 from __future__ import annotations
@@ -65,6 +158,14 @@ def Nanokatal(value: Numeric) -> CatalyticActivity:
     CatalyticActivity
         Catalytic activity represented in nanokatals.
 
+    Examples
+    --------
+    A microfluidic enzyme assay measures a substrate conversion rate of 120 nmol/s:
+
+    >>> activity = Nanokatal(120)
+    >>> activity.to_molar_flow_rate()
+    0.00000012 mol/s
+
     """
     return CatalyticActivity(to_exact(value) * NANOKATAL.scale, NANOKATAL)
 
@@ -82,6 +183,15 @@ def Microkatal(value: Numeric) -> CatalyticActivity:
     CatalyticActivity
         Catalytic activity represented in microkatals.
 
+    Examples
+    --------
+    A purified enzyme preparation converts 0.5 µmol of substrate per second under its
+    specified assay conditions:
+
+    >>> activity = Microkatal(0.5)
+    >>> activity.to_molar_flow_rate()
+    0.0000005 mol/s
+
     """
     return CatalyticActivity(to_exact(value) * MICROKATAL.scale, MICROKATAL)
 
@@ -98,6 +208,15 @@ def Millikatal(value: Numeric) -> CatalyticActivity:
     -------
     CatalyticActivity
         Catalytic activity represented in millikatals.
+
+    Examples
+    --------
+    A process-scale bioreactor is designed to convert 2.5 mmol of substrate per second
+    through an immobilized-enzyme bed:
+
+    >>> activity = Millikatal(2.5)
+    >>> activity.to_molar_flow_rate()
+    0.0025 mol/s
 
     """
     return CatalyticActivity(to_exact(value) * MILLIKATAL.scale, MILLIKATAL)
@@ -118,10 +237,12 @@ def Katal(value: Numeric) -> CatalyticActivity:
 
     Examples
     --------
-    A preparation of 120 nkat converts 7.2 µmol of substrate each minute:
+    One katal represents a catalytic activity corresponding to the conversion of one
+    mole of substrate per second in an assay system:
 
-    >>> Nanokatal(120).to_molar_flow_rate()
-    0.00000012 mol/s
+    >>> activity = Katal(1)
+    >>> activity.to_molar_flow_rate()
+    1 mol/s
 
     """
     return CatalyticActivity(to_exact(value) * KATAL.scale, KATAL)
@@ -140,12 +261,23 @@ def EnzymeUnit(value: Numeric) -> CatalyticActivity:
     CatalyticActivity
         Catalytic activity represented in enzyme units.
 
+    Notes
+    -----
+    One enzyme unit corresponds to the conversion of one micromole of substrate per
+    minute under specified assay conditions.
+
     Examples
     --------
-    An enzyme unit is a micromole per minute, a sixtieth of a microkatal:
+    An enzyme preparation is reported to have an activity of 60 U.
+    Express the same catalytic activity in the SI-prefixed unit microkatal:
 
     >>> EnzymeUnit(60) == Microkatal(1)
     True
+
+    The corresponding molar flow rate is:
+
+    >>> EnzymeUnit(60).to_molar_flow_rate()
+    0.000001 mol/s
 
     """
     return CatalyticActivity(to_exact(value) * ENZYME_UNIT.scale, ENZYME_UNIT)
