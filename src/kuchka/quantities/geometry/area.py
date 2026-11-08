@@ -45,6 +45,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
+    from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
@@ -58,6 +59,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.activity import Activity
     from kuchka.quantities.radiation.surface_activity import SurfaceActivity
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
 
 
 class Area(LinearQuantity):
@@ -73,6 +75,8 @@ class Area(LinearQuantity):
     def __mul__(self, other: ElectricFluxDensity) -> Charge: ...
     @overload
     def __mul__(self, other: EnergyDensity) -> Force: ...
+    @overload
+    def __mul__(self, other: HeatFlux) -> Power: ...
     @overload
     def __mul__(self, other: Illuminance) -> LuminousFlux: ...
     @overload

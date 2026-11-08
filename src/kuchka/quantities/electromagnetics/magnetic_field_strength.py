@@ -44,6 +44,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
 
 
 class MagneticFieldStrength(LinearQuantity):
@@ -68,6 +69,8 @@ class MagneticFieldStrength(LinearQuantity):
         return Magnetization(self._magnitude, self._display_unit)
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: ElectricFieldStrength) -> HeatFlux: ...
     @overload
     def __mul__(self, other: Length) -> Current: ...
     @overload

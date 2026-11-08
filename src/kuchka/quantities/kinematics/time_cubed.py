@@ -25,10 +25,12 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
+    from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
 
 
 class TimeCubed(LinearQuantity):
@@ -50,6 +52,8 @@ class TimeCubed(LinearQuantity):
     def __mul__(self, other: AngularJerk) -> AngularDisplacement: ...
     @overload
     def __mul__(self, other: Frequency) -> TimeSquared: ...
+    @overload
+    def __mul__(self, other: HeatFlux) -> Mass: ...
     @overload
     def __mul__(self, other: Jerk) -> Length: ...
     @overload

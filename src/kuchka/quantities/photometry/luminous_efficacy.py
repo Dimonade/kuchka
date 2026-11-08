@@ -18,9 +18,11 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.photometry.illuminance import Illuminance
     from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
     from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
 
 
 class LuminousEfficacy(LinearQuantity):
@@ -32,6 +34,8 @@ class LuminousEfficacy(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Energy) -> LuminousEnergy: ...
+    @overload
+    def __mul__(self, other: HeatFlux) -> Illuminance: ...
     @overload
     def __mul__(self, other: Power) -> LuminousFlux: ...
     @overload

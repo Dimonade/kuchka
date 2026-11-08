@@ -27,6 +27,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.time_cubed import TimeCubed
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.density import Density
@@ -47,6 +48,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.thermodynamics.heat_capacity import Entropy
     from kuchka.quantities.thermodynamics.heat_capacity import HeatCapacity
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
     from kuchka.quantities.thermodynamics.specific_heat_capacity import SpecificEntropy
     from kuchka.quantities.thermodynamics.specific_heat_capacity import (
         SpecificHeatCapacity,
@@ -109,6 +111,8 @@ class Mass(LinearQuantity):
     @overload
     def __truediv__(self, other: Density) -> Volume: ...
     @overload
+    def __truediv__(self, other: HeatFlux) -> TimeCubed: ...
+    @overload
     def __truediv__(self, other: Mass) -> Proportion: ...
     @overload
     def __truediv__(self, other: MassFlowRate) -> Time: ...
@@ -118,6 +122,8 @@ class Mass(LinearQuantity):
     def __truediv__(self, other: Proportion) -> Mass: ...
     @overload
     def __truediv__(self, other: Time) -> MassFlowRate: ...
+    @overload
+    def __truediv__(self, other: TimeCubed) -> HeatFlux: ...
     @overload
     def __truediv__(self, other: Volume) -> Density: ...
     @overload

@@ -50,10 +50,12 @@ if TYPE_CHECKING:
     from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.specific_activity import SpecificActivity
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.thermal import TemperatureDelta
     from kuchka.quantities.thermodynamics.heat_capacity import HeatCapacity
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
 
 
 class Energy(LinearQuantity):
@@ -73,6 +75,8 @@ class Energy(LinearQuantity):
     def __mul__(self, other: Proportion) -> Energy: ...
     @overload
     def __mul__(self, other: SpecificActivity) -> SpecificPower: ...
+    @overload
+    def __mul__(self, other: SurfaceActivity) -> HeatFlux: ...
     @overload
     def __mul__(self, other: Numeric) -> Energy: ...
     @overload

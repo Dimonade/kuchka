@@ -29,6 +29,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.surface_charge_density import (
         SurfaceChargeDensity,
     )
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.density import Density
@@ -40,6 +41,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
 
 
 class MassFlowRate(LinearQuantity):
@@ -82,6 +84,8 @@ class MassFlowRate(LinearQuantity):
     @overload
     def __truediv__(self, other: Frequency) -> Mass: ...
     @overload
+    def __truediv__(self, other: HeatFlux) -> TimeSquared: ...
+    @overload
     def __truediv__(self, other: MagneticFlux) -> SurfaceChargeDensity: ...
     @overload
     def __truediv__(self, other: MagneticFluxDensity) -> Charge: ...
@@ -97,6 +101,8 @@ class MassFlowRate(LinearQuantity):
     def __truediv__(self, other: Proportion) -> MassFlowRate: ...
     @overload
     def __truediv__(self, other: SurfaceChargeDensity) -> MagneticFlux: ...
+    @overload
+    def __truediv__(self, other: TimeSquared) -> HeatFlux: ...
     @overload
     def __truediv__(self, other: VolumetricFlowRate) -> Density: ...
     @overload

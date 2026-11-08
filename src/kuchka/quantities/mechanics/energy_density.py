@@ -51,6 +51,7 @@ if TYPE_CHECKING:
         VolumeChargeDensity,
     )
     from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.momentum import Momentum
@@ -59,6 +60,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.surface_activity import SurfaceActivity
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
 
 
 class EnergyDensity(LinearQuantity):
@@ -74,6 +76,8 @@ class EnergyDensity(LinearQuantity):
     def __mul__(self, other: MolarVolume) -> MolarEnergy: ...
     @overload
     def __mul__(self, other: Proportion) -> EnergyDensity: ...
+    @overload
+    def __mul__(self, other: Velocity) -> HeatFlux: ...
     @overload
     def __mul__(self, other: Volume) -> Energy: ...
     @overload
