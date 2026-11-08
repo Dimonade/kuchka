@@ -45,6 +45,7 @@ from kuchka.quantities import FirstMomentOfMass
 from kuchka.quantities import Force
 from kuchka.quantities import Frequency
 from kuchka.quantities import HeatCapacity
+from kuchka.quantities import HeatFlux
 from kuchka.quantities import HeatingRate
 from kuchka.quantities import Illuminance
 from kuchka.quantities import Impedance
@@ -102,6 +103,7 @@ from kuchka.quantities import SurfaceActivity
 from kuchka.quantities import SurfaceChargeDensity
 from kuchka.quantities import Temperature
 from kuchka.quantities import TemperatureDelta
+from kuchka.quantities import ThermalConductivity
 from kuchka.quantities import Time
 from kuchka.quantities import TimeCubed
 from kuchka.quantities import TimeFourthPower
@@ -385,6 +387,8 @@ from kuchka.units import Kilowatt
 from kuchka.units import KilowattHour
 from kuchka.units import KilowattHourPerKilogram
 from kuchka.units import KilowattPerKilogram
+from kuchka.units import KilowattPerMetreKelvin
+from kuchka.units import KilowattPerSquareMetre
 from kuchka.units import Kiloweber
 from kuchka.units import Knot
 from kuchka.units import LightYear
@@ -435,6 +439,7 @@ from kuchka.units import Megavolt
 from kuchka.units import MegavoltAmpere
 from kuchka.units import MegavoltPerMetre
 from kuchka.units import Megawatt
+from kuchka.units import MegawattPerSquareMetre
 from kuchka.units import Meter
 from kuchka.units import MeterPerSecond
 from kuchka.units import MeterPerSecondCubed
@@ -496,6 +501,7 @@ from kuchka.units import Microtesla
 from kuchka.units import Microvolt
 from kuchka.units import MicrovoltPerMetre
 from kuchka.units import Microwatt
+from kuchka.units import MicrowattPerSquareCentimetre
 from kuchka.units import Microweber
 from kuchka.units import Mile
 from kuchka.units import MilePerHour
@@ -579,6 +585,9 @@ from kuchka.units import Milliwatt
 from kuchka.units import MilliwattHour
 from kuchka.units import MilliwattPerGram
 from kuchka.units import MilliwattPerKilogram
+from kuchka.units import MilliwattPerMetreKelvin
+from kuchka.units import MilliwattPerSquareCentimetre
+from kuchka.units import MilliwattPerSquareMetre
 from kuchka.units import Milliweber
 from kuchka.units import Minute
 from kuchka.units import MinuteCubed
@@ -767,8 +776,12 @@ from kuchka.units import WattHour
 from kuchka.units import WattHourPerKilogram
 from kuchka.units import WattHourPerLiter
 from kuchka.units import WattHourPerLitre
+from kuchka.units import WattPerCentimetreKelvin
 from kuchka.units import WattPerGram
 from kuchka.units import WattPerKilogram
+from kuchka.units import WattPerMetreKelvin
+from kuchka.units import WattPerSquareCentimetre
+from kuchka.units import WattPerSquareMetre
 from kuchka.units import Weber
 from kuchka.units import Week
 from kuchka.units import Yard
@@ -965,6 +978,7 @@ __all__ = [
     "GrayPerMinute",
     "GrayPerSecond",
     "HeatCapacity",
+    "HeatFlux",
     "HeatingRate",
     "Hectare",
     "Hectopascal",
@@ -1093,6 +1107,8 @@ __all__ = [
     "KilowattHour",
     "KilowattHourPerKilogram",
     "KilowattPerKilogram",
+    "KilowattPerMetreKelvin",
+    "KilowattPerSquareMetre",
     "Kiloweber",
     "Knot",
     "Length",
@@ -1158,6 +1174,7 @@ __all__ = [
     "MegavoltAmpere",
     "MegavoltPerMetre",
     "Megawatt",
+    "MegawattPerSquareMetre",
     "Meter",
     "MeterPerSecond",
     "MeterPerSecondCubed",
@@ -1219,6 +1236,7 @@ __all__ = [
     "Microvolt",
     "MicrovoltPerMetre",
     "Microwatt",
+    "MicrowattPerSquareCentimetre",
     "Microweber",
     "Mile",
     "MilePerHour",
@@ -1302,6 +1320,9 @@ __all__ = [
     "MilliwattHour",
     "MilliwattPerGram",
     "MilliwattPerKilogram",
+    "MilliwattPerMetreKelvin",
+    "MilliwattPerSquareCentimetre",
+    "MilliwattPerSquareMetre",
     "Milliweber",
     "Minute",
     "MinuteCubed",
@@ -1499,6 +1520,7 @@ __all__ = [
     "Terajoule",
     "Terawatt",
     "Tesla",
+    "ThermalConductivity",
     "ThermochemicalCalorie",
     "ThermochemicalCaloriePerGramKelvin",
     "ThermochemicalCaloriePerKelvin",
@@ -1536,8 +1558,12 @@ __all__ = [
     "WattHourPerKilogram",
     "WattHourPerLiter",
     "WattHourPerLitre",
+    "WattPerCentimetreKelvin",
     "WattPerGram",
     "WattPerKilogram",
+    "WattPerMetreKelvin",
+    "WattPerSquareCentimetre",
+    "WattPerSquareMetre",
     "Weber",
     "Week",
     "Yard",

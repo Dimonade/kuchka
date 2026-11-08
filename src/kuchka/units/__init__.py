@@ -148,9 +148,11 @@ from kuchka.units.temporal.time import *
 from kuchka.units.thermal import *
 from kuchka.units.thermodynamics.entropy import *
 from kuchka.units.thermodynamics.heat_capacity import *
+from kuchka.units.thermodynamics.heat_flux import *
 from kuchka.units.thermodynamics.heating_rate import *
 from kuchka.units.thermodynamics.specific_entropy import *
 from kuchka.units.thermodynamics.specific_heat_capacity import *
+from kuchka.units.thermodynamics.thermal_conductivity import *
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -177,6 +179,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.AngularMomentum: ANGULAR_MOMENTUM_UNITS,
     quantities.FirstMomentOfMass: FIRST_MOMENT_OF_MASS_UNITS,
     quantities.MomentOfInertia: MOMENT_OF_INERTIA_UNITS,
+    quantities.ThermalConductivity: THERMAL_CONDUCTIVITY_UNITS,
     quantities.Torque: TORQUE_UNITS,
     quantities.Area: AREA_UNITS,
     quantities.BaudRate: BAUD_RATE_UNITS,
@@ -199,6 +202,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Frequency: FREQUENCY_UNITS,
     quantities.Entropy: ENTROPY_UNITS,
     quantities.HeatCapacity: HEAT_CAPACITY_UNITS,
+    quantities.HeatFlux: HEAT_FLUX_UNITS,
     quantities.HeatingRate: HEATING_RATE_UNITS,
     quantities.Impulse: IMPULSE_UNITS,
     quantities.MassFlowRate: MASS_FLOW_RATE_UNITS,
