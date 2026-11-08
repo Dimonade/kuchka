@@ -16,13 +16,18 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.current_density import CurrentDensity
     from kuchka.quantities.electromagnetics.linear_charge_density import (
         LinearChargeDensity,
     )
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.magnetic_flux_density import (
         MagneticFluxDensity,
+    )
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        ElectricFluxDensity,
     )
     from kuchka.quantities.electromagnetics.surface_charge_density import (
         SurfaceChargeDensity,
@@ -62,6 +67,10 @@ class Area(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: CurrentDensity) -> Current: ...
+    @overload
+    def __mul__(self, other: ElectricFluxDensity) -> Charge: ...
     @overload
     def __mul__(self, other: EnergyDensity) -> Force: ...
     @overload

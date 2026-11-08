@@ -6,6 +6,8 @@ from kuchka.quantities.electromagnetics import ac_power
 from kuchka.quantities.electromagnetics import capacitance
 from kuchka.quantities.electromagnetics import charge
 from kuchka.quantities.electromagnetics import conductance
+from kuchka.quantities.electromagnetics import current_density
+from kuchka.quantities.electromagnetics import electric_field_strength
 from kuchka.quantities.electromagnetics import inductance
 from kuchka.quantities.electromagnetics import linear_charge_density
 from kuchka.quantities.electromagnetics import magnetic_field_strength
@@ -23,6 +25,8 @@ from kuchka.quantities.electromagnetics.ac_power import *
 from kuchka.quantities.electromagnetics.capacitance import *
 from kuchka.quantities.electromagnetics.charge import *
 from kuchka.quantities.electromagnetics.conductance import *
+from kuchka.quantities.electromagnetics.current_density import *
+from kuchka.quantities.electromagnetics.electric_field_strength import *
 from kuchka.quantities.electromagnetics.inductance import *
 from kuchka.quantities.electromagnetics.linear_charge_density import *
 from kuchka.quantities.electromagnetics.magnetic_field_strength import *
@@ -43,6 +47,8 @@ __all__ += capacitance.__all__
 __all__ += charge.__all__
 __all__ += conductance.__all__
 __all__ += inductance.__all__
+__all__ += current_density.__all__
+__all__ += electric_field_strength.__all__
 __all__ += linear_charge_density.__all__
 __all__ += magnetic_field_strength.__all__
 __all__ += magnetic_flux.__all__

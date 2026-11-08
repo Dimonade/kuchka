@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.current_density import CurrentDensity
     from kuchka.quantities.electromagnetics.inductance import Inductance
     from kuchka.quantities.electromagnetics.linear_charge_density import (
         LinearChargeDensity,
@@ -35,6 +36,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.volume_charge_density import (
         VolumeChargeDensity,
     )
+    from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
@@ -79,11 +81,15 @@ class Current(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: Area) -> CurrentDensity: ...
+    @overload
     def __truediv__(self, other: Charge) -> Frequency: ...
     @overload
     def __truediv__(self, other: Conductance) -> Voltage: ...
     @overload
     def __truediv__(self, other: Current) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: CurrentDensity) -> Area: ...
     @overload
     def __truediv__(self, other: Frequency) -> Charge: ...
     @overload

@@ -18,6 +18,11 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.current_density import CurrentDensity
+    from kuchka.quantities.electromagnetics.electric_field_strength import (
+        ElectricFieldStrength,
+    )
+    from kuchka.quantities.electromagnetics.inductance import Inductance
     from kuchka.quantities.electromagnetics.magnetic_field_strength import (
         MagneticFieldStrength,
     )
@@ -29,6 +34,7 @@ if TYPE_CHECKING:
         SurfaceChargeDensity,
     )
     from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.proportion import Proportion
@@ -55,6 +61,8 @@ class MagneticFluxDensity(LinearQuantity):
     @overload
     def __mul__(self, other: SpecificCharge) -> Frequency: ...
     @overload
+    def __mul__(self, other: Velocity) -> ElectricFieldStrength: ...
+    @overload
     def __mul__(self, other: Numeric) -> MagneticFluxDensity: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
@@ -66,6 +74,10 @@ class MagneticFluxDensity(LinearQuantity):
         return super().__mul__(other)
 
     # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: CurrentDensity) -> Inductance: ...
+    @overload
+    def __truediv__(self, other: Inductance) -> CurrentDensity: ...
     @overload
     def __truediv__(self, other: MagneticFieldStrength) -> Permeability: ...
     @overload

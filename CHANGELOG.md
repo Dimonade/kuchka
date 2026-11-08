@@ -14,8 +14,8 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
 - **Electromagnetics:**
   `MagneticFlux` and `MagneticFluxDensity` (weber, tesla, and gauss families), `Capacitance`, `Inductance`, `Permittivity`, `Permeability`, and `MagneticFieldStrength`, with `Magnetization` as its role.
   `Reactance` and `Impedance` are roles of `Resistance`.
-  `LinearChargeDensity` (C/m, nC/m, ...), `SurfaceChargeDensity` (C/m², µC/cm², mAh/cm², ...), and `VolumeChargeDensity` (C/m³, C/cm³, Ah/L, ...).
-  An electric flux density and a polarization density are `SurfaceChargeDensity` values.
+  `ElectricFieldStrength` (V/m, kV/mm, ...), `CurrentDensity` (A/m², A/mm², mA/cm², ...), `LinearChargeDensity` (C/m, nC/m, ...), `SurfaceChargeDensity` (C/m², µC/cm², mAh/cm², ...), and `VolumeChargeDensity` (C/m³, C/cm³, Ah/L, ...), with `ElectricFluxDensity` as a role of `SurfaceChargeDensity`.
+  A polarization density reads as a `SurfaceChargeDensity`.
 - **Kinematics and rotation:**
   `Jerk` (m/s³, mm/s³), `Snap` (m/s⁴, mm/s⁴), `AngularAcceleration` (rad/s², tr/s², °/s², rpm/s), and `AngularJerk` (rad/s³, tr/s³, °/s³).
   `MomentOfInertia` (kg·m², kg·cm², g·cm², lb·ft², lb·in²), `AngularMomentum` (kg·m²/s, N·m·s), and `FirstMomentOfMass` (kg·m, g·cm, g·mm, oz·in), the unbalance of a rotor.
@@ -61,7 +61,9 @@ The quantities above take part in dimensional arithmetic, and the products and q
   A power is the product written out, so the rules of each step apply, and type checkers see the square, the cube, and the fourth power where those have a type.
 - **Electromagnetics:**
   `Voltage * Time`, `MagneticFlux / Area`, `Charge / Voltage`, `Resistance * Time`, `Current / Length`, and `Permeability * MagneticFieldStrength` derive the electromagnetic quantities.
+  `Voltage / Length`, `Force / Charge`, and `MagneticFluxDensity * Velocity` are an `ElectricFieldStrength`, and `Current / Area` and `VolumeChargeDensity * Velocity` a `CurrentDensity`.
   `Charge / Length`, `Charge / Area`, and `Charge / Volume` are the charge densities, and each steps to the next with a division by a `Length`.
+  `Permittivity * ElectricFieldStrength` is an `ElectricFluxDensity`, `ElectricFluxDensity * Area` the `Charge` it encloses, and `ElectricFieldStrength * ElectricFluxDensity` an `EnergyDensity`, the product `E·D`.
   `MagneticFluxDensity * MagneticFieldStrength` is an `EnergyDensity`, the product `B·H`, and `Magnetization` stays refused in it.
   Both role families reuse their parent units through explicit conversions and dedicated unit tables.
 - **Kinematics:**
@@ -101,7 +103,7 @@ The quantities above take part in dimensional arithmetic, and the products and q
   The `Frequency.to_angular_velocity()` docstring notes that a radian rate such as `v / r` reads two pi times too fast through it.
 - **Conversions:**
   Explicit conversions between contested kinds: `Impulse` and `Momentum`, and `VelocitySquared` and `SpecificEnergy`, the latter accounting for the factor of two in kinetic energy.
-  Between a role and its parent: `to_magnetization()`, `to_entropy()`, `to_specific_energy()`, `to_molar_flow_rate()`, and their inverses.
+  Between a role and its parent: `to_magnetization()`, `to_electric_flux_density()`, `to_entropy()`, `to_specific_energy()`, `to_molar_flow_rate()`, and their inverses.
   An `EquivalentDose` has no way into a `SpecificEnergy`, and a sievert times a kilogram is refused.
 - **Dimensional model:**
   Solid angle is an independent dimension axis, so photometric arithmetic distinguishes luminous intensity from luminous flux and derives illuminance and luminance separately.

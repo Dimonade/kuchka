@@ -17,6 +17,7 @@ from tests.support.kinds import UNIT_TABLES
 # Tables derived from another by wrapping its constructors, which are not exported.
 # `EXPOSURE_UNITS` is derived in part: its `C/kg` entry reads a `SpecificCharge`.
 DERIVED_TABLES = (
+    "ELECTRIC_FLUX_DENSITY_UNITS",
     "ENTROPY_UNITS",
     "MOLAR_ENTROPY_UNITS",
     "EXPOSURE_RATE_UNITS",

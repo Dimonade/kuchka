@@ -16,6 +16,10 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.electromagnetics.electric_field_strength import (
+        ElectricFieldStrength,
+    )
+    from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
     from kuchka.quantities.kinematics.angular_velocity_squared import (
@@ -91,6 +95,8 @@ class Acceleration(LinearQuantity):
     @overload
     def __truediv__(self, other: AngularVelocitySquared) -> Length: ...
     @overload
+    def __truediv__(self, other: ElectricFieldStrength) -> SpecificCharge: ...
+    @overload
     def __truediv__(self, other: Frequency) -> Velocity: ...
     @overload
     def __truediv__(self, other: Impulse) -> SpecificActivity: ...
@@ -102,6 +108,8 @@ class Acceleration(LinearQuantity):
     def __truediv__(self, other: Proportion) -> Acceleration: ...
     @overload
     def __truediv__(self, other: Snap) -> TimeSquared: ...
+    @overload
+    def __truediv__(self, other: SpecificCharge) -> ElectricFieldStrength: ...
     @overload
     def __truediv__(self, other: SurfaceActivity) -> VolumetricFlowRate: ...
     @overload

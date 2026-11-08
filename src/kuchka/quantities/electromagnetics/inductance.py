@@ -19,7 +19,11 @@ if TYPE_CHECKING:
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.current_density import CurrentDensity
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
+    from kuchka.quantities.electromagnetics.magnetic_flux_density import (
+        MagneticFluxDensity,
+    )
     from kuchka.quantities.electromagnetics.permeability import Permeability
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.kinematics.time_squared import TimeSquared
@@ -42,6 +46,8 @@ class Inductance(LinearQuantity):
     def __mul__(self, other: Conductance) -> Time: ...
     @overload
     def __mul__(self, other: Current) -> MagneticFlux: ...
+    @overload
+    def __mul__(self, other: CurrentDensity) -> MagneticFluxDensity: ...
     @overload
     def __mul__(self, other: Frequency) -> Resistance: ...
     @overload
