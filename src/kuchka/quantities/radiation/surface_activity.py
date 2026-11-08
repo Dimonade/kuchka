@@ -25,7 +25,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.photometry.illuminance import Illuminance
     from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
@@ -56,6 +58,8 @@ class SurfaceActivity(LinearQuantity):
     def __mul__(self, other: Charge) -> CurrentDensity: ...
     @overload
     def __mul__(self, other: Energy) -> HeatFlux: ...
+    @overload
+    def __mul__(self, other: FirstMomentOfMass) -> DynamicViscosity: ...
     @overload
     def __mul__(self, other: LuminousEnergy) -> Illuminance: ...
     @overload

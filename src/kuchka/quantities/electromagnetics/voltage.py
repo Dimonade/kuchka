@@ -30,12 +30,16 @@ if TYPE_CHECKING:
         LinearChargeDensity,
     )
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
+    from kuchka.quantities.electromagnetics.magnetic_flux_density import (
+        MagneticFluxDensity,
+    )
     from kuchka.quantities.electromagnetics.permittivity import Permittivity
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.proportion import Proportion
@@ -92,9 +96,13 @@ class Voltage(LinearQuantity):
     @overload
     def __truediv__(self, other: Frequency) -> MagneticFlux: ...
     @overload
+    def __truediv__(self, other: KinematicViscosity) -> MagneticFluxDensity: ...
+    @overload
     def __truediv__(self, other: Length) -> ElectricFieldStrength: ...
     @overload
     def __truediv__(self, other: MagneticFlux) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: MagneticFluxDensity) -> KinematicViscosity: ...
     @overload
     def __truediv__(self, other: Proportion) -> Voltage: ...
     @overload

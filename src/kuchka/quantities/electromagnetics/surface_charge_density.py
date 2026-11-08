@@ -20,6 +20,7 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
     from kuchka.quantities.electromagnetics.current_density import CurrentDensity
@@ -45,6 +46,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
@@ -74,6 +76,8 @@ class SurfaceChargeDensity(LinearQuantity):
     def __mul__(self, other: Area) -> Charge: ...
     @overload
     def __mul__(self, other: Frequency) -> CurrentDensity: ...
+    @overload
+    def __mul__(self, other: KinematicViscosity) -> Current: ...
     @overload
     def __mul__(self, other: Length) -> LinearChargeDensity: ...
     @overload

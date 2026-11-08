@@ -45,6 +45,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mechanics.density import Density
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.impulse import Impulse
@@ -55,6 +56,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.surface_activity import SurfaceActivity
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
     from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
 
 
@@ -71,6 +74,8 @@ class Pressure(LinearQuantity):
     def __mul__(self, other: MolarVolume) -> MolarEnergy: ...
     @overload
     def __mul__(self, other: Proportion) -> Pressure: ...
+    @overload
+    def __mul__(self, other: Time) -> DynamicViscosity: ...
     @overload
     def __mul__(self, other: Velocity) -> HeatFlux: ...
     @overload
@@ -92,9 +97,13 @@ class Pressure(LinearQuantity):
     @overload
     def __truediv__(self, other: Density) -> SpecificEnergy: ...
     @overload
+    def __truediv__(self, other: DynamicViscosity) -> Frequency: ...
+    @overload
     def __truediv__(self, other: ElectricFieldStrength) -> SurfaceChargeDensity: ...
     @overload
     def __truediv__(self, other: EnergyDensity) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Frequency) -> DynamicViscosity: ...
     @overload
     def __truediv__(self, other: Impulse) -> SurfaceActivity: ...
     @overload
@@ -177,6 +186,10 @@ class Stress(LinearQuantity):
         return super().__mul__(other)
 
     # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: DynamicViscosity) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: Frequency) -> DynamicViscosity: ...
     @overload
     def __truediv__(self, other: Proportion) -> Stress: ...
     @overload

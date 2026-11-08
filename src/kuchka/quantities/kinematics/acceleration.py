@@ -31,6 +31,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
@@ -45,6 +46,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
 
 
 class Acceleration(LinearQuantity):
@@ -54,6 +56,8 @@ class Acceleration(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: DynamicViscosity) -> HeatFlux: ...
     @overload
     def __mul__(self, other: FirstMomentOfMass) -> Energy: ...
     @overload

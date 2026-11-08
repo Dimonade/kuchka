@@ -100,11 +100,13 @@ from kuchka.quantities.luminous_intensity import *
 from kuchka.quantities.mass import *
 from kuchka.quantities.mechanics.angular_momentum import *
 from kuchka.quantities.mechanics.density import *
+from kuchka.quantities.mechanics.dynamic_viscosity import *
 from kuchka.quantities.mechanics.energy import *
 from kuchka.quantities.mechanics.energy_density import *
 from kuchka.quantities.mechanics.first_moment_of_mass import *
 from kuchka.quantities.mechanics.force import *
 from kuchka.quantities.mechanics.impulse import *
+from kuchka.quantities.mechanics.kinematic_viscosity import *
 from kuchka.quantities.mechanics.mass_flow_rate import *
 from kuchka.quantities.mechanics.moment_of_inertia import *
 from kuchka.quantities.mechanics.momentum import *

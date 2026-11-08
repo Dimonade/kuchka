@@ -32,6 +32,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        SurfaceChargeDensity,
+    )
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.electromagnetics.volume_charge_density import (
         VolumeChargeDensity,
@@ -41,6 +44,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
@@ -93,6 +97,8 @@ class Current(LinearQuantity):
     @overload
     def __truediv__(self, other: Frequency) -> Charge: ...
     @overload
+    def __truediv__(self, other: KinematicViscosity) -> SurfaceChargeDensity: ...
+    @overload
     def __truediv__(self, other: Length) -> MagneticFieldStrength: ...
     @overload
     def __truediv__(self, other: LinearChargeDensity) -> Velocity: ...
@@ -112,6 +118,8 @@ class Current(LinearQuantity):
     def __truediv__(self, other: SpecificCharge) -> MassFlowRate: ...
     @overload
     def __truediv__(self, other: SpecificCurrent) -> Mass: ...
+    @overload
+    def __truediv__(self, other: SurfaceChargeDensity) -> KinematicViscosity: ...
     @overload
     def __truediv__(self, other: Velocity) -> LinearChargeDensity: ...
     @overload

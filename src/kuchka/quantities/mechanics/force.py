@@ -36,10 +36,12 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
@@ -90,6 +92,8 @@ class Force(LinearQuantity):
     @overload
     def __truediv__(self, other: Charge) -> ElectricFieldStrength: ...
     @overload
+    def __truediv__(self, other: DynamicViscosity) -> KinematicViscosity: ...
+    @overload
     def __truediv__(self, other: ElectricFieldStrength) -> Charge: ...
     @overload
     def __truediv__(self, other: EnergyDensity) -> Area: ...
@@ -99,6 +103,8 @@ class Force(LinearQuantity):
     def __truediv__(self, other: Frequency) -> Impulse: ...
     @overload
     def __truediv__(self, other: Impulse) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: KinematicViscosity) -> DynamicViscosity: ...
     @overload
     def __truediv__(self, other: LinearChargeDensity) -> Voltage: ...
     @overload

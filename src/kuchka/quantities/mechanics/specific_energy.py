@@ -36,6 +36,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.specific_power import SpecificPower
@@ -76,6 +77,8 @@ class SpecificEnergy(LinearQuantity):
     @overload
     def __mul__(self, other: Proportion) -> SpecificEnergy: ...
     @overload
+    def __mul__(self, other: Time) -> KinematicViscosity: ...
+    @overload
     def __mul__(self, other: TimeSquared) -> Area: ...
     @overload
     def __mul__(self, other: Numeric) -> SpecificEnergy: ...
@@ -91,6 +94,10 @@ class SpecificEnergy(LinearQuantity):
     # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Acceleration) -> Length: ...
+    @overload
+    def __truediv__(self, other: Frequency) -> KinematicViscosity: ...
+    @overload
+    def __truediv__(self, other: KinematicViscosity) -> Frequency: ...
     @overload
     def __truediv__(self, other: Length) -> Acceleration: ...
     @overload

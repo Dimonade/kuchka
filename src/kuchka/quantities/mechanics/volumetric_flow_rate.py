@@ -27,8 +27,12 @@ if TYPE_CHECKING:
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.velocity import Velocity
+    from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.density import Density
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
+    from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
@@ -47,6 +51,8 @@ class VolumetricFlowRate(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Density) -> MassFlowRate: ...
+    @overload
+    def __mul__(self, other: DynamicViscosity) -> Energy: ...
     @overload
     def __mul__(self, other: EnergyDensity) -> Power: ...
     @overload
@@ -77,6 +83,10 @@ class VolumetricFlowRate(LinearQuantity):
     def __truediv__(self, other: Area) -> Velocity: ...
     @overload
     def __truediv__(self, other: Frequency) -> Volume: ...
+    @overload
+    def __truediv__(self, other: KinematicViscosity) -> Length: ...
+    @overload
+    def __truediv__(self, other: Length) -> KinematicViscosity: ...
     @overload
     def __truediv__(self, other: MolarFlowRate) -> MolarVolume: ...
     @overload

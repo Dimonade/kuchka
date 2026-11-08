@@ -25,6 +25,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.linear_charge_density import (
         LinearChargeDensity,
     )
+    from kuchka.quantities.electromagnetics.magnetic_field_strength import (
+        MagneticFieldStrength,
+    )
+    from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.surface_charge_density import (
         SurfaceChargeDensity,
@@ -34,6 +38,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.density import Density
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
 
@@ -48,7 +54,11 @@ class VolumeChargeDensity(LinearQuantity):
     @overload
     def __mul__(self, other: Area) -> LinearChargeDensity: ...
     @overload
+    def __mul__(self, other: KinematicViscosity) -> MagneticFieldStrength: ...
+    @overload
     def __mul__(self, other: Length) -> SurfaceChargeDensity: ...
+    @overload
+    def __mul__(self, other: MagneticFlux) -> DynamicViscosity: ...
     @overload
     def __mul__(self, other: MolarVolume) -> MolarCharge: ...
     @overload

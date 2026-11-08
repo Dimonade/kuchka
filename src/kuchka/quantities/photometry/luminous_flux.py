@@ -18,10 +18,12 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.luminous_intensity import LuminousIntensity
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.photometry.illuminance import Illuminance
     from kuchka.quantities.photometry.luminous_efficacy import LuminousEfficacy
     from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
+    from kuchka.quantities.photometry.luminous_exposure import LuminousExposure
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.solid_angle import SolidAngle
     from kuchka.quantities.temporal import Frequency
@@ -58,9 +60,13 @@ class LuminousFlux(LinearQuantity):
     @overload
     def __truediv__(self, other: Illuminance) -> Area: ...
     @overload
+    def __truediv__(self, other: KinematicViscosity) -> LuminousExposure: ...
+    @overload
     def __truediv__(self, other: LuminousEfficacy) -> Power: ...
     @overload
     def __truediv__(self, other: LuminousEnergy) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: LuminousExposure) -> KinematicViscosity: ...
     @overload
     def __truediv__(self, other: LuminousFlux) -> Proportion: ...
     @overload

@@ -44,6 +44,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
@@ -59,6 +60,8 @@ if TYPE_CHECKING:
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.activity import Activity
     from kuchka.quantities.radiation.surface_activity import SurfaceActivity
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
     from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
 
 
@@ -75,6 +78,8 @@ class Area(LinearQuantity):
     def __mul__(self, other: ElectricFluxDensity) -> Charge: ...
     @overload
     def __mul__(self, other: EnergyDensity) -> Force: ...
+    @overload
+    def __mul__(self, other: Frequency) -> KinematicViscosity: ...
     @overload
     def __mul__(self, other: HeatFlux) -> Power: ...
     @overload
@@ -116,6 +121,8 @@ class Area(LinearQuantity):
     @overload
     def __truediv__(self, other: Area) -> Proportion: ...
     @overload
+    def __truediv__(self, other: KinematicViscosity) -> Time: ...
+    @overload
     def __truediv__(self, other: Length) -> Length: ...
     @overload
     def __truediv__(self, other: Proportion) -> Area: ...
@@ -123,6 +130,8 @@ class Area(LinearQuantity):
     def __truediv__(self, other: SpecificEnergy) -> TimeSquared: ...
     @overload
     def __truediv__(self, other: SpecificPower) -> TimeCubed: ...
+    @overload
+    def __truediv__(self, other: Time) -> KinematicViscosity: ...
     @overload
     def __truediv__(self, other: TimeCubed) -> SpecificPower: ...
     @overload

@@ -57,12 +57,16 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.activity_concentration import ActivityConcentration
     from kuchka.quantities.radiation.surface_activity import SurfaceActivity
@@ -96,6 +100,8 @@ class Length(LinearQuantity):
     @overload
     def __mul__(self, other: CurrentDensity) -> MagneticFieldStrength: ...
     @overload
+    def __mul__(self, other: DynamicViscosity) -> MassFlowRate: ...
+    @overload
     def __mul__(self, other: ElectricFieldStrength) -> Voltage: ...
     @overload
     def __mul__(self, other: FirstMomentOfMass) -> MomentOfInertia: ...
@@ -105,6 +111,8 @@ class Length(LinearQuantity):
     def __mul__(self, other: Frequency) -> Velocity: ...
     @overload
     def __mul__(self, other: Jerk) -> SpecificPower: ...
+    @overload
+    def __mul__(self, other: KinematicViscosity) -> VolumetricFlowRate: ...
     @overload
     def __mul__(self, other: Length) -> Area: ...
     @overload
@@ -121,6 +129,8 @@ class Length(LinearQuantity):
     def __mul__(self, other: Proportion) -> Length: ...
     @overload
     def __mul__(self, other: SurfaceChargeDensity) -> LinearChargeDensity: ...
+    @overload
+    def __mul__(self, other: Velocity) -> KinematicViscosity: ...
     @overload
     def __mul__(self, other: VolumeChargeDensity) -> SurfaceChargeDensity: ...
     @overload

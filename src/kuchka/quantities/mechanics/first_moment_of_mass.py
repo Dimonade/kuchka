@@ -25,6 +25,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
@@ -32,6 +33,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.specific_activity import SpecificActivity
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.temporal import Time
 
 
@@ -62,6 +64,8 @@ class FirstMomentOfMass(LinearQuantity):
     def __mul__(self, other: Proportion) -> FirstMomentOfMass: ...
     @overload
     def __mul__(self, other: SpecificActivity) -> Velocity: ...
+    @overload
+    def __mul__(self, other: SurfaceActivity) -> DynamicViscosity: ...
     @overload
     def __mul__(self, other: Numeric) -> FirstMomentOfMass: ...
     @overload

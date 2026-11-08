@@ -35,12 +35,18 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.permeability import Permeability
     from kuchka.quantities.electromagnetics.resistance import Resistance
+    from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
     from kuchka.quantities.electromagnetics.surface_charge_density import (
         SurfaceChargeDensity,
     )
+    from kuchka.quantities.electromagnetics.volume_charge_density import (
+        VolumeChargeDensity,
+    )
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -102,9 +108,13 @@ class MagneticFieldStrength(LinearQuantity):
     @overload
     def __truediv__(self, other: CurrentDensity) -> Length: ...
     @overload
+    def __truediv__(self, other: DynamicViscosity) -> SpecificCharge: ...
+    @overload
     def __truediv__(self, other: ElectricFieldStrength) -> Conductance: ...
     @overload
     def __truediv__(self, other: Frequency) -> LinearChargeDensity: ...
+    @overload
+    def __truediv__(self, other: KinematicViscosity) -> VolumeChargeDensity: ...
     @overload
     def __truediv__(self, other: Length) -> CurrentDensity: ...
     @overload
@@ -114,9 +124,13 @@ class MagneticFieldStrength(LinearQuantity):
     @overload
     def __truediv__(self, other: Proportion) -> MagneticFieldStrength: ...
     @overload
+    def __truediv__(self, other: SpecificCharge) -> DynamicViscosity: ...
+    @overload
     def __truediv__(self, other: SurfaceChargeDensity) -> Velocity: ...
     @overload
     def __truediv__(self, other: Velocity) -> SurfaceChargeDensity: ...
+    @overload
+    def __truediv__(self, other: VolumeChargeDensity) -> KinematicViscosity: ...
     @overload
     def __truediv__(self, other: Numeric) -> MagneticFieldStrength: ...
     @overload
