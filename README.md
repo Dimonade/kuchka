@@ -387,6 +387,28 @@ Volt(1) + Millivolt(200) == Volt(1.2)
 
 This includes quantities such as `Voltage`, `Current`, `Length`, `Mass`, `Time`, and many others.
 
+Powers work too.
+A power is the product written out, so each step lands on a registered type, and the result is the quantity the dimension has:
+
+```python
+from kuchka import Metre
+from kuchka import MetrePerSecond
+from kuchka import Second
+from kuchka import SquareMetre
+from kuchka import VelocitySquared
+
+Metre(3) ** 2 == SquareMetre(9)
+# True
+
+isinstance(MetrePerSecond(3) ** 2, VelocitySquared)
+# True
+
+Second(2) ** -1
+# 0.5 Hz
+```
+
+See [dimensional algebra](docs/concepts/dimensional_algebra.md) for the products and powers the registry knows.
+
 ### Affine quantities
 
 Some values represent readings on a scale.
@@ -1031,10 +1053,6 @@ The vocabulary is intentionally curated and will remain finite. Current gaps inc
 - There is no JSON/DB persistence layer.
 
 A future persistence layer may use a representation such as `{"value": 4.2, "unit": "V"}` at the serialization boundary while reconstructing a typed quantity when data enters application code.
-
-Quantities have no exponentiation:
-`Second(2) ** 2` raises a `TypeError`.
-Multiply the factors instead, since every step lands on a registered type: `v0 * t + a * t * t / 2` is a `Length`, and `mass * v * v / 2` is an `Energy`.
 
 ## Stability
 
