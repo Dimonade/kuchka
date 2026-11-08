@@ -105,11 +105,13 @@ from kuchka.units.luminous_intensity import *
 from kuchka.units.mass import *
 from kuchka.units.mechanics.angular_momentum import *
 from kuchka.units.mechanics.density import *
+from kuchka.units.mechanics.dynamic_viscosity import *
 from kuchka.units.mechanics.energy import *
 from kuchka.units.mechanics.energy_density import *
 from kuchka.units.mechanics.first_moment_of_mass import *
 from kuchka.units.mechanics.force import *
 from kuchka.units.mechanics.impulse import *
+from kuchka.units.mechanics.kinematic_viscosity import *
 from kuchka.units.mechanics.mass_flow_rate import *
 from kuchka.units.mechanics.moment_of_inertia import *
 from kuchka.units.mechanics.momentum import *
@@ -166,8 +168,10 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Activity: ACTIVITY_UNITS,
     quantities.ApparentPower: APPARENT_POWER_UNITS,
     quantities.CurrentDensity: CURRENT_DENSITY_UNITS,
+    quantities.DynamicViscosity: DYNAMIC_VISCOSITY_UNITS,
     quantities.ElectricFieldStrength: ELECTRIC_FIELD_STRENGTH_UNITS,
     quantities.ElectricFluxDensity: ELECTRIC_FLUX_DENSITY_UNITS,
+    quantities.KinematicViscosity: KINEMATIC_VISCOSITY_UNITS,
     quantities.ReactivePower: REACTIVE_POWER_UNITS,
     quantities.AmountOfSubstance: AMOUNT_OF_SUBSTANCE_UNITS,
     quantities.Angle: ANGLE_UNITS,
