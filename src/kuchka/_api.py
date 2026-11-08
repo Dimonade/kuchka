@@ -27,9 +27,12 @@ from kuchka.quantities import Charge
 from kuchka.quantities import Conductance
 from kuchka.quantities import ConvertibleToFrequency
 from kuchka.quantities import Current
+from kuchka.quantities import CurrentDensity
 from kuchka.quantities import Data
 from kuchka.quantities import DataRate
 from kuchka.quantities import Density
+from kuchka.quantities import ElectricFieldStrength
+from kuchka.quantities import ElectricFluxDensity
 from kuchka.quantities import Energy
 from kuchka.quantities import EnergyDensity
 from kuchka.quantities import EntitiesPerAmount
@@ -117,6 +120,9 @@ from kuchka.units import AmpereHourPerKilogram
 from kuchka.units import AmpereHourPerLitre
 from kuchka.units import AmperePerKilogram
 from kuchka.units import AmperePerMetre
+from kuchka.units import AmperePerSquareCentimetre
+from kuchka.units import AmperePerSquareMetre
+from kuchka.units import AmperePerSquareMillimetre
 from kuchka.units import AmpereSecond
 from kuchka.units import ArcMinute
 from kuchka.units import ArcMinuteDisplacement
@@ -293,6 +299,7 @@ from kuchka.units import Kibibyte
 from kuchka.units import KibibytePerSecond
 from kuchka.units import Kiloampere
 from kuchka.units import KiloamperePerMetre
+from kuchka.units import KiloamperePerSquareMetre
 from kuchka.units import Kilobaud
 from kuchka.units import Kilobecquerel
 from kuchka.units import KilobecquerelPerCubicMetre
@@ -371,6 +378,9 @@ from kuchka.units import KilotonneOfTNT
 from kuchka.units import Kilovar
 from kuchka.units import Kilovolt
 from kuchka.units import KilovoltAmpere
+from kuchka.units import KilovoltPerCentimetre
+from kuchka.units import KilovoltPerMetre
+from kuchka.units import KilovoltPerMillimetre
 from kuchka.units import Kilowatt
 from kuchka.units import KilowattHour
 from kuchka.units import KilowattHourPerKilogram
@@ -399,6 +409,7 @@ from kuchka.units import Mebibyte
 from kuchka.units import MebibytePerSecond
 from kuchka.units import Megaampere
 from kuchka.units import MegaamperePerMetre
+from kuchka.units import MegaamperePerSquareMetre
 from kuchka.units import Megabaud
 from kuchka.units import Megabecquerel
 from kuchka.units import Megabit
@@ -422,6 +433,7 @@ from kuchka.units import MegatonneOfTNT
 from kuchka.units import Megavar
 from kuchka.units import Megavolt
 from kuchka.units import MegavoltAmpere
+from kuchka.units import MegavoltPerMetre
 from kuchka.units import Megawatt
 from kuchka.units import Meter
 from kuchka.units import MeterPerSecond
@@ -437,6 +449,7 @@ from kuchka.units import MetricHorsepower
 from kuchka.units import Microampere
 from kuchka.units import MicroamperePerKilogram
 from kuchka.units import MicroamperePerMetre
+from kuchka.units import MicroamperePerSquareCentimetre
 from kuchka.units import Microcoulomb
 from kuchka.units import MicrocoulombPerCubicMetre
 from kuchka.units import MicrocoulombPerKilogram
@@ -481,6 +494,7 @@ from kuchka.units import MicrosievertPerHour
 from kuchka.units import Microsteradian
 from kuchka.units import Microtesla
 from kuchka.units import Microvolt
+from kuchka.units import MicrovoltPerMetre
 from kuchka.units import Microwatt
 from kuchka.units import Microweber
 from kuchka.units import Mile
@@ -491,6 +505,8 @@ from kuchka.units import MilliampereHourPerGram
 from kuchka.units import MilliampereHourPerSquareCentimetre
 from kuchka.units import MilliamperePerKilogram
 from kuchka.units import MilliamperePerMetre
+from kuchka.units import MilliamperePerSquareCentimetre
+from kuchka.units import MilliamperePerSquareMetre
 from kuchka.units import MilliampereSecond
 from kuchka.units import Millibar
 from kuchka.units import Millibecquerel
@@ -558,6 +574,7 @@ from kuchka.units import Millitesla
 from kuchka.units import Millivar
 from kuchka.units import Millivolt
 from kuchka.units import MillivoltAmpere
+from kuchka.units import MillivoltPerMetre
 from kuchka.units import Milliwatt
 from kuchka.units import MilliwattHour
 from kuchka.units import MilliwattPerGram
@@ -742,6 +759,9 @@ from kuchka.units import UsGallonPerMinute
 from kuchka.units import Var
 from kuchka.units import Volt
 from kuchka.units import VoltAmpere
+from kuchka.units import VoltPerCentimetre
+from kuchka.units import VoltPerMetre
+from kuchka.units import VoltPerMillimetre
 from kuchka.units import Watt
 from kuchka.units import WattHour
 from kuchka.units import WattHourPerKilogram
@@ -767,6 +787,9 @@ __all__ = [
     "AmpereHourPerLitre",
     "AmperePerKilogram",
     "AmperePerMetre",
+    "AmperePerSquareCentimetre",
+    "AmperePerSquareMetre",
+    "AmperePerSquareMillimetre",
     "AmpereSecond",
     "Angle",
     "AngularAcceleration",
@@ -844,6 +867,7 @@ __all__ = [
     "CuriePerGram",
     "CuriePerSquareKilometre",
     "Current",
+    "CurrentDensity",
     "Dalton",
     "Data",
     "DataRate",
@@ -866,6 +890,8 @@ __all__ = [
     "Dyne",
     "DyneSecond",
     "EarthMass",
+    "ElectricFieldStrength",
+    "ElectricFluxDensity",
     "Electronvolt",
     "Energy",
     "EnergyDensity",
@@ -981,6 +1007,7 @@ __all__ = [
     "KibibytePerSecond",
     "Kiloampere",
     "KiloamperePerMetre",
+    "KiloamperePerSquareMetre",
     "Kilobaud",
     "Kilobecquerel",
     "KilobecquerelPerCubicMetre",
@@ -1059,6 +1086,9 @@ __all__ = [
     "Kilovar",
     "Kilovolt",
     "KilovoltAmpere",
+    "KilovoltPerCentimetre",
+    "KilovoltPerMetre",
+    "KilovoltPerMillimetre",
     "Kilowatt",
     "KilowattHour",
     "KilowattHourPerKilogram",
@@ -1102,6 +1132,7 @@ __all__ = [
     "MebibytePerSecond",
     "Megaampere",
     "MegaamperePerMetre",
+    "MegaamperePerSquareMetre",
     "Megabaud",
     "Megabecquerel",
     "Megabit",
@@ -1125,6 +1156,7 @@ __all__ = [
     "Megavar",
     "Megavolt",
     "MegavoltAmpere",
+    "MegavoltPerMetre",
     "Megawatt",
     "Meter",
     "MeterPerSecond",
@@ -1140,6 +1172,7 @@ __all__ = [
     "Microampere",
     "MicroamperePerKilogram",
     "MicroamperePerMetre",
+    "MicroamperePerSquareCentimetre",
     "Microcoulomb",
     "MicrocoulombPerCubicMetre",
     "MicrocoulombPerKilogram",
@@ -1184,6 +1217,7 @@ __all__ = [
     "Microsteradian",
     "Microtesla",
     "Microvolt",
+    "MicrovoltPerMetre",
     "Microwatt",
     "Microweber",
     "Mile",
@@ -1194,6 +1228,8 @@ __all__ = [
     "MilliampereHourPerSquareCentimetre",
     "MilliamperePerKilogram",
     "MilliamperePerMetre",
+    "MilliamperePerSquareCentimetre",
+    "MilliamperePerSquareMetre",
     "MilliampereSecond",
     "Millibar",
     "Millibecquerel",
@@ -1261,6 +1297,7 @@ __all__ = [
     "Millivar",
     "Millivolt",
     "MillivoltAmpere",
+    "MillivoltPerMetre",
     "Milliwatt",
     "MilliwattHour",
     "MilliwattPerGram",
@@ -1487,6 +1524,9 @@ __all__ = [
     "VelocitySquared",
     "Volt",
     "VoltAmpere",
+    "VoltPerCentimetre",
+    "VoltPerMetre",
+    "VoltPerMillimetre",
     "Voltage",
     "Volume",
     "VolumeChargeDensity",

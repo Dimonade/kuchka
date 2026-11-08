@@ -65,6 +65,9 @@ from kuchka.units.electromagnetics.ac_power import *
 from kuchka.units.electromagnetics.capacitance import *
 from kuchka.units.electromagnetics.charge import *
 from kuchka.units.electromagnetics.conductance import *
+from kuchka.units.electromagnetics.current_density import *
+from kuchka.units.electromagnetics.electric_field_strength import *
+from kuchka.units.electromagnetics.electric_flux_density import *
 from kuchka.units.electromagnetics.impedance import *
 from kuchka.units.electromagnetics.inductance import *
 from kuchka.units.electromagnetics.linear_charge_density import *
@@ -160,6 +163,9 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.Acceleration: ACCELERATION_UNITS,
     quantities.Activity: ACTIVITY_UNITS,
     quantities.ApparentPower: APPARENT_POWER_UNITS,
+    quantities.CurrentDensity: CURRENT_DENSITY_UNITS,
+    quantities.ElectricFieldStrength: ELECTRIC_FIELD_STRENGTH_UNITS,
+    quantities.ElectricFluxDensity: ELECTRIC_FLUX_DENSITY_UNITS,
     quantities.ReactivePower: REACTIVE_POWER_UNITS,
     quantities.AmountOfSubstance: AMOUNT_OF_SUBSTANCE_UNITS,
     quantities.Angle: ANGLE_UNITS,
