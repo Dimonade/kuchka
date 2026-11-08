@@ -10,6 +10,7 @@ from kuchka import Activity
 from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import CatalyticActivity
+from kuchka import ElectricFluxDensity
 from kuchka import Entropy
 from kuchka import EquivalentDose
 from kuchka import EquivalentDoseRate
@@ -37,6 +38,7 @@ from kuchka import SpecificEntropy
 from kuchka import SpecificHeatCapacity
 from kuchka import SpecificPower
 from kuchka import Stress
+from kuchka import SurfaceChargeDensity
 from kuchka import Time
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import TIME
@@ -63,6 +65,7 @@ from tests.support.synthetic import registry_state
         (SpecificEntropy, SpecificHeatCapacity),
         (ApparentPower, Power),
         (BaudRate, Frequency),
+        (ElectricFluxDensity, SurfaceChargeDensity),
         (Impedance, Resistance),
         (Magnetization, MagneticFieldStrength),
         (Reactance, Resistance),
@@ -85,6 +88,7 @@ def test_only_the_listed_kinds_are_specialisations() -> None:
         ApparentPower,
         BaudRate,
         CatalyticActivity,
+        ElectricFluxDensity,
         Entropy,
         EquivalentDose,
         EquivalentDoseRate,

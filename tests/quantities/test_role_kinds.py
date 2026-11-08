@@ -13,6 +13,7 @@ from kuchka import Activity
 from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import CatalyticActivity
+from kuchka import ElectricFluxDensity
 from kuchka import Entropy
 from kuchka import EquivalentDose
 from kuchka import EquivalentDoseRate
@@ -47,6 +48,7 @@ CONVERSION = {
     ApparentPower: "to_power",
     BaudRate: "no conversion",
     CatalyticActivity: "to_molar_flow_rate",
+    ElectricFluxDensity: "to_surface_charge_density",
     Entropy: "to_heat_capacity",
     MolarEntropy: "to_molar_heat_capacity",
     EquivalentDose: "no conversion",

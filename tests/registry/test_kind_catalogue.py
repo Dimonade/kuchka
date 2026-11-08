@@ -12,6 +12,7 @@ from kuchka import AngularDisplacement
 from kuchka import ApparentPower
 from kuchka import BaudRate
 from kuchka import CatalyticActivity
+from kuchka import ElectricFluxDensity
 from kuchka import EnergyDensity
 from kuchka import Entropy
 from kuchka import EquivalentDose
@@ -45,6 +46,7 @@ from kuchka import SpecificEntropy
 from kuchka import SpecificHeatCapacity
 from kuchka import SpecificPower
 from kuchka import Stress
+from kuchka import SurfaceChargeDensity
 from kuchka import Temperature
 from kuchka import TemperatureDelta
 from kuchka import Time
@@ -65,6 +67,7 @@ from kuchka.dimensions import SPECIFIC_CURRENT
 from kuchka.dimensions import SPECIFIC_ENERGY
 from kuchka.dimensions import SPECIFIC_HEAT_CAPACITY
 from kuchka.dimensions import SPECIFIC_POWER
+from kuchka.dimensions import SURFACE_CHARGE_DENSITY
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.dimensions import TIME
 from kuchka.dimensions import Dimension
@@ -86,6 +89,7 @@ SHARED = {
     ANGLE: (Angle, AngularDisplacement),
     SPECIFIC_ENERGY: (SpecificEnergy, VelocitySquared, AbsorbedDose, EquivalentDose),
     SPECIFIC_CHARGE: (SpecificCharge, Exposure),
+    SURFACE_CHARGE_DENSITY: (SurfaceChargeDensity, ElectricFluxDensity),
     SPECIFIC_POWER: (SpecificPower, AbsorbedDoseRate, EquivalentDoseRate),
     SPECIFIC_CURRENT: (SpecificCurrent, ExposureRate),
     HEAT_CAPACITY: (HeatCapacity, Entropy),
