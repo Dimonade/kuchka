@@ -56,6 +56,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
@@ -92,6 +93,8 @@ class Velocity(LinearQuantity):
     def __mul__(self, other: Frequency) -> Acceleration: ...
     @overload
     def __mul__(self, other: Impulse) -> Energy: ...
+    @overload
+    def __mul__(self, other: Length) -> KinematicViscosity: ...
     @overload
     def __mul__(self, other: LinearChargeDensity) -> Current: ...
     @overload

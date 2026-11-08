@@ -26,7 +26,9 @@ if TYPE_CHECKING:
     )
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
@@ -44,6 +46,8 @@ class Density(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: KinematicViscosity) -> DynamicViscosity: ...
     @overload
     def __mul__(self, other: Molality) -> MolarConcentration: ...
     @overload

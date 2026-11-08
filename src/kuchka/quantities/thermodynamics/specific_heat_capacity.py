@@ -22,12 +22,16 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molality import Molality
     from kuchka.quantities.chemistry.molar_heat_capacity import MolarHeatCapacity
     from kuchka.quantities.chemistry.molar_mass import MolarMass
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.thermal import TemperatureDelta
     from kuchka.quantities.thermodynamics.heat_capacity import HeatCapacity
     from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
+    from kuchka.quantities.thermodynamics.thermal_conductivity import (
+        ThermalConductivity,
+    )
 
 
 class SpecificHeatCapacity(LinearQuantity):
@@ -51,6 +55,8 @@ class SpecificHeatCapacity(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: DynamicViscosity) -> ThermalConductivity: ...
     @overload
     def __mul__(self, other: HeatingRate) -> SpecificPower: ...
     @overload

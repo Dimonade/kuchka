@@ -118,11 +118,13 @@ from __future__ import annotations
 
 from kuchka.units.mechanics import angular_momentum
 from kuchka.units.mechanics import density
+from kuchka.units.mechanics import dynamic_viscosity
 from kuchka.units.mechanics import energy
 from kuchka.units.mechanics import energy_density
 from kuchka.units.mechanics import first_moment_of_mass
 from kuchka.units.mechanics import force
 from kuchka.units.mechanics import impulse
+from kuchka.units.mechanics import kinematic_viscosity
 from kuchka.units.mechanics import mass_flow_rate
 from kuchka.units.mechanics import moment_of_inertia
 from kuchka.units.mechanics import momentum
@@ -136,11 +138,13 @@ from kuchka.units.mechanics import velocity_squared
 from kuchka.units.mechanics import volumetric_flow_rate
 from kuchka.units.mechanics.angular_momentum import *
 from kuchka.units.mechanics.density import *
+from kuchka.units.mechanics.dynamic_viscosity import *
 from kuchka.units.mechanics.energy import *
 from kuchka.units.mechanics.energy_density import *
 from kuchka.units.mechanics.first_moment_of_mass import *
 from kuchka.units.mechanics.force import *
 from kuchka.units.mechanics.impulse import *
+from kuchka.units.mechanics.kinematic_viscosity import *
 from kuchka.units.mechanics.mass_flow_rate import *
 from kuchka.units.mechanics.moment_of_inertia import *
 from kuchka.units.mechanics.momentum import *
@@ -156,11 +160,13 @@ from kuchka.units.mechanics.volumetric_flow_rate import *
 __all__: list[str] = []
 __all__ += angular_momentum.__all__
 __all__ += density.__all__
+__all__ += dynamic_viscosity.__all__
 __all__ += energy.__all__
 __all__ += energy_density.__all__
 __all__ += first_moment_of_mass.__all__
 __all__ += force.__all__
 __all__ += impulse.__all__
+__all__ += kinematic_viscosity.__all__
 __all__ += mass_flow_rate.__all__
 __all__ += moment_of_inertia.__all__
 __all__ += momentum.__all__

@@ -26,8 +26,10 @@ if TYPE_CHECKING:
         LinearChargeDensity,
     )
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
+    from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.length import Length
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.impulse import Impulse
@@ -86,6 +88,10 @@ class Momentum(LinearQuantity):
     # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: AngularVelocity) -> FirstMomentOfMass: ...
+    @overload
+    def __truediv__(self, other: Area) -> DynamicViscosity: ...
+    @overload
+    def __truediv__(self, other: DynamicViscosity) -> Area: ...
     @overload
     def __truediv__(self, other: FirstMomentOfMass) -> Frequency: ...
     @overload

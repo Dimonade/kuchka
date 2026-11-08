@@ -34,10 +34,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.angular_momentum import AngularMomentum
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
@@ -46,6 +49,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.specific_power import SpecificPower
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
+    from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.photometry.luminous_efficacy import LuminousEfficacy
     from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
     from kuchka.quantities.proportion import Proportion
@@ -106,6 +110,8 @@ class Energy(LinearQuantity):
     @overload
     def __truediv__(self, other: Current) -> MagneticFlux: ...
     @overload
+    def __truediv__(self, other: DynamicViscosity) -> VolumetricFlowRate: ...
+    @overload
     def __truediv__(self, other: Energy) -> Proportion: ...
     @overload
     def __truediv__(self, other: EnergyDensity) -> Volume: ...
@@ -118,11 +124,15 @@ class Energy(LinearQuantity):
     @overload
     def __truediv__(self, other: Impulse) -> Velocity: ...
     @overload
+    def __truediv__(self, other: KinematicViscosity) -> MassFlowRate: ...
+    @overload
     def __truediv__(self, other: Length) -> Force: ...
     @overload
     def __truediv__(self, other: MagneticFlux) -> Current: ...
     @overload
     def __truediv__(self, other: Mass) -> SpecificEnergy: ...
+    @overload
+    def __truediv__(self, other: MassFlowRate) -> KinematicViscosity: ...
     @overload
     def __truediv__(self, other: MolarEnergy) -> AmountOfSubstance: ...
     @overload
@@ -149,6 +159,8 @@ class Energy(LinearQuantity):
     def __truediv__(self, other: Voltage) -> Charge: ...
     @overload
     def __truediv__(self, other: Volume) -> EnergyDensity: ...
+    @overload
+    def __truediv__(self, other: VolumetricFlowRate) -> DynamicViscosity: ...
     @overload
     def __truediv__(self, other: Numeric) -> Energy: ...
     @overload

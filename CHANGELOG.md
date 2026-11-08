@@ -23,6 +23,8 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   The powers of a duration and of a rate, so that a product of three factors has one value in every order: `TimeSquared` (s², ms², µs², ns², min², h²), `TimeCubed` and `TimeFourthPower` (the same units), and `AngularVelocitySquared` (rad²/s², tr²/s², °²/s²).
 - **Mechanics:**
   `SpecificEnergy` (J/kg, Wh/kg, cal/kg), `Momentum` (SI, CGS, and FPS), `Impulse` (N·s, mN·s, kN·s, dyn·s, lbf·s), `VelocitySquared`, `VolumetricFlowRate`, and `MassFlowRate`.
+  `DynamicViscosity` (Pa·s, mPa·s, µPa·s, P, cP) and `KinematicViscosity` (m²/s, mm²/s, cm²/s, µm²/s, St, cSt).
+  A thermal diffusivity and a diffusion coefficient read as a `KinematicViscosity`.
 - **Thermodynamics:**
   `HeatingRate` (K/s, °C/s, °F/s), `HeatCapacity` (J/K, kJ/K, cal/K, kcal/K), and `SpecificHeatCapacity` (J/(kg·K), kJ/(kg·K), cal/(g·K)).
   `HeatFlux` (W/m², kW/m², mW/cm², ...) and `ThermalConductivity` (W/(m·K), mW/(m·K), W/(cm·K)).
@@ -76,6 +78,8 @@ The quantities above take part in dimensional arithmetic, and the products and q
 - **Mechanics and thermodynamics:**
   `SpecificEnergy` derives from energy, pressure, density, and acceleration relationships, `HeatingRate` from temperature change and time, `Momentum` from `Mass * Velocity`, `Impulse` from `Force * Time`, `VelocitySquared` from `Velocity * Velocity`, and the flow rates from volume, mass, density, area, and velocity.
   `Pressure * VolumetricFlowRate` is a `Power`.
+  `Pressure * Time` and `Density * KinematicViscosity` are a `DynamicViscosity`, and `Area / Time`, `Velocity * Length`, and `DynamicViscosity / Density` a `KinematicViscosity`, so the Reynolds number `v * L / nu` is a `Proportion`.
+  `DynamicViscosity * Frequency` is a `Stress`, the shear stress of a shear rate `Velocity / Length`, and `Stress / Frequency` the `DynamicViscosity` it measures.
   `Power / Area`, `Pressure * Velocity`, and `EnergyDensity * Velocity` are a `HeatFlux`, and `HeatFlux * Area` is a `Power`.
   `Energy / TemperatureDelta` is a `HeatCapacity`, `HeatCapacity / Mass` and `SpecificEnergy / TemperatureDelta` a `SpecificHeatCapacity`, and the heat `Q = m * c * dT` is an `Energy` however it is grouped.
   `HeatCapacity / AmountOfSubstance` and `MolarEnergy / TemperatureDelta` are a `MolarHeatCapacity`.

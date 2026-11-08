@@ -17,8 +17,10 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
     from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.photometry.illuminance import Illuminance
     from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
+    from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -35,6 +37,8 @@ class LuminousExposure(LinearQuantity):
     def __mul__(self, other: Area) -> LuminousEnergy: ...
     @overload
     def __mul__(self, other: Frequency) -> Illuminance: ...
+    @overload
+    def __mul__(self, other: KinematicViscosity) -> LuminousFlux: ...
     @overload
     def __mul__(self, other: Proportion) -> LuminousExposure: ...
     @overload

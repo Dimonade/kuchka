@@ -31,6 +31,7 @@ from kuchka.quantities import CurrentDensity
 from kuchka.quantities import Data
 from kuchka.quantities import DataRate
 from kuchka.quantities import Density
+from kuchka.quantities import DynamicViscosity
 from kuchka.quantities import ElectricFieldStrength
 from kuchka.quantities import ElectricFluxDensity
 from kuchka.quantities import Energy
@@ -53,6 +54,7 @@ from kuchka.quantities import Impulse
 from kuchka.quantities import Inductance
 from kuchka.quantities import Instant
 from kuchka.quantities import Jerk
+from kuchka.quantities import KinematicViscosity
 from kuchka.quantities import Length
 from kuchka.quantities import LinearChargeDensity
 from kuchka.quantities import LogarithmicRatio
@@ -157,6 +159,8 @@ from kuchka.units import Centigray
 from kuchka.units import CentigrayPerMinute
 from kuchka.units import Centimeter
 from kuchka.units import Centimetre
+from kuchka.units import Centipoise
+from kuchka.units import Centistokes
 from kuchka.units import Coulomb
 from kuchka.units import CoulombPerCubicCentimetre
 from kuchka.units import CoulombPerCubicMetre
@@ -487,6 +491,7 @@ from kuchka.units import MicromolePerLiter
 from kuchka.units import MicromolePerLitre
 from kuchka.units import Micronewton
 from kuchka.units import Microohm
+from kuchka.units import MicropascalSecond
 from kuchka.units import Microroentgen
 from kuchka.units import MicroroentgenPerHour
 from kuchka.units import Microsecond
@@ -562,6 +567,7 @@ from kuchka.units import MillinewtonMeter
 from kuchka.units import MillinewtonMetre
 from kuchka.units import MillinewtonSecond
 from kuchka.units import Milliohm
+from kuchka.units import MillipascalSecond
 from kuchka.units import Millirad
 from kuchka.units import MilliradPerHour
 from kuchka.units import Millirem
@@ -646,6 +652,7 @@ from kuchka.units import Ounce
 from kuchka.units import OunceInch
 from kuchka.units import Parsec
 from kuchka.units import Pascal
+from kuchka.units import PascalSecond
 from kuchka.units import Pebibit
 from kuchka.units import PebibitPerSecond
 from kuchka.units import Pebibyte
@@ -680,6 +687,7 @@ from kuchka.units import Picomole
 from kuchka.units import Picosecond
 from kuchka.units import Picotesla
 from kuchka.units import Picowatt
+from kuchka.units import Poise
 from kuchka.units import Pound
 from kuchka.units import PoundFootPerSecond
 from kuchka.units import PoundForce
@@ -724,6 +732,7 @@ from kuchka.units import SquareArcMinute
 from kuchka.units import SquareArcSecond
 from kuchka.units import SquareCentimeter
 from kuchka.units import SquareCentimetre
+from kuchka.units import SquareCentimetrePerSecond
 from kuchka.units import SquareDegree
 from kuchka.units import SquareInch
 from kuchka.units import SquareKilometer
@@ -731,11 +740,15 @@ from kuchka.units import SquareKilometre
 from kuchka.units import SquareKilometrePerSecondSquared
 from kuchka.units import SquareMeter
 from kuchka.units import SquareMetre
+from kuchka.units import SquareMetrePerSecond
 from kuchka.units import SquareMetrePerSecondSquared
+from kuchka.units import SquareMicrometrePerSecond
 from kuchka.units import SquareMillimeter
 from kuchka.units import SquareMillimetre
+from kuchka.units import SquareMillimetrePerSecond
 from kuchka.units import Steradian
 from kuchka.units import Stilb
+from kuchka.units import Stokes
 from kuchka.units import Tebibit
 from kuchka.units import TebibitPerSecond
 from kuchka.units import Tebibyte
@@ -847,6 +860,8 @@ __all__ = [
     "CentigrayPerMinute",
     "Centimeter",
     "Centimetre",
+    "Centipoise",
+    "Centistokes",
     "Charge",
     "Conductance",
     "ConvertibleToFrequency",
@@ -900,6 +915,7 @@ __all__ = [
     "DeltaRankine",
     "Density",
     "DpmPer100SquareCentimetre",
+    "DynamicViscosity",
     "Dyne",
     "DyneSecond",
     "EarthMass",
@@ -1110,6 +1126,7 @@ __all__ = [
     "KilowattPerMetreKelvin",
     "KilowattPerSquareMetre",
     "Kiloweber",
+    "KinematicViscosity",
     "Knot",
     "Length",
     "LightYear",
@@ -1222,6 +1239,7 @@ __all__ = [
     "MicromolePerLitre",
     "Micronewton",
     "Microohm",
+    "MicropascalSecond",
     "Microroentgen",
     "MicroroentgenPerHour",
     "Microsecond",
@@ -1297,6 +1315,7 @@ __all__ = [
     "MillinewtonMetre",
     "MillinewtonSecond",
     "Milliohm",
+    "MillipascalSecond",
     "Millirad",
     "MilliradPerHour",
     "Millirem",
@@ -1392,6 +1411,7 @@ __all__ = [
     "OunceInch",
     "Parsec",
     "Pascal",
+    "PascalSecond",
     "Pebibit",
     "PebibitPerSecond",
     "Pebibyte",
@@ -1428,6 +1448,7 @@ __all__ = [
     "Picosecond",
     "Picotesla",
     "Picowatt",
+    "Poise",
     "Pound",
     "PoundFootPerSecond",
     "PoundForce",
@@ -1489,6 +1510,7 @@ __all__ = [
     "SquareArcSecond",
     "SquareCentimeter",
     "SquareCentimetre",
+    "SquareCentimetrePerSecond",
     "SquareDegree",
     "SquareInch",
     "SquareKilometer",
@@ -1496,11 +1518,15 @@ __all__ = [
     "SquareKilometrePerSecondSquared",
     "SquareMeter",
     "SquareMetre",
+    "SquareMetrePerSecond",
     "SquareMetrePerSecondSquared",
+    "SquareMicrometrePerSecond",
     "SquareMillimeter",
     "SquareMillimetre",
+    "SquareMillimetrePerSecond",
     "Steradian",
     "Stilb",
+    "Stokes",
     "Stress",
     "SurfaceActivity",
     "SurfaceChargeDensity",

@@ -25,10 +25,12 @@ if TYPE_CHECKING:
     )
     from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.time_cubed import TimeCubed
     from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
@@ -75,7 +77,11 @@ class HeatFlux(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: Acceleration) -> DynamicViscosity: ...
+    @overload
     def __truediv__(self, other: CurrentDensity) -> Voltage: ...
+    @overload
+    def __truediv__(self, other: DynamicViscosity) -> Acceleration: ...
     @overload
     def __truediv__(self, other: ElectricFieldStrength) -> MagneticFieldStrength: ...
     @overload

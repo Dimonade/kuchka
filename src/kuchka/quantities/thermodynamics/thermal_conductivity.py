@@ -16,7 +16,11 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.thermodynamics.specific_heat_capacity import (
+        SpecificHeatCapacity,
+    )
 
 
 class ThermalConductivity(LinearQuantity):
@@ -44,7 +48,11 @@ class ThermalConductivity(LinearQuantity):
 
     # BEGIN GENERATED __truediv__
     @overload
+    def __truediv__(self, other: DynamicViscosity) -> SpecificHeatCapacity: ...
+    @overload
     def __truediv__(self, other: Proportion) -> ThermalConductivity: ...
+    @overload
+    def __truediv__(self, other: SpecificHeatCapacity) -> DynamicViscosity: ...
     @overload
     def __truediv__(self, other: ThermalConductivity) -> Proportion: ...
     @overload

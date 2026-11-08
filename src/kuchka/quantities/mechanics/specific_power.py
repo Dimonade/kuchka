@@ -25,10 +25,12 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.jerk import Jerk
     from kuchka.quantities.kinematics.time_cubed import TimeCubed
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
@@ -66,6 +68,8 @@ class SpecificPower(LinearQuantity):
     def __mul__(self, other: Time) -> SpecificEnergy: ...
     @overload
     def __mul__(self, other: TimeCubed) -> Area: ...
+    @overload
+    def __mul__(self, other: TimeSquared) -> KinematicViscosity: ...
     @overload
     def __mul__(self, other: Numeric) -> SpecificPower: ...
     @overload

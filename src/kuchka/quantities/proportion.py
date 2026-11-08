@@ -101,11 +101,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.angular_momentum import AngularMomentum
     from kuchka.quantities.mechanics.density import Density
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
     from kuchka.quantities.mechanics.momentum import Momentum
@@ -209,6 +211,8 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: Density) -> Density: ...
     @overload
+    def __mul__(self, other: DynamicViscosity) -> DynamicViscosity: ...
+    @overload
     def __mul__(self, other: ElectricFieldStrength) -> ElectricFieldStrength: ...
     @overload
     def __mul__(self, other: ElectricFluxDensity) -> ElectricFluxDensity: ...
@@ -250,6 +254,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: Inductance) -> Inductance: ...
     @overload
     def __mul__(self, other: Jerk) -> Jerk: ...
+    @overload
+    def __mul__(self, other: KinematicViscosity) -> KinematicViscosity: ...
     @overload
     def __mul__(self, other: Length) -> Length: ...
     @overload
