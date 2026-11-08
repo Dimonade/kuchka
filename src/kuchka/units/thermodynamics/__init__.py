@@ -11,18 +11,24 @@ from __future__ import annotations
 
 from kuchka.units.thermodynamics import entropy
 from kuchka.units.thermodynamics import heat_capacity
+from kuchka.units.thermodynamics import heat_flux
 from kuchka.units.thermodynamics import heating_rate
 from kuchka.units.thermodynamics import specific_entropy
 from kuchka.units.thermodynamics import specific_heat_capacity
+from kuchka.units.thermodynamics import thermal_conductivity
 from kuchka.units.thermodynamics.entropy import *
 from kuchka.units.thermodynamics.heat_capacity import *
+from kuchka.units.thermodynamics.heat_flux import *
 from kuchka.units.thermodynamics.heating_rate import *
 from kuchka.units.thermodynamics.specific_entropy import *
 from kuchka.units.thermodynamics.specific_heat_capacity import *
+from kuchka.units.thermodynamics.thermal_conductivity import *
 
 __all__: list[str] = []
 __all__ += entropy.__all__
 __all__ += heat_capacity.__all__
+__all__ += heat_flux.__all__
 __all__ += heating_rate.__all__
 __all__ += specific_entropy.__all__
 __all__ += specific_heat_capacity.__all__
+__all__ += thermal_conductivity.__all__

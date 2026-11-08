@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.capacitance import Capacitance
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.current_density import CurrentDensity
     from kuchka.quantities.electromagnetics.electric_field_strength import (
         ElectricFieldStrength,
     )
@@ -40,6 +41,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
 
 
 class Voltage(LinearQuantity):
@@ -57,6 +59,8 @@ class Voltage(LinearQuantity):
     def __mul__(self, other: Conductance) -> Current: ...
     @overload
     def __mul__(self, other: Current) -> Power: ...
+    @overload
+    def __mul__(self, other: CurrentDensity) -> HeatFlux: ...
     @overload
     def __mul__(self, other: LinearChargeDensity) -> Force: ...
     @overload

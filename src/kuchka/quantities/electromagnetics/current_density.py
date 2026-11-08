@@ -28,6 +28,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.surface_charge_density import (
         SurfaceChargeDensity,
     )
+    from kuchka.quantities.electromagnetics.voltage import Voltage
     from kuchka.quantities.electromagnetics.volume_charge_density import (
         VolumeChargeDensity,
     )
@@ -38,6 +39,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
 
 
 class CurrentDensity(LinearQuantity):
@@ -63,6 +65,8 @@ class CurrentDensity(LinearQuantity):
     def __mul__(self, other: Proportion) -> CurrentDensity: ...
     @overload
     def __mul__(self, other: Time) -> SurfaceChargeDensity: ...
+    @overload
+    def __mul__(self, other: Voltage) -> HeatFlux: ...
     @overload
     def __mul__(self, other: Numeric) -> CurrentDensity: ...
     @overload

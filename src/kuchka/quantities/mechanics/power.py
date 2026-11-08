@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
@@ -46,6 +47,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
     from kuchka.quantities.thermodynamics.heat_capacity import HeatCapacity
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
     from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
 
 
@@ -81,6 +83,8 @@ class Power(LinearQuantity):
     @overload
     def __truediv__(self, other: AngularVelocity) -> Torque: ...
     @overload
+    def __truediv__(self, other: Area) -> HeatFlux: ...
+    @overload
     def __truediv__(self, other: Current) -> Voltage: ...
     @overload
     def __truediv__(self, other: Energy) -> Frequency: ...
@@ -94,6 +98,8 @@ class Power(LinearQuantity):
     def __truediv__(self, other: Frequency) -> Energy: ...
     @overload
     def __truediv__(self, other: HeatCapacity) -> HeatingRate: ...
+    @overload
+    def __truediv__(self, other: HeatFlux) -> Area: ...
     @overload
     def __truediv__(self, other: HeatingRate) -> HeatCapacity: ...
     @overload

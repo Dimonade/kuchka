@@ -721,13 +721,15 @@ The units of `kuchka.units.temporal`.
 
 The units of `kuchka.units.thermodynamics`.
 
-| Quantity         | Representative units                                                                                             |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Heating Rate     | `KelvinPerSecond`, `CelsiusPerMinute`, `FahrenheitPerMinute`, and the per-second, per-minute, and per-hour units |
-| Heat capacity    | `JoulePerKelvin`, `KilojoulePerKelvin`, `ThermochemicalCaloriePerKelvin`, `KilocaloriePerKelvin`                 |
-| Specific heat    | `JoulePerKilogramKelvin`, `KilojoulePerKilogramKelvin`, `ThermochemicalCaloriePerGramKelvin`                     |
-| Entropy          | `HeatCapacity.to_entropy()`, and `ENTROPY_UNITS` for the same units as text                                      |
-| Specific entropy | `SpecificHeatCapacity.to_specific_entropy()`, and `SPECIFIC_ENTROPY_UNITS`                                       |
+| Quantity             | Representative units                                                                                             |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Heating Rate         | `KelvinPerSecond`, `CelsiusPerMinute`, `FahrenheitPerMinute`, and the per-second, per-minute, and per-hour units |
+| Heat capacity        | `JoulePerKelvin`, `KilojoulePerKelvin`, `ThermochemicalCaloriePerKelvin`, `KilocaloriePerKelvin`                 |
+| Specific heat        | `JoulePerKilogramKelvin`, `KilojoulePerKilogramKelvin`, `ThermochemicalCaloriePerGramKelvin`                     |
+| Heat flux            | `WattPerSquareMetre`, `KilowattPerSquareMetre`, `MilliwattPerSquareCentimetre`                                   |
+| Thermal conductivity | `WattPerMetreKelvin`, `MilliwattPerMetreKelvin`, `WattPerCentimetreKelvin`                                       |
+| Entropy              | `HeatCapacity.to_entropy()`, and `ENTROPY_UNITS` for the same units as text                                      |
+| Specific entropy     | `SpecificHeatCapacity.to_specific_entropy()`, and `SPECIFIC_ENTROPY_UNITS`                                       |
 
 Most SI-derived families expose a selected set of SI prefixes appropriate to their engineering use.
 The README does not list every prefix individually; the API reference contains the complete constructor and unit vocabulary.

@@ -142,10 +142,14 @@ if TYPE_CHECKING:
     from kuchka.quantities.thermal import TemperatureDelta
     from kuchka.quantities.thermodynamics.heat_capacity import Entropy
     from kuchka.quantities.thermodynamics.heat_capacity import HeatCapacity
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
     from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
     from kuchka.quantities.thermodynamics.specific_heat_capacity import SpecificEntropy
     from kuchka.quantities.thermodynamics.specific_heat_capacity import (
         SpecificHeatCapacity,
+    )
+    from kuchka.quantities.thermodynamics.thermal_conductivity import (
+        ThermalConductivity,
     )
 
 
@@ -232,6 +236,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: Frequency) -> Frequency: ...
     @overload
     def __mul__(self, other: HeatCapacity) -> HeatCapacity: ...
+    @overload
+    def __mul__(self, other: HeatFlux) -> HeatFlux: ...
     @overload
     def __mul__(self, other: HeatingRate) -> HeatingRate: ...
     @overload
@@ -340,6 +346,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: SurfaceChargeDensity) -> SurfaceChargeDensity: ...
     @overload
     def __mul__(self, other: TemperatureDelta) -> TemperatureDelta: ...
+    @overload
+    def __mul__(self, other: ThermalConductivity) -> ThermalConductivity: ...
     @overload
     def __mul__(self, other: Time) -> Time: ...
     @overload

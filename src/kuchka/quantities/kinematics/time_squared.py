@@ -33,11 +33,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
 
 
 class TimeSquared(LinearQuantity):
@@ -65,6 +67,8 @@ class TimeSquared(LinearQuantity):
     def __mul__(self, other: Force) -> FirstMomentOfMass: ...
     @overload
     def __mul__(self, other: Frequency) -> Time: ...
+    @overload
+    def __mul__(self, other: HeatFlux) -> MassFlowRate: ...
     @overload
     def __mul__(self, other: Jerk) -> Velocity: ...
     @overload

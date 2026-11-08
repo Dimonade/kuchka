@@ -25,6 +25,8 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   `SpecificEnergy` (J/kg, Wh/kg, cal/kg), `Momentum` (SI, CGS, and FPS), `Impulse` (N·s, mN·s, kN·s, dyn·s, lbf·s), `VelocitySquared`, `VolumetricFlowRate`, and `MassFlowRate`.
 - **Thermodynamics:**
   `HeatingRate` (K/s, °C/s, °F/s), `HeatCapacity` (J/K, kJ/K, cal/K, kcal/K), and `SpecificHeatCapacity` (J/(kg·K), kJ/(kg·K), cal/(g·K)).
+  `HeatFlux` (W/m², kW/m², mW/cm², ...) and `ThermalConductivity` (W/(m·K), mW/(m·K), W/(cm·K)).
+  An irradiance and a sound intensity read as a `HeatFlux`.
   `Entropy` and `SpecificEntropy` are closed roles of them, so that `Entropy * TemperatureDelta` is refused and never silently an `Energy`.
   `MolarHeatCapacity` (J/(mol·K), kJ/(mol·K), cal/(mol·K)) and its role `MolarEntropy`, the quantities the molar gas constant and the entropy tables of chemistry are measured in.
   A degree Celsius in a denominator is a kelvin, so `J/°C` and `J/(kg·°C)` are accepted spellings.
@@ -74,6 +76,7 @@ The quantities above take part in dimensional arithmetic, and the products and q
 - **Mechanics and thermodynamics:**
   `SpecificEnergy` derives from energy, pressure, density, and acceleration relationships, `HeatingRate` from temperature change and time, `Momentum` from `Mass * Velocity`, `Impulse` from `Force * Time`, `VelocitySquared` from `Velocity * Velocity`, and the flow rates from volume, mass, density, area, and velocity.
   `Pressure * VolumetricFlowRate` is a `Power`.
+  `Power / Area`, `Pressure * Velocity`, and `EnergyDensity * Velocity` are a `HeatFlux`, and `HeatFlux * Area` is a `Power`.
   `Energy / TemperatureDelta` is a `HeatCapacity`, `HeatCapacity / Mass` and `SpecificEnergy / TemperatureDelta` a `SpecificHeatCapacity`, and the heat `Q = m * c * dT` is an `Energy` however it is grouped.
   `HeatCapacity / AmountOfSubstance` and `MolarEnergy / TemperatureDelta` are a `MolarHeatCapacity`.
   `Entropy / Mass`, `Entropy / AmountOfSubstance`, and the matching products and quotients convert between the entropy roles and their divisors.
