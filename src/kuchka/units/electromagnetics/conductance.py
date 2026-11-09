@@ -232,7 +232,9 @@ def Microsiemens(value: Numeric) -> Conductance:
     A sensor-conditioning input has a resistance of 2.5 MΩ.
     Its corresponding conductance is 0.4 µS:
 
-    >>> input_conductance = Microsiemens(2.5)
+    >>> from kuchka import Megaohm
+    >>> resistance = Megaohm(2.5)
+    >>> input_conductance = (1 / resistance).to(MICROSIEMENS)
     >>> input_conductance
     0.4 µS
 

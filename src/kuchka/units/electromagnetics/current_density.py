@@ -41,6 +41,7 @@ A decorative chromium-plating process operates at a current density of 1200 A/m�
 The plated area is 200 cm².
 Calculate the total current:
 
+>>> from kuchka import SquareMetre
 >>> plating_density = AmperePerSquareMetre(1200)
 >>> plated_area = SquareMetre(0.02)
 >>> plating_density * plated_area
@@ -56,6 +57,7 @@ The same current density expressed in amperes per square metre is:
 An acquisition system exports an electrode measurement as text.
 The parser reads the value and its unit together:
 
+>>> from kuchka import parse
 >>> parse("2 mA/cm2", CurrentDensity)
 2 mA/cm²
 
@@ -407,8 +409,9 @@ def MilliamperePerSquareCentimetre(value: Numeric) -> CurrentDensity:
 
     For a geometric electrode area of 80 cm², the corresponding current is:
 
+    >>> from kuchka import SquareCentimetre
     >>> electrode_density * SquareCentimetre(80)
-    160 mA
+    0.16 A
 
     """  # noqa: E501 -- long unit name.
     return CurrentDensity(
