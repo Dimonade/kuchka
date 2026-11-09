@@ -206,9 +206,8 @@ def Gray(value: Numeric) -> AbsorbedDose:
     volume.
     Calculate their combined dose:
 
-    >>> from fractions import Fraction
-    >>> first_beam = Gray(Fraction(6, 5))
-    >>> second_beam = Gray(Fraction(4, 5))
+    >>> first_beam = Gray(1.2)
+    >>> second_beam = Gray(0.8)
     >>> (first_beam + second_beam).to(GRAY)
     2 Gy
 

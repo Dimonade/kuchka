@@ -224,10 +224,9 @@ def RoentgenPerSecond(value: Numeric) -> ExposureRate:
     250 ms pulse.
     Calculate the accumulated exposure:
 
-    >>> from fractions import Fraction
     >>> from kuchka import Second
     >>> from kuchka.units import MILLIROENTGEN
-    >>> pulse_rate = RoentgenPerSecond(Fraction(1, 50))
+    >>> pulse_rate = RoentgenPerSecond(0.02)
     >>> (pulse_rate * Second(Fraction(1, 4))).to(MILLIROENTGEN)
     5 mR
 
@@ -255,9 +254,8 @@ def RoentgenPerMinute(value: Numeric) -> ExposureRate:
     A reference ionization chamber measures an X-ray field at 0.05 R/min.
     Express the same exposure rate per hour:
 
-    >>> from fractions import Fraction
     >>> from kuchka.units import ROENTGEN_PER_HOUR
-    >>> RoentgenPerMinute(Fraction(1, 20)).to(ROENTGEN_PER_HOUR)
+    >>> RoentgenPerMinute(0.05).to(ROENTGEN_PER_HOUR)
     3 R/h
 
     """
@@ -284,9 +282,8 @@ def RoentgenPerHour(value: Numeric) -> ExposureRate:
     A gamma-field measurement is recorded as 0.1 R/h.
     Express the reading in milliroentgens per hour:
 
-    >>> from fractions import Fraction
     >>> from kuchka.units.radiation.exposure_rate import MILLIROENTGEN_PER_HOUR
-    >>> RoentgenPerHour(Fraction(1, 10)).to(MILLIROENTGEN_PER_HOUR)
+    >>> RoentgenPerHour(0.1).to(MILLIROENTGEN_PER_HOUR)
     100 mR/h
 
     """
