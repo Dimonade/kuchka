@@ -139,7 +139,7 @@ See Also
 ~kuchka.quantities.Voltage
     Potential difference across a conducting path.
 
-"""
+"""  # noqa: RUF002 -- using "sigma" symbol.
 
 from __future__ import annotations
 
