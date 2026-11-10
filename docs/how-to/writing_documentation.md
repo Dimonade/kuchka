@@ -11,23 +11,13 @@ It names the idea and leaves the history, the alternatives, and the tooling out.
 It refers to concepts, not to other files, because a file name goes stale when the file moves.
 Docstrings stay short enough to read in a terminal, and as long as the reasons for the definition need.
 
-Unit modules follow the NumPy docstring style, with `units/mass.py` as the model: a summary line, `Parameters`, `Returns`, `Notes`, and `Examples`, and a `Sources` and `See Also` at the module level where they help.
-A unit's note states its exact definition and relationships, and a module's note records where definitions come from and where sources disagree.
+Unit modules follow the NumPy docstring style, with `units/mass.py` as the model, and [Writing unit documentation](writing_unit_documentation.md) describes their sections and the kinds of example they carry.
 
 ## Doctests
 
-Every constructor has an example, and every example runs.
-Doctests run in the module's own globals, so an example imports each unit it uses:
-
-<!-- doc-test: skip an illustration of a docstring that does not exist in the library -->
-
-```python
->>> from kuchka.units.length import CENTIMETRE
->>> Shell(10).to(CENTIMETRE)
-30 cm
-```
-
-Write an expected result as the printed text, or as an equality check that prints `True`.
+Every constructor has examples, and every example runs.
+An example imports what it uses from the public paths, `kuchka` and `kuchka.units`, so a reader can copy it.
+Write an expected result as the printed text, or as an equality check that prints `True`, and write an error in the traceback form with an ellipsis for the message.
 `just test` runs them with the rest of the suite.
 
 ## Examples
@@ -50,7 +40,7 @@ Entries are short, in the style of the release notes: a few lines about what cha
 ## Checklist
 
 - [ ] a docstring on every public name, in the NumPy style, with sources where a definition has them,
-- [ ] a doctest per constructor, with its imports,
+- [ ] [two kinds of example](writing_unit_documentation.md) per constructor, with their imports,
 - [ ] a page or example when a concept needs one, with skip markers where a block cannot run,
 - [ ] `prettier` applied, and the page linked,
 - [ ] a changelog line.
