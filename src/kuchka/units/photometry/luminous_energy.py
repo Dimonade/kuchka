@@ -1,4 +1,4 @@
-"""Luminous energy constructors: LumenSecond and LumenHour.
+"""Luminous energy constructors: lumen-seconds and lumen-hours.
 
 Luminous energy is luminous flux accumulated over time: `1 lm·s = 1 cd·sr·s`.
 The lumen second is the canonical unit, and the historical talbot is the same unit.

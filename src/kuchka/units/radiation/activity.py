@@ -1,4 +1,4 @@
-"""Unit constructors for radioactive activity: becquerels and curies.
+"""Activity constructors: the becquerel, the curie, and their prefixes.
 
     from kuchka import Becquerel, Curie, Megabecquerel, Millicurie
 

@@ -1,4 +1,4 @@
-"""Logarithmic ratio quantities and constructors for the decibel and the bel.
+"""Logarithmic ratio constructors: the decibel and the bel.
 
 `LogarithmicRatio` expresses a ratio of two like quantities on a logarithmic scale:
 the gain of an amplifier, the loss of a cable, a signal-to-noise ratio.

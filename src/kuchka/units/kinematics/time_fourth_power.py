@@ -1,4 +1,4 @@
-"""Fourth-power-of-time unit constructors: SecondFourthPower and its relatives.
+"""Time-to-the-fourth constructors: seconds, with their prefixes, minutes, and hours.
 
 `TimeFourthPower` is a duration multiplied by itself four times, the power the
 constant-snap formulas are written with.

@@ -10,12 +10,13 @@ Every example is a doctest, so it runs, and every example has a scenario, so a r
 
 A module docstring follows the NumPy style, in this order:
 
-1. **Summary and introduction.** Name the quantity and the constructors the module provides, show one short example with its public imports, and give the canonical unit with its symbol and what it means physically.
-2. **Practical scales.** Describe the range the units cover and where each is at home, with examples from different disciplines where the units reach into them: engineering, medicine, physics, chemistry, biology, astronomy, materials, industry. A unit gets the context it has in practice, so a unit used in one field is shown in that field.
-3. **Examples.** Module-level examples that show relationships and features, and that complement the constructor docstrings.
-4. **Notes.** The physical definition, the equations, the exact conversion factors, the conventions that explain a symbol or a factor, the distinctions from neighbouring quantities, and the `*_UNITS` table with what it is for.
-5. **Sources.** Definitions, standards, and publications, with a note where sources disagree.
-6. **See Also.** The related quantity types and the neighbouring unit modules, chosen by direct relationship.
+1. **Title.** The first line is `<Quantity> constructors: <what the family spans>.`, which fits the line length. A module without constructors of its own, because its quantity reads another quantity's units, reads `<Quantity> units: <the units it reads>, read as a <quantity>.`
+2. **Summary and introduction.** Name the quantity and the constructors the module provides, show one short example with its public imports, and give the canonical unit with its symbol and what it means physically.
+3. **Practical scales.** Describe the range the units cover and where each is at home, with examples from different disciplines where the units reach into them: engineering, medicine, physics, chemistry, biology, astronomy, materials, industry. A unit gets the context it has in practice, so a unit used in one field is shown in that field.
+4. **Examples.** Module-level examples that show relationships and features, and that complement the constructor docstrings.
+5. **Notes.** The physical definition, the equations, the exact conversion factors, the conventions that explain a symbol or a factor, the distinctions from neighbouring quantities, and the `*_UNITS` table with what it is for.
+6. **Sources.** Definitions, standards, and publications, with a note where sources disagree.
+7. **See Also.** The related quantity types and the neighbouring unit modules, chosen by direct relationship.
 
 A structural rule (how a module is exported, where it lives) belongs to the comment above the place it applies and stays out of the docstring.
 

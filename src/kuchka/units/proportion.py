@@ -1,4 +1,4 @@
-"""Unit constructors for Proportion: Ratio and Percent.
+"""Proportion constructors: the plain ratio and the percent.
 
     from kuchka import Percent, Ratio
 

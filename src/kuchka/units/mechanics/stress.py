@@ -1,4 +1,4 @@
-"""Stress is a distinct quantity type that uses the pressure units.
+"""Stress units: the pressure units, read as a stress.
 
 Pressure and material stress share the pascal (Pa), equivalent to a
 newton per square metre, but they do not describe the same thing.

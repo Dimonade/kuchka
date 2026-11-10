@@ -1,4 +1,4 @@
-"""Magnetic permeability constructors, from nanohenries per metre to henries per metre.
+"""Permeability constructors: henries per metre, from nano to unit.
 
 Magnetic permeability (μ) describes how a medium relates magnetic flux density (B) to
 magnetic field strength (H).

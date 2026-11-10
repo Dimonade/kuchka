@@ -1,4 +1,4 @@
-"""Molality constructors: MolePerKilogram and its milli and micro forms.
+"""Molality constructors: moles per kilogram, with milli and micro forms.
 
 Molality is the amount of a solute per mass of solvent: `1 mol/kg` is the canonical
 unit.

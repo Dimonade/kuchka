@@ -1,4 +1,4 @@
-"""Unit constructors for thermal conductivity: watts per metre kelvin and its relatives.
+"""Thermal conductivity constructors: watts per metre kelvin and its relatives.
 
     from kuchka import MilliwattPerMetreKelvin, WattPerMetreKelvin
 

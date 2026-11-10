@@ -1,4 +1,4 @@
-"""LuminousIntensity unit constructors: Candela.
+"""Luminous intensity constructors: the candela.
 
 This module defines the canonical candela unit and its public constructor.
 

@@ -1,4 +1,4 @@
-"""Electric charge constructors, from picocoulombs to ampere-hours.
+"""Electric charge constructors: coulombs and ampere-hours.
 
 The coulomb (C) is the SI unit of electric charge: 1 C = 1 A·s.
 Charge is the time integral of electric current.

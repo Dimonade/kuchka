@@ -1,4 +1,4 @@
-"""Angular acceleration unit constructors: RadianPerSecondSquared and its relatives.
+"""Angular acceleration constructors: turns, radians, and degrees per second squared.
 
 `AngularAcceleration` is the rate at which an angular velocity changes, the spin-up of
 a spindle or the braking of a joint.

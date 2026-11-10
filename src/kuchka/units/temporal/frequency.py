@@ -1,4 +1,4 @@
-"""Unit constructors for Frequency: hertz and SI-prefixed multiples.
+"""Frequency constructors: the hertz, from nanohertz to petahertz.
 
     from kuchka import Hertz, Megahertz
 

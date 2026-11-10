@@ -1,4 +1,4 @@
-"""Time quantities and constructors from femtoseconds to astronomical years.
+"""Time constructors: from femtoseconds to astronomical years.
 
 `Time` represents a duration.
 The second is the canonical SI base unit of time, and the unit in which derived

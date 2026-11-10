@@ -1,4 +1,4 @@
-"""Density unit constructors for scientific, engineering, and laboratory calculations.
+"""Density constructors: kilograms, grams, and pounds per volume.
 
     from kuchka import KilogramPerCubicMetre, GramPerCubicCentimetre
 

@@ -1,4 +1,4 @@
-"""Unit constructors for AbsorbedDose: grays, SI-prefixed multiples, and rads.
+"""Absorbed dose constructors: the gray, its prefixes, and the rad.
 
     from kuchka import Centigray, Gray, Kilogray, Rad
     from kuchka.units import CENTIGRAY, GRAY

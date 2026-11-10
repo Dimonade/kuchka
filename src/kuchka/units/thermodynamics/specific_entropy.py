@@ -1,4 +1,4 @@
-"""`SpecificEntropy`'s units, reached from `SpecificHeatCapacity`.
+"""Specific entropy units: the specific heat capacity units, read as an entropy.
 
     from kuchka import JoulePerKilogramKelvin
 

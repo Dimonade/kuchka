@@ -1,4 +1,4 @@
-"""Angular jerk unit constructors: RadianPerSecondCubed and its relatives.
+"""Angular jerk constructors: turns, radians, and degrees per second cubed.
 
 `AngularJerk` is the rate at which an angular acceleration changes, the ramp of the
 S-curve a servo or a stepper follows.

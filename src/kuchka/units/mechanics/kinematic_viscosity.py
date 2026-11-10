@@ -1,4 +1,4 @@
-"""Unit constructors for kinematic viscosity: square metres per second and stokes.
+"""Kinematic viscosity constructors: square metres per second and the stokes.
 
     from kuchka import Centistokes, SquareMetrePerSecond
 

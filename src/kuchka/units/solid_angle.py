@@ -1,4 +1,4 @@
-"""Unit constructors for SolidAngle: Steradian, SquareDegree, and more.
+"""Solid angle constructors: the steradian and the square angle units.
 
     from kuchka import Steradian, SquareDegree
 

@@ -1,4 +1,4 @@
-"""`SamplingPeriod`'s canonical unit, reached from `Time`.
+"""Sampling period units: the time units, read as a sampling period.
 
     from kuchka import Millisecond, Second
 

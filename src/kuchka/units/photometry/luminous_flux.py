@@ -1,4 +1,4 @@
-"""Luminous flux constructors: Lumen and its prefixed forms.
+"""Luminous flux constructors: the lumen and its prefixes.
 
 The lumen (lm) is the SI unit of luminous flux: one candela over one steradian,
 `1 lm = 1 cd·sr`.

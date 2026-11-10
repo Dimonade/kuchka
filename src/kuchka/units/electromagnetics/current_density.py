@@ -1,4 +1,4 @@
-"""Unit constructors for CurrentDensity: amperes per area and SI-prefixed multiples.
+"""Current density constructors: amperes per square metre, centimetre, and millimetre.
 
     from kuchka import AmperePerSquareMillimetre
     from kuchka import MilliamperePerSquareCentimetre

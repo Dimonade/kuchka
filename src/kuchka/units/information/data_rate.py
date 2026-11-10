@@ -1,4 +1,4 @@
-"""Data-rate unit constructors: bits and bytes per second.
+"""Data rate constructors: bits and bytes per second, in decimal and binary multiples.
 
     from kuchka import GigabitPerSecond, MebibytePerSecond
 

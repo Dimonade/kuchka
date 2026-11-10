@@ -1,4 +1,4 @@
-"""Time-cubed unit constructors: SecondCubed and its relatives.
+"""Time-cubed constructors: seconds cubed, with their prefixes, minutes, and hours.
 
 `TimeCubed` is a duration times a duration times a duration, the cube the
 constant-jerk formulas are written with.

@@ -1,4 +1,4 @@
-"""Energy density unit constructors, from joules per cubic metre to Wh per litre.
+"""Energy density constructors: joules per cubic metre and watt-hours per litre.
 
     from kuchka import MegajoulePerCubicMetre, WattHourPerLitre
 

@@ -1,4 +1,4 @@
-"""`Instant`'s canonical unit, reached from `Time`.
+"""Instant units: the time units, read as an instant.
 
     from kuchka import Second, Millisecond, Hour
 

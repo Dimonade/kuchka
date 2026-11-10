@@ -1,4 +1,4 @@
-"""Unit constructors for surface activity: becquerels, curies, and counts per area.
+"""Surface activity constructors: becquerels, curies, and counts per area.
 
     from kuchka import BecquerelPerSquareCentimetre, CuriePerSquareKilometre
 

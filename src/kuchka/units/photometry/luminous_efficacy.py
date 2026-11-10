@@ -1,4 +1,4 @@
-"""Luminous efficacy constructors: LumenPerWatt.
+"""Luminous efficacy constructors: lumens per watt.
 
 Luminous efficacy is the luminous flux a source gives per watt it takes in, so it rates
 a lamp: `1 lm/W = 1 cd·sr/W`, and the lumen per watt is the canonical unit.

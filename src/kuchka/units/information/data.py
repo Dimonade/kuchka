@@ -1,4 +1,4 @@
-"""Data unit constructors: bits and bytes, in decimal and binary multiples.
+"""Data constructors: bits and bytes, in decimal and binary multiples.
 
     from kuchka import Gibibyte, Megabyte
 

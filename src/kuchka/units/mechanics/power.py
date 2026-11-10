@@ -1,4 +1,4 @@
-"""Power quantities and constructors across engineering and scientific scales.
+"""Power constructors: the watt, from picowatts to petawatts, and horsepower.
 
 `Power` represents the rate at which energy is transferred:
 

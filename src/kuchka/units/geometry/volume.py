@@ -1,4 +1,4 @@
-"""Volume unit constructors: cubic-metric prefixes, alongside Litre and its prefixes.
+"""Volume constructors: cubic units, the litre and its prefixes, and the US gallon.
 
     from kuchka import Litre, Millilitre
 

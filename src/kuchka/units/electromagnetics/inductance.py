@@ -1,4 +1,4 @@
-"""Inductance constructors, from picohenries to kilohenries.
+"""Inductance constructors: the henry, from picohenries to kilohenries.
 
 The henry (H) is the SI unit of inductance: 1 H = 1 Wb/A.
 An ideal inductor relates voltage to the rate of change of current, v = L dI/dt, and

@@ -1,4 +1,4 @@
-"""Unit constructors for specific power: watts per kilogram and per gram.
+"""Specific power constructors: watts per kilogram and per gram.
 
     from kuchka import KilowattPerKilogram, WattPerKilogram
 

@@ -1,4 +1,4 @@
-"""Pressure unit constructors, from SI-prefixed pascals to psi.
+"""Pressure constructors: pascals, bar, atmospheres, and pounds per square inch.
 
     from kuchka import Pascal, Bar, PoundPerSquareInch
 

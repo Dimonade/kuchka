@@ -1,4 +1,4 @@
-"""Unit constructors for specific activity: becquerels and curies per mass.
+"""Specific activity constructors: becquerels and curies per mass.
 
     from kuchka import BecquerelPerKilogram, PicocuriePerGram
 

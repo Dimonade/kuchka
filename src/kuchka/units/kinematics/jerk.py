@@ -1,4 +1,4 @@
-"""Jerk unit constructors: MetrePerSecondCubed and MillimetrePerSecondCubed.
+"""Jerk constructors: metres and millimetres per second cubed.
 
 `Jerk` is the rate at which an acceleration changes, also called jolt: the third
 derivative of a position, which a motion profile limits to keep a drive smooth.

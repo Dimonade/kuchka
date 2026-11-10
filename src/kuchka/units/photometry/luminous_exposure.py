@@ -1,4 +1,4 @@
-"""Luminous exposure constructors: LuxSecond, LuxHour, and KiloluxHour.
+"""Luminous exposure constructors: lux-seconds, lux-hours, and kilolux-hours.
 
 Luminous exposure is illuminance accumulated over time: `1 lx·s = 1 lm·s/m²`.
 The lux second is the canonical unit.

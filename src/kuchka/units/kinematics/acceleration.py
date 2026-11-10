@@ -1,4 +1,4 @@
-"""Acceleration quantities and constructors for mechanics, geophysics, and space.
+"""Acceleration constructors: metres per second squared and the gal.
 
 `Acceleration` represents the rate of change of velocity with respect to time:
 

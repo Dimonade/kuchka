@@ -1,4 +1,4 @@
-"""Unit constructors for Conductance: siemens and SI-prefixed multiples.
+"""Conductance constructors: the siemens, from nanosiemens to kilosiemens.
 
     from kuchka import Kilosiemens, Microsiemens, Millisiemens, Siemens
 

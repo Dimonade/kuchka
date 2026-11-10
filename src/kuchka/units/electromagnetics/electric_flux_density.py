@@ -1,4 +1,4 @@
-"""Electric flux density constructors, using the coulomb-per-area units.
+"""Electric flux density units: the coulomb-per-area units, read as a flux density.
 
 The electric flux density (D), also called the electric displacement field, is the free
 charge per area a field displaces: in a linear medium `D = εE`.

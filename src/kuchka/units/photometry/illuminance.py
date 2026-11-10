@@ -1,4 +1,4 @@
-"""Illuminance constructors: Lux, Phot, FootCandle, and the prefixed lux.
+"""Illuminance constructors: the lux and its prefixes, the phot, and the foot-candle.
 
 The lux (lx) is the SI unit of illuminance: one lumen per square metre,
 `1 lx = 1 lm/m² = 1 cd·sr/m²`, and it is the canonical unit.

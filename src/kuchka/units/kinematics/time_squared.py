@@ -1,4 +1,4 @@
-"""Time-squared unit constructors: SecondSquared and its relatives.
+"""Time-squared constructors: seconds squared, with their prefixes, minutes, and hours.
 
 `TimeSquared` is a duration times a duration, the square the constant-acceleration
 formulas are written with.

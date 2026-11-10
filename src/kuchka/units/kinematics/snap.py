@@ -1,4 +1,4 @@
-"""Snap unit constructors: MetrePerSecondFourthPower and MillimetrePerSecondFourthPower.
+"""Snap constructors: metres and millimetres per second to the fourth power.
 
 `Snap` is the rate at which a jerk changes, also called jounce: the fourth derivative
 of a position, which the smoothest motion profiles limit.

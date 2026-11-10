@@ -1,4 +1,4 @@
-"""Angular-velocity-squared unit constructors: RadianSquaredPerSecondSquared and more.
+"""Angular velocity squared constructors: turns, radians, and degrees squared.
 
 `AngularVelocitySquared` is an angular velocity times an angular velocity, the square
 that a centripetal acceleration `omega² * r` and a rotational kinetic energy

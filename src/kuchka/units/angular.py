@@ -1,4 +1,4 @@
-"""Unit constructors for Angle and AngularDisplacement: Turn, Degree, Radian, and more.
+"""Angle and angular-displacement constructors: turns, radians, degrees, and more.
 
     from kuchka import Radian, Degree
 

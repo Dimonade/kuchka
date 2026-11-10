@@ -1,4 +1,4 @@
-"""Mass quantities and constructors for SI and selected scientific units.
+"""Mass constructors: from picograms to solar masses.
 
 `Mass` represents the amount of matter in an object.
 The kilogram is the canonical SI base unit for mass, so every constructor in this

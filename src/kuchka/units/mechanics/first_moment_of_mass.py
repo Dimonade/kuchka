@@ -1,4 +1,4 @@
-"""First moment of mass unit constructors: KilogramMetre, GramMillimetre, and relatives.
+"""First moment of mass constructors: kilogram-metres and their relatives.
 
 A first moment of mass is a mass times its distance from an axis.
 On a rotor it is the unbalance, specified and measured in gram-millimetres: a 2 g

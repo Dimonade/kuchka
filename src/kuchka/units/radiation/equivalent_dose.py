@@ -1,4 +1,4 @@
-"""Unit constructors for equivalent dose: sieverts and rems.
+"""Equivalent dose constructors: the sievert, its prefixes, and the rem.
 
     from kuchka import Microsievert, Millisievert, Sievert
 

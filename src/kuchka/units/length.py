@@ -1,4 +1,4 @@
-"""Length quantities and constructors for engineering, science, and space.
+"""Length constructors: from picometres to gigaparsecs.
 
 `Length` represents one-dimensional distance. The metre is the canonical SI base unit,
 while the constructors in this module provide convenient entry points from metric

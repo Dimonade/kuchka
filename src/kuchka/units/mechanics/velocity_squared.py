@@ -1,4 +1,4 @@
-"""Velocity-squared unit constructors: square metres and kilometres per second squared.
+"""Velocity squared constructors: square metres and kilometres per second squared.
 
     from kuchka import SquareKilometrePerSecondSquared
 

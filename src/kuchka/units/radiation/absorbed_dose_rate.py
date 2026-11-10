@@ -1,4 +1,4 @@
-"""Unit constructors for absorbed dose rate: grays and rads per second, minute, hour.
+"""Absorbed dose rate constructors: grays and rads per second, minute, and hour.
 
     from kuchka import GrayPerMinute, MicrograyPerHour
 

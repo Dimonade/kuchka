@@ -1,4 +1,4 @@
-"""Moment of inertia unit constructors: KilogramSquareMetre and its relatives.
+"""Moment of inertia constructors: kilogram square metres and their relatives.
 
 A moment of inertia is how a body resists angular acceleration about an axis.
 A kilogram square metre is a kilogram square metre per square radian, the way a

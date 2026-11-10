@@ -1,4 +1,4 @@
-"""Magnetic field strength constructors, from microamperes to megaamperes per metre.
+"""Magnetic field strength constructors: amperes per metre, with prefixes.
 
 Magnetic field strength (H) describes the magnetising field associated with free
 currents.

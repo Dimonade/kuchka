@@ -1,4 +1,4 @@
-"""Permittivity constructors, from picofarads per metre to farads per metre.
+"""Permittivity constructors: farads per metre, from pico to unit.
 
 Permittivity (ε) describes how a dielectric responds to an electric field.
 For a linear, isotropic material, electric displacement and field are related by

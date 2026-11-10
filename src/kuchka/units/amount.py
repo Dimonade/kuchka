@@ -1,4 +1,4 @@
-"""Amount-of-substance quantities and constructors for common chemical scales.
+"""Amount-of-substance constructors: the mole, from femtomoles to kilomoles.
 
 `AmountOfSubstance` represents the amount of a chemical substance.
 The module provides the mole as the canonical SI unit, with metric submultiples for

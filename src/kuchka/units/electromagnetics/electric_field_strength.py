@@ -1,4 +1,4 @@
-"""Unit constructors for electric field strength: volts per length and its multiples.
+"""Electric field strength constructors: volts per metre, centimetre, and millimetre.
 
     from kuchka import KilovoltPerMillimetre, VoltPerMetre
 

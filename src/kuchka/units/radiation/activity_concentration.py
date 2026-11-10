@@ -1,4 +1,4 @@
-"""Unit constructors for activity concentration: becquerels and curies per volume.
+"""Activity concentration constructors: becquerels and curies per volume.
 
     from kuchka import BecquerelPerCubicMetre, PicocuriePerLitre
 

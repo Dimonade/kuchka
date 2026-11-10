@@ -1,4 +1,4 @@
-"""`MolarEntropy`'s units, reached from `MolarHeatCapacity`.
+"""Molar entropy units: the molar heat capacity units, read as an entropy.
 
     from kuchka import JoulePerMoleKelvin
 

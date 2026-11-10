@@ -1,4 +1,4 @@
-"""Molar concentration constructors: MolePerLitre, MillimolePerLitre, and more.
+"""Molar concentration constructors: moles per cubic metre and per litre.
 
 Molar concentration is the amount of a solute per volume of solution, which chemists
 call molarity: `1 mol/m³` is the canonical unit, and `1 mol/L` is written `M`.

@@ -1,4 +1,4 @@
-"""Impulse constructors for force integrated over time.
+"""Impulse constructors: newton-seconds, dyne-seconds, and pound-force-seconds.
 
 Impulse is the time integral of force and equals the change in momentum:
 J = ∫F dt = Δp.

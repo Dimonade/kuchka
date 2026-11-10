@@ -1,4 +1,4 @@
-"""Unit constructors for linear charge density: coulombs per metre and its prefixes.
+"""Linear charge density constructors: coulombs per metre, with prefixes.
 
     from kuchka import CoulombPerMetre, NanocoulombPerMetre
 

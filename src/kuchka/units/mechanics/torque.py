@@ -1,4 +1,4 @@
-"""Torque unit constructors: NewtonMetre, PoundForceFoot, and their relatives.
+"""Torque constructors: newton-metres, joules per turn, and pound-force feet.
 
     from kuchka import NewtonMetre, PoundForceFoot
 

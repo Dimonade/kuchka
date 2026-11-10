@@ -1,4 +1,4 @@
-"""Unit constructors for Catalytic Activity: katal and SI-prefixed multiples.
+"""Catalytic activity constructors: the katal, its prefixes, and the enzyme unit.
 
     from kuchka import EnzymeUnit, Katal, Microkatal, Millikatal, Nanokatal, parse
     from kuchka.quantities import CatalyticActivity

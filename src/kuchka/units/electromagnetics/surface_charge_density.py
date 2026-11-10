@@ -1,4 +1,4 @@
-"""Unit constructors for surface charge density: coulombs and ampere-hours per area.
+"""Surface charge density constructors: coulombs and ampere-hours per area.
 
     from kuchka import CoulombPerSquareMetre, MicrocoulombPerSquareCentimetre
 

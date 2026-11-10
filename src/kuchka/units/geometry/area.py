@@ -1,4 +1,4 @@
-"""Area quantities and constructors for metric and selected non-SI units.
+"""Area constructors: metric squares, the hectare, the acre, and the square inch.
 
 `Area` represents two-dimensional extent.
 The square metre is the canonical SI unit, while the constructors in this module

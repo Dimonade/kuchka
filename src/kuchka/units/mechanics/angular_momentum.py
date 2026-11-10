@@ -1,4 +1,4 @@
-"""Angular momentum unit constructors, such as KilogramSquareMetrePerSecond.
+"""Angular momentum constructors: joule-seconds per turn and newton-metre-seconds.
 
 Angular momentum is a moment of inertia times its angular velocity, and a torque applied
 for a time changes it by their product.

@@ -1,4 +1,4 @@
-"""Magnetic flux density constructors: teslas and gauss.
+"""Magnetic flux density constructors: the tesla and the gauss, with prefixes.
 
 The tesla (T) is the SI unit of magnetic flux density: 1 T = 1 Wb/m².
 The gauss (G, also Gs) is the corresponding CGS unit, defined by 1 G = 10⁻⁴ T.

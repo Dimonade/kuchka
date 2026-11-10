@@ -1,4 +1,4 @@
-"""Unit constructors for specific charge: coulombs and ampere-hours per mass.
+"""Specific charge constructors: coulombs and ampere-hours per mass.
 
     from kuchka import AmpereHourPerKilogram, CoulombPerKilogram
 

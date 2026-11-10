@@ -1,4 +1,4 @@
-"""Volumetric flow rate constructors: CubicMetrePerSecond, LitrePerMinute, and more.
+"""Volumetric flow rate constructors: cubic metres, litres, and gallons per time.
 
 Volumetric flow rate is the volume that passes a section per unit of time, of a liquid,
 a gas, or a solid such as grain: `1 m³/s` is the canonical unit.

@@ -1,4 +1,4 @@
-"""Unit constructors for Exposure Rate: roentgens per second, minute, and hour.
+"""Exposure rate constructors: roentgens per second, minute, and hour.
 
     from kuchka import MilliroentgenPerHour, RoentgenPerHour
 

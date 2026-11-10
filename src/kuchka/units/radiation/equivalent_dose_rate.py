@@ -1,4 +1,4 @@
-"""Unit constructors for equivalent dose rate: sieverts and rems per second and hour.
+"""Equivalent dose rate constructors: sieverts and rems per second and per hour.
 
     from kuchka import MicrosievertPerHour, SievertPerHour
 

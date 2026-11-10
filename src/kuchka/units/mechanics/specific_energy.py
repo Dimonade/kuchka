@@ -1,4 +1,4 @@
-"""Specific energy unit constructors, from joules per kilogram to kWh per kilogram.
+"""Specific energy constructors: joules, watt-hours, and kilocalories per mass.
 
     from kuchka import MegajoulePerKilogram, WattHourPerKilogram
 

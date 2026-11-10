@@ -1,4 +1,4 @@
-"""Unit constructors for dynamic viscosity: pascal-seconds, poise, and their multiples.
+"""Dynamic viscosity constructors: the pascal-second, the poise, and their prefixes.
 
     from kuchka import Centipoise, MillipascalSecond, PascalSecond
 

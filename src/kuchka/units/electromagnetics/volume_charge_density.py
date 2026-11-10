@@ -1,4 +1,4 @@
-"""Unit constructors for volume charge density: coulombs and ampere-hours per volume.
+"""Volume charge density constructors: coulombs and ampere-hours per volume.
 
     from kuchka import AmpereHourPerLitre, CoulombPerCubicMetre
 

@@ -1,4 +1,4 @@
-"""Mass flow rate constructors: KilogramPerSecond, TonnePerHour, and more.
+"""Mass flow rate constructors: kilograms, grams, tonnes, and pounds per time.
 
 Mass flow rate is the mass that passes a section per unit of time, of a liquid, a gas,
 or a solid such as ore on a belt: `1 kg/s` is the canonical unit.

@@ -1,4 +1,4 @@
-"""Voltage quantities and constructors across practical electrical scales.
+"""Voltage constructors: the volt, from nanovolts to petavolts.
 
 `Voltage` represents electric potential difference.
 The volt is the canonical SI unit, and the constructors in this module provide

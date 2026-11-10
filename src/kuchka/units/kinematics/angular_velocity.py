@@ -1,4 +1,4 @@
-"""Unit constructors for AngularVelocity: turns, radians, degrees per second, and rpm.
+"""Angular velocity constructors: turns, radians, and degrees per second, and rpm.
 
     from kuchka import RadianPerSecond, RevolutionPerMinute
     from kuchka.units import RADIAN_PER_SECOND, TURN_PER_SECOND

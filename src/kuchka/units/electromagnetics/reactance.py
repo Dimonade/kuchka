@@ -1,4 +1,4 @@
-"""Reactance is the signed imaginary part of impedance in AC circuit analysis.
+"""Reactance units: the resistance units, read as a reactance.
 
 Reactance is measured in ohms, but it is not resistance or impedance.
 Inductive reactance is positive and increases with frequency.

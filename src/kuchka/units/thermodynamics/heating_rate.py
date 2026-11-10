@@ -1,4 +1,4 @@
-"""Heating rate unit constructors: kelvin and degrees per second, minute, and hour.
+"""Heating rate constructors: kelvin, Celsius, and Fahrenheit per time.
 
     from kuchka import CelsiusPerMinute, KelvinPerSecond
 

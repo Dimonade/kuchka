@@ -1,4 +1,4 @@
-"""Momentum quantities and constructors in SI, CGS, and FPS units.
+"""Momentum constructors: SI, CGS, and foot-pound-second units.
 
 Linear momentum is the product of mass and velocity: p = mv.
 Its coherent SI unit is the kilogram metre per second (kg·m/s).

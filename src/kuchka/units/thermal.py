@@ -1,4 +1,4 @@
-"""Temperature quantities and constructors for Kelvin, Celsius, Fahrenheit, and Rankine.
+"""Temperature constructors: kelvin, Celsius, Fahrenheit, Rankine, and their deltas.
 
 `Temperature` represents a thermodynamic temperature reading, a point on a scale.
 `TemperatureDelta` represents a difference between two readings.

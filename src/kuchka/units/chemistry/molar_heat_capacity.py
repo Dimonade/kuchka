@@ -1,4 +1,4 @@
-"""Unit constructors for molar heat capacity: joules and calories per mole kelvin.
+"""Molar heat capacity constructors: joules and calories per mole kelvin.
 
     from kuchka import JoulePerMoleKelvin, KilojoulePerMoleKelvin
 

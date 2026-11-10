@@ -1,4 +1,4 @@
-"""Luminance constructors: CandelaPerSquareMetre, Stilb, FootLambert, and more.
+"""Luminance constructors: candelas per square metre, the stilb, and the foot-lambert.
 
 Luminance is the luminous intensity of a surface per unit of its area, which is how
 bright the surface looks: `1 cd/m²`, also called the nit, is the canonical unit.

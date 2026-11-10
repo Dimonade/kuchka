@@ -1,4 +1,4 @@
-"""Resistance quantities and constructors for practical electrical engineering.
+"""Resistance constructors: the ohm, from microohms to gigaohms.
 
 Resistance describes the opposition to electric current.
 Its SI unit is the ohm (Ω), defined by 1 Ω = 1 V/A.

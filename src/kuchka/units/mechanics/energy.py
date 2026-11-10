@@ -1,4 +1,4 @@
-"""Energy quantities and constructors for common engineering and scientific units.
+"""Energy constructors: from picojoules to megatonnes of TNT.
 
 `Energy` represents a scalar energy quantity.
 The module provides SI-prefixed joules for general engineering use, watt-hours for

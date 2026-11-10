@@ -1,4 +1,4 @@
-"""Unit constructors for heat flux: watts per area and its multiples.
+"""Heat flux constructors: watts per square metre and per square centimetre.
 
     from kuchka import KilowattPerSquareMetre, MilliwattPerSquareCentimetre
 

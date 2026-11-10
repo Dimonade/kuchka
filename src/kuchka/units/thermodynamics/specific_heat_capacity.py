@@ -1,4 +1,4 @@
-"""Unit constructors for specific heat capacity: joules, kilojoules, and calories.
+"""Specific heat capacity constructors: joules and calories per kilogram kelvin.
 
     from kuchka import KilojoulePerKilogramKelvin
 

@@ -1,4 +1,4 @@
-"""`Entropy`'s units, reached from `HeatCapacity`.
+"""Entropy units: the heat capacity units, read as an entropy.
 
     from kuchka import JoulePerKelvin
 

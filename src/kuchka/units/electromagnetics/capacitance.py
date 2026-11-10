@@ -1,4 +1,4 @@
-"""Capacitance constructors, from femtofarads to kilofarads.
+"""Capacitance constructors: the farad, from femtofarads to kilofarads.
 
 The farad (F) is the SI unit of capacitance: 1 F = 1 C/V.
 Capacitance relates the charge stored on a component to the voltage across it, Q = CV.

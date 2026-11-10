@@ -1,4 +1,4 @@
-"""Magnetization constructors, using the ampere-per-metre units.
+"""Magnetization units: the ampere-per-metre units, read as a magnetization.
 
 Magnetization (M) is the magnetic dipole moment per unit volume of a material.
 Its SI unit is the ampere per metre (A/m), the same unit as
