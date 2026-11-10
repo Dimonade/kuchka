@@ -49,7 +49,7 @@ Write what discovery cannot know:
 
 `just test` runs the doctests and the test suite.
 `just check` runs the generated-API check, `ruff`, `mypy --strict`, and `ty`.
-Doctests run in the module's own globals, so an example imports every unit it uses.
+The doctests are the examples of [the unit documentation](writing_unit_documentation.md).
 
 ## Checklist
 

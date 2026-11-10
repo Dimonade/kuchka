@@ -158,9 +158,7 @@ def Shell(value: Numeric) -> Length:
 
     Examples
     --------
-    >>> from kuchka.units.length import CENTIMETRE
-    >>> Shell(10).to(CENTIMETRE)
-    30 cm
+    ...
     """
     return Length(to_exact(value) * SHELL.scale, SHELL)
 
@@ -174,6 +172,7 @@ KRAKEN_LENGTH_UNITS = unit_table(
 )
 ```
 
+The `Examples` section shows at least two kinds of example, as [Writing unit documentation](writing_unit_documentation.md) describes.
 Each module owns one hand-written `__all__` naming its constants, constructors, and tables.
 A published module is exported the way its neighbours are, following the comment above `__all__` in `kuchka/units/__init__.py`.
 A published unit also joins its type's table there (the `_TABLE_OF` block, which also lets `parse` read the type's units), and `just generate-api` promotes its constructor to the top level.
@@ -181,7 +180,7 @@ A published unit also joins its type's table there (the `_TABLE_OF` block, which
 ## Checklist
 
 - [ ] the unit, with an exact scale and the spellings people use,
-- [ ] a constructor with a docstring and a doctest,
+- [ ] a constructor with a docstring and [two kinds of example](writing_unit_documentation.md),
 - [ ] a place in the module's `*_UNITS` table and `__all__`,
 - [ ] a place in the right package, and its imports and `__all__ +=` lines,
 - [ ] wiring: `_TABLE_OF` for a published unit, `extend_units` with the table for an archaic one,

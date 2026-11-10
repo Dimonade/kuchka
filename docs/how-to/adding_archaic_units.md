@@ -62,7 +62,7 @@ Archaic units are unpublished: a value displayed in one copies freely, and it pi
 
 The module docstring records where the definitions come from and where sources disagree.
 A scale is the one historical definition the module adopts, and each distinct calibration is a separate unit.
-Docstrings describe what a unit is and how it is used, in the style of [Writing documentation](writing_documentation.md).
+Docstrings describe what a unit is and how it is used, in the style of [Writing documentation](writing_documentation.md) and [Writing unit documentation](writing_unit_documentation.md).
 
 ## Checklist
 
