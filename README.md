@@ -695,8 +695,8 @@ The units of `kuchka.units.mechanics`.
 | Specific power       | `WattPerKilogram`, `MilliwattPerKilogram`, `KilowattPerKilogram`, `WattPerGram`, `MilliwattPerGram`                                                |
 | Volumetric flow      | `CubicMetrePerSecond`, `LitrePerSecond`, `LitrePerMinute`, `CubicMetrePerHour`, `MillilitrePerMinute`, `UsGallonPerMinute`, `CubicFootPerMinute`   |
 | Mass flow            | `KilogramPerSecond`, `GramPerSecond`, `KilogramPerHour`, `TonnePerHour`, `PoundPerHour`                                                            |
-| Dynamic viscosity | `PascalSecond`, `MillipascalSecond`, `Poise`, `Centipoise` |
-| Kinematic viscosity | `SquareMetrePerSecond`, `SquareMillimetrePerSecond`, `Stokes`, `Centistokes` |
+| Dynamic viscosity    | `PascalSecond`, `MillipascalSecond`, `Poise`, `Centipoise`                                                                                         |
+| Kinematic viscosity  | `SquareMetrePerSecond`, `SquareMillimetrePerSecond`, `Stokes`, `Centistokes`                                                                       |
 
 ### Photometry
 
