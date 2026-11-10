@@ -1,29 +1,103 @@
 """Pressure constructors: pascals, bar, atmospheres, and pounds per square inch.
 
-    from kuchka import Pascal, Bar, PoundPerSquareInch
+`Pressure` is force spread over an area, and the pascal (one newton per square metre)
+is its canonical unit.
+The module provides the pascal with its SI prefixes, the `Bar` and `Millibar`, the
+standard `Atmosphere`, and the US customary `PoundPerSquareInch` and
+`KilopoundPerSquareInch`:
 
-    tyre_pressure = Bar(2.2)
-    tank_rating = PoundPerSquareInch(3000)
+>>> from kuchka import Bar, Pascal, PoundPerSquareInch
+>>> tyre = Bar(2.2)
+>>> tank_rating = PoundPerSquareInch(3000)
 
-`Bar`, `Millibar`, and `Atmosphere` are all exact by definition (`100 000`, `100`,
-and `101 325` Pa respectively).
-`PoundPerSquareInch` is exact too, but for a different reason:
-it is computed directly from `kuchka`'s own already-exact `POUND_FORCE` and
-`SQUARE_INCH` scales (`kuchka.units.mechanics.force.POUND_FORCE`,
-`kuchka.units.geometry.area.SQUARE_INCH`) rather than a separately hand-typed
-literal, so it can never drift out of sync with either.
+Everyday pressures cover ten orders of magnitude, and each part of the range has its
+own habitual unit.
+Blood pressure and weather sit around kilopascals and hectopascals, tyres and gas
+cylinders are read in bar or psi, hydraulic systems and structural steel work in
+megapascals, and the interior of a planet is quoted in gigapascals.
 
-`Millibar` and `Hectopascal` share the same scale (`100`), the same coincidence
-`Litre`/`CubicDecimetre`-style units have elsewhere.
-They are two different naming traditions -- meteorology and SI prefixing -- that happen
-to agree numerically.
+Examples
+--------
+A diver's gauge reads the pressure above the surrounding atmosphere.
+Ten metres of seawater (about 1025 kg per cubic metre, so a column of 10 250 kg above
+each square metre) add about one bar, and the pressure on the diver is that column plus
+the atmosphere above it:
 
-`Gigapascal` and `KilopoundPerSquareInch` (`GPa`, `ksi`) are the units a material's
-stiffness and strength are quoted in, and they serve `Stress` as well, which reads
-every unit of this module (see `kuchka.units.mechanics.stress`).
+>>> from kuchka import Atmosphere, Kilogram, MetrePerSecondSquared, SquareMetre
+>>> from kuchka.units import BAR
+>>> gravity = MetrePerSecondSquared(9.80665)
+>>> column = Kilogram(10_250) * gravity / SquareMetre(1)
+>>> f"{column.to(BAR):.2f}"
+'1.01 bar'
+>>> f"{(Atmosphere(1) + column).to(BAR):.2f}"
+'2.02 bar'
 
-`PRESSURE_UNITS` maps each symbol to its constructor, for boundary code that reads
-a unit as a string from outside the application.
+A pressure over a day is a difference of two pressures, and it stays a `Pressure`.
+A front lowers the sea-level pressure from 1013.25 hPa to 990 hPa:
+
+>>> from kuchka import Hectopascal
+>>> from kuchka.units import KILOPASCAL
+>>> fall = Hectopascal(1013.25) - Hectopascal(990)
+>>> fall
+23.25 hPa
+>>> fall.to(KILOPASCAL)
+2.325 kPa
+
+A pressure is a different quantity from a force, so the two refuse to mix, and the
+relation between them is the area:
+
+>>> from kuchka import Newton
+>>> Pascal(1) + Newton(1)  # doctest: +ELLIPSIS
+Traceback (most recent call last):
+...
+kuchka.errors.IncompatibleDimensionError: ...
+
+Notes
+-----
+A pressure value carries no reference.
+A gauge reading (relative to the surrounding atmosphere) and an absolute reading are
+both `Pressure`, and adding the atmosphere to a gauge reading gives the absolute one,
+as the diver's example shows.
+
+The pascal is defined as one newton per square metre.
+`Bar` is exactly 100 000 Pa, `Millibar` exactly 100 Pa, and the standard `Atmosphere`
+exactly 101 325 Pa.
+`PoundPerSquareInch` is a pound-force on a square inch, so its scale follows from the
+exact scales of both and is exact (6894.757293168... Pa).
+`KilopoundPerSquareInch` is a thousand of those.
+
+`Millibar` and `Hectopascal` share the scale 100 Pa.
+They are two naming traditions, meteorological and SI-prefixed, that agree numerically.
+
+`Gigapascal` and `KilopoundPerSquareInch` (`GPa`, `ksi`) are the units that the
+strength and stiffness of materials are quoted in.
+They serve `Stress` as well, which reads every unit of this module, and
+`Pressure.to_stress()` takes a pressure reading as a stress.
+
+`PRESSURE_UNITS` maps each symbol to its constructor, for boundary code that reads a
+unit as a string from outside the application.
+
+References
+----------
+NIST, Guide for the Use of the International System of Units, Appendix B.8, factors
+for units listed alphabetically:
+https://www.nist.gov/node/777676
+
+BIPM, The International System of Units (SI Brochure):
+https://www.bipm.org/en/publications/si-brochure
+
+See Also
+--------
+~kuchka.quantities.Stress
+    Internal force per area in a loaded solid, which reads the same units.
+~kuchka.quantities.Force
+    Pressure times area is a force.
+~kuchka.quantities.Area
+    The surface a pressure acts over.
+~kuchka.quantities.Energy
+    Pressure times volume is energy, as in the work of a gas against a constant
+    pressure.
+
 """
 
 from __future__ import annotations
@@ -58,27 +132,169 @@ Pressure._canonical_unit = PASCAL  # noqa: SLF001 -- this module owns Pressure's
 
 
 def Pascal(value: Numeric) -> Pressure:
-    """Construct a Pressure from a magnitude expressed in pascals."""
+    """Construct a Pressure from a magnitude expressed in pascals.
+
+    Parameters
+    ----------
+    value : Numeric
+        Pressure magnitude in pascals.
+
+    Returns
+    -------
+    Pressure
+        Pressure represented in pascals.
+
+    Examples
+    --------
+    The weight of 80 g/m² office paper, spread over one square metre of sheet, presses
+    with under one pascal:
+
+    >>> from kuchka import Gram, MetrePerSecondSquared, SquareMetre
+    >>> weight = Gram(80) * MetrePerSecondSquared(9.80665)
+    >>> f"{weight / SquareMetre(1):.2f}"
+    '0.78 Pa'
+
+    A pressure that arrives as text enters through `parse`, and the standard
+    atmosphere is exactly 101 325 Pa:
+
+    >>> from kuchka import Atmosphere, Pressure, parse
+    >>> parse("101325 Pa", Pressure) == Atmosphere(1)
+    True
+
+    """
     return Pressure(to_exact(value) * PASCAL.scale, PASCAL)
 
 
 def Hectopascal(value: Numeric) -> Pressure:
-    """Construct a Pressure from a magnitude expressed in hectopascals."""
+    """Construct a Pressure from a magnitude expressed in hectopascals.
+
+    Parameters
+    ----------
+    value : Numeric
+        Pressure magnitude in hectopascals.
+
+    Returns
+    -------
+    Pressure
+        Pressure represented in hectopascals.
+
+    Examples
+    --------
+    A weather station reports the sea-level pressure in hectopascals:
+
+    >>> station = Hectopascal(1013.25)
+    >>> station
+    1013.25 hPa
+
+    That reading is the standard atmosphere, exactly:
+
+    >>> from kuchka import Atmosphere
+    >>> station == Atmosphere(1)
+    True
+
+    """
     return Pressure(to_exact(value) * HECTOPASCAL.scale, HECTOPASCAL)
 
 
 def Kilopascal(value: Numeric) -> Pressure:
-    """Construct a Pressure from a magnitude expressed in kilopascals."""
+    """Construct a Pressure from a magnitude expressed in kilopascals.
+
+    Parameters
+    ----------
+    value : Numeric
+        Pressure magnitude in kilopascals.
+
+    Returns
+    -------
+    Pressure
+        Pressure represented in kilopascals.
+
+    Examples
+    --------
+    A healthy adult's systolic blood pressure is about 16 kPa, which a sphygmomanometer
+    shows as 120 mmHg:
+
+    >>> systolic = Kilopascal(16)
+    >>> systolic
+    16 kPa
+
+    A gas that expands by 2 L against a constant pressure of 100 kPa does work equal to
+    pressure times volume:
+
+    >>> from kuchka import Litre
+    >>> Kilopascal(100) * Litre(2)
+    200 J
+
+    """
     return Pressure(to_exact(value) * KILOPASCAL.scale, KILOPASCAL)
 
 
 def Megapascal(value: Numeric) -> Pressure:
-    """Construct a Pressure from a magnitude expressed in megapascals."""
+    """Construct a Pressure from a magnitude expressed in megapascals.
+
+    Parameters
+    ----------
+    value : Numeric
+        Pressure magnitude in megapascals.
+
+    Returns
+    -------
+    Pressure
+        Pressure represented in megapascals.
+
+    Examples
+    --------
+    A hydraulic circuit is commonly set to 20 MPa:
+
+    >>> line = Megapascal(20)
+    >>> line
+    20 MPa
+
+    Acting on a 50 cm² piston, that pressure pushes with a force of 100 kN:
+
+    >>> from kuchka import SquareCentimetre
+    >>> from kuchka.units import KILONEWTON
+    >>> (line * SquareCentimetre(50)).to(KILONEWTON)
+    100 kN
+
+    A gauge on the same line is graduated in bar:
+
+    >>> from kuchka.units import BAR
+    >>> line.to(BAR)
+    200 bar
+
+    """
     return Pressure(to_exact(value) * MEGAPASCAL.scale, MEGAPASCAL)
 
 
 def Gigapascal(value: Numeric) -> Pressure:
-    """Construct a Pressure from a magnitude expressed in gigapascals."""
+    """Construct a Pressure from a magnitude expressed in gigapascals.
+
+    Parameters
+    ----------
+    value : Numeric
+        Pressure magnitude in gigapascals.
+
+    Returns
+    -------
+    Pressure
+        Pressure represented in gigapascals.
+
+    Examples
+    --------
+    The pressure at the centre of the Earth is about 360 GPa:
+
+    >>> core = Gigapascal(360)
+    >>> core
+    360 GPa
+
+    In atmospheres, that is a few million:
+
+    >>> from kuchka.units import ATMOSPHERE
+    >>> f"{core.to(ATMOSPHERE):.3e}"
+    '3.553e+6 atm'
+
+    """
     return Pressure(to_exact(value) * GIGAPASCAL.scale, GIGAPASCAL)
 
 
@@ -104,20 +320,114 @@ KILOPOUND_PER_SQUARE_INCH = UnitDef(
 def Bar(value: Numeric) -> Pressure:
     """Construct a Pressure from a magnitude expressed in bar.
 
+    Parameters
+    ----------
+    value : Numeric
+        Pressure magnitude in bar.
+
+    Returns
+    -------
+    Pressure
+        Pressure represented in bar.
+
+    Notes
+    -----
     Exact: a bar is defined as precisely 100 000 Pa.
+
+    Examples
+    --------
+    A passenger car's tyres are inflated to about 2.2 bar, which a tyre gauge also
+    shows in psi:
+
+    >>> tyre = Bar(2.2)
+    >>> from kuchka.units import POUND_PER_SQUARE_INCH
+    >>> f"{tyre.to(POUND_PER_SQUARE_INCH):.1f}"
+    '31.9 psi'
+
+    The bar is a decimal multiple of the pascal:
+
+    >>> from kuchka import Pascal
+    >>> Bar(1) == Pascal(100_000)
+    True
+
     """
     return Pressure(to_exact(value) * BAR.scale, BAR)
 
 
 def Millibar(value: Numeric) -> Pressure:
-    """Construct a Pressure from a magnitude expressed in millibar."""
+    """Construct a Pressure from a magnitude expressed in millibar.
+
+    Parameters
+    ----------
+    value : Numeric
+        Pressure magnitude in millibar.
+
+    Returns
+    -------
+    Pressure
+        Pressure represented in millibar.
+
+    Notes
+    -----
+    Exact: a millibar is defined as precisely 100 Pa, the scale of the hectopascal.
+
+    Examples
+    --------
+    The central pressure of a deep tropical cyclone is about 900 mbar:
+
+    >>> storm = Millibar(900)
+    >>> storm
+    900 mbar
+
+    A weather map that moves from millibar to hectopascal changes the label and keeps
+    every value, because the two units are the same size:
+
+    >>> from kuchka import Hectopascal
+    >>> from kuchka.units import HECTOPASCAL
+    >>> storm.to(HECTOPASCAL)
+    900 hPa
+    >>> Millibar(1013.25) == Hectopascal(1013.25)
+    True
+
+    """
     return Pressure(to_exact(value) * MILLIBAR.scale, MILLIBAR)
 
 
 def Atmosphere(value: Numeric) -> Pressure:
     """Construct a Pressure from a magnitude expressed in standard atmospheres.
 
+    Parameters
+    ----------
+    value : Numeric
+        Pressure magnitude in standard atmospheres.
+
+    Returns
+    -------
+    Pressure
+        Pressure represented in standard atmospheres.
+
+    Notes
+    -----
     Exact: the standard atmosphere is defined as precisely 101 325 Pa.
+
+    Examples
+    --------
+    Air pressure near the summit of Mount Everest is about a third of the sea-level
+    value:
+
+    >>> summit = Atmosphere(0.33)
+    >>> from kuchka.units import KILOPASCAL
+    >>> f"{summit.to(KILOPASCAL):.1f}"
+    '33.4 kPa'
+
+    One atmosphere in the units of a tyre gauge and of the SI:
+
+    >>> from kuchka.units import PASCAL, POUND_PER_SQUARE_INCH
+    >>> Atmosphere(1).to(PASCAL)
+    101325 Pa
+    >>> f"{Atmosphere(1).to(POUND_PER_SQUARE_INCH):.2f}"
+    '14.70 psi'
+
     """
     return Pressure(to_exact(value) * ATMOSPHERE.scale, ATMOSPHERE)
 
@@ -125,7 +435,40 @@ def Atmosphere(value: Numeric) -> Pressure:
 def PoundPerSquareInch(value: Numeric) -> Pressure:
     """Construct a Pressure from a magnitude expressed in pounds per square inch.
 
-    Exact: see `POUND_PER_SQUARE_INCH`'s own docstring.
+    Parameters
+    ----------
+    value : Numeric
+        Pressure magnitude in pounds per square inch.
+
+    Returns
+    -------
+    Pressure
+        Pressure represented in pounds per square inch.
+
+    Notes
+    -----
+    Exact: a pound-force acting on a square inch, from the exact scales of both.
+
+    Examples
+    --------
+    A scuba cylinder is rated for 3000 psi.
+    Filling it at a dive shop to 200 bar stays inside the rating, since the rating is
+    about 207 bar:
+
+    >>> from kuchka import Bar
+    >>> from kuchka.units import BAR
+    >>> rating = PoundPerSquareInch(3000)
+    >>> f"{rating.to(BAR):.0f}"
+    '207 bar'
+    >>> Bar(200) < rating
+    True
+
+    The unit is also read from text, as an instrument or a datasheet writes it:
+
+    >>> from kuchka import Pressure, parse
+    >>> parse("14.7 psi", Pressure)
+    14.7 psi
+
     """
     return Pressure(
         to_exact(value) * POUND_PER_SQUARE_INCH.scale,
@@ -136,7 +479,42 @@ def PoundPerSquareInch(value: Numeric) -> Pressure:
 def KilopoundPerSquareInch(value: Numeric) -> Pressure:
     """Construct a Pressure from a magnitude expressed in kilopounds per square inch.
 
+    Parameters
+    ----------
+    value : Numeric
+        Pressure magnitude in kilopounds per square inch.
+
+    Returns
+    -------
+    Pressure
+        Pressure represented in kilopounds per square inch.
+
+    Notes
+    -----
     Exact: a thousand times `POUND_PER_SQUARE_INCH`.
+
+    Examples
+    --------
+    Structural steel of grade A36 has a minimum yield strength of 36 ksi, which metric
+    specifications round to 250 MPa:
+
+    >>> yield_strength = KilopoundPerSquareInch(36)
+    >>> from kuchka.units import MEGAPASCAL
+    >>> f"{yield_strength.to(MEGAPASCAL):.0f}"
+    '248 MPa'
+
+    A strength is a stress in a loaded solid, and the pressure reading becomes one
+    explicitly:
+
+    >>> yield_strength.to_stress()
+    36 ksi
+
+    The kilopound is a decimal multiple of the pound:
+
+    >>> from kuchka import PoundPerSquareInch
+    >>> KilopoundPerSquareInch(1) == PoundPerSquareInch(1000)
+    True
+
     """
     return Pressure(
         to_exact(value) * KILOPOUND_PER_SQUARE_INCH.scale,
