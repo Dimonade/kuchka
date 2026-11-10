@@ -176,7 +176,7 @@ PREFIXED_UNIT_SCALES: tuple[tuple[str, str, str, str], ...] = (
     ("mass", "OUNCE", "KILOGRAM", "0.028349523125"),
     ("mass", "PICOGRAM", "KILOGRAM", "1E-15"),
     ("mass", "POUND", "KILOGRAM", "0.45359237"),
-    ("mass", "SOLAR_MASS", "KILOGRAM", "1.988416E+30"),
+    ("mass", "SOLAR_MASS", "KILOGRAM", "1.988410E+30"),
     ("permeability", "MICROHENRY_PER_METRE", "HENRY_PER_METRE", "0.000001"),
     ("permeability", "MILLIHENRY_PER_METRE", "HENRY_PER_METRE", "0.001"),
     ("permeability", "NANOHENRY_PER_METRE", "HENRY_PER_METRE", "1E-9"),

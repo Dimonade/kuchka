@@ -60,7 +60,7 @@ that black hole with cars would require an utterly unreasonable fleet:
 >>> sagittarius_a = SolarMass(4_300_000)
 >>> yaris_per_sagittarius_a = round((sagittarius_a / yaris).magnitude)
 >>> yaris_per_sagittarius_a
-8550188800000000000000000000000000
+8550163000000000000000000000000000
 
 Phew.
 That is...
@@ -395,6 +395,7 @@ def Dalton(value: Numeric) -> Mass:
     Notes
     -----
     The dalton is widely used for atoms, proteins, and molecular biology.
+    It is the CODATA 2022 atomic mass constant, 1.660 539 068 92 e-27 kg.
 
     Examples
     --------
@@ -514,7 +515,7 @@ def Ounce(value: Numeric) -> Mass:
 SOLAR_MASS = UnitDef(
     "solar_mass",
     f"M{symbols.SUN}",
-    Decimal("1.988416e30"),
+    Decimal("1.988410e30"),
     MASS,
     aliases=("Msun", "M_sun"),
     words=("solar masses",),
@@ -536,7 +537,8 @@ def SolarMass(value: Numeric) -> Mass:
 
     Notes
     -----
-    The solar mass is defined using the CODATA 2022 solar mass constant.
+    The IAU 2015 nominal solar mass parameter over the CODATA 2022 gravitational
+    constant, rounded to seven significant digits: 1.988410e30 kg.
 
     Examples
     --------
@@ -581,9 +583,8 @@ def EarthMass(value: Numeric) -> Mass:
 
     Notes
     -----
-    Derived from the IAU 2015 nominal terrestrial mass parameter and the CODATA 2022
-    gravitational constant, the same way `SolarMass` derives from the nominal solar
-    mass parameter.
+    The IAU 2015 nominal terrestrial mass parameter over the CODATA 2022 gravitational
+    constant, rounded to seven significant digits: 5.972168e24 kg.
 
     Examples
     --------

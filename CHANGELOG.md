@@ -139,6 +139,12 @@ The quantity types follow the same layout, one module per type in the matching p
 A quantity now pickles by the name `kuchka.quantities` publishes its class under, so a pickle no longer depends on the module that defines the class and survives such a move.
 A pickle made by an earlier version names the old module and does not load when its class moved.
 
+#### Astronomical mass units follow CODATA 2022
+
+`SolarMass` is exactly 1.988410e30 kg, where it was 1.988416e30 kg: the IAU 2015 nominal solar mass parameter over the CODATA 2022 gravitational constant, to seven significant digits, the way `EarthMass` was already derived.
+The value was 3 ppm higher than that derivation gives.
+Tests tie `Dalton`, `EarthMass`, `SolarMass`, and the constants of `codata_2022` to the listing the package ships, so a new CODATA adjustment that moves one of them fails a test until the value is updated on purpose.
+
 ### Deprecated
 
 ### Removed
