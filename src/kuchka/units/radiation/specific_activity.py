@@ -20,7 +20,7 @@ A soil sample at 15 pCi/g, in the SI unit:
 An activity over a mass is a specific activity:
 
 >>> from kuchka import Kilogram
->>> from kuchka.units.radiation.activity import Becquerel
+>>> from kuchka.units import Becquerel
 >>> Becquerel(200) / Kilogram(0.5)
 400 Bq/kg
 

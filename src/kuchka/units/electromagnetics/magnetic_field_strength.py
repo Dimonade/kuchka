@@ -26,7 +26,7 @@ Its field strength follows from the ampere-turns per metre.
 Vacuum permeability then gives the magnetic flux density inside the winding:
 
 >>> from kuchka import Ampere, Metre, MicrohenryPerMetre
->>> from kuchka.units.electromagnetics.magnetic_flux_density import MILLITESLA
+>>> from kuchka.units import MILLITESLA
 >>> turns = 1200
 >>> solenoid_field = turns * Ampere(2.5) / Metre(0.4)
 >>> solenoid_field
@@ -290,7 +290,7 @@ def MegaamperePerMetre(value: Numeric) -> MagneticFieldStrength:
     Calculate its field strength and the corresponding flux density in vacuum:
 
     >>> from kuchka import Ampere, Metre, MicrohenryPerMetre
-    >>> from kuchka.units.electromagnetics.magnetic_flux_density import TESLA
+    >>> from kuchka.units import TESLA
     >>> turns = 200
     >>> pulse_current = Ampere(500)
     >>> winding_length = Metre(0.1)

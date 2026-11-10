@@ -45,7 +45,7 @@ Laboratory reports may represent the same activity using different units.
 `parse` reads the complete measurement and constructs the appropriate quantity:
 
 >>> from kuchka import parse
->>> from kuchka.quantities import CatalyticActivity
+>>> from kuchka import CatalyticActivity
 >>> parse("180 U", CatalyticActivity) == parse("3 µkat", CatalyticActivity)
 True
 

@@ -24,8 +24,8 @@ In calories per mole kelvin:
 The heat to warm 2 mol by 10 K, grouped either way:
 
 >>> from kuchka import AmountOfSubstance, DeltaKelvin
->>> from kuchka.units.mechanics.energy import JOULE
->>> from kuchka.units.amount import Mole
+>>> from kuchka.units import JOULE
+>>> from kuchka.units import Mole
 >>> (JoulePerMoleKelvin(12.5) * Mole(2) * DeltaKelvin(10)).to(JOULE)
 250 J
 

@@ -77,7 +77,7 @@ followed by six arshins from the gate to the house:
 >>> approach = Sazhen(35)
 >>> entrance = Arshin(6)
 >>> total_journey = road + approach + entrance
->>> from kuchka.units.length import KILOMETRE
+>>> from kuchka.units import KILOMETRE
 >>> total_journey.to(KILOMETRE)
 8.6133432 km
 
@@ -176,7 +176,7 @@ def Tochka(value: Numeric) -> Length:
     A line measuring twenty-four tochki is just over six millimetres long:
 
     >>> detail = Tochka(24)
-    >>> from kuchka.units.length import MILLIMETRE
+    >>> from kuchka.units import MILLIMETRE
     >>> detail.to(MILLIMETRE)
     6.096 mm
 
@@ -207,7 +207,7 @@ def Liniya(value: Numeric) -> Length:
     spine decoration:
 
     >>> spine_decoration = Liniya(6)
-    >>> from kuchka.units.length import MILLIMETRE
+    >>> from kuchka.units import MILLIMETRE
     >>> spine_decoration.to(MILLIMETRE)
     15.24 mm
 
@@ -238,7 +238,7 @@ def Dyuym(value: Numeric) -> Length:
     The collar is specified as three dyuymy across:
 
     >>> chimney_collar = Dyuym(3)
-    >>> from kuchka.units.length import CENTIMETRE
+    >>> from kuchka.units import CENTIMETRE
     >>> chimney_collar.to(CENTIMETRE)
     7.62 cm
 
@@ -270,7 +270,7 @@ def Vershok(value: Numeric) -> Length:
     The standardized measurements represented here yield:
 
     >>> height = Arshin(2) + Vershok(5)
-    >>> from kuchka.units.length import CENTIMETRE
+    >>> from kuchka.units import CENTIMETRE
     >>> height.to(CENTIMETRE)
     164.465 cm
 
@@ -301,7 +301,7 @@ def Ladon(value: Numeric) -> Length:
     two-ladoni-wide wooden support:
 
     >>> support_width = Ladon(2)
-    >>> from kuchka.units.length import CENTIMETRE
+    >>> from kuchka.units import CENTIMETRE
     >>> support_width.to(CENTIMETRE)
     15.24 cm
 
@@ -332,7 +332,7 @@ def Pyad(value: Numeric) -> Length:
     three pyadi wide:
 
     >>> opening = Pyad(3)
-    >>> from kuchka.units.length import CENTIMETRE
+    >>> from kuchka.units import CENTIMETRE
     >>> opening.to(CENTIMETRE)
     53.34 cm
 
@@ -363,7 +363,7 @@ def Fut(value: Numeric) -> Length:
     timber beam for its supporting frame:
 
     >>> support_beam = Fut(9)
-    >>> from kuchka.units.length import METRE
+    >>> from kuchka.units import METRE
     >>> support_beam.to(METRE)
     2.7432 m
 
@@ -394,7 +394,7 @@ def Lokot(value: Numeric) -> Length:
     linen as three lokti long:
 
     >>> linen = Lokot(3)
-    >>> from kuchka.units.length import CENTIMETRE
+    >>> from kuchka.units import CENTIMETRE
     >>> linen.to(CENTIMETRE)
     137.16 cm
 
@@ -429,7 +429,7 @@ def Shag(value: Numeric) -> Length:
     the distance from the izba door to the well is eight standardized shagi.
 
     >>> doorway_to_well = Shag(8)
-    >>> from kuchka.units.length import METRE
+    >>> from kuchka.units import METRE
     >>> doorway_to_well.to(METRE)
     5.6896 m
 
@@ -495,7 +495,7 @@ def Sazhen(value: Numeric) -> Length:
     The recorded depth is four sazhens:
 
     >>> channel_depth = Sazhen(4)
-    >>> from kuchka.units.length import METRE
+    >>> from kuchka.units import METRE
     >>> channel_depth.to(METRE)
     8.5344 m
 
@@ -528,7 +528,7 @@ def Versta(value: Numeric) -> Length:
     >>> first_stage = Versta(12)
     >>> second_stage = Versta(7)
     >>> total_route = first_stage + second_stage
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> total_route.to(KILOMETRE)
     20.2692 km
 
@@ -589,7 +589,7 @@ def MakhovayaSazhen(value: Numeric) -> Length:
     is shorter than the standardized seven-foot sazhen:
 
     >>> span = MakhovayaSazhen(1)
-    >>> from kuchka.units.length import METRE
+    >>> from kuchka.units import METRE
     >>> span.to(METRE)
     1.76 m
     >>> span < Sazhen(1)
@@ -622,7 +622,7 @@ def KosayaSazhen(value: Numeric) -> Length:
     reach from a raised hand to the opposite foot as its reference measure:
 
     >>> diagonal_reach = KosayaSazhen(1)
-    >>> from kuchka.units.length import METRE
+    >>> from kuchka.units import METRE
     >>> diagonal_reach.to(METRE)
     2.4892 m
 
@@ -669,7 +669,7 @@ def MezhevayaVersta(value: Numeric) -> Length:
 
     The resulting area is about 164 hectares of meadowland:
 
-    >>> from kuchka.units.geometry.area import HECTARE
+    >>> from kuchka.units import HECTARE
     >>> meadow_area.to(HECTARE)
     163.88096256 ha
 

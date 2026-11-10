@@ -143,7 +143,7 @@ def NanohenryPerMetre(value: Numeric) -> Permeability:
     and the winding geometry:
 
     >>> from kuchka import Metre
-    >>> from kuchka.units.electromagnetics.inductance import MICROHENRY
+    >>> from kuchka.units import MICROHENRY
     >>> vacuum = NanohenryPerMetre(1256.63706127)
     >>> cross_section_side = Metre(0.002)
     >>> winding_length = Metre(0.05)
@@ -220,7 +220,7 @@ def MillihenryPerMetre(value: Numeric) -> Permeability:
     the winding inductance:
 
     >>> from kuchka import Metre
-    >>> from kuchka.units.electromagnetics.inductance import MILLIHENRY
+    >>> from kuchka.units import MILLIHENRY
     >>> core = MillihenryPerMetre(1.005)
     >>> core_side = Metre(0.01)
     >>> magnetic_path = Metre(0.1)

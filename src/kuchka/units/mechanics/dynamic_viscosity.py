@@ -28,7 +28,7 @@ A fluid of 2 Pa·s sheared at 50 1/s carries a shear stress of 100 Pa:
 The kinematic viscosity of that water, at a density of 1000 kg/m³, is one centistokes:
 
 >>> from kuchka import KilogramPerCubicMetre
->>> from kuchka.units.mechanics.kinematic_viscosity import CENTISTOKES
+>>> from kuchka.units import CENTISTOKES
 >>> (MillipascalSecond(1) / KilogramPerCubicMetre(1000)).to(CENTISTOKES)
 1 cSt
 

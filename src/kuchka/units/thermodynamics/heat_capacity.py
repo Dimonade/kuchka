@@ -22,7 +22,7 @@ A kettle with a heat capacity of 1.2 kJ/K, in joules per kelvin:
 The heat to warm it by 80 K is a heat capacity times a temperature difference:
 
 >>> from kuchka import DeltaKelvin
->>> from kuchka.units.mechanics.energy import KILOJOULE
+>>> from kuchka.units import KILOJOULE
 >>> (KilojoulePerKelvin(1.2) * DeltaKelvin(80)).to(KILOJOULE)
 96 kJ
 

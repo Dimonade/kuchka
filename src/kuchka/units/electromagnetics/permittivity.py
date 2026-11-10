@@ -33,7 +33,7 @@ applied.
 Neglect fringing fields and dielectric losses.
 
 >>> from kuchka import Metre, Millimetre, Volt
->>> from kuchka.units.electromagnetics.capacitance import PICOFARAD
+>>> from kuchka.units import PICOFARAD
 >>> vacuum = PicofaradPerMetre(8.8541878188)
 >>> dielectric = vacuum * 2.25
 >>> plate_side = Metre(0.1)
@@ -156,7 +156,7 @@ def PicofaradPerMetre(value: Numeric) -> Permittivity:
     The calculation uses vacuum permittivity, with fringing effects neglected:
 
     >>> from kuchka import Metre, Millimetre
-    >>> from kuchka.units.electromagnetics.capacitance import PICOFARAD
+    >>> from kuchka.units import PICOFARAD
     >>> vacuum = PicofaradPerMetre(8.8541878188)
     >>> plate_side = Metre(0.1)
     >>> separation = Millimetre(1)
@@ -198,7 +198,7 @@ def NanofaradPerMetre(value: Numeric) -> Permittivity:
     Calculate its capacitance, then determine the charge and stored energy at 48 V:
 
     >>> from kuchka import Metre, Micrometre, Volt
-    >>> from kuchka.units.electromagnetics.capacitance import NANOFARAD
+    >>> from kuchka.units import NANOFARAD
     >>> dielectric = NanofaradPerMetre(1)
     >>> electrode_side = Metre(0.02)
     >>> separation = Micrometre(100)
@@ -246,7 +246,7 @@ def MicrofaradPerMetre(value: Numeric) -> Permittivity:
     When charged to 5 kV, how much energy is stored in the panel assembly?
 
     >>> from kuchka import Metre, Volt
-    >>> from kuchka.units.electromagnetics.capacitance import MICROFARAD
+    >>> from kuchka.units import MICROFARAD
     >>> sail_dielectric = MicrofaradPerMetre(0.4)
     >>> panel_side = Metre(10)
     >>> separation = Metre(0.1)

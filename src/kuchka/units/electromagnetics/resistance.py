@@ -19,7 +19,7 @@ connector dissipates 36 W. That much local heating warrants investigation of
 the contact, its fasteners, and its condition:
 
 >>> from kuchka import Ampere, Millivolt
->>> from kuchka.units.electromagnetics.resistance import MILLIOHM
+>>> from kuchka.units import MILLIOHM
 >>> connector_current = Ampere(300)
 >>> voltage_drop = Millivolt(120)
 >>> contact_resistance = voltage_drop / connector_current
@@ -169,7 +169,7 @@ def Milliohm(value: Numeric) -> Resistance:
     thermal design requirement:
 
     >>> from kuchka import Ampere
-    >>> from kuchka.units.electromagnetics.voltage import MILLIVOLT
+    >>> from kuchka.units import MILLIVOLT
     >>> shunt = Milliohm(5)
     >>> shunt_current = Ampere(10)
     >>> (shunt * shunt_current).to(MILLIVOLT)

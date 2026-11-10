@@ -103,7 +103,7 @@ def Femtofarad(value: Numeric) -> Capacitance:
     Charging it through a voltage change of 0.8 V requires 16 fC of charge:
 
     >>> from kuchka import Femtofarad, Volt
-    >>> from kuchka.units.electromagnetics.charge import PICOCOULOMB
+    >>> from kuchka.units import PICOCOULOMB
     >>> gate_capacitance = Femtofarad(20)
     >>> logic_high = Volt(0.8)
     >>> gate_charge = gate_capacitance * logic_high
@@ -134,7 +134,7 @@ def Picofarad(value: Numeric) -> Capacitance:
     transition:
 
     >>> from kuchka import Picofarad, Volt
-    >>> from kuchka.units.electromagnetics.charge import PICOCOULOMB
+    >>> from kuchka.units import PICOCOULOMB
     >>> electrode = Picofarad(47)
     >>> bias_voltage = Volt(3.3)
     >>> electrode_charge = electrode * bias_voltage
@@ -195,7 +195,7 @@ def Microfarad(value: Numeric) -> Capacitance:
     Calculate the charge stored and the energy available for the voltage pulse:
 
     >>> from kuchka import Microfarad, Volt
-    >>> from kuchka.units.electromagnetics.charge import MICROCOULOMB
+    >>> from kuchka.units import MICROCOULOMB
     >>> actuator_capacitor = Microfarad(10)
     >>> driver_voltage = Volt(24)
     >>> actuator_charge = actuator_capacitor * driver_voltage

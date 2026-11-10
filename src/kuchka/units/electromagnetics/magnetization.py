@@ -31,8 +31,8 @@ Expressing the magnetization as a field-strength role allows the two A/m terms t
 combined before applying vacuum permeability:
 
 >>> from kuchka import KiloamperePerMetre, MicrohenryPerMetre
->>> from kuchka.units.electromagnetics.magnetic_flux_density import TESLA
->>> from kuchka.units.electromagnetics.magnetization import MAGNETIZATION_UNITS
+>>> from kuchka.units import TESLA
+>>> from kuchka.units import MAGNETIZATION_UNITS
 >>> applied = KiloamperePerMetre(7.5)
 >>> iron_saturation = MAGNETIZATION_UNITS["MA/m"](1.71)
 >>> vacuum_permeability = MicrohenryPerMetre(1.25663706127)
@@ -49,7 +49,7 @@ demagnetization.
 The magnetization component along the measured axis falls from 0.12 A/m to 0.03 A/m.
 The remaining component is one quarter of the initial reading:
 
->>> from kuchka.units.proportion import PERCENT
+>>> from kuchka.units import PERCENT
 >>> before = MAGNETIZATION_UNITS["A/m"](0.12)
 >>> after = MAGNETIZATION_UNITS["A/m"](0.03)
 >>> (after / before).to(PERCENT)

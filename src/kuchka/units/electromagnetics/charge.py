@@ -22,7 +22,7 @@ Calculate the charge used in one burst and the total charge accumulated over a d
 counting only the measurement bursts and excluding the device's idle consumption:
 
 >>> from kuchka import Milliampere, Millisecond
->>> from kuchka.units.electromagnetics.charge import COULOMB, MILLICOULOMB
+>>> from kuchka.units import COULOMB, MILLICOULOMB
 >>> burst_current = Milliampere(18)
 >>> burst_duration = Millisecond(240)
 >>> burst_charge = burst_current * burst_duration

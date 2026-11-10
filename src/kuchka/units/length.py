@@ -658,13 +658,13 @@ def Parsec(value: Numeric) -> Length:
     --------
     A parsec is about 3.26 light-years:
 
-    >>> from kuchka.units.length import LIGHT_YEAR
+    >>> from kuchka.units import LIGHT_YEAR
     >>> Parsec(1).to(LIGHT_YEAR)
     3.261563777167433562138639707 ly
 
     A parsec is the distance at which an astronomical unit subtends one arcsecond:
 
-    >>> from kuchka.units.angular import RADIAN, ArcSecond
+    >>> from kuchka.units import RADIAN, ArcSecond
     >>> Parsec(1).value_in(ASTRONOMICAL_UNIT) * ArcSecond(1).value_in(RADIAN) == 1
     True
 

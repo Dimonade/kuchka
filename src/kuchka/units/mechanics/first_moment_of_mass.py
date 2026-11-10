@@ -11,7 +11,7 @@ A balancing machine reports 30 g·mm of residual unbalance on a 1.5 kg rotor.
 Its centre of mass sits 20 µm off the axis:
 
 >>> from kuchka import Kilogram
->>> from kuchka.units.length import MICROMETRE
+>>> from kuchka.units import MICROMETRE
 >>> (GramMillimetre(30) / Kilogram(1.5)).to(MICROMETRE)
 20 µm
 

@@ -22,7 +22,7 @@ An environmental gamma dose rate of 90 nGy/h, in microgray per hour:
 A dose rate times a time is an absorbed dose:
 
 >>> from kuchka import Hour
->>> from kuchka.units.radiation.absorbed_dose import NANOGRAY
+>>> from kuchka.units import NANOGRAY
 >>> (MicrograyPerHour(0.09) * Hour(8)).to(NANOGRAY)
 720 nGy
 

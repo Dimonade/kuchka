@@ -22,7 +22,7 @@ A background of 0.12 µSv/h, in nanosieverts per hour:
 A reading times a working shift is an equivalent dose:
 
 >>> from kuchka import Hour
->>> from kuchka.units.radiation.equivalent_dose import MICROSIEVERT
+>>> from kuchka.units import MICROSIEVERT
 >>> (MicrosievertPerHour(0.12) * Hour(8)).to(MICROSIEVERT)
 0.96 µSv
 

@@ -34,7 +34,7 @@ A nominally faster link does not change how much data fits into a fixed transfer
 window.
 At 800 Mbit/s, the expected payload budget for a 90-second window is:
 
->>> from kuchka.units.information.data import GIGABYTE
+>>> from kuchka.units import GIGABYTE
 >>> (MegabitPerSecond(800) * Second(90)).to(GIGABYTE)
 9 GB
 
@@ -205,7 +205,7 @@ def MegabitPerSecond(value: Numeric) -> DataRate:
     before container and filesystem overhead:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import GIGABYTE
+    >>> from kuchka.units import GIGABYTE
     >>> recording = MegabitPerSecond(12) * Second(45 * 60)
     >>> recording.to(GIGABYTE)
     4.05 GB
@@ -260,7 +260,7 @@ def TerabitPerSecond(value: Numeric) -> DataRate:
     measurement window:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import TERABYTE
+    >>> from kuchka.units import TERABYTE
     >>> moved = TerabitPerSecond(2) * Second(30)
     >>> moved.to(TERABYTE)
     7.5 TB
@@ -288,7 +288,7 @@ def PetabitPerSecond(value: Numeric) -> DataRate:
     decimal petabyte:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import PETABYTE
+    >>> from kuchka.units import PETABYTE
     >>> (PetabitPerSecond(1) * Second(8)).to(PETABYTE)
     1 PB
 
@@ -315,7 +315,7 @@ def KibibitPerSecond(value: Numeric) -> DataRate:
     diagnostic session:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import KIBIBYTE
+    >>> from kuchka.units import KIBIBYTE
     >>> (KibibitPerSecond(64) * Second(15)).to(KIBIBYTE)
     120 KiB
 
@@ -367,7 +367,7 @@ def GibibitPerSecond(value: Numeric) -> DataRate:
     A 2 Gibit/s channel carries this much data in a five-second burst:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import GIBIBYTE
+    >>> from kuchka.units import GIBIBYTE
     >>> (GibibitPerSecond(2) * Second(5)).to(GIBIBYTE)
     1.25 GiB
 
@@ -501,7 +501,7 @@ def MegabytePerSecond(value: Numeric) -> DataRate:
     minute capture window:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import GIGABYTE
+    >>> from kuchka.units import GIGABYTE
     >>> captured = MegabytePerSecond(150) * Second(10 * 60)
     >>> captured.to(GIGABYTE)
     90 GB
@@ -662,7 +662,7 @@ def GibibytePerSecond(value: Numeric) -> DataRate:
     A checkpoint pipeline sustaining 8 GiB/s writes this much data in two seconds:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import GIBIBYTE
+    >>> from kuchka.units import GIBIBYTE
     >>> (GibibytePerSecond(8) * Second(2)).to(GIBIBYTE)
     16 GiB
 
@@ -689,7 +689,7 @@ def TebibytePerSecond(value: Numeric) -> DataRate:
     benchmark interval:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import TEBIBYTE
+    >>> from kuchka.units import TEBIBYTE
     >>> (TebibytePerSecond(4) * Second(6)).to(TEBIBYTE)
     24 TiB
 

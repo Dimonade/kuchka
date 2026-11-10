@@ -21,7 +21,7 @@ A radon level of 4 pCi/L, in the SI unit:
 An activity concentration times a volume is an activity:
 
 >>> from kuchka import CubicMetre
->>> from kuchka.units.radiation.activity import KILOBECQUEREL
+>>> from kuchka.units import KILOBECQUEREL
 >>> (BecquerelPerCubicMetre(150) * CubicMetre(60)).to(KILOBECQUEREL)
 9 kBq
 
