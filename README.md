@@ -977,6 +977,7 @@ wifi_wavelength = kc.SPEED_OF_LIGHT_IN_VACUUM / Hertz(2_400_000_000)
 
 Some constants are exact by definition; others are CODATA 2022 recommended values.
 Each constant documents its own status and published precision.
+A test ties every constant, and the `Dalton`, `EarthMass`, and `SolarMass` units, to the NIST listing shipped with the package, so a new adjustment fails a test until the values are updated on purpose.
 
 `kuchka.constants.icrp_103` holds the radiation weighting factors of ICRP Publication 103 as plain proportions, for `EquivalentDose.from_absorbed_dose`.
 They are the Commission's recommendations and not measurements, and the Commission has revised them before.

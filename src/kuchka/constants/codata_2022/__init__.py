@@ -5,13 +5,18 @@ Access is via this dataset's own namespace (`kuchka.constants.codata_2022`, or
 """
 
 from kuchka.constants.codata_2022.fundamental import ALPHA_PARTICLE_MASS
+from kuchka.constants.codata_2022.fundamental import ATOMIC_MASS_CONSTANT
 from kuchka.constants.codata_2022.fundamental import AVOGADRO_CONSTANT
+from kuchka.constants.codata_2022.fundamental import BOHR_RADIUS
 from kuchka.constants.codata_2022.fundamental import BOLTZMANN_CONSTANT
+from kuchka.constants.codata_2022.fundamental import CHARACTERISTIC_IMPEDANCE_OF_VACUUM
 from kuchka.constants.codata_2022.fundamental import ELECTRON_MASS
 from kuchka.constants.codata_2022.fundamental import ELEMENTARY_CHARGE
 from kuchka.constants.codata_2022.fundamental import FARADAY_CONSTANT
+from kuchka.constants.codata_2022.fundamental import FINE_STRUCTURE_CONSTANT
 from kuchka.constants.codata_2022.fundamental import MOLAR_GAS_CONSTANT
 from kuchka.constants.codata_2022.fundamental import NEUTRON_MASS
+from kuchka.constants.codata_2022.fundamental import PLANCK_CONSTANT
 from kuchka.constants.codata_2022.fundamental import PLANCK_ENERGY
 from kuchka.constants.codata_2022.fundamental import PLANCK_LENGTH
 from kuchka.constants.codata_2022.fundamental import PLANCK_MASS
@@ -21,18 +26,26 @@ from kuchka.constants.codata_2022.fundamental import (
 from kuchka.constants.codata_2022.fundamental import PLANCK_TEMPERATURE
 from kuchka.constants.codata_2022.fundamental import PLANCK_TIME
 from kuchka.constants.codata_2022.fundamental import PROTON_MASS
+from kuchka.constants.codata_2022.fundamental import REDUCED_PLANCK_CONSTANT
 from kuchka.constants.codata_2022.fundamental import SPEED_OF_LIGHT_IN_VACUUM
 from kuchka.constants.codata_2022.fundamental import STANDARD_ACCELERATION_OF_GRAVITY
+from kuchka.constants.codata_2022.fundamental import VACUUM_ELECTRIC_PERMITTIVITY
+from kuchka.constants.codata_2022.fundamental import VACUUM_MAGNETIC_PERMEABILITY
 
 __all__ = [
     "ALPHA_PARTICLE_MASS",
+    "ATOMIC_MASS_CONSTANT",
     "AVOGADRO_CONSTANT",
+    "BOHR_RADIUS",
     "BOLTZMANN_CONSTANT",
+    "CHARACTERISTIC_IMPEDANCE_OF_VACUUM",
     "ELECTRON_MASS",
     "ELEMENTARY_CHARGE",
     "FARADAY_CONSTANT",
+    "FINE_STRUCTURE_CONSTANT",
     "MOLAR_GAS_CONSTANT",
     "NEUTRON_MASS",
+    "PLANCK_CONSTANT",
     "PLANCK_ENERGY",
     "PLANCK_LENGTH",
     "PLANCK_MASS",
@@ -40,6 +53,9 @@ __all__ = [
     "PLANCK_TEMPERATURE",
     "PLANCK_TIME",
     "PROTON_MASS",
+    "REDUCED_PLANCK_CONSTANT",
     "SPEED_OF_LIGHT_IN_VACUUM",
     "STANDARD_ACCELERATION_OF_GRAVITY",
+    "VACUUM_ELECTRIC_PERMITTIVITY",
+    "VACUUM_MAGNETIC_PERMEABILITY",
 ]

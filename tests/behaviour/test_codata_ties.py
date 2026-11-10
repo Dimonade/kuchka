@@ -19,6 +19,7 @@ import pytest
 
 import kuchka.constants.codata_2022 as codata
 from kuchka.units import mass
+from kuchka.units.mechanics import angular_momentum
 
 LISTING = Path(codata.__file__).parent / "allascii.txt"
 
@@ -95,8 +96,36 @@ def test_the_earth_mass_is_the_nominal_parameter_over_the_codata_constant() -> N
         (codata.PLANCK_TIME, "Planck time"),
         (codata.PLANCK_TEMPERATURE, "Planck temperature"),
         (codata.STANDARD_ACCELERATION_OF_GRAVITY, "standard acceleration of gravity"),
+        (codata.ATOMIC_MASS_CONSTANT, "atomic mass constant"),
+        (codata.BOHR_RADIUS, "Bohr radius"),
+        (
+            codata.CHARACTERISTIC_IMPEDANCE_OF_VACUUM,
+            "characteristic impedance of vacuum",
+        ),
+        (codata.FINE_STRUCTURE_CONSTANT, "fine-structure constant"),
+        (codata.VACUUM_ELECTRIC_PERMITTIVITY, "vacuum electric permittivity"),
+        (codata.VACUUM_MAGNETIC_PERMEABILITY, "vacuum mag. permeability"),
     ],
     ids=lambda p: p if isinstance(p, str) else "",
 )
 def test_a_constant_carries_the_published_value(constant, row) -> None:
     assert constant.value_in(constant.unit) == Fraction(_published(row))
+
+
+def test_the_planck_constant_carries_the_published_value() -> None:
+    value = codata.PLANCK_CONSTANT.value_in(angular_momentum.JOULE_SECOND_PER_TURN)
+    assert value == Fraction(_published("Planck constant"))
+
+
+def test_the_reduced_planck_constant_is_the_planck_constant_per_radian() -> None:
+    published = _published("reduced Planck constant")
+    stored = codata.REDUCED_PLANCK_CONSTANT.value_in(
+        angular_momentum.NEWTON_METRE_SECOND
+    )
+    last_digit = Fraction(10) ** published.as_tuple().exponent
+    assert abs(stored - Fraction(published)) < last_digit
+    assert codata.REDUCED_PLANCK_CONSTANT == codata.PLANCK_CONSTANT
+
+
+def test_the_atomic_mass_constant_is_the_dalton() -> None:
+    assert mass.Dalton(1) == codata.ATOMIC_MASS_CONSTANT
