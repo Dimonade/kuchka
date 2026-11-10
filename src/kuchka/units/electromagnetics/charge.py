@@ -229,9 +229,8 @@ def Coulomb(value: Numeric) -> Charge:
     A pulse-power test fixture stores 0.2 C on a capacitor charged to 2 kV.
     For a capacitor charged from zero, the stored energy is QV/2:
 
-    >>> from fractions import Fraction
     >>> from kuchka import Coulomb, Volt
-    >>> capacitor_charge = Coulomb(Fraction(1, 5))
+    >>> capacitor_charge = Coulomb(0.2)
     >>> charging_voltage = Volt(2000)
     >>> capacitor_charge * charging_voltage / 2
     200 J
