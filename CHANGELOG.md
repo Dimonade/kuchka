@@ -124,6 +124,8 @@ The quantities above take part in dimensional arithmetic, and the products and q
   `AVOGADRO_CONSTANT * BOLTZMANN_CONSTANT` is `MOLAR_GAS_CONSTANT` by a rule, with no rounding, and the two quotients return the other factor.
 - **Avogadro and Faraday constants:**
   `AVOGADRO_CONSTANT` and `FARADAY_CONSTANT` in `codata_2022`, for entity counts and molar charge calculations.
+- **Electromagnetic and atomic constants:**
+  `PLANCK_CONSTANT` and `REDUCED_PLANCK_CONSTANT` (one `AngularMomentum`, per turn and per radian, so `h / (2 pi)` is exact), `VACUUM_ELECTRIC_PERMITTIVITY`, `VACUUM_MAGNETIC_PERMEABILITY`, `CHARACTERISTIC_IMPEDANCE_OF_VACUUM`, `FINE_STRUCTURE_CONSTANT`, `ATOMIC_MASS_CONSTANT`, and `BOHR_RADIUS`, the constants the electromagnetic and angular-momentum kinds made expressible.
 - **Radiation weighting factors:**
   `kuchka.constants.icrp_103` holds the radiation weighting factors of ICRP Publication 103 as proportions.
 
