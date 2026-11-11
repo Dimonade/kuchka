@@ -65,7 +65,6 @@ kuchka.units.photometry.luminous_efficacy
 kuchka.units.photometry.luminous_energy
 kuchka.units.photometry.luminous_exposure
 kuchka.units.photometry.luminous_flux
-kuchka.units.proportion
 kuchka.units.radiation.activity
 kuchka.units.radiation.activity_concentration
 kuchka.units.radiation.equivalent_dose
