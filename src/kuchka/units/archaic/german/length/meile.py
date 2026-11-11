@@ -68,9 +68,8 @@ than one scale.
 
 Importing this module lets `Length` display in these miles.
 
-Sources
--------
-
+References
+----------
 - https://en.wikipedia.org/wiki/German_units_of_measurement
 - https://de.wikipedia.org/wiki/Meile
 - https://en.wikipedia.org/wiki/Obsolete_Austrian_units_of_measurement

@@ -83,8 +83,8 @@ To request an explicit conversion to ordinary frequency, use `Activity.to_freque
 ``"mCi"``, ``"uCi"``, and ``"pCi"`` to their constructors for boundary code that
 reads unit labels from external data.
 
-Sources
--------
+References
+----------
 * U.S. Government Accountability Office, *Three Mile Island: The Most Studied Nuclear
   Accident in History* (1980), pp. 5-6:
   https://www.gao.gov/assets/emd-80-109.pdf

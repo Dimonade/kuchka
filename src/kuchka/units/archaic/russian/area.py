@@ -155,9 +155,8 @@ symbol, symbol aliases, and registered words.
 The public constructor aliases provide familiar Python spellings for parallel
 historical names.
 
-Sources
--------
-
+References
+----------
 - https://ru.wikipedia.org/wiki/Русская_система_мер
 - https://ru.wikipedia.org/wiki/Десятина_(мера_площади)
 - https://ru.wikipedia.org/wiki/Четверть_(единица_площади)
