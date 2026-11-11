@@ -43,7 +43,6 @@ kuchka.units.kinematics.time_cubed
 kuchka.units.kinematics.time_fourth_power
 kuchka.units.kinematics.time_squared
 kuchka.units.kinematics.velocity
-kuchka.units.luminous_intensity
 kuchka.units.mechanics.angular_momentum
 kuchka.units.mechanics.density
 kuchka.units.mechanics.dynamic_viscosity
