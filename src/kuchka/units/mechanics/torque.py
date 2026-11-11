@@ -292,22 +292,26 @@ def KilonewtonMetre(value: Numeric) -> Torque:
 
     Examples
     --------
-    A slow-speed marine diesel of 10 MW running at 100 rpm turns its shaft with a
-    torque of nearly a meganewton-metre, found by dividing power by angular velocity:
+    The shaft of a slow-speed marine diesel carries nearly a meganewton-metre:
+
+    >>> load = KilonewtonMetre(955)
+    >>> load
+    955 kN·m
+
+    At 100 rpm, that shaft transmits 10 MW:
+
+    >>> from kuchka import RevolutionPerMinute
+    >>> from kuchka.units import MEGAWATT
+    >>> f"{(load * RevolutionPerMinute(100)).to(MEGAWATT):.2f}"
+    '10.00 MW'
+
+    Read the other way, a power over an angular velocity is the torque:
 
     >>> from kuchka import Megawatt
-    >>> from kuchka import RevolutionPerMinute
     >>> from kuchka.units import KILONEWTON_METRE
     >>> shaft = Megawatt(10) / RevolutionPerMinute(100)
     >>> f"{shaft.to(KILONEWTON_METRE):.0f}"
     '955 kN·m'
-
-    Read the other way, a shaft that carries 955 kN·m at 100 rpm transmits 10 MW:
-
-    >>> from kuchka.units import MEGAWATT
-    >>> load = KilonewtonMetre(955)
-    >>> f"{(load * RevolutionPerMinute(100)).to(MEGAWATT):.2f}"
-    '10.00 MW'
 
     """
     return Torque(to_exact(value) * KILONEWTON_METRE.scale, KILONEWTON_METRE)

@@ -385,13 +385,19 @@ def VoltPerMillimetre(value: Numeric) -> ElectricFieldStrength:
 
     Examples
     --------
-    A 1.5 V cell across a separator 0.3 mm thick sees a field of 5 V/mm:
+    The separator of a 1.5 V cell, 0.3 mm thick, sees a field of 5 V/mm:
+
+    >>> separator = VoltPerMillimetre(5)
+    >>> separator
+    5 V/mm
+
+    The field follows from the voltage over the thickness:
 
     >>> from kuchka import Millimetre
     >>> from kuchka import Volt
     >>> from kuchka.units import VOLT_PER_MILLIMETRE
-    >>> (Volt(1.5) / Millimetre(0.3)).to(VOLT_PER_MILLIMETRE)
-    5 V/mm
+    >>> (Volt(1.5) / Millimetre(0.3)).to(VOLT_PER_MILLIMETRE) == separator
+    True
 
     A volt per millimetre is a kilovolt per metre:
 

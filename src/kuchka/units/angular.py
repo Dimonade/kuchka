@@ -489,15 +489,20 @@ def GradianDisplacement(value: Numeric) -> AngularDisplacement:
 
     Examples
     --------
-    A total station turned through 400 gon has made one full circle.
+    A total station turned through 400 gon has made one full circle:
+
+    >>> circle = GradianDisplacement(400)
+    >>> circle
+    400 gon
+    >>> from kuchka.units import TURN
+    >>> circle.to(TURN)
+    1 tr
+
     Two traverse legs of 150 and 250 gon add up to that circle:
 
     >>> legs = GradianDisplacement(150) + GradianDisplacement(250)
-    >>> legs
-    400 gon
-    >>> from kuchka.units import TURN
-    >>> legs.to(TURN)
-    1 tr
+    >>> legs == circle
+    True
 
     """
     return AngularDisplacement(to_exact(value) * GRADIAN.scale, GRADIAN)

@@ -237,11 +237,16 @@ def CubicMetre(value: Numeric) -> Volume:
     --------
     A swimming pool that is 25 m long, 10 m wide, and 2 m deep holds 500 m³ of water:
 
-    >>> from kuchka import Metre
-    >>> from kuchka import SquareMetre
-    >>> pool = SquareMetre(25 * 10) * Metre(2)
+    >>> pool = CubicMetre(500)
     >>> pool
     500 m³
+
+    The same volume is the floor area times the depth:
+
+    >>> from kuchka import Metre
+    >>> from kuchka import SquareMetre
+    >>> SquareMetre(25 * 10) * Metre(2) == pool
+    True
 
     At the density of water, that volume has a mass of about half a million kilograms:
 

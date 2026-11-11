@@ -151,6 +151,15 @@ def Pascal(value: Numeric) -> Pressure:
 
     Examples
     --------
+    The standard atmosphere is exactly 101 325 Pa:
+
+    >>> standard = Pascal(101_325)
+    >>> standard
+    101325 Pa
+    >>> from kuchka import Atmosphere
+    >>> standard == Atmosphere(1)
+    True
+
     The weight of 80 g/m² office paper, spread over one square metre of sheet, presses
     with under one pascal:
 
@@ -161,13 +170,11 @@ def Pascal(value: Numeric) -> Pressure:
     >>> f"{weight / SquareMetre(1):.2f}"
     '0.78 Pa'
 
-    A pressure that arrives as text enters through `parse`, and the standard
-    atmosphere is exactly 101 325 Pa:
+    A pressure that arrives as text enters through `parse`:
 
-    >>> from kuchka import Atmosphere
     >>> from kuchka import Pressure
     >>> from kuchka import parse
-    >>> parse("101325 Pa", Pressure) == Atmosphere(1)
+    >>> parse("101325 Pa", Pressure) == standard
     True
 
     """
