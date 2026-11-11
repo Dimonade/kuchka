@@ -58,8 +58,8 @@ first reaction stage:
 
 Notes
 -----
-The mole is the SI unit of amount of substance. Its definition fixes the
-number of specified elementary entities in one mole exactly.
+The mole is the SI unit of amount of substance. Its definition fixes the Avogadro
+constant at exactly 6.02214076E+23 elementary entities per mole.
 
 Metric submultiples are exact decimal fractions of the mole:
 
@@ -71,18 +71,22 @@ Metric submultiples are exact decimal fractions of the mole:
 
 The kilomole is the corresponding large-scale engineering unit:
 
-``1 kmol = 1000 mol```
+``1 kmol = 1000 mol``
 
-Amount of substance is distinct from a simple count of objects.
 A mole may refer to atoms, molecules, ions, electrons, or another specified set of
-elementary entities, so the chemical identity belongs to the surrounding application
-rather than to the `AmountOfSubstance` quantity itself.
+elementary entities, and the chemical identity belongs to the surrounding application.
+Multiplying an amount by the Avogadro constant gives the exact number of entities.
 
 `AMOUNT_OF_SUBSTANCE_UNITS` maps unit symbols such as ``"mol"``, ``"mmol"``,
 ``"umol"``, ``"nmol"``, ``"pmol"``, ``"fmol"``, and ``"kmol"`` to their
 constructors. It is intended for boundary code that receives units from
 configuration files, laboratory protocols, instrument data, or other external
 sources.
+
+References
+----------
+BIPM, The International System of Units (SI Brochure), on the mole:
+https://www.bipm.org/en/publications/si-brochure
 
 See Also
 --------
@@ -141,13 +145,23 @@ def Femtomole(value: Numeric) -> AmountOfSubstance:
 
     Examples
     --------
-    An analytical instrument reports 18 femtomoles of a trace compound in one sample
-    and 27 femtomoles in another:
+    An analytical instrument reports 18 femtomoles of a trace compound in a sample:
 
     >>> first_sample = Femtomole(18)
+    >>> first_sample
+    18 fmol
+
+    A second sample holds 27 femtomoles, and the two together hold:
+
     >>> second_sample = Femtomole(27)
     >>> first_sample + second_sample
     45 fmol
+
+    One femtomole is exactly 602 214 076 entities, from the exact Avogadro constant:
+
+    >>> from kuchka.constants.codata_2022 import AVOGADRO_CONSTANT
+    >>> Femtomole(1) * AVOGADRO_CONSTANT
+    Fraction(602214076, 1)
 
     """
     return AmountOfSubstance(to_exact(value) * FEMTOMOLE.scale, FEMTOMOLE)
@@ -168,13 +182,25 @@ def Picomole(value: Numeric) -> AmountOfSubstance:
 
     Examples
     --------
-    A trace analysis contains 250 picomoles of an analyte.
-    A second fraction contributes another 0.3 nanomoles:
+    A trace analysis finds 250 picomoles of an analyte:
 
     >>> primary = Picomole(250)
+    >>> primary
+    250 pmol
+
+    A second fraction contributes another 0.3 nanomoles:
+
+    >>> from kuchka import Nanomole
     >>> additional = Nanomole(0.3)
     >>> primary + additional
     550 pmol
+
+    Dissolved in 50 microlitres, the analyte reaches a concentration of 5 µmol/L:
+
+    >>> from kuchka import Microlitre
+    >>> from kuchka.units import MICROMOLE_PER_LITRE
+    >>> (primary / Microlitre(50)).to(MICROMOLE_PER_LITRE)
+    5 µmol/L
 
     """
     return AmountOfSubstance(to_exact(value) * PICOMOLE.scale, PICOMOLE)
@@ -195,13 +221,24 @@ def Nanomole(value: Numeric) -> AmountOfSubstance:
 
     Examples
     --------
-    A molecular biology protocol uses 120 nanomoles of primer.
-    After transferring 35 nanomoles to a reaction, the stock contains:
+    A molecular biology protocol uses 120 nanomoles of primer:
 
     >>> stock = Nanomole(120)
+    >>> stock
+    120 nmol
+
+    After transferring 35 nanomoles to a reaction, the stock contains:
+
     >>> transferred = Nanomole(35)
     >>> stock - transferred
     85 nmol
+
+    A 20-base primer has a molar mass of about 6000 g/mol, so the stock weighs 720 µg:
+
+    >>> from kuchka import GramPerMole
+    >>> from kuchka.units import MICROGRAM
+    >>> (stock * GramPerMole(6000)).to(MICROGRAM)
+    720 µg
 
     """
     return AmountOfSubstance(to_exact(value) * NANOMOLE.scale, NANOMOLE)
@@ -222,12 +259,27 @@ def Micromole(value: Numeric) -> AmountOfSubstance:
 
     Examples
     --------
-    A reaction requires 2.0 mmol of substrate and 500 micromol of catalyst:
+    A reaction requires 500 micromoles of catalyst:
 
-    >>> substrate = Millimole(2)
     >>> catalyst = Micromole(500)
+    >>> catalyst
+    500 µmol
+
+    Added to 2.0 mmol of substrate, the reaction mixture holds:
+
+    >>> from kuchka import Millimole
+    >>> substrate = Millimole(2)
     >>> substrate + catalyst
     2.5 mmol
+
+    If the catalyst were glucose, with a molar mass of 180.156 g/mol, 500 µmol would
+    weigh 90.08 mg:
+
+    >>> from decimal import Decimal
+    >>> from kuchka import GramPerMole
+    >>> from kuchka.units import MILLIGRAM
+    >>> f"{(catalyst * GramPerMole(Decimal('180.156'))).to(MILLIGRAM):.2f}"
+    '90.08 mg'
 
     """
     return AmountOfSubstance(to_exact(value) * MICROMOLE.scale, MICROMOLE)
@@ -248,13 +300,25 @@ def Millimole(value: Numeric) -> AmountOfSubstance:
 
     Examples
     --------
-    A synthesis uses 2.0 mmol of one reagent and 750 micromol of another:
+    A synthesis uses 2 mmol of one reagent:
 
     >>> primary_reagent = Millimole(2)
+    >>> primary_reagent
+    2 mmol
+
+    With 750 micromoles of another reagent, the total is:
+
+    >>> from kuchka import Micromole
     >>> secondary_reagent = Micromole(750)
-    >>> total = primary_reagent + secondary_reagent
-    >>> total
+    >>> primary_reagent + secondary_reagent
     2.75 mmol
+
+    Fasting blood glucose of 5 mmol per litre is the amount in one litre of blood:
+
+    >>> from kuchka import Litre
+    >>> from kuchka.units import MILLIMOLE_PER_LITRE
+    >>> (Millimole(5) / Litre(1)).to(MILLIMOLE_PER_LITRE)
+    5 mmol/L
 
     """
     return AmountOfSubstance(to_exact(value) * MILLIMOLE.scale, MILLIMOLE)
@@ -283,6 +347,19 @@ def Mole(value: Numeric) -> AmountOfSubstance:
     >>> reagent_b
     6 mol
 
+    Eighteen grams of water, with a molar mass of 18 g/mol, are one mole:
+
+    >>> from kuchka import Gram
+    >>> from kuchka import GramPerMole
+    >>> Gram(18) / GramPerMole(18)
+    1 mol
+
+    A mole holds the Avogadro number of entities:
+
+    >>> from kuchka.constants.codata_2022 import AVOGADRO_CONSTANT
+    >>> float(Mole(1) * AVOGADRO_CONSTANT)
+    6.02214076e+23
+
     """
     return AmountOfSubstance(to_exact(value) * MOLE.scale, MOLE)
 
@@ -302,13 +379,20 @@ def Kilomole(value: Numeric) -> AmountOfSubstance:
 
     Examples
     --------
-    An industrial process receives 3.2 kmol of feedstock and consumes
-    1.85 kmol during the first reaction stage:
+    An industrial process receives 3.2 kmol of feedstock and consumes 1.85 kmol
+    during the first reaction stage:
 
     >>> feed = Kilomole(3.2)
     >>> consumed = Kilomole(1.85)
     >>> feed - consumed
     1.35 kmol
+
+    Fed over one hour, the 3.2 kmol make a molar flow of about 0.89 mol/s:
+
+    >>> from kuchka import Hour
+    >>> from kuchka.units import MOLE_PER_SECOND
+    >>> f"{(feed / Hour(1)).to(MOLE_PER_SECOND):.2f}"
+    '0.89 mol/s'
 
     """
     return AmountOfSubstance(to_exact(value) * KILOMOLE.scale, KILOMOLE)

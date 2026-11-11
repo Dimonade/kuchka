@@ -1,6 +1,5 @@
 # Unit modules that predate the documented structure.
 # A module is removed from this list once it conforms, and the tests say when.
-kuchka.units.amount
 kuchka.units.chemistry.catalytic_activity
 kuchka.units.chemistry.entities_per_amount
 kuchka.units.chemistry.molality
