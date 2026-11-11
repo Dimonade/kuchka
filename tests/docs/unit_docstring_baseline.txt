@@ -46,7 +46,6 @@ kuchka.units.kinematics.velocity
 kuchka.units.length
 kuchka.units.logarithmic
 kuchka.units.luminous_intensity
-kuchka.units.mass
 kuchka.units.mechanics.angular_momentum
 kuchka.units.mechanics.density
 kuchka.units.mechanics.dynamic_viscosity
