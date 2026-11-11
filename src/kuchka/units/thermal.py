@@ -6,7 +6,7 @@ The kelvin is the canonical SI unit for both.
 
 Kelvin, Celsius, Fahrenheit, and Rankine readings are all the same `Temperature` type.
 Their units differ by a scale and an offset, which `AffineUnitDef` models directly.
-Temperature differences have no zero point, so `DeltaKelvin`, `DeltaCelsius`, and
+Temperature differences have no zero point, so `DeltaKelvin`, `DeltaCelsius`,
 `DeltaFahrenheit`, and `DeltaRankine` differ by scale only.
 
 Every conversion in this module is exact.
@@ -86,6 +86,16 @@ A reading below absolute zero (0 K, -273.15 °C, -459.67 °F) raises
 constructors, and `TEMPERATURE_DELTA_UNITS` maps ``"dK"``, ``"dC"``, and ``"dF"``.
 This is intended for boundary code that receives units as external data, such as
 configuration files.
+
+References
+----------
+BIPM, The International System of Units (SI Brochure), on the kelvin and the degree
+Celsius:
+https://www.bipm.org/en/publications/si-brochure
+
+NIST, Guide for the Use of the International System of Units, Appendix B.8, factors
+for units listed alphabetically:
+https://www.nist.gov/node/777676
 
 See Also
 --------
@@ -285,6 +295,12 @@ def DeltaFahrenheit(value: Numeric) -> TemperatureDelta:
     >>> evening_drop == DeltaCelsius(5)
     True
 
+    Applied to an evening reading of 77 °F, the drop leaves:
+
+    >>> from kuchka import Fahrenheit
+    >>> Fahrenheit(77) - evening_drop
+    68 °F
+
     """
     return TemperatureDelta(to_exact(value) * DELTA_FAHRENHEIT.scale, DELTA_FAHRENHEIT)
 
@@ -313,6 +329,12 @@ def DeltaRankine(value: Numeric) -> TemperatureDelta:
 
     >>> DeltaRankine(9) == DeltaKelvin(5)
     True
+
+    Heated from 500 °R, a gas that gains 90 °R reaches:
+
+    >>> from kuchka import Rankine
+    >>> Rankine(500) + DeltaRankine(90)
+    590 °R
 
     """
     return TemperatureDelta(to_exact(value) * DELTA_RANKINE.scale, DELTA_RANKINE)

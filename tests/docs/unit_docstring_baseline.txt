@@ -79,7 +79,6 @@ kuchka.units.temporal.instant
 kuchka.units.temporal.sample_rate
 kuchka.units.temporal.sampling_period
 kuchka.units.temporal.time
-kuchka.units.thermal
 kuchka.units.thermodynamics.entropy
 kuchka.units.thermodynamics.heat_capacity
 kuchka.units.thermodynamics.heat_flux
