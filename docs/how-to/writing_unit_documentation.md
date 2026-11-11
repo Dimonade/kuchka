@@ -261,11 +261,25 @@ An exact relationship in the Notes, such as an inch being 25.4 mm, reads best as
 - A measured quantity is not confused with one derived from it or with an interpretation of it.
 - A relationship that is exact is exact in the code: a `Fraction` or an integer, and an equality in the example when it helps.
 
+## The checked structure
+
+The tests check the structure of a unit module, so that the examples stay comparable from module to module:
+
+- the title has the form of [a module docstring](#a-module-docstring), and the docstring has `Examples` and `Notes` sections, in the order of that list,
+- a constructor docstring has `Parameters`, `Returns`, and `Examples`, in that order, with `Notes` between them where it has one,
+- the `Examples` of a constructor are at least two blocks, and a block is a sentence that sets the scene followed by its code and results,
+- the first block of a constructor shows that constructor and its result,
+- a traceback carries `# doctest: +ELLIPSIS`, and an import names one thing, from a public path.
+
+Modules written before the structure are listed in the baseline of the tests.
+A module that conforms comes off the list, and the tests say so when it does, which lets the list shrink and never grow.
+Whether an example is a good one stays with the reviewer.
+
 ## Checklist
 
-- [ ] a module docstring with introduction, practical scales, examples, notes, sources, and see also,
+- [ ] a module docstring with introduction, practical scales, examples, and notes, and references and see also where they help,
 - [ ] two or more kinds of example per constructor, the first a typical measurement,
 - [ ] prefixed variants with a real magnitude and one example of another kind,
 - [ ] a scenario sentence for each example, and varied contexts,
 - [ ] public imports, exact results, and the traceback form for an error,
-- [ ] `just test` clean, which runs every example.
+- [ ] `just test` clean, which runs every example and checks the structure, and the module off the baseline when it conforms.
