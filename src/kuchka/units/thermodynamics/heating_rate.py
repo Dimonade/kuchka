@@ -1,6 +1,7 @@
 """Heating rate constructors: kelvin, Celsius, and Fahrenheit per time.
 
-    from kuchka import CelsiusPerMinute, KelvinPerSecond
+    from kuchka import CelsiusPerMinute
+    from kuchka import KelvinPerSecond
 
     oven_ramp = CelsiusPerMinute(5)
     cooling = KelvinPerSecond(-0.2)

@@ -1,6 +1,7 @@
 """Unit constructors for the quantities measured per mole.
 
-from kuchka import GramPerMole, MolePerLitre
+from kuchka import GramPerMole
+from kuchka import MolePerLitre
 """
 
 from __future__ import annotations

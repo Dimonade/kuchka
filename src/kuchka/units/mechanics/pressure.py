@@ -6,7 +6,9 @@ The module provides the pascal with its SI prefixes, the `Bar` and `Millibar`, t
 standard `Atmosphere`, and the US customary `PoundPerSquareInch` and
 `KilopoundPerSquareInch`:
 
->>> from kuchka import Bar, Pascal, PoundPerSquareInch
+>>> from kuchka import Bar
+>>> from kuchka import Pascal
+>>> from kuchka import PoundPerSquareInch
 >>> tyre = Bar(2.2)
 >>> tank_rating = PoundPerSquareInch(3000)
 
@@ -23,7 +25,10 @@ Ten metres of seawater (about 1025 kg per cubic metre, so a column of 10 250 kg 
 each square metre) add about one bar, and the pressure on the diver is that column plus
 the atmosphere above it:
 
->>> from kuchka import Atmosphere, Kilogram, MetrePerSecondSquared, SquareMetre
+>>> from kuchka import Atmosphere
+>>> from kuchka import Kilogram
+>>> from kuchka import MetrePerSecondSquared
+>>> from kuchka import SquareMetre
 >>> from kuchka.units import BAR
 >>> gravity = MetrePerSecondSquared(9.80665)
 >>> column = Kilogram(10_250) * gravity / SquareMetre(1)
@@ -149,7 +154,9 @@ def Pascal(value: Numeric) -> Pressure:
     The weight of 80 g/m² office paper, spread over one square metre of sheet, presses
     with under one pascal:
 
-    >>> from kuchka import Gram, MetrePerSecondSquared, SquareMetre
+    >>> from kuchka import Gram
+    >>> from kuchka import MetrePerSecondSquared
+    >>> from kuchka import SquareMetre
     >>> weight = Gram(80) * MetrePerSecondSquared(9.80665)
     >>> f"{weight / SquareMetre(1):.2f}"
     '0.78 Pa'
@@ -157,7 +164,9 @@ def Pascal(value: Numeric) -> Pressure:
     A pressure that arrives as text enters through `parse`, and the standard
     atmosphere is exactly 101 325 Pa:
 
-    >>> from kuchka import Atmosphere, Pressure, parse
+    >>> from kuchka import Atmosphere
+    >>> from kuchka import Pressure
+    >>> from kuchka import parse
     >>> parse("101325 Pa", Pressure) == Atmosphere(1)
     True
 
@@ -422,7 +431,8 @@ def Atmosphere(value: Numeric) -> Pressure:
 
     One atmosphere in the units of a tyre gauge and of the SI:
 
-    >>> from kuchka.units import PASCAL, POUND_PER_SQUARE_INCH
+    >>> from kuchka.units import PASCAL
+    >>> from kuchka.units import POUND_PER_SQUARE_INCH
     >>> Atmosphere(1).to(PASCAL)
     101325 Pa
     >>> f"{Atmosphere(1).to(POUND_PER_SQUARE_INCH):.2f}"
@@ -465,7 +475,8 @@ def PoundPerSquareInch(value: Numeric) -> Pressure:
 
     The unit is also read from text, as an instrument or a datasheet writes it:
 
-    >>> from kuchka import Pressure, parse
+    >>> from kuchka import Pressure
+    >>> from kuchka import parse
     >>> parse("14.7 psi", Pressure)
     14.7 psi
 

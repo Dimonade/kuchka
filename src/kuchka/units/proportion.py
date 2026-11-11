@@ -1,6 +1,7 @@
 """Proportion constructors: the plain ratio and the percent.
 
-    from kuchka import Percent, Ratio
+    from kuchka import Percent
+    from kuchka import Ratio
 
     tolerance = Percent(5)
     duty_cycle = Ratio(Decimal("0.8"))

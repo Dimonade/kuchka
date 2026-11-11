@@ -181,7 +181,11 @@ Hertz(2) * Hertz(2) * Metre(1)  # rejected: `UnrepresentableDimensionError`.
 A ratio is a `Proportion`, and it displays as the coherent ratio:
 
 ```python
-from kuchka import Hertz, Percent, Ratio, Second, Volt
+from kuchka import Hertz
+from kuchka import Percent
+from kuchka import Ratio
+from kuchka import Second
+from kuchka import Volt
 
 gain = Volt(5) / Volt(2)
 gain == Ratio(2.5)

@@ -1,6 +1,7 @@
 """Heat capacity constructors: joules, kilojoules, and calories per kelvin.
 
-    from kuchka import JoulePerKelvin, KilojoulePerKelvin
+    from kuchka import JoulePerKelvin
+    from kuchka import KilojoulePerKelvin
 
     kettle = KilojoulePerKelvin(1.2)
     block = JoulePerKelvin(385)

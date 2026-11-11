@@ -1,6 +1,7 @@
 """Solid angle constructors: the steradian and the square angle units.
 
-    from kuchka import Steradian, SquareDegree
+    from kuchka import SquareDegree
+    from kuchka import Steradian
 
     detector = Steradian(0.02)
     survey = SquareDegree(25)
@@ -125,7 +126,9 @@ def Millisteradian(value: Numeric) -> SolidAngle:
     --------
     A 1 cm² photodiode 10 cm from a lamp subtends 10 msr:
 
-    >>> from kuchka import Centimetre, SolidAngle, SquareCentimetre
+    >>> from kuchka import Centimetre
+    >>> from kuchka import SolidAngle
+    >>> from kuchka import SquareCentimetre
     >>> diode = SolidAngle.from_area(SquareCentimetre(1), Centimetre(10))
     >>> diode == Millisteradian(10)
     True
@@ -151,7 +154,9 @@ def Steradian(value: Numeric) -> SolidAngle:
     --------
     A square metre of a sphere of radius 2 m lies at one quarter of a steradian:
 
-    >>> from kuchka import Metre, SolidAngle, SquareMetre
+    >>> from kuchka import Metre
+    >>> from kuchka import SolidAngle
+    >>> from kuchka import SquareMetre
     >>> SolidAngle.from_area(SquareMetre(1), Metre(2))
     0.25 sr
     >>> Steradian(2) + Millisteradian(500)

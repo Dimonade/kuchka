@@ -1,6 +1,7 @@
 """Activity concentration constructors: becquerels and curies per volume.
 
-    from kuchka import BecquerelPerCubicMetre, PicocuriePerLitre
+    from kuchka import BecquerelPerCubicMetre
+    from kuchka import PicocuriePerLitre
 
     radon = PicocuriePerLitre(4)
     air = BecquerelPerCubicMetre(100)

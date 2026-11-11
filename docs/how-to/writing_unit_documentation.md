@@ -76,33 +76,35 @@ The snippets run as written with these imports:
 ```python
 from fractions import Fraction
 
-from kuchka import (
-    Ampere,
-    AmpereHour,
-    Celsius,
-    Centigray,
-    Centimetre,
-    Charge,
-    Current,
-    DeltaCelsius,
-    Decibel,
-    Degree,
-    Gray,
-    Katal,
-    Kilogram,
-    Litre,
-    Metre,
-    Millivolt,
-    Newton,
-    RadianPerSecond,
-    Temperature,
-    Time,
-    Torque,
-    Volt,
-    Voltage,
-    parse,
-)
-from kuchka.units import AMPERE, CENTIGRAY, GRAY, HOUR, VOLTAGE_UNITS
+from kuchka import Ampere
+from kuchka import AmpereHour
+from kuchka import Celsius
+from kuchka import Centigray
+from kuchka import Centimetre
+from kuchka import Charge
+from kuchka import Current
+from kuchka import Decibel
+from kuchka import Degree
+from kuchka import DeltaCelsius
+from kuchka import Gray
+from kuchka import Katal
+from kuchka import Kilogram
+from kuchka import Litre
+from kuchka import Metre
+from kuchka import Millivolt
+from kuchka import Newton
+from kuchka import RadianPerSecond
+from kuchka import Temperature
+from kuchka import Time
+from kuchka import Torque
+from kuchka import Volt
+from kuchka import Voltage
+from kuchka import parse
+from kuchka.units import AMPERE
+from kuchka.units import CENTIGRAY
+from kuchka.units import GRAY
+from kuchka.units import HOUR
+from kuchka.units import VOLTAGE_UNITS
 ```
 
 ### 1. Typical measurement

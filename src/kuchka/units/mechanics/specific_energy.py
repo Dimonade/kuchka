@@ -1,6 +1,7 @@
 """Specific energy constructors: joules, watt-hours, and kilocalories per mass.
 
-    from kuchka import MegajoulePerKilogram, WattHourPerKilogram
+    from kuchka import MegajoulePerKilogram
+    from kuchka import WattHourPerKilogram
 
     diesel = MegajoulePerKilogram(43)
     battery_cell = WattHourPerKilogram(250)

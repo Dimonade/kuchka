@@ -17,7 +17,10 @@ A buck converter has a 24 µH inductor with 12 V across it during a 2 µs switch
 interval.
 Assuming the inductor voltage is constant over that interval, the current rises by 1 A:
 
->>> from kuchka import Ampere, Microhenry, Microsecond, Volt
+>>> from kuchka import Ampere
+>>> from kuchka import Microhenry
+>>> from kuchka import Microsecond
+>>> from kuchka import Volt
 >>> choke = Microhenry(24)
 >>> switch_voltage = Volt(12)
 >>> on_time = Microsecond(2)
@@ -30,7 +33,8 @@ The energy stored in its magnetic field is 1 J.
 A practical driver must provide a suitable path for that energy rather than simply
 opening the circuit:
 
->>> from kuchka import Ampere, Millihenry
+>>> from kuchka import Ampere
+>>> from kuchka import Millihenry
 >>> actuator_coil = Millihenry(125)
 >>> coil_current = Ampere(4)
 >>> stored_energy = actuator_coil * coil_current * coil_current / 2
@@ -114,7 +118,9 @@ def Picohenry(value: Numeric) -> Inductance:
     A loop inductance of 20 pH produces an ideal inductive voltage of 1 V during that
     transition:
 
-    >>> from kuchka import Ampere, Nanosecond, Picohenry
+    >>> from kuchka import Ampere
+    >>> from kuchka import Nanosecond
+    >>> from kuchka import Picohenry
     >>> package_loop = Picohenry(20)
     >>> current_step = Ampere(50)
     >>> transition_time = Nanosecond(1)
@@ -143,7 +149,8 @@ def Nanohenry(value: Numeric) -> Inductance:
     A pulsed-power busbar loop has 2 nH of inductance and briefly carries 1000 A.
     The magnetic energy associated with that loop inductance is 1 mJ:
 
-    >>> from kuchka import Ampere, Nanohenry
+    >>> from kuchka import Ampere
+    >>> from kuchka import Nanohenry
     >>> busbar_loop = Nanohenry(2)
     >>> pulse_current = Ampere(1000)
     >>> busbar_loop * pulse_current * pulse_current / 2
@@ -171,7 +178,9 @@ def Microhenry(value: Numeric) -> Inductance:
     In a switching converter, a 24 µH choke with 12 V across it for 2 µs experiences,
     ideally, a current increase of 1 A:
 
-    >>> from kuchka import Microhenry, Microsecond, Volt
+    >>> from kuchka import Microhenry
+    >>> from kuchka import Microsecond
+    >>> from kuchka import Volt
     >>> choke = Microhenry(24)
     >>> switch_voltage = Volt(12)
     >>> on_time = Microsecond(2)
@@ -201,7 +210,9 @@ def Millihenry(value: Numeric) -> Inductance:
     an ideal induced-voltage magnitude of 50 V.
     A real driver uses a flyback path or clamp to control the turn-off voltage:
 
-    >>> from kuchka import Ampere, Millihenry, Millisecond
+    >>> from kuchka import Ampere
+    >>> from kuchka import Millihenry
+    >>> from kuchka import Millisecond
     >>> actuator_coil = Millihenry(125)
     >>> current_change = Ampere(4)
     >>> turn_off_time = Millisecond(10)
@@ -231,7 +242,9 @@ def Henry(value: Numeric) -> Inductance:
     Applying 10 V across an winding for 60 s changes its current by 300 A, ignoring
     resistance and other voltage drops:
 
-    >>> from kuchka import Henry, Second, Volt
+    >>> from kuchka import Henry
+    >>> from kuchka import Second
+    >>> from kuchka import Volt
     >>> magnet_winding = Henry(2)
     >>> ramp_voltage = Volt(10)
     >>> ramp_duration = Second(60)
@@ -267,7 +280,9 @@ def Kilohenry(value: Numeric) -> Inductance:
     Even with 100 V across it, changing the current by 50 A takes 1000 s in the ideal
     constant-voltage model:
 
-    >>> from kuchka import Ampere, Kilohenry, Volt
+    >>> from kuchka import Ampere
+    >>> from kuchka import Kilohenry
+    >>> from kuchka import Volt
     >>> containment_loop = Kilohenry(2)
     >>> current_step = Ampere(50)
     >>> drive_voltage = Volt(100)

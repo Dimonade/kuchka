@@ -17,6 +17,7 @@ Unit modules follow the NumPy docstring style, with `units/mass.py` as the model
 
 Every constructor has examples, and every example runs.
 An example imports what it uses from the public paths, `kuchka` and `kuchka.units`, so a reader can copy it.
+Each import line names one thing, as the source does, so that adding or removing an example touches only its own lines.
 Write an expected result as the printed text, or as an equality check that prints `True`, and write an error in the traceback form with an ellipsis for the message.
 `just test` runs them with the rest of the suite.
 

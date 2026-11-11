@@ -1,6 +1,7 @@
 """Specific power constructors: watts per kilogram and per gram.
 
-    from kuchka import KilowattPerKilogram, WattPerKilogram
+    from kuchka import KilowattPerKilogram
+    from kuchka import WattPerKilogram
 
     engine = KilowattPerKilogram(2.5)
     limit = WattPerKilogram(2)

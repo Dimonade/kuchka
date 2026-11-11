@@ -664,7 +664,8 @@ def Parsec(value: Numeric) -> Length:
 
     A parsec is the distance at which an astronomical unit subtends one arcsecond:
 
-    >>> from kuchka.units import RADIAN, ArcSecond
+    >>> from kuchka.units import RADIAN
+    >>> from kuchka.units import ArcSecond
     >>> Parsec(1).value_in(ASTRONOMICAL_UNIT) * ArcSecond(1).value_in(RADIAN) == 1
     True
 

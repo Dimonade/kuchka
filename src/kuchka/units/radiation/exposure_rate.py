@@ -1,6 +1,7 @@
 """Exposure rate constructors: roentgens per second, minute, and hour.
 
-    from kuchka import MilliroentgenPerHour, RoentgenPerHour
+    from kuchka import MilliroentgenPerHour
+    from kuchka import RoentgenPerHour
 
     reading = MilliroentgenPerHour(2.5)
     calibration_field = RoentgenPerHour(0.1)
@@ -46,7 +47,8 @@ Exposure rate can also be expressed directly in its canonical SI unit.
 The conversion from exposure rate to specific current is made explicit:
 
 >>> from fractions import Fraction
->>> from kuchka import ExposureRate, AmperePerKilogram
+>>> from kuchka import AmperePerKilogram
+>>> from kuchka import ExposureRate
 >>> from kuchka.units import ROENTGEN_PER_HOUR
 >>> current_per_mass = AmperePerKilogram(Fraction(43, 600_000_000))
 >>> ExposureRate.from_specific_current(current_per_mass).to(ROENTGEN_PER_HOUR)

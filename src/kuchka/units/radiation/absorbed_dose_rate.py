@@ -1,6 +1,7 @@
 """Absorbed dose rate constructors: grays and rads per second, minute, and hour.
 
-    from kuchka import GrayPerMinute, MicrograyPerHour
+    from kuchka import GrayPerMinute
+    from kuchka import MicrograyPerHour
 
     field = MicrograyPerHour(0.09)
     beam = GrayPerMinute(2)

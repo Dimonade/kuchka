@@ -22,7 +22,9 @@ During an impact test, a 0.45 kg ball initially at rest experiences an average f
 300 N for 15 ms.
 Calculate the impulse and the resulting change in velocity along the force direction:
 
->>> from kuchka import Kilogram, Millisecond, Newton
+>>> from kuchka import Kilogram
+>>> from kuchka import Millisecond
+>>> from kuchka import Newton
 >>> ball_mass = Kilogram(0.45)
 >>> impact_force = Newton(300)
 >>> contact_duration = Millisecond(15)
@@ -154,7 +156,8 @@ def MillinewtonSecond(value: Numeric) -> Impulse:
     impact.
     Calculate its change in velocity:
 
-    >>> from kuchka import Gram, MillinewtonSecond
+    >>> from kuchka import Gram
+    >>> from kuchka import MillinewtonSecond
     >>> test_mass = Gram(12)
     >>> measured_impulse = MillinewtonSecond(2.4)
     >>> measured_impulse.to_momentum() / test_mass
@@ -185,7 +188,8 @@ def NewtonSecond(value: Numeric) -> Impulse:
     A robotic gripper collision imparts an impulse of 30 N·s to a 15 kg payload.
     Estimate the payload's velocity change along the collision axis:
 
-    >>> from kuchka import Kilogram, NewtonSecond
+    >>> from kuchka import Kilogram
+    >>> from kuchka import NewtonSecond
     >>> collision_impulse = NewtonSecond(30)
     >>> payload_mass = Kilogram(15)
     >>> collision_impulse.to_momentum() / payload_mass
@@ -214,7 +218,8 @@ def KilonewtonSecond(value: Numeric) -> Impulse:
     whose mass during the manoeuvre is 15,000 kg.
     Estimate the velocity change, neglecting external forces and mass variation:
 
-    >>> from kuchka import Kilogram, KilonewtonSecond
+    >>> from kuchka import Kilogram
+    >>> from kuchka import KilonewtonSecond
     >>> propulsion_impulse = KilonewtonSecond(45)
     >>> vehicle_mass = Kilogram(15_000)
     >>> propulsion_impulse.to_momentum() / vehicle_mass
@@ -246,7 +251,8 @@ def DyneSecond(value: Numeric) -> Impulse:
     experiment.
     Calculate its change in velocity:
 
-    >>> from kuchka import DyneSecond, Gram
+    >>> from kuchka import DyneSecond
+    >>> from kuchka import Gram
     >>> test_particle = Gram(1)
     >>> impact_impulse = DyneSecond(200)
     >>> impact_impulse.to_momentum() / test_particle
@@ -277,7 +283,8 @@ def PoundForceSecond(value: Numeric) -> Impulse:
     A test sled receives an impulse of 13.5 lbf·s during a launcher test.
     For a 10 kg sled, calculate the resulting velocity change in SI units:
 
-    >>> from kuchka import Kilogram, PoundForceSecond
+    >>> from kuchka import Kilogram
+    >>> from kuchka import PoundForceSecond
     >>> launch_impulse = PoundForceSecond(13.5)
     >>> sled_mass = Kilogram(10)
     >>> f"{launch_impulse.to_momentum() / sled_mass:.2f}"

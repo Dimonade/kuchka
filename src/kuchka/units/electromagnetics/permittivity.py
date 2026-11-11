@@ -19,7 +19,8 @@ in a coaxial cable.
 Using the 2022 CODATA value of vacuum permittivity and a relative permittivity of 2.25
 gives about 19.92 pF/m:
 
->>> from math import log, pi
+>>> from math import log
+>>> from math import pi
 >>> vacuum = PicofaradPerMetre(8.8541878188)
 >>> polyethylene = vacuum * 2.25
 >>> f"{polyethylene.to(PICOFARAD_PER_METRE):.2f}"
@@ -32,7 +33,9 @@ Estimate the capacitance, then calculate the charge and stored energy when 100 V
 applied.
 Neglect fringing fields and dielectric losses.
 
->>> from kuchka import Metre, Millimetre, Volt
+>>> from kuchka import Metre
+>>> from kuchka import Millimetre
+>>> from kuchka import Volt
 >>> from kuchka.units import PICOFARAD
 >>> vacuum = PicofaradPerMetre(8.8541878188)
 >>> dielectric = vacuum * 2.25
@@ -155,7 +158,8 @@ def PicofaradPerMetre(value: Numeric) -> Permittivity:
     approximately 88.5 pF.
     The calculation uses vacuum permittivity, with fringing effects neglected:
 
-    >>> from kuchka import Metre, Millimetre
+    >>> from kuchka import Metre
+    >>> from kuchka import Millimetre
     >>> from kuchka.units import PICOFARAD
     >>> vacuum = PicofaradPerMetre(8.8541878188)
     >>> plate_side = Metre(0.1)
@@ -197,7 +201,9 @@ def NanofaradPerMetre(value: Numeric) -> Permittivity:
     layer.
     Calculate its capacitance, then determine the charge and stored energy at 48 V:
 
-    >>> from kuchka import Metre, Micrometre, Volt
+    >>> from kuchka import Metre
+    >>> from kuchka import Micrometre
+    >>> from kuchka import Volt
     >>> from kuchka.units import NANOFARAD
     >>> dielectric = NanofaradPerMetre(1)
     >>> electrode_side = Metre(0.02)
@@ -245,7 +251,8 @@ def MicrofaradPerMetre(value: Numeric) -> Permittivity:
     of an invented field-shaping dielectric with permittivity 0.4 µF/m.
     When charged to 5 kV, how much energy is stored in the panel assembly?
 
-    >>> from kuchka import Metre, Volt
+    >>> from kuchka import Metre
+    >>> from kuchka import Volt
     >>> from kuchka.units import MICROFARAD
     >>> sail_dielectric = MicrofaradPerMetre(0.4)
     >>> panel_side = Metre(10)
@@ -294,7 +301,8 @@ def MillifaradPerMetre(value: Numeric) -> Permittivity:
     A 20 Ω dump resistor discharges the resulting capacitor.
     Calculate the circuit's RC time constant:
 
-    >>> from kuchka import Metre, Ohm
+    >>> from kuchka import Metre
+    >>> from kuchka import Ohm
     >>> braking_dielectric = MillifaradPerMetre(3)
     >>> electrode_side = Metre(1)
     >>> separation = Metre(0.1)
@@ -337,7 +345,8 @@ def FaradPerMetre(value: Numeric) -> Permittivity:
     Its plates are 2 m square, separated by 10 cm.
     At a charging voltage of 24 V, calculate the stored charge and energy:
 
-    >>> from kuchka import Metre, Volt
+    >>> from kuchka import Metre
+    >>> from kuchka import Volt
     >>> reactor_dielectric = FaradPerMetre(0.75)
     >>> plate_side = Metre(2)
     >>> separation = Metre(0.1)

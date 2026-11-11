@@ -22,7 +22,8 @@ A motor datasheet gives a rotor inertia of 30 kg·cm², and the drive accelerate
 A solid disc of 2 kg and 0.2 m radius has half the inertia of the same mass at its
 rim:
 
->>> from kuchka import Kilogram, Metre
+>>> from kuchka import Kilogram
+>>> from kuchka import Metre
 >>> 0.5 * Kilogram(2) * Metre(0.2) * Metre(0.2)
 0.04 kg·m²
 

@@ -20,7 +20,8 @@ Water, in the calorie unit:
 
 The heat to warm 2 kg of water by 30 K, grouped either way:
 
->>> from kuchka import DeltaKelvin, Kilogram
+>>> from kuchka import DeltaKelvin
+>>> from kuchka import Kilogram
 >>> from kuchka.units import KILOJOULE
 >>> water = KilojoulePerKilogramKelvin(4.184)
 >>> (water * Kilogram(2) * DeltaKelvin(30)).to(KILOJOULE)

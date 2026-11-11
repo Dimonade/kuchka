@@ -1,6 +1,7 @@
 """Energy density constructors: joules per cubic metre and watt-hours per litre.
 
-    from kuchka import MegajoulePerCubicMetre, WattHourPerLitre
+    from kuchka import MegajoulePerCubicMetre
+    from kuchka import WattHourPerLitre
 
     diesel = MegajoulePerCubicMetre(36_000)
     battery_cell = WattHourPerLitre(650)

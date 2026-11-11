@@ -274,7 +274,8 @@ def MilliamperePerSquareMetre(value: Numeric) -> CurrentDensity:
 
     An inspection record uses the ASCII unit spelling `mA/m2`:
 
-    >>> from kuchka import CurrentDensity, parse
+    >>> from kuchka import CurrentDensity
+    >>> from kuchka import parse
     >>> parse("25 mA/m2", CurrentDensity) == protection_density
     True
 

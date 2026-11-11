@@ -30,7 +30,8 @@ an applied field strength of 7.5 kA/m.
 Expressing the magnetization as a field-strength role allows the two A/m terms to be
 combined before applying vacuum permeability:
 
->>> from kuchka import KiloamperePerMetre, MicrohenryPerMetre
+>>> from kuchka import KiloamperePerMetre
+>>> from kuchka import MicrohenryPerMetre
 >>> from kuchka.units import TESLA
 >>> from kuchka.units import MAGNETIZATION_UNITS
 >>> applied = KiloamperePerMetre(7.5)

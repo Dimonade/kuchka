@@ -1,6 +1,7 @@
 """Data constructors: bits and bytes, in decimal and binary multiples.
 
-    from kuchka import Gibibyte, Megabyte
+    from kuchka import Gibibyte
+    from kuchka import Megabyte
 
 `Data` counts information, and its canonical unit is the bit.
 A byte is 8 bits, and each of the two has multiples in two families:

@@ -11,7 +11,8 @@ Examples
 A body that starts at rest, with no acceleration and no jerk, under a constant snap of
 24 m/s⁴ covers `snap * t⁴ / 24`, however the factors are written:
 
->>> from kuchka import MetrePerSecondFourthPower, Second
+>>> from kuchka import MetrePerSecondFourthPower
+>>> from kuchka import Second
 >>> snap = MetrePerSecondFourthPower(24)
 >>> snap * Second(2) * Second(2) * Second(2) * Second(2) / 24
 16 m
@@ -207,7 +208,8 @@ def SecondFourthPower(value: Numeric) -> TimeFourthPower:
     A length divided by a snap is a time to the fourth power, which is `24 * s / snap`
     for a body that starts at rest, with no acceleration and no jerk:
 
-    >>> from kuchka import Metre, MetrePerSecondFourthPower
+    >>> from kuchka import Metre
+    >>> from kuchka import MetrePerSecondFourthPower
     >>> Metre(48) / MetrePerSecondFourthPower(24)
     2 s⁴
 

@@ -1,6 +1,7 @@
 """Density constructors: kilograms, grams, and pounds per volume.
 
-    from kuchka import KilogramPerCubicMetre, GramPerCubicCentimetre
+    from kuchka import GramPerCubicCentimetre
+    from kuchka import KilogramPerCubicMetre
 
     steel = KilogramPerCubicMetre(7850)
     water = GramPerCubicCentimetre(1)

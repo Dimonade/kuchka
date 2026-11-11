@@ -20,8 +20,10 @@ The inductor contributes positive reactance, while the capacitor contributes neg
 reactance.
 Their sum is still capacitive at 50 Hz:
 
->>> from math import pi, sqrt
->>> from kuchka.units import OHM, Ohm
+>>> from math import pi
+>>> from math import sqrt
+>>> from kuchka.units import OHM
+>>> from kuchka.units import Ohm
 >>> inductive = Ohm(2 * pi * 50 * 10e-3).to_reactance()
 >>> capacitive = Ohm(-1 / (2 * pi * 50 * 100e-6)).to_reactance()
 >>> f"{inductive.to(OHM):.3f}"

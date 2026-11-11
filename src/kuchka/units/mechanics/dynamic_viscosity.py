@@ -1,6 +1,8 @@
 """Dynamic viscosity constructors: the pascal-second, the poise, and their prefixes.
 
-    from kuchka import Centipoise, MillipascalSecond, PascalSecond
+    from kuchka import Centipoise
+    from kuchka import MillipascalSecond
+    from kuchka import PascalSecond
 
     honey = PascalSecond(10)
     water = MillipascalSecond(1)

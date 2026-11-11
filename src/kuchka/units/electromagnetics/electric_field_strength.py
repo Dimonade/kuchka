@@ -1,6 +1,7 @@
 """Electric field strength constructors: volts per metre, centimetre, and millimetre.
 
-    from kuchka import KilovoltPerMillimetre, VoltPerMetre
+    from kuchka import KilovoltPerMillimetre
+    from kuchka import VoltPerMetre
 
     mains_wire = VoltPerMetre(5)
     breakdown = KilovoltPerMillimetre(3)
@@ -20,7 +21,8 @@ A 3 kV/mm field across a 2 mm gap is a 6 kV drop:
 
 A force of 12 N on a charge of 4 C is a field of 3 V/m:
 
->>> from kuchka import Coulomb, Newton
+>>> from kuchka import Coulomb
+>>> from kuchka import Newton
 >>> Newton(12) / Coulomb(4)
 3 V/m
 

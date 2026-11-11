@@ -1,6 +1,9 @@
 """Unit constructors for radioactivity and the doses it deposits.
 
-from kuchka import Becquerel, Gray, Roentgen, Sievert
+from kuchka import Becquerel
+from kuchka import Gray
+from kuchka import Roentgen
+from kuchka import Sievert
 
 source = Becquerel(3.7e6)
 absorbed = Gray(0.002)

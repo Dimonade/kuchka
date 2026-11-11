@@ -1,6 +1,11 @@
 """Catalytic activity constructors: the katal, its prefixes, and the enzyme unit.
 
-    from kuchka import EnzymeUnit, Katal, Microkatal, Millikatal, Nanokatal, parse
+    from kuchka import EnzymeUnit
+    from kuchka import Katal
+    from kuchka import Microkatal
+    from kuchka import Millikatal
+    from kuchka import Nanokatal
+    from kuchka import parse
     from kuchka.quantities import CatalyticActivity
 
     assay = EnzymeUnit(180)

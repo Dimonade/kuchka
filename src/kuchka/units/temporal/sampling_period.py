@@ -1,6 +1,7 @@
 """Sampling period units: the time units, read as a sampling period.
 
-    from kuchka import Millisecond, Second
+    from kuchka import Millisecond
+    from kuchka import Second
 
     period = Millisecond(2).to_sampling_period()
     rate = 1 / period               # -> SampleRate(500)

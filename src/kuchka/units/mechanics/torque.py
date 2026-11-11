@@ -4,7 +4,8 @@
 The module provides the newton-metre with its milli and kilo forms, the joule per turn,
 and the US customary pound-force foot and pound-force inch:
 
->>> from kuchka import NewtonMetre, PoundForceFoot
+>>> from kuchka import NewtonMetre
+>>> from kuchka import PoundForceFoot
 >>> bolt = NewtonMetre(40)
 >>> engine = PoundForceFoot(250)
 
@@ -26,7 +27,9 @@ Torque times angular velocity is the mechanical power:
 A 200 N push at the end of a 25 cm spanner gives a torque, and a torque divided by the
 force that produces it gives the lever arm back:
 
->>> from kuchka import Centimetre, Newton, Torque
+>>> from kuchka import Centimetre
+>>> from kuchka import Newton
+>>> from kuchka import Torque
 >>> turning = Torque.from_force(Newton(200), Centimetre(25))
 >>> turning
 50 N·m
@@ -230,7 +233,8 @@ def NewtonMetre(value: Numeric) -> Torque:
     The torque arrives as text in whatever spelling a datasheet uses, and the American
     spelling of the constructor is the same function:
 
-    >>> from kuchka import Torque, parse
+    >>> from kuchka import Torque
+    >>> from kuchka import parse
     >>> parse("110 Nm", Torque) == setting
     True
     >>> from kuchka import NewtonMeter
@@ -291,7 +295,8 @@ def KilonewtonMetre(value: Numeric) -> Torque:
     A slow-speed marine diesel of 10 MW running at 100 rpm turns its shaft with a
     torque of nearly a meganewton-metre, found by dividing power by angular velocity:
 
-    >>> from kuchka import Megawatt, RevolutionPerMinute
+    >>> from kuchka import Megawatt
+    >>> from kuchka import RevolutionPerMinute
     >>> from kuchka.units import KILONEWTON_METRE
     >>> shaft = Megawatt(10) / RevolutionPerMinute(100)
     >>> f"{shaft.to(KILONEWTON_METRE):.0f}"

@@ -86,7 +86,8 @@ def Lumen(value: Numeric) -> LuminousFlux:
     --------
     A lamp of 120 cd that emits uniformly into a cone of 2 sr gives:
 
-    >>> from kuchka import Candela, Steradian
+    >>> from kuchka import Candela
+    >>> from kuchka import Steradian
     >>> Candela(120) * Steradian(2)
     240 lm
     >>> Lumen(240) / Steradian(2)

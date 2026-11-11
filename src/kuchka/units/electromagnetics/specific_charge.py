@@ -1,6 +1,7 @@
 """Specific charge constructors: coulombs and ampere-hours per mass.
 
-    from kuchka import AmpereHourPerKilogram, CoulombPerKilogram
+    from kuchka import AmpereHourPerKilogram
+    from kuchka import CoulombPerKilogram
 
     cell = AmpereHourPerKilogram(0.25)
     beam = CoulombPerKilogram(0.0001)

@@ -1,6 +1,7 @@
 """Volume charge density constructors: coulombs and ampere-hours per volume.
 
-    from kuchka import AmpereHourPerLitre, CoulombPerCubicMetre
+    from kuchka import AmpereHourPerLitre
+    from kuchka import CoulombPerCubicMetre
 
     cloud = CoulombPerCubicMetre(0.000001)
     cell = AmpereHourPerLitre(0.7)

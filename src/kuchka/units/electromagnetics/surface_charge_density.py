@@ -1,6 +1,7 @@
 """Surface charge density constructors: coulombs and ampere-hours per area.
 
-    from kuchka import CoulombPerSquareMetre, MicrocoulombPerSquareCentimetre
+    from kuchka import CoulombPerSquareMetre
+    from kuchka import MicrocoulombPerSquareCentimetre
 
     plate = CoulombPerSquareMetre(0.02)
     film = MicrocoulombPerSquareCentimetre(10)

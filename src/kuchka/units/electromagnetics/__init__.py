@@ -1,6 +1,10 @@
 """Unit constructors for the electrical quantities other than current.
 
-from kuchka import Coulomb, Ohm, Siemens, Volt, VoltAmpere
+from kuchka import Coulomb
+from kuchka import Ohm
+from kuchka import Siemens
+from kuchka import Volt
+from kuchka import VoltAmpere
 
 stored = Coulomb(0.5)
 supply = Volt(12)

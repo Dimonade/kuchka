@@ -1,6 +1,7 @@
 """Specific activity constructors: becquerels and curies per mass.
 
-    from kuchka import BecquerelPerKilogram, PicocuriePerGram
+    from kuchka import BecquerelPerKilogram
+    from kuchka import PicocuriePerGram
 
     soil = BecquerelPerKilogram(400)
     sample = PicocuriePerGram(15)

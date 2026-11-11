@@ -1,6 +1,7 @@
 """Frequency constructors: the hertz, from nanohertz to petahertz.
 
-    from kuchka import Hertz, Megahertz
+    from kuchka import Hertz
+    from kuchka import Megahertz
 
     heart_rate = Hertz(1.2)
     carrier = Megahertz(915)

@@ -19,7 +19,8 @@ A geomagnetic survey estimates a local field of 0.5 G.
 A square loop with 10 cm sides is oriented perpendicular to the field.
 Assuming the field is uniform across the loop, the flux through it is:
 
->>> from kuchka import Gauss, Metre
+>>> from kuchka import Gauss
+>>> from kuchka import Metre
 >>> from kuchka.units import MICROWEBER
 >>> terrestrial_field = Gauss(0.5)
 >>> loop_side = Metre(0.1)
@@ -32,7 +33,8 @@ That is 9850 kG.
 For a hypothetical 1 mm square loop placed in a uniform region at the peak field, the
 corresponding flux would be:
 
->>> from kuchka import Millimetre, Tesla
+>>> from kuchka import Millimetre
+>>> from kuchka import Tesla
 >>> from kuchka.units import MILLIWEBER
 >>> peak_field = Tesla(985)
 >>> peak_field.to(KILOGAUSS)
@@ -246,7 +248,8 @@ def Picotesla(value: Numeric) -> MagneticFluxDensity:
     A precision magnetometer measures a 1.8 nT background and a 250 pT local anomaly.
     Combining the readings gives the total field component:
 
-    >>> from kuchka import Nanotesla, Picotesla
+    >>> from kuchka import Nanotesla
+    >>> from kuchka import Picotesla
     >>> background = Nanotesla(1.8)
     >>> anomaly = Picotesla(250)
     >>> (background + anomaly).to(NANOTESLA)
@@ -275,7 +278,8 @@ def Nanotesla(value: Numeric) -> MagneticFluxDensity:
     Estimate the magnetic flux through a square metre whose normal is aligned with the
     field:
 
-    >>> from kuchka import Metre, Nanotesla
+    >>> from kuchka import Metre
+    >>> from kuchka import Nanotesla
     >>> from kuchka.units import MICROWEBER
     >>> crustal_anomaly = Nanotesla(3000)
     >>> survey_side = Metre(1)
@@ -306,7 +310,8 @@ def Microtesla(value: Numeric) -> MagneticFluxDensity:
     430 µT.
     Estimate the flux through a 5 cm square loop perpendicular to that field:
 
-    >>> from kuchka import Metre, Microtesla
+    >>> from kuchka import Metre
+    >>> from kuchka import Microtesla
     >>> from kuchka.units import MICROWEBER
     >>> jovian_field = Microtesla(430)
     >>> loop_side = Metre(0.05)
@@ -337,7 +342,9 @@ def Millitesla(value: Numeric) -> MagneticFluxDensity:
     If the field rises from zero to 15 mT in 2 ms, Faraday's law predicts the average
     induced voltage across the winding:
 
-    >>> from kuchka import Metre, Millisecond, Millitesla
+    >>> from kuchka import Metre
+    >>> from kuchka import Millisecond
+    >>> from kuchka import Millitesla
     >>> field_change = Millitesla(15)
     >>> loop_side = Metre(0.01)
     >>> loop_area = loop_side * loop_side
@@ -370,7 +377,8 @@ def Tesla(value: Numeric) -> MagneticFluxDensity:
     to the field.
     The flux through the loop is:
 
-    >>> from kuchka import Metre, Tesla
+    >>> from kuchka import Metre
+    >>> from kuchka import Tesla
     >>> from kuchka.units import MILLIWEBER
     >>> scanner_field = Tesla(3)
     >>> loop_side = Metre(0.1)
@@ -407,7 +415,8 @@ def Kilotesla(value: Numeric) -> MagneticFluxDensity:
     Consider a 1 mm square loop placed in a region where the peak field is uniform.
     Calculate the flux linked by that loop:
 
-    >>> from kuchka import Kilotesla, Millimetre
+    >>> from kuchka import Kilotesla
+    >>> from kuchka import Millimetre
     >>> from kuchka.units import MILLIWEBER
     >>> peak_field = Kilotesla(0.985)
     >>> loop_side = Millimetre(1)
@@ -466,7 +475,8 @@ def Picogauss(value: Numeric) -> MagneticFluxDensity:
     enhancement around a denser clump.
     Combine the two readings:
 
-    >>> from kuchka import Microgauss, Picogauss
+    >>> from kuchka import Microgauss
+    >>> from kuchka import Picogauss
     >>> background_field = Microgauss(5)
     >>> local_enhancement = Picogauss(250_000)
     >>> (background_field + local_enhancement).to(MICROGAUSS)
@@ -523,7 +533,8 @@ def Microgauss(value: Numeric) -> MagneticFluxDensity:
     Estimate the flux through a one-square-kilometre simulation cell perpendicular to
     the field:
 
-    >>> from kuchka import Metre, Microgauss
+    >>> from kuchka import Metre
+    >>> from kuchka import Microgauss
     >>> from kuchka.units import MILLIWEBER
     >>> cloud_field = Microgauss(5)
     >>> cell_side = Metre(1000)
@@ -554,7 +565,9 @@ def Milligauss(value: Numeric) -> MagneticFluxDensity:
     pickup coil changes by 6 mG over 10 ms.
     Faraday's law gives the average induced voltage:
 
-    >>> from kuchka import Metre, Milligauss, Millisecond
+    >>> from kuchka import Metre
+    >>> from kuchka import Milligauss
+    >>> from kuchka import Millisecond
     >>> from kuchka.units import MILLIVOLT
     >>> field_change = Milligauss(6)
     >>> loop_side = Metre(0.1)
@@ -587,7 +600,8 @@ def Gauss(value: Numeric) -> MagneticFluxDensity:
     area.
     Assuming the field is uniform and perpendicular to the area, estimate the flux:
 
-    >>> from kuchka import Gauss, Metre
+    >>> from kuchka import Gauss
+    >>> from kuchka import Metre
     >>> from kuchka.units import MICROWEBER
     >>> magnet_field = Gauss(50)
     >>> probe_side = Metre(0.01)
@@ -619,7 +633,8 @@ def Kilogauss(value: Numeric) -> MagneticFluxDensity:
     magnetic fixture.
     The actual gap field depends on the magnet and geometry:
 
-    >>> from kuchka import Kilogauss, Metre
+    >>> from kuchka import Kilogauss
+    >>> from kuchka import Metre
     >>> from kuchka.units import MILLIWEBER
     >>> field = Kilogauss(13)
     >>> gap_side = Metre(0.01)

@@ -58,7 +58,8 @@ def MolePerKilogram(value: Numeric) -> Molality:
     --------
     Dissolving 0.5 mol of sucrose in 250 g of water gives a 2 mol/kg solution:
 
-    >>> from kuchka import Gram, Mole
+    >>> from kuchka import Gram
+    >>> from kuchka import Mole
     >>> Mole(0.5) / Gram(250)
     2 mol/kg
 

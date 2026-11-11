@@ -1,6 +1,7 @@
 """Angle and angular-displacement constructors: turns, radians, degrees, and more.
 
-    from kuchka import Radian, Degree
+    from kuchka import Degree
+    from kuchka import Radian
 
     heading = Degree(90) + Degree(45)
     sensor_reading = Radian(1.5707963)

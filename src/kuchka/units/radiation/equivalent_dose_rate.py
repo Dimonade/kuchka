@@ -1,6 +1,7 @@
 """Equivalent dose rate constructors: sieverts and rems per second and per hour.
 
-    from kuchka import MicrosievertPerHour, SievertPerHour
+    from kuchka import MicrosievertPerHour
+    from kuchka import SievertPerHour
 
     reading = MicrosievertPerHour(0.12)
     limit = SievertPerHour(1)

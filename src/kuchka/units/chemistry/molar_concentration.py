@@ -91,7 +91,8 @@ def MolePerLitre(value: Numeric) -> MolarConcentration:
     A 0.5 L flask of a 2 M solution holds 1 mol of solute, which is 58.44 g of sodium
     chloride:
 
-    >>> from kuchka import GramPerMole, Litre
+    >>> from kuchka import GramPerMole
+    >>> from kuchka import Litre
     >>> from kuchka.units import GRAM
     >>> amount = MolePerLitre(2) * Litre(0.5)
     >>> amount

@@ -12,7 +12,8 @@ Examples
 A spindle whose acceleration rises from 0 to 150 rad/s² in half a second ramps at
 300 rad/s³:
 
->>> from kuchka import RadianPerSecondSquared, Second
+>>> from kuchka import RadianPerSecondSquared
+>>> from kuchka import Second
 >>> RadianPerSecondSquared(150) / Second(0.5)
 300 rad/s³
 

@@ -1,6 +1,7 @@
 """Volume constructors: cubic units, the litre and its prefixes, and the US gallon.
 
-    from kuchka import Litre, Millilitre
+    from kuchka import Litre
+    from kuchka import Millilitre
 
     reagent = Millilitre(500) + Litre(Decimal("0.25"))
 

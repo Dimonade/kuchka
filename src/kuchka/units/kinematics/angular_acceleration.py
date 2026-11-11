@@ -12,7 +12,8 @@ Examples
 --------
 A spindle reaches 300 rad/s two seconds after it starts:
 
->>> from kuchka import RadianPerSecond, Second
+>>> from kuchka import RadianPerSecond
+>>> from kuchka import Second
 >>> RadianPerSecond(300) / Second(2)
 150 rad/s²
 

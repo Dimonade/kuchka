@@ -99,7 +99,8 @@ def KilogramMetre(value: Numeric) -> FirstMomentOfMass:
 
     Examples
     --------
-    >>> from kuchka import Kilogram, Metre
+    >>> from kuchka import Kilogram
+    >>> from kuchka import Metre
     >>> Kilogram(2) * Metre(0.5) == KilogramMetre(1)
     True
 
@@ -146,7 +147,8 @@ def GramMillimetre(value: Numeric) -> FirstMomentOfMass:
     --------
     A 2 g correction weight placed 15 mm from the axis:
 
-    >>> from kuchka import Gram, Millimetre
+    >>> from kuchka import Gram
+    >>> from kuchka import Millimetre
     >>> Gram(2) * Millimetre(15) == GramMillimetre(30)
     True
 

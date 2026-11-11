@@ -57,7 +57,9 @@ The exhibit lets visitors compare the three calibration conventions.
 These calculations are illustrative and leave practical halakhic rulings to the
 authorities:
 
->>> from kuchka.units import KILOMETRE, CENTIMETRE, METRE
+>>> from kuchka.units import CENTIMETRE
+>>> from kuchka.units import KILOMETRE
+>>> from kuchka.units import METRE
 >>> reference_boundary = Mil(1).to(KILOMETRE)
 >>> reference_boundary
 1.056 km

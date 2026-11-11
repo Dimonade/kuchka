@@ -1,6 +1,7 @@
 """Thermal conductivity constructors: watts per metre kelvin and its relatives.
 
-    from kuchka import MilliwattPerMetreKelvin, WattPerMetreKelvin
+    from kuchka import MilliwattPerMetreKelvin
+    from kuchka import WattPerMetreKelvin
 
     copper = WattPerMetreKelvin(401)
     aerogel = MilliwattPerMetreKelvin(15)

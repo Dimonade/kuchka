@@ -23,7 +23,10 @@ Its momentum is 30 kg·m/s.
 A braking actuator then applies a 12 N force opposite to the motion for one second.
 Calculate the remaining momentum and velocity along the original direction:
 
->>> from kuchka import Kilogram, MetrePerSecond, Newton, Second
+>>> from kuchka import Kilogram
+>>> from kuchka import MetrePerSecond
+>>> from kuchka import Newton
+>>> from kuchka import Second
 >>> package_mass = Kilogram(40)
 >>> approach_speed = MetrePerSecond(0.75)
 >>> initial_momentum = package_mass * approach_speed
@@ -138,7 +141,8 @@ def KilogramMetrePerSecond(value: Numeric) -> Momentum:
     Its measured momentum is 16 kg·m/s.
     Infer its speed from its mass and momentum:
 
-    >>> from kuchka import Kilogram, KilogramMetrePerSecond
+    >>> from kuchka import Kilogram
+    >>> from kuchka import KilogramMetrePerSecond
     >>> carriage_momentum = KilogramMetrePerSecond(16)
     >>> carriage_mass = Kilogram(2)
     >>> carriage_momentum / carriage_mass
@@ -169,7 +173,8 @@ def GramCentimetrePerSecond(value: Numeric) -> Momentum:
     A 2 g calibration bead has a measured momentum of 60 g·cm/s after a light impact.
     Use its mass to infer the velocity along the impact axis:
 
-    >>> from kuchka import Gram, GramCentimetrePerSecond
+    >>> from kuchka import Gram
+    >>> from kuchka import GramCentimetrePerSecond
     >>> bead_momentum = GramCentimetrePerSecond(60)
     >>> bead_mass = Gram(2)
     >>> bead_momentum / bead_mass
@@ -203,7 +208,8 @@ def PoundFootPerSecond(value: Numeric) -> Momentum:
     A legacy freight-handling record reports a trolley's momentum as 1200 lb·ft/s.
     If the trolley's measured mass is 100 kg, infer its speed in SI units:
 
-    >>> from kuchka import Kilogram, PoundFootPerSecond
+    >>> from kuchka import Kilogram
+    >>> from kuchka import PoundFootPerSecond
     >>> trolley_momentum = PoundFootPerSecond(1200)
     >>> trolley_mass = Kilogram(100)
     >>> f"{trolley_momentum / trolley_mass:.2f}"

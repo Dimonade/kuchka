@@ -1,6 +1,7 @@
 """Data rate constructors: bits and bytes per second, in decimal and binary multiples.
 
-    from kuchka import GigabitPerSecond, MebibytePerSecond
+    from kuchka import GigabitPerSecond
+    from kuchka import MebibytePerSecond
 
 `DataRate` measures how quickly information moves, with bit per second as its canonical
 unit.
@@ -24,7 +25,8 @@ device-side validation:
 A fleet of 50 sensors sends a 96-byte report every ten seconds.
 Calculate the aggregate uplink requirement to size a shared telemetry channel:
 
->>> from kuchka import Byte, Second
+>>> from kuchka import Byte
+>>> from kuchka import Second
 >>> per_sensor = Byte(96) / Second(10)
 >>> fleet_rate = per_sensor * 50
 >>> f"{fleet_rate.to(KILOBIT_PER_SECOND):.2f}"
@@ -150,7 +152,8 @@ def BitPerSecond(value: Numeric) -> DataRate:
     A 12-byte status packet sent five times per second consumes this bit rate on the
     telemetry link:
 
-    >>> from kuchka import Byte, Second
+    >>> from kuchka import Byte
+    >>> from kuchka import Second
     >>> packet_rate = (Byte(12) * 5) / Second(1)
     >>> packet_rate.to(BIT_PER_SECOND)
     480 bit/s
@@ -447,7 +450,8 @@ def BytePerSecond(value: Numeric) -> DataRate:
     A logger writes a 24-byte status record 20 times each second.
     Its payload rate is:
 
-    >>> from kuchka import Byte, Second
+    >>> from kuchka import Byte
+    >>> from kuchka import Second
     >>> log_rate = (Byte(24) * 20) / Second(1)
     >>> log_rate.to(BYTE_PER_SECOND)
     480 B/s

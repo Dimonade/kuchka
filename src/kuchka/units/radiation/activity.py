@@ -1,6 +1,9 @@
 """Activity constructors: the becquerel, the curie, and their prefixes.
 
-    from kuchka import Becquerel, Curie, Megabecquerel, Millicurie
+    from kuchka import Becquerel
+    from kuchka import Curie
+    from kuchka import Megabecquerel
+    from kuchka import Millicurie
 
 `Activity` counts nuclear transformations per second.
 Its SI unit is the becquerel (`Bq`), exactly one transformation per second.

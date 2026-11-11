@@ -20,7 +20,10 @@ The magnetic field rises from zero to a field strength of 800 A/m over 2 ms.
 Using vacuum permeability, estimate the induced voltage.
 Assume the field is uniform and perpendicular to the coil.
 
->>> from kuchka import AmperePerMetre, Metre, MicrohenryPerMetre, Millisecond
+>>> from kuchka import AmperePerMetre
+>>> from kuchka import Metre
+>>> from kuchka import MicrohenryPerMetre
+>>> from kuchka import Millisecond
 >>> vacuum = MicrohenryPerMetre(1.25663706127)
 >>> field_strength = AmperePerMetre(800)
 >>> flux_density = vacuum * field_strength
@@ -178,7 +181,8 @@ def MicrohenryPerMetre(value: Numeric) -> Permeability:
     If the response is linear at the measurement point, the ratio of the two readings
     gives its absolute permeability:
 
-    >>> from kuchka import AmperePerMetre, Millitesla
+    >>> from kuchka import AmperePerMetre
+    >>> from kuchka import Millitesla
     >>> measured_flux_density = Millitesla(2)
     >>> field_strength = AmperePerMetre(1600)
     >>> measured_permeability = measured_flux_density / field_strength
@@ -263,7 +267,8 @@ def HenryPerMetre(value: Numeric) -> Permeability:
     field is uniform and perpendicular to the aperture:
 
     >>> from math import pi
-    >>> from kuchka import AmperePerMetre, Metre
+    >>> from kuchka import AmperePerMetre
+    >>> from kuchka import Metre
     >>> confinement_medium = HenryPerMetre(0.25)
     >>> field_strength = AmperePerMetre(2)
     >>> flux_density = confinement_medium * field_strength

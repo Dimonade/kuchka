@@ -1,6 +1,7 @@
 """Surface activity constructors: becquerels, curies, and counts per area.
 
-    from kuchka import BecquerelPerSquareCentimetre, CuriePerSquareKilometre
+    from kuchka import BecquerelPerSquareCentimetre
+    from kuchka import CuriePerSquareKilometre
 
     wipe = BecquerelPerSquareCentimetre(4)
     fallout = CuriePerSquareKilometre(15)

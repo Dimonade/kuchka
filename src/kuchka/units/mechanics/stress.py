@@ -21,7 +21,8 @@ A materials report lists a test coupon's proof strength as 0.22 GPa, while a sim
 design estimate puts operating stress at 180 MPa.
 Treat both readings as stress before calculating the difference:
 
->>> from kuchka import Gigapascal, Megapascal
+>>> from kuchka import Gigapascal
+>>> from kuchka import Megapascal
 >>> from kuchka.units import MEGAPASCAL
 >>> proof_strength = Gigapascal(0.22).to_stress()
 >>> operating_stress = Megapascal(180).to_stress()

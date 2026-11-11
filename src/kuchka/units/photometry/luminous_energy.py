@@ -63,7 +63,8 @@ def LumenSecond(value: Numeric) -> LuminousEnergy:
     --------
     A 1000 lm flash that lasts 2 ms emits 2 lm·s:
 
-    >>> from kuchka import Lumen, Millisecond
+    >>> from kuchka import Lumen
+    >>> from kuchka import Millisecond
     >>> Lumen(1000) * Millisecond(2)
     2 lm·s
 
@@ -88,7 +89,8 @@ def LumenHour(value: Numeric) -> LuminousEnergy:
     --------
     A 800 lm lamp that runs for 2 hours delivers 1600 lm·h:
 
-    >>> from kuchka import Hour, Lumen
+    >>> from kuchka import Hour
+    >>> from kuchka import Lumen
     >>> (Lumen(800) * Hour(2)).to(LUMEN_HOUR)
     1600 lm·h
 

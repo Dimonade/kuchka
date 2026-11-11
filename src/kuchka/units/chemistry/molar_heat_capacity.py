@@ -1,6 +1,7 @@
 """Molar heat capacity constructors: joules and calories per mole kelvin.
 
-    from kuchka import JoulePerMoleKelvin, KilojoulePerMoleKelvin
+    from kuchka import JoulePerMoleKelvin
+    from kuchka import KilojoulePerMoleKelvin
 
     helium = JoulePerMoleKelvin(12.47)
     water = JoulePerMoleKelvin(75.3)
@@ -23,7 +24,8 @@ In calories per mole kelvin:
 
 The heat to warm 2 mol by 10 K, grouped either way:
 
->>> from kuchka import AmountOfSubstance, DeltaKelvin
+>>> from kuchka import AmountOfSubstance
+>>> from kuchka import DeltaKelvin
 >>> from kuchka.units import JOULE
 >>> from kuchka.units import Mole
 >>> (JoulePerMoleKelvin(12.5) * Mole(2) * DeltaKelvin(10)).to(JOULE)

@@ -85,7 +85,8 @@ def KilogramPerSecond(value: Numeric) -> MassFlowRate:
     --------
     A pump that moves 36 L of fuel of density 800 kg/m³ every second delivers:
 
-    >>> from kuchka import KilogramPerCubicMetre, LitrePerSecond
+    >>> from kuchka import KilogramPerCubicMetre
+    >>> from kuchka import LitrePerSecond
     >>> KilogramPerCubicMetre(800) * LitrePerSecond(36)
     28.8 kg/s
 
