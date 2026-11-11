@@ -1,4 +1,4 @@
-"""Angular-velocity-squared unit constructors: RadianSquaredPerSecondSquared and more.
+"""Angular velocity squared constructors: turns, radians, and degrees squared.
 
 `AngularVelocitySquared` is an angular velocity times an angular velocity, the square
 that a centripetal acceleration `omega² * r` and a rotational kinetic energy
@@ -15,7 +15,8 @@ Examples
 A rotor turns at 300 rad/s, so a point on its rim at 0.2 m has a centripetal
 acceleration of 18000 m/s², whichever way the factors are grouped:
 
->>> from kuchka import Metre, RadianPerSecond
+>>> from kuchka import Metre
+>>> from kuchka import RadianPerSecond
 >>> omega = RadianPerSecond(300)
 >>> omega * omega
 90000 rad²/s²

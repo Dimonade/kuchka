@@ -1,4 +1,4 @@
-"""Angular momentum unit constructors, such as KilogramSquareMetrePerSecond.
+"""Angular momentum constructors: joule-seconds per turn and newton-metre-seconds.
 
 Angular momentum is a moment of inertia times its angular velocity, and a torque applied
 for a time changes it by their product.
@@ -12,7 +12,9 @@ Examples
 A 0.04 kg·m² disc spinning at 300 rad/s carries 12 kg·m²/s, and a 2 N·m brake takes it
 to rest in six seconds:
 
->>> from kuchka import KilogramSquareMetre, NewtonMetre, RadianPerSecond
+>>> from kuchka import KilogramSquareMetre
+>>> from kuchka import NewtonMetre
+>>> from kuchka import RadianPerSecond
 >>> spin = KilogramSquareMetre(0.04) * RadianPerSecond(300)
 >>> spin
 12 kg·m²/s
@@ -159,7 +161,8 @@ def NewtonMetreSecond(value: Numeric) -> AngularMomentum:
     --------
     A 2 N·m torque applied for 6 s:
 
-    >>> from kuchka import NewtonMetre, Second
+    >>> from kuchka import NewtonMetre
+    >>> from kuchka import Second
     >>> NewtonMetre(2) * Second(6) == NewtonMetreSecond(12)
     True
 

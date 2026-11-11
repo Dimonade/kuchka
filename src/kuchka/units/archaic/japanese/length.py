@@ -44,7 +44,7 @@ A carpenter restoring a traditional timber-framed machiya prepares a floor
 plan 33 shaku long and 16 shaku plus 5 sun wide. The standardized dimensions
 produce a ten-by-five-metre footprint:
 
->>> from kuchka.units.length import METRE
+>>> from kuchka.units import METRE
 >>> room_length = Shaku(33)
 >>> room_width = Shaku(16) + Sun(5)
 >>> room_area = room_length * room_width
@@ -55,7 +55,7 @@ A Meiji-era survey records an 11-ri section of proposed railway track.
 Under the standardized shakkan-hō definition, that distance is exactly
 43.2 kilometres:
 
->>> from kuchka.units.length import KILOMETRE
+>>> from kuchka.units import KILOMETRE
 >>> surveyed_route = Ri(11)
 >>> surveyed_route.to(KILOMETRE)
 43.2 km
@@ -165,7 +165,7 @@ def Mo(value: Numeric) -> Length:
     aligning successive colour blocks.
     A 165-mō interval is exactly five millimetres under the standardized definition:
 
-    >>> from kuchka.units.length import MILLIMETRE
+    >>> from kuchka.units import MILLIMETRE
     >>> registration_mark = Mo(165)
     >>> registration_mark.to(MILLIMETRE)
     5 mm
@@ -196,7 +196,7 @@ def Rin(value: Numeric) -> Length:
     A craftsperson restoring a fine inlay on a traditional lacquer box records a
     twenty-millimetre section as 66 rin:
 
-    >>> from kuchka.units.length import MILLIMETRE
+    >>> from kuchka.units import MILLIMETRE
     >>> inlay_section = Rin(66)
     >>> inlay_section.to(MILLIMETRE)
     20 mm
@@ -227,7 +227,7 @@ def Bu(value: Numeric) -> Length:
     A lacquer artisan lays out three fine decorative rails, each 33 bu long.
     The combined length is exactly 30 centimetres:
 
-    >>> from kuchka.units.length import CENTIMETRE
+    >>> from kuchka.units import CENTIMETRE
     >>> rail = Bu(33)
     >>> (rail * 3).to(CENTIMETRE)
     30 cm
@@ -319,7 +319,7 @@ def Ken(value: Numeric) -> Length:
     A timber survey records a long covered walkway as 33 ken. Its standardized
     length is exactly 60 metres:
 
-    >>> from kuchka.units.length import METRE
+    >>> from kuchka.units import METRE
     >>> walkway = Ken(33)
     >>> walkway.to(METRE)
     60 m
@@ -351,7 +351,7 @@ def Jo(value: Numeric) -> Length:
     Japanese celebration. Its target height can be expressed as one jo
     plus another 23 shaku:
 
-    >>> from kuchka.units.length import METRE
+    >>> from kuchka.units import METRE
     >>> tower_height = Jo(1) + Shaku(23)
     >>> tower_height.to(METRE)
     10 m
@@ -382,7 +382,7 @@ def Cho(value: Numeric) -> Length:
     A Meiji-era survey records an irrigation channel extending for
     eleven cho along the edge of a rice-growing district:
 
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> channel_length = Cho(11)
     >>> channel_length.to(KILOMETRE)
     1.2 km
@@ -413,7 +413,7 @@ def Ri(value: Numeric) -> Length:
     A Meiji-era railway survey records an eleven-ri section of proposed
     track through the countryside:
 
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> surveyed_route = Ri(11)
     >>> surveyed_route.to(KILOMETRE)
     43.2 km

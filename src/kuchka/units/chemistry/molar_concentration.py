@@ -1,4 +1,4 @@
-"""Molar concentration constructors: MolePerLitre, MillimolePerLitre, and more.
+"""Molar concentration constructors: moles per cubic metre and per litre.
 
 Molar concentration is the amount of a solute per volume of solution, which chemists
 call molarity: `1 mol/m³` is the canonical unit, and `1 mol/L` is written `M`.
@@ -91,7 +91,8 @@ def MolePerLitre(value: Numeric) -> MolarConcentration:
     A 0.5 L flask of a 2 M solution holds 1 mol of solute, which is 58.44 g of sodium
     chloride:
 
-    >>> from kuchka import GramPerMole, Litre
+    >>> from kuchka import GramPerMole
+    >>> from kuchka import Litre
     >>> from kuchka.units import GRAM
     >>> amount = MolePerLitre(2) * Litre(0.5)
     >>> amount

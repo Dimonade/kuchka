@@ -1,6 +1,11 @@
-"""Unit constructors for Catalytic Activity: katal and SI-prefixed multiples.
+"""Catalytic activity constructors: the katal, its prefixes, and the enzyme unit.
 
-    from kuchka import EnzymeUnit, Katal, Microkatal, Millikatal, Nanokatal, parse
+    from kuchka import EnzymeUnit
+    from kuchka import Katal
+    from kuchka import Microkatal
+    from kuchka import Millikatal
+    from kuchka import Nanokatal
+    from kuchka import parse
     from kuchka.quantities import CatalyticActivity
 
     assay = EnzymeUnit(180)
@@ -45,7 +50,7 @@ Laboratory reports may represent the same activity using different units.
 `parse` reads the complete measurement and constructs the appropriate quantity:
 
 >>> from kuchka import parse
->>> from kuchka.quantities import CatalyticActivity
+>>> from kuchka import CatalyticActivity
 >>> parse("180 U", CatalyticActivity) == parse("3 µkat", CatalyticActivity)
 True
 

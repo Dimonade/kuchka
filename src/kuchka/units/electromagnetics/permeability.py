@@ -1,4 +1,4 @@
-"""Magnetic permeability constructors, from nanohenries per metre to henries per metre.
+"""Permeability constructors: henries per metre, from nano to unit.
 
 Magnetic permeability (μ) describes how a medium relates magnetic flux density (B) to
 magnetic field strength (H).
@@ -20,7 +20,10 @@ The magnetic field rises from zero to a field strength of 800 A/m over 2 ms.
 Using vacuum permeability, estimate the induced voltage.
 Assume the field is uniform and perpendicular to the coil.
 
->>> from kuchka import AmperePerMetre, Metre, MicrohenryPerMetre, Millisecond
+>>> from kuchka import AmperePerMetre
+>>> from kuchka import Metre
+>>> from kuchka import MicrohenryPerMetre
+>>> from kuchka import Millisecond
 >>> vacuum = MicrohenryPerMetre(1.25663706127)
 >>> field_strength = AmperePerMetre(800)
 >>> flux_density = vacuum * field_strength
@@ -143,7 +146,7 @@ def NanohenryPerMetre(value: Numeric) -> Permeability:
     and the winding geometry:
 
     >>> from kuchka import Metre
-    >>> from kuchka.units.electromagnetics.inductance import MICROHENRY
+    >>> from kuchka.units import MICROHENRY
     >>> vacuum = NanohenryPerMetre(1256.63706127)
     >>> cross_section_side = Metre(0.002)
     >>> winding_length = Metre(0.05)
@@ -178,7 +181,8 @@ def MicrohenryPerMetre(value: Numeric) -> Permeability:
     If the response is linear at the measurement point, the ratio of the two readings
     gives its absolute permeability:
 
-    >>> from kuchka import AmperePerMetre, Millitesla
+    >>> from kuchka import AmperePerMetre
+    >>> from kuchka import Millitesla
     >>> measured_flux_density = Millitesla(2)
     >>> field_strength = AmperePerMetre(1600)
     >>> measured_permeability = measured_flux_density / field_strength
@@ -220,7 +224,7 @@ def MillihenryPerMetre(value: Numeric) -> Permeability:
     the winding inductance:
 
     >>> from kuchka import Metre
-    >>> from kuchka.units.electromagnetics.inductance import MILLIHENRY
+    >>> from kuchka.units import MILLIHENRY
     >>> core = MillihenryPerMetre(1.005)
     >>> core_side = Metre(0.01)
     >>> magnetic_path = Metre(0.1)
@@ -263,7 +267,8 @@ def HenryPerMetre(value: Numeric) -> Permeability:
     field is uniform and perpendicular to the aperture:
 
     >>> from math import pi
-    >>> from kuchka import AmperePerMetre, Metre
+    >>> from kuchka import AmperePerMetre
+    >>> from kuchka import Metre
     >>> confinement_medium = HenryPerMetre(0.25)
     >>> field_strength = AmperePerMetre(2)
     >>> flux_density = confinement_medium * field_strength

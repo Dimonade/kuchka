@@ -1,4 +1,4 @@
-"""Snap unit constructors: MetrePerSecondFourthPower and MillimetrePerSecondFourthPower.
+"""Snap constructors: metres and millimetres per second to the fourth power.
 
 `Snap` is the rate at which a jerk changes, also called jounce: the fourth derivative
 of a position, which the smoothest motion profiles limit.
@@ -8,7 +8,8 @@ Examples
 --------
 A jerk rising by 10 m/s³ in half a second has a snap of 20 m/s⁴:
 
->>> from kuchka import MetrePerSecondCubed, Second
+>>> from kuchka import MetrePerSecondCubed
+>>> from kuchka import Second
 >>> MetrePerSecondCubed(10) / Second(0.5)
 20 m/s⁴
 

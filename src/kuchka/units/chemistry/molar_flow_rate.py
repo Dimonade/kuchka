@@ -1,4 +1,4 @@
-"""Molar flow rate constructors: MolePerSecond, KilomolePerHour, and more.
+"""Molar flow rate constructors: moles per second, minute, and hour.
 
 Molar flow rate is the amount of substance that passes a section per unit of time, as a
 reactor feed or a gas stream is quoted: `1 mol/s` is the canonical unit.

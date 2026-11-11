@@ -1,4 +1,4 @@
-"""Volumetric flow rate constructors: CubicMetrePerSecond, LitrePerMinute, and more.
+"""Volumetric flow rate constructors: cubic metres, litres, and gallons per time.
 
 Volumetric flow rate is the volume that passes a section per unit of time, of a liquid,
 a gas, or a solid such as grain: `1 m³/s` is the canonical unit.
@@ -143,7 +143,8 @@ def CubicMetrePerSecond(value: Numeric) -> VolumetricFlowRate:
     --------
     A pipe of 0.05 m² cross-section with water moving at 2 m/s carries 0.1 m³/s:
 
-    >>> from kuchka import MetrePerSecond, SquareMetre
+    >>> from kuchka import MetrePerSecond
+    >>> from kuchka import SquareMetre
     >>> SquareMetre(0.05) * MetrePerSecond(2)
     0.1 m³/s
 
@@ -239,7 +240,8 @@ def LitrePerMinute(value: Numeric) -> VolumetricFlowRate:
     --------
     A tap that fills a 10 L bucket in 40 s runs at 15 L/min:
 
-    >>> from kuchka import Litre, Second
+    >>> from kuchka import Litre
+    >>> from kuchka import Second
     >>> (Litre(10) / Second(40)).to(LITRE_PER_MINUTE)
     15 L/min
 

@@ -1,6 +1,7 @@
 """Reading a measurement from text.
 
-    from kuchka import Voltage, parse
+    from kuchka import Voltage
+    from kuchka import parse
 
     voltage = parse("5 mV", Voltage)
 
@@ -24,7 +25,10 @@ Examples
 --------
 A voltage, and the same text for the three kinds a second can be:
 
->>> from kuchka import Instant, SamplingPeriod, Time, Voltage
+>>> from kuchka import Instant
+>>> from kuchka import SamplingPeriod
+>>> from kuchka import Time
+>>> from kuchka import Voltage
 >>> parse("5 mV", Voltage)
 5 mV
 >>> parse("5 s", Time)

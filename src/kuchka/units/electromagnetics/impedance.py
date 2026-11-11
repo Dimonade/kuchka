@@ -1,4 +1,4 @@
-"""Impedance uses the ohm units already defined for `Resistance`.
+"""Impedance units: the resistance units, read as an impedance.
 
 No unit definitions live here: `kuchka.units.electromagnetics.resistance` owns the
 ohm and its multiples. Each entry in `IMPEDANCE_UNITS` reads the corresponding

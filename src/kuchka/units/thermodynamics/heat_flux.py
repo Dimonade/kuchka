@@ -1,6 +1,7 @@
-"""Unit constructors for heat flux: watts per area and its multiples.
+"""Heat flux constructors: watts per square metre and per square centimetre.
 
-    from kuchka import KilowattPerSquareMetre, MilliwattPerSquareCentimetre
+    from kuchka import KilowattPerSquareMetre
+    from kuchka import MilliwattPerSquareCentimetre
 
     sun = KilowattPerSquareMetre(1.361)
     sensor = MilliwattPerSquareCentimetre(100)

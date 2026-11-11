@@ -1,4 +1,4 @@
-"""Time-cubed unit constructors: SecondCubed and its relatives.
+"""Time-cubed constructors: seconds cubed, with their prefixes, minutes, and hours.
 
 `TimeCubed` is a duration times a duration times a duration, the cube the
 constant-jerk formulas are written with.
@@ -10,7 +10,8 @@ Examples
 A body that starts at rest, with no acceleration, under a constant jerk of 6 m/s³
 covers `j * t³ / 6`, however the factors are written:
 
->>> from kuchka import MetrePerSecondCubed, Second
+>>> from kuchka import MetrePerSecondCubed
+>>> from kuchka import Second
 >>> jerk = MetrePerSecondCubed(6)
 >>> jerk * Second(2) * Second(2) * Second(2) / 6
 8 m
@@ -198,7 +199,8 @@ def SecondCubed(value: Numeric) -> TimeCubed:
     A length divided by a jerk is a time cubed, which is `6 * s / j` for a body
     that starts at rest and at zero acceleration:
 
-    >>> from kuchka import Metre, MetrePerSecondCubed
+    >>> from kuchka import Metre
+    >>> from kuchka import MetrePerSecondCubed
     >>> Metre(8) / MetrePerSecondCubed(1)
     8 s³
 

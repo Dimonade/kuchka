@@ -1,6 +1,8 @@
-"""`Instant`'s canonical unit, reached from `Time`.
+"""Instant units: the time units, read as an instant.
 
-    from kuchka import Second, Millisecond, Hour
+    from kuchka import Hour
+    from kuchka import Millisecond
+    from kuchka import Second
 
     reading = Second(1_700_000_000).to_instant()
     later = reading + Millisecond(500)   # -> Instant

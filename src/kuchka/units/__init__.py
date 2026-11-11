@@ -1,6 +1,7 @@
 """Engineer-facing unit constructors, grouped by the physical dimension they measure.
 
-from kuchka import Volt, Milliampere
+from kuchka import Milliampere
+from kuchka import Volt
 
 voltage = Volt(4.2)
 current = Milliampere(150)

@@ -1,6 +1,9 @@
-"""Unit constructors for radioactive activity: becquerels and curies.
+"""Activity constructors: the becquerel, the curie, and their prefixes.
 
-    from kuchka import Becquerel, Curie, Megabecquerel, Millicurie
+    from kuchka import Becquerel
+    from kuchka import Curie
+    from kuchka import Megabecquerel
+    from kuchka import Millicurie
 
 `Activity` counts nuclear transformations per second.
 Its SI unit is the becquerel (`Bq`), exactly one transformation per second.
@@ -80,8 +83,8 @@ To request an explicit conversion to ordinary frequency, use `Activity.to_freque
 ``"mCi"``, ``"uCi"``, and ``"pCi"`` to their constructors for boundary code that
 reads unit labels from external data.
 
-Sources
--------
+References
+----------
 * U.S. Government Accountability Office, *Three Mile Island: The Most Studied Nuclear
   Accident in History* (1980), pp. 5-6:
   https://www.gao.gov/assets/emd-80-109.pdf

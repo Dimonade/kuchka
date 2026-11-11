@@ -1,4 +1,4 @@
-"""Electric charge constructors, from picocoulombs to ampere-hours.
+"""Electric charge constructors: coulombs and ampere-hours.
 
 The coulomb (C) is the SI unit of electric charge: 1 C = 1 A·s.
 Charge is the time integral of electric current.
@@ -21,8 +21,10 @@ It takes one measurement each minute.
 Calculate the charge used in one burst and the total charge accumulated over a day,
 counting only the measurement bursts and excluding the device's idle consumption:
 
->>> from kuchka import Milliampere, Millisecond
->>> from kuchka.units.electromagnetics.charge import COULOMB, MILLICOULOMB
+>>> from kuchka import Milliampere
+>>> from kuchka import Millisecond
+>>> from kuchka.units import COULOMB
+>>> from kuchka.units import MILLICOULOMB
 >>> burst_current = Milliampere(18)
 >>> burst_duration = Millisecond(240)
 >>> burst_charge = burst_current * burst_duration
@@ -106,7 +108,8 @@ def Picocoulomb(value: Numeric) -> Charge:
     A charge-sensitive detector transfers 8 pC to a 20 pF input capacitor.
     Calculate the resulting voltage change across the input capacitance:
 
-    >>> from kuchka import Picocoulomb, Picofarad
+    >>> from kuchka import Picocoulomb
+    >>> from kuchka import Picofarad
     >>> detector_charge = Picocoulomb(8)
     >>> input_capacitance = Picofarad(20)
     >>> detector_charge / input_capacitance
@@ -137,7 +140,8 @@ def Nanocoulomb(value: Numeric) -> Charge:
     An electrostatic actuator transfers 3 nC over a 2 ms pulse.
     Determine the average current during that interval:
 
-    >>> from kuchka import Millisecond, Nanocoulomb
+    >>> from kuchka import Millisecond
+    >>> from kuchka import Nanocoulomb
     >>> from kuchka.units import MICROAMPERE
     >>> transferred_charge = Nanocoulomb(3)
     >>> pulse_duration = Millisecond(2)
@@ -167,7 +171,8 @@ def Microcoulomb(value: Numeric) -> Charge:
     a mechanical impact.
     Calculate the voltage change:
 
-    >>> from kuchka import Microcoulomb, Microfarad
+    >>> from kuchka import Microcoulomb
+    >>> from kuchka import Microfarad
     >>> transferred_charge = Microcoulomb(18)
     >>> integration_capacitor = Microfarad(3)
     >>> transferred_charge / integration_capacitor
@@ -198,7 +203,8 @@ def Millicoulomb(value: Numeric) -> Charge:
     A pulsed solenoid transfers 20 mC over an 8 ms current pulse.
     Calculate the average current during the pulse:
 
-    >>> from kuchka import Millicoulomb, Millisecond
+    >>> from kuchka import Millicoulomb
+    >>> from kuchka import Millisecond
     >>> transferred_charge = Millicoulomb(20)
     >>> pulse_duration = Millisecond(8)
     >>> transferred_charge / pulse_duration
@@ -229,7 +235,8 @@ def Coulomb(value: Numeric) -> Charge:
     A pulse-power test fixture stores 0.2 C on a capacitor charged to 2 kV.
     For a capacitor charged from zero, the stored energy is QV/2:
 
-    >>> from kuchka import Coulomb, Volt
+    >>> from kuchka import Coulomb
+    >>> from kuchka import Volt
     >>> capacitor_charge = Coulomb(0.2)
     >>> charging_voltage = Volt(2000)
     >>> capacitor_charge * charging_voltage / 2
@@ -271,7 +278,8 @@ def MilliampereSecond(value: Numeric) -> Charge:
     An X-ray tube operates at 200 mA for an exposure lasting 100 ms.
     Calculate the tube charge, a commonly specified radiographic technique factor:
 
-    >>> from kuchka import Milliampere, Millisecond
+    >>> from kuchka import Milliampere
+    >>> from kuchka import Millisecond
     >>> tube_current = Milliampere(200)
     >>> exposure_time = Millisecond(100)
     >>> tube_charge = tube_current * exposure_time
@@ -305,7 +313,8 @@ def MilliampereHour(value: Numeric) -> Charge:
     A battery rated at 3000 mAh powers a device drawing a steady 150 mA.
     Estimate the operating time from the rated capacity:
 
-    >>> from kuchka import Milliampere, MilliampereHour
+    >>> from kuchka import Milliampere
+    >>> from kuchka import MilliampereHour
     >>> from kuchka.units import HOUR
     >>> battery_capacity = MilliampereHour(3000)
     >>> device_current = Milliampere(150)
@@ -339,7 +348,8 @@ def AmpereHour(value: Numeric) -> Charge:
     Multiplying its nominal voltage by its charge capacity estimates the nominal stored
     energy:
 
-    >>> from kuchka import AmpereHour, Volt
+    >>> from kuchka import AmpereHour
+    >>> from kuchka import Volt
     >>> from kuchka.units import KILOWATT_HOUR
     >>> battery_capacity = AmpereHour(60)
     >>> nominal_voltage = Volt(48)

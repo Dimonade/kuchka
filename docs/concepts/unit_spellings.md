@@ -117,7 +117,9 @@ The same spelling can mean different things in different tables, because a table
 When a value arrives as one string, `parse` reads the number and the unit together through the table of the type it is given:
 
 ```python
-from kuchka import Temperature, Voltage, parse
+from kuchka import Temperature
+from kuchka import Voltage
+from kuchka import parse
 
 parse("5 mV", Voltage)  # 5 mV
 parse("-40 °C", Temperature)  # -40 °C

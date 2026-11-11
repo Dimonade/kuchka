@@ -21,7 +21,8 @@ Hydraulic systems use pressure acting over an area to generate substantial force
 A hydraulic press operating at 300 bar applies a force of 18 kN to a piston with a
 cross-sectional area of 6 cm²:
 
->>> from kuchka import Bar, SquareCentimetre
+>>> from kuchka import Bar
+>>> from kuchka import SquareCentimetre
 >>> Bar(300) * SquareCentimetre(6)
 18000 N
 
@@ -30,7 +31,10 @@ Consider a 1200 kg car travelling at 20 m/s that comes to a complete stop over
 four seconds.
 Its initial momentum determines the magnitude of the average braking force:
 
->>> from kuchka import Kilogram, Metre, Newton, Second
+>>> from kuchka import Kilogram
+>>> from kuchka import Metre
+>>> from kuchka import Newton
+>>> from kuchka import Second
 >>> initial_momentum = Kilogram(1200) * (Metre(20) / Second(1))
 >>> initial_momentum / Second(4)
 6000 N
@@ -52,7 +56,8 @@ components and structural materials.
 A solid steel billet occupying 0.25 m³, assuming a density of 7850 kg/m³, has a mass
 of:
 
->>> from kuchka import CubicMetre, KilogramPerCubicMetre
+>>> from kuchka import CubicMetre
+>>> from kuchka import KilogramPerCubicMetre
 >>> KilogramPerCubicMetre(7850) * CubicMetre(0.25)
 1962.5 kg
 

@@ -1,6 +1,7 @@
-"""Unit constructors for BaudRate: a symbol rate used by digital communications.
+"""Baud rate constructors: the baud and its prefixes.
 
-    from kuchka import Baud, Kilobaud
+    from kuchka import Baud
+    from kuchka import Kilobaud
 
     uart_rate = Baud(115200)
     telemetry_rate = Kilobaud(250)

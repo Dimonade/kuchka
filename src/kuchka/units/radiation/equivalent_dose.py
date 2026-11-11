@@ -1,6 +1,8 @@
-"""Unit constructors for equivalent dose: sieverts and rems.
+"""Equivalent dose constructors: the sievert, its prefixes, and the rem.
 
-    from kuchka import Microsievert, Millisievert, Sievert
+    from kuchka import Microsievert
+    from kuchka import Millisievert
+    from kuchka import Sievert
 
     reading = Microsievert(0.12)
     annual = Millisievert(2.4)

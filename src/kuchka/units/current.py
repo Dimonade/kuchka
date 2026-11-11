@@ -1,4 +1,4 @@
-"""Current quantities and constructors across practical electrical scales.
+"""Current constructors: the ampere, from picoamperes to megaamperes.
 
 `Current` represents the rate at which electric charge passes a point in a circuit.
 Its SI unit is the ampere, the SI base unit of electric current.

@@ -1,4 +1,4 @@
-"""Reactance is the signed imaginary part of impedance in AC circuit analysis.
+"""Reactance units: the resistance units, read as a reactance.
 
 Reactance is measured in ohms, but it is not resistance or impedance.
 Inductive reactance is positive and increases with frequency.
@@ -20,8 +20,10 @@ The inductor contributes positive reactance, while the capacitor contributes neg
 reactance.
 Their sum is still capacitive at 50 Hz:
 
->>> from math import pi, sqrt
->>> from kuchka.units.electromagnetics.resistance import OHM, Ohm
+>>> from math import pi
+>>> from math import sqrt
+>>> from kuchka.units import OHM
+>>> from kuchka.units import Ohm
 >>> inductive = Ohm(2 * pi * 50 * 10e-3).to_reactance()
 >>> capacitive = Ohm(-1 / (2 * pi * 50 * 100e-6)).to_reactance()
 >>> f"{inductive.to(OHM):.3f}"

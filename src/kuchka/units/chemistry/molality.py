@@ -1,4 +1,4 @@
-"""Molality constructors: MolePerKilogram and its milli and micro forms.
+"""Molality constructors: moles per kilogram, with milli and micro forms.
 
 Molality is the amount of a solute per mass of solvent: `1 mol/kg` is the canonical
 unit.
@@ -58,7 +58,8 @@ def MolePerKilogram(value: Numeric) -> Molality:
     --------
     Dissolving 0.5 mol of sucrose in 250 g of water gives a 2 mol/kg solution:
 
-    >>> from kuchka import Gram, Mole
+    >>> from kuchka import Gram
+    >>> from kuchka import Mole
     >>> Mole(0.5) / Gram(250)
     2 mol/kg
 

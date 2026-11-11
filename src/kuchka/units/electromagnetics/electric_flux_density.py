@@ -1,4 +1,4 @@
-"""Electric flux density constructors, using the coulomb-per-area units.
+"""Electric flux density units: the coulomb-per-area units, read as a flux density.
 
 The electric flux density (D), also called the electric displacement field, is the free
 charge per area a field displaces: in a linear medium `D = εE`.
@@ -19,7 +19,8 @@ Examples
 --------
 A field of 2 kV/m in a medium of permittivity 8.85 pF/m displaces 17.7 nC/m²:
 
->>> from kuchka import KilovoltPerMetre, PicofaradPerMetre
+>>> from kuchka import KilovoltPerMetre
+>>> from kuchka import PicofaradPerMetre
 >>> flux = PicofaradPerMetre(8.85) * KilovoltPerMetre(2)
 >>> flux.to_surface_charge_density().to(NANOCOULOMB_PER_SQUARE_METRE)
 17.7 nC/m²

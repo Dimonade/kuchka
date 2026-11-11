@@ -27,7 +27,9 @@ The same relationship between area and length is useful in hydrology.
 A rainfall depth of 20 millimetres over one hectare deposits 200 cubic metres of water,
 assuming the rainfall is uniform across the entire area:
 
->>> from kuchka import Hectare, Millimetre, Litre
+>>> from kuchka import Hectare
+>>> from kuchka import Litre
+>>> from kuchka import Millimetre
 >>> rainfall_volume = Hectare(1) * Millimetre(20)
 >>> rainfall_volume
 200 m³

@@ -1,6 +1,7 @@
-"""Unit constructors for kinematic viscosity: square metres per second and stokes.
+"""Kinematic viscosity constructors: square metres per second and the stokes.
 
-    from kuchka import Centistokes, SquareMetrePerSecond
+    from kuchka import Centistokes
+    from kuchka import SquareMetrePerSecond
 
     water = Centistokes(1)
     engine_oil = SquareMetrePerSecond(0.0001)
@@ -22,7 +23,8 @@ True
 
 The Reynolds number of water at 2 m/s in a 5 cm pipe is one hundred thousand:
 
->>> from kuchka import Metre, MetrePerSecond
+>>> from kuchka import Metre
+>>> from kuchka import MetrePerSecond
 >>> MetrePerSecond(2) * Metre(0.05) / Centistokes(1)
 100000 1
 

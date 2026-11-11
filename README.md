@@ -206,7 +206,8 @@ That does not mean the rest of the application has to become stringly typed.
 import tomllib
 from dataclasses import dataclass
 
-from kuchka import Voltage, parse
+from kuchka import Voltage
+from kuchka import parse
 
 
 @dataclass(frozen=True)
@@ -232,7 +233,8 @@ Quote the value and keep the unit in the string, and the digits are read exactly
 ```python
 from fractions import Fraction
 
-from kuchka import Temperature, Volt
+from kuchka import Temperature
+from kuchka import Volt
 
 parse("0.1 V", Voltage) == Volt(Fraction(1, 10))  # True: the number is read exactly
 parse("-40 °C", Temperature)  # -40 °C
@@ -442,7 +444,8 @@ Kelvin(0)  # valid.
 `Instant` follows the same shape, reached from any `Time` value:
 
 ```python
-from kuchka import Second, Millisecond
+from kuchka import Millisecond
+from kuchka import Second
 
 reading = Second(1_700_000_000).to_instant()
 reading + Millisecond(500)  # -> Instant, 500 ms later
@@ -453,7 +456,8 @@ reading + reading  # rejected: `MeasurementError`.
 `Time.to_instant()` and `Time.to_sampling_period()` work at whatever prefix the `Time` value was already constructed with:
 
 ```python
-from kuchka import Hour, Minute
+from kuchka import Hour
+from kuchka import Minute
 
 Hour(1).to_instant() == Second(3600).to_instant()
 Minute(1).to_sampling_period() == Second(60).to_sampling_period()
@@ -497,7 +501,9 @@ Decibel(3) * Decibel(3)  # rejected: two levels do not multiply (`TypeError`).
 Converting to or from the linear ratio a level describes goes through a logarithm, so it comes in two flavours: `10 ** (level / 10)` for power quantities and `10 ** (level / 20)` for field quantities such as voltage.
 
 ```python
-from kuchka import Decibel, LogarithmicRatio, Ratio
+from kuchka import Decibel
+from kuchka import LogarithmicRatio
+from kuchka import Ratio
 
 Decibel(30).to_power_ratio() == Ratio(1000)  # whole decades are exact.
 Decibel(40).to_field_ratio() == Ratio(100)
@@ -779,7 +785,8 @@ print(Arshin(3).to(CENTIMETRE))
 `parse` reads an archaic unit only when asked, and only from the modules that have been imported:
 
 ```python
-from kuchka import Length, parse
+from kuchka import Length
+from kuchka import parse
 
 parse("3 arshin", Length, allow_archaic=True)  # 3 arshin
 ```
@@ -983,7 +990,8 @@ A test ties every constant, and the `Dalton`, `EarthMass`, and `SolarMass` units
 They are the Commission's recommendations and not measurements, and the Commission has revised them before.
 
 ```python
-from kuchka import EquivalentDose, Milligray
+from kuchka import EquivalentDose
+from kuchka import Milligray
 from kuchka.constants import icrp_103
 
 EquivalentDose.from_absorbed_dose(Milligray(3), icrp_103.ALPHA_PARTICLES)

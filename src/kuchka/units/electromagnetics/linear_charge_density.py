@@ -1,6 +1,7 @@
-"""Unit constructors for linear charge density: coulombs per metre and its prefixes.
+"""Linear charge density constructors: coulombs per metre, with prefixes.
 
-    from kuchka import CoulombPerMetre, NanocoulombPerMetre
+    from kuchka import CoulombPerMetre
+    from kuchka import NanocoulombPerMetre
 
     line = CoulombPerMetre(0.5)
     cable = NanocoulombPerMetre(120)

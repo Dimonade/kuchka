@@ -1,4 +1,4 @@
-"""Molar volume constructors: CubicMetrePerMole, LitrePerMole, and more.
+"""Molar volume constructors: cubic metres, litres, and cubic centimetres per mole.
 
 Molar volume is the volume that one mole of a substance occupies: `1 m³/mol` is the
 canonical unit, and `L/mol` (the same as `dm³/mol`) and `cm³/mol` are the scales that

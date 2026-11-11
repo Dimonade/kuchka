@@ -1,4 +1,4 @@
-"""Entities per amount constructors: PerMole.
+"""Entities-per-amount constructors: the reciprocal mole.
 
 The number of elementary entities (atoms, molecules, ions) per amount of substance, in
 reciprocal moles: `1 mol⁻¹` is the canonical unit.

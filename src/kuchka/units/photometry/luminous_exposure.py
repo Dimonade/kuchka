@@ -1,4 +1,4 @@
-"""Luminous exposure constructors: LuxSecond, LuxHour, and KiloluxHour.
+"""Luminous exposure constructors: lux-seconds, lux-hours, and kilolux-hours.
 
 Luminous exposure is illuminance accumulated over time: `1 lx·s = 1 lm·s/m²`.
 The lux second is the canonical unit.
@@ -66,7 +66,8 @@ def LuxSecond(value: Numeric) -> LuminousExposure:
     --------
     A 500 lx work surface lit for 10 s receives 5000 lx·s:
 
-    >>> from kuchka import Lux, Second
+    >>> from kuchka import Lux
+    >>> from kuchka import Second
     >>> Lux(500) * Second(10)
     5000 lx·s
 
@@ -91,7 +92,8 @@ def LuxHour(value: Numeric) -> LuminousExposure:
     --------
     A watercolour lit at 50 lx for an 8 hour opening day takes 400 lx·h of exposure:
 
-    >>> from kuchka import Hour, Lux
+    >>> from kuchka import Hour
+    >>> from kuchka import Lux
     >>> (Lux(50) * Hour(8)).to(LUX_HOUR)
     400 lx·h
 
@@ -116,7 +118,8 @@ def KiloluxHour(value: Numeric) -> LuminousExposure:
     --------
     Ten hours of 20 klx daylight is 200 klx·h:
 
-    >>> from kuchka import Hour, Kilolux
+    >>> from kuchka import Hour
+    >>> from kuchka import Kilolux
     >>> (Kilolux(20) * Hour(10)).to(KILOLUX_HOUR)
     200 klx·h
 

@@ -1,4 +1,4 @@
-"""Molar charge constructors: CoulombPerMole and KilocoulombPerMole.
+"""Molar charge constructors: coulombs and kilocoulombs per mole.
 
 Molar charge is the electric charge carried by one mole of a substance: `1 C/mol` is the
 canonical unit.

@@ -1,4 +1,4 @@
-"""Luminance constructors: CandelaPerSquareMetre, Stilb, FootLambert, and more.
+"""Luminance constructors: candelas per square metre, the stilb, and the foot-lambert.
 
 Luminance is the luminous intensity of a surface per unit of its area, which is how
 bright the surface looks: `1 cd/m²`, also called the nit, is the canonical unit.
@@ -86,7 +86,8 @@ def CandelaPerSquareMetre(value: Numeric) -> Luminance:
     A 100 cd source seen across a surface of 0.5 m² has a luminance of 200 cd/m²,
     and 200 nits is the name the same value goes by on a display data sheet:
 
-    >>> from kuchka import Candela, SquareMetre
+    >>> from kuchka import Candela
+    >>> from kuchka import SquareMetre
     >>> Candela(100) / SquareMetre(0.5)
     200 cd/m²
     >>> from kuchka.units import LUMINANCE_UNITS

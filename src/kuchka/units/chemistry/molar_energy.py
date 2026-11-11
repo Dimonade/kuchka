@@ -1,4 +1,4 @@
-"""Molar energy constructors: JoulePerMole, KilojoulePerMole, and KilocaloriePerMole.
+"""Molar energy constructors: joules, kilojoules, and kilocalories per mole.
 
 Molar energy is the energy per mole of a substance, as a reaction enthalpy or a bond
 energy is quoted: `1 J/mol` is the canonical unit.

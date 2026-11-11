@@ -1,4 +1,4 @@
-"""Unit constructors for apparent and reactive power: volt-amperes and vars.
+"""AC power constructors: volt-amperes for apparent power, vars for reactive.
 
 Apparent power describes the RMS voltage-current product of an AC supply;
 reactive power describes the portion exchanged by inductive and capacitive fields.

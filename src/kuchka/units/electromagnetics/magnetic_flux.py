@@ -1,4 +1,4 @@
-"""Magnetic flux unit constructors: Microweber, Milliweber, Weber, ...
+"""Magnetic flux constructors: the weber, from nanowebers to kilowebers.
 
 The weber is the SI unit of magnetic flux: `1 Wb = 1 V·s`.
 

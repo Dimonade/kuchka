@@ -1,6 +1,7 @@
-"""Unit constructors for activity concentration: becquerels and curies per volume.
+"""Activity concentration constructors: becquerels and curies per volume.
 
-    from kuchka import BecquerelPerCubicMetre, PicocuriePerLitre
+    from kuchka import BecquerelPerCubicMetre
+    from kuchka import PicocuriePerLitre
 
     radon = PicocuriePerLitre(4)
     air = BecquerelPerCubicMetre(100)
@@ -21,7 +22,7 @@ A radon level of 4 pCi/L, in the SI unit:
 An activity concentration times a volume is an activity:
 
 >>> from kuchka import CubicMetre
->>> from kuchka.units.radiation.activity import KILOBECQUEREL
+>>> from kuchka.units import KILOBECQUEREL
 >>> (BecquerelPerCubicMetre(150) * CubicMetre(60)).to(KILOBECQUEREL)
 9 kBq
 

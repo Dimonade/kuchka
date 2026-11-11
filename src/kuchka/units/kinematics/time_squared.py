@@ -1,4 +1,4 @@
-"""Time-squared unit constructors: SecondSquared and its relatives.
+"""Time-squared constructors: seconds squared, with their prefixes, minutes, and hours.
 
 `TimeSquared` is a duration times a duration, the square the constant-acceleration
 formulas are written with.
@@ -10,7 +10,8 @@ Examples
 A mass dropped for two seconds falls through `g * t * t / 2`, however the factors are
 written:
 
->>> from kuchka import MetrePerSecondSquared, Second
+>>> from kuchka import MetrePerSecondSquared
+>>> from kuchka import Second
 >>> g = MetrePerSecondSquared(9.81)
 >>> g * Second(2) * Second(2) / 2
 19.62 m
@@ -204,7 +205,8 @@ def SecondSquared(value: Numeric) -> TimeSquared:
     A length divided by an acceleration is a time squared, which is `2 * s / a`
     for a body that starts at rest:
 
-    >>> from kuchka import Metre, MetrePerSecondSquared
+    >>> from kuchka import Metre
+    >>> from kuchka import MetrePerSecondSquared
     >>> Metre(19.62) / MetrePerSecondSquared(9.81)
     2 s²
 
@@ -254,7 +256,8 @@ def HourSquared(value: Numeric) -> TimeSquared:
     A vehicle gaining 100 km/h every hour accelerates at 100 km/h², and in two hours
     it covers `a * t² / 2`:
 
-    >>> from kuchka import Hour, KilometrePerHour
+    >>> from kuchka import Hour
+    >>> from kuchka import KilometrePerHour
     >>> KilometrePerHour(100) / Hour(1) * HourSquared(4) / 2
     200000 m
 

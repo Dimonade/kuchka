@@ -1,6 +1,9 @@
 """Unit constructors for the photometric quantities.
 
-from kuchka import Candela, Lumen, Lux, Steradian
+from kuchka import Candela
+from kuchka import Lumen
+from kuchka import Lux
+from kuchka import Steradian
 
 source = Candela(120)
 flux = source * Steradian(2)

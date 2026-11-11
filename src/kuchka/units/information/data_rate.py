@@ -1,6 +1,7 @@
-"""Data-rate unit constructors: bits and bytes per second.
+"""Data rate constructors: bits and bytes per second, in decimal and binary multiples.
 
-    from kuchka import GigabitPerSecond, MebibytePerSecond
+    from kuchka import GigabitPerSecond
+    from kuchka import MebibytePerSecond
 
 `DataRate` measures how quickly information moves, with bit per second as its canonical
 unit.
@@ -24,7 +25,8 @@ device-side validation:
 A fleet of 50 sensors sends a 96-byte report every ten seconds.
 Calculate the aggregate uplink requirement to size a shared telemetry channel:
 
->>> from kuchka import Byte, Second
+>>> from kuchka import Byte
+>>> from kuchka import Second
 >>> per_sensor = Byte(96) / Second(10)
 >>> fleet_rate = per_sensor * 50
 >>> f"{fleet_rate.to(KILOBIT_PER_SECOND):.2f}"
@@ -34,7 +36,7 @@ A nominally faster link does not change how much data fits into a fixed transfer
 window.
 At 800 Mbit/s, the expected payload budget for a 90-second window is:
 
->>> from kuchka.units.information.data import GIGABYTE
+>>> from kuchka.units import GIGABYTE
 >>> (MegabitPerSecond(800) * Second(90)).to(GIGABYTE)
 9 GB
 
@@ -150,7 +152,8 @@ def BitPerSecond(value: Numeric) -> DataRate:
     A 12-byte status packet sent five times per second consumes this bit rate on the
     telemetry link:
 
-    >>> from kuchka import Byte, Second
+    >>> from kuchka import Byte
+    >>> from kuchka import Second
     >>> packet_rate = (Byte(12) * 5) / Second(1)
     >>> packet_rate.to(BIT_PER_SECOND)
     480 bit/s
@@ -205,7 +208,7 @@ def MegabitPerSecond(value: Numeric) -> DataRate:
     before container and filesystem overhead:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import GIGABYTE
+    >>> from kuchka.units import GIGABYTE
     >>> recording = MegabitPerSecond(12) * Second(45 * 60)
     >>> recording.to(GIGABYTE)
     4.05 GB
@@ -260,7 +263,7 @@ def TerabitPerSecond(value: Numeric) -> DataRate:
     measurement window:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import TERABYTE
+    >>> from kuchka.units import TERABYTE
     >>> moved = TerabitPerSecond(2) * Second(30)
     >>> moved.to(TERABYTE)
     7.5 TB
@@ -288,7 +291,7 @@ def PetabitPerSecond(value: Numeric) -> DataRate:
     decimal petabyte:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import PETABYTE
+    >>> from kuchka.units import PETABYTE
     >>> (PetabitPerSecond(1) * Second(8)).to(PETABYTE)
     1 PB
 
@@ -315,7 +318,7 @@ def KibibitPerSecond(value: Numeric) -> DataRate:
     diagnostic session:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import KIBIBYTE
+    >>> from kuchka.units import KIBIBYTE
     >>> (KibibitPerSecond(64) * Second(15)).to(KIBIBYTE)
     120 KiB
 
@@ -367,7 +370,7 @@ def GibibitPerSecond(value: Numeric) -> DataRate:
     A 2 Gibit/s channel carries this much data in a five-second burst:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import GIBIBYTE
+    >>> from kuchka.units import GIBIBYTE
     >>> (GibibitPerSecond(2) * Second(5)).to(GIBIBYTE)
     1.25 GiB
 
@@ -447,7 +450,8 @@ def BytePerSecond(value: Numeric) -> DataRate:
     A logger writes a 24-byte status record 20 times each second.
     Its payload rate is:
 
-    >>> from kuchka import Byte, Second
+    >>> from kuchka import Byte
+    >>> from kuchka import Second
     >>> log_rate = (Byte(24) * 20) / Second(1)
     >>> log_rate.to(BYTE_PER_SECOND)
     480 B/s
@@ -501,7 +505,7 @@ def MegabytePerSecond(value: Numeric) -> DataRate:
     minute capture window:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import GIGABYTE
+    >>> from kuchka.units import GIGABYTE
     >>> captured = MegabytePerSecond(150) * Second(10 * 60)
     >>> captured.to(GIGABYTE)
     90 GB
@@ -662,7 +666,7 @@ def GibibytePerSecond(value: Numeric) -> DataRate:
     A checkpoint pipeline sustaining 8 GiB/s writes this much data in two seconds:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import GIBIBYTE
+    >>> from kuchka.units import GIBIBYTE
     >>> (GibibytePerSecond(8) * Second(2)).to(GIBIBYTE)
     16 GiB
 
@@ -689,7 +693,7 @@ def TebibytePerSecond(value: Numeric) -> DataRate:
     benchmark interval:
 
     >>> from kuchka import Second
-    >>> from kuchka.units.information.data import TEBIBYTE
+    >>> from kuchka.units import TEBIBYTE
     >>> (TebibytePerSecond(4) * Second(6)).to(TEBIBYTE)
     24 TiB
 

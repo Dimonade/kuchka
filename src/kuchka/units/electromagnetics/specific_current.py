@@ -1,6 +1,7 @@
-"""Unit constructors for specific current: amperes per kilogram.
+"""Specific current constructors: amperes per kilogram, with prefixes.
 
-    from kuchka import AmperePerKilogram, MilliamperePerKilogram
+    from kuchka import AmperePerKilogram
+    from kuchka import MilliamperePerKilogram
 
     rate = MilliamperePerKilogram(0.2)
 

@@ -10,12 +10,13 @@ Every example is a doctest, so it runs, and every example has a scenario, so a r
 
 A module docstring follows the NumPy style, in this order:
 
-1. **Summary and introduction.** Name the quantity and the constructors the module provides, show one short example with its public imports, and give the canonical unit with its symbol and what it means physically.
-2. **Practical scales.** Describe the range the units cover and where each is at home, with examples from different disciplines where the units reach into them: engineering, medicine, physics, chemistry, biology, astronomy, materials, industry. A unit gets the context it has in practice, so a unit used in one field is shown in that field.
-3. **Examples.** Module-level examples that show relationships and features, and that complement the constructor docstrings.
-4. **Notes.** The physical definition, the equations, the exact conversion factors, the conventions that explain a symbol or a factor, the distinctions from neighbouring quantities, and the `*_UNITS` table with what it is for.
-5. **Sources.** Definitions, standards, and publications, with a note where sources disagree.
-6. **See Also.** The related quantity types and the neighbouring unit modules, chosen by direct relationship.
+1. **Title.** The first line is `<Quantity> constructors: <what the family spans>.`, which fits the line length. A module without constructors of its own, because its quantity reads another quantity's units, reads `<Quantity> units: <the units it reads>, read as a <quantity>.`
+2. **Summary and introduction.** Name the quantity and the constructors the module provides, show one short example with its public imports, and give the canonical unit with its symbol and what it means physically.
+3. **Practical scales.** Describe the range the units cover and where each is at home, with examples from different disciplines where the units reach into them: engineering, medicine, physics, chemistry, biology, astronomy, materials, industry. A unit gets the context it has in practice, so a unit used in one field is shown in that field.
+4. **Examples.** Module-level examples that show relationships and features, and that complement the constructor docstrings.
+5. **Notes.** The physical definition, the equations, the exact conversion factors, the conventions that explain a symbol or a factor, the distinctions from neighbouring quantities, and the `*_UNITS` table with what it is for.
+6. **References.** Definitions, standards, and publications, each as a title followed by its link, with a note in Notes where sources disagree.
+7. **See Also.** The related quantity types and the neighbouring unit modules, chosen by direct relationship.
 
 A structural rule (how a module is exported, where it lives) belongs to the comment above the place it applies and stays out of the docstring.
 
@@ -75,33 +76,35 @@ The snippets run as written with these imports:
 ```python
 from fractions import Fraction
 
-from kuchka import (
-    Ampere,
-    AmpereHour,
-    Celsius,
-    Centigray,
-    Centimetre,
-    Charge,
-    Current,
-    DeltaCelsius,
-    Decibel,
-    Degree,
-    Gray,
-    Katal,
-    Kilogram,
-    Litre,
-    Metre,
-    Millivolt,
-    Newton,
-    RadianPerSecond,
-    Temperature,
-    Time,
-    Torque,
-    Volt,
-    Voltage,
-    parse,
-)
-from kuchka.units import AMPERE, CENTIGRAY, GRAY, HOUR, VOLTAGE_UNITS
+from kuchka import Ampere
+from kuchka import AmpereHour
+from kuchka import Celsius
+from kuchka import Centigray
+from kuchka import Centimetre
+from kuchka import Charge
+from kuchka import Current
+from kuchka import Decibel
+from kuchka import Degree
+from kuchka import DeltaCelsius
+from kuchka import Gray
+from kuchka import Katal
+from kuchka import Kilogram
+from kuchka import Litre
+from kuchka import Metre
+from kuchka import Millivolt
+from kuchka import Newton
+from kuchka import RadianPerSecond
+from kuchka import Temperature
+from kuchka import Time
+from kuchka import Torque
+from kuchka import Volt
+from kuchka import Voltage
+from kuchka import parse
+from kuchka.units import AMPERE
+from kuchka.units import CENTIGRAY
+from kuchka.units import GRAY
+from kuchka.units import HOUR
+from kuchka.units import VOLTAGE_UNITS
 ```
 
 ### 1. Typical measurement
@@ -258,11 +261,25 @@ An exact relationship in the Notes, such as an inch being 25.4 mm, reads best as
 - A measured quantity is not confused with one derived from it or with an interpretation of it.
 - A relationship that is exact is exact in the code: a `Fraction` or an integer, and an equality in the example when it helps.
 
+## The checked structure
+
+The tests check the structure of a unit module, so that the examples stay comparable from module to module:
+
+- the title has the form of [a module docstring](#a-module-docstring), and the docstring has `Examples` and `Notes` sections, in the order of that list,
+- a constructor docstring has `Parameters`, `Returns`, and `Examples`, in that order, with `Notes` between them where it has one,
+- the `Examples` of a constructor are at least two blocks, and a block is a sentence that sets the scene followed by its code and results,
+- the first block of a constructor shows that constructor and its result,
+- a traceback carries `# doctest: +ELLIPSIS`, and an import names one thing, from a public path.
+
+Modules written before the structure are listed in the baseline of the tests.
+A module that conforms comes off the list, and the tests say so when it does, which lets the list shrink and never grow.
+Whether an example is a good one stays with the reviewer.
+
 ## Checklist
 
-- [ ] a module docstring with introduction, practical scales, examples, notes, sources, and see also,
+- [ ] a module docstring with introduction, practical scales, examples, and notes, and references and see also where they help,
 - [ ] two or more kinds of example per constructor, the first a typical measurement,
 - [ ] prefixed variants with a real magnitude and one example of another kind,
 - [ ] a scenario sentence for each example, and varied contexts,
 - [ ] public imports, exact results, and the traceback form for an error,
-- [ ] `just test` clean, which runs every example.
+- [ ] `just test` clean, which runs every example and checks the structure, and the module off the baseline when it conforms.

@@ -1,4 +1,4 @@
-"""Mass flow rate constructors: KilogramPerSecond, TonnePerHour, and more.
+"""Mass flow rate constructors: kilograms, grams, tonnes, and pounds per time.
 
 Mass flow rate is the mass that passes a section per unit of time, of a liquid, a gas,
 or a solid such as ore on a belt: `1 kg/s` is the canonical unit.
@@ -85,7 +85,8 @@ def KilogramPerSecond(value: Numeric) -> MassFlowRate:
     --------
     A pump that moves 36 L of fuel of density 800 kg/m³ every second delivers:
 
-    >>> from kuchka import KilogramPerCubicMetre, LitrePerSecond
+    >>> from kuchka import KilogramPerCubicMetre
+    >>> from kuchka import LitrePerSecond
     >>> KilogramPerCubicMetre(800) * LitrePerSecond(36)
     28.8 kg/s
 

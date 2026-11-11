@@ -1,6 +1,8 @@
 """Unit constructors for how heat changes a temperature.
 
-from kuchka import CelsiusPerMinute, JoulePerKelvin, KilojoulePerKilogramKelvin
+from kuchka import CelsiusPerMinute
+from kuchka import JoulePerKelvin
+from kuchka import KilojoulePerKilogramKelvin
 
 ramp = CelsiusPerMinute(5)
 kettle = JoulePerKelvin(1200)

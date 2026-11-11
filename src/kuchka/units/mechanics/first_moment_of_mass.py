@@ -1,4 +1,4 @@
-"""First moment of mass unit constructors: KilogramMetre, GramMillimetre, and relatives.
+"""First moment of mass constructors: kilogram-metres and their relatives.
 
 A first moment of mass is a mass times its distance from an axis.
 On a rotor it is the unbalance, specified and measured in gram-millimetres: a 2 g
@@ -11,7 +11,7 @@ A balancing machine reports 30 g·mm of residual unbalance on a 1.5 kg rotor.
 Its centre of mass sits 20 µm off the axis:
 
 >>> from kuchka import Kilogram
->>> from kuchka.units.length import MICROMETRE
+>>> from kuchka.units import MICROMETRE
 >>> (GramMillimetre(30) / Kilogram(1.5)).to(MICROMETRE)
 20 µm
 
@@ -99,7 +99,8 @@ def KilogramMetre(value: Numeric) -> FirstMomentOfMass:
 
     Examples
     --------
-    >>> from kuchka import Kilogram, Metre
+    >>> from kuchka import Kilogram
+    >>> from kuchka import Metre
     >>> Kilogram(2) * Metre(0.5) == KilogramMetre(1)
     True
 
@@ -146,7 +147,8 @@ def GramMillimetre(value: Numeric) -> FirstMomentOfMass:
     --------
     A 2 g correction weight placed 15 mm from the axis:
 
-    >>> from kuchka import Gram, Millimetre
+    >>> from kuchka import Gram
+    >>> from kuchka import Millimetre
     >>> Gram(2) * Millimetre(15) == GramMillimetre(30)
     True
 

@@ -1,6 +1,7 @@
-"""Unit constructors for Exposure Rate: roentgens per second, minute, and hour.
+"""Exposure rate constructors: roentgens per second, minute, and hour.
 
-    from kuchka import MilliroentgenPerHour, RoentgenPerHour
+    from kuchka import MilliroentgenPerHour
+    from kuchka import RoentgenPerHour
 
     reading = MilliroentgenPerHour(2.5)
     calibration_field = RoentgenPerHour(0.1)
@@ -46,7 +47,8 @@ Exposure rate can also be expressed directly in its canonical SI unit.
 The conversion from exposure rate to specific current is made explicit:
 
 >>> from fractions import Fraction
->>> from kuchka import ExposureRate, AmperePerKilogram
+>>> from kuchka import AmperePerKilogram
+>>> from kuchka import ExposureRate
 >>> from kuchka.units import ROENTGEN_PER_HOUR
 >>> current_per_mass = AmperePerKilogram(Fraction(43, 600_000_000))
 >>> ExposureRate.from_specific_current(current_per_mass).to(ROENTGEN_PER_HOUR)
@@ -56,7 +58,7 @@ Instrument and archival records often use different spellings for the same unit.
 `parse` reads the numeric value and unit together, including registered alternatives:
 
 >>> from kuchka import parse
->>> from kuchka.quantities import ExposureRate
+>>> from kuchka import ExposureRate
 >>> parse("2.5 mR/hr", ExposureRate) == MilliroentgenPerHour(2.5)
 True
 
@@ -282,7 +284,7 @@ def RoentgenPerHour(value: Numeric) -> ExposureRate:
     A gamma-field measurement is recorded as 0.1 R/h.
     Express the reading in milliroentgens per hour:
 
-    >>> from kuchka.units.radiation.exposure_rate import MILLIROENTGEN_PER_HOUR
+    >>> from kuchka.units import MILLIROENTGEN_PER_HOUR
     >>> RoentgenPerHour(0.1).to(MILLIROENTGEN_PER_HOUR)
     100 mR/h
 

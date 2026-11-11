@@ -1,6 +1,9 @@
-"""Unit constructors for Conductance: siemens and SI-prefixed multiples.
+"""Conductance constructors: the siemens, from nanosiemens to kilosiemens.
 
-    from kuchka import Kilosiemens, Microsiemens, Millisiemens, Siemens
+    from kuchka import Kilosiemens
+    from kuchka import Microsiemens
+    from kuchka import Millisiemens
+    from kuchka import Siemens
 
     sensor_input = Microsiemens(0.4)
     bias_path = Millisiemens(5)
@@ -55,7 +58,8 @@ Older circuit diagrams and component references sometimes express conductance us
 historical name mho.
 The parser recognizes this spelling and its prefixed forms:
 
->>> from kuchka import Conductance, parse
+>>> from kuchka import Conductance
+>>> from kuchka import parse
 >>> parse("5 millimho", Conductance)
 5 mS
 
@@ -241,7 +245,8 @@ def Microsiemens(value: Numeric) -> Conductance:
     An acquisition system stores the measurement as text.
     Read the complete measurement:
 
-    >>> from kuchka import Conductance, parse
+    >>> from kuchka import Conductance
+    >>> from kuchka import parse
     >>> parse("0.4 µS", Conductance) == input_conductance
     True
 
@@ -306,7 +311,8 @@ def Siemens(value: Numeric) -> Conductance:
 
     Older electrical literature uses the name mho for the same unit:
 
-    >>> from kuchka import Conductance, parse
+    >>> from kuchka import Conductance
+    >>> from kuchka import parse
     >>> parse("1 mho", Conductance) == one_ohm_path
     True
 

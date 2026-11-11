@@ -1,4 +1,4 @@
-"""Resistance quantities and constructors for practical electrical engineering.
+"""Resistance constructors: the ohm, from microohms to gigaohms.
 
 Resistance describes the opposition to electric current.
 Its SI unit is the ohm (Ω), defined by 1 Ω = 1 V/A.
@@ -18,8 +18,9 @@ a power connector carrying 300 A. The inferred resistance is 0.4 mΩ, and the
 connector dissipates 36 W. That much local heating warrants investigation of
 the contact, its fasteners, and its condition:
 
->>> from kuchka import Ampere, Millivolt
->>> from kuchka.units.electromagnetics.resistance import MILLIOHM
+>>> from kuchka import Ampere
+>>> from kuchka import Millivolt
+>>> from kuchka.units import MILLIOHM
 >>> connector_current = Ampere(300)
 >>> voltage_drop = Millivolt(120)
 >>> contact_resistance = voltage_drop / connector_current
@@ -32,7 +33,8 @@ A signal-conditioning circuit uses a 4.7 kΩ resistor and a 100 nF capacitor.
 Their product gives the RC time constant used when estimating the filter's
 step response:
 
->>> from kuchka import Kiloohm, Nanofarad
+>>> from kuchka import Kiloohm
+>>> from kuchka import Nanofarad
 >>> from kuchka.units import MICROSECOND
 >>> filter_resistance = Kiloohm(4.7)
 >>> filter_capacitance = Nanofarad(100)
@@ -169,7 +171,7 @@ def Milliohm(value: Numeric) -> Resistance:
     thermal design requirement:
 
     >>> from kuchka import Ampere
-    >>> from kuchka.units.electromagnetics.voltage import MILLIVOLT
+    >>> from kuchka.units import MILLIVOLT
     >>> shunt = Milliohm(5)
     >>> shunt_current = Ampere(10)
     >>> (shunt * shunt_current).to(MILLIVOLT)

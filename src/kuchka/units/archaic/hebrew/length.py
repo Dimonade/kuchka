@@ -57,7 +57,9 @@ The exhibit lets visitors compare the three calibration conventions.
 These calculations are illustrative and leave practical halakhic rulings to the
 authorities:
 
->>> from kuchka.units.length import KILOMETRE, CENTIMETRE, METRE
+>>> from kuchka.units import CENTIMETRE
+>>> from kuchka.units import KILOMETRE
+>>> from kuchka.units import METRE
 >>> reference_boundary = Mil(1).to(KILOMETRE)
 >>> reference_boundary
 1.056 km
@@ -350,7 +352,7 @@ def Amah(value: Numeric) -> Length:
     A museum reconstruction of an ancient Jerusalem doorway uses a four-amah opening
     height under the reference calibration:
 
-    >>> from kuchka.units.length import METRE
+    >>> from kuchka.units import METRE
     >>> doorway_height = Amah(4)
     >>> doorway_height.to(METRE)
     2.112 m
@@ -383,7 +385,7 @@ def Mil(value: Numeric) -> Length:
     A study group annotating an ancient travel narrative records a route of two milin.
     The reference calibration gives the route a definite computational length:
 
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> route = Mil(2)
     >>> route.to(KILOMETRE)
     2.112 km
@@ -417,7 +419,7 @@ def Parsa(value: Numeric) -> Length:
     three parasangs.
     Under this module's reference calibration, the journey is represented as:
 
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> journey = Parsa(3)
     >>> journey.to(KILOMETRE)
     12.672 km
@@ -451,7 +453,7 @@ def EtzbaNaeh(value: Numeric) -> Length:
     thumb-breadths long.
     Using the Naeh calibration gives a twenty-two-centimetre line:
 
-    >>> from kuchka.units.length import CENTIMETRE
+    >>> from kuchka.units import CENTIMETRE
     >>> decorative_line = EtzbaNaeh(11)
     >>> decorative_line.to(CENTIMETRE)
     22 cm
@@ -518,7 +520,7 @@ def ZeretNaeh(value: Numeric) -> Length:
     measures its length as two and a half spans.
     Under the Naeh calibration, the strip is sixty centimetres long:
 
-    >>> from kuchka.units.length import CENTIMETRE
+    >>> from kuchka.units import CENTIMETRE
     >>> fabric_strip = ZeretNaeh(2.5)
     >>> fabric_strip.to(CENTIMETRE)
     60 cm
@@ -586,7 +588,7 @@ def MilNaeh(value: Numeric) -> Length:
     recorded as two milin.
     Under the Naeh calibration, the represented distance is:
 
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> route = MilNaeh(2)
     >>> route.to(KILOMETRE)
     1.92 km
@@ -619,7 +621,7 @@ def ParsaNaeh(value: Numeric) -> Length:
     A lesson on traditional travel terminology maps a three-parsa journey using
     Rabbi Avraham Chaim Naeh's calibration:
 
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> journey = ParsaNaeh(3)
     >>> journey.to(KILOMETRE)
     11.52 km
@@ -653,7 +655,7 @@ def EtzbaChazonIsh(value: Numeric) -> Length:
     Under the Chazon Ish calibration, ten thumb-breadths make a
     twenty-three-point-eight-centimetre reference segment:
 
-    >>> from kuchka.units.length import CENTIMETRE
+    >>> from kuchka.units import CENTIMETRE
     >>> reference_segment = EtzbaChazonIsh(10)
     >>> reference_segment.to(CENTIMETRE)
     23.8 cm
@@ -720,7 +722,7 @@ def ZeretChazonIsh(value: Numeric) -> Length:
     display.
     Under the Chazon Ish calibration, this is:
 
-    >>> from kuchka.units.length import METRE
+    >>> from kuchka.units import METRE
     >>> reference_span = ZeretChazonIsh(2.5)
     >>> reference_span.to(METRE)
     0.714 m
@@ -753,7 +755,7 @@ def AmahChazonIsh(value: Numeric) -> Length:
     A museum's architectural model includes a three-amah span, measured using the
     Chazon Ish calibration:
 
-    >>> from kuchka.units.length import METRE
+    >>> from kuchka.units import METRE
     >>> architectural_span = AmahChazonIsh(3)
     >>> architectural_span.to(METRE)
     1.7136 m
@@ -786,7 +788,7 @@ def MilChazonIsh(value: Numeric) -> Length:
     An educational map represents a route of one and a half milin under the Chazon Ish
     calibration:
 
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> route = MilChazonIsh(1.5)
     >>> route.to(KILOMETRE)
     1.7136 km
@@ -819,7 +821,7 @@ def ParsaChazonIsh(value: Numeric) -> Length:
     A study group maps a two-parsa journey described in a traditional travel account.
     Under the Chazon Ish calibration, the modeled distance is:
 
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> journey = ParsaChazonIsh(2)
     >>> journey.to(KILOMETRE)
     9.1392 km
@@ -1054,7 +1056,7 @@ def DerekhYom(value: Numeric) -> Length:
     The measurements combine into one route:
 
     >>> route = DerekhYom(1) + Mil(6) + Amah(12)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> route.to(KILOMETRE)
     48.582336 km
 
@@ -1086,7 +1088,7 @@ def DerekhYomNaeh(value: Numeric) -> Length:
     journey followed by another five milin to a spring:
 
     >>> route = DerekhYomNaeh(1) + MilNaeh(5)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> route.to(KILOMETRE)
     43.2 km
 
@@ -1121,7 +1123,7 @@ def DerekhYomChazonIsh(value: Numeric) -> Length:
     further one-and-a-half parsa'ot to a second stopping point:
 
     >>> route = DerekhYomChazonIsh(1) + ParsaChazonIsh(1.5)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> route.to(KILOMETRE)
     52.5504 km
 

@@ -1,6 +1,7 @@
-"""Unit constructors for SampleRate: how often an acquisition system takes a reading.
+"""Sample rate constructors: samples per second, with prefixes.
 
-    from kuchka import SamplesPerSecond, KilosamplesPerSecond
+    from kuchka import KilosamplesPerSecond
+    from kuchka import SamplesPerSecond
 
     rate = SamplesPerSecond(500)
     high_speed_rate = KilosamplesPerSecond(420)

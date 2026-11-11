@@ -1,7 +1,11 @@
-"""Unit constructors for AbsorbedDose: grays, SI-prefixed multiples, and rads.
+"""Absorbed dose constructors: the gray, its prefixes, and the rad.
 
-    from kuchka import Centigray, Gray, Kilogray, Rad
-    from kuchka.units import CENTIGRAY, GRAY
+    from kuchka import Centigray
+    from kuchka import Gray
+    from kuchka import Kilogray
+    from kuchka import Rad
+    from kuchka.units import CENTIGRAY
+    from kuchka.units import GRAY
 
     prescription = Gray(2)
     process_dose = Kilogray(25)
@@ -57,7 +61,11 @@ The symbol ``rad`` has two meanings in the library: it represents both the
 absorbed-dose unit and the radian, the unit of plane angle.
 `parse` resolves the spelling using the requested quantity type:
 
->>> from kuchka import AbsorbedDose, Angle, Centigray, Radian, parse
+>>> from kuchka import AbsorbedDose
+>>> from kuchka import Angle
+>>> from kuchka import Centigray
+>>> from kuchka import Radian
+>>> from kuchka import parse
 >>> parse("1 rad", AbsorbedDose) == Centigray(1)
 True
 >>> parse("1 rad", Angle) == Radian(1)
@@ -240,7 +248,8 @@ def Nanogray(value: Numeric) -> AbsorbedDose:
     A dosimetry instrument exports the same measurement as text.
     Read the complete measurement:
 
-    >>> from kuchka import AbsorbedDose, parse
+    >>> from kuchka import AbsorbedDose
+    >>> from kuchka import parse
     >>> parse("750 nGy", AbsorbedDose) == reading
     True
 
@@ -432,7 +441,10 @@ def Rad(value: Numeric) -> AbsorbedDose:
     The same symbol is also used for radians.
     The parser resolves the meaning from the requested quantity type:
 
-    >>> from kuchka import AbsorbedDose, Angle, Radian, parse
+    >>> from kuchka import AbsorbedDose
+    >>> from kuchka import Angle
+    >>> from kuchka import Radian
+    >>> from kuchka import parse
     >>> parse("1 rad", AbsorbedDose) == Rad(1)
     True
     >>> parse("1 rad", Angle) == Radian(1)

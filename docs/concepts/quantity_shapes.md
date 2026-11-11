@@ -11,7 +11,8 @@ Addition, subtraction, scalar multiplication, and ordering follow ordinary numer
 Examples include `Voltage`, `Current`, `Length`, `Mass`, and `Time`.
 
 ```python
-from kuchka import Gram, Kilogram
+from kuchka import Gram
+from kuchka import Kilogram
 
 Kilogram(2) + Gram(500) == Kilogram(2.5)
 Kilogram(10) * 3 == Kilogram(30)
@@ -28,7 +29,8 @@ Subtracting two readings produces a linear temperature delta; adding a delta to 
 Adding two readings is rejected.
 
 ```python
-from kuchka import DeltaKelvin, Kelvin
+from kuchka import DeltaKelvin
+from kuchka import Kelvin
 
 setpoint = Kelvin(350)
 reading = Kelvin(352)
@@ -44,7 +46,11 @@ Kelvin, Celsius, Fahrenheit, and Rankine readings are all `Temperature`.
 Their units differ by a scale and an offset, and kuchka keeps both exact: a Fahrenheit degree is exactly 5/9 of a kelvin, and 0 °F sits at exactly 459.67 x 5/9 K.
 
 ```python
-from kuchka import Celsius, DeltaCelsius, DeltaFahrenheit, Fahrenheit, Kelvin
+from kuchka import Celsius
+from kuchka import DeltaCelsius
+from kuchka import DeltaFahrenheit
+from kuchka import Fahrenheit
+from kuchka import Kelvin
 
 Fahrenheit(32) == Celsius(0)
 # True
@@ -100,7 +106,8 @@ The level is stored exactly.
 Multiplying two ratios adds their levels, so `+` and `-` combine stages in series and are exact:
 
 ```python
-from kuchka import Bel, Decibel
+from kuchka import Bel
+from kuchka import Decibel
 
 amplifier = Decibel(20)
 cable = Decibel(-3.5)
@@ -126,7 +133,9 @@ Both return a `Proportion`.
 `LogarithmicRatio.from_power_ratio()` and `LogarithmicRatio.from_field_ratio()` go the other way and require a positive ratio.
 
 ```python
-from kuchka import Decibel, LogarithmicRatio, Ratio
+from kuchka import Decibel
+from kuchka import LogarithmicRatio
+from kuchka import Ratio
 
 Decibel(30).to_power_ratio() == Ratio(1000)
 Decibel(40).to_field_ratio() == Ratio(100)

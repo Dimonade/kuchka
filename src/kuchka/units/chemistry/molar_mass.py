@@ -1,4 +1,4 @@
-"""Molar mass constructors: KilogramPerMole, GramPerMole, and KilogramPerKilomole.
+"""Molar mass constructors: kilograms and grams per mole, and per kilomole.
 
 Molar mass is the mass of one mole of a substance: `1 kg/mol` is the canonical unit.
 Chemists write it in `g/mol`, and a molecule's molar mass in `g/mol` has the same number

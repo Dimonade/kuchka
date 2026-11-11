@@ -1,4 +1,4 @@
-"""Moment of inertia unit constructors: KilogramSquareMetre and its relatives.
+"""Moment of inertia constructors: kilogram square metres and their relatives.
 
 A moment of inertia is how a body resists angular acceleration about an axis.
 A kilogram square metre is a kilogram square metre per square radian, the way a
@@ -22,7 +22,8 @@ A motor datasheet gives a rotor inertia of 30 kg·cm², and the drive accelerate
 A solid disc of 2 kg and 0.2 m radius has half the inertia of the same mass at its
 rim:
 
->>> from kuchka import Kilogram, Metre
+>>> from kuchka import Kilogram
+>>> from kuchka import Metre
 >>> 0.5 * Kilogram(2) * Metre(0.2) * Metre(0.2)
 0.04 kg·m²
 

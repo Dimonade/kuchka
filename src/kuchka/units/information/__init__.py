@@ -1,6 +1,8 @@
 """Unit constructors for information and its rate.
 
-from kuchka import Byte, GigabitPerSecond, Mebibyte
+from kuchka import Byte
+from kuchka import GigabitPerSecond
+from kuchka import Mebibyte
 
 firmware = Mebibyte(64)
 link = GigabitPerSecond(1)

@@ -1,6 +1,8 @@
 """Unit constructors for motion, whatever causes it.
 
-from kuchka import MetrePerSecond, MetrePerSecondSquared, RevolutionPerMinute
+from kuchka import MetrePerSecond
+from kuchka import MetrePerSecondSquared
+from kuchka import RevolutionPerMinute
 
 speed = MetrePerSecond(3)
 rate_of_change = MetrePerSecondSquared(9.81)

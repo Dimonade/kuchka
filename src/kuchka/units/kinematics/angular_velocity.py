@@ -1,7 +1,9 @@
-"""Unit constructors for AngularVelocity: turns, radians, degrees per second, and rpm.
+"""Angular velocity constructors: turns, radians, and degrees per second, and rpm.
 
-    from kuchka import RadianPerSecond, RevolutionPerMinute
-    from kuchka.units import RADIAN_PER_SECOND, TURN_PER_SECOND
+    from kuchka import RadianPerSecond
+    from kuchka import RevolutionPerMinute
+    from kuchka.units import RADIAN_PER_SECOND
+    from kuchka.units import TURN_PER_SECOND
 
     spindle = RevolutionPerMinute(3000)
     motor = RadianPerSecond(100)
@@ -54,7 +56,9 @@ A point 0.5 m from the joint axis has a tangential speed of 2 m/s:
 A motion controller exports a slew rate using the alternative spelling ``"deg/s"``.
 Read the complete measurement:
 
->>> from kuchka import AngularVelocity, DegreePerSecond, parse
+>>> from kuchka import AngularVelocity
+>>> from kuchka import DegreePerSecond
+>>> from kuchka import parse
 >>> parse("90 deg/s", AngularVelocity) == DegreePerSecond(90)
 True
 

@@ -1,6 +1,8 @@
-"""Unit constructors for exposure: roentgens, and coulombs per kilogram.
+"""Exposure constructors: the roentgen and its prefixes.
 
-    from kuchka import Microroentgen, Milliroentgen, Roentgen
+    from kuchka import Microroentgen
+    from kuchka import Milliroentgen
+    from kuchka import Roentgen
 
     survey = Milliroentgen(5)
     background = Microroentgen(10)

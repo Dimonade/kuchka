@@ -1,4 +1,4 @@
-"""Magnetic field strength constructors, from microamperes to megaamperes per metre.
+"""Magnetic field strength constructors: amperes per metre, with prefixes.
 
 Magnetic field strength (H) describes the magnetising field associated with free
 currents.
@@ -25,8 +25,10 @@ A long air-cored solenoid has 1200 turns over 0.4 m and carries 2.5 A.
 Its field strength follows from the ampere-turns per metre.
 Vacuum permeability then gives the magnetic flux density inside the winding:
 
->>> from kuchka import Ampere, Metre, MicrohenryPerMetre
->>> from kuchka.units.electromagnetics.magnetic_flux_density import MILLITESLA
+>>> from kuchka import Ampere
+>>> from kuchka import Metre
+>>> from kuchka import MicrohenryPerMetre
+>>> from kuchka.units import MILLITESLA
 >>> turns = 1200
 >>> solenoid_field = turns * Ampere(2.5) / Metre(0.4)
 >>> solenoid_field
@@ -142,7 +144,8 @@ def MicroamperePerMetre(value: Numeric) -> MagneticFieldStrength:
     Dividing its flux density by vacuum permeability gives the corresponding field
     strength:
 
-    >>> from kuchka import MicrohenryPerMetre, Picotesla
+    >>> from kuchka import MicrohenryPerMetre
+    >>> from kuchka import Picotesla
     >>> residual_field = Picotesla(0.5)
     >>> vacuum_permeability = MicrohenryPerMetre(1.25663706127)
     >>> f"{(residual_field / vacuum_permeability).to(MICROAMPERE_PER_METRE):.3f}"
@@ -173,7 +176,8 @@ def MilliamperePerMetre(value: Numeric) -> MagneticFieldStrength:
     Driving 2 µA through its winding produces a field strength of 1 mA/m under the
     long-solenoid approximation:
 
-    >>> from kuchka import Microampere, Metre
+    >>> from kuchka import Metre
+    >>> from kuchka import Microampere
     >>> turns = 50
     >>> calibration_current = Microampere(2)
     >>> winding_length = Metre(0.1)
@@ -207,7 +211,8 @@ def AmperePerMetre(value: Numeric) -> MagneticFieldStrength:
     approximately 3.18 A/m:
 
     >>> from math import pi
-    >>> from kuchka import Ampere, Metre
+    >>> from kuchka import Ampere
+    >>> from kuchka import Metre
     >>> wire_current = Ampere(1)
     >>> observation_distance = Metre(0.05)
     >>> field = wire_current / (2 * pi * observation_distance)
@@ -244,7 +249,8 @@ def KiloamperePerMetre(value: Numeric) -> MagneticFieldStrength:
     Calculate the required ampere-turn product, then the current needed for a winding
     with 60 turns:
 
-    >>> from kuchka import KiloamperePerMetre, Metre
+    >>> from kuchka import KiloamperePerMetre
+    >>> from kuchka import Metre
     >>> target_field = KiloamperePerMetre(20)
     >>> winding_length = Metre(0.3)
     >>> ampere_turns = target_field * winding_length
@@ -289,8 +295,10 @@ def MegaamperePerMetre(value: Numeric) -> MagneticFieldStrength:
     current of 500 A.
     Calculate its field strength and the corresponding flux density in vacuum:
 
-    >>> from kuchka import Ampere, Metre, MicrohenryPerMetre
-    >>> from kuchka.units.electromagnetics.magnetic_flux_density import TESLA
+    >>> from kuchka import Ampere
+    >>> from kuchka import Metre
+    >>> from kuchka import MicrohenryPerMetre
+    >>> from kuchka.units import TESLA
     >>> turns = 200
     >>> pulse_current = Ampere(500)
     >>> winding_length = Metre(0.1)

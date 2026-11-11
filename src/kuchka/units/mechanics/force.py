@@ -1,4 +1,4 @@
-"""Force quantities and constructors for SI and selected historical units.
+"""Force constructors: the newton, the dyne, pound-force, and kilogram-force.
 
 `Force` represents mechanical interaction capable of changing the motion of a body.
 The newton is the canonical SI unit:

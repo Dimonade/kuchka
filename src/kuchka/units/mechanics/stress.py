@@ -1,4 +1,4 @@
-"""Stress is a distinct quantity type that uses the pressure units.
+"""Stress units: the pressure units, read as a stress.
 
 Pressure and material stress share the pascal (Pa), equivalent to a
 newton per square metre, but they do not describe the same thing.
@@ -21,8 +21,9 @@ A materials report lists a test coupon's proof strength as 0.22 GPa, while a sim
 design estimate puts operating stress at 180 MPa.
 Treat both readings as stress before calculating the difference:
 
->>> from kuchka import Gigapascal, Megapascal
->>> from kuchka.units.mechanics.pressure import MEGAPASCAL
+>>> from kuchka import Gigapascal
+>>> from kuchka import Megapascal
+>>> from kuchka.units import MEGAPASCAL
 >>> proof_strength = Gigapascal(0.22).to_stress()
 >>> operating_stress = Megapascal(180).to_stress()
 >>> (proof_strength - operating_stress).to(MEGAPASCAL)
@@ -35,7 +36,7 @@ and applicable safety factors.
 A results importer can use the unit table when a report's unit symbol arrives as data
 instead of being hard-coded in the program:
 
->>> from kuchka.units.mechanics.stress import STRESS_UNITS
+>>> from kuchka.units import STRESS_UNITS
 >>> report_unit = "MPa"
 >>> specimen_strength = STRESS_UNITS[report_unit](220)
 >>> specimen_strength.to(MEGAPASCAL)

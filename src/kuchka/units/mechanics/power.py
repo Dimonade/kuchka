@@ -1,4 +1,4 @@
-"""Power quantities and constructors across engineering and scientific scales.
+"""Power constructors: the watt, from picowatts to petawatts, and horsepower.
 
 `Power` represents the rate at which energy is transferred:
 
@@ -89,8 +89,8 @@ Electrical power follows the familiar relationship
 
 A 12 V circuit carrying 2 A therefore transfers power at exactly 24 W:
 
->>> from kuchka.units.electromagnetics.voltage import Volt
->>> from kuchka.units.current import Ampere
+>>> from kuchka.units import Volt
+>>> from kuchka.units import Ampere
 >>> supply_voltage = Volt(12)
 >>> supply_current = Ampere(2)
 >>> supply_voltage * supply_current

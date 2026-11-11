@@ -1,4 +1,4 @@
-"""Illuminance constructors: Lux, Phot, FootCandle, and the prefixed lux.
+"""Illuminance constructors: the lux and its prefixes, the phot, and the foot-candle.
 
 The lux (lx) is the SI unit of illuminance: one lumen per square metre,
 `1 lx = 1 lm/m² = 1 cd·sr/m²`, and it is the canonical unit.
@@ -108,7 +108,8 @@ def Lux(value: Numeric) -> Illuminance:
     --------
     A 800 lm lamp spread evenly over a 4 m² desk area gives 200 lx:
 
-    >>> from kuchka import Lumen, SquareMetre
+    >>> from kuchka import Lumen
+    >>> from kuchka import SquareMetre
     >>> Lumen(800) / SquareMetre(4)
     200 lx
     >>> Lux(200) * SquareMetre(4)
@@ -181,7 +182,8 @@ def FootCandle(value: Numeric) -> Illuminance:
     --------
     A foot-candle is a lumen on a square foot:
 
-    >>> from kuchka import Foot, Lumen
+    >>> from kuchka import Foot
+    >>> from kuchka import Lumen
     >>> FootCandle(10) == Lumen(10) / (Foot(1) * Foot(1))
     True
 

@@ -1,34 +1,87 @@
-"""Unit constructors for absorbed dose rate: grays and rads per second, minute, hour.
+"""Absorbed dose rate constructors: grays and rads per second, minute, and hour.
 
-    from kuchka import GrayPerMinute, MicrograyPerHour
+`AbsorbedDoseRate` is the absorbed dose delivered per unit time.
+The module provides the gray per second, minute, and hour with the multiples that
+instruments and radiotherapy use, and the rad per hour of older survey meters:
 
-    field = MicrograyPerHour(0.09)
-    beam = GrayPerMinute(2)
+>>> from kuchka import GrayPerMinute
+>>> from kuchka import MicrograyPerHour
+>>> field = MicrograyPerHour(0.09)
+>>> beam = GrayPerMinute(2)
 
-`AbsorbedDoseRate` is the absorbed dose delivered per unit time, a role of
-`SpecificPower`.
-Its canonical unit is the gray per second (`Gy/s`), exactly one watt per kilogram, and
-its arithmetic results display in the gray per hour.
-The module provides the gray per second, minute, and hour with the multiples
-instruments and radiotherapy use, and the rad per hour.
+The canonical unit is the gray per second (`Gy/s`), exactly one watt per kilogram, and
+the results of arithmetic display in the gray per hour.
+Natural background sits at nanograys and micrograys per hour, a radiotherapy beam
+delivers grays per minute, and an industrial gamma irradiator delivers kilograys
+per hour.
 
 Examples
 --------
-An environmental gamma dose rate of 90 nGy/h, in microgray per hour:
+A gamma irradiator sterilises medical devices with a dose of 25 kGy.
+At a dose rate of 10 000 Gy/h, the exposure takes two and a half hours:
 
->>> NanograyPerHour(90).to(MICROGRAY_PER_HOUR)
-0.09 µGy/h
+>>> from kuchka import GrayPerHour
+>>> from kuchka import Kilogray
+>>> from kuchka.units import HOUR
+>>> (Kilogray(25) / GrayPerHour(10_000)).to(HOUR)
+2.5 h
 
-A dose rate times a time is an absorbed dose:
+Natural external background of 0.09 µGy/h, kept up for a year of 8766 hours, adds up
+to under a milligray:
 
 >>> from kuchka import Hour
->>> from kuchka.units.radiation.absorbed_dose import NANOGRAY
->>> (MicrograyPerHour(0.09) * Hour(8)).to(NANOGRAY)
-720 nGy
+>>> from kuchka import MicrograyPerHour
+>>> from kuchka.units import MILLIGRAY
+>>> year = MicrograyPerHour(0.09) * Hour(8766)
+>>> f"{year.to(MILLIGRAY):.2f}"
+'0.79 mGy'
 
-`ABSORBED_DOSE_RATE_UNITS` maps symbols such as ``"Gy/s"``, ``"uGy/h"``, and
-``"cGy/min"`` to their constructors for boundary code that reads unit labels from
-external data.
+Rates in different units add, and the sum displays in the gray per hour:
+
+>>> from kuchka import GrayPerMinute
+>>> GrayPerHour(1) + GrayPerMinute(1)
+61 Gy/h
+
+A rate and a dose are different quantities, so the two refuse to add:
+
+>>> from kuchka import Gray
+>>> GrayPerHour(1) + Gray(1)  # doctest: +ELLIPSIS
+Traceback (most recent call last):
+...
+kuchka.errors.IncompatibleDimensionError: ...
+
+Notes
+-----
+`AbsorbedDoseRate` has the dimension of `SpecificPower`, which is energy per mass per
+time, and the two are distinct quantities.
+`AbsorbedDoseRate.to_specific_power()` and `AbsorbedDoseRate.from_specific_power()`
+move between them, and one gray per second is exactly one watt per kilogram.
+
+The rad is exactly one hundredth of a gray, so a rad per hour is exactly 10 mGy/h.
+
+`ABSORBED_DOSE_RATE_UNITS` maps each symbol to its constructor, for boundary code that
+reads a unit as a string from outside the application.
+It accepts symbols such as ``"Gy/s"``, ``"uGy/h"``, and ``"cGy/min"``.
+
+References
+----------
+NIST, Guide for the Use of the International System of Units, Appendix B.8, factors
+for units listed alphabetically:
+https://www.nist.gov/node/777676
+
+BIPM, The International System of Units (SI Brochure):
+https://www.bipm.org/en/publications/si-brochure
+
+See Also
+--------
+~kuchka.quantities.AbsorbedDose
+    The dose a rate delivers over a time.
+~kuchka.quantities.SpecificPower
+    The quantity with the same dimension, energy per mass per time.
+~kuchka.quantities.EquivalentDoseRate
+    The rate of the biologically weighted dose.
+~kuchka.quantities.Time
+    A dose over a dose rate is the time the dose takes.
 
 """
 
@@ -143,6 +196,21 @@ def GrayPerSecond(value: Numeric) -> AbsorbedDoseRate:
     AbsorbedDoseRate
         AbsorbedDoseRate represented in grays per second.
 
+    Examples
+    --------
+    Flash radiotherapy delivers its dose at more than 40 Gy/s, thousands of times faster
+    than a conventional beam:
+
+    >>> flash = GrayPerSecond(40)
+    >>> flash
+    40 Gy/s
+
+    The gray per second is the watt per kilogram, so the rate reads as a power per mass
+    once the quantity is chosen explicitly:
+
+    >>> flash.to_specific_power()
+    40 W/kg
+
     """
     return AbsorbedDoseRate(to_exact(value) * GRAY_PER_SECOND.scale, GRAY_PER_SECOND)
 
@@ -159,6 +227,20 @@ def MilligrayPerSecond(value: Numeric) -> AbsorbedDoseRate:
     -------
     AbsorbedDoseRate
         AbsorbedDoseRate represented in milligrays per second.
+
+    Examples
+    --------
+    A cell irradiator is set to 30 mGy/s:
+
+    >>> irradiator = MilligrayPerSecond(30)
+    >>> irradiator
+    30 mGy/s
+
+    A radiobiologist plans in grays per minute, and the same setting is 1.8 Gy/min:
+
+    >>> from kuchka.units import GRAY_PER_MINUTE
+    >>> irradiator.to(GRAY_PER_MINUTE)
+    1.8 Gy/min
 
     """
     return AbsorbedDoseRate(
@@ -179,6 +261,21 @@ def GrayPerMinute(value: Numeric) -> AbsorbedDoseRate:
     AbsorbedDoseRate
         AbsorbedDoseRate represented in grays per minute.
 
+    Examples
+    --------
+    A linear accelerator delivers 4 Gy/min at the reference depth:
+
+    >>> beam = GrayPerMinute(4)
+    >>> beam
+    4 Gy/min
+
+    A fraction of 2 Gy takes half a minute of beam, as the dose over the rate:
+
+    >>> from kuchka import Gray
+    >>> from kuchka.units import SECOND
+    >>> (Gray(2) / beam).to(SECOND)
+    30 s
+
     """
     return AbsorbedDoseRate(to_exact(value) * GRAY_PER_MINUTE.scale, GRAY_PER_MINUTE)
 
@@ -195,6 +292,22 @@ def CentigrayPerMinute(value: Numeric) -> AbsorbedDoseRate:
     -------
     AbsorbedDoseRate
         AbsorbedDoseRate represented in centigrays per minute.
+
+    Examples
+    --------
+    A cobalt-60 teletherapy unit is specified at about 100 cGy/min at its calibration
+    point:
+
+    >>> source = CentigrayPerMinute(100)
+    >>> source
+    100 cGy/min
+
+    Treatment plans in centigray need 2 minutes of beam for 200 cGy:
+
+    >>> from kuchka import Minute
+    >>> from kuchka.units import CENTIGRAY
+    >>> (source * Minute(2)).to(CENTIGRAY)
+    200 cGy
 
     """
     return AbsorbedDoseRate(
@@ -215,6 +328,21 @@ def GrayPerHour(value: Numeric) -> AbsorbedDoseRate:
     AbsorbedDoseRate
         AbsorbedDoseRate represented in grays per hour.
 
+    Examples
+    --------
+    The dose rate inside a gamma irradiator is 10 000 Gy/h:
+
+    >>> chamber = GrayPerHour(10_000)
+    >>> chamber
+    10000 Gy/h
+
+    A product that must receive 25 kGy stays inside for two and a half hours:
+
+    >>> from kuchka import Kilogray
+    >>> from kuchka.units import HOUR
+    >>> (Kilogray(25) / chamber).to(HOUR)
+    2.5 h
+
     """
     return AbsorbedDoseRate(to_exact(value) * GRAY_PER_HOUR.scale, GRAY_PER_HOUR)
 
@@ -231,6 +359,21 @@ def MilligrayPerHour(value: Numeric) -> AbsorbedDoseRate:
     -------
     AbsorbedDoseRate
         AbsorbedDoseRate represented in milligrays per hour.
+
+    Examples
+    --------
+    A survey meter beside the shielding of an irradiator reads 0.4 mGy/h:
+
+    >>> reading = MilligrayPerHour(0.4)
+    >>> reading
+    0.4 mGy/h
+
+    An operator who stands there for a four-hour shift receives:
+
+    >>> from kuchka import Hour
+    >>> from kuchka.units import MILLIGRAY
+    >>> (reading * Hour(4)).to(MILLIGRAY)
+    1.6 mGy
 
     """
     return AbsorbedDoseRate(
@@ -251,6 +394,21 @@ def MicrograyPerHour(value: Numeric) -> AbsorbedDoseRate:
     AbsorbedDoseRate
         AbsorbedDoseRate represented in micrograys per hour.
 
+    Examples
+    --------
+    The external natural background in many places is about 0.09 µGy/h:
+
+    >>> background = MicrograyPerHour(0.09)
+    >>> background
+    0.09 µGy/h
+
+    Over a year of 8766 hours, that is under one milligray:
+
+    >>> from kuchka import Hour
+    >>> from kuchka.units import MILLIGRAY
+    >>> f"{(background * Hour(8766)).to(MILLIGRAY):.2f}"
+    '0.79 mGy'
+
     """
     return AbsorbedDoseRate(
         to_exact(value) * MICROGRAY_PER_HOUR.scale, MICROGRAY_PER_HOUR
@@ -269,6 +427,23 @@ def NanograyPerHour(value: Numeric) -> AbsorbedDoseRate:
     -------
     AbsorbedDoseRate
         AbsorbedDoseRate represented in nanograys per hour.
+
+    Examples
+    --------
+    A gamma monitoring station reports an environmental dose rate of 90 nGy/h, which a
+    public display shows in micrograys per hour:
+
+    >>> station = NanograyPerHour(90)
+    >>> from kuchka.units import MICROGRAY_PER_HOUR
+    >>> station.to(MICROGRAY_PER_HOUR)
+    0.09 µGy/h
+
+    The reading arrives from an instrument as text:
+
+    >>> from kuchka import AbsorbedDoseRate
+    >>> from kuchka import parse
+    >>> parse("90 nGy/h", AbsorbedDoseRate) == station
+    True
 
     """
     return AbsorbedDoseRate(
@@ -289,6 +464,20 @@ def RadPerHour(value: Numeric) -> AbsorbedDoseRate:
     AbsorbedDoseRate
         AbsorbedDoseRate represented in rads per hour.
 
+    Examples
+    --------
+    A survey meter calibrated before the SI reads 5 rad/h:
+
+    >>> legacy = RadPerHour(5)
+    >>> legacy
+    5 rad/h
+
+    A rad is exactly a hundredth of a gray, so 100 rad/h is exactly 1 Gy/h:
+
+    >>> from kuchka import GrayPerHour
+    >>> RadPerHour(100) == GrayPerHour(1)
+    True
+
     """
     return AbsorbedDoseRate(to_exact(value) * RAD_PER_HOUR.scale, RAD_PER_HOUR)
 
@@ -305,6 +494,20 @@ def MilliradPerHour(value: Numeric) -> AbsorbedDoseRate:
     -------
     AbsorbedDoseRate
         AbsorbedDoseRate represented in millirads per hour.
+
+    Examples
+    --------
+    Natural background was often quoted as about 0.01 mrad/h:
+
+    >>> background = MilliradPerHour(0.01)
+    >>> background
+    0.01 mrad/h
+
+    In today's units, that is 0.1 µGy/h:
+
+    >>> from kuchka.units import MICROGRAY_PER_HOUR
+    >>> background.to(MICROGRAY_PER_HOUR)
+    0.1 µGy/h
 
     """
     return AbsorbedDoseRate(
