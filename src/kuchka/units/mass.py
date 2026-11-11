@@ -723,7 +723,7 @@ def EarthMass(value: Numeric) -> Mass:
     >>> from kuchka import SolarMass
     >>> jupiter = EarthMass(318)
     >>> f"{jupiter / SolarMass(1):.3e}"
-    9.551e-4 1
+    '9.551e-4 1'
 
     """
     return Mass(to_exact(value) * EARTH_MASS.scale, EARTH_MASS)
