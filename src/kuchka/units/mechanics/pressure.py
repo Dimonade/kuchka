@@ -14,9 +14,9 @@ standard `Atmosphere`, and the US customary `PoundPerSquareInch` and
 
 Everyday pressures cover ten orders of magnitude, and each part of the range has its
 own habitual unit.
-Blood pressure and weather sit around kilopascals and hectopascals, tyres and gas
-cylinders are read in bar or psi, hydraulic systems and structural steel work in
-megapascals, and the interior of a planet is quoted in gigapascals.
+The air around us sits at hectopascals and kilopascals, tyres and gas cylinders are
+read in bar or psi, hydraulic systems and structural steel work in megapascals, and
+the interior of a planet is quoted in gigapascals.
 
 Examples
 --------
@@ -220,12 +220,11 @@ def Kilopascal(value: Numeric) -> Pressure:
 
     Examples
     --------
-    A healthy adult's systolic blood pressure is about 16 kPa, which a sphygmomanometer
-    shows as 120 mmHg:
+    The air pressure at 1000 m above sea level is about 90 kPa:
 
-    >>> systolic = Kilopascal(16)
-    >>> systolic
-    16 kPa
+    >>> highland = Kilopascal(90)
+    >>> highland
+    90 kPa
 
     A gas that expands by 2 L against a constant pressure of 100 kPa does work equal to
     pressure times volume:
