@@ -329,15 +329,14 @@ def ArcMinute(value: Numeric) -> Angle:
     arcminute to within an arcsecond:
 
     >>> from kuchka import AngularDisplacement
-    >>> from kuchka import ArcMinuteDisplacement
-    >>> from kuchka import ArcSecondDisplacement
     >>> from kuchka import Kilometre
     >>> from kuchka import NauticalMile
+    >>> from kuchka.units import ARCMINUTE
     >>> arc = AngularDisplacement.from_arc(NauticalMile(1), Kilometre(6371))
-    >>> arc.is_close(ArcMinuteDisplacement(1), tolerance=ArcSecondDisplacement(1))
-    True
+    >>> f"{arc.to(ARCMINUTE):.3f}"
+    '0.999 ′'
 
-    """
+    """  # noqa: RUF002 -- using "prime" symbol.
     return Angle(to_exact(value) * ARCMINUTE.scale, ARCMINUTE)
 
 
@@ -559,13 +558,13 @@ def ArcSecondDisplacement(value: Numeric) -> AngularDisplacement:
     >>> drift
     2 ″
 
-    In degrees, that is a very small fraction:
+    In arcminutes, that is a thirtieth:
 
-    >>> from kuchka.units import DEGREE
-    >>> f"{drift.to(DEGREE):.5f}"
-    '0.00056 °'
+    >>> from kuchka.units import ARCMINUTE
+    >>> f"{drift.to(ARCMINUTE):.3f}"
+    '0.033 ′'
 
-    """
+    """  # noqa: RUF002 -- using "prime" symbol.
     return AngularDisplacement(to_exact(value) * ARCSECOND.scale, ARCSECOND)
 
 
