@@ -73,7 +73,6 @@ kuchka.units.radiation.exposure
 kuchka.units.radiation.exposure_rate
 kuchka.units.radiation.specific_activity
 kuchka.units.radiation.surface_activity
-kuchka.units.solid_angle
 kuchka.units.temporal.baud_rate
 kuchka.units.temporal.frequency
 kuchka.units.temporal.instant
