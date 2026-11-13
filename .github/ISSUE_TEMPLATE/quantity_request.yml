@@ -1,0 +1,47 @@
+name: Quantity or unit request
+description: Ask for a quantity, a unit, or a relationship between quantities that kuchka does not have.
+labels: ["tag/proposal", "type/feature request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        `kuchka` keeps a curated vocabulary. A name earns its own quantity type when it
+        changes an operation or a result, and a concept that only shares a dimension
+        stays a variable name. The answers below let that be decided quickly.
+  - type: input
+    id: name
+    attributes:
+      label: Quantity or unit
+      placeholder: "Dynamic viscosity, pascal second (Pa·s)"
+    validations:
+      required: true
+  - type: input
+    id: units
+    attributes:
+      label: Units and symbols
+      description: The units you need, with their symbols and their definition in terms of SI units.
+    validations:
+      required: true
+  - type: textarea
+    id: use
+    attributes:
+      label: What you do with it
+      description: The calculation or boundary where you need it, and what goes wrong without it.
+    validations:
+      required: true
+  - type: textarea
+    id: usage
+    attributes:
+      label: How it should read
+      description: A few lines of code showing the construction and the operations you expect.
+      render: python
+  - type: textarea
+    id: relations
+    attributes:
+      label: Relations to existing quantities
+      description: Products and quotients with other quantities that should give this one, for example `Force / Area`.
+  - type: input
+    id: reference
+    attributes:
+      label: Reference
+      description: A standard, a textbook, or a datasheet that defines it.

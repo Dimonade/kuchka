@@ -255,7 +255,7 @@ for text in (
 
 Symbols such as `mV` are compared exactly, because `mV` and `MV` are different units, and spoken forms such as `degrees celsius` are compared ignoring case.
 A spelling that could mean more than one unit in a table, like `deg` for temperature, is refused rather than guessed.
-See [Unit spellings](docs/concepts/unit_spellings.md).
+See [Unit spellings](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/unit_spellings.md).
 
 The caller names the type because the same text can mean different quantities: `"5 s"` is a `Time`, an `Instant`, or a `SamplingPeriod`, so there is no untyped `parse`.
 
@@ -340,7 +340,7 @@ Mixing up two of these, say energy with power, is rejected as soon as it runs:
 supply_energy + supply_power  # rejected: `IncompatibleDimensionError`.
 ```
 
-The products and quotients the library knows are declared on the quantity types, so editors and type checkers see them, and [Dimensional algebra](docs/concepts/dimensional_algebra.md) describes how a result gets its type.
+The products and quotients the library knows are declared on the quantity types, so editors and type checkers see them, and [Dimensional algebra](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/dimensional_algebra.md) describes how a result gets its type.
 
 ### 4. Bring raw sensor data into a control path
 
@@ -409,7 +409,7 @@ Second(2) ** -1
 # 0.5 Hz
 ```
 
-See [dimensional algebra](docs/concepts/dimensional_algebra.md) for the products and powers the registry knows.
+See [dimensional algebra](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/dimensional_algebra.md) for the products and powers the registry knows.
 
 ### Affine quantities
 
@@ -512,7 +512,7 @@ LogarithmicRatio.from_power_ratio(Ratio(100)) == Decibel(20)
 
 Levels that are not whole decades convert to the precision of the active `decimal` context.
 
-See [Quantity shapes and semantics](docs/concepts/quantity_shapes.md) for the full semantics.
+See [Quantity shapes and semantics](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/quantity_shapes.md) for the full semantics.
 
 ## Why `kuchka`?
 
@@ -552,7 +552,7 @@ That is the niche `kuchka` is aiming for: a curated set of engineering quantitie
 This is deliberately narrower than a general-purpose unit language.
 `kuchka` does not try to accept arbitrary unit expressions, provide a mutable application-wide unit registry, or make every physical quantity array-native.
 Those are useful capabilities, but they optimize for a different problem.
-See [Comparison with existing tools](docs/comparison.md) for the trade-offs.
+See [Comparison with existing tools](https://github.com/Dimonade/kuchka/blob/HEAD/docs/comparison.md) for the trade-offs.
 
 ## Where `kuchka` fits
 
@@ -795,7 +795,7 @@ parse("3 arshin", Length, allow_archaic=True)  # 3 arshin
 The error for a refused archaic unit says how to read it.
 
 The traditions today are German (the Meilen), Hebrew, Japanese, and Russian.
-See the [archaic units README](src/kuchka/units/archaic/README.md) for what each provides, and [How to extend kuchka](docs/how-to/README.md) for adding more.
+See the [archaic units README](https://github.com/Dimonade/kuchka/blob/HEAD/src/kuchka/units/archaic/README.md) for what each provides, and [How to extend kuchka](https://github.com/Dimonade/kuchka/blob/HEAD/docs/how-to/README.md) for adding more.
 
 ## A few important distinctions
 
@@ -967,7 +967,7 @@ Radian(math.pi).is_close(Degree(180), tolerance=Radian(1e-12))  # True
 ```
 
 The tolerance has no default and is a quantity of the right type (a `TemperatureDelta` for a `Temperature`), so a bare number is rejected.
-See [Exactness, angles, and tolerance](docs/concepts/exactness.md) for why equality stays exact and how each shape measures distance.
+See [Exactness, angles, and tolerance](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/exactness.md) for why equality stays exact and how each shape measures distance.
 
 ## Physical constants
 
@@ -1041,9 +1041,9 @@ Without a precision, a value that has no finite decimal form shows 28 significan
 
 The repository contains longer, task-oriented examples:
 
-- **[A heated beaker on a stepper-driven lever](docs/examples/heated_beaker/README.md)** - reads a TOML spec and a CSV run log whose cells mix `V`, `mV`, `°C`, and `°F`, then measures the run with angles that wrap, temperature differences, tolerances, and power into energy.
-- **[Migrating a config from unit-suffixed keys to `kuchka`](docs/examples/config_migration/README.md)** - moves units from names such as `accepted_voltage_min_mv` into TOML strings such as `"-1.000 mV"` and reads them with `parse` into typed dataclasses at the boundary.
-- **[Working around an unrepresentable intermediate dimension](docs/examples/unrepresentable_dimensions/README.md)** - shows how to handle formulas such as `P = V²/R` and parallel resistor networks when an intermediate dimension has no registered type.
+- **[A heated beaker on a stepper-driven lever](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/heated_beaker/README.md)** - reads a TOML spec and a CSV run log whose cells mix `V`, `mV`, `°C`, and `°F`, then measures the run with angles that wrap, temperature differences, tolerances, and power into energy.
+- **[Migrating a config from unit-suffixed keys to `kuchka`](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/config_migration/README.md)** - moves units from names such as `accepted_voltage_min_mv` into TOML strings such as `"-1.000 mV"` and reads them with `parse` into typed dataclasses at the boundary.
+- **[Working around an unrepresentable intermediate dimension](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/unrepresentable_dimensions/README.md)** - shows how to handle formulas such as `P = V²/R` and parallel resistor networks when an intermediate dimension has no registered type.
 
 These examples show `kuchka` in application code, with arithmetic serving the larger engineering task.
 
@@ -1052,7 +1052,7 @@ These examples show `kuchka` in application code, with arithmetic serving the la
 `kuchka` uses exact rational arithmetic (`Fraction`) for correctness.
 The intended use is at configuration, application, control, and reporting boundaries, not inside a per-sample hot loop processing live streams at very high rates.
 
-See [`benchmarks`](benchmarks/README.md) for current measurements.
+See [`benchmarks`](https://github.com/Dimonade/kuchka/blob/HEAD/benchmarks/README.md) for current measurements.
 
 ## What this is not yet
 
@@ -1118,14 +1118,12 @@ Ruff is configured with `select = ["ALL"]`; disabled rules in `pyproject.toml` c
 The README intentionally gives the usage model before the implementation story.
 Deeper design material is kept separately:
 
-- **[Quantity shapes and semantics](docs/concepts/quantity_shapes.md)** - Linear, Affine, Modular, and Logarithmic quantities, including temperature, angle, and decibel semantics.
-- **[Dimensional algebra and derived quantities](docs/concepts/dimensional_algebra.md)** - exponent-vector arithmetic, registered results, reciprocal relationships, and the boundary between runtime algebra and static overloads.
-- **[Where the radian meets a length](docs/concepts/angle_bridges.md)** - how rotational quantities meet lengths: bridges, the moment of inertia, and the relations that stay named constructors.
-- **[Copying, pickling, and persistence](docs/concepts/persistence.md)** - what `copy` and `pickle` guarantee, why pickle is not a storage format, and how to store a value as exact text and a unit symbol.
-- **[Unit spellings](docs/concepts/unit_spellings.md)** - what the `*_UNITS` tables accept, how case and plurals are treated, and why no spelling can mean two units.
-- **[Exactness, angles, and tolerance](docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, angles and pi, and comparing with a tolerance.
-- **[How to extend kuchka](docs/how-to/README.md)** - adding a unit, a quantity, a dimension, or archaic units, splitting a module, and the tests and documentation each needs, with an imaginary krakenpeople example.
-- **[Design choices](docs/design_choices.md)** - constructor functions, unit definitions, canonical types, string-resolution boundaries, and the reasons for a curated vocabulary.
-- **[Comparison with existing tools](docs/comparison.md)** - the deliberate trade-offs versus Pint, physipy, impunity, and related libraries.
-
-The original pre-implementation design proposal lives at [`docs/introduction/design_proposal.md`](docs/introduction/design_proposal.md). It is retained as historical design material.
+- **[Quantity shapes and semantics](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/quantity_shapes.md)** - Linear, Affine, Modular, and Logarithmic quantities, including temperature, angle, and decibel semantics.
+- **[Dimensional algebra and derived quantities](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/dimensional_algebra.md)** - exponent-vector arithmetic, registered results, reciprocal relationships, and the boundary between runtime algebra and static overloads.
+- **[Where the radian meets a length](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/angle_bridges.md)** - how rotational quantities meet lengths: bridges, the moment of inertia, and the relations that stay named constructors.
+- **[Copying, pickling, and persistence](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/persistence.md)** - what `copy` and `pickle` guarantee, why pickle is not a storage format, and how to store a value as exact text and a unit symbol.
+- **[Unit spellings](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/unit_spellings.md)** - what the `*_UNITS` tables accept, how case and plurals are treated, and why no spelling can mean two units.
+- **[Exactness, angles, and tolerance](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, angles and pi, and comparing with a tolerance.
+- **[How to extend kuchka](https://github.com/Dimonade/kuchka/blob/HEAD/docs/how-to/README.md)** - adding a unit, a quantity, a dimension, or archaic units, splitting a module, and the tests and documentation each needs, with an imaginary krakenpeople example.
+- **[Design proposal](https://github.com/Dimonade/kuchka/blob/HEAD/docs/introduction/design_proposal.md)** - the original pre-implementation design: constructor functions, unit definitions, canonical types, string-resolution boundaries, and the reasons for a curated vocabulary.
+- **[Comparison with existing tools](https://github.com/Dimonade/kuchka/blob/HEAD/docs/comparison.md)** - the deliberate trade-offs versus Pint, physipy, impunity, and related libraries.

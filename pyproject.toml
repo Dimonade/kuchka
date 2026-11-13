@@ -3,12 +3,24 @@ name = "kuchka"
 version = "0.1.4"
 description = "A small pile of strongly-typed engineering units for Python."
 readme = "README.md"
+keywords = [
+  "units",
+  "quantities",
+  "dimensional-analysis",
+  "physical-quantities",
+  "typing",
+  "exact-arithmetic",
+  "engineering",
+]
 authors = [{ name = "dimonade", email = "dimonade@protonmail.com" }]
 requires-python = ">=3.11"
 dependencies = ['typing_extensions>=4.4; python_version < "3.12"']
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
+  "Intended Audience :: Education",
+  "Intended Audience :: Healthcare Industry",
+  "Intended Audience :: Manufacturing",
   "Intended Audience :: Science/Research",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
@@ -21,15 +33,18 @@ classifiers = [
   "Topic :: Scientific/Engineering",
   "Topic :: Scientific/Engineering :: Physics",
   "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: Testing",
   "Typing :: Typed",
 ]
 license = "Apache-2.0"
 license-files = ["LICENSE-APACHE"]
 
 [project.urls]
-Homepage = "https://codeberg.org/dimonade/kuchka"
-Repository = "https://codeberg.org/dimonade/kuchka"
-"Bug Tracker" = "https://codeberg.org/dimonade/kuchka/issues"
+Homepage = "https://github.com/Dimonade/kuchka"
+Source = "https://github.com/Dimonade/kuchka"
+Documentation = "https://github.com/Dimonade/kuchka/tree/HEAD/docs"
+Changelog = "https://github.com/Dimonade/kuchka/blob/HEAD/CHANGELOG.md"
+Issues = "https://github.com/Dimonade/kuchka/issues"
 
 [build-system]
 requires = ["uv_build>=0.13.5,<0.14.0"]
@@ -42,12 +57,15 @@ typing = ["mypy>=2.4.0"]
 
 pyright = ["pyright>=1.1.414"]
 
+# The overload generator formats what it writes with ruff, and a test runs it.
+ruff = ["ruff>=0.17.2"]
+
 lint = [
+  { include-group = "ruff" },
   { include-group = "typing" },
   "mccabe>=0.7.0",
   "pylsp-mypy>=0.8.2",
   "python-lsp-server>=1.15.0",
-  "ruff>=0.17.2",
   "ty>=0.0.91",
 ]
 
@@ -172,6 +190,7 @@ force-single-line = true
 ]
 "tools/consumer_smoke.py" = ["T201"]
 ".ci/run_consumer_tests.py" = ["T201"]
+".ci/check_artifacts.py" = ["T201"]
 
 [tool.tox]
 requires = ["tox>=4.67"]
@@ -189,7 +208,7 @@ env_list = [
 [tool.tox.env_run_base]
 description = "run the doctests and the test suite on Python {base_python}"
 # `typing` brings mypy in for the test that checks the static types agree with the runtime.
-dependency_groups = ["test", "typing"]
+dependency_groups = ["test", "typing", "ruff"]
 # The checkers an environment installs: a test that needs one fails, and does not skip, if it is missing.
 set_env = { KUCHKA_CHECKERS = "mypy" }
 commands = [
