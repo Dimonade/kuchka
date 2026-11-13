@@ -1,0 +1,102 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [develop, master]
+  push:
+    branches: [develop, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  coverage:
+    name: Checks and coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      UV_LOCKED: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          version: "0.13.7"
+      - name: Install just
+        run: |
+          uv tool install rust-just==1.59.0
+          echo "$(uv tool dir --bin)" >> "$GITHUB_PATH"
+      - name: Run the checks and the tests with coverage
+        run: just ct
+
+  tox:
+    name: tox ${{ matrix.env }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { env: "3.11", python: "3.11" }
+          - { env: "3.12", python: "3.12" }
+          - { env: "3.13", python: "3.13" }
+          - { env: "3.14", python: "3.14" }
+          - { env: "3.15", python: "3.15" }
+          - { env: lint, python: "3.11" }
+          - { env: typing-min, python: "3.11" }
+          - { env: pyright, python: "3.11" }
+    env:
+      UV_LOCKED: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          version: "0.13.7"
+      - name: Install the Python that the environment runs on
+        env:
+          PYTHON: ${{ matrix.python }}
+        run: |
+          bindir="$RUNNER_TEMP/python-bin"
+          mkdir -p "$bindir"
+          echo "$bindir" >> "$GITHUB_PATH"
+          UV_PYTHON_BIN_DIR="$bindir" uv python install "$PYTHON"
+      - name: Run the tox environment
+        env:
+          TOX_ENV: ${{ matrix.env }}
+        run: uv run tox -e "$TOX_ENV"
+
+  consumer-wheel:
+    name: Consumer of the built wheel
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      UV_PYTHON: "3.11"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          version: "0.13.7"
+      - name: Install the wheel into an independent project and test it
+        run: python3 .ci/run_consumer_tests.py wheel
+
+  # One status for branch protection to require, however the matrix above changes.
+  ci-passed:
+    name: ci passed
+    if: always()
+    needs: [coverage, tox, consumer-wheel]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every job to have succeeded
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: jq -e 'all(.[]; .result == "success")' <<< "$NEEDS"

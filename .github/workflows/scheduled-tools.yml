@@ -1,0 +1,59 @@
+name: scheduled-tools
+
+# `uv run` uses `uv.lock` while tox resolves fresh, so a failure here with `just check`
+# green means a tool moved. The consumer job installs the latest release from PyPI.
+
+on:
+  schedule:
+    - cron: "23 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: scheduled-tools
+  cancel-in-progress: false
+
+jobs:
+  watch-latest-tools:
+    name: Checks on the newest tools
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      UV_LOCKED: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          version: "0.13.7"
+      - name: Install just
+        run: |
+          uv tool install rust-just==1.59.0
+          echo "$(uv tool dir --bin)" >> "$GITHUB_PATH"
+      - name: Install Python 3.15
+        run: |
+          bindir="$RUNNER_TEMP/python-bin"
+          mkdir -p "$bindir"
+          echo "$bindir" >> "$GITHUB_PATH"
+          UV_PYTHON_BIN_DIR="$bindir" uv python install 3.15
+      - name: Run lint, pyright and Python 3.15 with fresh tools
+        run: just wt
+
+  consumer-pypi:
+    name: Consumer of the latest PyPI release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      UV_PYTHON: "3.11"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          version: "0.13.7"
+      - name: Install the latest release into an independent project and test it
+        run: python3 .ci/run_consumer_tests.py pypi
