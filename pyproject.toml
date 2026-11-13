@@ -57,12 +57,15 @@ typing = ["mypy>=2.4.0"]
 
 pyright = ["pyright>=1.1.414"]
 
+# The overload generator formats what it writes with ruff, and a test runs it.
+ruff = ["ruff>=0.17.2"]
+
 lint = [
+  { include-group = "ruff" },
   { include-group = "typing" },
   "mccabe>=0.7.0",
   "pylsp-mypy>=0.8.2",
   "python-lsp-server>=1.15.0",
-  "ruff>=0.17.2",
   "ty>=0.0.91",
 ]
 
@@ -204,7 +207,7 @@ env_list = [
 [tool.tox.env_run_base]
 description = "run the doctests and the test suite on Python {base_python}"
 # `typing` brings mypy in for the test that checks the static types agree with the runtime.
-dependency_groups = ["test", "typing"]
+dependency_groups = ["test", "typing", "ruff"]
 # The checkers an environment installs: a test that needs one fails, and does not skip, if it is missing.
 set_env = { KUCHKA_CHECKERS = "mypy" }
 commands = [
