@@ -3,12 +3,24 @@ name = "kuchka"
 version = "0.1.4"
 description = "A small pile of strongly-typed engineering units for Python."
 readme = "README.md"
+keywords = [
+  "units",
+  "quantities",
+  "dimensional-analysis",
+  "physical-quantities",
+  "typing",
+  "exact-arithmetic",
+  "engineering",
+]
 authors = [{ name = "dimonade", email = "dimonade@protonmail.com" }]
 requires-python = ">=3.11"
 dependencies = ['typing_extensions>=4.4; python_version < "3.12"']
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
+  "Intended Audience :: Education",
+  "Intended Audience :: Healthcare Industry",
+  "Intended Audience :: Manufacturing",
   "Intended Audience :: Science/Research",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
@@ -21,15 +33,18 @@ classifiers = [
   "Topic :: Scientific/Engineering",
   "Topic :: Scientific/Engineering :: Physics",
   "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: Testing",
   "Typing :: Typed",
 ]
 license = "Apache-2.0"
 license-files = ["LICENSE-APACHE"]
 
 [project.urls]
-Homepage = "https://codeberg.org/dimonade/kuchka"
-Repository = "https://codeberg.org/dimonade/kuchka"
-"Bug Tracker" = "https://codeberg.org/dimonade/kuchka/issues"
+Homepage = "https://github.com/Dimonade/kuchka"
+Source = "https://github.com/Dimonade/kuchka"
+Documentation = "https://github.com/Dimonade/kuchka/tree/HEAD/docs"
+Changelog = "https://github.com/Dimonade/kuchka/blob/HEAD/CHANGELOG.md"
+Issues = "https://github.com/Dimonade/kuchka/issues"
 
 [build-system]
 requires = ["uv_build>=0.13.5,<0.14.0"]
