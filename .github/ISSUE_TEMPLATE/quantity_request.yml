@@ -1,6 +1,6 @@
 name: Quantity or unit request
 description: Ask for a quantity, a unit, or a relationship between quantities that kuchka does not have.
-labels: ["enhancement"]
+labels: ["tag/proposal", "type/feature request"]
 body:
   - type: markdown
     attributes:

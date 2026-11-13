@@ -1,6 +1,6 @@
 name: Feature request
 description: Suggest a change to the library that is not a new quantity or unit.
-labels: ["enhancement"]
+labels: ["tag/proposal", "type/feature request"]
 body:
   - type: textarea
     id: problem
