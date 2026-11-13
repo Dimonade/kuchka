@@ -17,6 +17,11 @@ if TYPE_CHECKING:
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 CONSUMER_ROOT = REPOSITORY_ROOT / ".ci" / "consumer"
 CONSUMER_PROJECT = CONSUMER_ROOT / "pyproject.toml"
+TYPING_CHECKS = CONSUMER_ROOT / "typing_checks"
+
+# The checkers the consumer code is checked with, at the versions `uv.lock` holds.
+MYPY = "mypy==2.4.0"
+PYRIGHT = "pyright==1.1.414"
 
 
 def run_step(
@@ -36,6 +41,65 @@ def run_step(
         cwd=working_directory,
         check=True,
         shell=False,
+    )
+
+
+def consumer_python(consumer_directory: Path) -> str:
+    """Return the interpreter of the consumer project's environment."""
+    # The command is a fixed `uv` invocation inside a generated directory.
+    result = subprocess.run(
+        [  # noqa: S607
+            "uv",
+            "run",
+            "python",
+            "-I",
+            "-c",
+            "import sys; print(sys.executable)",
+        ],
+        cwd=consumer_directory,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return result.stdout.strip()
+
+
+def run_typing_checks(consumer_directory: Path) -> None:
+    """Type-check consumer code against the installed distribution.
+
+    `good.py` must pass as written, and every line of `bad.py` carries a
+    `# type: ignore` that the checkers report when the line stops being an error.
+    """
+    python = consumer_python(consumer_directory)
+
+    run_step(
+        "Type-check the consumer code with mypy",
+        [
+            "uvx",
+            "--from",
+            MYPY,
+            "mypy",
+            "--strict",
+            "--python-executable",
+            python,
+            str(TYPING_CHECKS / "good.py"),
+            str(TYPING_CHECKS / "bad.py"),
+        ],
+        working_directory=consumer_directory,
+    )
+    run_step(
+        "Type-check the consumer code with pyright",
+        [
+            "uvx",
+            "--from",
+            PYRIGHT,
+            "pyright",
+            "--pythonpath",
+            python,
+            "--project",
+            str(TYPING_CHECKS / "pyrightconfig.json"),
+        ],
+        working_directory=consumer_directory,
     )
 
 
@@ -65,7 +129,12 @@ def build_wheel(wheel_directory: Path) -> Path:
     return wheels[0]
 
 
-def run_consumer_tests(source: str) -> None:
+def run_consumer_tests(
+    source: str,
+    *,
+    version: str | None = None,
+    typing: bool = False,
+) -> None:
     """Install Kuchka from the selected source and run consumer tests."""
     with tempfile.TemporaryDirectory(prefix="kuchka-consumer-") as temporary:
         temporary_directory = Path(temporary)
@@ -80,14 +149,16 @@ def run_consumer_tests(source: str) -> None:
         )
 
         if source == "pypi":
+            requirement = f"kuchka=={version}" if version else "kuchka"
+
             run_step(
-                "Resolve and install latest Kuchka release from PyPI",
+                f"Resolve and install {requirement} from PyPI",
                 [
                     "uv",
                     "add",
                     "--refresh-package",
                     "kuchka",
-                    "kuchka",
+                    requirement,
                 ],
                 working_directory=consumer_directory,
             )
@@ -145,6 +216,9 @@ def run_consumer_tests(source: str) -> None:
             working_directory=consumer_directory,
         )
 
+        if typing:
+            run_typing_checks(consumer_directory)
+
 
 def main() -> int:
     """Run the selected consumer test workflow."""
@@ -158,10 +232,27 @@ def main() -> int:
         help="Install the latest PyPI release or build and install the current wheel.",
     )
 
+    parser.add_argument(
+        "--version",
+        help="With pypi, install this exact release instead of the latest.",
+    )
+    parser.add_argument(
+        "--typing",
+        action="store_true",
+        help="Also type-check consumer code against the installed distribution.",
+    )
+
     arguments = parser.parse_args()
 
+    if arguments.version and arguments.source != "pypi":
+        parser.error("--version applies to the pypi source only")
+
     try:
-        run_consumer_tests(arguments.source)
+        run_consumer_tests(
+            arguments.source,
+            version=arguments.version,
+            typing=arguments.typing,
+        )
     except subprocess.CalledProcessError as error:
         print(
             f"\nFAILED: command exited with status {error.returncode}",

@@ -1,0 +1,5 @@
+{
+  "include": ["good.py", "bad.py"],
+  "typeCheckingMode": "strict",
+  "reportUnnecessaryTypeIgnoreComment": "error"
+}
