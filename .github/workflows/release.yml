@@ -1,9 +1,10 @@
 name: release
 
-# A tag `vX.Y.Z` that matches the project version builds the distributions, publishes
+# A tag whose version matches the project version builds the distributions, publishes
 # them to PyPI with trusted publishing (which attaches attestations), and creates the
-# GitHub release from the changelog.
-# A manual run publishes the same build to TestPyPI.
+# GitHub release from the changelog. A release tag `vX.Y.Z` must be on master, which
+# receives only finished commits; a pre-release tag such as `vX.Y.ZrcN` may be on develop.
+# A manual run on a branch publishes the same build to TestPyPI.
 
 on:
   push:
@@ -23,14 +24,45 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: read
+      checks: read # read the CI result of the tagged commit
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          fetch-depth: 0
           persist-credentials: false
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           version: "0.13.7"
           enable-cache: false
+      - name: Check that the tagged commit is on the right branch
+        if: github.ref_type == 'tag'
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          prerelease='^v[0-9]+(\.[0-9]+)*(a|b|rc|\.dev)[0-9]+$'
+          if [[ "$TAG" =~ $prerelease ]]; then
+            if git merge-base --is-ancestor HEAD origin/develop || git merge-base --is-ancestor HEAD origin/master; then
+              exit 0
+            fi
+            echo "::error::A pre-release tag must be on develop or master."
+          else
+            if git merge-base --is-ancestor HEAD origin/master; then
+              exit 0
+            fi
+            echo "::error::A release tag must be on master, which receives only finished commits."
+          fi
+          exit 1
+      - name: Check that the tagged commit passed the CI
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          passed=$(gh api "repos/$GITHUB_REPOSITORY/commits/$(git rev-parse HEAD)/check-runs?check_name=ci%20passed&per_page=100" \
+            --jq '.check_runs | length > 0 and all(.conclusion == "success")')
+          if [ "$passed" != "true" ]; then
+            echo "::error::The CI has not passed on the tagged commit; wait for it or fix it."
+            exit 1
+          fi
       - name: Check that the tag names the project version
         if: github.ref_type == 'tag'
         env:
@@ -59,7 +91,7 @@ jobs:
 
   publish-testpypi:
     name: Publish to TestPyPI
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' && github.ref_type == 'branch'
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -76,10 +108,41 @@ jobs:
       - uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
         with:
           repository-url: https://test.pypi.org/legacy/
+          attestations: true
+
+  verify-testpypi:
+    name: Verify the TestPyPI rehearsal
+    needs: publish-testpypi
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          version: "0.13.7"
+          enable-cache: false
+      - name: Verify the attestation of each file
+        run: |
+          version="$(uv version --short)"
+          for file in "kuchka-${version}-py3-none-any.whl" "kuchka-${version}.tar.gz"; do
+            for attempt in 1 2 3 4 5; do
+              if uvx --from pypi-attestations==0.0.31 pypi-attestations verify pypi --staging \
+                --repository "https://github.com/$GITHUB_REPOSITORY" "pypi:$file"; then
+                continue 2
+              fi
+              echo "Attempt $attempt for $file failed; the provenance may still be catching up."
+              sleep 20
+            done
+            exit 1
+          done
 
   publish-pypi:
     name: Publish to PyPI
-    if: github.ref_type == 'tag'
+    if: github.event_name == 'push' && github.ref_type == 'tag'
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -94,6 +157,8 @@ jobs:
           name: dist
           path: dist/
       - uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
+        with:
+          attestations: true
 
   verify-published:
     name: Verify the published release
@@ -128,8 +193,15 @@ jobs:
         run: |
           version="${TAG#v}"
           for file in "kuchka-${version}-py3-none-any.whl" "kuchka-${version}.tar.gz"; do
-            uvx --from pypi-attestations==0.0.31 pypi-attestations verify pypi \
-              --repository "https://github.com/$GITHUB_REPOSITORY" "pypi:$file"
+            for attempt in 1 2 3 4 5; do
+              if uvx --from pypi-attestations==0.0.31 pypi-attestations verify pypi \
+                --repository "https://github.com/$GITHUB_REPOSITORY" "pypi:$file"; then
+                continue 2
+              fi
+              echo "Attempt $attempt for $file failed; the provenance may still be catching up."
+              sleep 20
+            done
+            exit 1
           done
 
   github-release:
@@ -153,7 +225,15 @@ jobs:
           TAG: ${{ github.ref_name }}
         run: |
           version="${TAG#v}"
-          python3 .ci/changelog_section.py "$version" > notes.md
-          flags=()
-          if [[ "$version" =~ [A-Za-z] ]]; then flags+=(--prerelease); fi
-          gh release create "$TAG" dist/* --repo "$GITHUB_REPOSITORY" --verify-tag --title "$TAG" --notes-file notes.md "${flags[@]}"
+          # A release candidate takes the notes of the version it leads up to.
+          base="$(printf '%s' "$version" | sed -E 's/\.?(a|b|rc|dev)[0-9]+$//')"
+          python3 .ci/changelog_section.py "$version" > notes.md 2> /dev/null \
+            || python3 .ci/changelog_section.py "$base" > notes.md
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --notes-file notes.md
+            gh release upload "$TAG" dist/* --repo "$GITHUB_REPOSITORY" --clobber
+          else
+            flags=()
+            if [[ "$version" =~ [A-Za-z] ]]; then flags+=(--prerelease); fi
+            gh release create "$TAG" dist/* --repo "$GITHUB_REPOSITORY" --verify-tag --title "$TAG" --notes-file notes.md "${flags[@]}"
+          fi
