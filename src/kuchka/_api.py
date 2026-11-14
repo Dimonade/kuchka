@@ -241,6 +241,7 @@ from kuchka.units import GigabytePerSecond
 from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gigajoule
+from kuchka.units import GigajoulePerHour
 from kuchka.units import Gigaohm
 from kuchka.units import Gigaparsec
 from kuchka.units import Gigapascal
@@ -286,9 +287,11 @@ from kuchka.units import Joule
 from kuchka.units import JoulePerCubicMeter
 from kuchka.units import JoulePerCubicMetre
 from kuchka.units import JoulePerGram
+from kuchka.units import JoulePerHour
 from kuchka.units import JoulePerKelvin
 from kuchka.units import JoulePerKilogram
 from kuchka.units import JoulePerKilogramKelvin
+from kuchka.units import JoulePerMinute
 from kuchka.units import JoulePerMole
 from kuchka.units import JoulePerMoleKelvin
 from kuchka.units import JoulePerTurn
@@ -351,9 +354,11 @@ from kuchka.units import Kilohertz
 from kuchka.units import Kilojoule
 from kuchka.units import KilojoulePerCubicMeter
 from kuchka.units import KilojoulePerCubicMetre
+from kuchka.units import KilojoulePerHour
 from kuchka.units import KilojoulePerKelvin
 from kuchka.units import KilojoulePerKilogram
 from kuchka.units import KilojoulePerKilogramKelvin
+from kuchka.units import KilojoulePerMinute
 from kuchka.units import KilojoulePerMole
 from kuchka.units import KilojoulePerMoleKelvin
 from kuchka.units import Kiloliter
@@ -431,6 +436,7 @@ from kuchka.units import Megahertz
 from kuchka.units import Megajoule
 from kuchka.units import MegajoulePerCubicMeter
 from kuchka.units import MegajoulePerCubicMetre
+from kuchka.units import MegajoulePerHour
 from kuchka.units import MegajoulePerKilogram
 from kuchka.units import Meganewton
 from kuchka.units import Megaohm
@@ -964,6 +970,7 @@ __all__ = [
     "Gigaelectronvolt",
     "Gigahertz",
     "Gigajoule",
+    "GigajoulePerHour",
     "Gigaohm",
     "Gigaparsec",
     "Gigapascal",
@@ -1018,9 +1025,11 @@ __all__ = [
     "JoulePerCubicMeter",
     "JoulePerCubicMetre",
     "JoulePerGram",
+    "JoulePerHour",
     "JoulePerKelvin",
     "JoulePerKilogram",
     "JoulePerKilogramKelvin",
+    "JoulePerMinute",
     "JoulePerMole",
     "JoulePerMoleKelvin",
     "JoulePerTurn",
@@ -1083,9 +1092,11 @@ __all__ = [
     "Kilojoule",
     "KilojoulePerCubicMeter",
     "KilojoulePerCubicMetre",
+    "KilojoulePerHour",
     "KilojoulePerKelvin",
     "KilojoulePerKilogram",
     "KilojoulePerKilogramKelvin",
+    "KilojoulePerMinute",
     "KilojoulePerMole",
     "KilojoulePerMoleKelvin",
     "Kiloliter",
@@ -1179,6 +1190,7 @@ __all__ = [
     "Megajoule",
     "MegajoulePerCubicMeter",
     "MegajoulePerCubicMetre",
+    "MegajoulePerHour",
     "MegajoulePerKilogram",
     "Meganewton",
     "Megaohm",

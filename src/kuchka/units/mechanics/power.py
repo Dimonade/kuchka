@@ -34,6 +34,12 @@ has several historical definitions.
 `MetricHorsepower` means the continental horsepower of exactly
 75 kilogram-force metres per second.
 
+The energy-per-time units `J/min`, `J/h`, `kJ/min`, `kJ/h`, `MJ/h`, and `GJ/h` write a
+power as the energy spent over a minute or an hour.
+They serve the fields that measure energy in joules and state a consumption or a
+rating per hour, such as sensor logging, exercise physiology, heating, and gas
+appliances.
+
 Examples
 --------
 Power becomes intuitive when it is attached to something actually doing work.
@@ -166,6 +172,18 @@ The two horsepower definitions differ by about 1.4 percent:
 >>> Horsepower(1) != MetricHorsepower(1)
 True
 
+A log that records an energy and the time it took gives the consumption in joules per
+hour directly.
+A device that spent 5400 J in 90 minutes consumed 3600 J/h, which is one watt:
+
+>>> from kuchka import Joule
+>>> from kuchka import Minute
+>>> consumption = (Joule(5400) / Minute(90)).to(JOULE_PER_HOUR)
+>>> consumption
+3600 J/h
+>>> consumption == Watt(1)
+True
+
 Power can also be understood through time.
 If an ideal 100 W load runs for ten seconds, it transfers exactly 1000 J of energy:
 
@@ -230,13 +248,28 @@ exactly 745.69987158227022 W.
 
 `MetricHorsepower` is exactly 75 kilogram-force metres per second, or 735.49875 W.
 
+The energy-per-time units are the watt written as an energy over a time, so their
+scales are exact:
+
+`1 J/min = 1/60 W`,
+
+`1 J/h = 1/3600 W`,
+
+and `1 kJ/h = 5/18 W`.
+
+>>> JoulePerHour(3600) == Watt(1)
+True
+
+>>> MegajoulePerHour(3.6) == Kilowatt(1)
+True
+
 Neither horsepower unit is an SI unit.
 They are included because they remain common in engineering specifications, especially
 for engines and motors.
 
 `POWER_UNITS` maps symbols such as ``"pW"``, ``"nW"``, ``"µW"``, ``"mW"``, ``"W"``,
-``"kW"``, ``"MW"``, ``"GW"``, ``"TW"``, ``"PW"``, ``"hp"``, and ``"PS"`` to their
-constructors.
+``"kW"``, ``"MW"``, ``"GW"``, ``"TW"``, ``"PW"``, ``"hp"``, ``"PS"``, ``"J/min"``,
+``"J/h"``, ``"kJ/min"``, ``"kJ/h"``, ``"MJ/h"``, and ``"GJ/h"`` to their constructors.
 This is intended for boundary code that receives units as external data.
 
 See Also
@@ -269,6 +302,12 @@ from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
 from kuchka.quantities import Power
 from kuchka.quantities import UnitDef
+from kuchka.units.mechanics.energy import GIGAJOULE
+from kuchka.units.mechanics.energy import JOULE
+from kuchka.units.mechanics.energy import KILOJOULE
+from kuchka.units.mechanics.energy import MEGAJOULE
+from kuchka.units.temporal.time import HOUR
+from kuchka.units.temporal.time import MINUTE
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -633,6 +672,301 @@ def MetricHorsepower(value: Numeric) -> Power:
     )
 
 
+# Energy per time.
+
+JOULE_PER_MINUTE = UnitDef(
+    "joule_per_minute",
+    "J/min",
+    JOULE.scale / MINUTE.scale,
+    POWER,
+    words=("joule per minute", "joules per minute"),
+)
+JOULE_PER_HOUR = UnitDef(
+    "joule_per_hour",
+    "J/h",
+    JOULE.scale / HOUR.scale,
+    POWER,
+    aliases=("J/hr",),
+    words=("joule per hour", "joules per hour"),
+)
+KILOJOULE_PER_MINUTE = UnitDef(
+    "kilojoule_per_minute",
+    "kJ/min",
+    KILOJOULE.scale / MINUTE.scale,
+    POWER,
+    words=("kilojoule per minute", "kilojoules per minute"),
+)
+KILOJOULE_PER_HOUR = UnitDef(
+    "kilojoule_per_hour",
+    "kJ/h",
+    KILOJOULE.scale / HOUR.scale,
+    POWER,
+    aliases=("kJ/hr",),
+    words=("kilojoule per hour", "kilojoules per hour"),
+)
+MEGAJOULE_PER_HOUR = UnitDef(
+    "megajoule_per_hour",
+    "MJ/h",
+    MEGAJOULE.scale / HOUR.scale,
+    POWER,
+    aliases=("MJ/hr",),
+    words=("megajoule per hour", "megajoules per hour"),
+)
+GIGAJOULE_PER_HOUR = UnitDef(
+    "gigajoule_per_hour",
+    "GJ/h",
+    GIGAJOULE.scale / HOUR.scale,
+    POWER,
+    aliases=("GJ/hr",),
+    words=("gigajoule per hour", "gigajoules per hour"),
+)
+
+
+def JoulePerMinute(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in joules per minute.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in J/min.
+
+    Returns
+    -------
+    Power
+        Power represented in joules per minute.
+
+    Notes
+    -----
+    One joule per minute is exactly 1/60 W.
+
+    Examples
+    --------
+    A small calorimeter heater that delivers 600 J every minute runs at 10 W:
+
+    >>> heater = JoulePerMinute(600)
+    >>> heater
+    600 J/min
+    >>> from kuchka.units import WATT
+    >>> heater.to(WATT)
+    10 W
+
+    Over a 15 minute run the same heater transfers exactly 9 kJ of energy:
+
+    >>> from kuchka import Minute
+    >>> from kuchka.units import KILOJOULE
+    >>> (heater * Minute(15)).to(KILOJOULE)
+    9 kJ
+
+    """
+    return Power(to_exact(value) * JOULE_PER_MINUTE.scale, JOULE_PER_MINUTE)
+
+
+def JoulePerHour(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in joules per hour.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in J/h.
+
+    Returns
+    -------
+    Power
+        Power represented in joules per hour.
+
+    Notes
+    -----
+    One joule per hour is exactly 1/3600 W.
+
+    Examples
+    --------
+    A battery-powered weather station that spends 1800 J every hour averages half a
+    watt:
+
+    >>> station = JoulePerHour(1800)
+    >>> station
+    1800 J/h
+    >>> from kuchka.units import MILLIWATT
+    >>> station.to(MILLIWATT)
+    500 mW
+
+    A consumption computed from a measured energy and the time it took needs no extra
+    conversion step.
+    A sensor node that used 7200 J over two hours consumed 3600 J/h:
+
+    >>> from kuchka import Hour
+    >>> from kuchka import Joule
+    >>> from kuchka.units import JOULE_PER_HOUR
+    >>> (Joule(7200) / Hour(2)).to(JOULE_PER_HOUR)
+    3600 J/h
+
+    """
+    return Power(to_exact(value) * JOULE_PER_HOUR.scale, JOULE_PER_HOUR)
+
+
+def KilojoulePerMinute(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in kilojoules per minute.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in kJ/min.
+
+    Returns
+    -------
+    Power
+        Power represented in kilojoules per minute.
+
+    Notes
+    -----
+    One kilojoule per minute is exactly 50/3 W.
+
+    Examples
+    --------
+    Exercise physiology often states a metabolic rate as the energy spent per minute.
+    A runner who spends about 36 kJ every minute works at 600 W:
+
+    >>> runner = KilojoulePerMinute(36)
+    >>> runner
+    36 kJ/min
+    >>> from kuchka.units import WATT
+    >>> runner.to(WATT)
+    600 W
+
+    Holding that pace for a 30 minute run costs 1080 kJ in total, assuming the rate
+    stays constant:
+
+    >>> from kuchka import Minute
+    >>> from kuchka.units import KILOJOULE
+    >>> (runner * Minute(30)).to(KILOJOULE)
+    1080 kJ
+
+    """
+    return Power(to_exact(value) * KILOJOULE_PER_MINUTE.scale, KILOJOULE_PER_MINUTE)
+
+
+def KilojoulePerHour(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in kilojoules per hour.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in kJ/h.
+
+    Returns
+    -------
+    Power
+        Power represented in kilojoules per hour.
+
+    Notes
+    -----
+    One kilojoule per hour is exactly 5/18 W.
+
+    Examples
+    --------
+    Heat loads in refrigeration and air conditioning are commonly listed in kilojoules
+    per hour.
+    A server rack that dissipates 36 000 kJ/h puts 10 kW into the room:
+
+    >>> rack = KilojoulePerHour(36_000)
+    >>> rack
+    36000 kJ/h
+    >>> from kuchka.units import KILOWATT
+    >>> rack.to(KILOWATT)
+    10 kW
+
+    The conversion is exact, so 3600 kJ/h is precisely one kilowatt:
+
+    >>> from kuchka import Kilowatt
+    >>> KilojoulePerHour(3600) == Kilowatt(1)
+    True
+
+    """
+    return Power(to_exact(value) * KILOJOULE_PER_HOUR.scale, KILOJOULE_PER_HOUR)
+
+
+def MegajoulePerHour(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in megajoules per hour.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in MJ/h.
+
+    Returns
+    -------
+    Power
+        Power represented in megajoules per hour.
+
+    Notes
+    -----
+    One megajoule per hour is exactly 2500/9 W, or 277.777... W.
+
+    Examples
+    --------
+    The input rating of a gas burner is quoted in megajoules per hour in some markets.
+    A hob burner rated at 10.8 MJ/h draws 3 kW of fuel energy:
+
+    >>> burner = MegajoulePerHour(10.8)
+    >>> burner
+    10.8 MJ/h
+    >>> from kuchka.units import KILOWATT
+    >>> burner.to(KILOWATT)
+    3 kW
+
+    Run for two hours at that rating, the burner consumes exactly 21.6 MJ of gas
+    energy:
+
+    >>> from kuchka import Hour
+    >>> from kuchka.units import MEGAJOULE
+    >>> (burner * Hour(2)).to(MEGAJOULE)
+    21.6 MJ
+
+    """
+    return Power(to_exact(value) * MEGAJOULE_PER_HOUR.scale, MEGAJOULE_PER_HOUR)
+
+
+def GigajoulePerHour(value: Numeric) -> Power:
+    """Construct a Power from a magnitude expressed in gigajoules per hour.
+
+    Parameters
+    ----------
+    value : Numeric
+        Power magnitude in GJ/h.
+
+    Returns
+    -------
+    Power
+        Power represented in gigajoules per hour.
+
+    Notes
+    -----
+    One gigajoule per hour is exactly 2500/9 kW, or 277.777... kW.
+
+    Examples
+    --------
+    A district heating substation that hands over 18 GJ of heat every hour transfers
+    5 MW:
+
+    >>> substation = GigajoulePerHour(18)
+    >>> substation
+    18 GJ/h
+    >>> from kuchka.units import MEGAWATT
+    >>> substation.to(MEGAWATT)
+    5 MW
+
+    Heat meters of large plants report gigajoules per hour, and the conversion is
+    exact.
+    A plant at 36 GJ/h is precisely a 10 MW source:
+
+    >>> from kuchka import Megawatt
+    >>> GigajoulePerHour(36) == Megawatt(10)
+    True
+
+    """
+    return Power(to_exact(value) * GIGAJOULE_PER_HOUR.scale, GIGAJOULE_PER_HOUR)
+
+
 POWER_UNITS: Mapping[str, Callable[[Numeric], Power]] = unit_table(
     "POWER_UNITS",
     {
@@ -648,13 +982,25 @@ POWER_UNITS: Mapping[str, Callable[[Numeric], Power]] = unit_table(
         PETAWATT: Petawatt,
         HORSEPOWER: Horsepower,
         METRIC_HORSEPOWER: MetricHorsepower,
+        JOULE_PER_MINUTE: JoulePerMinute,
+        JOULE_PER_HOUR: JoulePerHour,
+        KILOJOULE_PER_MINUTE: KilojoulePerMinute,
+        KILOJOULE_PER_HOUR: KilojoulePerHour,
+        MEGAJOULE_PER_HOUR: MegajoulePerHour,
+        GIGAJOULE_PER_HOUR: GigajoulePerHour,
     },
 )
 
 __all__ = [
+    "GIGAJOULE_PER_HOUR",
     "GIGAWATT",
     "HORSEPOWER",
+    "JOULE_PER_HOUR",
+    "JOULE_PER_MINUTE",
+    "KILOJOULE_PER_HOUR",
+    "KILOJOULE_PER_MINUTE",
     "KILOWATT",
+    "MEGAJOULE_PER_HOUR",
     "MEGAWATT",
     "METRIC_HORSEPOWER",
     "MICROWATT",
@@ -665,9 +1011,15 @@ __all__ = [
     "POWER_UNITS",
     "TERAWATT",
     "WATT",
+    "GigajoulePerHour",
     "Gigawatt",
     "Horsepower",
+    "JoulePerHour",
+    "JoulePerMinute",
+    "KilojoulePerHour",
+    "KilojoulePerMinute",
     "Kilowatt",
+    "MegajoulePerHour",
     "Megawatt",
     "MetricHorsepower",
     "Microwatt",
