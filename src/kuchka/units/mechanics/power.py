@@ -1,176 +1,76 @@
-"""Power constructors: the watt, from picowatts to petawatts, and horsepower.
+"""Power constructors: picowatts to petawatts, horsepower, and joules per hour.
 
-`Power` represents the rate at which energy is transferred:
+`Power` is the rate at which energy is transferred or converted, `P = dE / dt`.
+Its canonical unit is the watt, defined as one joule per second.
+Every constructor in this module scales relative to the watt.
 
-`P = dE / dt`.
+The module provides:
 
-Its SI unit is the watt, defined as one joule per second.
+* `Picowatt` through `Petawatt`, the SI prefixes of the watt;
+* `Horsepower` and `MetricHorsepower`, the engine ratings of two traditions;
+* `JoulePerMinute`, `JoulePerHour`, `KilojoulePerMinute`, `KilojoulePerHour`,
+  `MegajoulePerHour`, and `GigajoulePerHour`, a power written as the energy spent over
+  a minute or an hour.
 
-The constructors in this module span power scales from picowatts, encountered in
-sensitive measurement and optical systems, through ordinary electronic and mechanical
-equipment to petawatts used for ultrashort, high-intensity laser pulses.
+A voltage and a current make a power with one multiplication:
 
-Power also provides a common language between different physical domains.
-Electrical power follows
+>>> from kuchka import Ampere
+>>> from kuchka import Volt
+>>> Volt(12) * Ampere(2)
+24 W
 
-`P = V I`,
-
-mechanical power follows
-
-`P = F v`,
-
-and rotational mechanical power follows
-
-`P = tau omega`.
-
-The leaf constructors in this module provide the units.
-The package-level documentation for the relevant physical domain demonstrates those
-relationships.
-
-`Horsepower` and `MetricHorsepower` are explicitly distinguished because "horsepower"
-has several historical definitions.
-`Horsepower` in this module means the mechanical horsepower of exactly
-550 foot-pound-force per second.
-`MetricHorsepower` means the continental horsepower of exactly
-75 kilogram-force metres per second.
-
-The energy-per-time units `J/min`, `J/h`, `kJ/min`, `kJ/h`, `MJ/h`, and `GJ/h` write a
-power as the energy spent over a minute or an hour.
-They serve the fields that measure energy in joules and state a consumption or a
-rating per hour, such as sensor logging, exercise physiology, heating, and gas
-appliances.
+The units span an enormous range, and each scale belongs to a field.
+Picowatts and nanowatts are the signals of optical detectors and the leakage of
+sleeping electronics.
+Microwatts and milliwatts describe energy-harvesting sensors, radios, and laser
+pointers.
+Watts and kilowatts are the household and the vehicle: lamps, kettles, motors, and
+charging stations.
+Megawatts and gigawatts are wind turbines, locomotives, and power stations.
+Terawatts describe the energy system of a planet, and petawatts the peak of the
+strongest pulsed lasers and the sunlight that Earth intercepts.
+Horsepower rates engines, and the joule-per-hour units serve the fields that log an
+energy and state a consumption per hour: sensor logging, exercise physiology, heating,
+and gas appliances.
 
 Examples
 --------
-Power becomes intuitive when it is attached to something actually doing work.
+The same power arises in different physical domains.
+A cyclist who overcomes 25 N of drag at 8 m/s and a motor that turns at 100 rad/s
+against a torque of 2 N·m both deliver 200 W:
 
-A picowatt is an extremely small amount of power, useful when discussing sensitive
-optical and electronic measurements:
+>>> from kuchka import Newton
+>>> from kuchka import NewtonMetre
+>>> from kuchka import MetrePerSecond
+>>> from kuchka import RadianPerSecond
+>>> cyclist = Newton(25) * MetrePerSecond(8)
+>>> motor = NewtonMetre(2) * RadianPerSecond(100)
+>>> cyclist
+200 W
+>>> cyclist == motor
+True
 
->>> detector_signal = Picowatt(10)
->>> detector_signal
-10 pW
+Hydraulics adds a third route.
+A pump that pushes 60 L/min against a pressure of 5 bar does work at 500 W:
 
-Nanowatt-scale signals remain small enough that losses and leakage can become
-important:
+>>> from kuchka import Bar
+>>> from kuchka import LitrePerMinute
+>>> from kuchka.units import WATT
+>>> (Bar(5) * LitrePerMinute(60)).to(WATT)
+500 W
 
->>> leakage_power = Nanowatt(250)
->>> leakage_power
-250 nW
+Energy and power convert through time.
+A 2 kW heater that runs for three hours transfers 6 kWh, and dividing that energy by
+the same three hours returns the power:
 
-Low-power embedded and sensing electronics commonly live in the microwatt range:
-
->>> sleep_power = Microwatt(40)
->>> sleep_power
-40 µW
-
-At the milliwatt scale, electronic and optical components become easy to describe
-directly:
-
->>> optical_output = Milliwatt(5)
->>> optical_output
-5 mW
-
-Ordinary electrical equipment moves naturally into watts and kilowatts.
-A 100 W load is consuming energy at a rate of 100 joules every second:
-
->>> load = Watt(100)
->>> load
-100 W
-
-A 2 kW heater transfers energy twenty times faster:
-
->>> heater = Kilowatt(2)
->>> heater
+>>> from kuchka import Hour
+>>> from kuchka.units import KILOWATT
+>>> from kuchka.units import KILOWATT_HOUR
+>>> heat = (Kilowatt(2) * Hour(3)).to(KILOWATT_HOUR)
+>>> heat
+6 kWh
+>>> (heat / Hour(3)).to(KILOWATT)
 2 kW
-
-The unit remains the same physical quantity across these scales:
-
->>> Kilowatt(2) == Watt(2000)
-True
-
-Electrical power follows the familiar relationship
-
-`P = V I`.
-
-A 12 V circuit carrying 2 A therefore transfers power at exactly 24 W:
-
->>> from kuchka.units import Volt
->>> from kuchka.units import Ampere
->>> supply_voltage = Volt(12)
->>> supply_current = Ampere(2)
->>> supply_voltage * supply_current
-24 W
-
-The same principle works at much larger scales.
-A 400 V industrial circuit carrying 250 A carries exactly 100 kW:
-
->>> Volt(400) * Ampere(250)
-100000 W
-
-Mechanical systems commonly reach the kilowatt and megawatt ranges.
-A 5 MW machine has the same physical dimension as a 5 W sensor.
-Only the scale changes:
-
->>> industrial_machine = Megawatt(5)
->>> industrial_machine
-5 MW
-
-Grid-scale electrical systems are naturally described in gigawatts:
-
->>> generating_station = Gigawatt(1)
->>> generating_station
-1 GW
-
-Terawatt power is already a scale for very large aggregate systems:
-
->>> large_scale_power = Terawatt(1)
->>> large_scale_power
-1 TW
-
-At the extreme scientific end, petawatt lasers produce enormous peak power during
-extremely short pulses:
-
->>> laser_peak_power = Petawatt(5)
->>> laser_peak_power
-5 PW
-
-That value does not imply a five-petawatt continuous power source.
-Peak power and average power describe different properties of a pulsed system.
-
-Horsepower is a useful historical engineering unit, especially for engines and motors.
-One mechanical horsepower is exactly 745.69987158227022 W:
-
->>> engine_power = Horsepower(1)
->>> engine_power
-1 hp
-
-Its value in watts is exact under the definitions used to construct the unit:
-
->>> engine_power.to(WATT) == Watt(Decimal("745.69987158227022"))
-True
-
-A 100 hp engine therefore corresponds to exactly 74,569.987158227022 W:
-
->>> Horsepower(100).to(WATT) == Watt(Decimal("74569.987158227022"))
-True
-
-Continental metric horsepower is a different unit:
-
->>> MetricHorsepower(1)
-1 PS
-
-It is exactly 735.49875 W:
-
->>> MetricHorsepower(1) == Watt(735.49875)
-True
-
-The distinction matters when historical or automotive specifications are being
-imported.
-The two horsepower definitions differ by about 1.4 percent:
-
->>> Horsepower(1) != MetricHorsepower(1)
-True
 
 A log that records an energy and the time it took gives the consumption in joules per
 hour directly.
@@ -178,23 +78,31 @@ A device that spent 5400 J in 90 minutes consumed 3600 J/h, which is one watt:
 
 >>> from kuchka import Joule
 >>> from kuchka import Minute
+>>> from kuchka.units import JOULE_PER_HOUR
 >>> consumption = (Joule(5400) / Minute(90)).to(JOULE_PER_HOUR)
 >>> consumption
 3600 J/h
 >>> consumption == Watt(1)
 True
 
-Power can also be understood through time.
-If an ideal 100 W load runs for ten seconds, it transfers exactly 1000 J of energy:
+Peak power and average power describe different properties of a pulsed system.
+A laser that fires 30 J pulses of 30 fs reaches 1 PW at the peak, and at ten pulses per
+second it averages only 300 W:
 
->>> from kuchka import Second
->>> energy = Watt(100) * Second(10)
->>> energy
-1000 J
+>>> from kuchka import Femtosecond
+>>> from kuchka import Hertz
+>>> from kuchka.units import PETAWATT
+>>> pulse = Joule(30)
+>>> (pulse / Femtosecond(30)).to(PETAWATT)
+1 PW
+>>> (pulse * Hertz(10)).to(WATT)
+300 W
 
-That relationship is the definition of power in another form:
+The two horsepower definitions give different powers, which matters when engine
+specifications are imported from different markets:
 
-`P = E / t`.
+>>> Horsepower(1) != MetricHorsepower(1)
+True
 
 Notes
 -----
@@ -202,60 +110,23 @@ The watt is the SI coherent unit of power:
 
 `1 W = 1 J / s`.
 
-A watt is therefore a rate, not an amount of energy.
-Running a 1 kW load for one hour transfers 1 kWh of energy.
-The `Power` quantity itself remains 1 kW throughout the interval.
+A watt is a rate of energy transfer.
+An amount of energy is measured in joules or watt-hours: running a 1 kW load for one
+hour transfers 1 kWh, while the power stays 1 kW throughout the interval.
 
-The same `Power` quantity can arise from different physical relationships.
-Electrical power is `V I`; translational mechanical power is `F v`; and rotational
-mechanical power is `tau omega`.
-The dimensional result is the same even though the contributing quantities belong to
-different physical domains.
+SI prefixes are exact powers of ten:
 
-SI prefixes represent exact powers of ten.
-Consequently, conversions such as
-
->>> Picowatt(1000) == Nanowatt(1)
+>>> Kilowatt(1) == Watt(1000)
 True
 
->>> Nanowatt(1000) == Microwatt(1)
-True
-
->>> Microwatt(1000) == Milliwatt(1)
-True
-
->>> Milliwatt(1000) == Watt(1)
-True
-
->>> Watt(1000) == Kilowatt(1)
-True
-
->>> Kilowatt(1000) == Megawatt(1)
-True
-
->>> Megawatt(1000) == Gigawatt(1)
-True
-
->>> Gigawatt(1000) == Terawatt(1)
-True
-
->>> Terawatt(1000) == Petawatt(1)
-True
-
-`Horsepower` is the mechanical horsepower defined as 550 foot-pound-force per second.
-With the exact international foot and pound definitions and standard gravity, this is
-exactly 745.69987158227022 W.
-
-`MetricHorsepower` is exactly 75 kilogram-force metres per second, or 735.49875 W.
-
-The energy-per-time units are the watt written as an energy over a time, so their
-scales are exact:
+The joule-per-time units are the watt written as an energy over a time, so their
+scales are exact fractions of a watt:
 
 `1 J/min = 1/60 W`,
 
 `1 J/h = 1/3600 W`,
 
-and `1 kJ/h = 5/18 W`.
+`1 kJ/h = 5/18 W`.
 
 >>> JoulePerHour(3600) == Watt(1)
 True
@@ -263,14 +134,25 @@ True
 >>> MegajoulePerHour(3.6) == Kilowatt(1)
 True
 
-Neither horsepower unit is an SI unit.
-They are included because they remain common in engineering specifications, especially
-for engines and motors.
+`Horsepower` is the mechanical horsepower of exactly 550 foot-pound-force per second.
+With the exact international foot and pound and standard gravity, it is exactly
+745.69987158227022 W.
+`MetricHorsepower` is the continental horsepower of exactly 75 kilogram-force metres
+per second, or 735.49875 W.
+Neither is an SI unit, and both remain common in engine and motor specifications.
 
-`POWER_UNITS` maps symbols such as ``"pW"``, ``"nW"``, ``"µW"``, ``"mW"``, ``"W"``,
-``"kW"``, ``"MW"``, ``"GW"``, ``"TW"``, ``"PW"``, ``"hp"``, ``"PS"``, ``"J/min"``,
-``"J/h"``, ``"kJ/min"``, ``"kJ/h"``, ``"MJ/h"``, and ``"GJ/h"`` to their constructors.
+`POWER_UNITS` maps symbols such as ``"pW"``, ``"mW"``, ``"W"``, ``"kW"``, ``"MW"``,
+``"hp"``, ``"PS"``, ``"J/h"``, and ``"MJ/h"`` to their constructors.
 This is intended for boundary code that receives units as external data.
+
+References
+----------
+BIPM, The International System of Units (SI Brochure), on the watt:
+https://www.bipm.org/en/publications/si-brochure
+
+NIST, Special Publication 811, Guide for the Use of the International System of Units,
+on the two horsepower definitions:
+https://www.nist.gov/pml/special-publication-811
 
 See Also
 --------
@@ -286,6 +168,8 @@ See Also
     Translational velocity associated with mechanical power.
 ~kuchka.quantities.Torque
     Rotational moment associated with rotational power.
+~kuchka.units.mechanics.energy
+    Energy units, including the joule and the kilowatt-hour.
 
 """
 
@@ -346,11 +230,19 @@ def Picowatt(value: Numeric) -> Power:
 
     Examples
     --------
-    Very small optical and electronic signals can be measured in picowatts:
+    An optical receiver at the sensitivity limit of a fibre link detects a signal of
+    about 10 pW, which is -80 dBm:
 
     >>> signal = Picowatt(10)
     >>> signal
     10 pW
+
+    Collected for 100 s at a constant power, that signal delivers exactly 1 nJ:
+
+    >>> from kuchka import Second
+    >>> from kuchka.units import NANOJOULE
+    >>> (signal * Second(100)).to(NANOJOULE)
+    1 nJ
 
     """
     return Power(to_exact(value) * PICOWATT.scale, PICOWATT)
@@ -371,11 +263,25 @@ def Nanowatt(value: Numeric) -> Power:
 
     Examples
     --------
-    A 250 nW signal represents a very small rate of energy transfer:
+    Some real-time clock chips keep time on a few hundred nanowatts:
 
-    >>> signal = Nanowatt(250)
-    >>> signal
-    250 nW
+    >>> clock = Nanowatt(390)
+    >>> clock
+    390 nW
+
+    That figure is a 130 nA draw from a 3 V supply:
+
+    >>> from kuchka import Nanoampere
+    >>> from kuchka import Volt
+    >>> Volt(3) * Nanoampere(130) == clock
+    True
+
+    Over a day the clock costs 33.696 mJ of energy:
+
+    >>> from kuchka import Hour
+    >>> from kuchka.units import MILLIJOULE
+    >>> (clock * Hour(24)).to(MILLIJOULE)
+    33.696 mJ
 
     """
     return Power(to_exact(value) * NANOWATT.scale, NANOWATT)
@@ -396,12 +302,21 @@ def Microwatt(value: Numeric) -> Power:
 
     Examples
     --------
-    A low-power sensor or embedded circuit can operate at only a few tens of
-    microwatts:
+    A wireless sensor node asleep between readings can draw a few microwatts, such
+    as 2 µA from a 3 V supply:
 
-    >>> sleep_power = Microwatt(40)
+    >>> sleep_power = Microwatt(6)
     >>> sleep_power
-    40 µW
+    6 µW
+
+    An indoor photovoltaic cell harvests about 50 µW.
+    A reading that costs 0.5 mJ can then be taken every 10 s, assuming the harvest
+    arrives at a constant rate:
+
+    >>> from kuchka import Millijoule
+    >>> from kuchka.units import SECOND
+    >>> (Millijoule(0.5) / Microwatt(50)).to(SECOND)
+    10 s
 
     """
     return Power(to_exact(value) * MICROWATT.scale, MICROWATT)
@@ -422,12 +337,17 @@ def Milliwatt(value: Numeric) -> Power:
 
     Examples
     --------
-    Small electronic and optical components commonly use milliwatts as a natural power
-    scale:
+    Visible laser pointers of class 3R are limited to 5 mW of output:
 
-    >>> optical_output = Milliwatt(5)
-    >>> optical_output
+    >>> pointer = Milliwatt(5)
+    >>> pointer
     5 mW
+
+    Left on for ten minutes, such a pointer emits a total of 3 J of light:
+
+    >>> from kuchka import Minute
+    >>> pointer * Minute(10)
+    3 J
 
     """
     return Power(to_exact(value) * MILLIWATT.scale, MILLIWATT)
@@ -448,17 +368,39 @@ def Watt(value: Numeric) -> Power:
 
     Examples
     --------
-    One watt is one joule transferred every second:
+    A household LED lamp draws about 9 W:
 
-    >>> power = Watt(1)
-    >>> power
-    1 W
+    >>> lamp = Watt(9)
+    >>> lamp
+    9 W
 
-    A 100 W load transfers energy at one hundred joules per second:
+    Equipment that draws 100 W around the clock uses 2.4 kWh in a day:
 
-    >>> load = Watt(100)
-    >>> load
-    100 W
+    >>> from kuchka import Day
+    >>> from kuchka.units import KILOWATT_HOUR
+    >>> (Watt(100) * Day(1)).to(KILOWATT_HOUR)
+    2.4 kWh
+
+    A force at a speed and a torque at an angular velocity are powers too.
+    A cyclist who overcomes 25 N of drag at 8 m/s delivers 200 W, and so does a motor
+    that turns at 100 rad/s against 2 N·m:
+
+    >>> from kuchka import MetrePerSecond
+    >>> from kuchka import Newton
+    >>> from kuchka import NewtonMetre
+    >>> from kuchka import RadianPerSecond
+    >>> Newton(25) * MetrePerSecond(8)
+    200 W
+    >>> NewtonMetre(2) * RadianPerSecond(100)
+    200 W
+
+    A watt is a rate, so adding an amount of energy to it is rejected:
+
+    >>> from kuchka import Joule
+    >>> Watt(1) + Joule(1)  # doctest: +ELLIPSIS
+    Traceback (most recent call last):
+    ...
+    kuchka.errors.IncompatibleDimensionError: ...
 
     """
     return Power(to_exact(value) * WATT.scale, WATT)
@@ -479,11 +421,26 @@ def Kilowatt(value: Numeric) -> Power:
 
     Examples
     --------
-    A 2 kW heater is a familiar household-scale power load:
+    An electric kettle is rated at 2 kW:
 
-    >>> heater = Kilowatt(2)
-    >>> heater
+    >>> kettle = Kilowatt(2)
+    >>> kettle
     2 kW
+
+    Boiling for three minutes uses a tenth of a kilowatt-hour:
+
+    >>> from kuchka import Minute
+    >>> from kuchka.units import KILOWATT_HOUR
+    >>> (kettle * Minute(3)).to(KILOWATT_HOUR)
+    0.1 kWh
+
+    An 11 kW wallbox recharges a 55 kWh battery from empty in five hours, assuming it
+    holds full power throughout:
+
+    >>> from kuchka import KilowattHour
+    >>> from kuchka.units import HOUR
+    >>> (KilowattHour(55) / Kilowatt(11)).to(HOUR)
+    5 h
 
     """
     return Power(to_exact(value) * KILOWATT.scale, KILOWATT)
@@ -504,11 +461,24 @@ def Megawatt(value: Numeric) -> Power:
 
     Examples
     --------
-    Large industrial machines and electrical generators reach the megawatt scale:
+    An onshore wind turbine has a rated power of about 3 MW:
 
-    >>> machine = Megawatt(5)
-    >>> machine
-    5 MW
+    >>> turbine = Megawatt(3)
+    >>> turbine
+    3 MW
+
+    At a capacity factor of 35 percent it averages 1.05 MW, which is 25 200 kWh over a
+    day:
+
+    >>> from kuchka import Day
+    >>> from kuchka import Percent
+    >>> from kuchka.units import KILOWATT_HOUR
+    >>> from kuchka.units import MEGAWATT
+    >>> average = turbine * Percent(35)
+    >>> average.to(MEGAWATT)
+    1.05 MW
+    >>> (average * Day(1)).to(KILOWATT_HOUR)
+    25200 kWh
 
     """
     return Power(to_exact(value) * MEGAWATT.scale, MEGAWATT)
@@ -529,11 +499,23 @@ def Gigawatt(value: Numeric) -> Power:
 
     Examples
     --------
-    Gigawatts are a natural scale for large generating stations and power systems:
+    A nuclear power unit has an electrical output of about 1 GW:
 
-    >>> generating_station = Gigawatt(1)
-    >>> generating_station
+    >>> reactor = Gigawatt(1)
+    >>> reactor
     1 GW
+
+    Running for 24 hours at that output, it generates 86.4 TJ:
+
+    >>> from kuchka import Hour
+    >>> from kuchka.units import TERAJOULE
+    >>> (reactor * Hour(24)).to(TERAJOULE)
+    86.4 TJ
+
+    For households that average 500 W, one such unit supplies two million of them:
+
+    >>> round((reactor / Watt(500)).magnitude)
+    2000000
 
     """
     return Power(to_exact(value) * GIGAWATT.scale, GIGAWATT)
@@ -554,11 +536,18 @@ def Terawatt(value: Numeric) -> Power:
 
     Examples
     --------
-    Terawatts describe power on a scale far beyond an individual machine:
+    The primary energy supply of the world averages roughly 19 TW:
 
-    >>> large_scale_power = Terawatt(1)
-    >>> large_scale_power
-    1 TW
+    >>> world = Terawatt(19)
+    >>> world
+    19 TW
+
+    Shared over eight billion people, that is an average continuous power of
+    2.375 kW per person:
+
+    >>> from kuchka.units import KILOWATT
+    >>> (world / 8_000_000_000).to(KILOWATT)
+    2.375 kW
 
     """
     return Power(to_exact(value) * TERAWATT.scale, TERAWATT)
@@ -579,11 +568,17 @@ def Petawatt(value: Numeric) -> Power:
 
     Examples
     --------
-    Petawatt peak powers occur in ultrashort laser systems:
+    Petawatt-class lasers reach their peak power in extremely short pulses:
 
-    >>> laser_peak_power = Petawatt(5)
-    >>> laser_peak_power
-    5 PW
+    >>> peak = Petawatt(1)
+    >>> peak
+    1 PW
+
+    A pulse of 30 fs at that peak power carries only 30 J of energy:
+
+    >>> from kuchka import Femtosecond
+    >>> peak * Femtosecond(30)
+    30 J
 
     """
     return Power(to_exact(value) * PETAWATT.scale, PETAWATT)
@@ -630,11 +625,34 @@ def Horsepower(value: Numeric) -> Power:
 
     Examples
     --------
-    A nominal 100 hp engine is represented directly:
+    A truck engine is rated at 300 hp:
 
-    >>> engine = Horsepower(100)
+    >>> engine = Horsepower(300)
     >>> engine
-    100 hp
+    300 hp
+
+    The conversion to SI is exact:
+
+    >>> from kuchka.units import KILOWATT
+    >>> engine.to(KILOWATT)
+    223.709961474681066 kW
+
+    The unit comes from the foot-pound-force, so lifting 550 lbf at one foot per second
+    is exactly one horsepower:
+
+    >>> from kuchka import Foot
+    >>> from kuchka import PoundForce
+    >>> from kuchka import Second
+    >>> PoundForce(550) * (Foot(1) / Second(1)) == Horsepower(1)
+    True
+
+    A specification sheet written as text reads through `parse`, and the spelling `HP`
+    is the same unit:
+
+    >>> from kuchka import Power
+    >>> from kuchka import parse
+    >>> parse("300 HP", Power)
+    300 hp
 
     """
     return Power(to_exact(value) * HORSEPOWER.scale, HORSEPOWER)
@@ -655,15 +673,37 @@ def MetricHorsepower(value: Numeric) -> Power:
 
     Notes
     -----
-    One metric horsepower is exactly 735.49875 W.
+    One metric horsepower is exactly 75 kilogram-force metres per second, equivalent
+    to 735.49875 W.
 
     Examples
     --------
-    Automotive specifications in continental Europe may use metric horsepower:
+    A European car is listed at 110 PS:
 
-    >>> engine = MetricHorsepower(100)
-    >>> engine
-    100 PS
+    >>> car = MetricHorsepower(110)
+    >>> car
+    110 PS
+
+    The same car in kilowatts, exactly:
+
+    >>> from kuchka.units import KILOWATT
+    >>> car.to(KILOWATT)
+    80.9048625 kW
+
+    The unit is defined by a weight lifted at a speed: 75 kgf at one metre per second
+    is exactly one metric horsepower:
+
+    >>> from kuchka import KilogramForce
+    >>> from kuchka import MetrePerSecond
+    >>> KilogramForce(75) * MetrePerSecond(1) == MetricHorsepower(1)
+    True
+
+    French and Italian documents write the same unit as CV, which reads as PS:
+
+    >>> from kuchka import Power
+    >>> from kuchka import parse
+    >>> parse("110 CV", Power)
+    110 PS
 
     """
     return Power(
