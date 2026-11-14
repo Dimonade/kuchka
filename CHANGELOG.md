@@ -55,6 +55,8 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   The spellings `deg`, `degrees`, `degree`, and `Grad` stay ambiguous between the scales and are refused.
 - **Volume and density:**
   `CubicFoot` and `UsGallon`, and milligram-per-litre and microgram-per-litre density units.
+- **Power:**
+  `JoulePerMinute`, `JoulePerHour`, `KilojoulePerMinute`, `KilojoulePerHour`, `MegajoulePerHour`, and `GigajoulePerHour`, for consumption stated as an energy per minute or hour; each is an exact fraction of a watt.
 
 #### New relationships
 

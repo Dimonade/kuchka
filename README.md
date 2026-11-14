@@ -687,7 +687,7 @@ The units of `kuchka.units.mechanics`.
 | Stress               | the units of Pressure, reached with `Pressure.to_stress()`                                                                                         |
 | Energy               | `Picojoule` through `Petajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour`                                 |
 | _energy, continued_  | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                                                             |
-| Power                | `Picowatt` through `Petawatt`, `Horsepower` and `MetricHorsepower`                                                                                 |
+| Power                | `Picowatt` through `Petawatt`, `Horsepower`, `MetricHorsepower`, `JoulePerMinute`, `JoulePerHour`, `KilojoulePerHour`, `MegajoulePerHour`, `GigajoulePerHour`                                                                                 |
 | Torque               | `NewtonMetre`, `MillinewtonMetre`, `KilonewtonMetre`, `PoundForceFoot`, `PoundForceInch`, `JoulePerTurn`                                           |
 | Density              | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`, `GramPerLitre`, `MilligramPerLitre`, `MicrogramPerLitre`                    |
 | Energy density       | `JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`                                                       |
