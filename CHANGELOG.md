@@ -79,7 +79,7 @@ The quantities above take part in dimensional arithmetic, and the products and q
   `SpecificEnergy` derives from energy, pressure, density, and acceleration relationships, `HeatingRate` from temperature change and time, `Momentum` from `Mass * Velocity`, `Impulse` from `Force * Time`, `VelocitySquared` from `Velocity * Velocity`, and the flow rates from volume, mass, density, area, and velocity.
   `Pressure * VolumetricFlowRate` is a `Power`.
   `Pressure * Time` and `Density * KinematicViscosity` are a `DynamicViscosity`, and `Area / Time`, `Velocity * Length`, and `DynamicViscosity / Density` a `KinematicViscosity`, so the Reynolds number `v * L / nu` is a `Proportion`.
-  `DynamicViscosity * Frequency` is a `Stress`, the shear stress of a shear rate `Velocity / Length`, and `Stress / Frequency` the `DynamicViscosity` it measures.
+  `DynamicViscosity * Frequency` is a `Stress`, the shear stress of a shear rate `Velocity / Length`, and `Stress / Frequency` and `Stress * Time` the `DynamicViscosity` it measures.
   `Power / Area`, `Pressure * Velocity`, and `EnergyDensity * Velocity` are a `HeatFlux`, and `HeatFlux * Area` is a `Power`.
   `Energy / TemperatureDelta` is a `HeatCapacity`, `HeatCapacity / Mass` and `SpecificEnergy / TemperatureDelta` a `SpecificHeatCapacity`, and the heat `Q = m * c * dT` is an `Energy` however it is grouped.
   `HeatCapacity / AmountOfSubstance` and `MolarEnergy / TemperatureDelta` are a `MolarHeatCapacity`.

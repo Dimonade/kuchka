@@ -13,6 +13,7 @@ from kuchka.quantities.base.registry import _register
 from kuchka.quantities.base.registry import _rule
 from kuchka.quantities.mechanics.pressure import Stress
 from kuchka.quantities.temporal import Frequency
+from kuchka.quantities.temporal import Time
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -46,7 +47,6 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.surface_activity import SurfaceActivity
-    from kuchka.quantities.temporal import Time
     from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
     from kuchka.quantities.thermodynamics.specific_heat_capacity import (
         SpecificHeatCapacity,
@@ -139,6 +139,7 @@ _register(DYNAMIC_VISCOSITY, DynamicViscosity)
 
 _rule(DynamicViscosity, "*", Frequency, Stress)
 _rule(Stress, "/", Frequency, DynamicViscosity)
+_rule(Stress, "*", Time, DynamicViscosity)
 _rule(Stress, "/", DynamicViscosity, Frequency)
 
 __all__ = ["DynamicViscosity"]

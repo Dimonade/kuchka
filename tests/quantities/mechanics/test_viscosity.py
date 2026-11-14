@@ -11,7 +11,6 @@ from kuchka import Density
 from kuchka import DynamicViscosity
 from kuchka import Force
 from kuchka import Frequency
-from kuchka import IncompatibleDimensionError
 from kuchka import KinematicViscosity
 from kuchka import MassFlowRate
 from kuchka import Proportion
@@ -127,9 +126,19 @@ def test_the_stokes_drag_is_a_force() -> None:
     assert drag == force.Newton(216)
 
 
-def test_a_shear_stress_times_a_time_is_refused_with_the_conversion() -> None:
-    with pytest.raises(IncompatibleDimensionError, match="to_pressure"):
-        pressure.Pascal(2).to_stress() * temporal.Second(3)
+@pytest.mark.parametrize(
+    "build",
+    [
+        lambda: pressure.Pascal(12).to_stress() / temporal.Hertz(2),
+        lambda: pressure.Pascal(2).to_stress() * temporal.Second(3),
+        lambda: temporal.Second(3) * pressure.Pascal(2).to_stress(),
+    ],
+    ids=["tau/gamma", "tau*t", "t*tau"],
+)
+def test_a_stress_over_a_rate_and_times_a_time_are_one_viscosity(build) -> None:
+    viscosity = build()
+    assert type(viscosity) is DynamicViscosity
+    assert viscosity == MU
 
 
 @pytest.mark.parametrize(
