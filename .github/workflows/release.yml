@@ -101,8 +101,8 @@ jobs:
           fi
       - name: Give the rehearsal a version of its own
         if: github.ref_type != 'tag'
-        # TestPyPI never lets a file name be used twice, not even after a deletion. A
-        # development version keeps the real version free for the real release, and
+        # TestPyPI never lets a file name be used twice, not even after a deletion.
+        # A development version keeps the real version free for the real release, and
         # lets the rehearsal be repeated.
         run: uv version --frozen "$(uv version --short).dev$((GITHUB_RUN_NUMBER * 100 + GITHUB_RUN_ATTEMPT))"
       - name: Record the version that is built

@@ -1,4 +1,4 @@
-"""Compatability layer between older and newer Python features."""
+"""Compatibility layer between older and newer Python features."""
 
 import sys
 
