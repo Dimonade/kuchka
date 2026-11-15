@@ -44,5 +44,8 @@ The recipes you need most:
   [Writing documentation](docs/how-to/writing_documentation.md) says how.
 - It adds a short entry to the `develop` section of `CHANGELOG.md`.
 
+Only `rc/*` and `hotfix/*` branches are merged into `master`.
+[Releasing](RELEASING.md) says how a release is made.
+
 The pages under [docs/how-to](docs/how-to/README.md) walk through adding a unit, a
 quantity, a dimension, and the tests and documentation each needs.

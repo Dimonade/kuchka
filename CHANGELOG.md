@@ -483,7 +483,7 @@ Every `Time` constructor (`Second`, `Millisecond`, `Microsecond`, `Minute`, `Hou
 Was missed because `typing_extensions` is a transient dependency of `mypy` which was used in dev-dependencies.
 Fixed with import guard in `kuchka.internal.typing` for all affected Python versions.
 
-## [0.1.2] - 2026.09.22
+## [0.1.2] - 2026-09-22
 
 ### Added
 

@@ -1,8 +1,25 @@
 version: 2
 updates:
+  # Work lands on develop; master receives only releases, so no update may target it.
   - package-ecosystem: github-actions
     directory: /
+    target-branch: develop
     schedule:
       interval: weekly
     cooldown:
       default-days: 7
+
+  # `uv.lock` and the floors in `pyproject.toml`: the part of the release checklist
+  # that says to update the dependencies.
+  # `just watch-tools` and the scheduled workflow still cover the tools that move
+  # between these updates.
+  - package-ecosystem: uv
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      dev-tools:
+        patterns: ["*"]

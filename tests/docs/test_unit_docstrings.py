@@ -49,7 +49,7 @@ def dotted(path: Path) -> str:
 
 def baseline() -> set[str]:
     """Return the modules that are not yet held to the structure."""
-    lines = (line.strip() for line in BASELINE.read_text().splitlines())
+    lines = (line.strip() for line in BASELINE.read_text(encoding="utf-8").splitlines())
     return {line for line in lines if line and not line.startswith("#")}
 
 
@@ -142,7 +142,7 @@ def constructor_problems(function: ast.FunctionDef) -> list[str]:
 
 def module_problems(path: Path) -> list[str]:
     """Return the problems with the documentation of the module at `path`."""
-    tree = ast.parse(path.read_text())
+    tree = ast.parse(path.read_text(encoding="utf-8"))
     docstring = ast.get_docstring(tree)
     if docstring is None:
         return ["no module docstring"]

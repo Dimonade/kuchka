@@ -38,6 +38,11 @@ alias wt := watch-tools
 watch-tools:
     uv run tox -e lint,pyright,3.15
 
+alias pf := preflight
+# Run the machine part of the release checklist (tox covers `watch-tools`), then check the version, the lock and the changelog.
+preflight: check test tox
+    uv run python .ci/check_release.py --final
+
 alias ga := generate-api
 # Regenerate `src/kuchka/_api.py`, the names promoted to the top level, after changing a leaf `__all__`.
 generate-api:

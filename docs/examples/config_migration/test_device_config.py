@@ -73,6 +73,8 @@ def test_a_broken_config_fails_at_load_naming_the_field(
     tmp_path: Path, old: str, new: str, match: str
 ) -> None:
     path = tmp_path / "config.toml"
-    path.write_text(CONFIG_PATH.read_text(encoding="utf-8").replace(old, new, 1))
+    path.write_text(
+        CONFIG_PATH.read_text(encoding="utf-8").replace(old, new, 1), encoding="utf-8"
+    )
     with pytest.raises(ConfigError, match=match):
         load_device_config(path)

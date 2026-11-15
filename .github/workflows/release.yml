@@ -2,9 +2,15 @@ name: release
 
 # A tag whose version matches the project version builds the distributions, publishes
 # them to PyPI with trusted publishing (which attaches attestations), and creates the
-# GitHub release from the changelog. A release tag `vX.Y.Z` must be on master, which
-# receives only finished commits; a pre-release tag such as `vX.Y.ZrcN` may be on develop.
-# A manual run on a branch publishes the same build to TestPyPI.
+# GitHub release from the changelog.
+# A release tag `vX.Y.Z` must be on master, which receives only finished commits;
+# a pre-release tag such as `vX.Y.ZrcN` may also be on develop or on a release
+# candidate branch (`rc/*`).
+# Publishing to PyPI waits for the approval of a reviewer of the `pypi` environment,
+# which is the manual step.
+# A manual run on a branch publishes the same build to TestPyPI, as a `.devN` version
+# of the project version, so that the rehearsal can be repeated and never uses the
+# real one.
 
 on:
   push:
@@ -21,7 +27,9 @@ jobs:
   build:
     name: Build the distributions
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     permissions:
       contents: read
       checks: read # read the CI result of the tagged commit
@@ -41,10 +49,10 @@ jobs:
         run: |
           prerelease='^v[0-9]+(\.[0-9]+)*(a|b|rc|\.dev)[0-9]+$'
           if [[ "$TAG" =~ $prerelease ]]; then
-            if git merge-base --is-ancestor HEAD origin/develop || git merge-base --is-ancestor HEAD origin/master; then
+            if git branch --remotes --contains HEAD --format='%(refname:short)' | grep -Eq '^origin/(develop|master|rc/.+)$'; then
               exit 0
             fi
-            echo "::error::A pre-release tag must be on develop or master."
+            echo "::error::A pre-release tag must be on develop, master or a release candidate branch (rc/*)."
           else
             if git merge-base --is-ancestor HEAD origin/master; then
               exit 0
@@ -57,17 +65,49 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          passed=$(gh api "repos/$GITHUB_REPOSITORY/commits/$(git rev-parse HEAD)/check-runs?check_name=ci%20passed&per_page=100" \
-            --jq '.check_runs | length > 0 and all(.conclusion == "success")')
-          if [ "$passed" != "true" ]; then
-            echo "::error::The CI has not passed on the tagged commit; wait for it or fix it."
-            exit 1
-          fi
+          # The CI of a merge commit starts when master moves, so a tag pushed straight
+          # after the merge waits here for it instead of failing.
+          sha="$(git rev-parse HEAD)"
+          for attempt in $(seq 1 40); do
+            state=$(gh api "repos/$GITHUB_REPOSITORY/commits/$sha/check-runs?check_name=ci%20passed&filter=latest&per_page=100" \
+              --jq '.check_runs | if length == 0 then "missing" elif any(.status != "completed") then "pending" elif all(.conclusion == "success") then "passed" else "failed" end')
+            case "$state" in
+              passed) exit 0 ;;
+              failed)
+                echo "::error::The CI failed on the tagged commit; fix it and tag again."
+                exit 1
+                ;;
+            esac
+            echo "Attempt $attempt: the CI of the tagged commit is $state."
+            sleep 30
+          done
+          echo "::error::The CI of the tagged commit did not finish in time; re-run this job when it has."
+          exit 1
       - name: Check that the tag names the project version
         if: github.ref_type == 'tag'
         env:
           TAG: ${{ github.ref_name }}
         run: test "v$(uv version --short)" = "$TAG"
+      - name: Check that the release is ready (a dated changelog entry, a bumped lock, a new version)
+        if: github.ref_type == 'tag'
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          prerelease='^v[0-9]+(\.[0-9]+)*(a|b|rc|\.dev)[0-9]+$'
+          if [[ "$TAG" =~ $prerelease ]]; then
+            python3 .ci/check_release.py
+          else
+            python3 .ci/check_release.py --final
+          fi
+      - name: Give the rehearsal a version of its own
+        if: github.ref_type != 'tag'
+        # TestPyPI never lets a file name be used twice, not even after a deletion. A
+        # development version keeps the real version free for the real release, and
+        # lets the rehearsal be repeated.
+        run: uv version --frozen "$(uv version --short).dev$((GITHUB_RUN_NUMBER * 100 + GITHUB_RUN_ATTEMPT))"
+      - name: Record the version that is built
+        id: version
+        run: echo "version=$(uv version --short)" >> "$GITHUB_OUTPUT"
       - name: Point the links at the tag
         if: github.ref_type == 'tag'
         env:
@@ -112,22 +152,21 @@ jobs:
 
   verify-testpypi:
     name: Verify the TestPyPI rehearsal
-    needs: publish-testpypi
+    needs: [build, publish-testpypi]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: read
+    env:
+      VERSION: ${{ needs.build.outputs.version }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           version: "0.13.7"
           enable-cache: false
       - name: Verify the attestation of each file
         run: |
-          version="$(uv version --short)"
+          version="$VERSION"
           for file in "kuchka-${version}-py3-none-any.whl" "kuchka-${version}.tar.gz"; do
             for attempt in 1 2 3 4 5; do
               if uvx --from pypi-attestations==0.0.31 pypi-attestations verify pypi --staging \
