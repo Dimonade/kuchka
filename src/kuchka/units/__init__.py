@@ -110,6 +110,7 @@ from kuchka.units.mechanics.dynamic_viscosity import *
 from kuchka.units.mechanics.energy import *
 from kuchka.units.mechanics.energy_density import *
 from kuchka.units.mechanics.first_moment_of_mass import *
+from kuchka.units.mechanics.fluence import *
 from kuchka.units.mechanics.force import *
 from kuchka.units.mechanics.impulse import *
 from kuchka.units.mechanics.kinematic_viscosity import *
@@ -121,6 +122,7 @@ from kuchka.units.mechanics.pressure import *
 from kuchka.units.mechanics.specific_energy import *
 from kuchka.units.mechanics.specific_power import *
 from kuchka.units.mechanics.stress import *
+from kuchka.units.mechanics.surface_tension import *
 from kuchka.units.mechanics.torque import *
 from kuchka.units.mechanics.velocity_squared import *
 from kuchka.units.mechanics.volumetric_flow_rate import *
@@ -203,6 +205,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.ExposureRate: EXPOSURE_RATE_UNITS,
     quantities.Energy: ENERGY_UNITS,
     quantities.EnergyDensity: ENERGY_DENSITY_UNITS,
+    quantities.Fluence: FLUENCE_UNITS,
     quantities.Force: FORCE_UNITS,
     quantities.Frequency: FREQUENCY_UNITS,
     quantities.Entropy: ENTROPY_UNITS,
@@ -254,6 +257,7 @@ _TABLE_OF: dict[type[Any], Mapping[str, Callable[..., Any]]] = {
     quantities.SpecificPower: SPECIFIC_POWER_UNITS,
     quantities.SurfaceActivity: SURFACE_ACTIVITY_UNITS,
     quantities.SurfaceChargeDensity: SURFACE_CHARGE_DENSITY_UNITS,
+    quantities.SurfaceTension: SURFACE_TENSION_UNITS,
     quantities.Stress: STRESS_UNITS,
     quantities.Proportion: PROPORTION_UNITS,
     quantities.Reactance: REACTANCE_UNITS,
