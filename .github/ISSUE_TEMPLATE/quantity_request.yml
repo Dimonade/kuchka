@@ -4,10 +4,8 @@ labels: ["tag/proposal", "type/feature request"]
 body:
   - type: markdown
     attributes:
-      value: |
-        `kuchka` keeps a curated vocabulary. A name earns its own quantity type when it
-        changes an operation or a result, and a concept that only shares a dimension
-        stays a variable name. The answers below let that be decided quickly.
+      value: >-
+        `kuchka` keeps a curated vocabulary. A name earns its own quantity type when it changes an operation or a result, and a concept that only shares a dimension stays a variable name. The answers below let that be decided quickly.
   - type: input
     id: name
     attributes:
