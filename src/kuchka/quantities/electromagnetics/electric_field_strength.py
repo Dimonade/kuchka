@@ -44,6 +44,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
 
@@ -72,6 +73,8 @@ class ElectricFieldStrength(LinearQuantity):
     def __mul__(self, other: ElectricFluxDensity) -> EnergyDensity: ...
     @overload
     def __mul__(self, other: Length) -> Voltage: ...
+    @overload
+    def __mul__(self, other: LinearChargeDensity) -> SurfaceTension: ...
     @overload
     def __mul__(self, other: MagneticFieldStrength) -> HeatFlux: ...
     @overload

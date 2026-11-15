@@ -35,6 +35,7 @@ if TYPE_CHECKING:
         VolumeChargeDensity,
     )
     from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.density import Density
     from kuchka.quantities.mechanics.energy import Energy
@@ -44,6 +45,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.pressure import Pressure
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.surface_activity import SurfaceActivity
@@ -83,6 +85,8 @@ class DynamicViscosity(LinearQuantity):
     def __mul__(self, other: SpecificCharge) -> MagneticFieldStrength: ...
     @overload
     def __mul__(self, other: SpecificHeatCapacity) -> ThermalConductivity: ...
+    @overload
+    def __mul__(self, other: Velocity) -> SurfaceTension: ...
     @overload
     def __mul__(self, other: VolumetricFlowRate) -> Energy: ...
     @overload

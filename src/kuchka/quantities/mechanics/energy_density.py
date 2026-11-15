@@ -52,11 +52,13 @@ if TYPE_CHECKING:
     )
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.velocity import Velocity
+    from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
@@ -75,6 +77,8 @@ class EnergyDensity(LinearQuantity):
     # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Area) -> Force: ...
+    @overload
+    def __mul__(self, other: Length) -> SurfaceTension: ...
     @overload
     def __mul__(self, other: MolarVolume) -> MolarEnergy: ...
     @overload

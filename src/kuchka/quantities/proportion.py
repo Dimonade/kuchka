@@ -105,6 +105,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
+    from kuchka.quantities.mechanics.fluence import Fluence
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
@@ -116,6 +117,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.pressure import Stress
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
@@ -235,6 +237,8 @@ class Proportion(LinearQuantity):
     @overload
     def __mul__(self, other: FirstMomentOfMass) -> FirstMomentOfMass: ...
     @overload
+    def __mul__(self, other: Fluence) -> Fluence: ...
+    @overload
     def __mul__(self, other: Force) -> Force: ...
     @overload
     def __mul__(self, other: Frequency) -> Frequency: ...
@@ -350,6 +354,8 @@ class Proportion(LinearQuantity):
     def __mul__(self, other: SurfaceActivity) -> SurfaceActivity: ...
     @overload
     def __mul__(self, other: SurfaceChargeDensity) -> SurfaceChargeDensity: ...
+    @overload
+    def __mul__(self, other: SurfaceTension) -> SurfaceTension: ...
     @overload
     def __mul__(self, other: TemperatureDelta) -> TemperatureDelta: ...
     @overload

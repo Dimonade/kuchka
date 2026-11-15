@@ -48,7 +48,7 @@ _register(LENGTH, Depth, specialisation_of=Length)
 
 A specialisation records meaning and shape and converts no value.
 Moving between it and its principal kind is explicit, with named conversions in the `to_x` and `from_x` style (`Time.to_sampling_period()`, `SamplingPeriod.to_time()`).
-`SampleRate`, `BaudRate`, and `Activity` are specialisations of `Frequency`, `ApparentPower` and `ReactivePower` of `Power`, `Stress` of `Pressure`, `AbsorbedDose` and `EquivalentDose` of `SpecificEnergy`, `Exposure` of `SpecificCharge`, and `Entropy`, `SpecificEntropy`, and `MolarEntropy` of `HeatCapacity`, `SpecificHeatCapacity`, and `MolarHeatCapacity`.
+`SampleRate`, `BaudRate`, and `Activity` are specialisations of `Frequency`, `ApparentPower` and `ReactivePower` of `Power`, `Stress` of `Pressure`, `Fluence` of `SurfaceTension`, `AbsorbedDose` and `EquivalentDose` of `SpecificEnergy`, `Exposure` of `SpecificCharge`, and `Entropy`, `SpecificEntropy`, and `MolarEntropy` of `HeatCapacity`, `SpecificHeatCapacity`, and `MolarHeatCapacity`.
 A role may have no conversion out: a sievert times a kilogram is not an energy, so `EquivalentDose` has no `to_specific_energy()`, and the refusal says so.
 A role takes part in arithmetic only when it is scaled by a dimensionless value, divided by itself, multiplied by its reciprocal, or named by a rule.
 Every other product goes through the conversion first, so `Stress * Area` is refused with a hint and `stress.to_pressure() * area` is a `Force`.

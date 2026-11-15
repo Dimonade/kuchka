@@ -59,13 +59,16 @@ if TYPE_CHECKING:
     from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
+    from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.activity_concentration import ActivityConcentration
@@ -104,6 +107,8 @@ class Length(LinearQuantity):
     @overload
     def __mul__(self, other: ElectricFieldStrength) -> Voltage: ...
     @overload
+    def __mul__(self, other: EnergyDensity) -> SurfaceTension: ...
+    @overload
     def __mul__(self, other: FirstMomentOfMass) -> MomentOfInertia: ...
     @overload
     def __mul__(self, other: Force) -> Energy: ...
@@ -126,9 +131,13 @@ class Length(LinearQuantity):
     @overload
     def __mul__(self, other: Permittivity) -> Capacitance: ...
     @overload
+    def __mul__(self, other: Pressure) -> SurfaceTension: ...
+    @overload
     def __mul__(self, other: Proportion) -> Length: ...
     @overload
     def __mul__(self, other: SurfaceChargeDensity) -> LinearChargeDensity: ...
+    @overload
+    def __mul__(self, other: SurfaceTension) -> Force: ...
     @overload
     def __mul__(self, other: Velocity) -> KinematicViscosity: ...
     @overload

@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.current import Current
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.current_density import CurrentDensity
     from kuchka.quantities.electromagnetics.inductance import Inductance
     from kuchka.quantities.electromagnetics.magnetic_field_strength import (
         MagneticFieldStrength,
@@ -41,6 +42,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -57,6 +59,8 @@ class MagneticFlux(LinearQuantity):
     def __mul__(self, other: Conductance) -> Charge: ...
     @overload
     def __mul__(self, other: Current) -> Energy: ...
+    @overload
+    def __mul__(self, other: CurrentDensity) -> SurfaceTension: ...
     @overload
     def __mul__(self, other: Frequency) -> Voltage: ...
     @overload

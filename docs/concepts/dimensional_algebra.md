@@ -274,5 +274,6 @@ isinstance(rate, Frequency)
 A name earns a kind when it changes an operation or a result.
 `Pressure` and `EnergyDensity` return different results from `Force / Area` and `Energy / Volume`, and `Entropy` refuses the `* TemperatureDelta` that `HeatCapacity` accepts.
 A name that changes neither belongs to the variable: a wavelength is a `Length`, and `wavelength: Length` says so.
+`Energy / Area` is a `Fluence` and `Force / Length` a `SurfaceTension`, two kinds of the dimension M T⁻²: `Fluence` earns its kind because `HeatFlux * Time` and `Fluence / Time` run through it, and a stiffness, a line load, and an interfacial tension read as the principal `SurfaceTension`.
 Wavenumber, curvature, optical power, and spatial frequency are all m⁻¹, and any number of concepts can claim a dimension, so a kind for each would turn the library into a catalogue of topics.
 Naming the concept stays with the code that uses it.

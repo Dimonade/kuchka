@@ -25,6 +25,8 @@ See the `Stability` section in `README.md` for what versioning means before `0.2
   `SpecificEnergy` (J/kg, Wh/kg, cal/kg), `Momentum` (SI, CGS, and FPS), `Impulse` (N·s, mN·s, kN·s, dyn·s, lbf·s), `VelocitySquared`, `VolumetricFlowRate`, and `MassFlowRate`.
   `DynamicViscosity` (Pa·s, mPa·s, µPa·s, P, cP) and `KinematicViscosity` (m²/s, mm²/s, cm²/s, µm²/s, St, cSt).
   A thermal diffusivity and a diffusion coefficient read as a `KinematicViscosity`.
+  `SurfaceTension` (N/m, mN/m, kN/m, dyn/cm) and its role `Fluence` (J/m², MJ/m², J/cm², mJ/cm², µJ/cm², Wh/m², kWh/m²), the two kinds of one dimension.
+  A stiffness, a line load, and an interfacial tension read as a `SurfaceTension`, and a radiant exposure and an insolation as a `Fluence`.
 - **Thermodynamics:**
   `HeatingRate` (K/s, °C/s, °F/s), `HeatCapacity` (J/K, kJ/K, cal/K, kcal/K), and `SpecificHeatCapacity` (J/(kg·K), kJ/(kg·K), cal/(g·K)).
   `HeatFlux` (W/m², kW/m², mW/cm², ...) and `ThermalConductivity` (W/(m·K), mW/(m·K), W/(cm·K)).
@@ -65,6 +67,9 @@ The quantities above take part in dimensional arithmetic, and the products and q
 - **Integer powers:**
   A linear quantity takes an integer power: `Metre(3) ** 2` is `SquareMetre(9)`, `Second(2) ** -1` is `Hertz(0.5)`, and `q ** 0` is `Ratio(1)`.
   A power is the product written out, so the rules of each step apply, and type checkers see the square, the cube, and the fourth power where those have a type.
+- **Mechanics:**
+  `Force / Length` and `Pressure * Length` are a `SurfaceTension`, and `SurfaceTension / Length` the `Pressure` of a curved interface.
+  `Energy / Area` and `HeatFlux * Time` are a `Fluence`, `Fluence / Time` is a `HeatFlux`, and `Fluence * Area` an `Energy`.
 - **Electromagnetics:**
   `Voltage * Time`, `MagneticFlux / Area`, `Charge / Voltage`, `Resistance * Time`, `Current / Length`, and `Permeability * MagneticFieldStrength` derive the electromagnetic quantities.
   `Voltage / Length`, `Force / Charge`, and `MagneticFluxDensity * Velocity` are an `ElectricFieldStrength`, and `Current / Area` and `VolumeChargeDensity * Velocity` a `CurrentDensity`.

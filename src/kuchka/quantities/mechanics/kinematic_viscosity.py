@@ -41,8 +41,10 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
+    from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.photometry.luminous_exposure import LuminousExposure
@@ -81,6 +83,8 @@ class KinematicViscosity(LinearQuantity):
     def __mul__(self, other: Proportion) -> KinematicViscosity: ...
     @overload
     def __mul__(self, other: SurfaceChargeDensity) -> Current: ...
+    @overload
+    def __mul__(self, other: SurfaceTension) -> Power: ...
     @overload
     def __mul__(self, other: Time) -> Area: ...
     @overload

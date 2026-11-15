@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.charge import Charge
     from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
@@ -37,6 +38,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
+    from kuchka.quantities.mechanics.fluence import Fluence
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
@@ -47,6 +49,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
@@ -106,6 +109,8 @@ class Energy(LinearQuantity):
     @overload
     def __truediv__(self, other: AngularVelocitySquared) -> MomentOfInertia: ...
     @overload
+    def __truediv__(self, other: Area) -> Fluence: ...
+    @overload
     def __truediv__(self, other: Charge) -> Voltage: ...
     @overload
     def __truediv__(self, other: Current) -> MagneticFlux: ...
@@ -117,6 +122,8 @@ class Energy(LinearQuantity):
     def __truediv__(self, other: EnergyDensity) -> Volume: ...
     @overload
     def __truediv__(self, other: FirstMomentOfMass) -> Acceleration: ...
+    @overload
+    def __truediv__(self, other: Fluence) -> Area: ...
     @overload
     def __truediv__(self, other: Force) -> Length: ...
     @overload
@@ -147,6 +154,8 @@ class Energy(LinearQuantity):
     def __truediv__(self, other: Proportion) -> Energy: ...
     @overload
     def __truediv__(self, other: SpecificEnergy) -> Mass: ...
+    @overload
+    def __truediv__(self, other: SurfaceTension) -> Area: ...
     @overload
     def __truediv__(self, other: TemperatureDelta) -> HeatCapacity: ...
     @overload

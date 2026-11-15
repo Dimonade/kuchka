@@ -43,6 +43,7 @@ from kuchka.quantities import EquivalentDoseRate
 from kuchka.quantities import Exposure
 from kuchka.quantities import ExposureRate
 from kuchka.quantities import FirstMomentOfMass
+from kuchka.quantities import Fluence
 from kuchka.quantities import Force
 from kuchka.quantities import Frequency
 from kuchka.quantities import HeatCapacity
@@ -103,6 +104,7 @@ from kuchka.quantities import SpecificPower
 from kuchka.quantities import Stress
 from kuchka.quantities import SurfaceActivity
 from kuchka.quantities import SurfaceChargeDensity
+from kuchka.quantities import SurfaceTension
 from kuchka.quantities import Temperature
 from kuchka.quantities import TemperatureDelta
 from kuchka.quantities import ThermalConductivity
@@ -207,6 +209,7 @@ from kuchka.units import DeltaKelvin
 from kuchka.units import DeltaRankine
 from kuchka.units import DpmPer100SquareCentimetre
 from kuchka.units import Dyne
+from kuchka.units import DynePerCentimetre
 from kuchka.units import DyneSecond
 from kuchka.units import EarthMass
 from kuchka.units import Electronvolt
@@ -294,6 +297,8 @@ from kuchka.units import JoulePerKilogramKelvin
 from kuchka.units import JoulePerMinute
 from kuchka.units import JoulePerMole
 from kuchka.units import JoulePerMoleKelvin
+from kuchka.units import JoulePerSquareCentimetre
+from kuchka.units import JoulePerSquareMetre
 from kuchka.units import JoulePerTurn
 from kuchka.units import JouleSecondPerTurn
 from kuchka.units import JulianYear
@@ -376,6 +381,7 @@ from kuchka.units import KilomolePerSecond
 from kuchka.units import Kilonewton
 from kuchka.units import KilonewtonMeter
 from kuchka.units import KilonewtonMetre
+from kuchka.units import KilonewtonPerMetre
 from kuchka.units import KilonewtonSecond
 from kuchka.units import Kiloohm
 from kuchka.units import Kiloparsec
@@ -395,6 +401,7 @@ from kuchka.units import KilovoltPerMillimetre
 from kuchka.units import Kilowatt
 from kuchka.units import KilowattHour
 from kuchka.units import KilowattHourPerKilogram
+from kuchka.units import KilowattHourPerSquareMetre
 from kuchka.units import KilowattPerKilogram
 from kuchka.units import KilowattPerMetreKelvin
 from kuchka.units import KilowattPerSquareMetre
@@ -438,6 +445,7 @@ from kuchka.units import MegajoulePerCubicMeter
 from kuchka.units import MegajoulePerCubicMetre
 from kuchka.units import MegajoulePerHour
 from kuchka.units import MegajoulePerKilogram
+from kuchka.units import MegajoulePerSquareMetre
 from kuchka.units import Meganewton
 from kuchka.units import Megaohm
 from kuchka.units import Megaparsec
@@ -486,6 +494,7 @@ from kuchka.units import Microhenry
 from kuchka.units import MicrohenryPerMetre
 from kuchka.units import Microhertz
 from kuchka.units import Microjoule
+from kuchka.units import MicrojoulePerSquareCentimetre
 from kuchka.units import Microkatal
 from kuchka.units import Microliter
 from kuchka.units import Microlitre
@@ -550,6 +559,7 @@ from kuchka.units import Millihenry
 from kuchka.units import MillihenryPerMetre
 from kuchka.units import Millihertz
 from kuchka.units import Millijoule
+from kuchka.units import MillijoulePerSquareCentimetre
 from kuchka.units import Millikatal
 from kuchka.units import Milliliter
 from kuchka.units import MilliliterPerMinute
@@ -571,6 +581,7 @@ from kuchka.units import MillimolePerMinute
 from kuchka.units import Millinewton
 from kuchka.units import MillinewtonMeter
 from kuchka.units import MillinewtonMetre
+from kuchka.units import MillinewtonPerMetre
 from kuchka.units import MillinewtonSecond
 from kuchka.units import Milliohm
 from kuchka.units import MillipascalSecond
@@ -652,6 +663,7 @@ from kuchka.units import NewtonMeter
 from kuchka.units import NewtonMeterSecond
 from kuchka.units import NewtonMetre
 from kuchka.units import NewtonMetreSecond
+from kuchka.units import NewtonPerMetre
 from kuchka.units import NewtonSecond
 from kuchka.units import Ohm
 from kuchka.units import Ounce
@@ -795,6 +807,7 @@ from kuchka.units import WattHour
 from kuchka.units import WattHourPerKilogram
 from kuchka.units import WattHourPerLiter
 from kuchka.units import WattHourPerLitre
+from kuchka.units import WattHourPerSquareMetre
 from kuchka.units import WattPerCentimetreKelvin
 from kuchka.units import WattPerGram
 from kuchka.units import WattPerKilogram
@@ -923,6 +936,7 @@ __all__ = [
     "DpmPer100SquareCentimetre",
     "DynamicViscosity",
     "Dyne",
+    "DynePerCentimetre",
     "DyneSecond",
     "EarthMass",
     "ElectricFieldStrength",
@@ -949,6 +963,7 @@ __all__ = [
     "Femtosecond",
     "Femtotesla",
     "FirstMomentOfMass",
+    "Fluence",
     "Foot",
     "FootCandle",
     "FootLambert",
@@ -1032,6 +1047,8 @@ __all__ = [
     "JoulePerMinute",
     "JoulePerMole",
     "JoulePerMoleKelvin",
+    "JoulePerSquareCentimetre",
+    "JoulePerSquareMetre",
     "JoulePerTurn",
     "JouleSecondPerTurn",
     "JulianYear",
@@ -1114,6 +1131,7 @@ __all__ = [
     "Kilonewton",
     "KilonewtonMeter",
     "KilonewtonMetre",
+    "KilonewtonPerMetre",
     "KilonewtonSecond",
     "Kiloohm",
     "Kiloparsec",
@@ -1133,6 +1151,7 @@ __all__ = [
     "Kilowatt",
     "KilowattHour",
     "KilowattHourPerKilogram",
+    "KilowattHourPerSquareMetre",
     "KilowattPerKilogram",
     "KilowattPerMetreKelvin",
     "KilowattPerSquareMetre",
@@ -1192,6 +1211,7 @@ __all__ = [
     "MegajoulePerCubicMetre",
     "MegajoulePerHour",
     "MegajoulePerKilogram",
+    "MegajoulePerSquareMetre",
     "Meganewton",
     "Megaohm",
     "Megaparsec",
@@ -1240,6 +1260,7 @@ __all__ = [
     "MicrohenryPerMetre",
     "Microhertz",
     "Microjoule",
+    "MicrojoulePerSquareCentimetre",
     "Microkatal",
     "Microliter",
     "Microlitre",
@@ -1304,6 +1325,7 @@ __all__ = [
     "MillihenryPerMetre",
     "Millihertz",
     "Millijoule",
+    "MillijoulePerSquareCentimetre",
     "Millikatal",
     "Milliliter",
     "MilliliterPerMinute",
@@ -1325,6 +1347,7 @@ __all__ = [
     "Millinewton",
     "MillinewtonMeter",
     "MillinewtonMetre",
+    "MillinewtonPerMetre",
     "MillinewtonSecond",
     "Milliohm",
     "MillipascalSecond",
@@ -1417,6 +1440,7 @@ __all__ = [
     "NewtonMeterSecond",
     "NewtonMetre",
     "NewtonMetreSecond",
+    "NewtonPerMetre",
     "NewtonSecond",
     "Ohm",
     "Ounce",
@@ -1542,6 +1566,7 @@ __all__ = [
     "Stress",
     "SurfaceActivity",
     "SurfaceChargeDensity",
+    "SurfaceTension",
     "Tebibit",
     "TebibitPerSecond",
     "Tebibyte",
@@ -1596,6 +1621,7 @@ __all__ = [
     "WattHourPerKilogram",
     "WattHourPerLiter",
     "WattHourPerLitre",
+    "WattHourPerSquareMetre",
     "WattPerCentimetreKelvin",
     "WattPerGram",
     "WattPerKilogram",

@@ -33,13 +33,17 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.fluence import Fluence
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.photometry.illuminance import Illuminance
     from kuchka.quantities.photometry.luminous_efficacy import LuminousEfficacy
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.surface_activity import SurfaceActivity
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
 
 
 class HeatFlux(LinearQuantity):
@@ -47,7 +51,7 @@ class HeatFlux(LinearQuantity):
 
     An irradiance and a sound intensity are measured in the same watts per square
     metre, and read as a `HeatFlux` too.
-    `HeatFlux * Area` is a `Power`.
+    `HeatFlux * Area` is a `Power`, and `HeatFlux * Time` is a `Fluence`.
     """
 
     dimension: ClassVar[Dimension] = HEAT_FLUX
@@ -60,6 +64,8 @@ class HeatFlux(LinearQuantity):
     def __mul__(self, other: LuminousEfficacy) -> Illuminance: ...
     @overload
     def __mul__(self, other: Proportion) -> HeatFlux: ...
+    @overload
+    def __mul__(self, other: Time) -> Fluence: ...
     @overload
     def __mul__(self, other: TimeCubed) -> Mass: ...
     @overload
@@ -89,6 +95,8 @@ class HeatFlux(LinearQuantity):
     @overload
     def __truediv__(self, other: EnergyDensity) -> Velocity: ...
     @overload
+    def __truediv__(self, other: Frequency) -> SurfaceTension: ...
+    @overload
     def __truediv__(self, other: HeatFlux) -> Proportion: ...
     @overload
     def __truediv__(self, other: MagneticFieldStrength) -> ElectricFieldStrength: ...
@@ -98,6 +106,8 @@ class HeatFlux(LinearQuantity):
     def __truediv__(self, other: Proportion) -> HeatFlux: ...
     @overload
     def __truediv__(self, other: SurfaceActivity) -> Energy: ...
+    @overload
+    def __truediv__(self, other: SurfaceTension) -> Frequency: ...
     @overload
     def __truediv__(self, other: Voltage) -> CurrentDensity: ...
     @overload

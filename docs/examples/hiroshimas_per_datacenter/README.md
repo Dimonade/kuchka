@@ -48,15 +48,15 @@ The same division works for sunlight, 3,200 TJ a day, which is 51 Hiroshimas, an
 ## The fake unit
 
 Hiroshimas per Walmart Supercenter needs a Walmart Supercenter, and the post supplies one: 2,000 of them cover 40,000 acres, so a supercenter is 20 acres, the store and its parking lot.
-Per day it is a heat flux, a `Power` over an `Area`:
+A Hiroshima spread over an area is energy per area, a `Fluence`:
 
 ```python
-def one_hiroshima_per_day_per_supercenter(site: Site) -> HeatFlux:
-    return HIROSHIMA / Day(1) / site.supercenter
+def one_hiroshima_per_supercenter(site: Site) -> Fluence:
+    return HIROSHIMA / site.supercenter
 ```
 
 A fake unit is a reference quantity, and measuring in it is a division by that quantity.
-`hiroshimas_per_supercenter` divides the heat flux of the site by it and gets `0.0117` as a `Proportion`, next to the thread's `0.0115` Hiroshimas per Walmart Supercenter.
+`hiroshimas_per_supercenter` divides the heat the site releases per area and day by it and gets `0.0117` as a `Proportion`, next to the thread's `0.0115` Hiroshimas per Walmart Supercenter.
 The test checks the second route too: the daily count divided by the 2,000 supercenters is exactly the same value, because every step is exact.
 
 ## Slow heat and fast heat
@@ -70,7 +70,7 @@ Both are the same `Energy` per Hiroshima, and the types keep the difference as a
 - The thread rounds the bomb to 63 TJ and gets 23.3 bombs a day.
   The library's TNT is the thermochemical 4.184 GJ per tonne, so a Hiroshima is 62.76 TJ and the count is 23.4.
 - The efficiency of the plant is an input, so the demo shows 24.8, 23.4, and 22.5 bombs a day for 50, 53, and 55 percent.
-- Daily sunlight on the plot is compared as a heat flux, 229 W/m² against the site's 105 W/m², because energy per area has no registered type.
+- Daily sunlight on the plot is a `Fluence` like the site's own heat, 19.8 MJ/m² or 5.5 kWh/m² against 9.1 MJ/m² or 2.5 kWh/m², and `Energy / Area` and `HeatFlux * Time` both produce one.
 
 ## The boundary
 
@@ -104,8 +104,8 @@ The site, as the post describes it:
 
 Against what else the ground and the sky deliver:
 
-  sunlight on the same plot      3200 TJ a day, 51.0 Hiroshimas
-  heat flux, site against sun    105 W/m² against 229 W/m²
+  sunlight per m2 and day        19.8 MJ/m², 5.5 kWh/m²
+  site heat per m2 and day       9.1 MJ/m², 2.5 kWh/m²
   nuclear plant, 3.3 GW          9.2 Hiroshimas a day vented
 
 Why the comparison misleads:

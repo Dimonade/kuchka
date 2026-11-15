@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.magnetic_field_strength import (
         MagneticFieldStrength,
     )
+    from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
     from kuchka.quantities.electromagnetics.magnetic_flux_density import (
         MagneticFluxDensity,
     )
@@ -35,6 +36,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.temporal import Frequency
@@ -61,6 +63,8 @@ class CurrentDensity(LinearQuantity):
     def __mul__(self, other: Inductance) -> MagneticFluxDensity: ...
     @overload
     def __mul__(self, other: Length) -> MagneticFieldStrength: ...
+    @overload
+    def __mul__(self, other: MagneticFlux) -> SurfaceTension: ...
     @overload
     def __mul__(self, other: Proportion) -> CurrentDensity: ...
     @overload

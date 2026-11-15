@@ -36,12 +36,16 @@ if TYPE_CHECKING:
     from kuchka.quantities.electromagnetics.permittivity import Permittivity
     from kuchka.quantities.electromagnetics.resistance import Resistance
     from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        SurfaceChargeDensity,
+    )
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -75,6 +79,8 @@ class Voltage(LinearQuantity):
     def __mul__(self, other: Proportion) -> Voltage: ...
     @overload
     def __mul__(self, other: SpecificCurrent) -> SpecificPower: ...
+    @overload
+    def __mul__(self, other: SurfaceChargeDensity) -> SurfaceTension: ...
     @overload
     def __mul__(self, other: Time) -> MagneticFlux: ...
     @overload

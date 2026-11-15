@@ -28,6 +28,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.geometry.volume import Volume
     from kuchka.quantities.kinematics.acceleration import Acceleration
     from kuchka.quantities.kinematics.time_cubed import TimeCubed
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.density import Density
@@ -40,6 +41,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.radiation.activity import Activity
@@ -121,9 +123,13 @@ class Mass(LinearQuantity):
     @overload
     def __truediv__(self, other: Proportion) -> Mass: ...
     @overload
+    def __truediv__(self, other: SurfaceTension) -> TimeSquared: ...
+    @overload
     def __truediv__(self, other: Time) -> MassFlowRate: ...
     @overload
     def __truediv__(self, other: TimeCubed) -> HeatFlux: ...
+    @overload
+    def __truediv__(self, other: TimeSquared) -> SurfaceTension: ...
     @overload
     def __truediv__(self, other: Volume) -> Density: ...
     @overload
