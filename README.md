@@ -1066,10 +1066,9 @@ A future persistence layer may use a representation such as `{"value": 4.2, "uni
 
 ## Stability
 
-`kuchka` is currently `0.1.x`.
-Breaking changes are expected while the API settles.
-
-From `0.2.0` onward, `kuchka` follows ordinary semantic versioning: a minor release will not break existing code, and a breaking change comes with a major version bump.
+`kuchka` follows [semantic versioning](https://semver.org/).
+Before `1.0.0`, a breaking change comes with a minor version bump and is listed under `Changed` or `Removed` in the changelog.
+A patch release keeps existing code working.
 
 ### Compatibility
 
