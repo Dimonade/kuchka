@@ -40,6 +40,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
@@ -55,6 +56,8 @@ class MassFlowRate(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: Frequency) -> SurfaceTension: ...
     @overload
     def __mul__(self, other: KinematicViscosity) -> Energy: ...
     @overload
@@ -111,6 +114,10 @@ class MassFlowRate(LinearQuantity):
     def __truediv__(self, other: Proportion) -> MassFlowRate: ...
     @overload
     def __truediv__(self, other: SurfaceChargeDensity) -> MagneticFlux: ...
+    @overload
+    def __truediv__(self, other: SurfaceTension) -> Time: ...
+    @overload
+    def __truediv__(self, other: Time) -> SurfaceTension: ...
     @overload
     def __truediv__(self, other: TimeSquared) -> HeatFlux: ...
     @overload

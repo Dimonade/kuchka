@@ -18,7 +18,9 @@ if TYPE_CHECKING:
     from kuchka.numeric import Numeric
     from kuchka.quantities.geometry.area import Area
     from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.photometry.illuminance import Illuminance
+    from kuchka.quantities.photometry.luminous_efficacy import LuminousEfficacy
     from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
     from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.proportion import Proportion
@@ -56,9 +58,13 @@ class LuminousExposure(LinearQuantity):
     @overload
     def __truediv__(self, other: Illuminance) -> Time: ...
     @overload
+    def __truediv__(self, other: LuminousEfficacy) -> SurfaceTension: ...
+    @overload
     def __truediv__(self, other: LuminousExposure) -> Proportion: ...
     @overload
     def __truediv__(self, other: Proportion) -> LuminousExposure: ...
+    @overload
+    def __truediv__(self, other: SurfaceTension) -> LuminousEfficacy: ...
     @overload
     def __truediv__(self, other: Time) -> Illuminance: ...
     @overload

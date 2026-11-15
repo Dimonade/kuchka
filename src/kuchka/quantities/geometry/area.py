@@ -42,7 +42,9 @@ if TYPE_CHECKING:
     from kuchka.quantities.length import Length
     from kuchka.quantities.luminous_intensity import LuminousIntensity
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.fluence import Fluence
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.moment_of_inertia import MomentOfInertia
@@ -50,6 +52,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.photometry.illuminance import Illuminance
@@ -79,6 +82,8 @@ class Area(LinearQuantity):
     @overload
     def __mul__(self, other: EnergyDensity) -> Force: ...
     @overload
+    def __mul__(self, other: Fluence) -> Energy: ...
+    @overload
     def __mul__(self, other: Frequency) -> KinematicViscosity: ...
     @overload
     def __mul__(self, other: HeatFlux) -> Power: ...
@@ -102,6 +107,8 @@ class Area(LinearQuantity):
     def __mul__(self, other: SurfaceActivity) -> Activity: ...
     @overload
     def __mul__(self, other: SurfaceChargeDensity) -> Charge: ...
+    @overload
+    def __mul__(self, other: SurfaceTension) -> Energy: ...
     @overload
     def __mul__(self, other: Velocity) -> VolumetricFlowRate: ...
     @overload

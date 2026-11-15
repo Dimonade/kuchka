@@ -33,11 +33,13 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.momentum import Momentum
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
@@ -107,6 +109,8 @@ class Power(LinearQuantity):
     @overload
     def __truediv__(self, other: Jerk) -> FirstMomentOfMass: ...
     @overload
+    def __truediv__(self, other: KinematicViscosity) -> SurfaceTension: ...
+    @overload
     def __truediv__(self, other: Mass) -> SpecificPower: ...
     @overload
     def __truediv__(self, other: MolarEnergy) -> MolarFlowRate: ...
@@ -124,6 +128,8 @@ class Power(LinearQuantity):
     def __truediv__(self, other: SpecificEnergy) -> MassFlowRate: ...
     @overload
     def __truediv__(self, other: SpecificPower) -> Mass: ...
+    @overload
+    def __truediv__(self, other: SurfaceTension) -> KinematicViscosity: ...
     @overload
     def __truediv__(self, other: Torque) -> AngularVelocity: ...
     @overload

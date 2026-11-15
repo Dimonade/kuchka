@@ -104,6 +104,7 @@ from kuchka.quantities.mechanics.dynamic_viscosity import *
 from kuchka.quantities.mechanics.energy import *
 from kuchka.quantities.mechanics.energy_density import *
 from kuchka.quantities.mechanics.first_moment_of_mass import *
+from kuchka.quantities.mechanics.fluence import *
 from kuchka.quantities.mechanics.force import *
 from kuchka.quantities.mechanics.impulse import *
 from kuchka.quantities.mechanics.kinematic_viscosity import *
@@ -114,6 +115,7 @@ from kuchka.quantities.mechanics.power import *
 from kuchka.quantities.mechanics.pressure import *
 from kuchka.quantities.mechanics.specific_energy import *
 from kuchka.quantities.mechanics.specific_power import *
+from kuchka.quantities.mechanics.surface_tension import *
 from kuchka.quantities.mechanics.torque import *
 from kuchka.quantities.mechanics.velocity_squared import *
 from kuchka.quantities.mechanics.volumetric_flow_rate import *

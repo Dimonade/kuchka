@@ -51,6 +51,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.time_squared import TimeSquared
     from kuchka.quantities.length import Length
     from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
@@ -62,6 +63,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.power import Power
     from kuchka.quantities.mechanics.pressure import Pressure
     from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
     from kuchka.quantities.proportion import Proportion
@@ -85,6 +87,8 @@ class Velocity(LinearQuantity):
     def __mul__(self, other: AngularVelocity) -> Acceleration: ...
     @overload
     def __mul__(self, other: Area) -> VolumetricFlowRate: ...
+    @overload
+    def __mul__(self, other: DynamicViscosity) -> SurfaceTension: ...
     @overload
     def __mul__(self, other: EnergyDensity) -> HeatFlux: ...
     @overload

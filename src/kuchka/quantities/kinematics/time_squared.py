@@ -31,12 +31,14 @@ if TYPE_CHECKING:
     from kuchka.quantities.kinematics.time_fourth_power import TimeFourthPower
     from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
+    from kuchka.quantities.mass import Mass
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
     from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
@@ -81,6 +83,8 @@ class TimeSquared(LinearQuantity):
     def __mul__(self, other: SpecificEnergy) -> Area: ...
     @overload
     def __mul__(self, other: SpecificPower) -> KinematicViscosity: ...
+    @overload
+    def __mul__(self, other: SurfaceTension) -> Mass: ...
     @overload
     def __mul__(self, other: Time) -> TimeCubed: ...
     @overload

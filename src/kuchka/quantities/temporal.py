@@ -103,6 +103,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.energy import Energy
     from kuchka.quantities.mechanics.energy_density import EnergyDensity
     from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
+    from kuchka.quantities.mechanics.fluence import Fluence
     from kuchka.quantities.mechanics.force import Force
     from kuchka.quantities.mechanics.impulse import Impulse
     from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
@@ -113,6 +114,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.mechanics.pressure import Stress
     from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
     from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
@@ -131,6 +133,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.radiation.specific_activity import SpecificActivity
     from kuchka.quantities.radiation.surface_activity import SurfaceActivity
     from kuchka.quantities.thermal import TemperatureDelta
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
     from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
 
 
@@ -170,6 +173,8 @@ class Time(LinearQuantity):
     @overload
     def __mul__(self, other: Frequency) -> Fraction: ...
     @overload
+    def __mul__(self, other: HeatFlux) -> Fluence: ...
+    @overload
     def __mul__(self, other: HeatingRate) -> TemperatureDelta: ...
     @overload
     def __mul__(self, other: Illuminance) -> LuminousExposure: ...
@@ -207,6 +212,8 @@ class Time(LinearQuantity):
     def __mul__(self, other: SpecificPower) -> SpecificEnergy: ...
     @overload
     def __mul__(self, other: Stress) -> DynamicViscosity: ...
+    @overload
+    def __mul__(self, other: SurfaceTension) -> MassFlowRate: ...
     @overload
     def __mul__(self, other: Time) -> TimeSquared: ...
     @overload
@@ -395,6 +402,8 @@ class Frequency(LinearQuantity):
     @overload
     def __mul__(self, other: Mass) -> MassFlowRate: ...
     @overload
+    def __mul__(self, other: MassFlowRate) -> SurfaceTension: ...
+    @overload
     def __mul__(self, other: Momentum) -> Force: ...
     @overload
     def __mul__(self, other: Proportion) -> Frequency: ...
@@ -404,6 +413,8 @@ class Frequency(LinearQuantity):
     def __mul__(self, other: SpecificEnergy) -> SpecificPower: ...
     @overload
     def __mul__(self, other: SurfaceChargeDensity) -> CurrentDensity: ...
+    @overload
+    def __mul__(self, other: SurfaceTension) -> HeatFlux: ...
     @overload
     def __mul__(self, other: TemperatureDelta) -> HeatingRate: ...
     @overload

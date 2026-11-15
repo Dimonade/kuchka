@@ -41,6 +41,7 @@ if TYPE_CHECKING:
     from kuchka.quantities.length import Length
     from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
     from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
     from kuchka.quantities.proportion import Proportion
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
@@ -53,6 +54,8 @@ class LinearChargeDensity(LinearQuantity):
     __slots__ = ()
 
     # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: ElectricFieldStrength) -> SurfaceTension: ...
     @overload
     def __mul__(self, other: Frequency) -> MagneticFieldStrength: ...
     @overload
