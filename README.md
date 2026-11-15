@@ -680,29 +680,29 @@ The units of `kuchka.units.kinematics`.
 
 The units of `kuchka.units.mechanics`.
 
-| Quantity             | Representative units                                                                                                                               |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Force                | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                                                                      |
-| Pressure             | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Gigapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`, `KilopoundPerSquareInch` |
-| Stress               | the units of Pressure, reached with `Pressure.to_stress()`                                                                                         |
-| Energy               | `Picojoule` through `Petajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour`                                 |
-| _energy, continued_  | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                                                             |
-| Power                | `Picowatt` through `Petawatt`, `Horsepower`, `MetricHorsepower`, `JoulePerMinute`, `JoulePerHour`, `KilojoulePerHour`, `MegajoulePerHour`, `GigajoulePerHour`                                                                                 |
-| Torque               | `NewtonMetre`, `MillinewtonMetre`, `KilonewtonMetre`, `PoundForceFoot`, `PoundForceInch`, `JoulePerTurn`                                           |
-| Density              | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`, `GramPerLitre`, `MilligramPerLitre`, `MicrogramPerLitre`                    |
-| Energy density       | `JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`                                                       |
-| Momentum             | `KilogramMetrePerSecond`, `GramCentimetrePerSecond`, `PoundFootPerSecond`                                                                          |
-| Impulse              | `NewtonSecond`, `MillinewtonSecond`, `KilonewtonSecond`, `DyneSecond`, `PoundForceSecond`                                                          |
-| Angular momentum     | `KilogramSquareMetrePerSecond`, `NewtonMetreSecond`, `JouleSecondPerTurn`                                                                          |
-| Moment of inertia    | `KilogramSquareMetre`, `KilogramSquareCentimetre`, `GramSquareCentimetre`, `PoundSquareFoot`, `PoundSquareInch`                                    |
-| First moment of mass | `KilogramMetre`, `GramCentimetre`, `GramMillimetre`, `OunceInch`                                                                                   |
-| Velocity squared     | `SquareMetrePerSecondSquared`, `SquareKilometrePerSecondSquared`                                                                                   |
-| Specific energy      | `JoulePerKilogram`, `MegajoulePerKilogram`, `WattHourPerKilogram`, `KilowattHourPerKilogram`, `KilocaloriePerKilogram`                             |
-| Specific power       | `WattPerKilogram`, `MilliwattPerKilogram`, `KilowattPerKilogram`, `WattPerGram`, `MilliwattPerGram`                                                |
-| Volumetric flow      | `CubicMetrePerSecond`, `LitrePerSecond`, `LitrePerMinute`, `CubicMetrePerHour`, `MillilitrePerMinute`, `UsGallonPerMinute`, `CubicFootPerMinute`   |
-| Mass flow            | `KilogramPerSecond`, `GramPerSecond`, `KilogramPerHour`, `TonnePerHour`, `PoundPerHour`                                                            |
-| Dynamic viscosity    | `PascalSecond`, `MillipascalSecond`, `Poise`, `Centipoise`                                                                                         |
-| Kinematic viscosity  | `SquareMetrePerSecond`, `SquareMillimetrePerSecond`, `Stokes`, `Centistokes`                                                                       |
+| Quantity             | Representative units                                                                                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Force                | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                                                                                 |
+| Pressure             | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Gigapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`, `KilopoundPerSquareInch`            |
+| Stress               | the units of Pressure, reached with `Pressure.to_stress()`                                                                                                    |
+| Energy               | `Picojoule` through `Petajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour`                                            |
+| _energy, continued_  | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                                                                        |
+| Power                | `Picowatt` through `Petawatt`, `Horsepower`, `MetricHorsepower`, `JoulePerMinute`, `JoulePerHour`, `KilojoulePerHour`, `MegajoulePerHour`, `GigajoulePerHour` |
+| Torque               | `NewtonMetre`, `MillinewtonMetre`, `KilonewtonMetre`, `PoundForceFoot`, `PoundForceInch`, `JoulePerTurn`                                                      |
+| Density              | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`, `GramPerLitre`, `MilligramPerLitre`, `MicrogramPerLitre`                               |
+| Energy density       | `JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`                                                                  |
+| Momentum             | `KilogramMetrePerSecond`, `GramCentimetrePerSecond`, `PoundFootPerSecond`                                                                                     |
+| Impulse              | `NewtonSecond`, `MillinewtonSecond`, `KilonewtonSecond`, `DyneSecond`, `PoundForceSecond`                                                                     |
+| Angular momentum     | `KilogramSquareMetrePerSecond`, `NewtonMetreSecond`, `JouleSecondPerTurn`                                                                                     |
+| Moment of inertia    | `KilogramSquareMetre`, `KilogramSquareCentimetre`, `GramSquareCentimetre`, `PoundSquareFoot`, `PoundSquareInch`                                               |
+| First moment of mass | `KilogramMetre`, `GramCentimetre`, `GramMillimetre`, `OunceInch`                                                                                              |
+| Velocity squared     | `SquareMetrePerSecondSquared`, `SquareKilometrePerSecondSquared`                                                                                              |
+| Specific energy      | `JoulePerKilogram`, `MegajoulePerKilogram`, `WattHourPerKilogram`, `KilowattHourPerKilogram`, `KilocaloriePerKilogram`                                        |
+| Specific power       | `WattPerKilogram`, `MilliwattPerKilogram`, `KilowattPerKilogram`, `WattPerGram`, `MilliwattPerGram`                                                           |
+| Volumetric flow      | `CubicMetrePerSecond`, `LitrePerSecond`, `LitrePerMinute`, `CubicMetrePerHour`, `MillilitrePerMinute`, `UsGallonPerMinute`, `CubicFootPerMinute`              |
+| Mass flow            | `KilogramPerSecond`, `GramPerSecond`, `KilogramPerHour`, `TonnePerHour`, `PoundPerHour`                                                                       |
+| Dynamic viscosity    | `PascalSecond`, `MillipascalSecond`, `Poise`, `Centipoise`                                                                                                    |
+| Kinematic viscosity  | `SquareMetrePerSecond`, `SquareMillimetrePerSecond`, `Stokes`, `Centistokes`                                                                                  |
 
 ### Photometry
 

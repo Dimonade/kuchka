@@ -9,12 +9,12 @@ Credits go to u/NovaTaima for the post, u/tx_queer for the math breakout, and u/
 The figures are the post's own, rounded the way the post rounds them, and they serve as story material here.
 The names and numbers can change to any scenario, a fictional Project Alfredo included, and the arithmetic stays the same.
 
-| File | What it is |
-| --- | --- |
-| `site_spec.toml` | The figures of the site and of a nuclear plant to compare with |
-| `heat_budget.py` | The boundary layer and the heat arithmetic |
-| `demo.py` | Run this: counts the heat in Hiroshimas, then varies the plant |
-| `test_heat_budget.py` | Tests for `heat_budget.py` |
+| File                  | What it is                                                     |
+| --------------------- | -------------------------------------------------------------- |
+| `site_spec.toml`      | The figures of the site and of a nuclear plant to compare with |
+| `heat_budget.py`      | The boundary layer and the heat arithmetic                     |
+| `demo.py`             | Run this: counts the heat in Hiroshimas, then varies the plant |
+| `test_heat_budget.py` | Tests for `heat_budget.py`                                     |
 
 ## The math of the thread, as types
 
