@@ -146,13 +146,13 @@ def test_the_total_heat_is_a_power() -> None:
 
 def test_a_figure_in_the_wrong_unit_is_refused_at_the_boundary(tmp_path: Path) -> None:
     broken = tmp_path / "site_spec.toml"
-    broken.write_text(SPEC.read_text().replace('"9 GW"', '"9 A"'))
+    broken.write_text(SPEC.read_text(encoding="utf-8").replace('"9 GW"', '"9 A"'))
     with pytest.raises(UnknownUnitError):
         load_scenario(broken)
 
 
 def test_a_figure_with_no_unit_is_refused_at_the_boundary(tmp_path: Path) -> None:
     broken = tmp_path / "site_spec.toml"
-    broken.write_text(SPEC.read_text().replace('"9 GW"', "9"))
+    broken.write_text(SPEC.read_text(encoding="utf-8").replace('"9 GW"', "9"))
     with pytest.raises(TypeError):
         load_scenario(broken)

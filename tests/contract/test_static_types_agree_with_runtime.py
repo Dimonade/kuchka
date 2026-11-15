@@ -88,7 +88,7 @@ def test_the_checker_and_the_runtime_agree_on_every_operand_pair(
                 lines.append(f"    reveal_type(l {symbol} r)")
                 index[len(lines)] = (left, symbol, right)
     path = tmp_path / "pairs.py"
-    path.write_text("\n".join(lines) + "\n")
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     revealed = reveal(checker, path)
 
     mismatches = []
