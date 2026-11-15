@@ -48,7 +48,7 @@ The bubble is a time, so it takes a second module of the same shape, with `TIME`
 ```python
 from kuchka.units.archaic.krakenpeople.length import Shell
 from kuchka.units.archaic.krakenpeople.time import Bubble
-from kuchka.units.length import CENTIMETRE
+from kuchka.units import CENTIMETRE
 
 reef_wall = Shell(40)
 reef_wall.to(CENTIMETRE)  # 120 cm

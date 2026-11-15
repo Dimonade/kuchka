@@ -94,8 +94,11 @@ or:
 pip install kuchka
 ```
 
-Application code should normally import from the top-level `kuchka` package.
+`kuchka` is pure Python and imports only the standard library at runtime.
+On Python 3.11 it also installs `typing_extensions`, the backport that provides `override`; from Python 3.12 it has no dependencies at all.
 The development toolchain described later is separate from the package's runtime dependencies.
+
+Application code should normally import from the top-level `kuchka` package.
 
 ## Quick start
 
@@ -776,7 +779,7 @@ They are imported explicitly from the module of their tradition and add nothing 
 
 ```python
 from kuchka.units.archaic.russian.length import Arshin
-from kuchka.units.length import CENTIMETRE
+from kuchka.units import CENTIMETRE
 
 print(Arshin(3).to(CENTIMETRE))
 # 213.36 cm
