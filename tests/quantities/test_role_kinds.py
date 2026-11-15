@@ -19,6 +19,7 @@ from kuchka import EquivalentDose
 from kuchka import EquivalentDoseRate
 from kuchka import Exposure
 from kuchka import ExposureRate
+from kuchka import Fluence
 from kuchka import Impedance
 from kuchka import IncompatibleDimensionError
 from kuchka import Magnetization
@@ -55,6 +56,7 @@ CONVERSION = {
     EquivalentDoseRate: "no conversion",
     Exposure: "to_specific_charge",
     ExposureRate: "to_specific_current",
+    Fluence: "to_surface_tension",
     SpecificEntropy: "to_specific_heat_capacity",
     Impedance: "to_resistance",
     Magnetization: "to_magnetic_field_strength",

@@ -16,6 +16,7 @@ from kuchka import EquivalentDose
 from kuchka import EquivalentDoseRate
 from kuchka import Exposure
 from kuchka import ExposureRate
+from kuchka import Fluence
 from kuchka import Frequency
 from kuchka import HeatCapacity
 from kuchka import Impedance
@@ -39,6 +40,7 @@ from kuchka import SpecificHeatCapacity
 from kuchka import SpecificPower
 from kuchka import Stress
 from kuchka import SurfaceChargeDensity
+from kuchka import SurfaceTension
 from kuchka import Time
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import TIME
@@ -61,6 +63,7 @@ from tests.support.synthetic import registry_state
         (EquivalentDoseRate, SpecificPower),
         (Exposure, SpecificCharge),
         (ExposureRate, SpecificCurrent),
+        (Fluence, SurfaceTension),
         (MolarEntropy, MolarHeatCapacity),
         (SpecificEntropy, SpecificHeatCapacity),
         (ApparentPower, Power),
@@ -94,6 +97,7 @@ def test_only_the_listed_kinds_are_specialisations() -> None:
         EquivalentDoseRate,
         Exposure,
         ExposureRate,
+        Fluence,
         Impedance,
         Magnetization,
         Reactance,

@@ -19,6 +19,7 @@ from kuchka import EquivalentDose
 from kuchka import EquivalentDoseRate
 from kuchka import Exposure
 from kuchka import ExposureRate
+from kuchka import Fluence
 from kuchka import Frequency
 from kuchka import HeatCapacity
 from kuchka import Impedance
@@ -47,6 +48,7 @@ from kuchka import SpecificHeatCapacity
 from kuchka import SpecificPower
 from kuchka import Stress
 from kuchka import SurfaceChargeDensity
+from kuchka import SurfaceTension
 from kuchka import Temperature
 from kuchka import TemperatureDelta
 from kuchka import Time
@@ -68,6 +70,7 @@ from kuchka.dimensions import SPECIFIC_ENERGY
 from kuchka.dimensions import SPECIFIC_HEAT_CAPACITY
 from kuchka.dimensions import SPECIFIC_POWER
 from kuchka.dimensions import SURFACE_CHARGE_DENSITY
+from kuchka.dimensions import SURFACE_TENSION
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.dimensions import TIME
 from kuchka.dimensions import Dimension
@@ -97,6 +100,7 @@ SHARED = {
     SPECIFIC_HEAT_CAPACITY: (SpecificHeatCapacity, SpecificEntropy),
     MOMENTUM: (Momentum, Impulse),
     MOLAR_FLOW_RATE: (MolarFlowRate, CatalyticActivity),
+    SURFACE_TENSION: (SurfaceTension, Fluence),
 }
 
 
