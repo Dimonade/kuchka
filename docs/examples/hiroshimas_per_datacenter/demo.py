@@ -12,9 +12,10 @@ from pathlib import Path
 from heat_budget import HIROSHIMA
 from heat_budget import Plant
 from heat_budget import blast_power
-from heat_budget import hiroshimas
+from heat_budget import heat_per_area
 from heat_budget import hiroshimas_per_day
 from heat_budget import hiroshimas_per_supercenter
+from heat_budget import insolation
 from heat_budget import load_scenario
 from heat_budget import time_per_hiroshima
 
@@ -24,10 +25,11 @@ from kuchka import Percent
 from kuchka import Proportion
 from kuchka.units import ACRE
 from kuchka.units import GIGAWATT
+from kuchka.units import KILOWATT_HOUR_PER_SQUARE_METRE
+from kuchka.units import MEGAJOULE_PER_SQUARE_METRE
 from kuchka.units import MINUTE
 from kuchka.units import PETAWATT
 from kuchka.units import TERAJOULE
-from kuchka.units import WATT_PER_SQUARE_METRE
 
 HERE = Path(__file__).parent
 
@@ -62,16 +64,14 @@ def main() -> None:
     )
 
     print("\nAgainst what else the ground and the sky deliver:\n")
-    sunlight = site.sunlight_per_day
-    site_flux = (heat / site.area).to(WATT_PER_SQUARE_METRE)
-    sunlight_flux = (sunlight / Day(1) / site.area).to(WATT_PER_SQUARE_METRE)
-    print(
-        f"  sunlight on the same plot      {sunlight.to(TERAJOULE):.0f} a day,"
-        f" {_count(hiroshimas(sunlight))} Hiroshimas"
-    )
-    print(
-        f"  heat flux, site against sun    {site_flux:.0f} against {sunlight_flux:.0f}"
-    )
+    sun = insolation(site)
+    site_heat = heat_per_area(heat, site)
+    for label, fluence in (("sunlight", sun), ("site heat", site_heat)):
+        print(
+            f"  {label + ' per m2 and day':<30} "
+            f"{fluence.to(MEGAJOULE_PER_SQUARE_METRE):.1f}, "
+            f"{fluence.to(KILOWATT_HOUR_PER_SQUARE_METRE):.1f}"
+        )
     nuclear = scenario.nuclear_reference
     vented = _count(hiroshimas_per_day(nuclear.waste_heat))
     label = f"nuclear plant, {nuclear.electrical_output.to(GIGAWATT):.1f}"

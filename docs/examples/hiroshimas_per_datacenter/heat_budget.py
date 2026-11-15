@@ -22,7 +22,7 @@ from typing import Final
 from kuchka import Area
 from kuchka import Day
 from kuchka import Energy
-from kuchka import HeatFlux
+from kuchka import Fluence
 from kuchka import KilotonneOfTNT
 from kuchka import Power
 from kuchka import Proportion
@@ -96,17 +96,24 @@ def hiroshimas_per_day(power: Power) -> Proportion:
     return hiroshimas(power * Day(1))
 
 
-def one_hiroshima_per_day_per_supercenter(site: Site) -> HeatFlux:
-    """Return the unit of the thread, as a heat flux: a Hiroshima a day on a store.
+def heat_per_area(power: Power, site: Site) -> Fluence:
+    """Return the heat `power` releases in a day on each square metre of the site."""
+    return power * Day(1) / site.area
 
-    Energy per area has no registered type, so the day is part of the unit.
-    """
-    return HIROSHIMA / Day(1) / site.supercenter
+
+def insolation(site: Site) -> Fluence:
+    """Return the sunlight of a day on each square metre of the site."""
+    return site.sunlight_per_day / site.area
+
+
+def one_hiroshima_per_supercenter(site: Site) -> Fluence:
+    """Return the unit of the thread: one Hiroshima spread over one supercenter."""
+    return HIROSHIMA / site.supercenter
 
 
 def hiroshimas_per_supercenter(power: Power, site: Site) -> Proportion:
-    """Return `power` spread over the site, in Hiroshimas per day per supercenter."""
-    return (power / site.area) / one_hiroshima_per_day_per_supercenter(site)
+    """Return the daily heat of `power` in Hiroshimas per supercenter."""
+    return heat_per_area(power, site) / one_hiroshima_per_supercenter(site)
 
 
 def time_per_hiroshima(power: Power) -> Time:

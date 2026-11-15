@@ -20,16 +20,20 @@ import pytest
 from heat_budget import HIROSHIMA
 from heat_budget import Plant
 from heat_budget import blast_power
+from heat_budget import heat_per_area
 from heat_budget import hiroshimas
 from heat_budget import hiroshimas_per_day
 from heat_budget import hiroshimas_per_supercenter
+from heat_budget import insolation
 from heat_budget import load_scenario
-from heat_budget import one_hiroshima_per_day_per_supercenter
+from heat_budget import one_hiroshima_per_supercenter
 from heat_budget import time_per_hiroshima
 
 from kuchka import Acre
 from kuchka import Day
+from kuchka import Fluence
 from kuchka import Gigawatt
+from kuchka import KilowattHourPerSquareMetre
 from kuchka import Millisecond
 from kuchka import Percent
 from kuchka import Petawatt
@@ -82,9 +86,10 @@ def test_a_supercenter_is_twenty_acres() -> None:
     assert SITE.supercenter == Acre(20)
 
 
-def test_the_unit_of_the_thread_is_one_hiroshima_a_day_on_a_supercenter() -> None:
-    reference = one_hiroshima_per_day_per_supercenter(SITE)
-    assert reference == HIROSHIMA / Day(1) / Acre(20)
+def test_the_unit_of_the_thread_is_one_hiroshima_on_a_supercenter() -> None:
+    reference = one_hiroshima_per_supercenter(SITE)
+    assert type(reference) is Fluence
+    assert reference == HIROSHIMA / Acre(20)
 
 
 def test_the_heat_per_supercenter_is_the_number_of_the_thread() -> None:
@@ -101,10 +106,14 @@ def test_sunlight_on_the_plot_is_about_fifty_hiroshimas_a_day() -> None:
     assert count(hiroshimas(SITE.sunlight_per_day)) == pytest.approx(51, abs=0.5)
 
 
+def test_sunlight_on_the_plot_is_about_five_and_a_half_kilowatt_hours() -> None:
+    sun = insolation(SITE)
+    assert type(sun) is Fluence
+    assert abs(sun - KilowattHourPerSquareMetre(5.5)) < KilowattHourPerSquareMetre(0.05)
+
+
 def test_the_site_heats_the_ground_less_than_the_sun_does() -> None:
-    site_flux = SITE.total_heat / SITE.area
-    sun_flux = SITE.sunlight_per_day / Day(1) / SITE.area
-    assert site_flux < sun_flux
+    assert heat_per_area(SITE.total_heat, SITE) < insolation(SITE)
 
 
 def test_a_nuclear_plant_vents_about_nine_hiroshimas_a_day() -> None:
