@@ -164,13 +164,23 @@ jobs:
         with:
           version: "0.13.7"
           enable-cache: false
+          ignore-empty-workdir: true
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist
+          path: dist/
       - name: Verify the attestation of each file
+        # `pypi-attestations` looks a `pypi:` file up on pypi.org only, so the files built
+        # here are checked against the provenance that TestPyPI serves for them.
         run: |
-          version="$VERSION"
-          for file in "kuchka-${version}-py3-none-any.whl" "kuchka-${version}.tar.gz"; do
+          for file in "kuchka-${VERSION}-py3-none-any.whl" "kuchka-${VERSION}.tar.gz"; do
             for attempt in 1 2 3 4 5; do
-              if uvx --from pypi-attestations==0.0.31 pypi-attestations verify pypi --staging \
-                --repository "https://github.com/$GITHUB_REPOSITORY" "pypi:$file"; then
+              if curl --fail --silent --show-error \
+                  --output provenance.json \
+                  "https://test.pypi.org/integrity/kuchka/${VERSION}/${file}/provenance" \
+                && uvx --from pypi-attestations==0.0.31 pypi-attestations verify pypi \
+                  --repository "https://github.com/$GITHUB_REPOSITORY" \
+                  --provenance-file provenance.json "dist/$file"; then
                 continue 2
               fi
               echo "Attempt $attempt for $file failed; the provenance may still be catching up."
