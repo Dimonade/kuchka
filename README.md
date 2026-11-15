@@ -1044,6 +1044,7 @@ The repository contains longer, task-oriented examples:
 - **[A heated beaker on a stepper-driven lever](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/heated_beaker/README.md)** - reads a TOML spec and a CSV run log whose cells mix `V`, `mV`, `°C`, and `°F`, then measures the run with angles that wrap, temperature differences, tolerances, and power into energy.
 - **[Migrating a config from unit-suffixed keys to `kuchka`](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/config_migration/README.md)** - moves units from names such as `accepted_voltage_min_mv` into TOML strings such as `"-1.000 mV"` and reads them with `parse` into typed dataclasses at the boundary.
 - **[Working around an unrepresentable intermediate dimension](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/unrepresentable_dimensions/README.md)** - shows how to handle formulas such as `P = V²/R` and parallel resistor networks when an intermediate dimension has no registered type.
+- **[Hiroshimas per datacenter](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/hiroshimas_per_datacenter/README.md)** - counts the heat of a planned off-grid data center in Hiroshimas, with an efficiency as a `Proportion`, TNT equivalents, terajoules, a heat flux over acres, and the Reddit unit of Hiroshimas per Walmart Supercenter built as a reference quantity.
 
 These examples show `kuchka` in application code, with arithmetic serving the larger engineering task.
 

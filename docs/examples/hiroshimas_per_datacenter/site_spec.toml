@@ -1,0 +1,14 @@
+# The figures of one social-media post about a planned off-grid data center.
+# Every measurement is one string: a number and its unit, read exactly by `parse`.
+# The figures are the post's own, rounded the way the post rounds them.
+
+[site]
+electrical_load = "9 GW"       # What the servers draw, fed by an on-site gas plant.
+plant_efficiency = "53 %"      # The post says 50 to 55 percent for gas turbines.
+area = "40000 acre"            # The plot.
+supercenters = 2000            # The post's yardstick: a count, so a bare number.
+sunlight_per_day = "3200 TJ"   # Sunshine on that plot, over one day.
+
+[nuclear_reference]
+electrical_output = "3.3 GW"
+efficiency = "33 %"
