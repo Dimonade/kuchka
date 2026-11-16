@@ -7,35 +7,74 @@ from fractions import Fraction
 
 import pytest
 
+from kuchka import AbsorbedDose
+from kuchka import AbsorbedDoseRate
 from kuchka import Activity
 from kuchka import ApparentPower
 from kuchka import BaudRate
+from kuchka import CatalyticActivity
+from kuchka import ElectricFluxDensity
+from kuchka import Entropy
+from kuchka import EquivalentDose
+from kuchka import EquivalentDoseRate
+from kuchka import Exposure
+from kuchka import ExposureRate
+from kuchka import Fluence
+from kuchka import Impedance
 from kuchka import IncompatibleDimensionError
+from kuchka import Magnetization
+from kuchka import MolarEntropy
+from kuchka import Reactance
 from kuchka import ReactivePower
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
+from kuchka import SpecificEntropy
 from kuchka import Stress
 from kuchka import Time
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.quantities.base import registry
-from kuchka.units import baud_rate
 from kuchka.units import proportion
-from kuchka.units import sample_rate
-from kuchka.units import time
+from kuchka.units.temporal import baud_rate
+from kuchka.units.temporal import sample_rate
+from kuchka.units.temporal import time
 from tests.support.families import FAMILIES
 
 ROLES = [f for f in FAMILIES if f.quantity in registry._SPECIALISATIONS]  # noqa: SLF001
 ROLE_IDS = [f.id for f in ROLES]
 OTHERS = [f for f in FAMILIES if f.canonical_unit.dimension != DIMENSIONLESS]
 CONVERSION = {
+    AbsorbedDose: "to_specific_energy",
+    AbsorbedDoseRate: "to_specific_power",
     Activity: "to_frequency",
     ApparentPower: "to_power",
     BaudRate: "no conversion",
+    CatalyticActivity: "to_molar_flow_rate",
+    ElectricFluxDensity: "to_surface_charge_density",
+    Entropy: "to_heat_capacity",
+    MolarEntropy: "to_molar_heat_capacity",
+    EquivalentDose: "no conversion",
+    EquivalentDoseRate: "no conversion",
+    Exposure: "to_specific_charge",
+    ExposureRate: "to_specific_current",
+    Fluence: "to_surface_tension",
+    SpecificEntropy: "to_specific_heat_capacity",
+    Impedance: "to_resistance",
+    Magnetization: "to_magnetic_field_strength",
+    Reactance: "to_resistance",
     ReactivePower: "to_power",
     SampleRate: "to_frequency",
     SamplingPeriod: "to_time",
     Stress: "to_pressure",
 }
+
+
+def _is_ruled(role: type, other: type) -> bool:
+    """Return whether a rule names a product or quotient of the two kinds."""
+    return any(
+        (left, operation, right) in registry._RULES  # noqa: SLF001
+        for operation in ("*", "/")
+        for left, right in ((role, other), (other, role))
+    )
 
 
 REFUSED = [
@@ -44,6 +83,7 @@ REFUSED = [
     for other in OTHERS
     if other.quantity is not role.quantity
     and {role.quantity, other.quantity} != {SampleRate, SamplingPeriod}
+    and not _is_ruled(role.quantity, other.quantity)
 ]
 
 
@@ -61,7 +101,10 @@ def test_a_role_is_refused_with_any_other_quantity(role, other) -> None:
 @pytest.mark.parametrize("role", ROLES, ids=ROLE_IDS)
 def test_the_refusal_names_the_conversion_out_of_the_role(role) -> None:
     other = next(
-        f for f in OTHERS if f.quantity not in {SampleRate, SamplingPeriod, BaudRate}
+        f
+        for f in OTHERS
+        if f.quantity not in {SampleRate, SamplingPeriod, BaudRate}
+        and not _is_ruled(role.quantity, f.quantity)
     )
     with pytest.raises(IncompatibleDimensionError, match=CONVERSION[role.quantity]):
         role.canonical(12) * other.canonical(3)

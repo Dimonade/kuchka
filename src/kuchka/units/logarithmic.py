@@ -1,4 +1,4 @@
-"""Logarithmic ratio quantities and constructors for the decibel and the bel.
+"""Logarithmic ratio constructors: the decibel and the bel.
 
 `LogarithmicRatio` expresses a ratio of two like quantities on a logarithmic scale:
 the gain of an amplifier, the loss of a cable, a signal-to-noise ratio.
@@ -6,6 +6,10 @@ The decibel is the canonical unit, and the bel is ten decibels.
 
 Multiplying two ratios adds their levels.
 Stages in series therefore combine by plain addition, and every such sum is exact.
+
+Amplifier gains, cable and filter losses, signal-to-noise ratios, and the dynamic range
+of converters are quoted in decibels.
+The bel, ten decibels, is the larger unit that the decibel is named after.
 
 Examples
 --------
@@ -59,6 +63,19 @@ The reverse direction is a classmethod on `LogarithmicRatio`:
 >>> LogarithmicRatio.from_power_ratio(Ratio(100)) == Decibel(20)
 True
 
+A 16-bit converter tells 2**16 amplitude steps apart, so its dynamic range is the level
+of a field ratio of 65 536:
+
+>>> f"{LogarithmicRatio.from_field_ratio(Ratio(2**16)):.1f}"
+'96.3 dB'
+
+A level and a linear ratio are different things, so the two refuse to add:
+
+>>> Decibel(3) + Ratio(2)  # doctest: +ELLIPSIS
+Traceback (most recent call last):
+...
+TypeError: ...
+
 Notes
 -----
 A level is the same number for a ratio of power quantities and for a ratio of field
@@ -70,6 +87,12 @@ Only a positive ratio has a level.
 
 `LOGARITHMIC_RATIO_UNITS` maps unit symbols (``"dB"``, ``"B"``) to their constructors
 for configuration files and other external interfaces.
+
+References
+----------
+BIPM, The International System of Units (SI Brochure), on the neper, the bel, and
+logarithmic quantities:
+https://www.bipm.org/en/publications/si-brochure
 
 See Also
 --------
@@ -118,14 +141,23 @@ def Decibel(value: Numeric) -> LogarithmicRatio:
 
     Examples
     --------
-    A microphone preamplifier adding 40 dB of gain:
+    A microphone preamplifier adds 40 dB of gain:
 
     >>> preamp_gain = Decibel(40)
+    >>> preamp_gain
+    40 dB
 
     A gain and the attenuation that undoes it cancel exactly:
 
     >>> preamp_gain + Decibel(-40) == Decibel(0)
     True
+
+    A filter is specified by its half-power point, 3 dB down, where it passes about half
+    of the power:
+
+    >>> half_power = Decibel(-3).to_power_ratio()
+    >>> f"{float(half_power.magnitude):.3f}"
+    '0.501'
 
     """
     return LogarithmicRatio(to_exact(value) * DECIBEL.scale, DECIBEL)
@@ -150,13 +182,21 @@ def Bel(value: Numeric) -> LogarithmicRatio:
 
     Examples
     --------
-    Two bels are twenty decibels:
+    A power gain of 3 B is a factor of a thousand:
+
+    >>> gain = Bel(3)
+    >>> gain
+    3 B
+    >>> from kuchka import Ratio
+    >>> gain.to_power_ratio() == Ratio(1000)
+    True
+
+    Two bels are twenty decibels, and a level displays in whichever unit it was last
+    asked to be seen in:
 
     >>> Bel(2) == Decibel(20)
     True
-
-    A level displays in whichever unit it was last asked to be seen in:
-
+    >>> from kuchka.units import BEL
     >>> Decibel(35).to(BEL)
     3.5 B
 

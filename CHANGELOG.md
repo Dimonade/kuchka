@@ -3,13 +3,156 @@
 All notable changes to kuchka are documented here.
 
 The format tries to follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
-See the `Stability` section in `README.md` for what versioning means before `0.2.0`.
+See the `Stability` section in `README.md` for what versioning means.
 
-## [0.1.5] - `develop`
+## [0.1.5] - 2026-11-16
 
 ### Added
 
+#### New quantities
+
+- **Electromagnetics:**
+  `MagneticFlux` and `MagneticFluxDensity` (weber, tesla, and gauss families), `Capacitance`, `Inductance`, `Permittivity`, `Permeability`, and `MagneticFieldStrength`, with `Magnetization` as its role.
+  `Reactance` and `Impedance` are roles of `Resistance`.
+  `ElectricFieldStrength` (V/m, kV/mm, ...), `CurrentDensity` (A/m², A/mm², mA/cm², ...), `LinearChargeDensity` (C/m, nC/m, ...), `SurfaceChargeDensity` (C/m², µC/cm², mAh/cm², ...), and `VolumeChargeDensity` (C/m³, C/cm³, Ah/L, ...), with `ElectricFluxDensity` as a role of `SurfaceChargeDensity`.
+  A polarization density reads as a `SurfaceChargeDensity`.
+- **Kinematics and rotation:**
+  `Jerk` (m/s³, mm/s³), `Snap` (m/s⁴, mm/s⁴), `AngularAcceleration` (rad/s², tr/s², °/s², rpm/s), and `AngularJerk` (rad/s³, tr/s³, °/s³).
+  `MomentOfInertia` (kg·m², kg·cm², g·cm², lb·ft², lb·in²), `AngularMomentum` (kg·m²/s, N·m·s), and `FirstMomentOfMass` (kg·m, g·cm, g·mm, oz·in), the unbalance of a rotor.
+  `kg·m²` carries the scale `(2 pi) ** 2`, the way `N·m` carries `2 pi`, so a datasheet value is typed as written.
+  The powers of a duration and of a rate, so that a product of three factors has one value in every order: `TimeSquared` (s², ms², µs², ns², min², h²), `TimeCubed` and `TimeFourthPower` (the same units), and `AngularVelocitySquared` (rad²/s², tr²/s², °²/s²).
+- **Mechanics:**
+  `SpecificEnergy` (J/kg, Wh/kg, cal/kg), `Momentum` (SI, CGS, and FPS), `Impulse` (N·s, mN·s, kN·s, dyn·s, lbf·s), `VelocitySquared`, `VolumetricFlowRate`, and `MassFlowRate`.
+  `DynamicViscosity` (Pa·s, mPa·s, µPa·s, P, cP) and `KinematicViscosity` (m²/s, mm²/s, cm²/s, µm²/s, St, cSt).
+  A thermal diffusivity and a diffusion coefficient read as a `KinematicViscosity`.
+  `SurfaceTension` (N/m, mN/m, kN/m, dyn/cm) and its role `Fluence` (J/m², MJ/m², J/cm², mJ/cm², µJ/cm², Wh/m², kWh/m²), the two kinds of one dimension.
+  A stiffness, a line load, and an interfacial tension read as a `SurfaceTension`, and a radiant exposure and an insolation as a `Fluence`.
+- **Thermodynamics:**
+  `HeatingRate` (K/s, °C/s, °F/s), `HeatCapacity` (J/K, kJ/K, cal/K, kcal/K), and `SpecificHeatCapacity` (J/(kg·K), kJ/(kg·K), cal/(g·K)).
+  `HeatFlux` (W/m², kW/m², mW/cm², ...) and `ThermalConductivity` (W/(m·K), mW/(m·K), W/(cm·K)).
+  An irradiance and a sound intensity read as a `HeatFlux`.
+  `Entropy` and `SpecificEntropy` are closed roles of them, so that `Entropy * TemperatureDelta` is refused and never silently an `Energy`.
+  `MolarHeatCapacity` (J/(mol·K), kJ/(mol·K), cal/(mol·K)) and its role `MolarEntropy`, the quantities the molar gas constant and the entropy tables of chemistry are measured in.
+  A degree Celsius in a denominator is a kelvin, so `J/°C` and `J/(kg·°C)` are accepted spellings.
+  The `thermodynamics` units package moves up the layering order, because it builds on the energy units.
+- **Chemistry:**
+  `MolarMass`, `MolarConcentration` (M, mM, µM, nM), `MolarEnergy`, `EntitiesPerAmount`, `Molality`, `MolarVolume`, `MolarFlowRate`, `CatalyticActivity` (katal and enzyme unit, a role of `MolarFlowRate`), and `MolarCharge`.
+  Ambiguous bare spellings `Da`, `u`, `ppm`, `IU`, and molal `m` are refused.
+- **Radiation:**
+  `AbsorbedDose` (gray, rad), `EquivalentDose` (sievert, rem), and `Exposure` (roentgen), the first two roles of `SpecificEnergy` and the last a role of the new `SpecificCharge` (C/kg, Ah/kg, mAh/g).
+  `AbsorbedDoseRate` (Gy/h, rad/h), `EquivalentDoseRate` (Sv/h, rem/h), and `ExposureRate` (R/h), roles of the new `SpecificPower` (W/kg) and `SpecificCurrent` (A/kg).
+  `ActivityConcentration` (Bq/m³, Bq/L, pCi/L), `SpecificActivity` (Bq/kg, pCi/g, Ci/g), and `SurfaceActivity` (Bq/cm², dpm/100 cm², Ci/km²), principal kinds of their own dimensions.
+  The `radiation` package moves up the layering order, because it builds on mechanics and electromagnetics.
+- **Photometry:**
+  `SolidAngle` (steradian, square degree), `LuminousFlux` (lumen), `Illuminance` (lux, phot, foot-candle), `LuminousEnergy` (talbot), `LuminousExposure`, `Luminance` (nit, stilb, foot-lambert), and `LuminousEfficacy` (lm/W).
+
+#### New units of existing quantities
+
+- **Length:**
+  `Parsec`, `Kiloparsec`, `Megaparsec`, and `Gigaparsec`.
+  A parsec is exactly 648000/pi astronomical units, held as that quotient with pi to 100 decimal places, and the multiples of it are exact.
+  The spelling `pc` is a parsec, where it was refused before.
+- **Temperature:**
+  `Rankine` and `DeltaRankine`: a Rankine degree is exactly 5/9 of a kelvin, and 0 °R is absolute zero, so 0 °F is exactly 459.67 °R.
+  The spellings `deg`, `degrees`, `degree`, and `Grad` stay ambiguous between the scales and are refused.
+- **Volume and density:**
+  `CubicFoot` and `UsGallon`, and milligram-per-litre and microgram-per-litre density units.
+- **Power:**
+  `JoulePerMinute`, `JoulePerHour`, `KilojoulePerMinute`, `KilojoulePerHour`, `MegajoulePerHour`, and `GigajoulePerHour`, for consumption stated as an energy per minute or hour; each is an exact fraction of a watt.
+
+#### New relationships
+
+The quantities above take part in dimensional arithmetic, and the products and quotients below have a result.
+
+- **Integer powers:**
+  A linear quantity takes an integer power: `Metre(3) ** 2` is `SquareMetre(9)`, `Second(2) ** -1` is `Hertz(0.5)`, and `q ** 0` is `Ratio(1)`.
+  A power is the product written out, so the rules of each step apply, and type checkers see the square, the cube, and the fourth power where those have a type.
+- **Mechanics:**
+  `Force / Length` and `Pressure * Length` are a `SurfaceTension`, and `SurfaceTension / Length` the `Pressure` of a curved interface.
+  `Energy / Area` and `HeatFlux * Time` are a `Fluence`, `Fluence / Time` is a `HeatFlux`, and `Fluence * Area` an `Energy`.
+- **Electromagnetics:**
+  `Voltage * Time`, `MagneticFlux / Area`, `Charge / Voltage`, `Resistance * Time`, `Current / Length`, and `Permeability * MagneticFieldStrength` derive the electromagnetic quantities.
+  `Voltage / Length`, `Force / Charge`, and `MagneticFluxDensity * Velocity` are an `ElectricFieldStrength`, and `Current / Area` and `VolumeChargeDensity * Velocity` a `CurrentDensity`.
+  `Charge / Length`, `Charge / Area`, and `Charge / Volume` are the charge densities, and each steps to the next with a division by a `Length`.
+  `Permittivity * ElectricFieldStrength` is an `ElectricFluxDensity`, `ElectricFluxDensity * Area` the `Charge` it encloses, and `ElectricFieldStrength * ElectricFluxDensity` an `EnergyDensity`, the product `E·D`.
+  `MagneticFluxDensity * MagneticFieldStrength` is an `EnergyDensity`, the product `B·H`, and `Magnetization` stays refused in it.
+  Both role families reuse their parent units through explicit conversions and dedicated unit tables.
+- **Kinematics:**
+  `Acceleration / Time` and `Velocity / TimeSquared` are a `Jerk`, `Jerk / Time` and `Acceleration / TimeSquared` a `Snap`, and `Time ** 3` and `Time ** 4` have a type.
+  `AngularAcceleration / Time` is an `AngularJerk`.
+  `Momentum * Time` and `Impulse * Time` are a `FirstMomentOfMass`.
+  Each of these raised `UnrepresentableDimensionError` before.
+- **Mechanics and thermodynamics:**
+  `SpecificEnergy` derives from energy, pressure, density, and acceleration relationships, `HeatingRate` from temperature change and time, `Momentum` from `Mass * Velocity`, `Impulse` from `Force * Time`, `VelocitySquared` from `Velocity * Velocity`, and the flow rates from volume, mass, density, area, and velocity.
+  `Pressure * VolumetricFlowRate` is a `Power`.
+  `Pressure * Time` and `Density * KinematicViscosity` are a `DynamicViscosity`, and `Area / Time`, `Velocity * Length`, and `DynamicViscosity / Density` a `KinematicViscosity`, so the Reynolds number `v * L / nu` is a `Proportion`.
+  `DynamicViscosity * Frequency` is a `Stress`, the shear stress of a shear rate `Velocity / Length`, and `Stress / Frequency` and `Stress * Time` the `DynamicViscosity` it measures.
+  `Power / Area`, `Pressure * Velocity`, and `EnergyDensity * Velocity` are a `HeatFlux`, and `HeatFlux * Area` is a `Power`.
+  `Energy / TemperatureDelta` is a `HeatCapacity`, `HeatCapacity / Mass` and `SpecificEnergy / TemperatureDelta` a `SpecificHeatCapacity`, and the heat `Q = m * c * dT` is an `Energy` however it is grouped.
+  `HeatCapacity / AmountOfSubstance` and `MolarEnergy / TemperatureDelta` are a `MolarHeatCapacity`.
+  `Entropy / Mass`, `Entropy / AmountOfSubstance`, and the matching products and quotients convert between the entropy roles and their divisors.
+  `Force / Frequency` is an `Impulse`, the force times a period; the roles of `Frequency`, such as `Activity` and `SampleRate`, stay refused in it.
+- **Chemistry:**
+  Derived from `Mass / Amount`, `Amount / Volume`, `Energy / Amount`, `Amount / Mass`, `Volume / Amount`, `Amount / Time`, and `Charge / Amount`; `MolarConcentration * MolarMass` is a `Density`.
+- **Radiation:**
+  `Velocity * Acceleration`, `Power / Mass`, and `SpecificEnergy / Time` are a `SpecificPower`, and a dose rate times a `Time` is the matching dose.
+  `Charge / Mass` is a `SpecificCharge`, and `SpecificCharge * MagneticFluxDensity` a `Frequency`.
+  `Activity / Volume`, `Activity / Mass`, and `Activity / Area` are the activity densities, and so are `Frequency / Volume`, `Frequency / Mass`, and `Frequency / Area`.
+  A `_rule` may name a role as an operand or as its result, which is how `Sievert(1) / Hour(2)` is a dose rate while `Sv * kg` stays refused.
+- **Bridges across the angle axis:**
+  [Where the radian meets a length](docs/concepts/angle_bridges.md) describes the model, and [Adding a bridge](docs/how-to/adding_a_bridge.md) how one is declared.
+  `AngularVelocity * Length` is a `Velocity`, `AngularAcceleration * Length` an `Acceleration`, `AngularJerk * Length` a `Jerk`, `Torque / Force` the lever arm, and `Torque / Length` the force at it.
+  `AngularVelocitySquared * Length` is the centripetal `Acceleration`, a bridge with the factor `(2 pi) ** 2`.
+  `AngularDisplacement * Length` is the arc swept, and an arc over its angle the radius.
+  A `MomentOfInertia` divides back into its mass, area, radius, and unbalance.
+- **Rotational dynamics:**
+  `Mass * Area` is a `MomentOfInertia`, and so is a mass at a radius in any order: `m * r * r`, `r * m * r`, and `m * r ** 2`.
+  `MomentOfInertia * AngularAcceleration` is a `Torque`, `MomentOfInertia * AngularVelocity` and `Torque * Time` an `AngularMomentum`, and `0.5 * I * omega * omega` an `Energy`.
+  `AngularVelocity * Velocity` is the centripetal `Acceleration`, `AngularVelocity * Momentum` the centripetal `Force`, and `FirstMomentOfMass * AngularVelocity` the `Momentum` of an unbalance on its circle, so `GramMillimetre(30) * omega * omega` is the force an unbalance pulls the axis with.
+  `AngularVelocity * Frequency` is an `AngularAcceleration`.
+- **Named relations:**
+  `AngularVelocity.from_tangential(velocity, radius)`, since `Velocity / Length` is a `Frequency`, and `AngularDisplacement.from_arc(arc, radius)`, since `Length / Length` is a ratio.
+  `Entropy.from_heat(heat, temperature)` is `dS = Q / T` for an `Energy` and an absolute `Temperature` on any scale, and raises `InvalidMeasurementError` at absolute zero.
+  `EquivalentDose.from_absorbed_dose(dose, weighting_factor)` and `EquivalentDoseRate.from_absorbed_dose_rate(rate, weighting_factor)` take a plain `Proportion`, and are the only way from grays to sieverts.
+  The `Frequency.to_angular_velocity()` docstring notes that a radian rate such as `v / r` reads two pi times too fast through it.
+- **Conversions:**
+  Explicit conversions between contested kinds: `Impulse` and `Momentum`, and `VelocitySquared` and `SpecificEnergy`, the latter accounting for the factor of two in kinetic energy.
+  Between a role and its parent: `to_magnetization()`, `to_electric_flux_density()`, `to_entropy()`, `to_specific_energy()`, `to_molar_flow_rate()`, and their inverses.
+  An `EquivalentDose` has no way into a `SpecificEnergy`, and a sievert times a kilogram is refused.
+- **Dimensional model:**
+  Solid angle is an independent dimension axis, so photometric arithmetic distinguishes luminous intensity from luminous flux and derives illuminance and luminance separately.
+  `Area / Area` remains a `Proportion`.
+
+#### New constants
+
+- **Boltzmann constant (k_B) and molar gas constant (R):**
+  `BOLTZMANN_CONSTANT` (an `Entropy`, 1.380649e-23 J/K, exact) and `MOLAR_GAS_CONSTANT` (a `MolarEntropy`, 8.31446261815324 J/(mol·K), exact) in `codata_2022`.
+  CODATA prints the gas constant with a trailing ellipsis because it shows a prefix: the product of the two exact defining constants has exactly those 15 digits, and the library stores all of them.
+  `AVOGADRO_CONSTANT * BOLTZMANN_CONSTANT` is `MOLAR_GAS_CONSTANT` by a rule, with no rounding, and the two quotients return the other factor.
+- **Avogadro and Faraday constants:**
+  `AVOGADRO_CONSTANT` and `FARADAY_CONSTANT` in `codata_2022`, for entity counts and molar charge calculations.
+- **Electromagnetic and atomic constants:**
+  `PLANCK_CONSTANT` and `REDUCED_PLANCK_CONSTANT` (one `AngularMomentum`, per turn and per radian, so `h / (2 pi)` is exact), `VACUUM_ELECTRIC_PERMITTIVITY`, `VACUUM_MAGNETIC_PERMEABILITY`, `CHARACTERISTIC_IMPEDANCE_OF_VACUUM`, `FINE_STRUCTURE_CONSTANT`, `ATOMIC_MASS_CONSTANT`, and `BOHR_RADIUS`, the constants the electromagnetic and angular-momentum kinds made expressible.
+- **Radiation weighting factors:**
+  `kuchka.constants.icrp_103` holds the radiation weighting factors of ICRP Publication 103 as proportions.
+
 ### Changed
+
+#### Unit modules live in themed packages
+
+`kuchka.units` keeps the base dimensions and the angle, solid angle, proportion, and logarithmic axes at its top level, and groups the other modules in `geometry`, `kinematics`, `mechanics`, `electromagnetics`, `information`, `photometry`, and `radiation`.
+Every constructor and table is still imported from `kuchka` and `kuchka.units`.
+A unit module is imported from its package, so `from kuchka.units import voltage` is now `from kuchka.units.electromagnetics import voltage`, and `kuchka.units.kinematics.force` is now `kuchka.units.mechanics.force`.
+
+The quantity types follow the same layout, one module per type in the matching package of `kuchka.quantities`: `kuchka.quantities.electrical.Voltage` is now `kuchka.quantities.electromagnetics.voltage.Voltage`, and `Force`, `Power`, and `Torque` are in `kuchka.quantities.mechanics`.
+A quantity now pickles by the name `kuchka.quantities` publishes its class under, so a pickle no longer depends on the module that defines the class and survives such a move.
+A pickle made by an earlier version names the old module and does not load when its class moved.
+
+#### Astronomical mass units follow CODATA 2022
+
+`SolarMass` is exactly 1.988410e30 kg, where it was 1.988416e30 kg: the IAU 2015 nominal solar mass parameter over the CODATA 2022 gravitational constant, to seven significant digits, the way `EarthMass` was already derived.
+The value was 3 ppm higher than that derivation gives.
+Tests tie `Dalton`, `EarthMass`, `SolarMass`, and the constants of `codata_2022` to the listing the package ships, so a new CODATA adjustment that moves one of them fails a test until the value is updated on purpose.
 
 ### Deprecated
 
@@ -340,7 +483,7 @@ Every `Time` constructor (`Second`, `Millisecond`, `Microsecond`, `Minute`, `Hou
 Was missed because `typing_extensions` is a transient dependency of `mypy` which was used in dev-dependencies.
 Fixed with import guard in `kuchka.internal.typing` for all affected Python versions.
 
-## [0.1.2] - 2026.09.22
+## [0.1.2] - 2026-09-22
 
 ### Added
 

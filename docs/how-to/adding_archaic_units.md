@@ -48,7 +48,7 @@ The bubble is a time, so it takes a second module of the same shape, with `TIME`
 ```python
 from kuchka.units.archaic.krakenpeople.length import Shell
 from kuchka.units.archaic.krakenpeople.time import Bubble
-from kuchka.units.length import CENTIMETRE
+from kuchka.units import CENTIMETRE
 
 reef_wall = Shell(40)
 reef_wall.to(CENTIMETRE)  # 120 cm
@@ -62,7 +62,7 @@ Archaic units are unpublished: a value displayed in one copies freely, and it pi
 
 The module docstring records where the definitions come from and where sources disagree.
 A scale is the one historical definition the module adopts, and each distinct calibration is a separate unit.
-Docstrings describe what a unit is and how it is used, in the style of [Writing documentation](writing_documentation.md).
+Docstrings describe what a unit is and how it is used, in the style of [Writing documentation](writing_documentation.md) and [Writing unit documentation](writing_unit_documentation.md).
 
 ## Checklist
 

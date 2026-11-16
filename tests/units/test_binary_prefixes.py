@@ -13,7 +13,7 @@ import pytest
 from kuchka.internal import prefixes
 from kuchka.internal.prefixes import Prefix
 from kuchka.internal.prefixes import with_prefix
-from kuchka.units import data
+from kuchka.units.information import data
 
 BINARY_PREFIXES = [
     (prefixes.KIBI, "kibi", "Ki", 10, "1024"),

@@ -3,7 +3,7 @@ from __future__ import annotations
 from kuchka.dimensions import Dimension
 from kuchka.internal import symbols
 from kuchka.units import thermal
-from kuchka.units import voltage as voltage_units
+from kuchka.units.electromagnetics import voltage as voltage_units
 
 
 def test_empty_format_spec_matches_repr() -> None:
@@ -40,6 +40,7 @@ def test_dimensions_superscripts() -> None:
         amount=0,
         luminous_intensity=-9000,
         angle=1991,
+        solid_angle=-2,
         information=3,
     )
-    assert d.__repr__() == "T⁻¹⁷ M⁻⁴²⁰ I¹⁰²⁴ Θ⁻⁵¹² J⁻⁹⁰⁰⁰ ∠¹⁹⁹¹ D³"
+    assert d.__repr__() == "T⁻¹⁷ M⁻⁴²⁰ I¹⁰²⁴ Θ⁻⁵¹² J⁻⁹⁰⁰⁰ ∠¹⁹⁹¹ ∢⁻² D³"

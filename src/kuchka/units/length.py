@@ -1,15 +1,14 @@
-"""Length quantities and constructors for engineering, science, and space.
+"""Length constructors: from picometres to gigaparsecs.
 
 `Length` represents one-dimensional distance. The metre is the canonical SI base unit,
 while the constructors in this module provide convenient entry points from metric
 prefixes and a small set of exact non-SI units.
 
 `Metre` is the canonical spelling adopted by the BIPM.
-American spellings (`Meter`, `Millimeter`, `Kilometer`, ...) are true aliases of the
-same objects, not wrappers or duplicate implementations.
-Both spellings display using the same SI symbols.
+American spellings (`Meter`, `Millimeter`, `Kilometer`, ...) are aliases of the same
+objects, and both spellings display using the same SI symbols.
 
-Every imperial unit implemented here is an **exact** decimal multiple of the metre.
+Every imperial unit implemented here is an exact decimal multiple of the metre.
 Since the 1959 international yard and pound agreement, conversions such as
 `1 in = 25.4 mm` and `1 ft = 0.3048 m` are exact, so they preserve the same `Decimal`
 precision guarantees as SI prefixes.
@@ -17,6 +16,12 @@ precision guarantees as SI prefixes.
 The astronomical unit and light-year extend the same `Length` quantity to astronomical
 scales. The astronomical unit (`au`) is an exact conventional length, while the
 light-year (`ly`) is the exact distance light travels in a Julian year.
+The parsec (`pc`) is defined as exactly 648000/pi astronomical units, the distance at
+which one astronomical unit subtends one arcsecond.
+Pi is irrational, so `kuchka` holds a parsec as that quotient with pi to 100 decimal
+places, the same pi `Radian` uses: the parsec is within one part in 1E+100 of its
+defined length, and the parsecs, kiloparsecs, and megaparsecs among themselves stay
+exact.
 
 Examples
 --------
@@ -33,9 +38,9 @@ A human hair is roughly 70 µm thick:
 
 >>> hair_diameter = Micrometre(70)
 
-Modern semiconductor processes are measured in nanometres:
+Visible light has wavelengths of hundreds of nanometres:
 
->>> transistor_node = Nanometre(3)
+>>> green_laser = Nanometre(532)
 
 Large distances remain the same quantity.
 A marathon is 42.195 km:
@@ -79,8 +84,8 @@ Notes
 -----
 Metric prefixes represent exact powers of ten.
 
-Imperial units implemented by this module are exact by definition, not measured
-approximations. This means comparisons such as
+Imperial units implemented by this module are exact by definition, so comparisons
+such as
 
 >>> Inch(1) == Millimetre(25.4)
 True
@@ -91,13 +96,31 @@ The astronomical unit is defined exactly as:
 
     1 au = 149597870700 m
 
+The parsec is defined by the IAU (2015, resolution B2) as:
+
+    1 pc = 648000 / pi au = 3.0856775814913672789139...e16 m
+
 The light-year is defined from the exact speed of light and the Julian year of
 365.25 days:
 
     1 ly = 9460730472580800 m
 
-`LENGTH_UNITS` maps symbols such as ``"mm"``, ``"km"``, ``"in"``, ``"au"``, and
-``"ly"`` to their constructors for configuration files and other external interfaces.
+`LENGTH_UNITS` maps symbols such as ``"mm"``, ``"km"``, ``"in"``, ``"au"``,
+``"ly"``, and ``"pc"`` to their constructors for configuration files and other
+external interfaces.
+
+References
+----------
+BIPM, The International System of Units (SI Brochure), on the metre and the units
+accepted for use with the SI:
+https://www.bipm.org/en/publications/si-brochure
+
+IAU 2015 Resolution B2, which defines the parsec and fixes the astronomical unit:
+https://arxiv.org/abs/1510.06262
+
+NIST, Guide for the Use of the International System of Units, Appendix B.8, factors
+for units listed alphabetically:
+https://www.nist.gov/node/777676
 
 See Also
 --------
@@ -113,12 +136,15 @@ See Also
 from __future__ import annotations
 
 from decimal import Decimal
+from fractions import Fraction
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import LENGTH
 from kuchka.internal import prefixes
 from kuchka.internal import symbols
+from kuchka.internal.constants import PI
 from kuchka.internal.prefixes import prefixed_unit
+from kuchka.internal.prefixes import with_prefix
 from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import Numeric
 from kuchka.numeric import to_exact
@@ -192,9 +218,17 @@ def Picometre(value: Numeric) -> Length:
 
     Examples
     --------
-    A typical covalent bond is about 154 pm long:
+    A typical covalent bond between two carbon atoms is about 154 pm long:
 
     >>> carbon_bond = Picometre(154)
+    >>> carbon_bond
+    154 pm
+
+    Structural biology quotes the same length in nanometres:
+
+    >>> from kuchka.units import NANOMETRE
+    >>> carbon_bond.to(NANOMETRE)
+    0.154 nm
 
     """
     return Length(to_exact(value) * PICOMETRE.scale, PICOMETRE)
@@ -215,9 +249,19 @@ def Nanometre(value: Numeric) -> Length:
 
     Examples
     --------
-    A modern 3 nm transistor process is measured on the nanometre scale:
+    A green laser pointer emits light with a wavelength of about 532 nm:
 
-    >>> process_node = Nanometre(3)
+    >>> wavelength = Nanometre(532)
+    >>> wavelength
+    532 nm
+
+    Light travels at the speed of light, so dividing it by the wavelength gives the
+    frequency, about 563 THz:
+
+    >>> from kuchka.constants.codata_2022 import SPEED_OF_LIGHT_IN_VACUUM
+    >>> from kuchka.units import TERAHERTZ
+    >>> f"{(SPEED_OF_LIGHT_IN_VACUUM / wavelength).to(TERAHERTZ):.1f}"
+    '563.5 THz'
 
     """
     return Length(to_exact(value) * NANOMETRE.scale, NANOMETRE)
@@ -241,6 +285,14 @@ def Micrometre(value: Numeric) -> Length:
     A human hair is approximately 70 µm thick:
 
     >>> hair = Micrometre(70)
+    >>> hair
+    70 µm
+
+    A red blood cell is about 7 µm across, so ten of them in a row span a hair:
+
+    >>> red_blood_cell = Micrometre(7)
+    >>> round((hair / red_blood_cell).magnitude)
+    10
 
     """
     return Length(to_exact(value) * MICROMETRE.scale, MICROMETRE)
@@ -264,10 +316,20 @@ def Millimetre(value: Numeric) -> Length:
     Two machined parts with a 0.2 mm clearance produce a precise assembly gap:
 
     >>> shaft = Millimetre(12)
+    >>> shaft
+    12 mm
     >>> bore = Millimetre(12.2)
     >>> clearance = bore - shaft
     >>> clearance
     0.2 mm
+
+    A clearance that arrives as text, as a drawing or a spreadsheet writes it, enters
+    through `parse`:
+
+    >>> from kuchka import Length
+    >>> from kuchka import parse
+    >>> parse("0.2 mm", Length) == clearance
+    True
 
     """
     return Length(to_exact(value) * MILLIMETRE.scale, MILLIMETRE)
@@ -291,6 +353,14 @@ def Centimetre(value: Numeric) -> Length:
     A postcard is about 15 cm wide:
 
     >>> postcard_width = Centimetre(15)
+    >>> postcard_width
+    15 cm
+
+    The same width on an inch ruler is a little under six inches:
+
+    >>> from kuchka.units import INCH
+    >>> f"{postcard_width.to(INCH):.2f}"
+    '5.91 in'
 
     """
     return Length(to_exact(value) * CENTIMETRE.scale, CENTIMETRE)
@@ -311,9 +381,20 @@ def Decimetre(value: Numeric) -> Length:
 
     Examples
     --------
-    A 6 dm ruler is exactly 60 cm long:
+    A 6 dm drafting ruler is exactly 60 cm long:
 
     >>> drafting_ruler = Decimetre(6)
+    >>> drafting_ruler
+    6 dm
+    >>> from kuchka import Centimetre
+    >>> drafting_ruler == Centimetre(60)
+    True
+
+    A cube 1 dm on a side holds one litre, which is where the litre comes from:
+
+    >>> from kuchka import Litre
+    >>> Decimetre(1) * Decimetre(1) * Decimetre(1) == Litre(1)
+    True
 
     """
     return Length(to_exact(value) * DECIMETRE.scale, DECIMETRE)
@@ -334,9 +415,19 @@ def Metre(value: Numeric) -> Length:
 
     Examples
     --------
-    The high jump world-class bar height is around two and a half metres:
+    The world-class high jump bar height is around two and a half metres:
 
     >>> high_jump_bar = Metre(2.45)
+    >>> high_jump_bar
+    2.45 m
+
+    A 100 m sprint in 9.58 s is an average speed of about 37.6 km/h:
+
+    >>> from kuchka import Second
+    >>> from kuchka.units import KILOMETRE_PER_HOUR
+    >>> sprint = Metre(100) / Second(9.58)
+    >>> f"{sprint.to(KILOMETRE_PER_HOUR):.1f}"
+    '37.6 km/h'
 
     """
     return Length(to_exact(value) * METRE.scale, METRE)
@@ -360,6 +451,14 @@ def Kilometre(value: Numeric) -> Length:
     The official marathon distance is 42.195 km:
 
     >>> marathon = Kilometre(42.195)
+    >>> marathon
+    42.195 km
+
+    The same race in the miles that road signs show in the United States:
+
+    >>> from kuchka.units import MILE
+    >>> f"{marathon.to(MILE):.3f}"
+    '26.219 mi'
 
     """
     return Length(to_exact(value) * KILOMETRE.scale, KILOMETRE)
@@ -406,13 +505,20 @@ def Inch(value: Numeric) -> Length:
 
     Examples
     --------
-    A 3D printer enclosure may combine imperial hardware with metric sheet metal:
+    A laptop screen is sold by its diagonal of 14 in:
 
-    >>> screw_spacing = Inch(2)
-    >>> panel_width = Millimetre(80)
-    >>> usable_width = panel_width - screw_spacing
-    >>> usable_width
-    29.2 mm
+    >>> screen = Inch(14)
+    >>> screen
+    14 in
+    >>> from kuchka.units import CENTIMETRE
+    >>> screen.to(CENTIMETRE)
+    35.56 cm
+
+    The conversion factor to the millimetre is exact:
+
+    >>> from kuchka import Millimetre
+    >>> Inch(1) == Millimetre(25.4)
+    True
 
     """
     return Length(to_exact(value) * INCH.scale, INCH)
@@ -446,6 +552,17 @@ def Foot(value: Numeric) -> Length:
     A standard basketball hoop is 10 ft above the floor:
 
     >>> hoop_height = Foot(10)
+    >>> hoop_height
+    10 ft
+    >>> from kuchka.units import METRE
+    >>> hoop_height.to(METRE)
+    3.048 m
+
+    Aviation quotes cruising altitudes in feet, and flight level 350 is 35 000 ft:
+
+    >>> from kuchka.units import KILOMETRE
+    >>> Foot(35_000).to(KILOMETRE)
+    10.668 km
 
     """
     return Length(to_exact(value) * FOOT.scale, FOOT)
@@ -469,9 +586,21 @@ def Yard(value: Numeric) -> Length:
 
     Examples
     --------
-    The width of an American football field is 53 and 1/3 yards:
+    An American football field is 100 yd between the goal lines:
 
-    >>> field_width = Yard(53.3333333333)
+    >>> field = Yard(100)
+    >>> field
+    100 yd
+    >>> from kuchka.units import METRE
+    >>> field.to(METRE)
+    91.44 m
+
+    The field is 160 ft wide, which is 53 and 1/3 yd, and an exact fraction keeps it so:
+
+    >>> from fractions import Fraction
+    >>> from kuchka import Foot
+    >>> Yard(Fraction(160, 3)) == Foot(160)
+    True
 
     """
     return Length(to_exact(value) * YARD.scale, YARD)
@@ -498,9 +627,18 @@ def Mile(value: Numeric) -> Length:
     A 5-mile training run can be compared directly with metric distances:
 
     >>> morning_run = Mile(5)
+    >>> morning_run
+    5 mi
+    >>> from kuchka import Kilometre
     >>> race_distance = Kilometre(8)
     >>> sorted([morning_run, race_distance])
     [8 km, 5 mi]
+
+    The mile is an exact length in kilometres:
+
+    >>> from kuchka.units import KILOMETRE
+    >>> Mile(1).to(KILOMETRE)
+    1.609344 km
 
     """
     return Length(to_exact(value) * MILE.scale, MILE)
@@ -531,9 +669,18 @@ def NauticalMile(value: Numeric) -> Length:
     A ship travelling 120 nautical miles covers exactly 222.24 km:
 
     >>> voyage = NauticalMile(120)
-    >>> equivalent = Kilometre(222.24)
-    >>> voyage == equivalent
+    >>> voyage
+    120 M
+    >>> from kuchka import Kilometre
+    >>> voyage == Kilometre(222.24)
     True
+
+    A knot is a nautical mile per hour:
+
+    >>> from kuchka import Hour
+    >>> from kuchka.units import KNOT
+    >>> (NauticalMile(1) / Hour(1)).to(KNOT)
+    1 kn
 
     """
     return Length(to_exact(value) * NAUTICAL_MILE.scale, NAUTICAL_MILE)
@@ -556,6 +703,17 @@ LIGHT_YEAR = UnitDef(
     aliases=("lyr", "l.y."),
     words=("light-year", "lightyear"),
 )
+PARSEC = UnitDef(
+    "parsec",
+    "pc",
+    Fraction(648000) * ASTRONOMICAL_UNIT.scale / PI,
+    LENGTH,
+    words=("parsec",),
+)
+"""The parsec: exactly 648000/pi astronomical units, with pi to 100 decimal places."""
+KILOPARSEC = with_prefix(prefixes.KILO, PARSEC)
+MEGAPARSEC = with_prefix(prefixes.MEGA, PARSEC)
+GIGAPARSEC = with_prefix(prefixes.GIGA, PARSEC)
 
 
 def AstronomicalUnit(value: Numeric) -> Length:
@@ -576,8 +734,19 @@ def AstronomicalUnit(value: Numeric) -> Length:
     The astronomical unit is useful for expressing distances within the Solar System:
 
     >>> earth_sun_distance = AstronomicalUnit(1)
-    >>> earth_sun_distance.to(KILOMETRE) == Kilometre(Decimal("149597870.7"))
-    True
+    >>> earth_sun_distance
+    1 au
+    >>> from kuchka.units import KILOMETRE
+    >>> earth_sun_distance.to(KILOMETRE)
+    149597870.7 km
+
+    Sunlight reaches the Earth after the distance divided by the speed of light, about
+    eight minutes and twenty seconds:
+
+    >>> from kuchka.constants.codata_2022 import SPEED_OF_LIGHT_IN_VACUUM
+    >>> from kuchka.units import MINUTE
+    >>> f"{(earth_sun_distance / SPEED_OF_LIGHT_IN_VACUUM).to(MINUTE):.2f}"
+    '8.32 min'
 
     """
     return Length(to_exact(value) * ASTRONOMICAL_UNIT.scale, ASTRONOMICAL_UNIT)
@@ -598,15 +767,166 @@ def LightYear(value: Numeric) -> Length:
 
     Examples
     --------
-    A light-year is the distance travelled by light during one Julian year.
-    Its exact SI conversion is:
+    Proxima Centauri, the nearest star beyond the Sun, is about 4.25 ly away:
 
-    >>> distance = LightYear(1)
-    >>> distance.to(KILOMETRE)
+    >>> from decimal import Decimal
+    >>> nearest_star = LightYear(Decimal("4.25"))
+    >>> nearest_star
+    4.25 ly
+
+    A light-year is the distance light travels in one Julian year, and its exact SI
+    conversion is:
+
+    >>> from kuchka.units import KILOMETRE
+    >>> LightYear(1).to(KILOMETRE)
     9460730472580.8 km
 
     """
     return Length(to_exact(value) * LIGHT_YEAR.scale, LIGHT_YEAR)
+
+
+def Parsec(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in parsecs.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in parsecs.
+
+    Returns
+    -------
+    Length
+        Length represented in parsecs.
+
+    Notes
+    -----
+    A parsec is exactly 648000/pi astronomical units.
+    kuchka holds pi to 100 decimal places, so a parsec is within one part in 1E+100 of
+    that length, and the kiloparsec, megaparsec, and gigaparsec are exact multiples of
+    it.
+
+    Examples
+    --------
+    The distance between neighbouring stars in the Galactic disc is of the order of a
+    parsec:
+
+    >>> separation = Parsec(1)
+    >>> separation
+    1 pc
+
+    A parsec is about 3.26 light-years:
+
+    >>> from kuchka.units import LIGHT_YEAR
+    >>> f"{separation.to(LIGHT_YEAR):.2f}"
+    '3.26 ly'
+
+    A parsec is the distance at which an astronomical unit subtends one arcsecond:
+
+    >>> from kuchka.units import ASTRONOMICAL_UNIT
+    >>> from kuchka.units import RADIAN
+    >>> from kuchka.units import ArcSecond
+    >>> Parsec(1).value_in(ASTRONOMICAL_UNIT) * ArcSecond(1).value_in(RADIAN) == 1
+    True
+
+    """
+    return Length(to_exact(value) * PARSEC.scale, PARSEC)
+
+
+def Kiloparsec(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in kiloparsecs.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in kiloparsecs.
+
+    Returns
+    -------
+    Length
+        Length represented in kiloparsecs.
+
+    Examples
+    --------
+    The Sun lies about 8.2 kpc from the centre of the Milky Way:
+
+    >>> galactic_centre = Kiloparsec(8.2)
+    >>> galactic_centre
+    8.2 kpc
+
+    That is about twenty-seven thousand light-years:
+
+    >>> from kuchka.units import LIGHT_YEAR
+    >>> f"{galactic_centre.to(LIGHT_YEAR):.3e}"
+    '2.674e+4 ly'
+
+    """
+    return Length(to_exact(value) * KILOPARSEC.scale, KILOPARSEC)
+
+
+def Megaparsec(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in megaparsecs.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in megaparsecs.
+
+    Returns
+    -------
+    Length
+        Length represented in megaparsecs.
+
+    Examples
+    --------
+    The Andromeda galaxy is about 0.78 Mpc away:
+
+    >>> andromeda = Megaparsec(0.78)
+    >>> andromeda
+    0.78 Mpc
+    >>> from kuchka.units import KILOPARSEC
+    >>> andromeda.to(KILOPARSEC)
+    780 kpc
+
+    Galaxy catalogues list distances in this unit, and `parse` reads one as text:
+
+    >>> from kuchka import Length
+    >>> from kuchka import parse
+    >>> parse("0.78 Mpc", Length) == andromeda
+    True
+
+    """
+    return Length(to_exact(value) * MEGAPARSEC.scale, MEGAPARSEC)
+
+
+def Gigaparsec(value: Numeric) -> Length:
+    """Construct a Length from a magnitude expressed in gigaparsecs.
+
+    Parameters
+    ----------
+    value : Numeric
+        Length magnitude in gigaparsecs.
+
+    Returns
+    -------
+    Length
+        Length represented in gigaparsecs.
+
+    Examples
+    --------
+    The radius of the observable universe is about 14.2 Gpc in comoving distance:
+
+    >>> observable_universe = Gigaparsec(14.2)
+    >>> observable_universe
+    14.2 Gpc
+
+    In light-years, that is about 46 billion:
+
+    >>> from kuchka.units import LIGHT_YEAR
+    >>> f"{observable_universe.to(LIGHT_YEAR):.2e}"
+    '4.63e+10 ly'
+
+    """
+    return Length(to_exact(value) * GIGAPARSEC.scale, GIGAPARSEC)
 
 
 LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = unit_table(
@@ -627,6 +947,10 @@ LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = unit_table(
         NAUTICAL_MILE: NauticalMile,
         ASTRONOMICAL_UNIT: AstronomicalUnit,
         LIGHT_YEAR: LightYear,
+        PARSEC: Parsec,
+        KILOPARSEC: Kiloparsec,
+        MEGAPARSEC: Megaparsec,
+        GIGAPARSEC: Gigaparsec,
     },
 )
 
@@ -637,11 +961,14 @@ __all__ = [
     "DECIMETER",
     "DECIMETRE",
     "FOOT",
+    "GIGAPARSEC",
     "INCH",
     "KILOMETER",
     "KILOMETRE",
+    "KILOPARSEC",
     "LENGTH_UNITS",
     "LIGHT_YEAR",
+    "MEGAPARSEC",
     "METER",
     "METRE",
     "MICROMETER",
@@ -652,6 +979,7 @@ __all__ = [
     "NANOMETER",
     "NANOMETRE",
     "NAUTICAL_MILE",
+    "PARSEC",
     "PICOMETER",
     "PICOMETRE",
     "YARD",
@@ -661,10 +989,13 @@ __all__ = [
     "Decimeter",
     "Decimetre",
     "Foot",
+    "Gigaparsec",
     "Inch",
     "Kilometer",
     "Kilometre",
+    "Kiloparsec",
     "LightYear",
+    "Megaparsec",
     "Meter",
     "Metre",
     "Micrometer",
@@ -675,6 +1006,7 @@ __all__ = [
     "Nanometer",
     "Nanometre",
     "NauticalMile",
+    "Parsec",
     "Picometer",
     "Picometre",
     "Yard",

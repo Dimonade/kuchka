@@ -35,7 +35,18 @@ from kuchka.quantities.base.registry import _register
 if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+    from kuchka.quantities.chemistry.molar_energy import MolarEnergy
+    from kuchka.quantities.chemistry.molar_heat_capacity import MolarHeatCapacity
+    from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
     from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermodynamics.heat_capacity import HeatCapacity
+    from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
+    from kuchka.quantities.thermodynamics.specific_heat_capacity import (
+        SpecificHeatCapacity,
+    )
 
 
 class TemperatureDelta(LinearQuantity):
@@ -44,27 +55,45 @@ class TemperatureDelta(LinearQuantity):
     dimension: ClassVar[Dimension] = TEMPERATURE_DELTA
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: Frequency) -> HeatingRate: ...
+    @overload
+    def __mul__(self, other: HeatCapacity) -> Energy: ...
+    @overload
+    def __mul__(self, other: MolarHeatCapacity) -> MolarEnergy: ...
     @overload
     def __mul__(self, other: Proportion) -> TemperatureDelta: ...
+    @overload
+    def __mul__(self, other: SpecificHeatCapacity) -> SpecificEnergy: ...
     @overload
     def __mul__(self, other: Numeric) -> TemperatureDelta: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: HeatingRate) -> Time: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> TemperatureDelta: ...
     @overload
     def __truediv__(self, other: TemperatureDelta) -> Proportion: ...
     @overload
-    def __truediv__(self, other: Proportion) -> TemperatureDelta: ...
+    def __truediv__(self, other: Time) -> HeatingRate: ...
     @overload
     def __truediv__(self, other: Numeric) -> TemperatureDelta: ...
     @overload
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

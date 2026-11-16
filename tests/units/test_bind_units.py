@@ -11,11 +11,11 @@ from kuchka.dimensions import VOLTAGE
 from kuchka.internal.unit_table import units_of
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base.units import bind_units
-from kuchka.units import frequency
-from kuchka.units import instant
-from kuchka.units import sample_rate
-from kuchka.units import time
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.temporal import frequency
+from kuchka.units.temporal import instant
+from kuchka.units.temporal import sample_rate
+from kuchka.units.temporal import time
 
 
 def _fresh_type() -> type[LinearQuantity]:

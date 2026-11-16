@@ -1,0 +1,102 @@
+"""Molar energy: the energy per mole of a substance."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import overload
+
+from kuchka.dimensions import MOLAR_ENERGY
+from kuchka.internal.typing import override
+from kuchka.quantities.base import LinearQuantity
+from kuchka.quantities.base.registry import _register
+
+if TYPE_CHECKING:
+    from fractions import Fraction
+
+    from kuchka.dimensions import Dimension
+    from kuchka.numeric import Numeric
+    from kuchka.quantities.amount import AmountOfSubstance
+    from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
+    from kuchka.quantities.chemistry.molar_charge import MolarCharge
+    from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
+    from kuchka.quantities.chemistry.molar_heat_capacity import MolarHeatCapacity
+    from kuchka.quantities.chemistry.molar_mass import MolarMass
+    from kuchka.quantities.chemistry.molar_volume import MolarVolume
+    from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.pressure import Pressure
+    from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+    from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
+    from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.thermal import TemperatureDelta
+
+
+class MolarEnergy(LinearQuantity):
+    """The energy per mole of a substance, such as a reaction enthalpy."""
+
+    dimension: ClassVar[Dimension] = MOLAR_ENERGY
+    __slots__ = ()
+
+    # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: AmountOfSubstance) -> Energy: ...
+    @overload
+    def __mul__(self, other: MolarFlowRate) -> Power: ...
+    @overload
+    def __mul__(self, other: Proportion) -> MolarEnergy: ...
+    @overload
+    def __mul__(self, other: Numeric) -> MolarEnergy: ...
+    @overload
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__mul__(other)
+
+    # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: Energy) -> EntitiesPerAmount: ...
+    @overload
+    def __truediv__(self, other: EnergyDensity) -> MolarVolume: ...
+    @overload
+    def __truediv__(self, other: EntitiesPerAmount) -> Energy: ...
+    @overload
+    def __truediv__(self, other: MolarCharge) -> Voltage: ...
+    @overload
+    def __truediv__(self, other: MolarEnergy) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: MolarHeatCapacity) -> TemperatureDelta: ...
+    @overload
+    def __truediv__(self, other: Pressure) -> MolarVolume: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> MolarEnergy: ...
+    @overload
+    def __truediv__(self, other: SpecificEnergy) -> MolarMass: ...
+    @overload
+    def __truediv__(self, other: TemperatureDelta) -> MolarHeatCapacity: ...
+    @overload
+    def __truediv__(self, other: VelocitySquared) -> MolarMass: ...
+    @overload
+    def __truediv__(self, other: Voltage) -> MolarCharge: ...
+    @overload
+    def __truediv__(self, other: Numeric) -> MolarEnergy: ...
+    @overload
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__truediv__(other)
+
+
+_register(MOLAR_ENERGY, MolarEnergy)
+
+__all__ = ["MolarEnergy"]

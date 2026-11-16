@@ -24,6 +24,7 @@ Area * Length       -> Volume
 
 A quantity type displays in the units of its own `*_UNITS` table, and in no unit of another type, even one with the same dimension.
 `Frequency`, `BaudRate`, `SampleRate`, and `Activity` share the dimension T⁻¹, and each has its own units: the hertz, the baud, the sample per second, and the becquerel.
+`AbsorbedDose` and `EquivalentDose` share L²T⁻² with `SpecificEnergy`, with the gray and the sievert as their units and the rad and the rem as their older ones.
 `Hertz(1).to(BAUD)` raises `InvalidConversionError`, and `Frequency(Fraction(1), BAUD)` raises `InvalidMeasurementError`, and both name the type the unit belongs to.
 A unit can belong to several types: the second is a unit of `Time` and of `SamplingPeriod`.
 
@@ -64,6 +65,20 @@ That separates torque from energy and angular velocity from the hertz, which hav
 Turn is the canonical angle, so the canonical units are the turn, the turn per second, and the joule per turn, and a radian enters as the exact factor `1 / (2 pi)`.
 Arithmetic results display in the radian, the radian per second, and the newton-metre.
 
+## The solid angle axis
+
+`Dimension` counts solid angle as an axis of its own, so luminous flux is luminous intensity times solid angle and illuminance is flux per area.
+That separates the lumen from the candela, which have the same dimension in SI's base-quantity accounting, where the steradian is a square metre per square metre.
+
+The axis is not the square of the angle axis, because a solid angle is not the product of two plane angles: `AngularDisplacement * AngularDisplacement` has no registered type.
+It is not reached by cancelling areas either, because `Area / Area` is a `Proportion`.
+A `SolidAngle` comes from a constructor, or from `SolidAngle.from_area(area, radius)`, the area an object cuts from a sphere over the radius squared.
+
+The steradian is the canonical solid angle, so a candela steradian is a lumen and a lumen per square metre is a lux, with no factor between them.
+Only the square degree and its relatives, which are the angle units squared, carry pi.
+`Candela * Steradian` is a `LuminousFlux`, `LuminousFlux / Area` an `Illuminance`, and `LuminousFlux * Time` a `LuminousEnergy`, which `/ Area` turns into a `LuminousExposure`.
+`LuminousIntensity / Area` is a `Luminance`, which has no solid angle in it, and `LuminousFlux / Power` is a `LuminousEfficacy`.
+
 ## The information axis
 
 `Dimension` counts information as an axis of its own, so data is a dimension and a data rate is data per time.
@@ -98,6 +113,7 @@ The type of a product or quotient is decided in this order:
 2. Any other dimensionless result is a plain `Fraction`: `Hertz(2) * Second(3)` counts cycles.
 3. A dimensionless operand, a `Proportion`, keeps the kind of the other operand: `SampleRate(...) * Percent(50)` is a `SampleRate`.
 4. A rule for the operand kinds names the kind, for a dimension that has several linear kinds: `Pressure` and `EnergyDensity` share M L⁻¹ T⁻², so `Force / Area` is a `Pressure` and `Energy / Volume` an `EnergyDensity`.
+   A bridge is a rule whose result differs from the plain product on the angle axis alone, described in [Where the radian meets a length](angle_bridges.md).
 5. Otherwise the principal kind of the dimension is the result, and a contested dimension raises `AmbiguousKindError`.
 
 A specialisation is checked before any of those.
@@ -115,12 +131,61 @@ SamplesPerSecond(48_000) * Second(2)  # rejected: `IncompatibleDimensionError`.
 SamplesPerSecond(48_000).to_frequency() * Second(2) == 96_000
 ```
 
+## Powers
+
+A linear quantity raised to an integer power is the product written out, so `side ** 3` is `side * side * side`, and each step is a product the registry gives a type:
+
+```python
+from kuchka import Metre
+from kuchka import MetrePerSecond
+from kuchka import Ratio
+from kuchka import Second
+from kuchka import SquareMetre
+
+Metre(3) ** 2 == SquareMetre(9)
+type(MetrePerSecond(3) ** 2).__name__ == "VelocitySquared"
+Second(2) ** -1  # a Frequency of 0.5 Hz
+Metre(3) ** 0 == Ratio(1)
+```
+
+A negative exponent gives the reciprocal of the positive power, and an exponent is an `int`.
+Type checkers see the square, the cube, and the fourth power of a type whose power has a type of its own.
+
+## Products of three factors
+
+Python evaluates `a * b * c` as `(a * b) * c`, and each step is a product the registry gives a type.
+The squares in common formulas have kinds of their own (`TimeSquared`, `TimeCubed`, `AngularVelocitySquared`, `VelocitySquared`, `Area`), so those formulas read the same in every order:
+
+```python
+from kuchka import Metre
+from kuchka import MetrePerSecondSquared
+from kuchka import Second
+
+g = MetrePerSecondSquared(9.81)
+t = Second(2)
+g * t * t == t * t * g == t**2 * g == Metre(39.24)
+```
+
+A first step with no kind raises, even where another grouping of the same factors closes:
+
+```python
+from kuchka import Hertz
+from kuchka import Metre
+
+Metre(1) * Hertz(2) * Hertz(2)  # an Acceleration of 4 m/s².
+Hertz(2) * Hertz(2) * Metre(1)  # rejected: `UnrepresentableDimensionError`.
+```
+
 ## Ratios
 
 A ratio is a `Proportion`, and it displays as the coherent ratio:
 
 ```python
-from kuchka import Hertz, Percent, Ratio, Second, Volt
+from kuchka import Hertz
+from kuchka import Percent
+from kuchka import Ratio
+from kuchka import Second
+from kuchka import Volt
 
 gain = Volt(5) / Volt(2)
 gain == Ratio(2.5)
@@ -162,7 +227,7 @@ A conversion that has a domain raises `InvalidMeasurementError` outside it, and 
 ## Type-checker support
 
 The runtime engine can derive arbitrary dimensions, but static type checkers cannot infer a semantic mapping such as `Voltage * Current -> Power` from exponent arithmetic alone.
-`kuchka` therefore maintains explicit overloads for registered derived quantities.
+`kuchka` therefore declares explicit overloads for registered derived quantities, generated from the same registry the runtime uses.
 
 This keeps arithmetic visible to mypy and ty while retaining a general runtime model.
 
@@ -203,3 +268,12 @@ isinstance(rate, Frequency)
 ```
 
 `BaudRate` has no automatic reciprocal relationship because baud counts symbols per second, not bits or cycles.
+
+## When a name earns a kind
+
+A name earns a kind when it changes an operation or a result.
+`Pressure` and `EnergyDensity` return different results from `Force / Area` and `Energy / Volume`, and `Entropy` refuses the `* TemperatureDelta` that `HeatCapacity` accepts.
+A name that changes neither belongs to the variable: a wavelength is a `Length`, and `wavelength: Length` says so.
+`Energy / Area` is a `Fluence` and `Force / Length` a `SurfaceTension`, two kinds of the dimension M T⁻²: `Fluence` earns its kind because `HeatFlux * Time` and `Fluence / Time` run through it, and a stiffness, a line load, and an interfacial tension read as the principal `SurfaceTension`.
+Wavenumber, curvature, optical power, and spatial frequency are all m⁻¹, and any number of concepts can claim a dimension, so a kind for each would turn the library into a catalogue of topics.
+Naming the concept stays with the code that uses it.

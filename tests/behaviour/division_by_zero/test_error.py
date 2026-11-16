@@ -8,7 +8,7 @@ import kuchka
 import kuchka.errors
 from kuchka import DivisionByZeroError
 from kuchka import MeasurementError
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 
 
 def test_the_error_is_both_a_measurement_error_and_a_zero_division_error() -> None:

@@ -1,0 +1,161 @@
+"""Energy density: energy per unit volume.
+
+Shares its dimension with `Pressure` (both are M L⁻¹ T⁻²), and is a different
+concept: a pressure is a force on an area, and an energy density is how much energy a
+volume holds.
+Neither is the general kind of the dimension, so `EnergyDensity` and `Pressure` are
+contested, and the operand kinds decide the result.
+Any other operation that produces this dimension raises `AmbiguousKindError`, and a
+`Pressure` or an `EnergyDensity` is then constructed explicitly.
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import overload
+
+from kuchka.dimensions import ENERGY_DENSITY
+from kuchka.internal.typing import override
+from kuchka.quantities.base import LinearQuantity
+from kuchka.quantities.base.registry import _register
+from kuchka.quantities.base.registry import _rule
+from kuchka.quantities.geometry.volume import Volume
+from kuchka.quantities.mechanics.density import Density
+from kuchka.quantities.mechanics.energy import Energy
+from kuchka.quantities.mechanics.pressure import Pressure
+from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+
+if TYPE_CHECKING:
+    from fractions import Fraction
+
+    from kuchka.dimensions import Dimension
+    from kuchka.numeric import Numeric
+    from kuchka.quantities.chemistry.molar_concentration import MolarConcentration
+    from kuchka.quantities.chemistry.molar_energy import MolarEnergy
+    from kuchka.quantities.chemistry.molar_volume import MolarVolume
+    from kuchka.quantities.electromagnetics.electric_field_strength import (
+        ElectricFieldStrength,
+    )
+    from kuchka.quantities.electromagnetics.magnetic_field_strength import (
+        MagneticFieldStrength,
+    )
+    from kuchka.quantities.electromagnetics.magnetic_flux_density import (
+        MagneticFluxDensity,
+    )
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        SurfaceChargeDensity,
+    )
+    from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.electromagnetics.volume_charge_density import (
+        VolumeChargeDensity,
+    )
+    from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.kinematics.velocity import Velocity
+    from kuchka.quantities.length import Length
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
+    from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.momentum import Momentum
+    from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
+    from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
+    from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
+    from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
+
+
+class EnergyDensity(LinearQuantity):
+    """Energy per unit volume: how much energy a volume of a material or store holds."""
+
+    dimension: ClassVar[Dimension] = ENERGY_DENSITY
+    __slots__ = ()
+
+    # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: Area) -> Force: ...
+    @overload
+    def __mul__(self, other: Length) -> SurfaceTension: ...
+    @overload
+    def __mul__(self, other: MolarVolume) -> MolarEnergy: ...
+    @overload
+    def __mul__(self, other: Proportion) -> EnergyDensity: ...
+    @overload
+    def __mul__(self, other: Time) -> DynamicViscosity: ...
+    @overload
+    def __mul__(self, other: Velocity) -> HeatFlux: ...
+    @overload
+    def __mul__(self, other: Volume) -> Energy: ...
+    @overload
+    def __mul__(self, other: VolumetricFlowRate) -> Power: ...
+    @overload
+    def __mul__(self, other: Numeric) -> EnergyDensity: ...
+    @overload
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__mul__(other)
+
+    # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: Density) -> SpecificEnergy: ...
+    @overload
+    def __truediv__(self, other: DynamicViscosity) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: ElectricFieldStrength) -> SurfaceChargeDensity: ...
+    @overload
+    def __truediv__(self, other: EnergyDensity) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Frequency) -> DynamicViscosity: ...
+    @overload
+    def __truediv__(self, other: Impulse) -> SurfaceActivity: ...
+    @overload
+    def __truediv__(self, other: MagneticFieldStrength) -> MagneticFluxDensity: ...
+    @overload
+    def __truediv__(self, other: MagneticFluxDensity) -> MagneticFieldStrength: ...
+    @overload
+    def __truediv__(self, other: MolarConcentration) -> MolarEnergy: ...
+    @overload
+    def __truediv__(self, other: MolarEnergy) -> MolarConcentration: ...
+    @overload
+    def __truediv__(self, other: Momentum) -> SurfaceActivity: ...
+    @overload
+    def __truediv__(self, other: Pressure) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> EnergyDensity: ...
+    @overload
+    def __truediv__(self, other: SpecificEnergy) -> Density: ...
+    @overload
+    def __truediv__(self, other: SurfaceChargeDensity) -> ElectricFieldStrength: ...
+    @overload
+    def __truediv__(self, other: VelocitySquared) -> Density: ...
+    @overload
+    def __truediv__(self, other: Voltage) -> VolumeChargeDensity: ...
+    @overload
+    def __truediv__(self, other: VolumeChargeDensity) -> Voltage: ...
+    @overload
+    def __truediv__(self, other: Numeric) -> EnergyDensity: ...
+    @overload
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__truediv__(other)
+
+
+_register(ENERGY_DENSITY, EnergyDensity, contested_with=Pressure)
+_rule(Energy, "/", Volume, EnergyDensity)
+_rule(SpecificEnergy, "*", Density, EnergyDensity)
+_rule(EnergyDensity, "/", Density, SpecificEnergy)
+
+__all__ = ["EnergyDensity"]

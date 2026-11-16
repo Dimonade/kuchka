@@ -14,12 +14,12 @@ import pytest
 
 from kuchka import Energy
 from kuchka import Torque
-from kuchka.units import angular_velocity
-from kuchka.units import energy
-from kuchka.units import frequency
-from kuchka.units import power
 from kuchka.units import temporal
-from kuchka.units import torque
+from kuchka.units.kinematics import angular_velocity
+from kuchka.units.mechanics import energy
+from kuchka.units.mechanics import power
+from kuchka.units.mechanics import torque
+from kuchka.units.temporal import frequency
 
 CONFIGURATION = json.loads(
     '{"rating": "3 kW", "speed": "3000 rpm", "supply": "50 Hz", "shift": "8 h"}'

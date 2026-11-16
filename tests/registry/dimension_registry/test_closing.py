@@ -9,7 +9,7 @@ from kuchka.dimensions import FREQUENCY
 from kuchka.dimensions import TIME
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import registry
-from kuchka.units import time
+from kuchka.units.temporal import time
 
 REGISTERED = registry._DIMENSION_REGISTRY  # noqa: SLF001 -- inspected, never modified
 

@@ -1,6 +1,7 @@
 """Reading a measurement from text.
 
-    from kuchka import Voltage, parse
+    from kuchka import Voltage
+    from kuchka import parse
 
     voltage = parse("5 mV", Voltage)
 
@@ -24,7 +25,10 @@ Examples
 --------
 A voltage, and the same text for the three kinds a second can be:
 
->>> from kuchka import Instant, SamplingPeriod, Time, Voltage
+>>> from kuchka import Instant
+>>> from kuchka import SamplingPeriod
+>>> from kuchka import Time
+>>> from kuchka import Voltage
 >>> parse("5 mV", Voltage)
 5 mV
 >>> parse("5 s", Time)
@@ -36,11 +40,10 @@ A voltage, and the same text for the three kinds a second can be:
 
 The number is exact, and the space is optional:
 
->>> from fractions import Fraction
 >>> from kuchka import Volt
->>> parse("0.1V", Voltage) == Volt(Fraction(1, 10))
+>>> parse("0.1V", Voltage) == Volt(0.1)
 True
->>> parse("-4.5e-3 V", Voltage) == Volt(Fraction(-9, 2000))
+>>> parse("-4.5e-3 V", Voltage) == Volt(-0.0045)
 True
 
 Text that is no measurement of the type raises `ParseError`, and a unit the type does

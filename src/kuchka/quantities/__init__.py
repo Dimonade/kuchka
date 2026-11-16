@@ -5,87 +5,165 @@ Application code should not need to read this package.
 It exists so that ``Voltage``, ``Current``, ``Power``, ``Resistance``,
 ``TemperatureDelta``, and the rest of the vocabulary do not each have to hand-roll
 their own arithmetic, conversion, and comparison logic:
-they share one implementation (:class:`LinearQuantity`, in ``base.py``) and differ only
-in their :class:`~kuchka.dimensions.Dimension` and, where relevant, their
-multiplication and division overloads (``electrical.py``, ``thermal.py``).
+they share one implementation (:class:`LinearQuantity`, in ``kuchka.quantities.base``)
+and differ only in their :class:`~kuchka.dimensions.Dimension` and, where relevant,
+their multiplication and division overloads.
 
-Each leaf module owns one hand-written ``__all__`` naming exactly what it defines.
-This package imports each leaf and composes its own ``__all__`` from theirs, so adding
-a unit to an existing dimension never requires touching this file.
-A new leaf module needs three lines here (its module import, its wildcard import, and
-its ``__all__ +=``), and ``tests/test_public_api_surface.py`` fails if one is missing.
+The base dimensions and the axes that are not dimensions of their own each have a
+module at this level, and `temporal` is one module because its types construct one
+another.
+Related derived types live in themed packages that mirror those of `kuchka.units`.
+
+Runtime arithmetic (`+`, `-`, `*`, `/`) is fully general and lives on `LinearQuantity`:
+it derives any product or quotient from `Dimension` exponent-vector algebra.
+Type checkers cannot infer "Voltage times Current is Power" from that algebra, so each
+type declares its relationships as explicit `@overload`s, which
+`tools/generate_overloads.py` writes from the registry, and every overload list ends
+with a fallback matching the signature declared on `LinearQuantity`, which keeps the
+overrides compatible with the base class under strict checking.
 """
 
 from __future__ import annotations
 
-from kuchka.quantities import ac_power
-from kuchka.quantities import activity
 from kuchka.quantities import amount
 from kuchka.quantities import angular
-from kuchka.quantities import area
 from kuchka.quantities import base
-from kuchka.quantities import charge
-from kuchka.quantities import data
-from kuchka.quantities import density
-from kuchka.quantities import electrical
-from kuchka.quantities import energy
-from kuchka.quantities import energy_density
+from kuchka.quantities import chemistry
+from kuchka.quantities import current
+from kuchka.quantities import electromagnetics
+from kuchka.quantities import geometry
+from kuchka.quantities import information
 from kuchka.quantities import kinematics
 from kuchka.quantities import length
 from kuchka.quantities import logarithmic
 from kuchka.quantities import luminous_intensity
 from kuchka.quantities import mass
-from kuchka.quantities import pressure
+from kuchka.quantities import mechanics
+from kuchka.quantities import photometry
 from kuchka.quantities import proportion
-from kuchka.quantities import rotational
+from kuchka.quantities import radiation
+from kuchka.quantities import solid_angle
 from kuchka.quantities import temporal
 from kuchka.quantities import thermal
-from kuchka.quantities import volume
-from kuchka.quantities.ac_power import *
-from kuchka.quantities.activity import *
+from kuchka.quantities import thermodynamics
 from kuchka.quantities.amount import *
 from kuchka.quantities.angular import *
-from kuchka.quantities.area import *
 from kuchka.quantities.base import *
-from kuchka.quantities.charge import *
-from kuchka.quantities.data import *
-from kuchka.quantities.density import *
-from kuchka.quantities.electrical import *
-from kuchka.quantities.energy import *
-from kuchka.quantities.energy_density import *
-from kuchka.quantities.kinematics import *
+from kuchka.quantities.chemistry.catalytic_activity import *
+from kuchka.quantities.chemistry.entities_per_amount import *
+from kuchka.quantities.chemistry.molality import *
+from kuchka.quantities.chemistry.molar_charge import *
+from kuchka.quantities.chemistry.molar_concentration import *
+from kuchka.quantities.chemistry.molar_energy import *
+from kuchka.quantities.chemistry.molar_flow_rate import *
+from kuchka.quantities.chemistry.molar_heat_capacity import *
+from kuchka.quantities.chemistry.molar_mass import *
+from kuchka.quantities.chemistry.molar_volume import *
+from kuchka.quantities.current import *
+from kuchka.quantities.electromagnetics.ac_power import *
+from kuchka.quantities.electromagnetics.capacitance import *
+from kuchka.quantities.electromagnetics.charge import *
+from kuchka.quantities.electromagnetics.conductance import *
+from kuchka.quantities.electromagnetics.current_density import *
+from kuchka.quantities.electromagnetics.electric_field_strength import *
+from kuchka.quantities.electromagnetics.inductance import *
+from kuchka.quantities.electromagnetics.linear_charge_density import *
+from kuchka.quantities.electromagnetics.magnetic_field_strength import *
+from kuchka.quantities.electromagnetics.magnetic_flux import *
+from kuchka.quantities.electromagnetics.magnetic_flux_density import *
+from kuchka.quantities.electromagnetics.permeability import *
+from kuchka.quantities.electromagnetics.permittivity import *
+from kuchka.quantities.electromagnetics.resistance import *
+from kuchka.quantities.electromagnetics.specific_charge import *
+from kuchka.quantities.electromagnetics.specific_current import *
+from kuchka.quantities.electromagnetics.surface_charge_density import *
+from kuchka.quantities.electromagnetics.voltage import *
+from kuchka.quantities.electromagnetics.volume_charge_density import *
+from kuchka.quantities.geometry.area import *
+from kuchka.quantities.geometry.volume import *
+from kuchka.quantities.information.data import *
+from kuchka.quantities.information.data_rate import *
+from kuchka.quantities.kinematics.acceleration import *
+from kuchka.quantities.kinematics.angular_acceleration import *
+from kuchka.quantities.kinematics.angular_jerk import *
+from kuchka.quantities.kinematics.angular_velocity import *
+from kuchka.quantities.kinematics.angular_velocity_squared import *
+from kuchka.quantities.kinematics.jerk import *
+from kuchka.quantities.kinematics.snap import *
+from kuchka.quantities.kinematics.time_cubed import *
+from kuchka.quantities.kinematics.time_fourth_power import *
+from kuchka.quantities.kinematics.time_squared import *
+from kuchka.quantities.kinematics.velocity import *
 from kuchka.quantities.length import *
 from kuchka.quantities.logarithmic import *
 from kuchka.quantities.luminous_intensity import *
 from kuchka.quantities.mass import *
-from kuchka.quantities.pressure import *
+from kuchka.quantities.mechanics.angular_momentum import *
+from kuchka.quantities.mechanics.density import *
+from kuchka.quantities.mechanics.dynamic_viscosity import *
+from kuchka.quantities.mechanics.energy import *
+from kuchka.quantities.mechanics.energy_density import *
+from kuchka.quantities.mechanics.first_moment_of_mass import *
+from kuchka.quantities.mechanics.fluence import *
+from kuchka.quantities.mechanics.force import *
+from kuchka.quantities.mechanics.impulse import *
+from kuchka.quantities.mechanics.kinematic_viscosity import *
+from kuchka.quantities.mechanics.mass_flow_rate import *
+from kuchka.quantities.mechanics.moment_of_inertia import *
+from kuchka.quantities.mechanics.momentum import *
+from kuchka.quantities.mechanics.power import *
+from kuchka.quantities.mechanics.pressure import *
+from kuchka.quantities.mechanics.specific_energy import *
+from kuchka.quantities.mechanics.specific_power import *
+from kuchka.quantities.mechanics.surface_tension import *
+from kuchka.quantities.mechanics.torque import *
+from kuchka.quantities.mechanics.velocity_squared import *
+from kuchka.quantities.mechanics.volumetric_flow_rate import *
+from kuchka.quantities.photometry.illuminance import *
+from kuchka.quantities.photometry.luminance import *
+from kuchka.quantities.photometry.luminous_efficacy import *
+from kuchka.quantities.photometry.luminous_energy import *
+from kuchka.quantities.photometry.luminous_exposure import *
+from kuchka.quantities.photometry.luminous_flux import *
 from kuchka.quantities.proportion import *
-from kuchka.quantities.rotational import *
+from kuchka.quantities.radiation.absorbed_dose import *
+from kuchka.quantities.radiation.absorbed_dose_rate import *
+from kuchka.quantities.radiation.activity import *
+from kuchka.quantities.radiation.activity_concentration import *
+from kuchka.quantities.radiation.equivalent_dose import *
+from kuchka.quantities.radiation.equivalent_dose_rate import *
+from kuchka.quantities.radiation.exposure import *
+from kuchka.quantities.radiation.exposure_rate import *
+from kuchka.quantities.radiation.specific_activity import *
+from kuchka.quantities.radiation.surface_activity import *
+from kuchka.quantities.solid_angle import *
 from kuchka.quantities.temporal import *
 from kuchka.quantities.thermal import *
-from kuchka.quantities.volume import *
+from kuchka.quantities.thermodynamics.heat_capacity import *
+from kuchka.quantities.thermodynamics.heat_flux import *
+from kuchka.quantities.thermodynamics.heating_rate import *
+from kuchka.quantities.thermodynamics.specific_heat_capacity import *
+from kuchka.quantities.thermodynamics.thermal_conductivity import *
 
 __all__: list[str] = []
-__all__ += ac_power.__all__
-__all__ += activity.__all__
 __all__ += amount.__all__
 __all__ += angular.__all__
-__all__ += area.__all__
 __all__ += base.__all__
-__all__ += charge.__all__
-__all__ += data.__all__
-__all__ += density.__all__
-__all__ += electrical.__all__
-__all__ += energy.__all__
-__all__ += energy_density.__all__
+__all__ += chemistry.__all__
+__all__ += current.__all__
+__all__ += electromagnetics.__all__
+__all__ += geometry.__all__
+__all__ += information.__all__
 __all__ += kinematics.__all__
 __all__ += length.__all__
 __all__ += logarithmic.__all__
 __all__ += luminous_intensity.__all__
 __all__ += mass.__all__
-__all__ += pressure.__all__
+__all__ += mechanics.__all__
+__all__ += photometry.__all__
 __all__ += proportion.__all__
-__all__ += rotational.__all__
+__all__ += radiation.__all__
+__all__ += solid_angle.__all__
 __all__ += temporal.__all__
 __all__ += thermal.__all__
-__all__ += volume.__all__
+__all__ += thermodynamics.__all__

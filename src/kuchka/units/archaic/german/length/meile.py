@@ -38,7 +38,7 @@ A cartographer reconstructing an equatorial chart uses fifteen geographical mile
 degree of arc.
 The source's metric calibration makes the full arc:
 
->>> from kuchka.units.length import KILOMETRE
+>>> from kuchka.units import KILOMETRE
 >>> equatorial_degree = GeographischeMeile(15)
 >>> equatorial_degree.to(KILOMETRE)
 111.306585 km
@@ -68,9 +68,8 @@ than one scale.
 
 Importing this module lets `Length` display in these miles.
 
-Sources
--------
-
+References
+----------
 - https://en.wikipedia.org/wiki/German_units_of_measurement
 - https://de.wikipedia.org/wiki/Meile
 - https://en.wikipedia.org/wiki/Obsolete_Austrian_units_of_measurement
@@ -192,7 +191,7 @@ def GeographischeMeile(value: Numeric) -> Length:
     checks the length of the full arc:
 
     >>> distance = GeographischeMeile(15)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     111.306585 km
 
@@ -223,7 +222,7 @@ def Reichsmeile(value: Numeric) -> Length:
     A road engineer budgets twelve Reichsmeilen for a post road:
 
     >>> distance = Reichsmeile(12)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     90 km
 
@@ -255,7 +254,7 @@ def PreussischeLandmeile(value: Numeric) -> Length:
     A Prussian postal itinerary counts two landmeilen between district offices:
 
     >>> distance = PreussischeLandmeile(2)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     15.065 km
 
@@ -286,7 +285,7 @@ def OesterreichischeMeile(value: Numeric) -> Length:
     A Habsburg-era itinerary marks two Austrian miles between district towns:
 
     >>> distance = OesterreichischeMeile(2)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     15.17187072 km
 

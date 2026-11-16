@@ -14,13 +14,13 @@ from kuchka import Energy
 from kuchka import Power
 from kuchka import Resistance
 from kuchka import Voltage
-from kuchka.units import conductance
 from kuchka.units import current
-from kuchka.units import energy
-from kuchka.units import power
-from kuchka.units import resistance
 from kuchka.units import temporal
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import conductance
+from kuchka.units.electromagnetics import resistance
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.mechanics import energy
+from kuchka.units.mechanics import power
 
 SUPPLY = voltage.Volt(12)
 LOAD = resistance.Ohm(48)

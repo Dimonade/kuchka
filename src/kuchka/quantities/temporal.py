@@ -36,6 +36,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import ClassVar
+from typing import Literal
 from typing import Protocol
 from typing import overload
 from typing import runtime_checkable
@@ -54,18 +55,86 @@ if TYPE_CHECKING:
     from fractions import Fraction
 
     from kuchka.dimensions import Dimension
+    from kuchka.quantities.amount import AmountOfSubstance
     from kuchka.quantities.angular import AngularDisplacement
-    from kuchka.quantities.charge import Charge
-    from kuchka.quantities.data import Data
-    from kuchka.quantities.data import DataRate
-    from kuchka.quantities.electrical import Current
-    from kuchka.quantities.electrical import Power
-    from kuchka.quantities.energy import Energy
-    from kuchka.quantities.kinematics import Acceleration
-    from kuchka.quantities.kinematics import Velocity
+    from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
+    from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
+    from kuchka.quantities.current import Current
+    from kuchka.quantities.electromagnetics.capacitance import Capacitance
+    from kuchka.quantities.electromagnetics.charge import Charge
+    from kuchka.quantities.electromagnetics.conductance import Conductance
+    from kuchka.quantities.electromagnetics.current_density import CurrentDensity
+    from kuchka.quantities.electromagnetics.inductance import Inductance
+    from kuchka.quantities.electromagnetics.linear_charge_density import (
+        LinearChargeDensity,
+    )
+    from kuchka.quantities.electromagnetics.magnetic_field_strength import (
+        MagneticFieldStrength,
+    )
+    from kuchka.quantities.electromagnetics.magnetic_flux import MagneticFlux
+    from kuchka.quantities.electromagnetics.magnetic_flux_density import (
+        MagneticFluxDensity,
+    )
+    from kuchka.quantities.electromagnetics.resistance import Resistance
+    from kuchka.quantities.electromagnetics.specific_charge import SpecificCharge
+    from kuchka.quantities.electromagnetics.specific_current import SpecificCurrent
+    from kuchka.quantities.electromagnetics.surface_charge_density import (
+        SurfaceChargeDensity,
+    )
+    from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.geometry.volume import Volume
+    from kuchka.quantities.information.data import Data
+    from kuchka.quantities.information.data_rate import DataRate
+    from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
+    from kuchka.quantities.kinematics.angular_jerk import AngularJerk
+    from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.jerk import Jerk
+    from kuchka.quantities.kinematics.snap import Snap
+    from kuchka.quantities.kinematics.time_cubed import TimeCubed
+    from kuchka.quantities.kinematics.time_fourth_power import TimeFourthPower
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
+    from kuchka.quantities.kinematics.velocity import Velocity
     from kuchka.quantities.length import Length
+    from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.angular_momentum import AngularMomentum
+    from kuchka.quantities.mechanics.dynamic_viscosity import DynamicViscosity
+    from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
+    from kuchka.quantities.mechanics.fluence import Fluence
+    from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
+    from kuchka.quantities.mechanics.momentum import Momentum
+    from kuchka.quantities.mechanics.power import Power
+    from kuchka.quantities.mechanics.pressure import Pressure
+    from kuchka.quantities.mechanics.pressure import Stress
+    from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+    from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
+    from kuchka.quantities.mechanics.torque import Torque
+    from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
+    from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
+    from kuchka.quantities.photometry.illuminance import Illuminance
+    from kuchka.quantities.photometry.luminous_energy import LuminousEnergy
+    from kuchka.quantities.photometry.luminous_exposure import LuminousExposure
+    from kuchka.quantities.photometry.luminous_flux import LuminousFlux
     from kuchka.quantities.proportion import Proportion
-    from kuchka.quantities.rotational import AngularVelocity
+    from kuchka.quantities.radiation.absorbed_dose import AbsorbedDose
+    from kuchka.quantities.radiation.absorbed_dose_rate import AbsorbedDoseRate
+    from kuchka.quantities.radiation.activity_concentration import ActivityConcentration
+    from kuchka.quantities.radiation.equivalent_dose import EquivalentDose
+    from kuchka.quantities.radiation.equivalent_dose_rate import EquivalentDoseRate
+    from kuchka.quantities.radiation.exposure import Exposure
+    from kuchka.quantities.radiation.exposure_rate import ExposureRate
+    from kuchka.quantities.radiation.specific_activity import SpecificActivity
+    from kuchka.quantities.radiation.surface_activity import SurfaceActivity
+    from kuchka.quantities.thermal import TemperatureDelta
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
+    from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
 
 
 class Time(LinearQuantity):
@@ -74,35 +143,121 @@ class Time(LinearQuantity):
     dimension: ClassVar[Dimension] = TIME
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
     @overload
-    def __mul__(self, other: Frequency) -> Fraction: ...
-    @overload
-    def __mul__(self, other: Current) -> Charge: ...
-    @overload
-    def __mul__(self, other: DataRate) -> Data: ...
-    @overload
-    def __mul__(self, other: Power) -> Energy: ...
-    @overload
-    def __mul__(self, other: Velocity) -> Length: ...
+    def __mul__(self, other: AbsorbedDoseRate) -> AbsorbedDose: ...
     @overload
     def __mul__(self, other: Acceleration) -> Velocity: ...
     @overload
+    def __mul__(self, other: AngularAcceleration) -> AngularVelocity: ...
+    @overload
+    def __mul__(self, other: AngularJerk) -> AngularAcceleration: ...
+    @overload
     def __mul__(self, other: AngularVelocity) -> AngularDisplacement: ...
     @overload
+    def __mul__(self, other: Conductance) -> Capacitance: ...
+    @overload
+    def __mul__(self, other: Current) -> Charge: ...
+    @overload
+    def __mul__(self, other: CurrentDensity) -> SurfaceChargeDensity: ...
+    @overload
+    def __mul__(self, other: DataRate) -> Data: ...
+    @overload
+    def __mul__(self, other: EnergyDensity) -> DynamicViscosity: ...
+    @overload
+    def __mul__(self, other: EquivalentDoseRate) -> EquivalentDose: ...
+    @overload
+    def __mul__(self, other: ExposureRate) -> Exposure: ...
+    @overload
+    def __mul__(self, other: Force) -> Impulse: ...
+    @overload
+    def __mul__(self, other: Frequency) -> Fraction: ...
+    @overload
+    def __mul__(self, other: HeatFlux) -> Fluence: ...
+    @overload
+    def __mul__(self, other: HeatingRate) -> TemperatureDelta: ...
+    @overload
+    def __mul__(self, other: Illuminance) -> LuminousExposure: ...
+    @overload
+    def __mul__(self, other: Impulse) -> FirstMomentOfMass: ...
+    @overload
+    def __mul__(self, other: Jerk) -> Acceleration: ...
+    @overload
+    def __mul__(self, other: KinematicViscosity) -> Area: ...
+    @overload
+    def __mul__(self, other: LuminousFlux) -> LuminousEnergy: ...
+    @overload
+    def __mul__(self, other: MagneticFieldStrength) -> LinearChargeDensity: ...
+    @overload
+    def __mul__(self, other: MassFlowRate) -> Mass: ...
+    @overload
+    def __mul__(self, other: MolarFlowRate) -> AmountOfSubstance: ...
+    @overload
+    def __mul__(self, other: Momentum) -> FirstMomentOfMass: ...
+    @overload
+    def __mul__(self, other: Power) -> Energy: ...
+    @overload
+    def __mul__(self, other: Pressure) -> DynamicViscosity: ...
+    @overload
     def __mul__(self, other: Proportion) -> Time: ...
+    @overload
+    def __mul__(self, other: Resistance) -> Inductance: ...
+    @overload
+    def __mul__(self, other: Snap) -> Jerk: ...
+    @overload
+    def __mul__(self, other: SpecificCurrent) -> SpecificCharge: ...
+    @overload
+    def __mul__(self, other: SpecificEnergy) -> KinematicViscosity: ...
+    @overload
+    def __mul__(self, other: SpecificPower) -> SpecificEnergy: ...
+    @overload
+    def __mul__(self, other: Stress) -> DynamicViscosity: ...
+    @overload
+    def __mul__(self, other: SurfaceTension) -> MassFlowRate: ...
+    @overload
+    def __mul__(self, other: Time) -> TimeSquared: ...
+    @overload
+    def __mul__(self, other: TimeCubed) -> TimeFourthPower: ...
+    @overload
+    def __mul__(self, other: TimeSquared) -> TimeCubed: ...
+    @overload
+    def __mul__(self, other: Torque) -> AngularMomentum: ...
+    @overload
+    def __mul__(self, other: Velocity) -> Length: ...
+    @overload
+    def __mul__(self, other: VelocitySquared) -> KinematicViscosity: ...
+    @overload
+    def __mul__(self, other: Voltage) -> MagneticFlux: ...
+    @overload
+    def __mul__(self, other: VolumetricFlowRate) -> Volume: ...
     @overload
     def __mul__(self, other: Numeric) -> Time: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: Capacitance) -> Resistance: ...
+    @overload
+    def __truediv__(self, other: Conductance) -> Inductance: ...
+    @overload
+    def __truediv__(self, other: Frequency) -> TimeSquared: ...
+    @overload
+    def __truediv__(self, other: Inductance) -> Conductance: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> Time: ...
+    @overload
+    def __truediv__(self, other: Resistance) -> Capacitance: ...
     @overload
     def __truediv__(self, other: Time) -> Proportion: ...
     @overload
-    def __truediv__(self, other: Proportion) -> Time: ...
+    def __truediv__(self, other: TimeSquared) -> Frequency: ...
     @overload
     def __truediv__(self, other: Numeric) -> Time: ...
     @overload
@@ -110,16 +265,21 @@ class Time(LinearQuantity):
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
+    # BEGIN GENERATED __rtruediv__
     @overload
     def __rtruediv__(self, other: Numeric) -> Frequency: ...
     @overload
     def __rtruediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __rtruediv__(
@@ -155,6 +315,22 @@ class Time(LinearQuantity):
         """
         return Instant(self._magnitude, Instant._canonical_unit)  # noqa: SLF001 -- Instant's own canonical unit
 
+    # BEGIN GENERATED __pow__
+    @overload
+    def __pow__(self, exponent: Literal[2]) -> TimeSquared: ...
+    @overload
+    def __pow__(self, exponent: Literal[3]) -> TimeCubed: ...
+    @overload
+    def __pow__(self, exponent: Literal[4]) -> TimeFourthPower: ...
+    @overload
+    def __pow__(self, exponent: int) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __pow__(self, exponent: int) -> LinearQuantity | Fraction:
+        return super().__pow__(exponent)
+
 
 class Instant(AffineQuantity[Time]):
     """A point in time: a clock reading, a log timestamp, a sensor's capture moment.
@@ -182,35 +358,115 @@ class Frequency(LinearQuantity):
     dimension: ClassVar[Dimension] = FREQUENCY
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
     @overload
-    def __mul__(self, other: Time) -> Fraction: ...
+    def __mul__(self, other: Acceleration) -> Jerk: ...
+    @overload
+    def __mul__(self, other: AmountOfSubstance) -> MolarFlowRate: ...
+    @overload
+    def __mul__(self, other: AngularAcceleration) -> AngularJerk: ...
     @overload
     def __mul__(self, other: AngularDisplacement) -> AngularVelocity: ...
+    @overload
+    def __mul__(self, other: AngularMomentum) -> Torque: ...
+    @overload
+    def __mul__(self, other: AngularVelocity) -> AngularAcceleration: ...
+    @overload
+    def __mul__(self, other: Area) -> KinematicViscosity: ...
+    @overload
+    def __mul__(self, other: Capacitance) -> Conductance: ...
     @overload
     def __mul__(self, other: Charge) -> Current: ...
     @overload
     def __mul__(self, other: Data) -> DataRate: ...
     @overload
+    def __mul__(self, other: DynamicViscosity) -> Stress: ...
+    @overload
     def __mul__(self, other: Energy) -> Power: ...
+    @overload
+    def __mul__(self, other: Impulse) -> Force: ...
+    @overload
+    def __mul__(self, other: Inductance) -> Resistance: ...
+    @overload
+    def __mul__(self, other: Jerk) -> Snap: ...
     @overload
     def __mul__(self, other: Length) -> Velocity: ...
     @overload
-    def __mul__(self, other: Velocity) -> Acceleration: ...
+    def __mul__(self, other: LinearChargeDensity) -> MagneticFieldStrength: ...
+    @overload
+    def __mul__(self, other: LuminousEnergy) -> LuminousFlux: ...
+    @overload
+    def __mul__(self, other: LuminousExposure) -> Illuminance: ...
+    @overload
+    def __mul__(self, other: MagneticFlux) -> Voltage: ...
+    @overload
+    def __mul__(self, other: Mass) -> MassFlowRate: ...
+    @overload
+    def __mul__(self, other: MassFlowRate) -> SurfaceTension: ...
+    @overload
+    def __mul__(self, other: Momentum) -> Force: ...
     @overload
     def __mul__(self, other: Proportion) -> Frequency: ...
+    @overload
+    def __mul__(self, other: SpecificCharge) -> SpecificCurrent: ...
+    @overload
+    def __mul__(self, other: SpecificEnergy) -> SpecificPower: ...
+    @overload
+    def __mul__(self, other: SurfaceChargeDensity) -> CurrentDensity: ...
+    @overload
+    def __mul__(self, other: SurfaceTension) -> HeatFlux: ...
+    @overload
+    def __mul__(self, other: TemperatureDelta) -> HeatingRate: ...
+    @overload
+    def __mul__(self, other: Time) -> Fraction: ...
+    @overload
+    def __mul__(self, other: TimeCubed) -> TimeSquared: ...
+    @overload
+    def __mul__(self, other: TimeFourthPower) -> TimeCubed: ...
+    @overload
+    def __mul__(self, other: TimeSquared) -> Time: ...
+    @overload
+    def __mul__(self, other: Velocity) -> Acceleration: ...
+    @overload
+    def __mul__(self, other: VelocitySquared) -> SpecificPower: ...
+    @overload
+    def __mul__(self, other: Volume) -> VolumetricFlowRate: ...
     @overload
     def __mul__(self, other: Numeric) -> Frequency: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: ActivityConcentration) -> Volume: ...
+    @overload
+    def __truediv__(self, other: Area) -> SurfaceActivity: ...
+    @overload
+    def __truediv__(self, other: EntitiesPerAmount) -> MolarFlowRate: ...
     @overload
     def __truediv__(self, other: Frequency) -> Proportion: ...
     @overload
+    def __truediv__(self, other: MagneticFluxDensity) -> SpecificCharge: ...
+    @overload
+    def __truediv__(self, other: Mass) -> SpecificActivity: ...
+    @overload
+    def __truediv__(self, other: MolarFlowRate) -> EntitiesPerAmount: ...
+    @overload
     def __truediv__(self, other: Proportion) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: SpecificActivity) -> Mass: ...
+    @overload
+    def __truediv__(self, other: SpecificCharge) -> MagneticFluxDensity: ...
+    @overload
+    def __truediv__(self, other: SurfaceActivity) -> Area: ...
+    @overload
+    def __truediv__(self, other: Volume) -> ActivityConcentration: ...
     @overload
     def __truediv__(self, other: Numeric) -> Frequency: ...
     @overload
@@ -218,16 +474,21 @@ class Frequency(LinearQuantity):
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
+    # BEGIN GENERATED __rtruediv__
     @overload
     def __rtruediv__(self, other: Numeric) -> Time: ...
     @overload
     def __rtruediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __rtruediv__(
@@ -251,8 +512,14 @@ class Frequency(LinearQuantity):
             Mains frequency as angular velocity: Hertz(50).to_angular_velocity()
 
         One hertz is one turn per second, which is two pi radians per second.
+
+        This fits a frequency counted in cycles.
+        A rate that arrives as a `Frequency` but counts radians, such as a speed over a
+        radius or a natural frequency `sqrt(k / m)`, reads two pi times too fast here:
+        `AngularVelocity.from_tangential(velocity, radius)` builds the first, and
+        `RadianPerSecond(rate.magnitude)` the second.
         """
-        from kuchka.quantities.rotational import AngularVelocity  # noqa: PLC0415
+        from kuchka.quantities.kinematics.angular_velocity import AngularVelocity  # noqa: PLC0415
 
         return AngularVelocity(self._magnitude, AngularVelocity._result_unit)  # noqa: SLF001 -- AngularVelocity's own units
 
@@ -297,23 +564,27 @@ class SamplingPeriod(LinearQuantity):
     dimension: ClassVar[Dimension] = TIME
     __slots__ = ()
 
-    @overload
-    def __mul__(self, other: SampleRate) -> Fraction: ...
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Proportion) -> SamplingPeriod: ...
+    @overload
+    def __mul__(self, other: SampleRate) -> Fraction: ...
     @overload
     def __mul__(self, other: Numeric) -> SamplingPeriod: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: SamplingPeriod) -> Proportion: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Proportion) -> SamplingPeriod: ...
+    @overload
+    def __truediv__(self, other: SamplingPeriod) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> SamplingPeriod: ...
     @overload
@@ -321,16 +592,21 @@ class SamplingPeriod(LinearQuantity):
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
+    # BEGIN GENERATED __rtruediv__
     @overload
     def __rtruediv__(self, other: Numeric) -> SampleRate: ...
     @overload
     def __rtruediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __rtruediv__(
@@ -374,23 +650,27 @@ class SampleRate(LinearQuantity):
     dimension: ClassVar[Dimension] = FREQUENCY
     __slots__ = ()
 
-    @overload
-    def __mul__(self, other: SamplingPeriod) -> Fraction: ...
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Proportion) -> SampleRate: ...
+    @overload
+    def __mul__(self, other: SamplingPeriod) -> Fraction: ...
     @overload
     def __mul__(self, other: Numeric) -> SampleRate: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
-    @overload
-    def __truediv__(self, other: SampleRate) -> Proportion: ...
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: Proportion) -> SampleRate: ...
+    @overload
+    def __truediv__(self, other: SampleRate) -> Proportion: ...
     @overload
     def __truediv__(self, other: Numeric) -> SampleRate: ...
     @overload
@@ -398,16 +678,21 @@ class SampleRate(LinearQuantity):
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__truediv__(other)
 
+    # BEGIN GENERATED __rtruediv__
     @overload
     def __rtruediv__(self, other: Numeric) -> SamplingPeriod: ...
     @overload
     def __rtruediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __rtruediv__(
@@ -448,6 +733,7 @@ class BaudRate(LinearQuantity):
     dimension: ClassVar[Dimension] = FREQUENCY
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
     @overload
     def __mul__(self, other: Proportion) -> BaudRate: ...
     @overload
@@ -455,10 +741,13 @@ class BaudRate(LinearQuantity):
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    # BEGIN GENERATED __truediv__
     @overload
     def __truediv__(self, other: BaudRate) -> Proportion: ...
     @overload
@@ -469,6 +758,8 @@ class BaudRate(LinearQuantity):
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:

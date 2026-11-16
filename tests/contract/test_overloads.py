@@ -15,6 +15,7 @@ from fractions import Fraction
 import pytest
 
 from kuchka import MeasurementError
+from kuchka.quantities.base.registry import _BRIDGES
 from tests.support.families import FAMILIES
 from tests.support.overloads import FAMILY_OF
 from tests.support.overloads import OVERLOAD_IDS
@@ -39,7 +40,9 @@ def test_a_declared_overload_is_what_the_operator_returns(overload: Overload) ->
         return
     assert type(result) is overload.result
     expected = 36 if overload.operation == "__mul__" else 4
-    assert result == FAMILY_OF[overload.result].canonical(expected)
+    key = (overload.left, SYMBOL[overload.operation], overload.right)
+    _, factor = _BRIDGES.get(key, (None, Fraction(1)))
+    assert result == FAMILY_OF[overload.result].canonical(expected * factor)
 
 
 def runtime_pairs() -> set[tuple[str, str, str, str]]:

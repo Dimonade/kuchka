@@ -25,7 +25,7 @@ ENTRY_POINTS = [
     "kuchka.quantities.base",
     "kuchka.quantities.base.registry",
     "kuchka.units",
-    "kuchka.units.voltage",
+    "kuchka.units.electromagnetics.voltage",
     "kuchka.units.temporal.time",
 ]
 

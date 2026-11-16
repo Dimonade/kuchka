@@ -1,6 +1,7 @@
-"""Unit constructors for Frequency: hertz and SI-prefixed multiples.
+"""Frequency constructors: the hertz, from nanohertz to petahertz.
 
-    from kuchka import Hertz, Megahertz
+    from kuchka import Hertz
+    from kuchka import Megahertz
 
     heart_rate = Hertz(1.2)
     carrier = Megahertz(915)
@@ -78,6 +79,20 @@ A radio telescope can distinguish a 1.400 GHz hydrogen-line signal from a nearby
 >>> (hydrogen_line - spectral_feature).to(MEGAHERTZ)
 0.2 MHz
 
+
+The millisecond pulsar PSR J1748-2446ad rotates at approximately 716.358 Hz.
+At a steady spin rate, a 15-minute observation spans more than 640,000 rotations, while
+each rotation takes less than 1.4 milliseconds.
+
+>>> spin_rate = Hertz(716.358)
+>>> spin_rate.to(HERTZ)
+716.358 Hz
+>>> round(716.358 * 15 * 60)
+644722
+>>> f"{1000 / 716.358:.4f} ms"
+'1.3960 ms'
+
+
 Notes
 -----
 Frequency measures the number of complete cycles or repetitions occurring per unit
@@ -98,6 +113,9 @@ For example, a 100 Hz signal has a period of exactly 0.01 seconds:
 ``"GHz"``, and ``"THz"`` to their constructors.
 It is intended for boundary code that receives units from configuration files,
 protocols, or other external sources.
+
+Hessels et al., A Radio Pulsar Spinning at 716 Hertz, NRAO
+https://www.nrao.edu/pr/2006/mspulsar/
 
 See Also
 --------

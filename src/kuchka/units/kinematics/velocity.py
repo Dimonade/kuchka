@@ -1,4 +1,4 @@
-"""Velocity quantities and constructors for everyday motion, engineering, and space.
+"""Velocity constructors: metres per second, kilometres per hour, miles per hour, knots.
 
 `Velocity` represents the rate of change of position with respect to time:
 

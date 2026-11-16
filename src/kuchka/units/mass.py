@@ -1,4 +1,4 @@
-"""Mass quantities and constructors for SI and selected scientific units.
+"""Mass constructors: from picograms to solar masses.
 
 `Mass` represents the amount of matter in an object.
 The kilogram is the canonical SI base unit for mass, so every constructor in this
@@ -60,7 +60,7 @@ that black hole with cars would require an utterly unreasonable fleet:
 >>> sagittarius_a = SolarMass(4_300_000)
 >>> yaris_per_sagittarius_a = round((sagittarius_a / yaris).magnitude)
 >>> yaris_per_sagittarius_a
-8550188800000000000000000000000000
+8550163000000000000000000000000000
 
 Phew.
 That is...
@@ -78,14 +78,29 @@ Notes
 The kilogram is the canonical unit of `Mass`.
 This is unusual among SI base quantities because the base unit itself contains a prefix.
 
-`Tonne` is an alias of `Megagram`, not a separate unit definition:
+`Tonne` is an alias of `Megagram`: both names are one unit definition.
 
 >>> Tonne is Megagram
 True
 
+Since the 2019 revision of the SI, the kilogram is defined by fixing the Planck constant
+at exactly 6.62607015E-34 J·s.
+
 `MASS_UNITS` maps unit symbols such as ``"mg"``, ``"kg"``, ``"Da"``, and
 ``"lb"`` to their constructors for configuration files and other external
 interfaces.
+
+References
+----------
+BIPM, The International System of Units (SI Brochure), on the kilogram and the
+dalton:
+https://www.bipm.org/en/publications/si-brochure
+
+NIST, Fundamental Physical Constants, for the atomic mass constant:
+https://physics.nist.gov/cuu/Constants/
+
+IAU 2015 Resolution B3, nominal solar and planetary values:
+https://arxiv.org/abs/1605.09788
 
 See Also
 --------
@@ -192,6 +207,15 @@ def Picogram(value: Numeric) -> Mass:
     A human red blood cell has a mass of roughly 27 pg:
 
     >>> red_blood_cell = Picogram(27)
+    >>> red_blood_cell
+    27 pg
+
+    A millilitre of blood holds about five billion red cells, and together they weigh
+    135 mg:
+
+    >>> from kuchka.units import MILLIGRAM
+    >>> (red_blood_cell * 5_000_000_000).to(MILLIGRAM)
+    135 mg
 
     """
     return Mass(to_exact(value) * PICOGRAM.scale, PICOGRAM)
@@ -215,6 +239,19 @@ def Nanogram(value: Numeric) -> Mass:
     Environmental laboratories often measure airborne particles in nanograms:
 
     >>> airborne_sample = Nanogram(85)
+    >>> airborne_sample
+    85 ng
+
+    A filter that weighs 150.000000 mg before sampling and 150.000085 mg after has
+    collected that sample, and decimal arithmetic keeps the difference exact:
+
+    >>> from decimal import Decimal
+    >>> from kuchka import Milligram
+    >>> from kuchka.units import NANOGRAM
+    >>> before = Milligram(Decimal("150.000000"))
+    >>> after = Milligram(Decimal("150.000085"))
+    >>> (after - before).to(NANOGRAM)
+    85 ng
 
     """
     return Mass(to_exact(value) * NANOGRAM.scale, NANOGRAM)
@@ -238,6 +275,15 @@ def Microgram(value: Numeric) -> Mass:
     Vitamin B12 supplements are commonly measured in hundreds of micrograms:
 
     >>> b12 = Microgram(500)
+    >>> b12
+    500 µg
+
+    A label that spells the unit with a plain `u` is read the same way:
+
+    >>> from kuchka import Mass
+    >>> from kuchka import parse
+    >>> parse("500 ug", Mass) == b12
+    True
 
     """
     return Mass(to_exact(value) * MICROGRAM.scale, MICROGRAM)
@@ -261,14 +307,16 @@ def Milligram(value: Numeric) -> Mass:
     An average fruit fly weighs about one milligram:
 
     >>> fruit_fly = Milligram(1)
+    >>> fruit_fly
+    1 mg
 
-    Roughly 300 thousand fruit flies weigh about the same as a dog:
+    Roughly thirty million fruit flies weigh about the same as a 30 kg dog:
 
-    >>> fly = Gram(0.1)
+    >>> from kuchka import Kilogram
     >>> dog = Kilogram(30)
-    >>> swarm = round((dog / fly).magnitude)
+    >>> swarm = round((dog / fruit_fly).magnitude)
     >>> swarm
-    300000
+    30000000
 
     """
     return Mass(to_exact(value) * MILLIGRAM.scale, MILLIGRAM)
@@ -289,9 +337,19 @@ def Gram(value: Numeric) -> Mass:
 
     Examples
     --------
-    A laboratory balance commonly measures samples on the gram scale:
+    A level teaspoon of table salt weighs about 6 g:
 
-    >>> mineral_sample = Gram(42)
+    >>> salt = Gram(6)
+    >>> salt
+    6 g
+
+    A gram of water fills a millilitre, so a mass over a volume gives the density of
+    water:
+
+    >>> from kuchka import Millilitre
+    >>> from kuchka.units import KILOGRAM_PER_CUBIC_METRE
+    >>> (Gram(1) / Millilitre(1)).to(KILOGRAM_PER_CUBIC_METRE)
+    1000 kg/m³
 
     """
     return Mass(to_exact(value) * GRAM.scale, GRAM)
@@ -310,11 +368,27 @@ def Kilogram(value: Numeric) -> Mass:
     Mass
         Mass represented in kilograms.
 
+    Notes
+    -----
+    The kilogram is the SI base unit of mass, defined by fixing the Planck constant at
+    exactly 6.62607015E-34 J·s.
+
     Examples
     --------
     A full bowling ball weighs up to about 7.26 kg:
 
     >>> bowling_ball = Kilogram(7.26)
+    >>> bowling_ball
+    7.26 kg
+
+    Its weight on Earth, with the standard acceleration of gravity, is a force of about
+    71 N:
+
+    >>> from kuchka import MetrePerSecondSquared
+    >>> from kuchka.units import NEWTON
+    >>> weight = bowling_ball * MetrePerSecondSquared(9.80665)
+    >>> f"{weight.to(NEWTON):.1f}"
+    '71.2 N'
 
     """
     return Mass(to_exact(value) * KILOGRAM.scale, KILOGRAM)
@@ -338,11 +412,19 @@ def Megagram(value: Numeric) -> Mass:
     A loaded concrete mixer can easily carry several megagrams of material:
 
     >>> concrete_load = Megagram(18)
+    >>> concrete_load
+    18 Mg
+
+    In kilograms, that load is:
+
+    >>> from kuchka.units import KILOGRAM
+    >>> concrete_load.to(KILOGRAM)
+    18000 kg
 
     A `Megagram` is aliased to the omnipresent `Tonne`:
-    >>> car_megagram = Megagram(1.3)
-    >>> car_tonne = Tonne(1.3)
-    >>> car_tonne == car_megagram
+
+    >>> from kuchka import Tonne
+    >>> Megagram(1.3) == Tonne(1.3)
     True
 
     """
@@ -395,16 +477,28 @@ def Dalton(value: Numeric) -> Mass:
     Notes
     -----
     The dalton is widely used for atoms, proteins, and molecular biology.
+    It is the CODATA 2022 atomic mass constant, 1.660 539 068 92 e-27 kg.
 
     Examples
     --------
     A water molecule has a molecular mass of about 18 Da:
 
     >>> water = Dalton(18)
+    >>> water
+    18 Da
 
     A hemoglobin molecule is roughly 64.5 kDa:
 
-    >>> hemoglobin = Dalton(64500)
+    >>> hemoglobin = Dalton(64_500)
+    >>> round((hemoglobin / water).magnitude)
+    3583
+
+    Eighteen grams of water hold about Avogadro's number of molecules, the mass over
+    the dalton:
+
+    >>> from kuchka import Gram
+    >>> f"{float((Gram(18) / water).magnitude):.4e}"
+    '6.0221e+23'
 
     """
     return Mass(to_exact(value) * DALTON.scale, DALTON)
@@ -435,6 +529,14 @@ def Grain(value: Numeric) -> Mass:
     Bullet masses are traditionally specified in grains:
 
     >>> bullet = Grain(147)
+    >>> bullet
+    147 gr
+
+    A 147 grain bullet weighs a little over nine and a half grams:
+
+    >>> from kuchka.units import GRAM
+    >>> f"{bullet.to(GRAM):.2f}"
+    '9.53 g'
 
     """
     return Mass(to_exact(value) * GRAIN.scale, GRAIN)
@@ -465,10 +567,21 @@ def Pound(value: Numeric) -> Mass:
     Airline baggage limits are often expressed in pounds:
 
     >>> suitcase = Pound(50)
+    >>> suitcase
+    50 lb
+
+    A 25 kg limit is a little more than 50 lb, so the suitcase fits:
+
+    >>> from kuchka import Kilogram
     >>> baggage_limit = Kilogram(25)
-    >>> should_fit = baggage_limit > suitcase
-    >>> should_fit
+    >>> baggage_limit > suitcase
     True
+
+    The conversion factor to the kilogram is exact:
+
+    >>> from kuchka.units import KILOGRAM
+    >>> Pound(1).to(KILOGRAM)
+    0.45359237 kg
 
     """
     return Mass(to_exact(value) * POUND.scale, POUND)
@@ -499,6 +612,9 @@ def Ounce(value: Numeric) -> Mass:
     A first-class letter sits within the one-ounce postage limit:
 
     >>> letter = Ounce(1)
+    >>> letter
+    1 oz
+    >>> from kuchka import Pound
     >>> letter <= Pound(1)
     True
 
@@ -514,7 +630,7 @@ def Ounce(value: Numeric) -> Mass:
 SOLAR_MASS = UnitDef(
     "solar_mass",
     f"M{symbols.SUN}",
-    Decimal("1.988416e30"),
+    Decimal("1.988410e30"),
     MASS,
     aliases=("Msun", "M_sun"),
     words=("solar masses",),
@@ -536,13 +652,16 @@ def SolarMass(value: Numeric) -> Mass:
 
     Notes
     -----
-    The solar mass is defined using the CODATA 2022 solar mass constant.
+    The IAU 2015 nominal solar mass parameter over the CODATA 2022 gravitational
+    constant, rounded to seven significant digits: 1.988410e30 kg.
 
     Examples
     --------
     The Milky Way's central black hole has a mass of about 4.3 million Suns:
 
     >>> sagittarius_a = SolarMass(4_300_000)
+    >>> sagittarius_a
+    4300000 M☉
 
     A binary system can be represented naturally in the same unit:
 
@@ -551,6 +670,12 @@ def SolarMass(value: Numeric) -> Mass:
     >>> total = primary + secondary
     >>> total
     2.2 M☉
+
+    In kilograms, one solar mass is:
+
+    >>> from kuchka.units import KILOGRAM
+    >>> f"{SolarMass(1).to(KILOGRAM):.6e}"
+    '1.988410e+30 kg'
 
     """
     return Mass(to_exact(value) * SOLAR_MASS.scale, SOLAR_MASS)
@@ -581,21 +706,24 @@ def EarthMass(value: Numeric) -> Mass:
 
     Notes
     -----
-    Derived from the IAU 2015 nominal terrestrial mass parameter and the CODATA 2022
-    gravitational constant, the same way `SolarMass` derives from the nominal solar
-    mass parameter.
+    The IAU 2015 nominal terrestrial mass parameter over the CODATA 2022 gravitational
+    constant, rounded to seven significant digits: 5.972168e24 kg.
 
     Examples
     --------
     Exoplanet masses are conventionally reported in Earth masses:
 
+    >>> from decimal import Decimal
     >>> super_earth = EarthMass(Decimal("1.6"))
+    >>> super_earth
+    1.6 M♁
 
     Jupiter, at roughly 318 Earth masses, is still a fraction of a Sun:
 
+    >>> from kuchka import SolarMass
     >>> jupiter = EarthMass(318)
-    >>> jupiter <= SolarMass(1)
-    True
+    >>> f"{jupiter / SolarMass(1):.3e}"
+    '9.551e-4 1'
 
     """
     return Mass(to_exact(value) * EARTH_MASS.scale, EARTH_MASS)

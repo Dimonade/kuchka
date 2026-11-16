@@ -5,49 +5,130 @@ To promote, rename, or remove a name, change the `__all__` of the leaf module th
 defines it and run `just generate-api`.
 """
 
+from kuchka.quantities import AbsorbedDose
+from kuchka.quantities import AbsorbedDoseRate
 from kuchka.quantities import Acceleration
 from kuchka.quantities import Activity
+from kuchka.quantities import ActivityConcentration
 from kuchka.quantities import AmountOfSubstance
 from kuchka.quantities import Angle
+from kuchka.quantities import AngularAcceleration
 from kuchka.quantities import AngularDisplacement
+from kuchka.quantities import AngularJerk
+from kuchka.quantities import AngularMomentum
 from kuchka.quantities import AngularVelocity
+from kuchka.quantities import AngularVelocitySquared
 from kuchka.quantities import ApparentPower
 from kuchka.quantities import Area
 from kuchka.quantities import BaudRate
+from kuchka.quantities import Capacitance
+from kuchka.quantities import CatalyticActivity
 from kuchka.quantities import Charge
 from kuchka.quantities import Conductance
 from kuchka.quantities import ConvertibleToFrequency
 from kuchka.quantities import Current
+from kuchka.quantities import CurrentDensity
 from kuchka.quantities import Data
 from kuchka.quantities import DataRate
 from kuchka.quantities import Density
+from kuchka.quantities import DynamicViscosity
+from kuchka.quantities import ElectricFieldStrength
+from kuchka.quantities import ElectricFluxDensity
 from kuchka.quantities import Energy
 from kuchka.quantities import EnergyDensity
+from kuchka.quantities import EntitiesPerAmount
+from kuchka.quantities import Entropy
+from kuchka.quantities import EquivalentDose
+from kuchka.quantities import EquivalentDoseRate
+from kuchka.quantities import Exposure
+from kuchka.quantities import ExposureRate
+from kuchka.quantities import FirstMomentOfMass
+from kuchka.quantities import Fluence
 from kuchka.quantities import Force
 from kuchka.quantities import Frequency
+from kuchka.quantities import HeatCapacity
+from kuchka.quantities import HeatFlux
+from kuchka.quantities import HeatingRate
+from kuchka.quantities import Illuminance
+from kuchka.quantities import Impedance
+from kuchka.quantities import Impulse
+from kuchka.quantities import Inductance
 from kuchka.quantities import Instant
+from kuchka.quantities import Jerk
+from kuchka.quantities import KinematicViscosity
 from kuchka.quantities import Length
+from kuchka.quantities import LinearChargeDensity
 from kuchka.quantities import LogarithmicRatio
+from kuchka.quantities import Luminance
+from kuchka.quantities import LuminousEfficacy
+from kuchka.quantities import LuminousEnergy
+from kuchka.quantities import LuminousExposure
+from kuchka.quantities import LuminousFlux
 from kuchka.quantities import LuminousIntensity
+from kuchka.quantities import MagneticFieldStrength
+from kuchka.quantities import MagneticFlux
+from kuchka.quantities import MagneticFluxDensity
+from kuchka.quantities import Magnetization
 from kuchka.quantities import Mass
+from kuchka.quantities import MassFlowRate
+from kuchka.quantities import Molality
+from kuchka.quantities import MolarCharge
+from kuchka.quantities import MolarConcentration
+from kuchka.quantities import MolarEnergy
+from kuchka.quantities import MolarEntropy
+from kuchka.quantities import MolarFlowRate
+from kuchka.quantities import MolarHeatCapacity
+from kuchka.quantities import MolarMass
+from kuchka.quantities import MolarVolume
+from kuchka.quantities import MomentOfInertia
+from kuchka.quantities import Momentum
+from kuchka.quantities import Permeability
+from kuchka.quantities import Permittivity
 from kuchka.quantities import Power
 from kuchka.quantities import Pressure
 from kuchka.quantities import Proportion
+from kuchka.quantities import Reactance
 from kuchka.quantities import ReactivePower
 from kuchka.quantities import Resistance
 from kuchka.quantities import SampleRate
 from kuchka.quantities import SamplingPeriod
+from kuchka.quantities import Snap
+from kuchka.quantities import SolidAngle
+from kuchka.quantities import SpecificActivity
+from kuchka.quantities import SpecificCharge
+from kuchka.quantities import SpecificCurrent
+from kuchka.quantities import SpecificEnergy
+from kuchka.quantities import SpecificEntropy
+from kuchka.quantities import SpecificHeatCapacity
+from kuchka.quantities import SpecificPower
 from kuchka.quantities import Stress
+from kuchka.quantities import SurfaceActivity
+from kuchka.quantities import SurfaceChargeDensity
+from kuchka.quantities import SurfaceTension
 from kuchka.quantities import Temperature
 from kuchka.quantities import TemperatureDelta
+from kuchka.quantities import ThermalConductivity
 from kuchka.quantities import Time
+from kuchka.quantities import TimeCubed
+from kuchka.quantities import TimeFourthPower
+from kuchka.quantities import TimeSquared
 from kuchka.quantities import Torque
 from kuchka.quantities import Velocity
+from kuchka.quantities import VelocitySquared
 from kuchka.quantities import Voltage
 from kuchka.quantities import Volume
+from kuchka.quantities import VolumeChargeDensity
+from kuchka.quantities import VolumetricFlowRate
 from kuchka.units import Acre
 from kuchka.units import Ampere
 from kuchka.units import AmpereHour
+from kuchka.units import AmpereHourPerKilogram
+from kuchka.units import AmpereHourPerLitre
+from kuchka.units import AmperePerKilogram
+from kuchka.units import AmperePerMetre
+from kuchka.units import AmperePerSquareCentimetre
+from kuchka.units import AmperePerSquareMetre
+from kuchka.units import AmperePerSquareMillimetre
 from kuchka.units import AmpereSecond
 from kuchka.units import ArcMinute
 from kuchka.units import ArcMinuteDisplacement
@@ -58,6 +139,12 @@ from kuchka.units import Atmosphere
 from kuchka.units import Bar
 from kuchka.units import Baud
 from kuchka.units import Becquerel
+from kuchka.units import BecquerelPerCubicMetre
+from kuchka.units import BecquerelPerGram
+from kuchka.units import BecquerelPerKilogram
+from kuchka.units import BecquerelPerLitre
+from kuchka.units import BecquerelPerSquareCentimetre
+from kuchka.units import BecquerelPerSquareMetre
 from kuchka.units import Bel
 from kuchka.units import Bit
 from kuchka.units import BitPerSecond
@@ -65,17 +152,46 @@ from kuchka.units import Byte
 from kuchka.units import BytePerSecond
 from kuchka.units import Calorie
 from kuchka.units import Candela
+from kuchka.units import CandelaPerSquareMetre
 from kuchka.units import Celsius
+from kuchka.units import CelsiusPerHour
+from kuchka.units import CelsiusPerMinute
+from kuchka.units import CelsiusPerSecond
+from kuchka.units import Centigray
+from kuchka.units import CentigrayPerMinute
 from kuchka.units import Centimeter
 from kuchka.units import Centimetre
+from kuchka.units import Centipoise
+from kuchka.units import Centistokes
 from kuchka.units import Coulomb
+from kuchka.units import CoulombPerCubicCentimetre
+from kuchka.units import CoulombPerCubicMetre
+from kuchka.units import CoulombPerKilogram
+from kuchka.units import CoulombPerMetre
+from kuchka.units import CoulombPerMole
+from kuchka.units import CoulombPerSquareCentimetre
+from kuchka.units import CoulombPerSquareMetre
 from kuchka.units import CubicCentimeter
+from kuchka.units import CubicCentimeterPerMole
 from kuchka.units import CubicCentimetre
+from kuchka.units import CubicCentimetrePerMole
+from kuchka.units import CubicFoot
+from kuchka.units import CubicFootPerMinute
 from kuchka.units import CubicMeter
+from kuchka.units import CubicMeterPerHour
+from kuchka.units import CubicMeterPerMinute
+from kuchka.units import CubicMeterPerMole
+from kuchka.units import CubicMeterPerSecond
 from kuchka.units import CubicMetre
+from kuchka.units import CubicMetrePerHour
+from kuchka.units import CubicMetrePerMinute
+from kuchka.units import CubicMetrePerMole
+from kuchka.units import CubicMetrePerSecond
 from kuchka.units import CubicMillimeter
 from kuchka.units import CubicMillimetre
 from kuchka.units import Curie
+from kuchka.units import CuriePerGram
+from kuchka.units import CuriePerSquareKilometre
 from kuchka.units import Dalton
 from kuchka.units import Day
 from kuchka.units import Decibel
@@ -84,19 +200,37 @@ from kuchka.units import Decimetre
 from kuchka.units import Degree
 from kuchka.units import DegreeDisplacement
 from kuchka.units import DegreePerSecond
+from kuchka.units import DegreePerSecondCubed
+from kuchka.units import DegreePerSecondSquared
+from kuchka.units import DegreeSquaredPerSecondSquared
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaFahrenheit
 from kuchka.units import DeltaKelvin
+from kuchka.units import DeltaRankine
+from kuchka.units import DpmPer100SquareCentimetre
 from kuchka.units import Dyne
+from kuchka.units import DynePerCentimetre
+from kuchka.units import DyneSecond
 from kuchka.units import EarthMass
 from kuchka.units import Electronvolt
+from kuchka.units import EnzymeUnit
 from kuchka.units import Erg
 from kuchka.units import Fahrenheit
+from kuchka.units import FahrenheitPerMinute
+from kuchka.units import FahrenheitPerSecond
+from kuchka.units import Farad
+from kuchka.units import FaradPerMetre
+from kuchka.units import Femtofarad
+from kuchka.units import Femtogauss
 from kuchka.units import Femtomole
 from kuchka.units import Femtosecond
+from kuchka.units import Femtotesla
 from kuchka.units import Foot
+from kuchka.units import FootCandle
+from kuchka.units import FootLambert
 from kuchka.units import Fortnight
 from kuchka.units import Gal
+from kuchka.units import Gauss
 from kuchka.units import Gibibit
 from kuchka.units import GibibitPerSecond
 from kuchka.units import Gibibyte
@@ -110,7 +244,9 @@ from kuchka.units import GigabytePerSecond
 from kuchka.units import Gigaelectronvolt
 from kuchka.units import Gigahertz
 from kuchka.units import Gigajoule
+from kuchka.units import GigajoulePerHour
 from kuchka.units import Gigaohm
+from kuchka.units import Gigaparsec
 from kuchka.units import Gigapascal
 from kuchka.units import Gigavar
 from kuchka.units import GigavoltAmpere
@@ -119,78 +255,181 @@ from kuchka.units import Gradian
 from kuchka.units import GradianDisplacement
 from kuchka.units import Grain
 from kuchka.units import Gram
+from kuchka.units import GramCentimeter
+from kuchka.units import GramCentimetre
+from kuchka.units import GramCentimetrePerSecond
+from kuchka.units import GramMillimeter
+from kuchka.units import GramMillimetre
 from kuchka.units import GramPerCubicCentimeter
 from kuchka.units import GramPerCubicCentimetre
 from kuchka.units import GramPerLiter
 from kuchka.units import GramPerLitre
 from kuchka.units import GramPerMilliliter
 from kuchka.units import GramPerMillilitre
+from kuchka.units import GramPerMole
+from kuchka.units import GramPerSecond
+from kuchka.units import GramSquareCentimeter
+from kuchka.units import GramSquareCentimetre
+from kuchka.units import Gray
+from kuchka.units import GrayPerHour
+from kuchka.units import GrayPerMinute
+from kuchka.units import GrayPerSecond
 from kuchka.units import Hectare
 from kuchka.units import Hectopascal
+from kuchka.units import Henry
+from kuchka.units import HenryPerMetre
 from kuchka.units import Hertz
 from kuchka.units import Horsepower
 from kuchka.units import Hour
+from kuchka.units import HourCubed
+from kuchka.units import HourFourthPower
+from kuchka.units import HourSquared
 from kuchka.units import Inch
 from kuchka.units import Jiffy
 from kuchka.units import Joule
 from kuchka.units import JoulePerCubicMeter
 from kuchka.units import JoulePerCubicMetre
+from kuchka.units import JoulePerGram
+from kuchka.units import JoulePerHour
+from kuchka.units import JoulePerKelvin
+from kuchka.units import JoulePerKilogram
+from kuchka.units import JoulePerKilogramKelvin
+from kuchka.units import JoulePerMinute
+from kuchka.units import JoulePerMole
+from kuchka.units import JoulePerMoleKelvin
+from kuchka.units import JoulePerSquareCentimetre
+from kuchka.units import JoulePerSquareMetre
 from kuchka.units import JoulePerTurn
+from kuchka.units import JouleSecondPerTurn
 from kuchka.units import JulianYear
+from kuchka.units import Katal
 from kuchka.units import Kelvin
+from kuchka.units import KelvinPerHour
+from kuchka.units import KelvinPerMinute
+from kuchka.units import KelvinPerSecond
 from kuchka.units import Kibibit
 from kuchka.units import KibibitPerSecond
 from kuchka.units import Kibibyte
 from kuchka.units import KibibytePerSecond
 from kuchka.units import Kiloampere
+from kuchka.units import KiloamperePerMetre
+from kuchka.units import KiloamperePerSquareMetre
 from kuchka.units import Kilobaud
 from kuchka.units import Kilobecquerel
+from kuchka.units import KilobecquerelPerCubicMetre
+from kuchka.units import KilobecquerelPerKilogram
+from kuchka.units import KilobecquerelPerSquareMetre
 from kuchka.units import Kilobit
 from kuchka.units import KilobitPerSecond
 from kuchka.units import Kilobyte
 from kuchka.units import KilobytePerSecond
 from kuchka.units import Kilocalorie
+from kuchka.units import KilocaloriePerKelvin
+from kuchka.units import KilocaloriePerKilogram
+from kuchka.units import KilocaloriePerMole
+from kuchka.units import KilocandelaPerSquareMetre
+from kuchka.units import KilocoulombPerMole
 from kuchka.units import Kiloelectronvolt
+from kuchka.units import Kilofarad
+from kuchka.units import Kilogauss
 from kuchka.units import Kilogram
 from kuchka.units import KilogramForce
+from kuchka.units import KilogramMeter
+from kuchka.units import KilogramMetre
+from kuchka.units import KilogramMetrePerSecond
 from kuchka.units import KilogramPerCubicMeter
 from kuchka.units import KilogramPerCubicMetre
+from kuchka.units import KilogramPerHour
+from kuchka.units import KilogramPerKilomole
 from kuchka.units import KilogramPerLiter
 from kuchka.units import KilogramPerLitre
+from kuchka.units import KilogramPerMole
+from kuchka.units import KilogramPerSecond
+from kuchka.units import KilogramSquareCentimeter
+from kuchka.units import KilogramSquareCentimetre
+from kuchka.units import KilogramSquareMeter
+from kuchka.units import KilogramSquareMeterPerSecond
+from kuchka.units import KilogramSquareMeterPerSquareTurn
+from kuchka.units import KilogramSquareMetre
+from kuchka.units import KilogramSquareMetrePerSecond
+from kuchka.units import KilogramSquareMetrePerSquareTurn
+from kuchka.units import Kilogray
+from kuchka.units import Kilohenry
 from kuchka.units import Kilohertz
 from kuchka.units import Kilojoule
 from kuchka.units import KilojoulePerCubicMeter
 from kuchka.units import KilojoulePerCubicMetre
+from kuchka.units import KilojoulePerHour
+from kuchka.units import KilojoulePerKelvin
+from kuchka.units import KilojoulePerKilogram
+from kuchka.units import KilojoulePerKilogramKelvin
+from kuchka.units import KilojoulePerMinute
+from kuchka.units import KilojoulePerMole
+from kuchka.units import KilojoulePerMoleKelvin
 from kuchka.units import Kiloliter
 from kuchka.units import Kilolitre
+from kuchka.units import Kilolumen
+from kuchka.units import Kilolux
+from kuchka.units import KiloluxHour
 from kuchka.units import Kilometer
 from kuchka.units import KilometerPerHour
 from kuchka.units import Kilometre
 from kuchka.units import KilometrePerHour
 from kuchka.units import Kilomole
+from kuchka.units import KilomolePerHour
+from kuchka.units import KilomolePerSecond
 from kuchka.units import Kilonewton
 from kuchka.units import KilonewtonMeter
 from kuchka.units import KilonewtonMetre
+from kuchka.units import KilonewtonPerMetre
+from kuchka.units import KilonewtonSecond
 from kuchka.units import Kiloohm
+from kuchka.units import Kiloparsec
 from kuchka.units import Kilopascal
 from kuchka.units import KilopoundPerSquareInch
 from kuchka.units import KilosamplesPerSecond
 from kuchka.units import Kilosiemens
+from kuchka.units import Kilosievert
+from kuchka.units import Kilotesla
 from kuchka.units import KilotonneOfTNT
 from kuchka.units import Kilovar
 from kuchka.units import Kilovolt
 from kuchka.units import KilovoltAmpere
+from kuchka.units import KilovoltPerCentimetre
+from kuchka.units import KilovoltPerMetre
+from kuchka.units import KilovoltPerMillimetre
 from kuchka.units import Kilowatt
 from kuchka.units import KilowattHour
+from kuchka.units import KilowattHourPerKilogram
+from kuchka.units import KilowattHourPerSquareMetre
+from kuchka.units import KilowattPerKilogram
+from kuchka.units import KilowattPerMetreKelvin
+from kuchka.units import KilowattPerSquareMetre
+from kuchka.units import Kiloweber
 from kuchka.units import Knot
 from kuchka.units import LightYear
 from kuchka.units import Liter
+from kuchka.units import LiterPerMinute
+from kuchka.units import LiterPerMole
+from kuchka.units import LiterPerSecond
 from kuchka.units import Litre
+from kuchka.units import LitrePerMinute
+from kuchka.units import LitrePerMole
+from kuchka.units import LitrePerSecond
+from kuchka.units import Lumen
+from kuchka.units import LumenHour
+from kuchka.units import LumenPerWatt
+from kuchka.units import LumenSecond
+from kuchka.units import Lux
+from kuchka.units import LuxHour
+from kuchka.units import LuxSecond
 from kuchka.units import Mebibit
 from kuchka.units import MebibitPerSecond
 from kuchka.units import Mebibyte
 from kuchka.units import MebibytePerSecond
 from kuchka.units import Megaampere
+from kuchka.units import MegaamperePerMetre
+from kuchka.units import MegaamperePerSquareMetre
 from kuchka.units import Megabaud
 from kuchka.units import Megabecquerel
 from kuchka.units import Megabit
@@ -199,101 +438,245 @@ from kuchka.units import Megabyte
 from kuchka.units import MegabytePerSecond
 from kuchka.units import Megaelectronvolt
 from kuchka.units import Megagram
+from kuchka.units import Megagray
 from kuchka.units import Megahertz
 from kuchka.units import Megajoule
 from kuchka.units import MegajoulePerCubicMeter
 from kuchka.units import MegajoulePerCubicMetre
+from kuchka.units import MegajoulePerHour
+from kuchka.units import MegajoulePerKilogram
+from kuchka.units import MegajoulePerSquareMetre
 from kuchka.units import Meganewton
 from kuchka.units import Megaohm
+from kuchka.units import Megaparsec
 from kuchka.units import Megapascal
 from kuchka.units import MegasamplesPerSecond
 from kuchka.units import MegatonneOfTNT
 from kuchka.units import Megavar
 from kuchka.units import Megavolt
 from kuchka.units import MegavoltAmpere
+from kuchka.units import MegavoltPerMetre
 from kuchka.units import Megawatt
+from kuchka.units import MegawattPerSquareMetre
 from kuchka.units import Meter
 from kuchka.units import MeterPerSecond
+from kuchka.units import MeterPerSecondCubed
+from kuchka.units import MeterPerSecondFourthPower
 from kuchka.units import MeterPerSecondSquared
 from kuchka.units import Metre
 from kuchka.units import MetrePerSecond
+from kuchka.units import MetrePerSecondCubed
+from kuchka.units import MetrePerSecondFourthPower
 from kuchka.units import MetrePerSecondSquared
 from kuchka.units import MetricHorsepower
 from kuchka.units import Microampere
+from kuchka.units import MicroamperePerKilogram
+from kuchka.units import MicroamperePerMetre
+from kuchka.units import MicroamperePerSquareCentimetre
 from kuchka.units import Microcoulomb
+from kuchka.units import MicrocoulombPerCubicMetre
+from kuchka.units import MicrocoulombPerKilogram
+from kuchka.units import MicrocoulombPerMetre
+from kuchka.units import MicrocoulombPerSquareCentimetre
+from kuchka.units import MicrocoulombPerSquareMetre
 from kuchka.units import Microcurie
 from kuchka.units import Microelectronvolt
+from kuchka.units import Microfarad
+from kuchka.units import MicrofaradPerMetre
 from kuchka.units import Microgal
+from kuchka.units import Microgauss
 from kuchka.units import Microgram
+from kuchka.units import MicrogramPerLiter
+from kuchka.units import MicrogramPerLitre
+from kuchka.units import Microgray
+from kuchka.units import MicrograyPerHour
+from kuchka.units import Microhenry
+from kuchka.units import MicrohenryPerMetre
 from kuchka.units import Microhertz
 from kuchka.units import Microjoule
+from kuchka.units import MicrojoulePerSquareCentimetre
+from kuchka.units import Microkatal
 from kuchka.units import Microliter
 from kuchka.units import Microlitre
 from kuchka.units import Micrometer
 from kuchka.units import Micrometre
 from kuchka.units import Micromole
+from kuchka.units import MicromolePerKilogram
+from kuchka.units import MicromolePerLiter
+from kuchka.units import MicromolePerLitre
 from kuchka.units import Micronewton
 from kuchka.units import Microohm
+from kuchka.units import MicropascalSecond
+from kuchka.units import Microroentgen
+from kuchka.units import MicroroentgenPerHour
 from kuchka.units import Microsecond
+from kuchka.units import MicrosecondCubed
+from kuchka.units import MicrosecondFourthPower
+from kuchka.units import MicrosecondSquared
 from kuchka.units import Microsiemens
+from kuchka.units import Microsievert
+from kuchka.units import MicrosievertPerHour
+from kuchka.units import Microsteradian
+from kuchka.units import Microtesla
 from kuchka.units import Microvolt
+from kuchka.units import MicrovoltPerMetre
 from kuchka.units import Microwatt
+from kuchka.units import MicrowattPerSquareCentimetre
+from kuchka.units import Microweber
 from kuchka.units import Mile
 from kuchka.units import MilePerHour
 from kuchka.units import Milliampere
 from kuchka.units import MilliampereHour
+from kuchka.units import MilliampereHourPerGram
+from kuchka.units import MilliampereHourPerSquareCentimetre
+from kuchka.units import MilliamperePerKilogram
+from kuchka.units import MilliamperePerMetre
+from kuchka.units import MilliamperePerSquareCentimetre
+from kuchka.units import MilliamperePerSquareMetre
 from kuchka.units import MilliampereSecond
 from kuchka.units import Millibar
 from kuchka.units import Millibecquerel
+from kuchka.units import MillibecquerelPerCubicMetre
+from kuchka.units import MillicandelaPerSquareMetre
 from kuchka.units import Millicoulomb
+from kuchka.units import MillicoulombPerCubicMetre
+from kuchka.units import MillicoulombPerKilogram
+from kuchka.units import MillicoulombPerMetre
+from kuchka.units import MillicoulombPerSquareMetre
 from kuchka.units import Millicurie
 from kuchka.units import Millielectronvolt
+from kuchka.units import Millifarad
+from kuchka.units import MillifaradPerMetre
 from kuchka.units import Milligal
+from kuchka.units import Milligauss
 from kuchka.units import Milligram
+from kuchka.units import MilligramPerLiter
+from kuchka.units import MilligramPerLitre
+from kuchka.units import Milligray
+from kuchka.units import MilligrayPerHour
+from kuchka.units import MilligrayPerSecond
+from kuchka.units import Millihenry
+from kuchka.units import MillihenryPerMetre
 from kuchka.units import Millihertz
 from kuchka.units import Millijoule
+from kuchka.units import MillijoulePerSquareCentimetre
+from kuchka.units import Millikatal
 from kuchka.units import Milliliter
+from kuchka.units import MilliliterPerMinute
 from kuchka.units import Millilitre
+from kuchka.units import MillilitrePerMinute
+from kuchka.units import Millilumen
+from kuchka.units import Millilux
 from kuchka.units import Millimeter
+from kuchka.units import MillimeterPerSecondCubed
+from kuchka.units import MillimeterPerSecondFourthPower
 from kuchka.units import Millimetre
+from kuchka.units import MillimetrePerSecondCubed
+from kuchka.units import MillimetrePerSecondFourthPower
 from kuchka.units import Millimole
+from kuchka.units import MillimolePerKilogram
+from kuchka.units import MillimolePerLiter
+from kuchka.units import MillimolePerLitre
+from kuchka.units import MillimolePerMinute
 from kuchka.units import Millinewton
 from kuchka.units import MillinewtonMeter
 from kuchka.units import MillinewtonMetre
+from kuchka.units import MillinewtonPerMetre
+from kuchka.units import MillinewtonSecond
 from kuchka.units import Milliohm
+from kuchka.units import MillipascalSecond
+from kuchka.units import Millirad
+from kuchka.units import MilliradPerHour
+from kuchka.units import Millirem
+from kuchka.units import MilliremPerHour
+from kuchka.units import Milliroentgen
+from kuchka.units import MilliroentgenPerHour
 from kuchka.units import Millisecond
+from kuchka.units import MillisecondCubed
+from kuchka.units import MillisecondFourthPower
+from kuchka.units import MillisecondSquared
 from kuchka.units import Millisiemens
+from kuchka.units import Millisievert
+from kuchka.units import MillisievertPerHour
+from kuchka.units import Millisteradian
+from kuchka.units import Millitesla
 from kuchka.units import Millivar
 from kuchka.units import Millivolt
 from kuchka.units import MillivoltAmpere
+from kuchka.units import MillivoltPerMetre
 from kuchka.units import Milliwatt
 from kuchka.units import MilliwattHour
+from kuchka.units import MilliwattPerGram
+from kuchka.units import MilliwattPerKilogram
+from kuchka.units import MilliwattPerMetreKelvin
+from kuchka.units import MilliwattPerSquareCentimetre
+from kuchka.units import MilliwattPerSquareMetre
+from kuchka.units import Milliweber
 from kuchka.units import Minute
+from kuchka.units import MinuteCubed
+from kuchka.units import MinuteFourthPower
+from kuchka.units import MinuteSquared
 from kuchka.units import Mole
+from kuchka.units import MolePerCubicMeter
+from kuchka.units import MolePerCubicMetre
+from kuchka.units import MolePerHour
+from kuchka.units import MolePerKilogram
+from kuchka.units import MolePerLiter
+from kuchka.units import MolePerLitre
+from kuchka.units import MolePerMinute
+from kuchka.units import MolePerSecond
 from kuchka.units import Nanoampere
 from kuchka.units import Nanocoulomb
+from kuchka.units import NanocoulombPerCubicMetre
+from kuchka.units import NanocoulombPerMetre
+from kuchka.units import NanocoulombPerSquareMetre
+from kuchka.units import Nanofarad
+from kuchka.units import NanofaradPerMetre
+from kuchka.units import Nanogauss
 from kuchka.units import Nanogram
+from kuchka.units import Nanogray
+from kuchka.units import NanograyPerHour
+from kuchka.units import Nanohenry
+from kuchka.units import NanohenryPerMetre
 from kuchka.units import Nanohertz
 from kuchka.units import Nanojoule
+from kuchka.units import Nanokatal
 from kuchka.units import Nanometer
 from kuchka.units import Nanometre
 from kuchka.units import Nanomole
+from kuchka.units import NanomolePerLiter
+from kuchka.units import NanomolePerLitre
 from kuchka.units import Nanosecond
+from kuchka.units import NanosecondCubed
+from kuchka.units import NanosecondFourthPower
+from kuchka.units import NanosecondSquared
 from kuchka.units import Nanosiemens
+from kuchka.units import Nanosievert
+from kuchka.units import NanosievertPerHour
+from kuchka.units import Nanotesla
 from kuchka.units import Nanovolt
 from kuchka.units import Nanowatt
+from kuchka.units import Nanoweber
 from kuchka.units import NauticalMile
 from kuchka.units import Newton
 from kuchka.units import NewtonMeter
+from kuchka.units import NewtonMeterSecond
 from kuchka.units import NewtonMetre
+from kuchka.units import NewtonMetreSecond
+from kuchka.units import NewtonPerMetre
+from kuchka.units import NewtonSecond
 from kuchka.units import Ohm
 from kuchka.units import Ounce
+from kuchka.units import OunceInch
+from kuchka.units import Parsec
 from kuchka.units import Pascal
+from kuchka.units import PascalSecond
 from kuchka.units import Pebibit
 from kuchka.units import PebibitPerSecond
 from kuchka.units import Pebibyte
 from kuchka.units import PebibytePerSecond
 from kuchka.units import Percent
+from kuchka.units import PerMole
 from kuchka.units import Petabit
 from kuchka.units import PetabitPerSecond
 from kuchka.units import Petabyte
@@ -303,39 +686,87 @@ from kuchka.units import Petahertz
 from kuchka.units import Petajoule
 from kuchka.units import Petavolt
 from kuchka.units import Petawatt
+from kuchka.units import Phot
 from kuchka.units import Picoampere
 from kuchka.units import Picocoulomb
+from kuchka.units import PicocoulombPerMetre
 from kuchka.units import Picocurie
+from kuchka.units import PicocuriePerGram
+from kuchka.units import PicocuriePerLitre
+from kuchka.units import Picofarad
+from kuchka.units import PicofaradPerMetre
+from kuchka.units import Picogauss
 from kuchka.units import Picogram
+from kuchka.units import Picohenry
 from kuchka.units import Picojoule
 from kuchka.units import Picometer
 from kuchka.units import Picometre
 from kuchka.units import Picomole
 from kuchka.units import Picosecond
+from kuchka.units import Picotesla
 from kuchka.units import Picowatt
+from kuchka.units import Poise
 from kuchka.units import Pound
+from kuchka.units import PoundFootPerSecond
 from kuchka.units import PoundForce
 from kuchka.units import PoundForceFoot
 from kuchka.units import PoundForceInch
+from kuchka.units import PoundForceSecond
+from kuchka.units import PoundPerHour
+from kuchka.units import PoundPerLiter
+from kuchka.units import PoundPerLitre
 from kuchka.units import PoundPerSquareInch
+from kuchka.units import PoundSquareFoot
+from kuchka.units import PoundSquareInch
+from kuchka.units import Rad
 from kuchka.units import Radian
 from kuchka.units import RadianDisplacement
 from kuchka.units import RadianPerSecond
+from kuchka.units import RadianPerSecondCubed
+from kuchka.units import RadianPerSecondSquared
+from kuchka.units import RadianSquaredPerSecondSquared
+from kuchka.units import RadPerHour
+from kuchka.units import Rankine
 from kuchka.units import Ratio
+from kuchka.units import Rem
+from kuchka.units import RemPerHour
 from kuchka.units import RevolutionPerMinute
+from kuchka.units import RevolutionPerMinutePerSecond
+from kuchka.units import Roentgen
+from kuchka.units import RoentgenPerHour
+from kuchka.units import RoentgenPerMinute
+from kuchka.units import RoentgenPerSecond
 from kuchka.units import SamplesPerSecond
 from kuchka.units import Second
+from kuchka.units import SecondCubed
+from kuchka.units import SecondFourthPower
+from kuchka.units import SecondSquared
 from kuchka.units import Siemens
+from kuchka.units import Sievert
+from kuchka.units import SievertPerHour
+from kuchka.units import SievertPerSecond
 from kuchka.units import SolarMass
+from kuchka.units import SquareArcMinute
+from kuchka.units import SquareArcSecond
 from kuchka.units import SquareCentimeter
 from kuchka.units import SquareCentimetre
+from kuchka.units import SquareCentimetrePerSecond
+from kuchka.units import SquareDegree
 from kuchka.units import SquareInch
 from kuchka.units import SquareKilometer
 from kuchka.units import SquareKilometre
+from kuchka.units import SquareKilometrePerSecondSquared
 from kuchka.units import SquareMeter
 from kuchka.units import SquareMetre
+from kuchka.units import SquareMetrePerSecond
+from kuchka.units import SquareMetrePerSecondSquared
+from kuchka.units import SquareMicrometrePerSecond
 from kuchka.units import SquareMillimeter
 from kuchka.units import SquareMillimetre
+from kuchka.units import SquareMillimetrePerSecond
+from kuchka.units import Steradian
+from kuchka.units import Stilb
+from kuchka.units import Stokes
 from kuchka.units import Tebibit
 from kuchka.units import TebibitPerSecond
 from kuchka.units import Tebibyte
@@ -349,33 +780,69 @@ from kuchka.units import Teraelectronvolt
 from kuchka.units import Terahertz
 from kuchka.units import Terajoule
 from kuchka.units import Terawatt
+from kuchka.units import Tesla
 from kuchka.units import ThermochemicalCalorie
+from kuchka.units import ThermochemicalCaloriePerGramKelvin
+from kuchka.units import ThermochemicalCaloriePerKelvin
+from kuchka.units import ThermochemicalCaloriePerMoleKelvin
 from kuchka.units import Tonne
 from kuchka.units import TonneOfTNT
+from kuchka.units import TonnePerHour
 from kuchka.units import Turn
 from kuchka.units import TurnDisplacement
 from kuchka.units import TurnPerSecond
+from kuchka.units import TurnPerSecondCubed
+from kuchka.units import TurnPerSecondSquared
+from kuchka.units import TurnSquaredPerSecondSquared
+from kuchka.units import UsGallon
+from kuchka.units import UsGallonPerMinute
 from kuchka.units import Var
 from kuchka.units import Volt
 from kuchka.units import VoltAmpere
+from kuchka.units import VoltPerCentimetre
+from kuchka.units import VoltPerMetre
+from kuchka.units import VoltPerMillimetre
 from kuchka.units import Watt
 from kuchka.units import WattHour
+from kuchka.units import WattHourPerKilogram
 from kuchka.units import WattHourPerLiter
 from kuchka.units import WattHourPerLitre
+from kuchka.units import WattHourPerSquareMetre
+from kuchka.units import WattPerCentimetreKelvin
+from kuchka.units import WattPerGram
+from kuchka.units import WattPerKilogram
+from kuchka.units import WattPerMetreKelvin
+from kuchka.units import WattPerSquareCentimetre
+from kuchka.units import WattPerSquareMetre
+from kuchka.units import Weber
 from kuchka.units import Week
 from kuchka.units import Yard
 
 __all__ = [
+    "AbsorbedDose",
+    "AbsorbedDoseRate",
     "Acceleration",
     "Acre",
     "Activity",
+    "ActivityConcentration",
     "AmountOfSubstance",
     "Ampere",
     "AmpereHour",
+    "AmpereHourPerKilogram",
+    "AmpereHourPerLitre",
+    "AmperePerKilogram",
+    "AmperePerMetre",
+    "AmperePerSquareCentimetre",
+    "AmperePerSquareMetre",
+    "AmperePerSquareMillimetre",
     "AmpereSecond",
     "Angle",
+    "AngularAcceleration",
     "AngularDisplacement",
+    "AngularJerk",
+    "AngularMomentum",
     "AngularVelocity",
+    "AngularVelocitySquared",
     "ApparentPower",
     "ArcMinute",
     "ArcMinuteDisplacement",
@@ -388,6 +855,12 @@ __all__ = [
     "Baud",
     "BaudRate",
     "Becquerel",
+    "BecquerelPerCubicMetre",
+    "BecquerelPerGram",
+    "BecquerelPerKilogram",
+    "BecquerelPerLitre",
+    "BecquerelPerSquareCentimetre",
+    "BecquerelPerSquareMetre",
     "Bel",
     "Bit",
     "BitPerSecond",
@@ -395,21 +868,53 @@ __all__ = [
     "BytePerSecond",
     "Calorie",
     "Candela",
+    "CandelaPerSquareMetre",
+    "Capacitance",
+    "CatalyticActivity",
     "Celsius",
+    "CelsiusPerHour",
+    "CelsiusPerMinute",
+    "CelsiusPerSecond",
+    "Centigray",
+    "CentigrayPerMinute",
     "Centimeter",
     "Centimetre",
+    "Centipoise",
+    "Centistokes",
     "Charge",
     "Conductance",
     "ConvertibleToFrequency",
     "Coulomb",
+    "CoulombPerCubicCentimetre",
+    "CoulombPerCubicMetre",
+    "CoulombPerKilogram",
+    "CoulombPerMetre",
+    "CoulombPerMole",
+    "CoulombPerSquareCentimetre",
+    "CoulombPerSquareMetre",
     "CubicCentimeter",
+    "CubicCentimeterPerMole",
     "CubicCentimetre",
+    "CubicCentimetrePerMole",
+    "CubicFoot",
+    "CubicFootPerMinute",
     "CubicMeter",
+    "CubicMeterPerHour",
+    "CubicMeterPerMinute",
+    "CubicMeterPerMole",
+    "CubicMeterPerSecond",
     "CubicMetre",
+    "CubicMetrePerHour",
+    "CubicMetrePerMinute",
+    "CubicMetrePerMole",
+    "CubicMetrePerSecond",
     "CubicMillimeter",
     "CubicMillimetre",
     "Curie",
+    "CuriePerGram",
+    "CuriePerSquareKilometre",
     "Current",
+    "CurrentDensity",
     "Dalton",
     "Data",
     "DataRate",
@@ -420,24 +925,53 @@ __all__ = [
     "Degree",
     "DegreeDisplacement",
     "DegreePerSecond",
+    "DegreePerSecondCubed",
+    "DegreePerSecondSquared",
+    "DegreeSquaredPerSecondSquared",
     "DeltaCelsius",
     "DeltaFahrenheit",
     "DeltaKelvin",
+    "DeltaRankine",
     "Density",
+    "DpmPer100SquareCentimetre",
+    "DynamicViscosity",
     "Dyne",
+    "DynePerCentimetre",
+    "DyneSecond",
     "EarthMass",
+    "ElectricFieldStrength",
+    "ElectricFluxDensity",
     "Electronvolt",
     "Energy",
     "EnergyDensity",
+    "EntitiesPerAmount",
+    "Entropy",
+    "EnzymeUnit",
+    "EquivalentDose",
+    "EquivalentDoseRate",
     "Erg",
+    "Exposure",
+    "ExposureRate",
     "Fahrenheit",
+    "FahrenheitPerMinute",
+    "FahrenheitPerSecond",
+    "Farad",
+    "FaradPerMetre",
+    "Femtofarad",
+    "Femtogauss",
     "Femtomole",
     "Femtosecond",
+    "Femtotesla",
+    "FirstMomentOfMass",
+    "Fluence",
     "Foot",
+    "FootCandle",
+    "FootLambert",
     "Force",
     "Fortnight",
     "Frequency",
     "Gal",
+    "Gauss",
     "Gibibit",
     "GibibitPerSecond",
     "Gibibyte",
@@ -451,7 +985,9 @@ __all__ = [
     "Gigaelectronvolt",
     "Gigahertz",
     "Gigajoule",
+    "GigajoulePerHour",
     "Gigaohm",
+    "Gigaparsec",
     "Gigapascal",
     "Gigavar",
     "GigavoltAmpere",
@@ -460,83 +996,206 @@ __all__ = [
     "GradianDisplacement",
     "Grain",
     "Gram",
+    "GramCentimeter",
+    "GramCentimetre",
+    "GramCentimetrePerSecond",
+    "GramMillimeter",
+    "GramMillimetre",
     "GramPerCubicCentimeter",
     "GramPerCubicCentimetre",
     "GramPerLiter",
     "GramPerLitre",
     "GramPerMilliliter",
     "GramPerMillilitre",
+    "GramPerMole",
+    "GramPerSecond",
+    "GramSquareCentimeter",
+    "GramSquareCentimetre",
+    "Gray",
+    "GrayPerHour",
+    "GrayPerMinute",
+    "GrayPerSecond",
+    "HeatCapacity",
+    "HeatFlux",
+    "HeatingRate",
     "Hectare",
     "Hectopascal",
+    "Henry",
+    "HenryPerMetre",
     "Hertz",
     "Horsepower",
     "Hour",
+    "HourCubed",
+    "HourFourthPower",
+    "HourSquared",
+    "Illuminance",
+    "Impedance",
+    "Impulse",
     "Inch",
+    "Inductance",
     "Instant",
+    "Jerk",
     "Jiffy",
     "Joule",
     "JoulePerCubicMeter",
     "JoulePerCubicMetre",
+    "JoulePerGram",
+    "JoulePerHour",
+    "JoulePerKelvin",
+    "JoulePerKilogram",
+    "JoulePerKilogramKelvin",
+    "JoulePerMinute",
+    "JoulePerMole",
+    "JoulePerMoleKelvin",
+    "JoulePerSquareCentimetre",
+    "JoulePerSquareMetre",
     "JoulePerTurn",
+    "JouleSecondPerTurn",
     "JulianYear",
+    "Katal",
     "Kelvin",
+    "KelvinPerHour",
+    "KelvinPerMinute",
+    "KelvinPerSecond",
     "Kibibit",
     "KibibitPerSecond",
     "Kibibyte",
     "KibibytePerSecond",
     "Kiloampere",
+    "KiloamperePerMetre",
+    "KiloamperePerSquareMetre",
     "Kilobaud",
     "Kilobecquerel",
+    "KilobecquerelPerCubicMetre",
+    "KilobecquerelPerKilogram",
+    "KilobecquerelPerSquareMetre",
     "Kilobit",
     "KilobitPerSecond",
     "Kilobyte",
     "KilobytePerSecond",
     "Kilocalorie",
+    "KilocaloriePerKelvin",
+    "KilocaloriePerKilogram",
+    "KilocaloriePerMole",
+    "KilocandelaPerSquareMetre",
+    "KilocoulombPerMole",
     "Kiloelectronvolt",
+    "Kilofarad",
+    "Kilogauss",
     "Kilogram",
     "KilogramForce",
+    "KilogramMeter",
+    "KilogramMetre",
+    "KilogramMetrePerSecond",
     "KilogramPerCubicMeter",
     "KilogramPerCubicMetre",
+    "KilogramPerHour",
+    "KilogramPerKilomole",
     "KilogramPerLiter",
     "KilogramPerLitre",
+    "KilogramPerMole",
+    "KilogramPerSecond",
+    "KilogramSquareCentimeter",
+    "KilogramSquareCentimetre",
+    "KilogramSquareMeter",
+    "KilogramSquareMeterPerSecond",
+    "KilogramSquareMeterPerSquareTurn",
+    "KilogramSquareMetre",
+    "KilogramSquareMetrePerSecond",
+    "KilogramSquareMetrePerSquareTurn",
+    "Kilogray",
+    "Kilohenry",
     "Kilohertz",
     "Kilojoule",
     "KilojoulePerCubicMeter",
     "KilojoulePerCubicMetre",
+    "KilojoulePerHour",
+    "KilojoulePerKelvin",
+    "KilojoulePerKilogram",
+    "KilojoulePerKilogramKelvin",
+    "KilojoulePerMinute",
+    "KilojoulePerMole",
+    "KilojoulePerMoleKelvin",
     "Kiloliter",
     "Kilolitre",
+    "Kilolumen",
+    "Kilolux",
+    "KiloluxHour",
     "Kilometer",
     "KilometerPerHour",
     "Kilometre",
     "KilometrePerHour",
     "Kilomole",
+    "KilomolePerHour",
+    "KilomolePerSecond",
     "Kilonewton",
     "KilonewtonMeter",
     "KilonewtonMetre",
+    "KilonewtonPerMetre",
+    "KilonewtonSecond",
     "Kiloohm",
+    "Kiloparsec",
     "Kilopascal",
     "KilopoundPerSquareInch",
     "KilosamplesPerSecond",
     "Kilosiemens",
+    "Kilosievert",
+    "Kilotesla",
     "KilotonneOfTNT",
     "Kilovar",
     "Kilovolt",
     "KilovoltAmpere",
+    "KilovoltPerCentimetre",
+    "KilovoltPerMetre",
+    "KilovoltPerMillimetre",
     "Kilowatt",
     "KilowattHour",
+    "KilowattHourPerKilogram",
+    "KilowattHourPerSquareMetre",
+    "KilowattPerKilogram",
+    "KilowattPerMetreKelvin",
+    "KilowattPerSquareMetre",
+    "Kiloweber",
+    "KinematicViscosity",
     "Knot",
     "Length",
     "LightYear",
+    "LinearChargeDensity",
     "Liter",
+    "LiterPerMinute",
+    "LiterPerMole",
+    "LiterPerSecond",
     "Litre",
+    "LitrePerMinute",
+    "LitrePerMole",
+    "LitrePerSecond",
     "LogarithmicRatio",
+    "Lumen",
+    "LumenHour",
+    "LumenPerWatt",
+    "LumenSecond",
+    "Luminance",
+    "LuminousEfficacy",
+    "LuminousEnergy",
+    "LuminousExposure",
+    "LuminousFlux",
     "LuminousIntensity",
+    "Lux",
+    "LuxHour",
+    "LuxSecond",
+    "MagneticFieldStrength",
+    "MagneticFlux",
+    "MagneticFluxDensity",
+    "Magnetization",
     "Mass",
+    "MassFlowRate",
     "Mebibit",
     "MebibitPerSecond",
     "Mebibyte",
     "MebibytePerSecond",
     "Megaampere",
+    "MegaamperePerMetre",
+    "MegaamperePerSquareMetre",
     "Megabaud",
     "Megabecquerel",
     "Megabit",
@@ -545,101 +1204,258 @@ __all__ = [
     "MegabytePerSecond",
     "Megaelectronvolt",
     "Megagram",
+    "Megagray",
     "Megahertz",
     "Megajoule",
     "MegajoulePerCubicMeter",
     "MegajoulePerCubicMetre",
+    "MegajoulePerHour",
+    "MegajoulePerKilogram",
+    "MegajoulePerSquareMetre",
     "Meganewton",
     "Megaohm",
+    "Megaparsec",
     "Megapascal",
     "MegasamplesPerSecond",
     "MegatonneOfTNT",
     "Megavar",
     "Megavolt",
     "MegavoltAmpere",
+    "MegavoltPerMetre",
     "Megawatt",
+    "MegawattPerSquareMetre",
     "Meter",
     "MeterPerSecond",
+    "MeterPerSecondCubed",
+    "MeterPerSecondFourthPower",
     "MeterPerSecondSquared",
     "Metre",
     "MetrePerSecond",
+    "MetrePerSecondCubed",
+    "MetrePerSecondFourthPower",
     "MetrePerSecondSquared",
     "MetricHorsepower",
     "Microampere",
+    "MicroamperePerKilogram",
+    "MicroamperePerMetre",
+    "MicroamperePerSquareCentimetre",
     "Microcoulomb",
+    "MicrocoulombPerCubicMetre",
+    "MicrocoulombPerKilogram",
+    "MicrocoulombPerMetre",
+    "MicrocoulombPerSquareCentimetre",
+    "MicrocoulombPerSquareMetre",
     "Microcurie",
     "Microelectronvolt",
+    "Microfarad",
+    "MicrofaradPerMetre",
     "Microgal",
+    "Microgauss",
     "Microgram",
+    "MicrogramPerLiter",
+    "MicrogramPerLitre",
+    "Microgray",
+    "MicrograyPerHour",
+    "Microhenry",
+    "MicrohenryPerMetre",
     "Microhertz",
     "Microjoule",
+    "MicrojoulePerSquareCentimetre",
+    "Microkatal",
     "Microliter",
     "Microlitre",
     "Micrometer",
     "Micrometre",
     "Micromole",
+    "MicromolePerKilogram",
+    "MicromolePerLiter",
+    "MicromolePerLitre",
     "Micronewton",
     "Microohm",
+    "MicropascalSecond",
+    "Microroentgen",
+    "MicroroentgenPerHour",
     "Microsecond",
+    "MicrosecondCubed",
+    "MicrosecondFourthPower",
+    "MicrosecondSquared",
     "Microsiemens",
+    "Microsievert",
+    "MicrosievertPerHour",
+    "Microsteradian",
+    "Microtesla",
     "Microvolt",
+    "MicrovoltPerMetre",
     "Microwatt",
+    "MicrowattPerSquareCentimetre",
+    "Microweber",
     "Mile",
     "MilePerHour",
     "Milliampere",
     "MilliampereHour",
+    "MilliampereHourPerGram",
+    "MilliampereHourPerSquareCentimetre",
+    "MilliamperePerKilogram",
+    "MilliamperePerMetre",
+    "MilliamperePerSquareCentimetre",
+    "MilliamperePerSquareMetre",
     "MilliampereSecond",
     "Millibar",
     "Millibecquerel",
+    "MillibecquerelPerCubicMetre",
+    "MillicandelaPerSquareMetre",
     "Millicoulomb",
+    "MillicoulombPerCubicMetre",
+    "MillicoulombPerKilogram",
+    "MillicoulombPerMetre",
+    "MillicoulombPerSquareMetre",
     "Millicurie",
     "Millielectronvolt",
+    "Millifarad",
+    "MillifaradPerMetre",
     "Milligal",
+    "Milligauss",
     "Milligram",
+    "MilligramPerLiter",
+    "MilligramPerLitre",
+    "Milligray",
+    "MilligrayPerHour",
+    "MilligrayPerSecond",
+    "Millihenry",
+    "MillihenryPerMetre",
     "Millihertz",
     "Millijoule",
+    "MillijoulePerSquareCentimetre",
+    "Millikatal",
     "Milliliter",
+    "MilliliterPerMinute",
     "Millilitre",
+    "MillilitrePerMinute",
+    "Millilumen",
+    "Millilux",
     "Millimeter",
+    "MillimeterPerSecondCubed",
+    "MillimeterPerSecondFourthPower",
     "Millimetre",
+    "MillimetrePerSecondCubed",
+    "MillimetrePerSecondFourthPower",
     "Millimole",
+    "MillimolePerKilogram",
+    "MillimolePerLiter",
+    "MillimolePerLitre",
+    "MillimolePerMinute",
     "Millinewton",
     "MillinewtonMeter",
     "MillinewtonMetre",
+    "MillinewtonPerMetre",
+    "MillinewtonSecond",
     "Milliohm",
+    "MillipascalSecond",
+    "Millirad",
+    "MilliradPerHour",
+    "Millirem",
+    "MilliremPerHour",
+    "Milliroentgen",
+    "MilliroentgenPerHour",
     "Millisecond",
+    "MillisecondCubed",
+    "MillisecondFourthPower",
+    "MillisecondSquared",
     "Millisiemens",
+    "Millisievert",
+    "MillisievertPerHour",
+    "Millisteradian",
+    "Millitesla",
     "Millivar",
     "Millivolt",
     "MillivoltAmpere",
+    "MillivoltPerMetre",
     "Milliwatt",
     "MilliwattHour",
+    "MilliwattPerGram",
+    "MilliwattPerKilogram",
+    "MilliwattPerMetreKelvin",
+    "MilliwattPerSquareCentimetre",
+    "MilliwattPerSquareMetre",
+    "Milliweber",
     "Minute",
+    "MinuteCubed",
+    "MinuteFourthPower",
+    "MinuteSquared",
+    "Molality",
+    "MolarCharge",
+    "MolarConcentration",
+    "MolarEnergy",
+    "MolarEntropy",
+    "MolarFlowRate",
+    "MolarHeatCapacity",
+    "MolarMass",
+    "MolarVolume",
     "Mole",
+    "MolePerCubicMeter",
+    "MolePerCubicMetre",
+    "MolePerHour",
+    "MolePerKilogram",
+    "MolePerLiter",
+    "MolePerLitre",
+    "MolePerMinute",
+    "MolePerSecond",
+    "MomentOfInertia",
+    "Momentum",
     "Nanoampere",
     "Nanocoulomb",
+    "NanocoulombPerCubicMetre",
+    "NanocoulombPerMetre",
+    "NanocoulombPerSquareMetre",
+    "Nanofarad",
+    "NanofaradPerMetre",
+    "Nanogauss",
     "Nanogram",
+    "Nanogray",
+    "NanograyPerHour",
+    "Nanohenry",
+    "NanohenryPerMetre",
     "Nanohertz",
     "Nanojoule",
+    "Nanokatal",
     "Nanometer",
     "Nanometre",
     "Nanomole",
+    "NanomolePerLiter",
+    "NanomolePerLitre",
     "Nanosecond",
+    "NanosecondCubed",
+    "NanosecondFourthPower",
+    "NanosecondSquared",
     "Nanosiemens",
+    "Nanosievert",
+    "NanosievertPerHour",
+    "Nanotesla",
     "Nanovolt",
     "Nanowatt",
+    "Nanoweber",
     "NauticalMile",
     "Newton",
     "NewtonMeter",
+    "NewtonMeterSecond",
     "NewtonMetre",
+    "NewtonMetreSecond",
+    "NewtonPerMetre",
+    "NewtonSecond",
     "Ohm",
     "Ounce",
+    "OunceInch",
+    "Parsec",
     "Pascal",
+    "PascalSecond",
     "Pebibit",
     "PebibitPerSecond",
     "Pebibyte",
     "PebibytePerSecond",
+    "PerMole",
     "Percent",
+    "Permeability",
+    "Permittivity",
     "Petabit",
     "PetabitPerSecond",
     "Petabyte",
@@ -649,47 +1465,108 @@ __all__ = [
     "Petajoule",
     "Petavolt",
     "Petawatt",
+    "Phot",
     "Picoampere",
     "Picocoulomb",
+    "PicocoulombPerMetre",
     "Picocurie",
+    "PicocuriePerGram",
+    "PicocuriePerLitre",
+    "Picofarad",
+    "PicofaradPerMetre",
+    "Picogauss",
     "Picogram",
+    "Picohenry",
     "Picojoule",
     "Picometer",
     "Picometre",
     "Picomole",
     "Picosecond",
+    "Picotesla",
     "Picowatt",
+    "Poise",
     "Pound",
+    "PoundFootPerSecond",
     "PoundForce",
     "PoundForceFoot",
     "PoundForceInch",
+    "PoundForceSecond",
+    "PoundPerHour",
+    "PoundPerLiter",
+    "PoundPerLitre",
     "PoundPerSquareInch",
+    "PoundSquareFoot",
+    "PoundSquareInch",
     "Power",
     "Pressure",
     "Proportion",
+    "Rad",
+    "RadPerHour",
     "Radian",
     "RadianDisplacement",
     "RadianPerSecond",
+    "RadianPerSecondCubed",
+    "RadianPerSecondSquared",
+    "RadianSquaredPerSecondSquared",
+    "Rankine",
     "Ratio",
+    "Reactance",
     "ReactivePower",
+    "Rem",
+    "RemPerHour",
     "Resistance",
     "RevolutionPerMinute",
+    "RevolutionPerMinutePerSecond",
+    "Roentgen",
+    "RoentgenPerHour",
+    "RoentgenPerMinute",
+    "RoentgenPerSecond",
     "SampleRate",
     "SamplesPerSecond",
     "SamplingPeriod",
     "Second",
+    "SecondCubed",
+    "SecondFourthPower",
+    "SecondSquared",
     "Siemens",
+    "Sievert",
+    "SievertPerHour",
+    "SievertPerSecond",
+    "Snap",
     "SolarMass",
+    "SolidAngle",
+    "SpecificActivity",
+    "SpecificCharge",
+    "SpecificCurrent",
+    "SpecificEnergy",
+    "SpecificEntropy",
+    "SpecificHeatCapacity",
+    "SpecificPower",
+    "SquareArcMinute",
+    "SquareArcSecond",
     "SquareCentimeter",
     "SquareCentimetre",
+    "SquareCentimetrePerSecond",
+    "SquareDegree",
     "SquareInch",
     "SquareKilometer",
     "SquareKilometre",
+    "SquareKilometrePerSecondSquared",
     "SquareMeter",
     "SquareMetre",
+    "SquareMetrePerSecond",
+    "SquareMetrePerSecondSquared",
+    "SquareMicrometrePerSecond",
     "SquareMillimeter",
     "SquareMillimetre",
+    "SquareMillimetrePerSecond",
+    "Steradian",
+    "Stilb",
+    "Stokes",
     "Stress",
+    "SurfaceActivity",
+    "SurfaceChargeDensity",
+    "SurfaceTension",
     "Tebibit",
     "TebibitPerSecond",
     "Tebibyte",
@@ -705,24 +1582,53 @@ __all__ = [
     "Terahertz",
     "Terajoule",
     "Terawatt",
+    "Tesla",
+    "ThermalConductivity",
     "ThermochemicalCalorie",
+    "ThermochemicalCaloriePerGramKelvin",
+    "ThermochemicalCaloriePerKelvin",
+    "ThermochemicalCaloriePerMoleKelvin",
     "Time",
+    "TimeCubed",
+    "TimeFourthPower",
+    "TimeSquared",
     "Tonne",
     "TonneOfTNT",
+    "TonnePerHour",
     "Torque",
     "Turn",
     "TurnDisplacement",
     "TurnPerSecond",
+    "TurnPerSecondCubed",
+    "TurnPerSecondSquared",
+    "TurnSquaredPerSecondSquared",
+    "UsGallon",
+    "UsGallonPerMinute",
     "Var",
     "Velocity",
+    "VelocitySquared",
     "Volt",
     "VoltAmpere",
+    "VoltPerCentimetre",
+    "VoltPerMetre",
+    "VoltPerMillimetre",
     "Voltage",
     "Volume",
+    "VolumeChargeDensity",
+    "VolumetricFlowRate",
     "Watt",
     "WattHour",
+    "WattHourPerKilogram",
     "WattHourPerLiter",
     "WattHourPerLitre",
+    "WattHourPerSquareMetre",
+    "WattPerCentimetreKelvin",
+    "WattPerGram",
+    "WattPerKilogram",
+    "WattPerMetreKelvin",
+    "WattPerSquareCentimetre",
+    "WattPerSquareMetre",
+    "Weber",
     "Week",
     "Yard",
 ]

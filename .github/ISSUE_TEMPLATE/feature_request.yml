@@ -1,0 +1,23 @@
+name: Feature request
+description: Suggest a change to the library that is not a new quantity or unit.
+labels: ["tag/proposal", "type/feature request"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What you are trying to do and where it gets in the way.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would like
+      description: How it could work, ideally with a short example of the code you would write.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: What you do today, and anything else you considered.

@@ -15,12 +15,12 @@ from kuchka import Power
 from kuchka import Torque
 from kuchka.internal.constants import PI
 from kuchka.units import angular
-from kuchka.units import angular_velocity as angvel
-from kuchka.units import energy
-from kuchka.units import force
 from kuchka.units import length
-from kuchka.units import power as power_units
-from kuchka.units import torque as torque_units
+from kuchka.units.kinematics import angular_velocity as angvel
+from kuchka.units.mechanics import energy
+from kuchka.units.mechanics import force
+from kuchka.units.mechanics import power as power_units
+from kuchka.units.mechanics import torque as torque_units
 
 
 def test_energy_per_angle_is_torque() -> None:

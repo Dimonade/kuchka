@@ -13,8 +13,8 @@ from kuchka import IncompatibleDimensionError
 from kuchka import Instant
 from kuchka import MeasurementError
 from kuchka import Time
-from kuchka.units import instant
-from kuchka.units import time
+from kuchka.units.temporal import instant
+from kuchka.units.temporal import time
 
 
 def test_time_as_instant_returns_an_instant():

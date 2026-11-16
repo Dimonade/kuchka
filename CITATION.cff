@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: If you use kuchka in your work, please cite it as below.
+title: kuchka
+type: software
+abstract: A small pile of strongly-typed engineering units for Python.
+authors:
+  - alias: dimonade
+repository-code: "https://github.com/Dimonade/kuchka"
+url: "https://github.com/Dimonade/kuchka"
+license: Apache-2.0
+keywords:
+  - units
+  - quantities
+  - dimensional analysis
+  - exact arithmetic

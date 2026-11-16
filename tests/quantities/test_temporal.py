@@ -16,11 +16,11 @@ from kuchka import IncompatibleDimensionError
 from kuchka import InvalidMeasurementError
 from kuchka import SampleRate
 from kuchka import UnrepresentableDimensionError
-from kuchka.units import baud_rate
-from kuchka.units import frequency as frequency_units
-from kuchka.units import sample_rate
-from kuchka.units import time
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.temporal import baud_rate
+from kuchka.units.temporal import frequency as frequency_units
+from kuchka.units.temporal import sample_rate
+from kuchka.units.temporal import time
 
 
 def test_time_addition_and_prefix_conversion():

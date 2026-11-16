@@ -4,30 +4,73 @@ from __future__ import annotations
 
 import pytest
 
+from kuchka import AbsorbedDose
+from kuchka import AbsorbedDoseRate
 from kuchka import Activity
 from kuchka import Angle
 from kuchka import AngularDisplacement
 from kuchka import ApparentPower
 from kuchka import BaudRate
+from kuchka import CatalyticActivity
+from kuchka import ElectricFluxDensity
 from kuchka import EnergyDensity
+from kuchka import Entropy
+from kuchka import EquivalentDose
+from kuchka import EquivalentDoseRate
+from kuchka import Exposure
+from kuchka import ExposureRate
+from kuchka import Fluence
 from kuchka import Frequency
+from kuchka import HeatCapacity
+from kuchka import Impedance
+from kuchka import Impulse
 from kuchka import Instant
 from kuchka import LogarithmicRatio
+from kuchka import MagneticFieldStrength
+from kuchka import Magnetization
+from kuchka import MolarEntropy
+from kuchka import MolarFlowRate
+from kuchka import MolarHeatCapacity
+from kuchka import Momentum
 from kuchka import Power
 from kuchka import Pressure
 from kuchka import Proportion
+from kuchka import Reactance
 from kuchka import ReactivePower
+from kuchka import Resistance
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
+from kuchka import SpecificCharge
+from kuchka import SpecificCurrent
+from kuchka import SpecificEnergy
+from kuchka import SpecificEntropy
+from kuchka import SpecificHeatCapacity
+from kuchka import SpecificPower
 from kuchka import Stress
+from kuchka import SurfaceChargeDensity
+from kuchka import SurfaceTension
 from kuchka import Temperature
 from kuchka import TemperatureDelta
 from kuchka import Time
+from kuchka import VelocitySquared
 from kuchka.dimensions import ANGLE
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import FREQUENCY
+from kuchka.dimensions import HEAT_CAPACITY
+from kuchka.dimensions import MAGNETIC_FIELD_STRENGTH
+from kuchka.dimensions import MOLAR_FLOW_RATE
+from kuchka.dimensions import MOLAR_HEAT_CAPACITY
+from kuchka.dimensions import MOMENTUM
 from kuchka.dimensions import POWER
 from kuchka.dimensions import PRESSURE
+from kuchka.dimensions import RESISTANCE
+from kuchka.dimensions import SPECIFIC_CHARGE
+from kuchka.dimensions import SPECIFIC_CURRENT
+from kuchka.dimensions import SPECIFIC_ENERGY
+from kuchka.dimensions import SPECIFIC_HEAT_CAPACITY
+from kuchka.dimensions import SPECIFIC_POWER
+from kuchka.dimensions import SURFACE_CHARGE_DENSITY
+from kuchka.dimensions import SURFACE_TENSION
 from kuchka.dimensions import TEMPERATURE_DELTA
 from kuchka.dimensions import TIME
 from kuchka.dimensions import Dimension
@@ -44,7 +87,20 @@ SHARED = {
     DIMENSIONLESS: (Proportion, LogarithmicRatio),
     PRESSURE: (Pressure, Stress, EnergyDensity),
     POWER: (Power, ApparentPower, ReactivePower),
+    MAGNETIC_FIELD_STRENGTH: (MagneticFieldStrength, Magnetization),
+    RESISTANCE: (Resistance, Reactance, Impedance),
     ANGLE: (Angle, AngularDisplacement),
+    SPECIFIC_ENERGY: (SpecificEnergy, VelocitySquared, AbsorbedDose, EquivalentDose),
+    SPECIFIC_CHARGE: (SpecificCharge, Exposure),
+    SURFACE_CHARGE_DENSITY: (SurfaceChargeDensity, ElectricFluxDensity),
+    SPECIFIC_POWER: (SpecificPower, AbsorbedDoseRate, EquivalentDoseRate),
+    SPECIFIC_CURRENT: (SpecificCurrent, ExposureRate),
+    HEAT_CAPACITY: (HeatCapacity, Entropy),
+    MOLAR_HEAT_CAPACITY: (MolarHeatCapacity, MolarEntropy),
+    SPECIFIC_HEAT_CAPACITY: (SpecificHeatCapacity, SpecificEntropy),
+    MOMENTUM: (Momentum, Impulse),
+    MOLAR_FLOW_RATE: (MolarFlowRate, CatalyticActivity),
+    SURFACE_TENSION: (SurfaceTension, Fluence),
 }
 
 
@@ -102,6 +158,12 @@ def test_the_principal_kinds_are_linear_kinds_with_extent() -> None:
         assert registry._is_registered(kind)  # noqa: SLF001
 
 
-def test_only_pressure_and_energy_density_are_contested() -> None:
-    assert {PRESSURE: (Pressure, EnergyDensity)} == registry._CONTESTED  # noqa: SLF001
-    assert PRESSURE not in registry._DIMENSION_REGISTRY  # noqa: SLF001
+def test_the_contested_kinds_are_exactly_the_listed_ones() -> None:
+    contested = registry._CONTESTED  # noqa: SLF001
+    assert contested == {
+        PRESSURE: (Pressure, EnergyDensity),
+        SPECIFIC_ENERGY: (SpecificEnergy, VelocitySquared),
+        MOMENTUM: (Momentum, Impulse),
+    }
+    for dimension in contested:
+        assert dimension not in registry._DIMENSION_REGISTRY  # noqa: SLF001

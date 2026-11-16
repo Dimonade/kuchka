@@ -32,6 +32,56 @@ The important part is not the arithmetic itself.
 Each result is a real `kuchka` quantity, and the relationships between the inputs determine the resulting physical type.
 The same dimensional machinery is used whether the calculation is mechanical, electrical, geometric, or signal-related.
 
+## Contents
+
+<!-- BEGIN TOC -->
+
+- [Installation](#installation)
+- [Quick start](#quick-start)
+  - [1. Put the physical meaning in the signature](#1-put-the-physical-meaning-in-the-signature)
+  - [2. Read measurements from text and config](#2-read-measurements-from-text-and-config)
+  - [3. Compose real engineering relationships](#3-compose-real-engineering-relationships)
+  - [4. Bring raw sensor data into a control path](#4-bring-raw-sensor-data-into-a-control-path)
+- [Take a tour](#take-a-tour)
+  - [Linear quantities](#linear-quantities)
+  - [Affine quantities](#affine-quantities)
+  - [Modular quantities](#modular-quantities)
+  - [Logarithmic quantities](#logarithmic-quantities)
+- [Why `kuchka`?](#why-kuchka)
+- [Where `kuchka` fits](#where-kuchka-fits)
+- [What's included in 0.1.x](#whats-included-in-01x)
+  - [Core](#core)
+  - [Chemistry](#chemistry)
+  - [Electromagnetics](#electromagnetics)
+  - [Geometry](#geometry)
+  - [Information](#information)
+  - [Kinematics](#kinematics)
+  - [Mechanics](#mechanics)
+  - [Photometry](#photometry)
+  - [Radiation](#radiation)
+  - [Temporal](#temporal)
+  - [Thermodynamics](#thermodynamics)
+  - [Archaic and historical units](#archaic-and-historical-units)
+- [A few important distinctions](#a-few-important-distinctions)
+  - [Same dimension does not always mean the same concept](#same-dimension-does-not-always-mean-the-same-concept)
+  - [Canonical types and domain-specific types](#canonical-types-and-domain-specific-types)
+- [Conversions](#conversions)
+- [Exact arithmetic](#exact-arithmetic)
+  - [Angles and pi](#angles-and-pi)
+  - [Comparing with a tolerance](#comparing-with-a-tolerance)
+- [Physical constants](#physical-constants)
+- [Errors](#errors)
+- [Formatting](#formatting)
+- [Examples](#examples)
+- [Performance](#performance)
+- [What this is not yet](#what-this-is-not-yet)
+- [Stability](#stability)
+  - [Compatibility](#compatibility)
+- [Development](#development)
+- [Further reading](#further-reading)
+
+<!-- END TOC -->
+
 ## Installation
 
 ```bash
@@ -44,76 +94,123 @@ or:
 pip install kuchka
 ```
 
-Application code should normally import from the top-level `kuchka` package.
+`kuchka` is pure Python and imports only the standard library at runtime.
+On Python 3.11 it also installs `typing_extensions`, the backport that provides `override`; from Python 3.12 it has no dependencies at all.
 The development toolchain described later is separate from the package's runtime dependencies.
+
+Application code should normally import from the top-level `kuchka` package.
 
 ## Quick start
 
 The useful part of `kuchka` is not just unit conversion.
 Values acquire a physical type, typed quantities can cross application boundaries, and ordinary arithmetic can produce other physical quantities.
 
-### 1. Type the values your application is already using
+### 1. Put the physical meaning in the signature
 
-A unit constructor such as `Volt` creates a `Voltage`; `Milliampere` creates a `Current`.
-The unit is part of construction, while the resulting object has the physical quantity type.
+In 1983 an Air Canada Boeing 767 ran out of fuel in flight and glided down to a disused airfield at Gimli, Manitoba (the "Gimli Glider").
+The fuel gauges were out of service, so the ground crew worked the load out by hand: the flight needed 22,300 kg, the dipsticks showed 7,682 L in the tanks, and the fuel table gave a density of 1.77.
+That number was pounds per litre.
+It was used as kilograms per litre, and the tanks received about a quarter of the fuel they needed.
+
+Written with plain numbers, the calculation looks fine and runs without complaint:
 
 ```python
-from kuchka import Ampere
-from kuchka import Milliampere
-from kuchka import Millivolt
-from kuchka import Volt
-from kuchka import Voltage
-
-supply = Volt(5)
-load = Milliampere(150)
-power = supply * load
-
-print(power)
-# 0.75 W
+def compute_fuel_to_add(required, in_tanks, density):
+    return (required - in_tanks * density) / density
 
 
-def check_supply(voltage: Voltage) -> bool:
-    return voltage >= Volt(3)
+print(f"{compute_fuel_to_add(22_300, 7_682, 1.77):.0f}")
+# 4917
+```
+
+Nothing in `4917` says litres, and nothing in `1.77` says pounds.
+With quantities, the unit travels with the number from the moment it is read, and the checks that matter are written once, in the unit that is convenient:
+
+```python
+from kuchka import Density
+from kuchka import Kilogram
+from kuchka import KilogramPerLitre
+from kuchka import Litre
+from kuchka import Mass
+from kuchka import Volume
+from kuchka import parse
+from kuchka.units import LITRE
+
+JET_FUEL_MIN = KilogramPerLitre(0.775)
+JET_FUEL_MAX = KilogramPerLitre(0.840)
 
 
-check_supply(Volt(5))  # valid.
-check_supply(Millivolt(4200))  # valid.
-check_supply(Ampere(2))  # static type error (`IncompatibleDimensionError`).
-check_supply(4.2)  # static type error (`IncompatibleDimensionError`).
+def read_fuel_density(text: str) -> Density:
+    density = parse(text, Density)
+    if not JET_FUEL_MIN <= density <= JET_FUEL_MAX:
+        raise ValueError(f"{density} is not the density of jet fuel")
+    return density
+
+
+def compute_fuel_to_add(required: Mass, in_tanks: Volume, density: Density) -> Volume:
+    in_tanks_mass = in_tanks * density
+    missing = required - in_tanks_mass
+    return missing / density
+
+
+density = read_fuel_density("1.77 lb/L")  # the fuel table, as it is printed.
+fuel = compute_fuel_to_add(
+    required=Kilogram(22_300),
+    in_tanks=Litre(7_682),
+    density=density,
+)
+
+print(f"{fuel.to(LITRE):.0f}")
+# 20094 L
+```
+
+The flight plan is in kilograms, the table in pounds and litres, and the dipstick in litres, and nothing in the calculation converts anything: the quantities carry their units and combine exactly.
+Every line has a physical type: `Volume * Density` is a `Mass`, a `Mass` over a `Density` is a `Volume`.
+
+`kuchka` cannot know what the table meant: the unit comes from whoever wrote it, and a card that says `1.77 kg/L` is as readable as one that says `1.77 lb/L`.
+What changes is where a mistake can hide:
+
+```python
+read_fuel_density("1.77")  # rejected: `ParseError`.
+read_fuel_density("1.77 kg")  # rejected: `UnknownUnitError`.
+read_fuel_density("1.77 kg/L")  # rejected: `ValueError`.
+```
+
+A number without a unit cannot enter the program, and the plausibility check is written once, in kilograms per litre, whichever unit the card uses: `1.77 lb/L` and `0.803 kg/L` pass, and `1.77 kg/L` is stopped on the ground.
+With plain numbers the same check needs the pounds-to-kilograms factor, which is the conversion the crew got wrong.
+
+The signature is the contract as well, and a bare number has nowhere to go:
+
+<!-- doc-test: skip static type errors, shown for the checker -->
+
+```python
+compute_fuel_to_add(
+    Kilogram(22_300), Litre(7_682), 1.77
+)  # static type error: a bare number is not a Density.
+compute_fuel_to_add(
+    Kilogram(22_300), Litre(7_682), Kilogram(1.77)
+)  # static type error: a Mass is not a Density.
 ```
 
 The type annotation gives static tools the contract.
-The comparison inside the function also exercises `kuchka`'s runtime dimensional checks when the function is called with an incompatible value.
+The arithmetic inside the function exercises `kuchka`'s runtime dimensional checks when it is called with an incompatible value.
 Python function annotations themselves remain ordinary annotations; `kuchka` does not add a runtime annotation enforcement mechanism.
 
-This is the basic idea: application functions can name the physical quantity they expect instead of accepting an unqualified `float`.
+The point is not to replace every unit library.
+The point is to make one particular style of engineering code feel natural: ordinary Python functions taking and returning ordinary Python types that happen to carry physical meaning.
 
-### 2. Validate units when data enters from configuration
+### 2. Read measurements from text and config
 
-Configuration formats have to represent units as data.
+Configuration files, CSV logs, command lines, and instrument replies write units as text.
 That does not mean the rest of the application has to become stringly typed.
-Resolve the unit once at the boundary, then construct a typed value.
-
-For example:
-
-```toml
-# device.toml
-led_critical_voltage = { value = "2800", unit = "mV" }
-```
-
-The corresponding loader can use `VOLTAGE_UNITS`, which contains only voltage units:
-
-<!-- doc-test: skip reads device.toml from disk -->
+`parse` reads the number and the unit together, through the table of units of the type you name, and returns a typed value:
 
 ```python
-from collections.abc import Mapping
-from dataclasses import dataclass
-from decimal import Decimal
-from pathlib import Path
 import tomllib
+from dataclasses import dataclass
 
 from kuchka import Voltage
-from kuchka.units import VOLTAGE_UNITS
+from kuchka import parse
 
 
 @dataclass(frozen=True)
@@ -121,113 +218,132 @@ class DeviceConfig:
     led_critical_voltage: Voltage
 
 
-def parse_voltage(raw: Mapping[str, str]) -> Voltage:
-    try:
-        constructor = VOLTAGE_UNITS[raw["unit"]]
-    except KeyError as exc:
-        raise ValueError(f"invalid voltage unit: {raw['unit']!r}") from exc
-
-    return constructor(Decimal(raw["value"]))
-
-
-with Path("device.toml").open("rb") as file:
-    raw = tomllib.load(file)
-
-config = DeviceConfig(led_critical_voltage=parse_voltage(raw["led_critical_voltage"]))
+raw = tomllib.loads('led_critical_voltage = "2800 mV"')
+config = DeviceConfig(led_critical_voltage=parse(raw["led_critical_voltage"], Voltage))
 ```
 
-This is accepted:
-
-```toml
-led_critical_voltage = { value = "2800", unit = "mV" }
-```
-
-This is rejected while loading because `mA` is not a member of the voltage unit table:
-
-```toml
-led_critical_voltage = { value = "150", unit = "mA" }
-```
-
-The same boundary pattern exists for the other quantity families through their corresponding `*_UNITS` mappings.
-`kuchka` therefore allows strings where the data format requires them without making strings the normal application API.
-
-The tables accept the notations that real files use, so these all resolve to the same temperature unit:
+The unit is closed to the quantity the field expects, so these are rejected while loading:
 
 ```python
-from kuchka.units import TEMPERATURE_UNITS
-
-for text in ("°C", "C", "degC", "degrees C", "Degrees Celsius"):
-    constructor = TEMPERATURE_UNITS[text]
-    constructor(21.5)  # 21.5 °C
+parse("150 mA", Voltage)  # rejected: `UnknownUnitError`.
+parse("five volts", Voltage)  # rejected: `ParseError`.
+parse(2.8, Voltage)  # rejected: `TypeError`.
 ```
 
-Symbols such as `mV` are compared exactly, because `mV` and `MV` are different units, and spoken forms such as `degrees celsius` are compared ignoring case.
-A spelling that could mean more than one unit in a table, like `deg` for temperature, is refused rather than guessed.
-See [Unit spellings](docs/concepts/unit_spellings.md).
-
-When the whole value arrives as one string, `parse` reads the number and the unit together through the table of the type you name:
+`mA` is no unit of `Voltage`, and the last line is what a bare TOML number would be: a binary float with no unit.
+Quote the value and keep the unit in the string, and the digits are read exactly:
 
 ```python
 from fractions import Fraction
 
-from kuchka import Temperature, Volt, Voltage, parse
+from kuchka import Temperature
+from kuchka import Volt
 
-parse("5 mV", Voltage)  # 5 mV
-parse("-40 °C", Temperature)  # -40 °C
 parse("0.1 V", Voltage) == Volt(Fraction(1, 10))  # True: the number is read exactly
+parse("-40 °C", Temperature)  # -40 °C
 ```
 
+The tables accept the notations that real files use, so these all read as the same temperature:
+
+```python
+for text in (
+    "21.5 °C",
+    "21.5 degC",
+    "21.5 degrees C",
+    "21.5 Degrees Celsius",
+    "21.5 C",
+):
+    parse(text, Temperature)  # 21.5 °C
+```
+
+Symbols such as `mV` are compared exactly, because `mV` and `MV` are different units, and spoken forms such as `degrees celsius` are compared ignoring case.
+A spelling that could mean more than one unit in a table, like `deg` for temperature, is refused rather than guessed.
+See [Unit spellings](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/unit_spellings.md).
+
 The caller names the type because the same text can mean different quantities: `"5 s"` is a `Time`, an `Instant`, or a `SamplingPeriod`, so there is no untyped `parse`.
-Text that is no measurement of that type raises a `ParseError`, and a unit the type does not have raises an `UnknownUnitError`.
+
+When the unit arrives in a field of its own, such as a CSV column or a `{ value, unit }` pair, the `*_UNITS` table of the type resolves the spelling directly: `VOLTAGE_UNITS["mV"]` is the `Millivolt` constructor.
 
 ### 3. Compose real engineering relationships
 
-The library is useful when a calculation crosses more than one physical domain. For example, an actuator calculation can derive several quantities in sequence:
+A calculation is most useful when it crosses physical domains and every step keeps its type.
+A winch lifts a 250 kg load by 12 m, and the same lift is followed from the weight on the hook to the heat in the motor winding:
 
-```text
-Voltage * Current -> Power
-Mass * Acceleration -> Force
-Force / Area -> Pressure
-Pressure * Volume -> Energy
-Energy / Volume -> EnergyDensity
-Torque * AngularDisplacement -> Energy
-Torque * AngularVelocity -> Power
-AngularDisplacement / Time -> AngularVelocity
-Mass / Volume -> Density
-Length * Length -> Area
-Area * Length -> Volume
-```
-
-That means a calculation can move through a chain such as:
+<details>
+<summary>Imports</summary>
 
 ```python
+from kuchka import Ampere
 from kuchka import Centimetre
+from kuchka import JoulePerKelvin
 from kuchka import Kilogram
+from kuchka import Metre
+from kuchka import MetrePerSecond
 from kuchka import MetrePerSecondSquared
-from kuchka import SquareCentimetre
-
-mass = Kilogram(1000)
-acceleration = MetrePerSecondSquared(0.5)
-piston_area = SquareCentimetre(20)
-stroke = Centimetre(10)
-
-force = mass * acceleration
-pressure = force / piston_area
-volume = piston_area * stroke
-energy = pressure * volume
-
-print(force)
-# 500 N
-print(pressure)
-# 250000 Pa
-print(volume)
-# 0.0002 m³
-print(energy)
-# 50 J
+from kuchka import RadianPerSecond
+from kuchka import Torque
+from kuchka import Volt
+from kuchka.units import PERCENT
+from kuchka.units import WATT_HOUR
 ```
 
-No unit strings or manual conversion factors are needed in the calculation.
-The operators determine the physical result types.
+</details>
+
+```python
+load = Kilogram(250)
+height = Metre(12)
+lift_speed = MetrePerSecond(0.5)
+gravity = MetrePerSecondSquared(9.80665)
+
+supply = Volt(400)
+current = Ampere(6.5)
+
+drum_radius = Centimetre(20)
+drum_speed = RadianPerSecond(2.5)  # 0.5 m/s on a 0.2 m drum.
+winding_heat_capacity = JoulePerKelvin(900)
+
+# Mechanics: the weight and the work of lifting it.
+weight = load * gravity  # Mass * Acceleration -> Force
+work = weight * height  # Force * Length -> Energy
+lift_time = height / lift_speed  # Length / Velocity -> Time
+useful_power = work / lift_time  # Energy / Time -> Power
+
+# Electrics: what the supply delivers for the same lift.
+supply_power = supply * current  # Voltage * Current -> Power
+supply_energy = supply_power * lift_time  # Power * Time -> Energy
+efficiency = useful_power / supply_power  # Power / Power -> Proportion
+
+# Rotation: the same power measured on the drum shaft.
+shaft_torque = Torque.from_force(weight, drum_radius)
+shaft_power = shaft_torque * drum_speed  # Torque * AngularVelocity -> Power
+
+# Heat: what the winding has to absorb.
+losses = supply_energy - work  # Energy - Energy -> Energy
+rise = losses / winding_heat_capacity  # Energy / HeatCapacity -> TemperatureDelta
+
+print(weight, work, lift_time)
+# 2451.6625 N 29419.95 J 24 s
+print(useful_power, supply_power)
+# 1225.83125 W 2600 W
+print(f"{efficiency.to(PERCENT):.1f}")
+# 47.1 %
+print(f"{supply_energy.to(WATT_HOUR):.1f}")
+# 17.3 Wh
+print(shaft_torque, shaft_power == useful_power)
+# 490.3325 N·m True
+print(f"{rise:.1f}")
+# 36.6 ΔK
+```
+
+No unit strings and no conversion factors appear in the calculation, and each quantity is the type its physics says it is.
+The shaft power computed from a torque and a rate in radians per second is exactly the power computed from a force and a speed, because `kuchka` holds pi as an exact rational.
+Mixing up two of these, say energy with power, is rejected as soon as it runs:
+
+```python
+supply_energy + supply_power  # rejected: `IncompatibleDimensionError`.
+```
+
+The products and quotients the library knows are declared on the quantity types, so editors and type checkers see them, and [Dimensional algebra](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/dimensional_algebra.md) describes how a result gets its type.
 
 ### 4. Bring raw sensor data into a control path
 
@@ -276,6 +392,28 @@ Volt(1) + Millivolt(200) == Volt(1.2)
 
 This includes quantities such as `Voltage`, `Current`, `Length`, `Mass`, `Time`, and many others.
 
+Powers work too.
+A power is the product written out, so each step lands on a registered type, and the result is the quantity the dimension has:
+
+```python
+from kuchka import Metre
+from kuchka import MetrePerSecond
+from kuchka import Second
+from kuchka import SquareMetre
+from kuchka import VelocitySquared
+
+Metre(3) ** 2 == SquareMetre(9)
+# True
+
+isinstance(MetrePerSecond(3) ** 2, VelocitySquared)
+# True
+
+Second(2) ** -1
+# 0.5 Hz
+```
+
+See [dimensional algebra](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/dimensional_algebra.md) for the products and powers the registry knows.
+
 ### Affine quantities
 
 Some values represent readings on a scale.
@@ -309,7 +447,8 @@ Kelvin(0)  # valid.
 `Instant` follows the same shape, reached from any `Time` value:
 
 ```python
-from kuchka import Second, Millisecond
+from kuchka import Millisecond
+from kuchka import Second
 
 reading = Second(1_700_000_000).to_instant()
 reading + Millisecond(500)  # -> Instant, 500 ms later
@@ -320,7 +459,8 @@ reading + reading  # rejected: `MeasurementError`.
 `Time.to_instant()` and `Time.to_sampling_period()` work at whatever prefix the `Time` value was already constructed with:
 
 ```python
-from kuchka import Hour, Minute
+from kuchka import Hour
+from kuchka import Minute
 
 Hour(1).to_instant() == Second(3600).to_instant()
 Minute(1).to_sampling_period() == Second(60).to_sampling_period()
@@ -364,7 +504,9 @@ Decibel(3) * Decibel(3)  # rejected: two levels do not multiply (`TypeError`).
 Converting to or from the linear ratio a level describes goes through a logarithm, so it comes in two flavours: `10 ** (level / 10)` for power quantities and `10 ** (level / 20)` for field quantities such as voltage.
 
 ```python
-from kuchka import Decibel, LogarithmicRatio, Ratio
+from kuchka import Decibel
+from kuchka import LogarithmicRatio
+from kuchka import Ratio
 
 Decibel(30).to_power_ratio() == Ratio(1000)  # whole decades are exact.
 Decibel(40).to_field_ratio() == Ratio(100)
@@ -373,7 +515,7 @@ LogarithmicRatio.from_power_ratio(Ratio(100)) == Decibel(20)
 
 Levels that are not whole decades convert to the precision of the active `decimal` context.
 
-See [Quantity shapes and semantics](docs/concepts/quantity_shapes.md) for the full semantics.
+See [Quantity shapes and semantics](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/quantity_shapes.md) for the full semantics.
 
 ## Why `kuchka`?
 
@@ -394,12 +536,15 @@ The mistake is hidden because the units exist only in variable names.
 With `kuchka`, physical meaning is part of the value itself:
 
 ```python
+from kuchka import Milliampere
+from kuchka import Millivolt
+
 voltage = Millivolt(4200)
 current = Milliampere(150)
 power = voltage * current
 
 power  # 0.63 W
-type(power)  # `<class 'kuchka.quantities.electrical.Power'>`
+type(power)  # `<class 'kuchka.quantities.mechanics.power.Power'>`
 ```
 
 A function can require `Voltage`, a configuration loader can construct a `Voltage`, and an engineering formula can produce a `Power`.
@@ -410,7 +555,7 @@ That is the niche `kuchka` is aiming for: a curated set of engineering quantitie
 This is deliberately narrower than a general-purpose unit language.
 `kuchka` does not try to accept arbitrary unit expressions, provide a mutable application-wide unit registry, or make every physical quantity array-native.
 Those are useful capabilities, but they optimize for a different problem.
-See [Comparison with existing tools](docs/comparison.md) for the trade-offs.
+See [Comparison with existing tools](https://github.com/Dimonade/kuchka/blob/HEAD/docs/comparison.md) for the trade-offs.
 
 ## Where `kuchka` fits
 
@@ -428,81 +573,199 @@ The point is to make one particular style of engineering code feel natural: ordi
 `kuchka` currently covers a growing vocabulary of engineering and scientific quantities.
 Units are represented as typed values, with exact conversions where the unit definition permits them.
 
-The tables below show a number of representative units per field or domain.
+The tables below show a number of representative units per package of `kuchka.units`, with `Core` holding its top-level modules.
 The complete unit vocabulary is available in the API reference.
 
-### Electrical
+### Core
 
-| Quantity             | Representative units                                                                                               |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Voltage              | `Nanovolt` though `Petavolt`                                                                                       |
-| Current              | `Picoampere`, through `Megaampere`                                                                                 |
-| Power                | `Picowatt` through `Petawatt`, `Horsepower` and `MetricHorsepower`                                                 |
-| Apparent Power       | `MillivoltAmpere` through `GigavoltAmpere`                                                                         |
-| Reactive Power       | `Millivar` through `Gigavar`                                                                                       |
-| Resistance           | `Microohm`, through `Gigaohm`                                                                                      |
-| Conductance          | `Nanosiemens` through `Kilosiemens`                                                                                |
-| Charge               | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`                              |
-| Energy               | `Picojoule` through `Petajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour` |
-| _energy, countinued_ | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                             |
+The units of the top-level modules of `kuchka.units`.
 
-### Time and signals
+| Quantity             | Representative units                                                                                                                       |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Length               | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit`, `LightYear`, and `Parsec` through `Gigaparsec` |
+| Mass                 | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                                                             |
+| Current              | `Picoampere`, through `Megaampere`                                                                                                         |
+| Amount of Substance  | `Femtoomole` through `Kilomole`                                                                                                            |
+| Luminous Intensity   | `Candela`                                                                                                                                  |
+| Temperature          | `Celsius`, `Fahrenheit`, `Kelvin`, `Rankine`                                                                                               |
+| Temperature Delta    | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`, `DeltaRankine`                                                                           |
+| Angle                | `Radian`, `Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond`                                                                            |
+| Angular displacement | `RadianDisplacement`, `DegreeDisplacement`, `TurnDisplacement`, `GradianDisplacement`, `ArcMinuteDisplacement`, `ArcSecondDisplacement`    |
+| Solid angle          | `Steradian`, `Millisteradian`, `Microsteradian`, `SquareDegree`, `SquareArcMinute`, `SquareArcSecond`                                      |
+| Proportion           | `Ratio`, `Percent`                                                                                                                         |
+| LogarithmicRatio     | `Decibel`, `Bel`                                                                                                                           |
 
-| Quantity          | Representative units                                                                                  |
-| ----------------- | ----------------------------------------------------------------------------------------------------- |
-| Time              | `Femtosecond` through `Second`, `Minute` through `JulianYear`, and `Jiffy`                            |
-| Instant           | reached via `Time.to_instant()`                                                                       |
-| Frequency         | `Nanohertz` through `Petahertz`                                                                       |
-| Sampling Period   | reached via `Time.to_sampling_period()`                                                               |
-| Sample Rate       | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`                                    |
-| Baud Rate         | `Baud` through `Gigabaud`                                                                             |
-| Activity          | `Millibecquerel` through `Terabecquerel`, `Curie`, `Millicurie`, `Microcurie`, and `Picocurie`        |
-| Data              | `Bit` and `Byte`, `Kilobyte` through `Petabyte`, `Kibibyte` through `Pebibyte`, and the same for bits |
-| Data Rate         | `BitPerSecond` and `BytePerSecond`, with the same SI and IEC multiples                                |
-| Temperature       | `Celsius`, `Fahrenheit`, `Kelvin`                                                                     |
-| Temperature Delta | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`                                                      |
+### Chemistry
 
-### Geometry and mechanics
+The units of `kuchka.units.chemistry`.
 
-| Quantity       | Representative units                                                                                                                               |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Length         | `Picometre` through `Kilometre`, `Inch` and other exact imperial units, `AstronomicalUnit` and `LightYear`                                         |
-| Area           | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                                                                    |
-| Volume         | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`                                                           |
-| Velocity       | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`, `Knot`                                                                                        |
-| Acceleration   | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                                                                  |
-| Mass           | `Nanogram` through `Megagram`, `Tonne`, along with `SolarMass` and `EarthMass`                                                                     |
-| Force          | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                                                                      |
-| Density        | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`                                                                              |
-| Pressure       | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Gigapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`, `KilopoundPerSquareInch` |
-| Stress         | the units of Pressure, reached with `Pressure.to_stress()`                                                                                         |
-| Energy density | `JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`                                                       |
+| Quantity            | Representative units                                                                                          |
+| ------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Molar mass          | `KilogramPerMole`, `GramPerMole`, `KilogramPerKilomole`                                                       |
+| Molar concentration | `MolePerCubicMetre`, `MolePerLitre`, `MillimolePerLitre`, `MicromolePerLitre`, `NanomolePerLitre`             |
+| Molar energy        | `JoulePerMole`, `KilojoulePerMole`, `KilocaloriePerMole`                                                      |
+| Entities per amount | `PerMole`                                                                                                     |
+| Molality            | `MolePerKilogram`, `MillimolePerKilogram`, `MicromolePerKilogram`                                             |
+| Molar volume        | `CubicMetrePerMole`, `LitrePerMole`, `CubicCentimetrePerMole`                                                 |
+| Molar flow rate     | `MolePerSecond`, `KilomolePerSecond`, `MillimolePerMinute`, `MolePerMinute`, `MolePerHour`, `KilomolePerHour` |
+| Catalytic activity  | `Nanokatal`, `Microkatal`, `Millikatal`, `Katal`, `EnzymeUnit`                                                |
+| Molar charge        | `CoulombPerMole`, `KilocoulombPerMole`                                                                        |
+| Molar heat cap.     | `JoulePerMoleKelvin`, `KilojoulePerMoleKelvin`, `ThermochemicalCaloriePerMoleKelvin`                          |
+| Molar entropy       | `MolarHeatCapacity.to_molar_entropy()`, and `MOLAR_ENTROPY_UNITS`                                             |
 
-### Angle and rotation
+### Electromagnetics
 
-| Quantity             | Units                                                                                                                                   |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Angle                | `Radian`, `Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond`                                                                         |
-| Angular displacement | `RadianDisplacement`, `DegreeDisplacement`, `TurnDisplacement`, `GradianDisplacement`, `ArcMinuteDisplacement`, `ArcSecondDisplacement` |
-| Angular velocity     | `RadianPerSecond`, `DegreePerSecond`, `TurnPerSecond`, `RevolutionPerMinute`                                                            |
-| Torque               | `NewtonMetre`, `MillinewtonMetre`, `KilonewtonMetre`, `PoundForceFoot`, `PoundForceInch`, `JoulePerTurn`                                |
+The units of `kuchka.units.electromagnetics`.
 
-### Chemistry and light
+| Quantity                | Representative units                                                                             |
+| ----------------------- | ------------------------------------------------------------------------------------------------ |
+| Voltage                 | `Nanovolt` through `Petavolt`                                                                    |
+| Apparent Power          | `MillivoltAmpere` through `GigavoltAmpere`                                                       |
+| Reactive Power          | `Millivar` through `Gigavar`                                                                     |
+| Resistance              | `Microohm`, through `Gigaohm`                                                                    |
+| Conductance             | `Nanosiemens` through `Kilosiemens`                                                              |
+| Charge                  | `Picocoulomb` through `Coulomb`, `MilliampereSecond`, `MilliampereHour`, `AmpereHour`            |
+| Specific charge         | `CoulombPerKilogram`, `AmpereHourPerKilogram`, `MilliampereHourPerGram`                          |
+| Electric field strength | `MicrovoltPerMetre` through `MegavoltPerMetre`, `VoltPerCentimetre`, `KilovoltPerMillimetre`     |
+| Current density         | `AmperePerSquareMetre`, `AmperePerSquareMillimetre`, `MilliamperePerSquareCentimetre`            |
+| Linear charge density   | `CoulombPerMetre`, `NanocoulombPerMetre`, `PicocoulombPerMetre`                                  |
+| Surface charge density  | `CoulombPerSquareMetre`, `MicrocoulombPerSquareCentimetre`, `MilliampereHourPerSquareCentimetre` |
+| Volume charge density   | `CoulombPerCubicMetre`, `CoulombPerCubicCentimetre`, `AmpereHourPerLitre`                        |
+| Specific current        | `AmperePerKilogram`, `MilliamperePerKilogram`, `MicroamperePerKilogram`                          |
+| Magnetic Flux           | `Nanoweber` through `Kiloweber`                                                                  |
+| Flux Density            | `Femtotesla` through `Kilotesla`, `Femtogauss` through `Kilogauss`                               |
+| Capacitance             | `Femtofarad` through `Kilofarad`                                                                 |
+| Inductance              | `Picohenry` through `Kilohenry`                                                                  |
+| Reactance               | reached via `Resistance.to_reactance()`                                                          |
+| Impedance               | reached via `Resistance.to_impedance()`                                                          |
+| Permittivity            | `PicofaradPerMetre` through `FaradPerMetre`                                                      |
+| Permeability            | `NanohenryPerMetre` through `HenryPerMetre`                                                      |
+| Field Strength          | `MicroamperePerMetre` through `MegaamperePerMetre`                                               |
+| Magnetization           | reached via `MagneticFieldStrength.to_magnetization()`                                           |
 
-| Quantity            | Units                           |
-| ------------------- | ------------------------------- |
-| Amount of Substance | `Femtoomole` through `Kilomole` |
-| Luminous Intensity  | `Candela`                       |
+### Geometry
 
-### Dimensionless quantities
+The units of `kuchka.units.geometry`.
 
-| Quantity         | Units              |
-| ---------------- | ------------------ |
-| Proportion       | `Ratio`, `Percent` |
-| LogarithmicRatio | `Decibel`, `Bel`   |
+| Quantity | Representative units                                                                                              |
+| -------- | ----------------------------------------------------------------------------------------------------------------- |
+| Area     | `SquareMillimetre` through `SquareKilometre`, `Hectare`, `Acre`                                                   |
+| Volume   | `CubicMillimetre` through `CubicMetre`, `Microlitre`, `Millilitre`, `Litre`, `Kilolitre`, `CubicFoot`, `UsGallon` |
+
+### Information
+
+The units of `kuchka.units.information`.
+
+| Quantity  | Representative units                                                                                  |
+| --------- | ----------------------------------------------------------------------------------------------------- |
+| Data      | `Bit` and `Byte`, `Kilobyte` through `Petabyte`, `Kibibyte` through `Pebibyte`, and the same for bits |
+| Data Rate | `BitPerSecond` and `BytePerSecond`, with the same SI and IEC multiples                                |
+
+### Kinematics
+
+The units of `kuchka.units.kinematics`.
+
+| Quantity                 | Representative units                                                                                       |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| Velocity                 | `MetrePerSecond`, `KilometrePerHour`, `MilePerHour`, `Knot`                                                |
+| Acceleration             | `MetrePerSecondSquared`, `Microgal` through `Gal`                                                          |
+| Jerk                     | `MetrePerSecondCubed`, `MillimetrePerSecondCubed`                                                          |
+| Snap                     | `MetrePerSecondFourthPower`, `MillimetrePerSecondFourthPower`                                              |
+| Angular velocity         | `RadianPerSecond`, `DegreePerSecond`, `TurnPerSecond`, `RevolutionPerMinute`                               |
+| Angular acceleration     | `RadianPerSecondSquared`, `DegreePerSecondSquared`, `TurnPerSecondSquared`, `RevolutionPerMinutePerSecond` |
+| Angular jerk             | `RadianPerSecondCubed`, `DegreePerSecondCubed`, `TurnPerSecondCubed`                                       |
+| Angular velocity squared | `RadianSquaredPerSecondSquared`, `TurnSquaredPerSecondSquared`, `DegreeSquaredPerSecondSquared`            |
+| Time squared             | `NanosecondSquared` through `SecondSquared`, `MinuteSquared`, `HourSquared`                                |
+| Time cubed               | `NanosecondCubed` through `SecondCubed`, `MinuteCubed`, `HourCubed`                                        |
+| Time to the fourth power | `NanosecondFourthPower` through `SecondFourthPower`, `MinuteFourthPower`, `HourFourthPower`                |
+
+### Mechanics
+
+The units of `kuchka.units.mechanics`.
+
+| Quantity             | Representative units                                                                                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Force                | `Micronewton` through `MegaNewton`, `Dyne`, `PoundForce`, and `KilogramForce`                                                                                 |
+| Pressure             | `Pascal`, `Hectopascal`, `Kilopascal`, `Megapascal`, `Gigapascal`, `Bar`, `Millibar`, `Atmosphere`, `PoundPerSquareInch`, `KilopoundPerSquareInch`            |
+| Stress               | the units of Pressure, reached with `Pressure.to_stress()`                                                                                                    |
+| Energy               | `Picojoule` through `Petajoule`, `Electronvolt` through `Teraelectronvolt`, `MilliwattHour` through `KilowattHour`                                            |
+| _energy, continued_  | `Erg`, `Calorie`, `Kilocalorie`, `TonneOfTNT` through `MegatonneOfTNT`                                                                                        |
+| Power                | `Picowatt` through `Petawatt`, `Horsepower`, `MetricHorsepower`, `JoulePerMinute`, `JoulePerHour`, `KilojoulePerHour`, `MegajoulePerHour`, `GigajoulePerHour` |
+| Torque               | `NewtonMetre`, `MillinewtonMetre`, `KilonewtonMetre`, `PoundForceFoot`, `PoundForceInch`, `JoulePerTurn`                                                      |
+| Density              | `KilogramPerCubicMetre`, `GramPerCubicCentimetre`, `KilogramPerLitre`, `GramPerLitre`, `MilligramPerLitre`, `MicrogramPerLitre`                               |
+| Energy density       | `JoulePerCubicMetre`, `KilojoulePerCubicMetre`, `MegajoulePerCubicMetre`, `WattHourPerLitre`                                                                  |
+| Momentum             | `KilogramMetrePerSecond`, `GramCentimetrePerSecond`, `PoundFootPerSecond`                                                                                     |
+| Impulse              | `NewtonSecond`, `MillinewtonSecond`, `KilonewtonSecond`, `DyneSecond`, `PoundForceSecond`                                                                     |
+| Angular momentum     | `KilogramSquareMetrePerSecond`, `NewtonMetreSecond`, `JouleSecondPerTurn`                                                                                     |
+| Moment of inertia    | `KilogramSquareMetre`, `KilogramSquareCentimetre`, `GramSquareCentimetre`, `PoundSquareFoot`, `PoundSquareInch`                                               |
+| First moment of mass | `KilogramMetre`, `GramCentimetre`, `GramMillimetre`, `OunceInch`                                                                                              |
+| Velocity squared     | `SquareMetrePerSecondSquared`, `SquareKilometrePerSecondSquared`                                                                                              |
+| Specific energy      | `JoulePerKilogram`, `MegajoulePerKilogram`, `WattHourPerKilogram`, `KilowattHourPerKilogram`, `KilocaloriePerKilogram`                                        |
+| Specific power       | `WattPerKilogram`, `MilliwattPerKilogram`, `KilowattPerKilogram`, `WattPerGram`, `MilliwattPerGram`                                                           |
+| Volumetric flow      | `CubicMetrePerSecond`, `LitrePerSecond`, `LitrePerMinute`, `CubicMetrePerHour`, `MillilitrePerMinute`, `UsGallonPerMinute`, `CubicFootPerMinute`              |
+| Mass flow            | `KilogramPerSecond`, `GramPerSecond`, `KilogramPerHour`, `TonnePerHour`, `PoundPerHour`                                                                       |
+| Dynamic viscosity    | `PascalSecond`, `MillipascalSecond`, `Poise`, `Centipoise`                                                                                                    |
+| Kinematic viscosity  | `SquareMetrePerSecond`, `SquareMillimetrePerSecond`, `Stokes`, `Centistokes`                                                                                  |
+
+### Photometry
+
+The units of `kuchka.units.photometry`.
+
+| Quantity          | Representative units                                                                                       |
+| ----------------- | ---------------------------------------------------------------------------------------------------------- |
+| Luminous flux     | `Millilumen`, `Lumen`, `Kilolumen`                                                                         |
+| Luminous energy   | `LumenSecond`, `LumenHour`                                                                                 |
+| Illuminance       | `Millilux`, `Lux`, `Kilolux`, `Phot`, `FootCandle`                                                         |
+| Luminous exposure | `LuxSecond`, `LuxHour`, `KiloluxHour`                                                                      |
+| Luminance         | `CandelaPerSquareMetre`, `MillicandelaPerSquareMetre`, `KilocandelaPerSquareMetre`, `Stilb`, `FootLambert` |
+| Luminous efficacy | `LumenPerWatt`                                                                                             |
+
+### Radiation
+
+The units of `kuchka.units.radiation`.
+
+| Quantity          | Representative units                                                                                   |
+| ----------------- | ------------------------------------------------------------------------------------------------------ |
+| Activity          | `Millibecquerel` through `Terabecquerel`, `Curie`, `Millicurie`, `Microcurie`, and `Picocurie`         |
+| Absorbed dose     | `Nanogray` through `Megagray`, `Rad`, and `Millirad`                                                   |
+| Equivalent dose   | `Nanosievert` through `Kilosievert`, `Rem`, and `Millirem`                                             |
+| Exposure          | `Roentgen`, `Milliroentgen`, `Microroentgen`, and `C/kg` through `EXPOSURE_UNITS`                      |
+| Abs. dose rate    | `GrayPerSecond`, `GrayPerMinute`, `GrayPerHour` through `NanograyPerHour`, and `RadPerHour`            |
+| Equiv. dose rate  | `SievertPerSecond`, `SievertPerHour` through `NanosievertPerHour`, and `RemPerHour`                    |
+| Exposure rate     | `RoentgenPerSecond` through `RoentgenPerHour`, `MilliroentgenPerHour`, `MicroroentgenPerHour`          |
+| Activity conc.    | `BecquerelPerCubicMetre`, `BecquerelPerLitre`, `PicocuriePerLitre`, and the kilo- and milli- multiples |
+| Specific activity | `BecquerelPerKilogram`, `BecquerelPerGram`, `PicocuriePerGram`, `CuriePerGram`                         |
+| Surface act.      | `BecquerelPerSquareCentimetre`, `DpmPer100SquareCentimetre`, `CuriePerSquareKilometre`                 |
+
+### Temporal
+
+The units of `kuchka.units.temporal`.
+
+| Quantity        | Representative units                                                       |
+| --------------- | -------------------------------------------------------------------------- |
+| Time            | `Femtosecond` through `Second`, `Minute` through `JulianYear`, and `Jiffy` |
+| Instant         | reached via `Time.to_instant()`                                            |
+| Frequency       | `Nanohertz` through `Petahertz`                                            |
+| Sampling Period | reached via `Time.to_sampling_period()`                                    |
+| Sample Rate     | `SamplesPerSecond`, `KilosamplesPerSecond`, `MegasamplesPerSecond`         |
+| Baud Rate       | `Baud` through `Gigabaud`                                                  |
+
+### Thermodynamics
+
+The units of `kuchka.units.thermodynamics`.
+
+| Quantity             | Representative units                                                                                             |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Heating Rate         | `KelvinPerSecond`, `CelsiusPerMinute`, `FahrenheitPerMinute`, and the per-second, per-minute, and per-hour units |
+| Heat capacity        | `JoulePerKelvin`, `KilojoulePerKelvin`, `ThermochemicalCaloriePerKelvin`, `KilocaloriePerKelvin`                 |
+| Specific heat        | `JoulePerKilogramKelvin`, `KilojoulePerKilogramKelvin`, `ThermochemicalCaloriePerGramKelvin`                     |
+| Heat flux            | `WattPerSquareMetre`, `KilowattPerSquareMetre`, `MilliwattPerSquareCentimetre`                                   |
+| Thermal conductivity | `WattPerMetreKelvin`, `MilliwattPerMetreKelvin`, `WattPerCentimetreKelvin`                                       |
+| Entropy              | `HeatCapacity.to_entropy()`, and `ENTROPY_UNITS` for the same units as text                                      |
+| Specific entropy     | `SpecificHeatCapacity.to_specific_entropy()`, and `SPECIFIC_ENTROPY_UNITS`                                       |
 
 Most SI-derived families expose a selected set of SI prefixes appropriate to their engineering use.
-The README does not list every prefix individually;the API reference contains the complete constructor and unit vocabulary.
+The README does not list every prefix individually; the API reference contains the complete constructor and unit vocabulary.
 
 The canonical spelling of SI `metre` is used throughout `kuchka`.
 American-English `*meter` names are aliases of the corresponding `*metre`
@@ -516,7 +779,7 @@ They are imported explicitly from the module of their tradition and add nothing 
 
 ```python
 from kuchka.units.archaic.russian.length import Arshin
-from kuchka.units.length import CENTIMETRE
+from kuchka.units import CENTIMETRE
 
 print(Arshin(3).to(CENTIMETRE))
 # 213.36 cm
@@ -525,7 +788,8 @@ print(Arshin(3).to(CENTIMETRE))
 `parse` reads an archaic unit only when asked, and only from the modules that have been imported:
 
 ```python
-from kuchka import Length, parse
+from kuchka import Length
+from kuchka import parse
 
 parse("3 arshin", Length, allow_archaic=True)  # 3 arshin
 ```
@@ -534,7 +798,7 @@ parse("3 arshin", Length, allow_archaic=True)  # 3 arshin
 The error for a refused archaic unit says how to read it.
 
 The traditions today are German (the Meilen), Hebrew, Japanese, and Russian.
-See the [archaic units README](src/kuchka/units/archaic/README.md) for what each provides, and [How to extend kuchka](docs/how-to/README.md) for adding more.
+See the [archaic units README](https://github.com/Dimonade/kuchka/blob/HEAD/src/kuchka/units/archaic/README.md) for what each provides, and [How to extend kuchka](https://github.com/Dimonade/kuchka/blob/HEAD/docs/how-to/README.md) for adding more.
 
 ## A few important distinctions
 
@@ -569,6 +833,24 @@ def nyquist_ok(signal: ConvertibleToFrequency, sample_rate: Frequency) -> bool:
     return signal.to_frequency() * 2 <= sample_rate
 ```
 
+An impulse and a momentum are both newton seconds, and still different concepts: a force over a time delivers one, a mass moving at a velocity has the other.
+Each product returns its own type, and converting is explicit:
+
+```python
+from kuchka import Kilogram
+from kuchka import MetrePerSecond
+from kuchka import Newton
+from kuchka import Second
+
+push = Newton(20) * Second(3)  # an Impulse
+cart = Kilogram(12) * MetrePerSecond(5)  # a Momentum
+
+push + cart  # rejected: `IncompatibleDimensionError`.
+push.to_momentum() == cart  # True: the push brings the cart from rest to 5 m/s.
+```
+
+Likewise a velocity squared and a specific energy share m²/s², and `VelocitySquared.to_specific_energy()` is its half, the kinetic energy per mass.
+
 ### Canonical types and domain-specific types
 
 For a physical dimension, one type is canonical: the type produced by generic dimensional arithmetic.
@@ -593,7 +875,7 @@ print(voltage)
 
 There is no `voltage.to("mV")`.
 Application code uses Python unit definitions.
-String resolution belongs at boundaries such as configuration and import code, where the maintained `*_UNITS` mappings provide the bridge.
+String resolution belongs at boundaries such as configuration and import code, where `parse` and the maintained `*_UNITS` mappings provide the bridge.
 
 A conversion to another physical dimension is rejected:
 
@@ -688,7 +970,7 @@ Radian(math.pi).is_close(Degree(180), tolerance=Radian(1e-12))  # True
 ```
 
 The tolerance has no default and is a quantity of the right type (a `TemperatureDelta` for a `Temperature`), so a bare number is rejected.
-See [Exactness, angles, and tolerance](docs/concepts/exactness.md) for why equality stays exact and how each shape measures distance.
+See [Exactness, angles, and tolerance](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/exactness.md) for why equality stays exact and how each shape measures distance.
 
 ## Physical constants
 
@@ -705,6 +987,19 @@ wifi_wavelength = kc.SPEED_OF_LIGHT_IN_VACUUM / Hertz(2_400_000_000)
 
 Some constants are exact by definition; others are CODATA 2022 recommended values.
 Each constant documents its own status and published precision.
+A test ties every constant, and the `Dalton`, `EarthMass`, and `SolarMass` units, to the NIST listing shipped with the package, so a new adjustment fails a test until the values are updated on purpose.
+
+`kuchka.constants.icrp_103` holds the radiation weighting factors of ICRP Publication 103 as plain proportions, for `EquivalentDose.from_absorbed_dose`.
+They are the Commission's recommendations and not measurements, and the Commission has revised them before.
+
+```python
+from kuchka import EquivalentDose
+from kuchka import Milligray
+from kuchka.constants import icrp_103
+
+EquivalentDose.from_absorbed_dose(Milligray(3), icrp_103.ALPHA_PARTICLES)
+# EquivalentDose: 60 mSv
+```
 
 ## Errors
 
@@ -749,8 +1044,10 @@ Without a precision, a value that has no finite decimal form shows 28 significan
 
 The repository contains longer, task-oriented examples:
 
-- **[Migrating a config from unit-suffixed keys to `kuchka`](docs/examples/config_migration/README.md)** - moves units from names such as `accepted_voltage_min_mv` into TOML data and resolves them into typed dataclasses at the boundary.
-- **[Working around an unrepresentable intermediate dimension](docs/examples/unrepresentable_dimensions/README.md)** - shows how to handle formulas such as `P = V²/R` and parallel resistor networks when an intermediate dimension has no registered type.
+- **[A heated beaker on a stepper-driven lever](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/heated_beaker/README.md)** - reads a TOML spec and a CSV run log whose cells mix `V`, `mV`, `°C`, and `°F`, then measures the run with angles that wrap, temperature differences, tolerances, and power into energy.
+- **[Migrating a config from unit-suffixed keys to `kuchka`](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/config_migration/README.md)** - moves units from names such as `accepted_voltage_min_mv` into TOML strings such as `"-1.000 mV"` and reads them with `parse` into typed dataclasses at the boundary.
+- **[Working around an unrepresentable intermediate dimension](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/unrepresentable_dimensions/README.md)** - shows how to handle formulas such as `P = V²/R` and parallel resistor networks when an intermediate dimension has no registered type.
+- **[Hiroshimas per datacenter](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/hiroshimas_per_datacenter/README.md)** - counts the heat of a planned off-grid data center in Hiroshimas, with an efficiency as a `Proportion`, TNT equivalents, terajoules, a fluence over acres, and the Reddit unit of Hiroshimas per Walmart Supercenter built as a reference quantity.
 
 These examples show `kuchka` in application code, with arithmetic serving the larger engineering task.
 
@@ -759,7 +1056,7 @@ These examples show `kuchka` in application code, with arithmetic serving the la
 `kuchka` uses exact rational arithmetic (`Fraction`) for correctness.
 The intended use is at configuration, application, control, and reporting boundaries, not inside a per-sample hot loop processing live streams at very high rates.
 
-See [`benchmarks`](benchmarks/README.md) for current measurements.
+See [`benchmarks`](https://github.com/Dimonade/kuchka/blob/HEAD/benchmarks/README.md) for current measurements.
 
 ## What this is not yet
 
@@ -770,16 +1067,11 @@ The vocabulary is intentionally curated and will remain finite. Current gaps inc
 
 A future persistence layer may use a representation such as `{"value": 4.2, "unit": "V"}` at the serialization boundary while reconstructing a typed quantity when data enters application code.
 
-Quantities have no exponentiation:
-`Second(2) ** 2` raises a `TypeError`.
-Multiply the factors instead, since every step lands on a registered type: `v0 * t + a * t * t / 2` is a `Length`.
-
 ## Stability
 
-`kuchka` is currently `0.1.x`.
-Breaking changes are expected while the API settles.
-
-From `0.2.0` onward, `kuchka` follows ordinary semantic versioning: a minor release will not break existing code, and a breaking change comes with a major version bump.
+`kuchka` follows [semantic versioning](https://semver.org/).
+Before `1.0.0`, a breaking change comes with a minor version bump and is listed under `Changed` or `Removed` in the changelog.
+A patch release keeps existing code working.
 
 ### Compatibility
 
@@ -814,7 +1106,7 @@ uv run ty check src/kuchka tests
 uv run coverage run -m pytest && uv run coverage report
 ```
 
-`just test` runs the doctests and the test suite, `just check` runs the generated-API check, `ruff`, `mypy --strict`, and `ty`, and `just ct` (or `just covtest`) runs the full testbench with coverage after `check` passes, so a lint or type error fails before the slower run.
+`just test` runs the doctests and the test suite, `just check` runs the generated-file checks (the API, the overloads, and the contents above), `ruff`, `mypy --strict`, and `ty`, and `just ct` (or `just covtest`) runs the full testbench with coverage after `check` passes, so a lint or type error fails before the slower run.
 `just tox` runs the doctests and the test suite on every supported Python version, plus a `lint` environment with the same checks as `just check`, a `typing-min` environment that checks the library and its consumer-side types on the oldest supported mypy, and a `pyright` environment that checks the same consumer-side types on pyright.
 
 `uv run` resolves the tools from `uv.lock`, while tox installs the newest versions the floors in `pyproject.toml` allow.
@@ -829,13 +1121,12 @@ Ruff is configured with `select = ["ALL"]`; disabled rules in `pyproject.toml` c
 The README intentionally gives the usage model before the implementation story.
 Deeper design material is kept separately:
 
-- **[Quantity shapes and semantics](docs/concepts/quantity_shapes.md)** - Linear, Affine, Modular, and Logarithmic quantities, including temperature, angle, and decibel semantics.
-- **[Dimensional algebra and derived quantities](docs/concepts/dimensional_algebra.md)** - exponent-vector arithmetic, registered results, reciprocal relationships, and the boundary between runtime algebra and static overloads.
-- **[Copying, pickling, and persistence](docs/concepts/persistence.md)** - what `copy` and `pickle` guarantee, why pickle is not a storage format, and how to store a value as exact text and a unit symbol.
-- **[Unit spellings](docs/concepts/unit_spellings.md)** - what the `*_UNITS` tables accept, how case and plurals are treated, and why no spelling can mean two units.
-- **[Exactness, angles, and tolerance](docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, angles and pi, and comparing with a tolerance.
-- **[How to extend kuchka](docs/how-to/README.md)** - adding a unit, a quantity, a dimension, or archaic units, splitting a module, and the tests and documentation each needs, with an imaginary krakenpeople example.
-- **[Design choices](docs/design_choices.md)** - constructor functions, unit definitions, canonical types, string-resolution boundaries, and the reasons for a curated vocabulary.
-- **[Comparison with existing tools](docs/comparison.md)** - the deliberate trade-offs versus Pint, physipy, impunity, and related libraries.
-
-The original pre-implementation design proposal lives at [`docs/introduction/design_proposal.md`](docs/introduction/design_proposal.md). It is retained as historical design material.
+- **[Quantity shapes and semantics](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/quantity_shapes.md)** - Linear, Affine, Modular, and Logarithmic quantities, including temperature, angle, and decibel semantics.
+- **[Dimensional algebra and derived quantities](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/dimensional_algebra.md)** - exponent-vector arithmetic, registered results, reciprocal relationships, and the boundary between runtime algebra and static overloads.
+- **[Where the radian meets a length](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/angle_bridges.md)** - how rotational quantities meet lengths: bridges, the moment of inertia, and the relations that stay named constructors.
+- **[Copying, pickling, and persistence](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/persistence.md)** - what `copy` and `pickle` guarantee, why pickle is not a storage format, and how to store a value as exact text and a unit symbol.
+- **[Unit spellings](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/unit_spellings.md)** - what the `*_UNITS` tables accept, how case and plurals are treated, and why no spelling can mean two units.
+- **[Exactness, angles, and tolerance](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, angles and pi, and comparing with a tolerance.
+- **[How to extend kuchka](https://github.com/Dimonade/kuchka/blob/HEAD/docs/how-to/README.md)** - adding a unit, a quantity, a dimension, or archaic units, splitting a module, and the tests and documentation each needs, with an imaginary krakenpeople example.
+- **[Design proposal](https://github.com/Dimonade/kuchka/blob/HEAD/docs/introduction/design_proposal.md)** - the original pre-implementation design: constructor functions, unit definitions, canonical types, string-resolution boundaries, and the reasons for a curated vocabulary.
+- **[Comparison with existing tools](https://github.com/Dimonade/kuchka/blob/HEAD/docs/comparison.md)** - the deliberate trade-offs versus Pint, physipy, impunity, and related libraries.

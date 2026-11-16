@@ -3,7 +3,8 @@
 A checker is asked about a file of `reveal_type(...)` lines and answers, per line,
 either the name of the revealed type or that it refused the expression.
 The names are reduced to their last dotted segment and joined with `|` in order, so
-mypy's `kuchka.quantities.electrical.Voltage` and pyright's `Voltage` compare equal.
+mypy's `kuchka.quantities.electromagnetics.voltage.Voltage` and pyright's `Voltage`
+compare equal.
 """
 
 from __future__ import annotations

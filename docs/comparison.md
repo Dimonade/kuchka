@@ -104,8 +104,8 @@ Generic runtime systems can often accept a new unit or compound expression witho
 
 Static arithmetic is also not free.
 The runtime can derive dimensions generically, but Python type checkers do not infer an arbitrary mapping such as `Voltage * Current -> Power` from exponent-vector algebra.
-`kuchka` therefore maintains explicit overloads for registered derived quantities.
-This keeps common relationships visible to mypy and ty at the cost of a hand-maintained type-level vocabulary.
+`kuchka` therefore declares explicit overloads for registered derived quantities, generated from the same registry the runtime uses.
+This keeps common relationships visible to mypy and ty at the cost of a type-level vocabulary that grows with every quantity type.
 
 Array computing is another deliberate boundary.
 Astropy, physipy, and unyt are designed to work with array data, and Pint provides NumPy-oriented integration.

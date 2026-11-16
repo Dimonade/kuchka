@@ -162,7 +162,7 @@ def test_sagittarius_a_dwarfs_an_ordinary_car():
     """Pins the module docstring's own worked example as a regression test."""
     yaris = mass.Kilogram(1_000)
     sagittarius_a = mass.SolarMass(4_300_000)
-    expected = 8_550_188_800_000_000_000_000_000_000_000_000
+    expected = 8_550_163_000_000_000_000_000_000_000_000_000
     assert round((sagittarius_a / yaris).magnitude) == expected
 
 

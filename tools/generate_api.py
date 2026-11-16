@@ -75,6 +75,11 @@ def _leaves(package: Path) -> list[Path]:
     )
 
 
+def _import_order(name: str) -> tuple[str, str]:
+    """Return the key that orders imports the way the linter's import sorting does."""
+    return name.lower(), name
+
+
 def promoted_names() -> tuple[list[str], list[str]]:
     """Return the quantity types and the unit constructors to promote, sorted."""
     quantities = {n for leaf in _leaves(PACKAGE / "quantities") for n in _all_of(leaf)}
@@ -91,8 +96,14 @@ def render() -> str:
     """Return the full text of the generated module."""
     quantities, constructors = promoted_names()
     lines = [HEADER.rstrip("\n"), ""]
-    lines += [f"from kuchka.quantities import {name}" for name in quantities]
-    lines += [f"from kuchka.units import {name}" for name in constructors]
+    lines += [
+        f"from kuchka.quantities import {name}"
+        for name in sorted(quantities, key=_import_order)
+    ]
+    lines += [
+        f"from kuchka.units import {name}"
+        for name in sorted(constructors, key=_import_order)
+    ]
     lines += ["", "__all__ = ["]
     lines += [f'    "{name}",' for name in sorted({*quantities, *constructors})]
     lines += ["]", ""]

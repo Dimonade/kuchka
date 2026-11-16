@@ -1,6 +1,7 @@
 """kuchka -- a small pile of physically-typed units for engineering code.
 
-    from kuchka import Volt, Milliampere
+    from kuchka import Milliampere
+    from kuchka import Volt
 
     voltage = Volt(4.2)
     current = Milliampere(150)
@@ -34,6 +35,7 @@ from kuchka import errors
 from kuchka import parsing
 from kuchka._api import *
 from kuchka.constants import codata_2022
+from kuchka.constants import icrp_103
 from kuchka.errors import *
 from kuchka.parsing import *
 from kuchka.quantities.base.registry import _close
@@ -45,7 +47,7 @@ except PackageNotFoundError:  # pragma: no cover -- running from an uninstalled 
 
 _close()
 
-__all__: list[str] = ["__version__", "codata_2022"]
+__all__: list[str] = ["__version__", "codata_2022", "icrp_103"]
 __all__ += _api.__all__
 __all__ += errors.__all__
 __all__ += parsing.__all__

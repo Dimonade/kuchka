@@ -16,7 +16,7 @@ import pytest
 from kuchka import InvalidMeasurementError
 from kuchka import Voltage
 from kuchka.units import current
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
 from tests.support.families import FAMILIES
 from tests.support.families import FAMILY_IDS
 from tests.support.kinds import QUANTITY_TYPES

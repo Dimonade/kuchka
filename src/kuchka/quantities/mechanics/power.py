@@ -1,0 +1,157 @@
+"""Power: energy per time."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import overload
+
+from kuchka.dimensions import POWER
+from kuchka.internal.typing import override
+from kuchka.quantities.base import LinearQuantity
+from kuchka.quantities.base.registry import _register
+
+if TYPE_CHECKING:
+    from fractions import Fraction
+
+    from kuchka.dimensions import Dimension
+    from kuchka.numeric import Numeric
+    from kuchka.quantities.chemistry.molar_energy import MolarEnergy
+    from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
+    from kuchka.quantities.current import Current
+    from kuchka.quantities.electromagnetics.voltage import Voltage
+    from kuchka.quantities.geometry.area import Area
+    from kuchka.quantities.kinematics.acceleration import Acceleration
+    from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
+    from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.jerk import Jerk
+    from kuchka.quantities.kinematics.velocity import Velocity
+    from kuchka.quantities.mass import Mass
+    from kuchka.quantities.mechanics.angular_momentum import AngularMomentum
+    from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.energy_density import EnergyDensity
+    from kuchka.quantities.mechanics.first_moment_of_mass import FirstMomentOfMass
+    from kuchka.quantities.mechanics.force import Force
+    from kuchka.quantities.mechanics.impulse import Impulse
+    from kuchka.quantities.mechanics.kinematic_viscosity import KinematicViscosity
+    from kuchka.quantities.mechanics.mass_flow_rate import MassFlowRate
+    from kuchka.quantities.mechanics.momentum import Momentum
+    from kuchka.quantities.mechanics.pressure import Pressure
+    from kuchka.quantities.mechanics.specific_energy import SpecificEnergy
+    from kuchka.quantities.mechanics.specific_power import SpecificPower
+    from kuchka.quantities.mechanics.surface_tension import SurfaceTension
+    from kuchka.quantities.mechanics.torque import Torque
+    from kuchka.quantities.mechanics.velocity_squared import VelocitySquared
+    from kuchka.quantities.mechanics.volumetric_flow_rate import VolumetricFlowRate
+    from kuchka.quantities.photometry.luminous_efficacy import LuminousEfficacy
+    from kuchka.quantities.photometry.luminous_flux import LuminousFlux
+    from kuchka.quantities.proportion import Proportion
+    from kuchka.quantities.temporal import Frequency
+    from kuchka.quantities.temporal import Time
+    from kuchka.quantities.thermodynamics.heat_capacity import HeatCapacity
+    from kuchka.quantities.thermodynamics.heat_flux import HeatFlux
+    from kuchka.quantities.thermodynamics.heating_rate import HeatingRate
+
+
+class Power(LinearQuantity):
+    """The rate at which electrical energy is transferred or dissipated."""
+
+    dimension: ClassVar[Dimension] = POWER
+    __slots__ = ()
+
+    # BEGIN GENERATED __mul__
+    @overload
+    def __mul__(self, other: LuminousEfficacy) -> LuminousFlux: ...
+    @overload
+    def __mul__(self, other: Proportion) -> Power: ...
+    @overload
+    def __mul__(self, other: Time) -> Energy: ...
+    @overload
+    def __mul__(self, other: Numeric) -> Power: ...
+    @overload
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__mul__(other)
+
+    # BEGIN GENERATED __truediv__
+    @overload
+    def __truediv__(self, other: AngularAcceleration) -> AngularMomentum: ...
+    @overload
+    def __truediv__(self, other: AngularMomentum) -> AngularAcceleration: ...
+    @overload
+    def __truediv__(self, other: AngularVelocity) -> Torque: ...
+    @overload
+    def __truediv__(self, other: Area) -> HeatFlux: ...
+    @overload
+    def __truediv__(self, other: Current) -> Voltage: ...
+    @overload
+    def __truediv__(self, other: Energy) -> Frequency: ...
+    @overload
+    def __truediv__(self, other: EnergyDensity) -> VolumetricFlowRate: ...
+    @overload
+    def __truediv__(self, other: FirstMomentOfMass) -> Jerk: ...
+    @overload
+    def __truediv__(self, other: Force) -> Velocity: ...
+    @overload
+    def __truediv__(self, other: Frequency) -> Energy: ...
+    @overload
+    def __truediv__(self, other: HeatCapacity) -> HeatingRate: ...
+    @overload
+    def __truediv__(self, other: HeatFlux) -> Area: ...
+    @overload
+    def __truediv__(self, other: HeatingRate) -> HeatCapacity: ...
+    @overload
+    def __truediv__(self, other: Impulse) -> Acceleration: ...
+    @overload
+    def __truediv__(self, other: Jerk) -> FirstMomentOfMass: ...
+    @overload
+    def __truediv__(self, other: KinematicViscosity) -> SurfaceTension: ...
+    @overload
+    def __truediv__(self, other: Mass) -> SpecificPower: ...
+    @overload
+    def __truediv__(self, other: MolarEnergy) -> MolarFlowRate: ...
+    @overload
+    def __truediv__(self, other: MolarFlowRate) -> MolarEnergy: ...
+    @overload
+    def __truediv__(self, other: Momentum) -> Acceleration: ...
+    @overload
+    def __truediv__(self, other: Power) -> Proportion: ...
+    @overload
+    def __truediv__(self, other: Pressure) -> VolumetricFlowRate: ...
+    @overload
+    def __truediv__(self, other: Proportion) -> Power: ...
+    @overload
+    def __truediv__(self, other: SpecificEnergy) -> MassFlowRate: ...
+    @overload
+    def __truediv__(self, other: SpecificPower) -> Mass: ...
+    @overload
+    def __truediv__(self, other: SurfaceTension) -> KinematicViscosity: ...
+    @overload
+    def __truediv__(self, other: Torque) -> AngularVelocity: ...
+    @overload
+    def __truediv__(self, other: Velocity) -> Force: ...
+    @overload
+    def __truediv__(self, other: VelocitySquared) -> MassFlowRate: ...
+    @overload
+    def __truediv__(self, other: Voltage) -> Current: ...
+    @overload
+    def __truediv__(self, other: Numeric) -> Power: ...
+    @overload
+    def __truediv__(
+        self, other: LinearQuantity | Numeric
+    ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
+
+    @override
+    def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
+        return super().__truediv__(other)
+
+
+_register(POWER, Power)
+
+__all__ = ["Power"]

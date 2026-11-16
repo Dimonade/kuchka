@@ -49,7 +49,7 @@ A land ledger lists a parcel as 121 tsubo.
 Under the standardized conversion, that is exactly 400 square metres, which makes the
 old and metric records straightforward to reconcile:
 
->>> from kuchka.units.area import SQUARE_METRE
+>>> from kuchka.units import SQUARE_METRE
 >>> cadastral_area = Tsubo(121)
 >>> cadastral_area.to(SQUARE_METRE)
 400 m²
@@ -80,7 +80,7 @@ See Also
 --------
 ~kuchka.quantities.Area
     Quantity type representing area.
-~kuchka.units.area
+~kuchka.units.geometry.area
     Metric and other area constructors, including square metres and hectares.
 ~kuchka.units.japanese.length
     Japanese length units, including shaku and ken.

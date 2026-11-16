@@ -14,13 +14,13 @@ from kuchka import InvalidMeasurementError
 from kuchka import Torque
 from kuchka.internal import symbols
 from kuchka.units import angular
-from kuchka.units import angular_velocity as angvel
-from kuchka.units import energy
-from kuchka.units import force
-from kuchka.units import frequency
 from kuchka.units import length
-from kuchka.units import time
-from kuchka.units import torque
+from kuchka.units.kinematics import angular_velocity as angvel
+from kuchka.units.mechanics import energy
+from kuchka.units.mechanics import force
+from kuchka.units.mechanics import torque
+from kuchka.units.temporal import frequency
+from kuchka.units.temporal import time
 
 
 def test_a_torque_unit_is_not_an_energy_unit() -> None:

@@ -31,11 +31,11 @@ from kuchka import Voltage
 from kuchka import parse
 from kuchka.internal.limits import NUMERIC_LIMITS
 from kuchka.quantities.base import LinearQuantity
-from kuchka.units import area
 from kuchka.units import proportion
 from kuchka.units import thermal
-from kuchka.units import time
-from kuchka.units import voltage
+from kuchka.units.electromagnetics import voltage
+from kuchka.units.geometry import area
+from kuchka.units.temporal import time
 
 
 @pytest.mark.parametrize(

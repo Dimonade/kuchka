@@ -51,7 +51,7 @@ Examples
 A Silesian post rider's six-mile stage converts without reading the historical road
 log as modern miles:
 
->>> from kuchka.units.length import KILOMETRE
+>>> from kuchka.units import KILOMETRE
 >>> BreslauerMeile(6).to(KILOMETRE)
 40.2 km
 
@@ -86,9 +86,8 @@ here keep the published metric calibration.
 Importing this module lets `Length` display in the regional miles and the principal
 ones.
 
-Sources
--------
-
+References
+----------
 - https://en.wikipedia.org/wiki/German_units_of_measurement
 - https://de.wikipedia.org/wiki/Meile
 - https://en.wikipedia.org/wiki/Obsolete_Austrian_units_of_measurement
@@ -463,7 +462,7 @@ def BreslauerMeile(value: Numeric) -> Length:
     A Silesian post rider has six Breslau miles between dispatch stations:
 
     >>> distance = BreslauerMeile(6)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     40.2 km
 
@@ -494,7 +493,7 @@ def BayerischeMeile(value: Numeric) -> Length:
     A Bavarian survey party marks a four-mile leg between market towns:
 
     >>> distance = BayerischeMeile(4)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     29.66 km
 
@@ -524,7 +523,7 @@ def WuerttembergischeMeile(value: Numeric) -> Length:
     A Württemberg travel journal records three miles between overnight inns:
 
     >>> distance = WuerttembergischeMeile(3)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     22.347 km
 
@@ -556,7 +555,7 @@ def AnhaltischeMeile(value: Numeric) -> Length:
     An Anhalt estate map labels a boundary road as five miles long:
 
     >>> distance = AnhaltischeMeile(5)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     37.66 km
 
@@ -588,7 +587,7 @@ def SaechsischeMeile(value: Numeric) -> Length:
     next:
 
     >>> distance = SaechsischeMeile(8)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     60 km
 
@@ -619,7 +618,7 @@ def AlteSaechsischeMeile(value: Numeric) -> Length:
     register:
 
     >>> distance = AlteSaechsischeMeile(3)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     27.186 km
 
@@ -651,7 +650,7 @@ def SchleswigHolsteinischeMeile(value: Numeric) -> Length:
     A coastal courier schedule allows four local miles between relay posts:
 
     >>> distance = SchleswigHolsteinischeMeile(4)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     35.212 km
 
@@ -686,7 +685,7 @@ def BadischeMeile(value: Numeric) -> Length:
     road:
 
     >>> distance = BadischeMeile(3)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     24 km
 
@@ -716,7 +715,7 @@ def BadischeMeileVor1810(value: Numeric) -> Length:
     A pre-1810 Baden itinerary lists two miles between customs houses:
 
     >>> distance = BadischeMeileVor1810(2)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     17.778 km
 
@@ -749,7 +748,7 @@ def BadischeMeile1810Bis1871(value: Numeric) -> Length:
     A nineteenth-century Baden coach log totals two miles between staging inns:
 
     >>> distance = BadischeMeile1810Bis1871(2)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     17.888 km
 
@@ -782,7 +781,7 @@ def HessischeMeile(value: Numeric) -> Length:
     A Hesse-Kassel courier changes horses after a three-mile stage:
 
     >>> distance = HessischeMeile(3)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     27.618 km
 
@@ -812,7 +811,7 @@ def LippeDetmolderMeile(value: Numeric) -> Length:
     An archivist converts a two-mile passage from a Lippe-Detmold itinerary:
 
     >>> distance = LippeDetmolderMeile(2)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     18.528 km
 
@@ -842,7 +841,7 @@ def WestfaelischeMeile(value: Numeric) -> Length:
     A Westphalian stagecoach route measures two long miles between major towns:
 
     >>> distance = WestfaelischeMeile(2)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     22.2 km
 
@@ -872,7 +871,7 @@ def WestfaelischeMeileKurz(value: Numeric) -> Length:
     A local Westphalian route book uses the shorter value for two stages:
 
     >>> distance = WestfaelischeMeileKurz(2)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     18.5 km
 
@@ -904,7 +903,7 @@ def OldenburgerMeile(value: Numeric) -> Length:
     A surveyor translates three Oldenburg miles from a boundary description:
 
     >>> distance = OldenburgerMeile(3)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     29.682 km
 
@@ -935,7 +934,7 @@ def RheinlaendischeMeile(value: Numeric) -> Length:
     A Rhineland market route recorded as four miles is converted for a modern map:
 
     >>> distance = RheinlaendischeMeile(4)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     16.476 km
 
@@ -965,7 +964,7 @@ def PfaelzischeMeile(value: Numeric) -> Length:
     A Palatinate tax record describes a five-mile road between villages:
 
     >>> distance = PfaelzischeMeile(5)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     23.15 km
 
@@ -995,7 +994,7 @@ def OsnabrueckerMeile(value: Numeric) -> Length:
     A travelling merchant converts two Osnabrück miles into kilometres:
 
     >>> distance = OsnabrueckerMeile(2)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     10.32 km
 
@@ -1025,7 +1024,7 @@ def WiesbadenerMeile(value: Numeric) -> Length:
     A Wiesbaden municipal note records three local miles of roadworks:
 
     >>> distance = WiesbadenerMeile(3)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     3 km
 
@@ -1057,7 +1056,7 @@ def OesterreichischePostmeile(value: Numeric) -> Length:
     A post route described in the 3,910-Klafter convention covers two such miles:
 
     >>> distance = OesterreichischePostmeile(2)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     14.8305036288 km
 
@@ -1091,7 +1090,7 @@ def HelvetischeMeile(value: Numeric) -> Length:
     cantonal centres:
 
     >>> distance = HelvetischeMeile(2)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     19.2 km
 
@@ -1122,7 +1121,7 @@ def ZuercherMeile(value: Numeric) -> Length:
     A Zurich travel ledger uses two miles under the older local measure:
 
     >>> distance = ZuercherMeile(2)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     21.6 km
 
@@ -1153,7 +1152,7 @@ def BernerMeile(value: Numeric) -> Length:
     A Bernese itinerary records two miles under its older local calibration:
 
     >>> distance = BernerMeile(2)
-    >>> from kuchka.units.length import KILOMETRE
+    >>> from kuchka.units import KILOMETRE
     >>> distance.to(KILOMETRE)
     21.12 km
 

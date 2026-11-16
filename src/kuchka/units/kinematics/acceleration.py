@@ -1,4 +1,4 @@
-"""Acceleration quantities and constructors for mechanics, geophysics, and space.
+"""Acceleration constructors: metres per second squared and the gal.
 
 `Acceleration` represents the rate of change of velocity with respect to time:
 
@@ -42,12 +42,10 @@ Starting at 90 km/h and decelerating at exactly 5 m/s²:
 >>> stopping_time
 5 s
 
-The same constant-acceleration model gives the stopping distance.
-TODO: This calculation is intentionally skipped until exponentiation of `Time` is
-supported:
+The same constant-acceleration model gives the stopping distance:
 
->>> stopping_distance = initial_speed * stopping_time + braking * stopping_time**2 / 2  # doctest: +SKIP
->>> stopping_distance  # doctest: +SKIP
+>>> stopping_distance = initial_speed * stopping_time + braking * stopping_time**2 / 2
+>>> stopping_distance
 62.5 m
 
 Acceleration can also be derived from force and mass.
@@ -141,7 +139,7 @@ See Also
 ~kuchka.quantities.Length
     Distance travelled during accelerated motion.
 
-"""  # noqa: E501  # NOTE: This is due the doctest: +SKIP that will be removed later.
+"""  # NOTE: This is due the doctest: +SKIP that will be removed later.
 
 from __future__ import annotations
 

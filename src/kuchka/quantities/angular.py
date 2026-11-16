@@ -9,19 +9,6 @@ and `AngularDisplacement.to_angle()` move between them.
 
 Turn is the canonical unit.
 See `kuchka.units.angular` for how Radian relates to it.
-
-The relationships that involve an angular displacement:
-
-- `AngularDisplacement / Time -> AngularVelocity` and its inverses,
-  `AngularVelocity * Time -> AngularDisplacement` and
-  `AngularDisplacement / AngularVelocity -> Time`;
-- `Torque * AngularDisplacement -> Energy` and its inverses,
-  `Energy / AngularDisplacement -> Torque` and `Energy / Torque -> AngularDisplacement`;
-- `AngularDisplacement * Frequency -> AngularVelocity`, the angle swept per cycle times
-  the cycles per second.
-
-The other overload halves live on `Time`, `Energy`, `Frequency`, `AngularVelocity`,
-and `Torque`.
 """
 
 from __future__ import annotations
@@ -33,11 +20,14 @@ from typing import overload
 
 from kuchka.dimensions import ANGLE
 from kuchka.errors import IncompatibleDimensionError
+from kuchka.internal.constants import PI
 from kuchka.internal.typing import override
 from kuchka.quantities.base import LinearQuantity
 from kuchka.quantities.base import ModularQuantity
+from kuchka.quantities.base.registry import _bridge
 from kuchka.quantities.base.registry import _register
 from kuchka.quantities.base.storage import _ScalarStorage
+from kuchka.quantities.length import Length
 
 if TYPE_CHECKING:
     from fractions import Fraction
@@ -46,10 +36,17 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
-    from kuchka.quantities.energy import Energy
+    from kuchka.quantities.kinematics.angular_acceleration import AngularAcceleration
+    from kuchka.quantities.kinematics.angular_jerk import AngularJerk
+    from kuchka.quantities.kinematics.angular_velocity import AngularVelocity
+    from kuchka.quantities.kinematics.angular_velocity_squared import (
+        AngularVelocitySquared,
+    )
+    from kuchka.quantities.kinematics.time_cubed import TimeCubed
+    from kuchka.quantities.kinematics.time_squared import TimeSquared
+    from kuchka.quantities.mechanics.energy import Energy
+    from kuchka.quantities.mechanics.torque import Torque
     from kuchka.quantities.proportion import Proportion
-    from kuchka.quantities.rotational import AngularVelocity
-    from kuchka.quantities.rotational import Torque
     from kuchka.quantities.temporal import Frequency
     from kuchka.quantities.temporal import Time
 
@@ -117,40 +114,60 @@ class AngularDisplacement(LinearQuantity):
     multiplies and divides like any linear quantity:
     `Torque * AngularDisplacement` is the work done, and `AngularDisplacement / Time` is
     an angular velocity.
+    Times a radius, it is the `Length` of the arc it sweeps, and
+    `AngularDisplacement.from_arc(arc, radius)` reads the angle back.
     """
 
     dimension: ClassVar[Dimension] = ANGLE
     __slots__ = ()
 
+    # BEGIN GENERATED __mul__
     @overload
-    def __mul__(self, other: Torque) -> Energy: ...
+    def __mul__(self, other: AngularAcceleration) -> AngularVelocitySquared: ...
     @overload
     def __mul__(self, other: Frequency) -> AngularVelocity: ...
     @overload
+    def __mul__(self, other: Length) -> Length: ...
+    @overload
     def __mul__(self, other: Proportion) -> AngularDisplacement: ...
+    @overload
+    def __mul__(self, other: Torque) -> Energy: ...
     @overload
     def __mul__(self, other: Numeric) -> AngularDisplacement: ...
     @overload
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction: ...
 
+    # END GENERATED
+
     @override
     def __mul__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
         return super().__mul__(other)
 
+    # BEGIN GENERATED __truediv__
     @overload
-    def __truediv__(self, other: Time) -> AngularVelocity: ...
-    @overload
-    def __truediv__(self, other: AngularVelocity) -> Time: ...
+    def __truediv__(self, other: AngularAcceleration) -> TimeSquared: ...
     @overload
     def __truediv__(self, other: AngularDisplacement) -> Proportion: ...
     @overload
+    def __truediv__(self, other: AngularJerk) -> TimeCubed: ...
+    @overload
+    def __truediv__(self, other: AngularVelocity) -> Time: ...
+    @overload
     def __truediv__(self, other: Proportion) -> AngularDisplacement: ...
+    @overload
+    def __truediv__(self, other: Time) -> AngularVelocity: ...
+    @overload
+    def __truediv__(self, other: TimeCubed) -> AngularJerk: ...
+    @overload
+    def __truediv__(self, other: TimeSquared) -> AngularAcceleration: ...
     @overload
     def __truediv__(self, other: Numeric) -> AngularDisplacement: ...
     @overload
     def __truediv__(
         self, other: LinearQuantity | Numeric
     ) -> LinearQuantity | Fraction: ...
+
+    # END GENERATED
 
     @override
     def __truediv__(self, other: LinearQuantity | Numeric) -> LinearQuantity | Fraction:
@@ -165,8 +182,24 @@ class AngularDisplacement(LinearQuantity):
         """
         return Angle(self._magnitude, self._display_unit).normalize()
 
+    @classmethod
+    def from_arc(cls, arc: Length, radius: Length) -> Self:
+        """Return the angle an arc of a length sweeps around a radius.
+
+            AngularDisplacement.from_arc(Metre(0.5), Metre(0.25))  # 2 rad
+
+        The angle is the arc over the radius, in radians.
+        `Length / Length` alone is a ratio, because most lengths over lengths are one.
+        """
+        if not isinstance(arc, Length) or not isinstance(radius, Length):
+            raise IncompatibleDimensionError("build an angle from", arc, radius)
+        radians = (arc / radius)._magnitude  # noqa: SLF001 -- same-package arithmetic on canonical magnitudes
+        return cls(radians / (2 * PI), cls._result_unit)
+
 
 _register(ANGLE, Angle)
 _register(ANGLE, AngularDisplacement)
+_bridge(AngularDisplacement, "*", Length, Length)
+_bridge(Length, "/", AngularDisplacement, Length)
 
 __all__ = ["Angle", "AngularDisplacement"]

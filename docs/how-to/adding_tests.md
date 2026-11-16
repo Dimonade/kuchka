@@ -38,7 +38,7 @@ Write what discovery cannot know:
 
 ## Conventions
 
-- Tests import by module: `from kuchka.units import length`, shortened when the name is long.
+- Tests import by module, from the package that holds it: `from kuchka.units import length`, `from kuchka.units.mechanics import force`, shortened when the name is long.
 - Long lists of units and quantities are alphabetical.
 - A test module is named for the topic it covers. A test that seals a fix lives with its topic, and no catch-all file collects the rest.
 - A banner comment is a single `# Descriptive banner, ends with dot.` line, and a file that needs banners splits into modules.
@@ -49,7 +49,7 @@ Write what discovery cannot know:
 
 `just test` runs the doctests and the test suite.
 `just check` runs the generated-API check, `ruff`, `mypy --strict`, and `ty`.
-Doctests run in the module's own globals, so an example imports every unit it uses.
+The doctests are the examples of [the unit documentation](writing_unit_documentation.md).
 
 ## Checklist
 

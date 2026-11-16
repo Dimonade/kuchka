@@ -1,0 +1,72 @@
+name: master-gate
+
+# Master holds the releases.
+# A pull request into it must come from a release candidate branch `rc/X.Y.Z` or from a
+# `hotfix/` branch of this repository, and must carry a finished release: a final
+# version (X.Y.Z, for an `rc/X.Y.Z`), a lock that agrees with it, and a dated changelog
+# entry.
+# Branch rules cannot say where a pull request comes from, so this workflow does, and
+# the rule for master requires its `master gate passed` check.
+#
+# `edited` is among the types because it is what a change of the base branch raises.
+
+on:
+  pull_request:
+    branches: [master]
+    types: [opened, reopened, synchronize, edited]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: master-gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  source:
+    name: Pull request source
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require that the branch is a release candidate or a hotfix of this repository
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+        run: |
+          if [ "$HEAD_REPOSITORY" != "$GITHUB_REPOSITORY" ]; then
+            echo "::error::A pull request into master must come from this repository, not from $HEAD_REPOSITORY."
+            exit 1
+          fi
+          case "$HEAD_REF" in
+            rc/?* | hotfix/?*) ;;
+            *)
+              echo "::error::Only rc/* and hotfix/* may be merged into master, not $HEAD_REF."
+              exit 1
+              ;;
+          esac
+
+  release-ready:
+    name: Release is ready
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check the version, the lock, the changelog and PyPI
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: python3 .ci/check_release.py --final --branch "$HEAD_REF"
+
+  # One status for the rule of master to require.
+  master-gate-passed:
+    name: master gate passed
+    if: always()
+    needs: [source, release-ready]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require every job to have succeeded
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: jq -e 'all(.[]; .result == "success")' <<< "$NEEDS"

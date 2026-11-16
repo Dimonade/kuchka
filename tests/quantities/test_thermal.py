@@ -301,3 +301,27 @@ def test_fahrenheit_is_registered_in_the_unit_tables():
 def test_fahrenheit_is_a_temperature():
     assert isinstance(thermal.Fahrenheit(68), Temperature)
     assert isinstance(thermal.DeltaFahrenheit(9), TemperatureDelta)
+
+
+def test_rankine_is_the_fahrenheit_degree_from_absolute_zero():
+    assert thermal.Rankine(0) == thermal.Kelvin(0)
+    assert thermal.Rankine(Decimal("459.67")) == thermal.Fahrenheit(0)
+    assert thermal.Rankine(Decimal("491.67")) == thermal.Celsius(0)
+    assert thermal.Rankine(9).kelvin == thermal.Kelvin(5).kelvin
+
+
+def test_rankine_below_absolute_zero_is_rejected():
+    with pytest.raises(InvalidMeasurementError, match="absolute zero"):
+        thermal.Rankine(-1)
+
+
+def test_a_rankine_difference_is_a_fahrenheit_difference():
+    assert thermal.Rankine(530) - thermal.Rankine(521) == thermal.DeltaRankine(9)
+    assert thermal.DeltaRankine(9) == thermal.DeltaFahrenheit(9)
+    assert thermal.DeltaRankine(9) == thermal.DeltaKelvin(5)
+    assert thermal.Rankine(500) + thermal.DeltaFahrenheit(9) == thermal.Rankine(509)
+
+
+def test_rankine_displays_in_its_own_unit():
+    assert repr(thermal.Rankine(491.67)) == "491.67 \u00b0R"
+    assert thermal.Celsius(0).to(thermal.RANKINE).unit is thermal.RANKINE

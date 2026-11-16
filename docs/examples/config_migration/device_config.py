@@ -1,19 +1,16 @@
 """Boundary layer for device-limits configuration: TOML in, typed settings out.
 
-This is the only place in an application that should ever see a unit as a string.
+This is the only place in an application that reads a unit as text.
 Everything below `load_device_config` returns typed `kuchka` quantities;
 nothing downstream of it ever sees a bare number again.
 
 Three rules, matching `kuchka`'s own design:
 
-1. Unit resolution is closed per physical dimension, using the tables `kuchka.units`
-    already maintains (`VOLTAGE_UNITS`, `CURRENT_UNITS`, and so on):
-    a voltage field only ever looks a unit symbol up in `VOLTAGE_UNITS`, so writing
-    `unit = "mA"` for a voltage field is not merely "the wrong prefix", it is a symbol
-    that simply is not in that table, and fails the same way a typo would.
-2. A value is parsed through `Decimal(str)`, instead of `float(str)`, for the same
-    reason `kuchka` itself preserves exact values internally:
-    the digits an engineer typed should survive parsing exactly.
+1. Every measurement is one string, such as `"2800 mV"`, read by `parse` through the
+    unit table of the quantity the field expects:
+    a voltage field reads `"mA"` as nothing, the way it reads a typo, and a bare TOML
+    number, which is a binary float with no unit, is refused.
+2. `parse` reads the digits exactly, so what an engineer typed is what is stored.
 3. Unknown keys are treated the same as missing ones.
     A typo'd section or field name fails loudly at load time, not silently three
     functions later when something expected is `None`.
@@ -23,68 +20,54 @@ from __future__ import annotations
 
 import tomllib
 from dataclasses import dataclass
-from decimal import Decimal
-from decimal import InvalidOperation
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import TypeVar
 
-from kuchka.units import BAUD_RATE_UNITS
-from kuchka.units import CURRENT_UNITS
-from kuchka.units import FREQUENCY_UNITS
-from kuchka.units import TEMPERATURE_UNITS
-from kuchka.units import VOLTAGE_UNITS
+from kuchka import BaudRate
+from kuchka import Current
+from kuchka import Frequency
+from kuchka import Temperature
+from kuchka import Voltage
+from kuchka import parse
+from kuchka.errors import ParseError
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
     from collections.abc import Mapping
     from pathlib import Path
 
-    from kuchka import BaudRate
-    from kuchka import Current
-    from kuchka import Frequency
-    from kuchka import Temperature
-    from kuchka import Voltage
-    from kuchka.numeric import Numeric
-
-Q = TypeVar("Q")
+_QuantityT = TypeVar("_QuantityT", BaudRate, Current, Frequency, Temperature, Voltage)
 
 
 class ConfigError(Exception):
     """A device-limits config file could not be parsed into typed settings."""
 
 
-def _build_quantity(
-    raw: Mapping[str, Any],
-    units: Mapping[str, Callable[[Numeric], Q]],
+def _read(
+    section: Mapping[str, Any],
+    path: str,
+    quantity: type[_QuantityT],
     *,
     field: str,
-) -> Q:
-    """Turn a {value, unit} table into a typed quantity, or fail with why."""
-    try:
-        raw_value = raw["value"]
-        unit_symbol = raw["unit"]
-    except KeyError as exc:
-        msg = f"{field}: expected a table with 'value' and 'unit', got {raw!r}"
-        raise ConfigError(msg) from exc
+) -> _QuantityT:
+    """Read the measurement at `path` in `section` as a `quantity`, or fail with why."""
+    node: Any = section
+    for key in path.split("."):
+        try:
+            node = node[key]
+        except (KeyError, TypeError) as exc:
+            msg = f"{field}.{path}: missing"
+            raise ConfigError(msg) from exc
+
+    if not isinstance(node, str):
+        msg = f"{field}.{path}: expected a number with its unit as text, got {node!r}"
+        raise ConfigError(msg)
 
     try:
-        magnitude = Decimal(raw_value)
-    except InvalidOperation as exc:
-        msg = f"{field}: {raw_value!r} is not a valid decimal number"
+        return parse(node, quantity)
+    except ParseError as exc:
+        msg = f"{field}.{path}: {exc}"
         raise ConfigError(msg) from exc
-
-    try:
-        constructor = units[unit_symbol]
-    except KeyError as exc:
-        allowed = ", ".join(sorted(units))
-        msg = (
-            f"{field}: unit {unit_symbol!r} is not recognised for this "
-            f"field's physical dimension. Expected one of: {allowed}."
-        )
-        raise ConfigError(msg) from exc
-
-    return constructor(magnitude)
 
 
 @dataclass(frozen=True)
@@ -155,58 +138,29 @@ class DeviceConfig:
 
 
 def _parse_led_limits(raw: Mapping[str, Any], *, led_name: str) -> LedLimits:
+    def read(path: str, quantity: type[_QuantityT]) -> _QuantityT:
+        return _read(raw, path, quantity, field=led_name)
+
     return LedLimits(
         voltage=VoltageLimits(
-            minimum=_build_quantity(
-                raw["accepted_voltage"]["min"],
-                VOLTAGE_UNITS,
-                field=f"{led_name}.accepted_voltage.min",
-            ),
-            maximum=_build_quantity(
-                raw["accepted_voltage"]["max"],
-                VOLTAGE_UNITS,
-                field=f"{led_name}.accepted_voltage.max",
-            ),
+            minimum=read("accepted_voltage.min", Voltage),
+            maximum=read("accepted_voltage.max", Voltage),
         ),
         current=CurrentLimits(
-            minimum=_build_quantity(
-                raw["accepted_current"]["min"],
-                CURRENT_UNITS,
-                field=f"{led_name}.accepted_current.min",
-            ),
-            maximum=_build_quantity(
-                raw["accepted_current"]["max"],
-                CURRENT_UNITS,
-                field=f"{led_name}.accepted_current.max",
-            ),
+            minimum=read("accepted_current.min", Current),
+            maximum=read("accepted_current.max", Current),
         ),
         temperature=TemperatureLimits(
-            minimum=_build_quantity(
-                raw["accepted_temperature"]["min"],
-                TEMPERATURE_UNITS,
-                field=f"{led_name}.accepted_temperature.min",
-            ),
-            maximum=_build_quantity(
-                raw["accepted_temperature"]["max"],
-                TEMPERATURE_UNITS,
-                field=f"{led_name}.accepted_temperature.max",
-            ),
+            minimum=read("accepted_temperature.min", Temperature),
+            maximum=read("accepted_temperature.max", Temperature),
         ),
     )
 
 
 def _parse_comms(raw: Mapping[str, Any]) -> CommsSettings:
     return CommsSettings(
-        uart_baud_rate=_build_quantity(
-            raw["uart_baud_rate"],
-            BAUD_RATE_UNITS,
-            field="comms.uart_baud_rate",
-        ),
-        sensor_poll_rate=_build_quantity(
-            raw["sensor_poll_rate"],
-            FREQUENCY_UNITS,
-            field="comms.sensor_poll_rate",
-        ),
+        uart_baud_rate=_read(raw, "uart_baud_rate", BaudRate, field="comms"),
+        sensor_poll_rate=_read(raw, "sensor_poll_rate", Frequency, field="comms"),
     )
 
 
@@ -217,8 +171,8 @@ def load_device_config(path: Path) -> DeviceConfig:
     """Load and fully validate a device-limits TOML file into a `DeviceConfig`.
 
     Raises `ConfigError` for anything wrong with the file:
-    an unknown section, a missing field, an unparsable number, or a unit that does not
-    belong to the field it was written for.
+    an unknown section, a missing field, an unreadable measurement, or a unit that
+    does not belong to the field it was written for.
     """
     with path.open("rb") as handle:
         raw = tomllib.load(handle)

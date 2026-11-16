@@ -4,16 +4,43 @@ from __future__ import annotations
 
 import pytest
 
+from kuchka import AbsorbedDose
+from kuchka import AbsorbedDoseRate
 from kuchka import Activity
 from kuchka import ApparentPower
 from kuchka import BaudRate
+from kuchka import CatalyticActivity
+from kuchka import ElectricFluxDensity
+from kuchka import Entropy
+from kuchka import EquivalentDose
+from kuchka import EquivalentDoseRate
+from kuchka import Exposure
+from kuchka import ExposureRate
+from kuchka import Fluence
 from kuchka import Frequency
+from kuchka import HeatCapacity
+from kuchka import Impedance
+from kuchka import MagneticFieldStrength
+from kuchka import Magnetization
+from kuchka import MolarEntropy
+from kuchka import MolarFlowRate
+from kuchka import MolarHeatCapacity
 from kuchka import Power
 from kuchka import Pressure
+from kuchka import Reactance
 from kuchka import ReactivePower
+from kuchka import Resistance
 from kuchka import SampleRate
 from kuchka import SamplingPeriod
+from kuchka import SpecificCharge
+from kuchka import SpecificCurrent
+from kuchka import SpecificEnergy
+from kuchka import SpecificEntropy
+from kuchka import SpecificHeatCapacity
+from kuchka import SpecificPower
 from kuchka import Stress
+from kuchka import SurfaceChargeDensity
+from kuchka import SurfaceTension
 from kuchka import Time
 from kuchka.dimensions import DIMENSIONLESS
 from kuchka.dimensions import TIME
@@ -27,9 +54,24 @@ from tests.support.synthetic import registry_state
 @pytest.mark.parametrize(
     ("kind", "target"),
     [
+        (AbsorbedDose, SpecificEnergy),
+        (AbsorbedDoseRate, SpecificPower),
         (Activity, Frequency),
+        (CatalyticActivity, MolarFlowRate),
+        (Entropy, HeatCapacity),
+        (EquivalentDose, SpecificEnergy),
+        (EquivalentDoseRate, SpecificPower),
+        (Exposure, SpecificCharge),
+        (ExposureRate, SpecificCurrent),
+        (Fluence, SurfaceTension),
+        (MolarEntropy, MolarHeatCapacity),
+        (SpecificEntropy, SpecificHeatCapacity),
         (ApparentPower, Power),
         (BaudRate, Frequency),
+        (ElectricFluxDensity, SurfaceChargeDensity),
+        (Impedance, Resistance),
+        (Magnetization, MagneticFieldStrength),
+        (Reactance, Resistance),
         (ReactivePower, Power),
         (SampleRate, Frequency),
         (SamplingPeriod, Time),
@@ -43,13 +85,28 @@ def test_a_role_of_a_kind_is_its_specialisation(kind: type, target: type) -> Non
 
 def test_only_the_listed_kinds_are_specialisations() -> None:
     assert set(registry._SPECIALISATIONS) == {  # noqa: SLF001
+        AbsorbedDose,
+        AbsorbedDoseRate,
         Activity,
         ApparentPower,
         BaudRate,
+        CatalyticActivity,
+        ElectricFluxDensity,
+        Entropy,
+        EquivalentDose,
+        EquivalentDoseRate,
+        Exposure,
+        ExposureRate,
+        Fluence,
+        Impedance,
+        Magnetization,
+        Reactance,
         ReactivePower,
         SampleRate,
         SamplingPeriod,
         Stress,
+        SpecificEntropy,
+        MolarEntropy,
     }
 
 

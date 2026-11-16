@@ -1,0 +1,14 @@
+time,lever_angle,motor_voltage,motor_current,temperature
+0 s,350 deg,0 V,0 mA,24.8 °C
+10 s,355 deg,11.8 V,320 mA,31.5 °C
+20 s,359.5 deg,11.9 V,310 mA,40.2 °C
+30 s,4 deg,11.8 V,330 mA,49.0 °C
+40 s,9 deg,11.9 V,315 mA,57.6 °C
+50 s,12 deg,11700 mV,0.3 A,61.8 °C
+60 s,12 deg,0 V,0 mA,62.1 °C
+70 s,12.2 deg,0 V,0 mA,143.8 °F
+80 s,12 deg,0 V,0 mA,67.4 °C
+90 s,6 deg,11.8 V,320 mA,64.0 °C
+100 s,358 deg,11.9 V,305 mA,60.9 °C
+110 s,352 deg,11.8 V,310 mA,55.2 °C
+120 s,350.2 deg,0 V,0 mA,52.0 °C

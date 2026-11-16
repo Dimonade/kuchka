@@ -5,9 +5,9 @@ from __future__ import annotations
 import pytest
 
 from kuchka import InvalidMeasurementError
-from kuchka.units import instant
 from kuchka.units import thermal
-from kuchka.units import time
+from kuchka.units.temporal import instant
+from kuchka.units.temporal import time
 
 
 def test_temperatures_are_close_across_scales() -> None:

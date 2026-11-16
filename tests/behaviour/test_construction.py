@@ -8,7 +8,7 @@ import pytest
 from kuchka import InvalidMeasurementError
 from kuchka import Voltage
 from kuchka.units import current
-from kuchka.units import voltage as voltage_units
+from kuchka.units.electromagnetics import voltage as voltage_units
 
 
 def test_accepts_int_float_decimal_fraction():

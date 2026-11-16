@@ -34,7 +34,7 @@ Examples
 A pearl-trading workshop near Toba prepares a consignment weighing
 80 monme. The pearls are divided evenly among four trays for sorting:
 
->>> from kuchka.units.mass import GRAM
+>>> from kuchka.units import GRAM
 >>> consignment = Monme(80)
 >>> tray_mass = (consignment / 4).to(GRAM)
 >>> tray_mass
@@ -53,7 +53,7 @@ its available metal in kan. Eight kan divided among four casting batches
 gives each batch a mass of:
 
 >>> bronze_stock = Kan(8)
->>> from kuchka.units.mass import KILOGRAM
+>>> from kuchka.units import KILOGRAM
 >>> casting_mass = (bronze_stock / 4).to(KILOGRAM)
 >>> casting_mass
 7.5 kg
@@ -178,7 +178,7 @@ def Mo(value: Numeric) -> Mass:
     A Kyoto metalworker preparing fine gold details for a lacquer repair weighs an
     amount of gold foil equivalent to 800 mō:
 
-    >>> from kuchka.units.mass import GRAM
+    >>> from kuchka.units import GRAM
     >>> gold_foil = Mo(800)
     >>> gold_foil.to(GRAM)
     3 g
@@ -209,7 +209,7 @@ def Rin(value: Numeric) -> Mass:
     A small ingredient sample prepared by a traditional Japanese apothecary weighs
     eight rin:
 
-    >>> from kuchka.units.mass import GRAM
+    >>> from kuchka.units import GRAM
     >>> sample = Rin(8)
     >>> sample.to(GRAM)
     0.3 g
@@ -240,7 +240,7 @@ def Fun(value: Numeric) -> Mass:
     A medicine prepared in a Meiji-era Japanese pharmacy is weighed out as eight fun,
     giving a three-gram quantity:
 
-    >>> from kuchka.units.mass import GRAM
+    >>> from kuchka.units import GRAM
     >>> preparation = Fun(8)
     >>> preparation.to(GRAM)
     3 g
@@ -271,7 +271,7 @@ def Monme(value: Numeric) -> Mass:
     A pearl-trading workshop prepares an 80-monme consignment for sorting.
     Dividing it into four equal trays gives each tray a mass of 75 g:
 
-    >>> from kuchka.units.mass import GRAM
+    >>> from kuchka.units import GRAM
     >>> consignment = Monme(80)
     >>> (consignment / 4).to(GRAM)
     75 g
@@ -302,7 +302,7 @@ def Hyakume(value: Numeric) -> Mass:
     A merchant preparing a shipment of traditional Japanese goods divides one hyakume
     of material equally between three packages:
 
-    >>> from kuchka.units.mass import GRAM
+    >>> from kuchka.units import GRAM
     >>> shipment = Hyakume(1)
     >>> package_mass = (shipment / 3).to(GRAM)
     >>> package_mass
@@ -334,7 +334,7 @@ def Kin(value: Numeric) -> Mass:
     A Kyoto confectionery workshop prepares five kin of azuki beans for a seasonal
     batch of anko, then portions the stock into six equal batches:
 
-    >>> from kuchka.units.mass import GRAM
+    >>> from kuchka.units import GRAM
     >>> bean_stock = Kin(5)
     >>> batch_mass = (bean_stock / 6).to(GRAM)
     >>> batch_mass
@@ -367,7 +367,7 @@ def Kan(value: Numeric) -> Mass:
     metal.
     Dividing the stock between four casting batches gives each batch a mass of 7.5 kg:
 
-    >>> from kuchka.units.mass import KILOGRAM
+    >>> from kuchka.units import KILOGRAM
     >>> bronze_stock = Kan(8)
     >>> casting_mass = (bronze_stock / 4).to(KILOGRAM)
     >>> casting_mass
@@ -399,7 +399,7 @@ def Maru(value: Numeric) -> Mass:
     A traditional goods depot records three maru of material, divided evenly between
     six storage loads:
 
-    >>> from kuchka.units.mass import KILOGRAM
+    >>> from kuchka.units import KILOGRAM
     >>> inventory = Maru(3)
     >>> load_mass = (inventory / 6).to(KILOGRAM)
     >>> load_mass
@@ -431,7 +431,7 @@ def Tan(value: Numeric) -> Mass:
     A rice cooperative records a five-tan grain delivery and divides it evenly among
     ten storage lots:
 
-    >>> from kuchka.units.mass import KILOGRAM
+    >>> from kuchka.units import KILOGRAM
     >>> delivery = Tan(5)
     >>> lot_mass = (delivery / 10).to(KILOGRAM)
     >>> lot_mass
