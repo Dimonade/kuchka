@@ -3,7 +3,6 @@
 ![PyPI Version](https://img.shields.io/pypi/v/kuchka)
 ![PyPI License](https://img.shields.io/pypi/l/kuchka)
 
-
 ---
 
 A small pile of strongly-typed physical quantities and engineering units for Python.

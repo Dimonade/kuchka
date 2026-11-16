@@ -1,84 +1,109 @@
 # Hiroshimas per datacenter
 
-A post went around about a planned off-grid data center that will "generate the heat equivalent of 23 atom bombs detonating every single day".
-A reply on Reddit ran the numbers and found that the tweet is accurate and that the heat still matters little, a thread that ends with a unit for everything that is not metric: Hiroshimas per Walmart Supercenter.
-That thread has the whole toolbox of a unit library in it: gigawatts, an efficiency, TNT equivalents, gigajoules and terajoules, a plot measured in acres, and a count of bombs.
+An interesting post on Reddit claimed that the planned off-grid **Stratos Project** data center in Utah, spanning 40,000 acres (the size of 2,000 Walmart Supercenters) and drawing 9 GW of power, will "generate the heat equivalent of 23 atom bombs detonating every single day."
 
-Credits go to u/NovaTaima for the post, u/tx_queer for the math breakout, and u/EarthTrash for the fake unit.
+A Reddit math breakdown checked the claim and found two interesting things:
 
-The figures are the post's own, rounded the way the post rounds them, and they serve as story material here.
-The names and numbers can change to any scenario, a fictional Project Alfredo included, and the arithmetic stays the same.
+1. **The tweet's math is actually right.**
+2. **The comparison is misleading**, because normal sunlight hitting that same patch of desert delivers more than twice as much heat.
 
-| File                  | What it is                                                     |
-| --------------------- | -------------------------------------------------------------- |
-| `site_spec.toml`      | The figures of the site and of a nuclear plant to compare with |
-| `heat_budget.py`      | The boundary layer and the heat arithmetic                     |
-| `demo.py`             | Run this: counts the heat in Hiroshimas, then varies the plant |
-| `test_heat_budget.py` | Tests for `heat_budget.py`                                     |
+This example models that entire back-of-the-envelope calculation in `kuchka`.
+Every figure from the thread is represented as a typed physical quantity (`Power`, `Energy`, `Area`, `Fluence`, `Proportion`) without manual conversion factors.
 
-## The math of the thread, as types
+Credits go to u/NovaTaima for the original question, u/tx_queer for the physics breakdown, and u/EarthTrash for inventing the unit "Hiroshimas per Walmart Supercenter".
 
-The servers draw 9 GW, and nearly all of it ends as heat.
-A gas plant of about 53 percent efficiency feeds them, so the plant burns `9 GW / 53 %` of fuel heat, and everything it does not turn into electricity leaves as waste heat:
+## Files
 
-```python
-thermal_input = electrical_output / efficiency  # 16.98 GW
-waste_heat = thermal_input - electrical_output  # 7.98 GW
-```
+| File                  | Purpose                                                                                          |
+| :-------------------- | :----------------------------------------------------------------------------------------------- |
+| `site_spec.toml`      | Input numbers from the thread stored as unit-bearing strings (`"9 GW"`, `"40000 ac"`, `"53 %"`). |
+| `heat_budget.py`      | Boundary parser and typed thermodynamic calculations.                                            |
+| `demo.py`             | Runs the scenario and prints the full comparison.                                                |
+| `test_heat_budget.py` | Verifies exact rational equivalence across different calculation paths.                          |
 
-The thread's "9 GW plus 8 GW makes about 17 GW" is the same sum, and `Site.total_heat` adds it the same way.
-The efficiency is a `Proportion`, so `Power / Proportion` is a `Power`, and `53 %` reads as `Percent(53)` with no conversion to a fraction by hand.
+## Checking the "23 bombs a day" claim
 
-A day of that heat is `Power * Time`, an `Energy`, and the thread's "1,468 TJ" comes from `.to(TERAJOULE)`.
+The math works out because the data center is planned to be off-grid:
 
-## A Hiroshima is a reference quantity
+- The servers draw **9 GW** of electricity, and virtually all of it ends up as heat.
+- Generating 9 GW on-site with natural gas turbines at roughly **53% efficiency** produces another **7.98 GW** of waste heat.
+- Total continuous heat output is **16.98 GW** (`1,467 TJ` over 24 hours).
 
-The bomb is 15 kilotonnes of TNT, and the library knows that unit:
+In `kuchka`, efficiency is a `Proportion` (`Percent(53)`), so dividing `Power` by `Proportion` returns `Power` directly:
 
 ```python
-HIROSHIMA = KilotonneOfTNT(15)  # 62.76 TJ
+from kuchka import Gigawatt
+from kuchka import Hour
+from kuchka import Percent
+
+electrical_output = Gigawatt(9)
+efficiency = Percent(53)
+
+thermal_input = electrical_output / efficiency  # Power: 16.98 GW
+waste_heat = thermal_input - electrical_output  # Power: 7.98 GW
+daily_heat = thermal_input * Hour(24)  # Energy: 1,467 TJ
 ```
 
-Counting in Hiroshimas is dividing by it.
-`Energy / Energy` is a `Proportion`, so `hiroshimas(energy)` returns the count of bombs as an exact typed number, and `23.4` is the result of a division.
-The same division works for sunlight, 3,200 TJ a day, which is 51 Hiroshimas, and for a 3.3 GW nuclear plant of 33 percent efficiency, which vents 9.2.
-
-`Energy / Power` is a `Time`, so `time_per_hiroshima(heat)` answers the question the thread leaves open: the site releases one Hiroshima of heat about every 61.6 minutes.
-
-## The fake unit
-
-Hiroshimas per Walmart Supercenter needs a Walmart Supercenter, and the post supplies one: 2,000 of them cover 40,000 acres, so a supercenter is 20 acres, the store and its parking lot.
-A Hiroshima spread over an area is energy per area, a `Fluence`:
+A standard Hiroshima bomb (`15 kt` of TNT) releases **62.76 TJ** of energy.
+Dividing two `Energy` quantities yields a dimensionless `Proportion`:
 
 ```python
-def one_hiroshima_per_supercenter(site: Site) -> Fluence:
-    return HIROSHIMA / site.supercenter
+from kuchka import KilotonneOfTNT
+
+HIROSHIMA = KilotonneOfTNT(15)  # Energy: 62.76 TJ
+bombs_per_day = daily_heat / HIROSHIMA  # Proportion: 23.4
+time_per_bomb = HIROSHIMA / thermal_input  # Time: 61.6 min
 ```
 
-A fake unit is a reference quantity, and measuring in it is a division by that quantity.
-`hiroshimas_per_supercenter` divides the heat the site releases per area and day by it and gets `0.0117` as a `Proportion`, next to the thread's `0.0115` Hiroshimas per Walmart Supercenter.
-The test checks the second route too: the daily count divided by the 2,000 supercenters is exactly the same value, because every step is exact.
+## Slow heat vs. fast heat (Energy vs. Power)
 
-## Slow heat and fast heat
+The tweet treats **total energy** as if it were the same thing as **rate of release**:
 
-The reply points out that one bomb releases its 62.76 TJ at once and the site releases its heat slowly.
-`blast_power(Millisecond(1))` is `Energy / Time`, 62.76 PW, and the demo divides it by the site's heat output: a millisecond-long bomb is 3.7 million times the power of the site.
-Both are the same `Energy` per Hiroshima, and the types keep the difference as a `Power`.
+- A nuclear weapon dumps `62.76 TJ` in roughly **1 millisecond** (`62.76 PW`).
+- The data center bleeds that same `62.76 TJ` slowly over **61.6 minutes** (`16.98 GW`).
 
-## What the library says differently
+```python
+from kuchka import Millisecond
 
-- The thread rounds the bomb to 63 TJ and gets 23.3 bombs a day.
-  The library's TNT is the thermochemical 4.184 GJ per tonne, so a Hiroshima is 62.76 TJ and the count is 23.4.
-- The efficiency of the plant is an input, so the demo shows 24.8, 23.4, and 22.5 bombs a day for 50, 53, and 55 percent.
-- Daily sunlight on the plot is a `Fluence` like the site's own heat, 19.8 MJ/m² or 5.5 kWh/m² against 9.1 MJ/m² or 2.5 kWh/m², and `Energy / Area` and `HeatFlux * Time` both produce one.
+blast_power = HIROSHIMA / Millisecond(1)  # Power: 62.76 PW
+intensity_ratio = blast_power / thermal_input  # Proportion: 3,695,867
+```
 
-## The boundary
+Both involve the same `Energy`, but dividing by `Time` produces a `Power` and shows a 3.7-million-fold difference in intensity.
 
-`site_spec.toml` holds every figure as one string, a number and its unit, and `load_scenario` reads each with `parse`.
-A figure in the wrong unit, such as `"9 A"` for a power, raises `UnknownUnitError`, and a bare `9` is refused before it becomes a float in the arithmetic.
-The count of supercenters is a plain integer, because a count has no unit.
+## Sunlight and nuclear plants
 
-## Running it
+Spreading energy over land gives energy per unit area, which is a `Fluence` (`Energy / Area`):
+
+- **The data center** spreads `1,467 TJ/day` across `40,000 acres`, or **9.1 MJ/m²** (`2.5 kWh/m²`).
+- **Normal Utah sunlight** hitting that same 40,000-acre plot delivers **3,200 TJ/day** (**51 Hiroshimas a day**), or **19.8 MJ/m²** (`5.5 kWh/m²`).
+- **A 3.3 GW nuclear power plant** (at 33% efficiency) vents **9.2 Hiroshimas a day** into the atmosphere as water vapor.
+
+## Hiroshimas per Walmart Supercenter
+
+At the end of the thread, a commenter mentioned a non-metric unit for the site, which rightfully belongs in "anything-but-metric".
+Given 2,000 Supercenters covering 40,000 acres (`20 acres` per store and parking lot), one Hiroshima spread over one Supercenter is a reference `Fluence`:
+
+```python
+from kuchka import Acre
+
+HIROSHIMA_PER_SUPERCENTER = HIROSHIMA / Acre(20)
+site_fluence = daily_heat / Acre(40_000)
+
+ratio = site_fluence / HIROSHIMA_PER_SUPERCENTER  # Proportion: 0.0117
+```
+
+Because `kuchka` uses exact `Fraction` arithmetic under the hood, `site_fluence / HIROSHIMA_PER_SUPERCENTER` produces the exact same rational value as `(daily_heat / HIROSHIMA) / 2000`.
+
+## Why typed units matter here
+
+Every input in `site_spec.toml` is parsed at the boundary with `parse(raw_value, ExpectedQuantity)`:
+
+- Passing `"9 A"` instead of `"9 GW"` fails immediately with `UnknownUnitError`.
+- Passing a bare `9` without a unit fails with `TypeError`.
+- Mixing up `Energy` (total heat) with `Power` (blast intensity) or `Fluence` (heat per acre) is caught statically by `mypy` and `pyright`, as well as at runtime.
+
+## Running the example
 
 ```bash
 cd docs/examples/hiroshimas_per_datacenter
