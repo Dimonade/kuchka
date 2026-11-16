@@ -419,7 +419,7 @@ wheels = [
 
 [[package]]
 name = "kuchka"
-version = "0.1.4"
+version = "0.1.5"
 source = { editable = "." }
 dependencies = [
     { name = "typing-extensions", marker = "python_full_version < '3.12'" },

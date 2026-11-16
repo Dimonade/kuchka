@@ -5,7 +5,7 @@ All notable changes to kuchka are documented here.
 The format tries to follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 See the `Stability` section in `README.md` for what versioning means.
 
-## [0.1.5] - `develop`
+## [0.1.5] - 2026-11-16
 
 ### Added
 
