@@ -39,41 +39,42 @@ and with `--profile` to see where the time of one construction goes, per functio
 ```text
 environment:
   python:   3.11.16 (CPython)
-  platform: Linux-6.18.54-1-lts-x86_64-with-glibc2.44
+  platform: Linux-6.18.62-1-lts-x86_64-with-glibc2.44
   machine:  x86_64
   decimal:  decimal
+  kuchka:   /home/dimonade/repositories/kuchka/src/kuchka/__init__.py
   method:   best of 7 repeats, each at least 0.2 s
   loop:     6.1 ns per empty iteration
 ```
 
 | Case                                                              | us/sample |   MSa/s | spread |
 | ----------------------------------------------------------------- | --------: | ------: | -----: |
-| raw float divide (no correctness guarantees)                      |    0.0130 | 76.9214 |   2.5% |
-| Fraction(x) \* scale (kuchka's own construction cost, no wrapper) |    0.9045 |  1.1056 |   0.4% |
-| Millivolt(x): a single kuchka construction                        |    2.8668 |  0.3488 |   0.1% |
-| Millivolt(x) over a batch of 1000 raw readings                    |    2.9014 |  0.3447 |   0.2% |
-| parse("2350 mV", Voltage): reading a value from text              |    8.2891 |  0.1206 |   0.3% |
-| repr(Millivolt): display cost, not construction                   |    3.9076 |  0.2559 |   0.1% |
-| Voltage + Voltage (steady-state hot-loop addition)                |    2.0119 |  0.4970 |   0.5% |
-| Voltage < Voltage (a threshold check)                             |    0.3575 |  2.7971 |   0.3% |
-| Voltage \* Current -> Power (one multiplication)                  |    5.0751 |  0.1970 |   0.4% |
-| Voltage / Current -> Resistance (Ohm's law, one division)         |    5.5189 |  0.1812 |   0.2% |
+| raw float divide (no correctness guarantees)                      |    0.0145 | 69.2011 |   2.2% |
+| Fraction(x) \* scale (kuchka's own construction cost, no wrapper) |    0.8519 |  1.1738 |   0.3% |
+| Millivolt(x): a single kuchka construction                        |    2.8187 |  0.3548 |   0.1% |
+| Millivolt(x) over a batch of 1000 raw readings                    |    2.8741 |  0.3479 |   0.1% |
+| parse("2350 mV", Voltage): reading a value from text              |    7.9880 |  0.1252 |   0.1% |
+| repr(Millivolt): display cost, not construction                   |    3.8490 |  0.2598 |   0.2% |
+| Voltage + Voltage (steady-state hot-loop addition)                |    1.9597 |  0.5103 |   0.3% |
+| Voltage < Voltage (a threshold check)                             |    0.3396 |  2.9447 |   0.5% |
+| Voltage \* Current -> Power (one multiplication)                  |    5.1116 |  0.1956 |   0.3% |
+| Voltage / Current -> Resistance (Ohm's law, one division)         |    5.3796 |  0.1859 |   0.8% |
 
 ## Conclusion
 
-A single `Millivolt(x)` costs 2.87 us.
-The `Fraction` conversion accounts for 0.90 us of that, about 32 %, and the class machinery around it for the remaining 1.96 us, about 68 %.
-Against a raw float divide, which does no checking at all, a construction costs more than 200 times as much.
+A single `Millivolt(x)` costs 2.82 us.
+The `Fraction` conversion accounts for 0.85 us of that, about 30 %, and the class machinery around it for the remaining 1.97 us, about 70 %.
+Against a raw float divide, which does no checking at all, a construction costs nearly 200 times as much.
 
-Batch construction over a Python list costs the same per value as a single call (2.90 us against 2.87 us), since no vectorized path exists yet.
+Batch construction over a Python list costs almost the same per value as a single call (2.87 us against 2.82 us), since no vectorized path exists yet.
 
-Reading a value from text with `parse` costs 8.29 us, about 2.9 times a construction.
-Displaying a value costs 3.91 us, about 1.4 times a construction.
+Reading a value from text with `parse` costs 7.99 us, about 2.8 times a construction.
+Displaying a value costs 3.85 us, about 1.4 times a construction.
 Construction and arithmetic never touch `Decimal`, since storage and arithmetic stay in `Fraction` end to end; `parse` and `repr` are where it comes in.
 
-Arithmetic that keeps the dimension is cheap: an addition costs 2.01 us and a comparison 0.36 us, the cheapest `kuchka` operation measured.
-Arithmetic that changes the dimension costs more than twice an addition: a multiplication costs 5.08 us and a division 5.52 us, because both go through the dimension-exponent-vector `_promote` path and a registry lookup, not just scaling.
+Arithmetic that keeps the dimension is cheap: an addition costs 1.96 us and a comparison 0.34 us, the cheapest `kuchka` operation measured.
+Arithmetic that changes the dimension costs more than twice an addition: a multiplication costs 5.11 us and a division 5.38 us, because both go through the dimension-exponent-vector `_promote` path and a registry lookup, not just scaling.
 
-On one core that is about 350,000 constructions, 500,000 additions, 200,000 multiplications, or 180,000 divisions per second, and 2.8 million comparisons.
+On one core that is about 355,000 constructions, 510,000 additions, 196,000 multiplications, or 186,000 divisions per second, and 2.9 million comparisons.
 That serves configuration, reporting, and control loops at kilohertz rates.
 An acquisition path in the MSa/s range keeps raw floats inside it and builds quantities where the values leave it.
