@@ -5,6 +5,16 @@ All notable changes to kuchka are documented here.
 The format tries to follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 See the `Stability` section in `README.md` for what versioning means.
 
+## [develop]
+
+### Added
+
+#### New units of existing quantities
+
+- **Temperature:**
+  `Millikelvin`, `Microkelvin`, `Millicelsius`, and `Microcelsius`, each with a `Delta` form.
+  A prefix keeps the zero of the scale, so `Millicelsius(0)` is 273.15 K, and `m°C` is the spelling of the millidegree.
+
 ## [0.1.5] - 2026-11-16
 
 ### Added

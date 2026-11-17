@@ -89,6 +89,7 @@ Some spellings are common and still refused, because accepting them would mean c
 | `calorie`        | `ENERGY_UNITS`                               | A small or a large calorie; `cal` and `Cal` are exact.                                            |
 | `kt`, `Mt`, `t`  | `ENERGY_UNITS`                               | Kilotonnes of what: the TNT equivalent has to be named, `kt TNT`.                                 |
 | `deg`, `degrees` | `TEMPERATURE_UNITS`                          | Celsius, Fahrenheit, or Kelvin.                                                                   |
+| `mC`, `uC`       | `TEMPERATURE_UNITS`                          | A millicoulomb or microcoulomb; the millidegree Celsius is `m°C`.                                 |
 | `bhp`            | `POWER_UNITS`                                | Brake horsepower is not the mechanical horsepower `hp`.                                           |
 | `gal`, `gpm`     | `VOLUME_UNITS`, `VOLUMETRIC_FLOW_RATE_UNITS` | The US and the imperial gallon differ; `US gal` and `US gal/min` are exact.                       |
 | `IU`             | `CATALYTIC_ACTIVITY_UNITS`                   | The international unit also measures vitamins and hormones; `U` is the enzyme unit.               |
