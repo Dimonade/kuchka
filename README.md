@@ -592,8 +592,8 @@ The units of the top-level modules of `kuchka.units`.
 | Current              | `Picoampere`, through `Megaampere`                                                                                                         |
 | Amount of Substance  | `Femtoomole` through `Kilomole`                                                                                                            |
 | Luminous Intensity   | `Candela`                                                                                                                                  |
-| Temperature          | `Celsius`, `Fahrenheit`, `Kelvin`, `Rankine`                                                                                               |
-| Temperature Delta    | `DeltaCelsius`, `DeltaFahrenheit`, `DeltaKelvin`, `DeltaRankine`                                                                           |
+| Temperature          | `Microkelvin` through `Kelvin`, `Microcelsius` through `Celsius`, `Fahrenheit`, `Rankine`                                                  |
+| Temperature Delta    | `DeltaMicrokelvin` through `DeltaKelvin`, `DeltaMicrocelsius` through `DeltaCelsius`, `DeltaFahrenheit`, `DeltaRankine`                    |
 | Angle                | `Radian`, `Degree`, `Turn`, `Gradian`, `ArcMinute`, `ArcSecond`                                                                            |
 | Angular displacement | `RadianDisplacement`, `DegreeDisplacement`, `TurnDisplacement`, `GradianDisplacement`, `ArcMinuteDisplacement`, `ArcSecondDisplacement`    |
 | Solid angle          | `Steradian`, `Millisteradian`, `Microsteradian`, `SquareDegree`, `SquareArcMinute`, `SquareArcSecond`                                      |

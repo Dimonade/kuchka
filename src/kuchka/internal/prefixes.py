@@ -15,8 +15,10 @@ from dataclasses import dataclass
 from decimal import Decimal
 from fractions import Fraction
 from typing import TYPE_CHECKING
+from typing import overload
 
 from kuchka.internal import symbols
+from kuchka.quantities.base.units import AffineUnitDef
 from kuchka.quantities.base.units import UnitDef
 
 if TYPE_CHECKING:
@@ -93,38 +95,81 @@ ZEBI = Prefix("zebi", "Zi", 70, base=2)
 YOBI = Prefix("yobi", "Yi", 80, base=2)
 
 
+@overload
 def with_prefix(
     prefix: Prefix,
     base: UnitDef,
     *,
     aliases: tuple[str, ...] = (),
     words: tuple[str, ...] = (),
-) -> UnitDef:
-    """Build a `UnitDef` for `prefix` applied to the unit `base`.
+    paired_aliases: tuple[str, ...] | None = None,
+    paired_words: tuple[str, ...] | None = None,
+) -> UnitDef: ...
+@overload
+def with_prefix(
+    prefix: Prefix,
+    base: AffineUnitDef,
+    *,
+    aliases: tuple[str, ...] = (),
+    words: tuple[str, ...] = (),
+    paired_aliases: tuple[str, ...] | None = None,
+    paired_words: tuple[str, ...] | None = None,
+) -> AffineUnitDef: ...
+def with_prefix(  # noqa: PLR0913 -- the spelling controls are keyword-only
+    prefix: Prefix,
+    base: UnitDef | AffineUnitDef,
+    *,
+    aliases: tuple[str, ...] = (),
+    words: tuple[str, ...] = (),
+    paired_aliases: tuple[str, ...] | None = None,
+    paired_words: tuple[str, ...] | None = None,
+) -> UnitDef | AffineUnitDef:
+    """Build a unit for `prefix` applied to the unit `base`.
 
     The scale is the scale of `base` times the factor of the prefix, held as an exact
-    fraction, so the base may be any linear unit: the metre, the gram, or a unit of an
-    old measurement system such as the shell of the krakenpeople.
+    fraction, so the base may be any unit: the metre, the gram, or a unit of an old
+    measurement system such as the shell of the krakenpeople.
+    An affine `base`, a unit with an offset such as the degree Celsius, gives an affine
+    unit with the offset of the base: the offset is where the zero of the scale lies,
+    and a prefix changes the size of the unit, not that point.
     The name and the symbol join the prefix and the base.
     The unit is known by every pairing of a prefix symbol, or prefix alias, with a base
     symbol or base alias, and by the prefix name before each word of the base.
+    `paired_aliases` and `paired_words` replace the base spellings that take part in
+    the pairing, which are all of them when omitted.
+    A base spelling that reads as another unit once a prefix stands before it is left
+    out of the pairing: `C` is the degree Celsius, and `mC` is a millicoulomb.
     `aliases` and `words` add spellings of this one unit that no pairing produces,
     such as `t` for the megagram.
     """
     symbol = f"{prefix.symbol}{base.symbol}"
+    pairing_aliases = base.aliases if paired_aliases is None else paired_aliases
+    pairing_words = base.words if paired_words is None else paired_words
     paired = tuple(
         spelling
         for prefix_symbol in (prefix.symbol, *prefix.aliases)
-        for base_symbol in (base.symbol, *base.aliases)
+        for base_symbol in (base.symbol, *pairing_aliases)
         if (spelling := f"{prefix_symbol}{base_symbol}") != symbol
     )
+    scale = base.scale * Fraction(prefix.factor)
+    spellings = (*paired, *aliases)
+    names = (*(f"{prefix.name}{word}" for word in pairing_words), *words)
+    if isinstance(base, AffineUnitDef):
+        return AffineUnitDef(
+            f"{prefix.name}{base.name}",
+            symbol,
+            scale,
+            base.offset,
+            aliases=spellings,
+            words=names,
+        )
     return UnitDef(
         f"{prefix.name}{base.name}",
         symbol,
-        base.scale * Fraction(prefix.factor),
+        scale,
         base.dimension,
-        aliases=(*paired, *aliases),
-        words=(*(f"{prefix.name}{word}" for word in base.words), *words),
+        aliases=spellings,
+        words=names,
     )
 
 
