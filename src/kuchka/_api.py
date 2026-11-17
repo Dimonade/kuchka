@@ -206,6 +206,10 @@ from kuchka.units import DegreeSquaredPerSecondSquared
 from kuchka.units import DeltaCelsius
 from kuchka.units import DeltaFahrenheit
 from kuchka.units import DeltaKelvin
+from kuchka.units import DeltaMicrocelsius
+from kuchka.units import DeltaMicrokelvin
+from kuchka.units import DeltaMillicelsius
+from kuchka.units import DeltaMillikelvin
 from kuchka.units import DeltaRankine
 from kuchka.units import DpmPer100SquareCentimetre
 from kuchka.units import Dyne
@@ -473,6 +477,7 @@ from kuchka.units import Microampere
 from kuchka.units import MicroamperePerKilogram
 from kuchka.units import MicroamperePerMetre
 from kuchka.units import MicroamperePerSquareCentimetre
+from kuchka.units import Microcelsius
 from kuchka.units import Microcoulomb
 from kuchka.units import MicrocoulombPerCubicMetre
 from kuchka.units import MicrocoulombPerKilogram
@@ -496,6 +501,7 @@ from kuchka.units import Microhertz
 from kuchka.units import Microjoule
 from kuchka.units import MicrojoulePerSquareCentimetre
 from kuchka.units import Microkatal
+from kuchka.units import Microkelvin
 from kuchka.units import Microliter
 from kuchka.units import Microlitre
 from kuchka.units import Micrometer
@@ -538,6 +544,7 @@ from kuchka.units import Millibar
 from kuchka.units import Millibecquerel
 from kuchka.units import MillibecquerelPerCubicMetre
 from kuchka.units import MillicandelaPerSquareMetre
+from kuchka.units import Millicelsius
 from kuchka.units import Millicoulomb
 from kuchka.units import MillicoulombPerCubicMetre
 from kuchka.units import MillicoulombPerKilogram
@@ -561,6 +568,7 @@ from kuchka.units import Millihertz
 from kuchka.units import Millijoule
 from kuchka.units import MillijoulePerSquareCentimetre
 from kuchka.units import Millikatal
+from kuchka.units import Millikelvin
 from kuchka.units import Milliliter
 from kuchka.units import MilliliterPerMinute
 from kuchka.units import Millilitre
@@ -931,6 +939,10 @@ __all__ = [
     "DeltaCelsius",
     "DeltaFahrenheit",
     "DeltaKelvin",
+    "DeltaMicrocelsius",
+    "DeltaMicrokelvin",
+    "DeltaMillicelsius",
+    "DeltaMillikelvin",
     "DeltaRankine",
     "Density",
     "DpmPer100SquareCentimetre",
@@ -1239,6 +1251,7 @@ __all__ = [
     "MicroamperePerKilogram",
     "MicroamperePerMetre",
     "MicroamperePerSquareCentimetre",
+    "Microcelsius",
     "Microcoulomb",
     "MicrocoulombPerCubicMetre",
     "MicrocoulombPerKilogram",
@@ -1262,6 +1275,7 @@ __all__ = [
     "Microjoule",
     "MicrojoulePerSquareCentimetre",
     "Microkatal",
+    "Microkelvin",
     "Microliter",
     "Microlitre",
     "Micrometer",
@@ -1304,6 +1318,7 @@ __all__ = [
     "Millibecquerel",
     "MillibecquerelPerCubicMetre",
     "MillicandelaPerSquareMetre",
+    "Millicelsius",
     "Millicoulomb",
     "MillicoulombPerCubicMetre",
     "MillicoulombPerKilogram",
@@ -1327,6 +1342,7 @@ __all__ = [
     "Millijoule",
     "MillijoulePerSquareCentimetre",
     "Millikatal",
+    "Millikelvin",
     "Milliliter",
     "MilliliterPerMinute",
     "Millilitre",
