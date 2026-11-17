@@ -325,3 +325,59 @@ def test_a_rankine_difference_is_a_fahrenheit_difference():
 def test_rankine_displays_in_its_own_unit():
     assert repr(thermal.Rankine(491.67)) == "491.67 \u00b0R"
     assert thermal.Celsius(0).to(thermal.RANKINE).unit is thermal.RANKINE
+
+
+def test_a_prefixed_kelvin_is_exact_in_kelvin():
+    assert thermal.Millikelvin(1) == thermal.Kelvin(Decimal("0.001"))
+    assert thermal.Microkelvin(1_000_000) == thermal.Kelvin(1)
+    assert thermal.Microkelvin(999) < thermal.Millikelvin(1)
+
+
+def test_a_prefixed_celsius_keeps_the_zero_of_the_celsius_scale():
+    assert thermal.Millicelsius(0) == thermal.Kelvin(Decimal("273.15"))
+    assert thermal.Microcelsius(0) == thermal.Celsius(0)
+    assert thermal.Millicelsius(25_000) == thermal.Celsius(25)
+    assert thermal.Microcelsius(25_000_000) == thermal.Celsius(25)
+
+
+def test_a_reading_converts_exactly_to_a_prefixed_unit_and_back():
+    reading = thermal.Celsius(Decimal("36.6"))
+    shown = reading.to(thermal.MILLICELSIUS)
+    assert shown.value_in(thermal.MILLICELSIUS) == Decimal(36_600)
+    assert shown.to(thermal.CELSIUS).value_in(thermal.CELSIUS) == Decimal("36.6")
+
+
+def test_a_prefixed_reading_shows_its_unit():
+    assert repr(thermal.Millicelsius(42_000)) == "42000 m\u00b0C"
+    assert repr(thermal.Microkelvin(150)) == f"150 {symbols.MICRO}K"
+
+
+@pytest.mark.parametrize(
+    ("reading", "absolute_zero"),
+    [
+        (thermal.Millikelvin, 0),
+        (thermal.Microkelvin, 0),
+        (thermal.Millicelsius, -273_150),
+        (thermal.Microcelsius, -273_150_000),
+    ],
+)
+def test_a_prefixed_reading_below_absolute_zero_is_rejected(reading, absolute_zero):
+    assert reading(absolute_zero) == thermal.Kelvin(0)
+    with pytest.raises(InvalidMeasurementError):
+        reading(absolute_zero - 1)
+
+
+def test_a_prefixed_difference_is_the_same_size_in_kelvin_and_celsius():
+    assert thermal.DeltaMillicelsius(5) == thermal.DeltaMillikelvin(5)
+    assert thermal.DeltaMicrocelsius(5) == thermal.DeltaMicrokelvin(5)
+    assert thermal.DeltaMillikelvin(5) == thermal.DeltaKelvin(Decimal("0.005"))
+    assert thermal.DeltaMicrokelvin(1000) == thermal.DeltaMillikelvin(1)
+
+
+def test_a_prefixed_difference_shifts_a_reading_and_the_reading_keeps_its_unit():
+    shifted = thermal.Millikelvin(10) + thermal.DeltaMicrokelvin(500)
+    assert shifted == thermal.Millikelvin(Decimal("10.5"))
+    assert shifted.unit == thermal.MILLIKELVIN
+    assert thermal.Millicelsius(25_000) - thermal.Millicelsius(20_000) == (
+        thermal.DeltaMillicelsius(5_000)
+    )

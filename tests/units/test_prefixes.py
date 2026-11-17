@@ -23,9 +23,11 @@ from kuchka.internal import prefixes
 from kuchka.internal import symbols
 from kuchka.internal.prefixes import prefixed_unit
 from kuchka.internal.prefixes import with_prefix
+from kuchka.quantities.base import AffineUnitDef
 from kuchka.quantities.base import UnitDef
 from kuchka.units import length
 from kuchka.units import mass
+from kuchka.units import thermal
 from kuchka.units.electromagnetics import voltage
 
 if TYPE_CHECKING:
@@ -213,3 +215,32 @@ def test_with_prefix_reproduces_the_published_prefixed_unit(
     prefix: Prefix, base: UnitDef, published: UnitDef
 ) -> None:
     assert with_prefix(prefix, base) == published
+
+
+def test_with_prefix_of_an_affine_unit_scales_the_unit_and_keeps_its_zero() -> None:
+    unit = with_prefix(prefixes.MILLI, thermal.CELSIUS)
+    assert isinstance(unit, AffineUnitDef)
+    assert unit.name == "millicelsius"
+    assert unit.symbol == f"m{symbols.DEGREE}C"
+    assert unit.scale == Fraction(1, 1000)
+    assert unit.offset == Fraction(27315, 100)
+
+
+def test_with_prefix_pairs_every_alias_of_the_base_by_default() -> None:
+    unit = with_prefix(prefixes.MILLI, thermal.CELSIUS)
+    assert "mC" in unit.aliases
+
+
+def test_with_prefix_pairs_only_the_aliases_it_is_told_to() -> None:
+    unit = with_prefix(
+        prefixes.MILLI, thermal.CELSIUS, paired_aliases=(f"{symbols.DEGREE} C",)
+    )
+    assert unit.aliases == (f"m{symbols.DEGREE} C",)
+
+
+def test_with_prefix_pairs_only_the_words_it_is_told_to() -> None:
+    unit = with_prefix(
+        prefixes.MILLI, thermal.CELSIUS, paired_words=("degrees celsius",)
+    )
+    assert unit.words == ("millidegrees celsius",)
+    assert with_prefix(prefixes.MILLI, thermal.KELVIN, paired_words=()).words == ()
