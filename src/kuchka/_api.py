@@ -253,6 +253,7 @@ from kuchka.units import Gigaohm
 from kuchka.units import Gigaparsec
 from kuchka.units import Gigapascal
 from kuchka.units import Gigavar
+from kuchka.units import Gigavolt
 from kuchka.units import GigavoltAmpere
 from kuchka.units import Gigawatt
 from kuchka.units import Gradian
@@ -370,6 +371,7 @@ from kuchka.units import KilojoulePerKilogramKelvin
 from kuchka.units import KilojoulePerMinute
 from kuchka.units import KilojoulePerMole
 from kuchka.units import KilojoulePerMoleKelvin
+from kuchka.units import KilojoulePerSquareMetre
 from kuchka.units import Kiloliter
 from kuchka.units import Kilolitre
 from kuchka.units import Kilolumen
@@ -485,6 +487,7 @@ from kuchka.units import MicrocoulombPerMetre
 from kuchka.units import MicrocoulombPerSquareCentimetre
 from kuchka.units import MicrocoulombPerSquareMetre
 from kuchka.units import Microcurie
+from kuchka.units import MicrocuriePerGram
 from kuchka.units import Microelectronvolt
 from kuchka.units import Microfarad
 from kuchka.units import MicrofaradPerMetre
@@ -549,8 +552,10 @@ from kuchka.units import Millicoulomb
 from kuchka.units import MillicoulombPerCubicMetre
 from kuchka.units import MillicoulombPerKilogram
 from kuchka.units import MillicoulombPerMetre
+from kuchka.units import MillicoulombPerSquareCentimetre
 from kuchka.units import MillicoulombPerSquareMetre
 from kuchka.units import Millicurie
+from kuchka.units import MillicuriePerGram
 from kuchka.units import Millielectronvolt
 from kuchka.units import Millifarad
 from kuchka.units import MillifaradPerMetre
@@ -638,6 +643,8 @@ from kuchka.units import Nanocoulomb
 from kuchka.units import NanocoulombPerCubicMetre
 from kuchka.units import NanocoulombPerMetre
 from kuchka.units import NanocoulombPerSquareMetre
+from kuchka.units import Nanocurie
+from kuchka.units import NanocuriePerGram
 from kuchka.units import Nanofarad
 from kuchka.units import NanofaradPerMetre
 from kuchka.units import Nanogauss
@@ -787,6 +794,7 @@ from kuchka.units import TerabytePerSecond
 from kuchka.units import Teraelectronvolt
 from kuchka.units import Terahertz
 from kuchka.units import Terajoule
+from kuchka.units import Teravolt
 from kuchka.units import Terawatt
 from kuchka.units import Tesla
 from kuchka.units import ThermochemicalCalorie
@@ -1002,6 +1010,7 @@ __all__ = [
     "Gigaparsec",
     "Gigapascal",
     "Gigavar",
+    "Gigavolt",
     "GigavoltAmpere",
     "Gigawatt",
     "Gradian",
@@ -1128,6 +1137,7 @@ __all__ = [
     "KilojoulePerMinute",
     "KilojoulePerMole",
     "KilojoulePerMoleKelvin",
+    "KilojoulePerSquareMetre",
     "Kiloliter",
     "Kilolitre",
     "Kilolumen",
@@ -1259,6 +1269,7 @@ __all__ = [
     "MicrocoulombPerSquareCentimetre",
     "MicrocoulombPerSquareMetre",
     "Microcurie",
+    "MicrocuriePerGram",
     "Microelectronvolt",
     "Microfarad",
     "MicrofaradPerMetre",
@@ -1323,8 +1334,10 @@ __all__ = [
     "MillicoulombPerCubicMetre",
     "MillicoulombPerKilogram",
     "MillicoulombPerMetre",
+    "MillicoulombPerSquareCentimetre",
     "MillicoulombPerSquareMetre",
     "Millicurie",
+    "MillicuriePerGram",
     "Millielectronvolt",
     "Millifarad",
     "MillifaradPerMetre",
@@ -1423,6 +1436,8 @@ __all__ = [
     "NanocoulombPerCubicMetre",
     "NanocoulombPerMetre",
     "NanocoulombPerSquareMetre",
+    "Nanocurie",
+    "NanocuriePerGram",
     "Nanofarad",
     "NanofaradPerMetre",
     "Nanogauss",
@@ -1597,6 +1612,7 @@ __all__ = [
     "Teraelectronvolt",
     "Terahertz",
     "Terajoule",
+    "Teravolt",
     "Terawatt",
     "Tesla",
     "ThermalConductivity",

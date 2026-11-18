@@ -9,7 +9,8 @@
 `SpecificActivity` is the activity in each unit of mass, `Activity / Mass`.
 Its canonical unit is the becquerel per kilogram (`Bq/kg`).
 The module provides it with the kilobecquerel per kilogram, the becquerel per gram,
-and the picocurie and curie per gram: one picocurie per gram is exactly 37 Bq/kg.
+and the curie per gram from picocuries to curies: one picocurie per gram is exactly
+37 Bq/kg.
 
 Examples
 --------
@@ -36,6 +37,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import SPECIFIC_ACTIVITY
+from kuchka.internal import prefixes
+from kuchka.internal.prefixes import with_prefix
 from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import to_exact
 from kuchka.quantities import SpecificActivity
@@ -86,6 +89,9 @@ CURIE_PER_GRAM = UnitDef(
     SPECIFIC_ACTIVITY,
     words=("curies per gram",),
 )
+MILLICURIE_PER_GRAM = with_prefix(prefixes.MILLI, CURIE_PER_GRAM)
+MICROCURIE_PER_GRAM = with_prefix(prefixes.MICRO, CURIE_PER_GRAM)
+NANOCURIE_PER_GRAM = with_prefix(prefixes.NANO, CURIE_PER_GRAM)
 
 SpecificActivity._canonical_unit = BECQUEREL_PER_KILOGRAM  # noqa: SLF001 -- this module owns SpecificActivity's canonical unit
 
@@ -183,6 +189,63 @@ def CuriePerGram(value: Numeric) -> SpecificActivity:
     return SpecificActivity(to_exact(value) * CURIE_PER_GRAM.scale, CURIE_PER_GRAM)
 
 
+def MillicuriePerGram(value: Numeric) -> SpecificActivity:
+    """Construct a SpecificActivity from a magnitude in millicuries per gram.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnitude in millicuries per gram.
+
+    Returns
+    -------
+    SpecificActivity
+        SpecificActivity represented in millicuries per gram.
+
+    """
+    return SpecificActivity(
+        to_exact(value) * MILLICURIE_PER_GRAM.scale, MILLICURIE_PER_GRAM
+    )
+
+
+def MicrocuriePerGram(value: Numeric) -> SpecificActivity:
+    """Construct a SpecificActivity from a magnitude in microcuries per gram.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnitude in microcuries per gram.
+
+    Returns
+    -------
+    SpecificActivity
+        SpecificActivity represented in microcuries per gram.
+
+    """
+    return SpecificActivity(
+        to_exact(value) * MICROCURIE_PER_GRAM.scale, MICROCURIE_PER_GRAM
+    )
+
+
+def NanocuriePerGram(value: Numeric) -> SpecificActivity:
+    """Construct a SpecificActivity from a magnitude in nanocuries per gram.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnitude in nanocuries per gram.
+
+    Returns
+    -------
+    SpecificActivity
+        SpecificActivity represented in nanocuries per gram.
+
+    """
+    return SpecificActivity(
+        to_exact(value) * NANOCURIE_PER_GRAM.scale, NANOCURIE_PER_GRAM
+    )
+
+
 SPECIFIC_ACTIVITY_UNITS: Mapping[str, Callable[[Numeric], SpecificActivity]] = (
     unit_table(
         "SPECIFIC_ACTIVITY_UNITS",
@@ -190,7 +253,10 @@ SPECIFIC_ACTIVITY_UNITS: Mapping[str, Callable[[Numeric], SpecificActivity]] = (
             BECQUEREL_PER_KILOGRAM: BecquerelPerKilogram,
             KILOBECQUEREL_PER_KILOGRAM: KilobecquerelPerKilogram,
             BECQUEREL_PER_GRAM: BecquerelPerGram,
+            NANOCURIE_PER_GRAM: NanocuriePerGram,
             PICOCURIE_PER_GRAM: PicocuriePerGram,
+            MICROCURIE_PER_GRAM: MicrocuriePerGram,
+            MILLICURIE_PER_GRAM: MillicuriePerGram,
             CURIE_PER_GRAM: CuriePerGram,
         },
     )
@@ -201,11 +267,17 @@ __all__ = [
     "BECQUEREL_PER_KILOGRAM",
     "CURIE_PER_GRAM",
     "KILOBECQUEREL_PER_KILOGRAM",
+    "MICROCURIE_PER_GRAM",
+    "MILLICURIE_PER_GRAM",
+    "NANOCURIE_PER_GRAM",
     "PICOCURIE_PER_GRAM",
     "SPECIFIC_ACTIVITY_UNITS",
     "BecquerelPerGram",
     "BecquerelPerKilogram",
     "CuriePerGram",
     "KilobecquerelPerKilogram",
+    "MicrocuriePerGram",
+    "MillicuriePerGram",
+    "NanocuriePerGram",
     "PicocuriePerGram",
 ]

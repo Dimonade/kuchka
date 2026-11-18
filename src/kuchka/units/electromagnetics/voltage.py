@@ -140,6 +140,8 @@ MILLIVOLT = prefixed_unit(prefixes.MILLI, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
 VOLT = prefixed_unit(prefixes.UNIT, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
 KILOVOLT = prefixed_unit(prefixes.KILO, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
 MEGAVOLT = prefixed_unit(prefixes.MEGA, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
+GIGAVOLT = prefixed_unit(prefixes.GIGA, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
+TERAVOLT = prefixed_unit(prefixes.TERA, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
 PETAVOLT = prefixed_unit(prefixes.PETA, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
 
 
@@ -353,6 +355,71 @@ def Megavolt(value: Numeric) -> Voltage:
     return Voltage(to_exact(value) * MEGAVOLT.scale, MEGAVOLT)
 
 
+def Gigavolt(value: Numeric) -> Voltage:
+    """Construct a Voltage from a magnitude expressed in gigavolts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Voltage magnitude in gigavolts.
+
+    Returns
+    -------
+    Voltage
+        Voltage represented in gigavolts.
+
+    Examples
+    --------
+    The potential difference between a thundercloud and the ground before a lightning
+    stroke is estimated at hundreds of megavolts up to about a gigavolt:
+
+    >>> cloud_to_ground = Gigavolt(1)
+    >>> cloud_to_ground
+    1 GV
+
+    The conversion to megavolts is exact:
+
+    >>> Gigavolt(1) == Megavolt(1000)
+    True
+
+    """
+    return Voltage(to_exact(value) * GIGAVOLT.scale, GIGAVOLT)
+
+
+def Teravolt(value: Numeric) -> Voltage:
+    """Construct a Voltage from a magnitude expressed in teravolts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Voltage magnitude in teravolts.
+
+    Returns
+    -------
+    Voltage
+        Voltage represented in teravolts.
+
+    Examples
+    --------
+    Teravolt is an astrophysical scale.
+    The potential drop across the polar cap of a typical radio pulsar is estimated at
+    about 10^12 V:
+
+    >>> polar_cap = Teravolt(1)
+    >>> polar_cap
+    1 TV
+
+    A thousand gigavolts are a teravolt, and a thousand teravolts a petavolt:
+
+    >>> Teravolt(1) == Gigavolt(1000)
+    True
+    >>> Teravolt(1000) == Petavolt(1)
+    True
+
+    """
+    return Voltage(to_exact(value) * TERAVOLT.scale, TERAVOLT)
+
+
 def Petavolt(value: Numeric) -> Voltage:
     """Construct a Voltage from a magnitude expressed in petavolts.
 
@@ -389,6 +456,8 @@ VOLTAGE_UNITS: Mapping[str, Callable[[Numeric], Voltage]] = unit_table(
         VOLT: Volt,
         KILOVOLT: Kilovolt,
         MEGAVOLT: Megavolt,
+        GIGAVOLT: Gigavolt,
+        TERAVOLT: Teravolt,
         PETAVOLT: Petavolt,
     },
 )
@@ -401,26 +470,32 @@ VOLTAGE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
         VOLT,
         KILOVOLT,
         MEGAVOLT,
+        GIGAVOLT,
+        TERAVOLT,
         PETAVOLT,
     ),
 )
 """The units `auto_scale` moves a voltage along, smallest first."""
 
 __all__ = [
+    "GIGAVOLT",
     "KILOVOLT",
     "MEGAVOLT",
     "MICROVOLT",
     "MILLIVOLT",
     "NANOVOLT",
     "PETAVOLT",
+    "TERAVOLT",
     "VOLT",
     "VOLTAGE_LADDERS",
     "VOLTAGE_UNITS",
+    "Gigavolt",
     "Kilovolt",
     "Megavolt",
     "Microvolt",
     "Millivolt",
     "Nanovolt",
     "Petavolt",
+    "Teravolt",
     "Volt",
 ]

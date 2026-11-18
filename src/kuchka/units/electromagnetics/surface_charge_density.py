@@ -73,6 +73,9 @@ COULOMB_PER_SQUARE_CENTIMETRE = UnitDef(
     aliases=powered("C/cm", 2),
     words=("coulombs per square centimetre", "coulombs per square centimeter"),
 )
+MILLICOULOMB_PER_SQUARE_CENTIMETRE = with_prefix(
+    prefixes.MILLI, COULOMB_PER_SQUARE_CENTIMETRE
+)
 MICROCOULOMB_PER_SQUARE_CENTIMETRE = with_prefix(
     prefixes.MICRO, COULOMB_PER_SQUARE_CENTIMETRE
 )
@@ -190,6 +193,26 @@ def CoulombPerSquareCentimetre(value: Numeric) -> SurfaceChargeDensity:
     )
 
 
+def MillicoulombPerSquareCentimetre(value: Numeric) -> SurfaceChargeDensity:
+    """Construct a SurfaceChargeDensity from millicoulombs per square centimetre.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnitude in millicoulombs per square centimetre.
+
+    Returns
+    -------
+    SurfaceChargeDensity
+        SurfaceChargeDensity represented in millicoulombs per square centimetre.
+
+    """
+    return SurfaceChargeDensity(
+        to_exact(value) * MILLICOULOMB_PER_SQUARE_CENTIMETRE.scale,
+        MILLICOULOMB_PER_SQUARE_CENTIMETRE,
+    )
+
+
 def MicrocoulombPerSquareCentimetre(value: Numeric) -> SurfaceChargeDensity:
     """Construct a SurfaceChargeDensity from microcoulombs per square centimetre.
 
@@ -240,6 +263,7 @@ SURFACE_CHARGE_DENSITY_UNITS: Mapping[
         MICROCOULOMB_PER_SQUARE_METRE: MicrocoulombPerSquareMetre,
         NANOCOULOMB_PER_SQUARE_METRE: NanocoulombPerSquareMetre,
         COULOMB_PER_SQUARE_CENTIMETRE: CoulombPerSquareCentimetre,
+        MILLICOULOMB_PER_SQUARE_CENTIMETRE: MillicoulombPerSquareCentimetre,
         MICROCOULOMB_PER_SQUARE_CENTIMETRE: MicrocoulombPerSquareCentimetre,
         MILLIAMPERE_HOUR_PER_SQUARE_CENTIMETRE: MilliampereHourPerSquareCentimetre,
     },
@@ -251,6 +275,7 @@ __all__ = [
     "MICROCOULOMB_PER_SQUARE_CENTIMETRE",
     "MICROCOULOMB_PER_SQUARE_METRE",
     "MILLIAMPERE_HOUR_PER_SQUARE_CENTIMETRE",
+    "MILLICOULOMB_PER_SQUARE_CENTIMETRE",
     "MILLICOULOMB_PER_SQUARE_METRE",
     "NANOCOULOMB_PER_SQUARE_METRE",
     "SURFACE_CHARGE_DENSITY_UNITS",
@@ -259,6 +284,7 @@ __all__ = [
     "MicrocoulombPerSquareCentimetre",
     "MicrocoulombPerSquareMetre",
     "MilliampereHourPerSquareCentimetre",
+    "MillicoulombPerSquareCentimetre",
     "MillicoulombPerSquareMetre",
     "NanocoulombPerSquareMetre",
 ]

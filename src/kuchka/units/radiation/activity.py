@@ -10,7 +10,7 @@ Its SI unit is the becquerel (`Bq`), exactly one transformation per second.
 The curie (`Ci`) is the older unit, defined exactly as 37,000,000,000 becquerels.
 
 The module provides the becquerel from milli- through tera- multiples, and the curie in
-milli-, micro-, and pico-multiples.
+milli-, micro-, nano-, and pico-multiples.
 These are units of total activity:
 they are not units of activity concentration, absorbed dose, or biological risk.
 
@@ -136,6 +136,7 @@ GIGABECQUEREL = with_prefix(prefixes.GIGA, BECQUEREL)
 TERABECQUEREL = with_prefix(prefixes.TERA, BECQUEREL)
 MILLICURIE = with_prefix(prefixes.MILLI, CURIE)
 MICROCURIE = with_prefix(prefixes.MICRO, CURIE)
+NANOCURIE = with_prefix(prefixes.NANO, CURIE)
 PICOCURIE = with_prefix(prefixes.PICO, CURIE)
 
 Activity._canonical_unit = BECQUEREL  # noqa: SLF001 -- this module owns Activity's canonical unit
@@ -384,6 +385,38 @@ def Microcurie(value: Numeric) -> Activity:
     return Activity(to_exact(value) * MICROCURIE.scale, MICROCURIE)
 
 
+def Nanocurie(value: Numeric) -> Activity:
+    """Construct an Activity from a magnitude expressed in nanocuries.
+
+    Parameters
+    ----------
+    value : Numeric
+        Activity in nanocuries.
+
+    Returns
+    -------
+    Activity
+        Activity represented in nanocuries.
+
+    Examples
+    --------
+    Check sources for counting equipment are sold in nanocurie and microcurie
+    strengths.
+    A 5 nCi source decays 185 times a second:
+
+    >>> check_source = Nanocurie(5)
+    >>> check_source.to(BECQUEREL)
+    185 Bq
+
+    A thousand nanocuries are a microcurie:
+
+    >>> Nanocurie(1000) == Microcurie(1)
+    True
+
+    """
+    return Activity(to_exact(value) * NANOCURIE.scale, NANOCURIE)
+
+
 def Picocurie(value: Numeric) -> Activity:
     """Construct an Activity from a magnitude expressed in picocuries.
 
@@ -426,6 +459,7 @@ ACTIVITY_UNITS: Mapping[str, Callable[[Numeric], Activity]] = unit_table(
         CURIE: Curie,
         MILLICURIE: Millicurie,
         MICROCURIE: Microcurie,
+        NANOCURIE: Nanocurie,
         PICOCURIE: Picocurie,
     },
 )
@@ -440,6 +474,7 @@ __all__ = [
     "MICROCURIE",
     "MILLIBECQUEREL",
     "MILLICURIE",
+    "NANOCURIE",
     "PICOCURIE",
     "TERABECQUEREL",
     "Becquerel",
@@ -450,6 +485,7 @@ __all__ = [
     "Microcurie",
     "Millibecquerel",
     "Millicurie",
+    "Nanocurie",
     "Picocurie",
     "Terabecquerel",
 ]
