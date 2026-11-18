@@ -312,6 +312,24 @@ SPECIFIC_ACTIVITY_UNITS: Mapping[str, Callable[[Numeric], SpecificActivity]] = (
     )
 )
 
+SPECIFIC_ACTIVITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        BECQUEREL_PER_KILOGRAM,
+        KILOBECQUEREL_PER_KILOGRAM,
+    ),
+    (
+        PICOCURIE_PER_GRAM,
+        NANOCURIE_PER_GRAM,
+        MICROCURIE_PER_GRAM,
+        MILLICURIE_PER_GRAM,
+        CURIE_PER_GRAM,
+    ),
+)
+"""The runs of units `auto_scale` moves a specific activity along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
     "BECQUEREL_PER_GRAM",
     "BECQUEREL_PER_KILOGRAM",
@@ -321,6 +339,7 @@ __all__ = [
     "MILLICURIE_PER_GRAM",
     "NANOCURIE_PER_GRAM",
     "PICOCURIE_PER_GRAM",
+    "SPECIFIC_ACTIVITY_LADDERS",
     "SPECIFIC_ACTIVITY_UNITS",
     "BecquerelPerGram",
     "BecquerelPerKilogram",

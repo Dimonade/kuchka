@@ -368,7 +368,17 @@ EXPOSURE_RATE_UNITS: Mapping[str, Callable[[Numeric], ExposureRate]] = unit_tabl
     },
 )
 
+EXPOSURE_RATE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROROENTGEN_PER_HOUR,
+        MILLIROENTGEN_PER_HOUR,
+        ROENTGEN_PER_HOUR,
+    ),
+)
+"""The units `auto_scale` moves an exposure rate along, smallest first."""
+
 __all__ = [
+    "EXPOSURE_RATE_LADDERS",
     "EXPOSURE_RATE_UNITS",
     "MICROROENTGEN_PER_HOUR",
     "MILLIROENTGEN_PER_HOUR",

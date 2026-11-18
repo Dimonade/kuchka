@@ -209,7 +209,26 @@ EQUIVALENT_DOSE_UNITS: Mapping[str, Callable[[Numeric], EquivalentDose]] = unit_
     },
 )
 
+EQUIVALENT_DOSE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        NANOSIEVERT,
+        MICROSIEVERT,
+        MILLISIEVERT,
+        SIEVERT,
+        KILOSIEVERT,
+    ),
+    (
+        MILLIREM,
+        REM,
+    ),
+)
+"""The runs of units `auto_scale` moves an equivalent dose along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
+    "EQUIVALENT_DOSE_LADDERS",
     "EQUIVALENT_DOSE_UNITS",
     "KILOSIEVERT",
     "MICROSIEVERT",

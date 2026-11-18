@@ -468,7 +468,30 @@ ACTIVITY_UNITS: Mapping[str, Callable[[Numeric], Activity]] = unit_table(
     },
 )
 
+ACTIVITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLIBECQUEREL,
+        BECQUEREL,
+        KILOBECQUEREL,
+        MEGABECQUEREL,
+        GIGABECQUEREL,
+        TERABECQUEREL,
+    ),
+    (
+        PICOCURIE,
+        NANOCURIE,
+        MICROCURIE,
+        MILLICURIE,
+        CURIE,
+    ),
+)
+"""The runs of units `auto_scale` moves an activity along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
+    "ACTIVITY_LADDERS",
     "ACTIVITY_UNITS",
     "BECQUEREL",
     "CURIE",

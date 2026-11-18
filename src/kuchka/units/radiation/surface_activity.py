@@ -205,12 +205,21 @@ SURFACE_ACTIVITY_UNITS: Mapping[str, Callable[[Numeric], SurfaceActivity]] = uni
     },
 )
 
+SURFACE_ACTIVITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        BECQUEREL_PER_SQUARE_METRE,
+        KILOBECQUEREL_PER_SQUARE_METRE,
+    ),
+)
+"""The units `auto_scale` moves a surface activity along, smallest first."""
+
 __all__ = [
     "BECQUEREL_PER_SQUARE_CENTIMETRE",
     "BECQUEREL_PER_SQUARE_METRE",
     "CURIE_PER_SQUARE_KILOMETRE",
     "DPM_PER_100_SQUARE_CENTIMETRE",
     "KILOBECQUEREL_PER_SQUARE_METRE",
+    "SURFACE_ACTIVITY_LADDERS",
     "SURFACE_ACTIVITY_UNITS",
     "BecquerelPerSquareCentimetre",
     "BecquerelPerSquareMetre",
