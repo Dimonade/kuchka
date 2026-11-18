@@ -177,9 +177,19 @@ THERMAL_CONDUCTIVITY_UNITS: Mapping[str, Callable[[Numeric], ThermalConductivity
     )
 )
 
+THERMAL_CONDUCTIVITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLIWATT_PER_METRE_KELVIN,
+        WATT_PER_METRE_KELVIN,
+        KILOWATT_PER_METRE_KELVIN,
+    ),
+)
+"""The units `auto_scale` moves a thermal conductivity along, smallest first."""
+
 __all__ = [
     "KILOWATT_PER_METRE_KELVIN",
     "MILLIWATT_PER_METRE_KELVIN",
+    "THERMAL_CONDUCTIVITY_LADDERS",
     "THERMAL_CONDUCTIVITY_UNITS",
     "WATT_PER_CENTIMETRE_KELVIN",
     "WATT_PER_METRE_KELVIN",

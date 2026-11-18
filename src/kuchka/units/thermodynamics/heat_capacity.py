@@ -172,7 +172,23 @@ HEAT_CAPACITY_UNITS: UnitTable[HeatCapacity] = unit_table(
     },
 )
 
+HEAT_CAPACITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        JOULE_PER_KELVIN,
+        KILOJOULE_PER_KELVIN,
+    ),
+    (
+        THERMOCHEMICAL_CALORIE_PER_KELVIN,
+        KILOCALORIE_PER_KELVIN,
+    ),
+)
+"""The runs of units `auto_scale` moves a heat capacity along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
+    "HEAT_CAPACITY_LADDERS",
     "HEAT_CAPACITY_UNITS",
     "JOULE_PER_KELVIN",
     "KILOCALORIE_PER_KELVIN",
