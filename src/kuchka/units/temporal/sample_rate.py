@@ -76,10 +76,20 @@ SAMPLE_RATE_UNITS: Mapping[str, Callable[[Numeric], SampleRate]] = unit_table(
     },
 )
 
+SAMPLE_RATE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        SAMPLES_PER_SECOND,
+        KILOSAMPLES_PER_SECOND,
+        MEGASAMPLES_PER_SECOND,
+    ),
+)
+"""The units `auto_scale` moves a sample rate along, smallest first."""
+
 __all__ = [
     "KILOSAMPLES_PER_SECOND",
     "MEGASAMPLES_PER_SECOND",
     "SAMPLES_PER_SECOND",
+    "SAMPLE_RATE_LADDERS",
     "SAMPLE_RATE_UNITS",
     "KilosamplesPerSecond",
     "MegasamplesPerSecond",

@@ -179,10 +179,27 @@ SPECIFIC_POWER_UNITS: Mapping[str, Callable[[Numeric], SpecificPower]] = unit_ta
     },
 )
 
+SPECIFIC_POWER_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLIWATT_PER_KILOGRAM,
+        WATT_PER_KILOGRAM,
+        KILOWATT_PER_KILOGRAM,
+    ),
+    (
+        MILLIWATT_PER_GRAM,
+        WATT_PER_GRAM,
+    ),
+)
+"""The runs of units `auto_scale` moves a specific power along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
     "KILOWATT_PER_KILOGRAM",
     "MILLIWATT_PER_GRAM",
     "MILLIWATT_PER_KILOGRAM",
+    "SPECIFIC_POWER_LADDERS",
     "SPECIFIC_POWER_UNITS",
     "WATT_PER_GRAM",
     "WATT_PER_KILOGRAM",

@@ -208,8 +208,18 @@ DYNAMIC_VISCOSITY_UNITS: Mapping[str, Callable[[Numeric], DynamicViscosity]] = (
     )
 )
 
+DYNAMIC_VISCOSITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROPASCAL_SECOND,
+        MILLIPASCAL_SECOND,
+        PASCAL_SECOND,
+    ),
+)
+"""The units `auto_scale` moves a dynamic viscosity along, smallest first."""
+
 __all__ = [
     "CENTIPOISE",
+    "DYNAMIC_VISCOSITY_LADDERS",
     "DYNAMIC_VISCOSITY_UNITS",
     "MICROPASCAL_SECOND",
     "MILLIPASCAL_SECOND",

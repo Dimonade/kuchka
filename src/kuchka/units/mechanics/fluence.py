@@ -527,7 +527,29 @@ FLUENCE_UNITS: Mapping[str, Callable[[Numeric], Fluence]] = unit_table(
     },
 )
 
+FLUENCE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROJOULE_PER_SQUARE_CENTIMETRE,
+        MILLIJOULE_PER_SQUARE_CENTIMETRE,
+        JOULE_PER_SQUARE_CENTIMETRE,
+    ),
+    (
+        JOULE_PER_SQUARE_METRE,
+        KILOJOULE_PER_SQUARE_METRE,
+        MEGAJOULE_PER_SQUARE_METRE,
+    ),
+    (
+        WATT_HOUR_PER_SQUARE_METRE,
+        KILOWATT_HOUR_PER_SQUARE_METRE,
+    ),
+)
+"""The runs of units `auto_scale` moves a fluence along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
+    "FLUENCE_LADDERS",
     "FLUENCE_UNITS",
     "JOULE_PER_SQUARE_CENTIMETRE",
     "JOULE_PER_SQUARE_METRE",

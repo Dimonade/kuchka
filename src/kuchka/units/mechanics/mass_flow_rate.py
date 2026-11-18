@@ -189,10 +189,19 @@ MASS_FLOW_RATE_UNITS: Mapping[str, Callable[[Numeric], MassFlowRate]] = unit_tab
     },
 )
 
+MASS_FLOW_RATE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        GRAM_PER_SECOND,
+        KILOGRAM_PER_SECOND,
+    ),
+)
+"""The units `auto_scale` moves a mass flow rate along, smallest first."""
+
 __all__ = [
     "GRAM_PER_SECOND",
     "KILOGRAM_PER_HOUR",
     "KILOGRAM_PER_SECOND",
+    "MASS_FLOW_RATE_LADDERS",
     "MASS_FLOW_RATE_UNITS",
     "POUND_PER_HOUR",
     "TONNE_PER_HOUR",

@@ -444,7 +444,18 @@ DENSITY_UNITS: Mapping[str, Callable[[Numeric], Density]] = unit_table(
     },
 )
 
+DENSITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROGRAM_PER_LITRE,
+        MILLIGRAM_PER_LITRE,
+        GRAM_PER_LITRE,
+        KILOGRAM_PER_LITRE,
+    ),
+)
+"""The units `auto_scale` moves a density along, smallest first."""
+
 __all__ = [
+    "DENSITY_LADDERS",
     "DENSITY_UNITS",
     "GRAM_PER_CUBIC_CENTIMETER",
     "GRAM_PER_CUBIC_CENTIMETRE",
