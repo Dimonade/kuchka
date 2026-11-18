@@ -49,6 +49,7 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
     _canonical_unit: ClassVar[UnitDef]
     _result_unit: ClassVar[UnitDef]
     _unit_type: ClassVar[type] = UnitDef
+    _scales_by_size: ClassVar[bool] = True
     __slots__ = ()
 
     @property

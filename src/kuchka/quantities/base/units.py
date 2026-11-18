@@ -15,6 +15,8 @@ from __future__ import annotations
 import functools
 import importlib
 import pickle
+from itertools import pairwise
+from types import MappingProxyType
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Protocol
@@ -32,6 +34,10 @@ if TYPE_CHECKING:
 
     from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
+
+
+_MINIMUM_LADDER = 2
+"""A ladder with one unit has nothing to move along."""
 
 
 def _checked_spellings(
@@ -236,6 +242,79 @@ def extend_units(
         recorded = vars(quantity_type).get("_extension_tables", ())
         if not any(known is table for known in recorded):
             quantity_type._extension_tables = (*recorded, table)  # noqa: SLF001
+
+
+def _check_ladder(
+    quantity_type: type[Any], ladder: tuple[Any, ...], claimed: Mapping[object, object]
+) -> None:
+    """Raise `TypeError` unless `ladder` is a run of bound units that grow in size."""
+    name = quantity_type.__name__
+    if len(ladder) < _MINIMUM_LADDER:
+        msg = f"a ladder of {name} needs at least two units, got {ladder!r}."
+        raise TypeError(msg)
+    for unit in ladder:
+        if unit not in quantity_type._applicable_units:  # noqa: SLF001
+            msg = f"{unit!r} is not a unit of {name}, so it cannot be on its ladder."
+            raise TypeError(msg)
+        if getattr(unit, "offset", 0) != 0:
+            msg = (
+                f"{unit!r} starts its scale away from zero, so the size of a reading "
+                f"in it is no size of the {name}: it cannot be on a ladder."
+            )
+            raise TypeError(msg)
+        if unit in claimed:
+            msg = f"{unit!r} is on more than one ladder of {name}."
+            raise TypeError(msg)
+    for smaller, larger in pairwise(ladder):
+        if smaller.scale >= larger.scale:
+            msg = (
+                f"a ladder of {name} grows from each unit to the next, but "
+                f"{smaller!r} is followed by {larger!r}."
+            )
+            raise TypeError(msg)
+
+
+def bind_ladders(quantity_type: type[Any], ladders: Iterable[Iterable[Any]]) -> None:
+    """Bind the ladders `auto_scale` moves along for `quantity_type`.
+
+    This is called once per quantity type, after `bind_units`.
+
+    A ladder is a run of units of one family, such as the nanoampere to the megaampere,
+    given smallest first.
+    It has at least two units, each a bound unit of the type, and every unit is larger
+    than the one before.
+    A unit stands on one ladder of a type, and a quantity displayed in it moves along
+    that ladder.
+    A ladder holds only units that start at zero, since the size of a reading on a
+    scale with an offset, such as the degree Celsius, says nothing about the size of
+    the quantity.
+    Only a type whose magnitude is a size can have ladders, which leaves out the
+    modular and logarithmic shapes.
+
+    Raises `TypeError` for a type that has its ladders bound already, a type without
+    bound units or without a size, and a ladder that breaks the rules above, since each
+    is a defect in `kuchka`'s own unit modules.
+    """
+    name = quantity_type.__name__
+    if "_ladders" in vars(quantity_type):
+        msg = f"{name} already has its ladders bound."
+        raise TypeError(msg)
+    if "_applicable_units" not in vars(quantity_type):
+        msg = f"{name} has no bound units to build ladders from."
+        raise TypeError(msg)
+    if not quantity_type._scales_by_size:  # noqa: SLF001
+        msg = f"{name} has no ladders: the size of its magnitude does not pick a unit."
+        raise TypeError(msg)
+    runs = tuple(tuple(ladder) for ladder in ladders)
+    if not runs:
+        msg = f"{name} needs at least one ladder."
+        raise TypeError(msg)
+    claimed: dict[object, tuple[Any, ...]] = {}
+    for run in runs:
+        _check_ladder(quantity_type, run, claimed)
+        claimed.update(dict.fromkeys(run, run))
+    quantity_type._ladders = runs  # noqa: SLF001
+    quantity_type._ladder_of = MappingProxyType(claimed)  # noqa: SLF001
 
 
 def _published_unit(name: str) -> _Unit:

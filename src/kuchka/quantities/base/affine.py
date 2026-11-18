@@ -88,6 +88,7 @@ class AffineQuantity(
     _canonical_unit: ClassVar[AffineUnitDef]
     _conversion_target_hint: ClassVar[str] = "a matching affine unit"
     _unit_type: ClassVar[type] = AffineUnitDef
+    _scales_by_size: ClassVar[bool] = True
     __slots__ = ()
 
     def to(self, unit: AffineUnitDef) -> Self:
