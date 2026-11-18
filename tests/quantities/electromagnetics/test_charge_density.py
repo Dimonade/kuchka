@@ -197,6 +197,7 @@ def test_the_tables_list_the_units_by_symbol() -> None:
         f"{micro}C/m{two}",
         f"nC/m{two}",
         f"C/cm{two}",
+        f"mC/cm{two}",
         f"{micro}C/cm{two}",
         f"mAh/cm{two}",
     }
