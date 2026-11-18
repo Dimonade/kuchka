@@ -119,9 +119,19 @@ MOLALITY_UNITS: Mapping[str, Callable[[Numeric], Molality]] = unit_table(
     },
 )
 
+MOLALITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROMOLE_PER_KILOGRAM,
+        MILLIMOLE_PER_KILOGRAM,
+        MOLE_PER_KILOGRAM,
+    ),
+)
+"""The units `auto_scale` moves a molality along, smallest first."""
+
 __all__ = [
     "MICROMOLE_PER_KILOGRAM",
     "MILLIMOLE_PER_KILOGRAM",
+    "MOLALITY_LADDERS",
     "MOLALITY_UNITS",
     "MOLE_PER_KILOGRAM",
     "MicromolePerKilogram",

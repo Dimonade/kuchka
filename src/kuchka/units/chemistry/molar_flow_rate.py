@@ -213,10 +213,30 @@ MOLAR_FLOW_RATE_UNITS: Mapping[str, Callable[[Numeric], MolarFlowRate]] = unit_t
     },
 )
 
+MOLAR_FLOW_RATE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLIMOLE_PER_MINUTE,
+        MOLE_PER_MINUTE,
+    ),
+    (
+        MOLE_PER_HOUR,
+        KILOMOLE_PER_HOUR,
+    ),
+    (
+        MOLE_PER_SECOND,
+        KILOMOLE_PER_SECOND,
+    ),
+)
+"""The runs of units `auto_scale` moves a molar flow rate along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
     "KILOMOLE_PER_HOUR",
     "KILOMOLE_PER_SECOND",
     "MILLIMOLE_PER_MINUTE",
+    "MOLAR_FLOW_RATE_LADDERS",
     "MOLAR_FLOW_RATE_UNITS",
     "MOLE_PER_HOUR",
     "MOLE_PER_MINUTE",
