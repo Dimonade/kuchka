@@ -9,8 +9,19 @@ See the `Stability` section in `README.md` for what versioning means.
 
 ### Added
 
+#### Display
+
+- **`auto_scale()`:**
+  `Ampere(0.000045).auto_scale()` returns the same measurement in the unit of its ladder that suits its size, here `45 µA`.
+  The value is unchanged, the result has the type of the measurement, and `str()` and `f"{q}"` keep showing the unit the measurement was given.
+  A ladder is the run of prefixed units of a quantity, such as the nanoampere to the megaampere; a measurement moves along the ladder of the unit it displays in, and a unit on no ladder keeps its display unit.
+  `Current`, `Voltage`, `Frequency`, `Temperature` (the kelvin scale), and `TemperatureDelta` have ladders so far.
+
 #### New units of existing quantities
 
+- **Prefix families without gaps:**
+  `Gigavolt` and `Teravolt` between `Megavolt` and `Petavolt`; `Nanocurie`, with `MillicuriePerGram`, `MicrocuriePerGram`, and `NanocuriePerGram` for specific activity; `KilojoulePerSquareMetre`; and `MillicoulombPerSquareCentimetre`, which electric flux density reads too.
+  A test requires every family of prefixed units to hold each step of a thousand between its smallest and largest unit.
 - **Temperature:**
   `Millikelvin`, `Microkelvin`, `Millicelsius`, and `Microcelsius`, each with a `Delta` form.
   A prefix keeps the zero of the scale, so `Millicelsius(0)` is 273.15 K, and `m°C` is the spelling of the millidegree.
