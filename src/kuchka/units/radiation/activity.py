@@ -400,17 +400,21 @@ def Nanocurie(value: Numeric) -> Activity:
 
     Examples
     --------
-    Check sources for counting equipment are sold in nanocurie and microcurie
-    strengths.
-    A 5 nCi source decays 185 times a second:
+    A leak test wipes the surface of a sealed source and counts what the wipe removed.
+    A wipe that reads 3 nCi removed 111 decays per second:
 
-    >>> check_source = Nanocurie(5)
-    >>> check_source.to(BECQUEREL)
-    185 Bq
+    >>> wipe = Nanocurie(3)
+    >>> wipe.to(BECQUEREL)
+    111 Bq
 
-    A thousand nanocuries are a microcurie:
+    A sealed source is regarded as leaking when a wipe removes 0.005 µCi or more, which
+    is exactly 185 Bq since the curie is exactly 37 GBq.
+    The comparison is exact and works across units:
 
-    >>> Nanocurie(1000) == Microcurie(1)
+    >>> leak_limit = Microcurie(0.005)
+    >>> leak_limit == Becquerel(185)
+    True
+    >>> wipe < leak_limit
     True
 
     """

@@ -206,6 +206,28 @@ def MillicoulombPerSquareCentimetre(value: Numeric) -> SurfaceChargeDensity:
     SurfaceChargeDensity
         SurfaceChargeDensity represented in millicoulombs per square centimetre.
 
+    Examples
+    --------
+    A stimulation electrode coated with iridium oxide can inject a charge of the order
+    of 1 to 5 mC/cm² in a pulse without damaging itself or the tissue:
+
+    >>> injection_limit = MillicoulombPerSquareCentimetre(2)
+    >>> injection_limit
+    2 mC/cm²
+
+    On a microelectrode of 0.002 cm², which is 0.2 mm², that density is a charge per
+    pulse, and a constant current of 1 mA delivers it in a few milliseconds:
+
+    >>> from kuchka import Milliampere
+    >>> from kuchka import SquareCentimetre
+    >>> from kuchka.units import MICROCOULOMB
+    >>> from kuchka.units import MILLISECOND
+    >>> charge = injection_limit * SquareCentimetre(0.002)
+    >>> charge.to(MICROCOULOMB)
+    4 µC
+    >>> (charge / Milliampere(1)).to(MILLISECOND)
+    4 ms
+
     """
     return SurfaceChargeDensity(
         to_exact(value) * MILLICOULOMB_PER_SQUARE_CENTIMETRE.scale,

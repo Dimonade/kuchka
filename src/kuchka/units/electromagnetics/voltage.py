@@ -377,10 +377,15 @@ def Gigavolt(value: Numeric) -> Voltage:
     >>> cloud_to_ground
     1 GV
 
-    The conversion to megavolts is exact:
+    A charge that falls through a potential difference gains kinetic energy equal to
+    the charge times the voltage, in vacuum, from rest, and without losses.
+    This is the definition of the electronvolt, and the elementary charge is exact, so
+    an electron falling through one gigavolt gains exactly one gigaelectronvolt:
 
-    >>> Gigavolt(1) == Megavolt(1000)
-    True
+    >>> from kuchka.constants.codata_2022 import ELEMENTARY_CHARGE
+    >>> from kuchka.units import GIGAELECTRONVOLT
+    >>> (ELEMENTARY_CHARGE * Gigavolt(1)).to(GIGAELECTRONVOLT)
+    1 GeV
 
     """
     return Voltage(to_exact(value) * GIGAVOLT.scale, GIGAVOLT)
@@ -402,18 +407,20 @@ def Teravolt(value: Numeric) -> Voltage:
     Examples
     --------
     Teravolt is an astrophysical scale.
-    The potential drop across the polar cap of a typical radio pulsar is estimated at
-    about 10^12 V:
+    The potential drop across the polar cap of a typical radio pulsar is estimated to
+    be of the order of a teravolt:
 
     >>> polar_cap = Teravolt(1)
     >>> polar_cap
     1 TV
 
-    A thousand gigavolts are a teravolt, and a thousand teravolts a petavolt:
+    A pulsar model that works in plain volts can report its result at the scale that
+    reads best, and the value stays the same:
 
-    >>> Teravolt(1) == Gigavolt(1000)
-    True
-    >>> Teravolt(1000) == Petavolt(1)
+    >>> potential_drop = Volt(3_400_000_000_000)
+    >>> potential_drop.auto_scale()
+    3.4 TV
+    >>> potential_drop.auto_scale() == potential_drop
     True
 
     """
