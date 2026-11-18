@@ -52,6 +52,7 @@ from kuchka import SamplingPeriod
 from kuchka import Second
 from kuchka import Siemens
 from kuchka import SquareMetre
+from kuchka import Temperature
 from kuchka import Time
 from kuchka import Torque
 from kuchka import Var
@@ -237,3 +238,9 @@ wrong_quantity: Current = parse("5 mV", Voltage)  # type: ignore[assignment]  # 
 _parse_a_number = parse(5, Voltage)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 _parse_a_constructor = parse("5 mV", Volt)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 _parse_with_a_word = parse("5 mV", Voltage, allow_archaic="yes")  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
+
+# `auto_scale` returns the type it is called on.
+scaled_current: Current = Ampere(0.000045).auto_scale()  # OK
+scaled_frequency: Frequency = Hertz(2_400_000_000).auto_scale()  # OK
+scaled_reading: Temperature = Celsius(25).auto_scale()  # OK
+wrong_scaled: Voltage = Ampere(0.000045).auto_scale()  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
