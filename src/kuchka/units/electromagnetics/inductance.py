@@ -71,6 +71,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
+    from kuchka.quantities import UnitDef
 HENRY_NAME = "henry"
 HENRY_SYMBOL = "H"
 HENRY_WORDS = ("henries",)
@@ -305,8 +306,21 @@ INDUCTANCE_UNITS: Mapping[str, Callable[[Numeric], Inductance]] = unit_table(
     },
 )
 
+INDUCTANCE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        PICOHENRY,
+        NANOHENRY,
+        MICROHENRY,
+        MILLIHENRY,
+        HENRY,
+        KILOHENRY,
+    ),
+)
+"""The units `auto_scale` moves an inductance along, smallest first."""
+
 __all__ = [
     "HENRY",
+    "INDUCTANCE_LADDERS",
     "INDUCTANCE_UNITS",
     "KILOHENRY",
     "MICROHENRY",

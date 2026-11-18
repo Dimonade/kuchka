@@ -80,7 +80,7 @@ from kuchka.quantities import MagneticFieldStrength
 
 if TYPE_CHECKING:
     from kuchka.internal.unit_table import UnitTable
-
+    from kuchka.quantities import UnitDef
 AMPERE_PER_METRE_NAME = "ampere_per_metre"
 AMPERE_PER_METRE_SYMBOL = "A/m"
 AMPERE_PER_METRE_WORDS = ("ampere per metre", "ampere per meter")
@@ -326,9 +326,21 @@ MAGNETIC_FIELD_STRENGTH_UNITS: UnitTable[MagneticFieldStrength] = unit_table(
     },
 )
 
+MAGNETIC_FIELD_STRENGTH_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROAMPERE_PER_METRE,
+        MILLIAMPERE_PER_METRE,
+        AMPERE_PER_METRE,
+        KILOAMPERE_PER_METRE,
+        MEGAAMPERE_PER_METRE,
+    ),
+)
+"""The units `auto_scale` moves a magnetic field strength along, smallest first."""
+
 __all__ = [
     "AMPERE_PER_METRE",
     "KILOAMPERE_PER_METRE",
+    "MAGNETIC_FIELD_STRENGTH_LADDERS",
     "MAGNETIC_FIELD_STRENGTH_UNITS",
     "MEGAAMPERE_PER_METRE",
     "MICROAMPERE_PER_METRE",

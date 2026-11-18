@@ -130,10 +130,20 @@ SPECIFIC_CURRENT_UNITS: Mapping[str, Callable[[Numeric], SpecificCurrent]] = uni
     },
 )
 
+SPECIFIC_CURRENT_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROAMPERE_PER_KILOGRAM,
+        MILLIAMPERE_PER_KILOGRAM,
+        AMPERE_PER_KILOGRAM,
+    ),
+)
+"""The units `auto_scale` moves a specific current along, smallest first."""
+
 __all__ = [
     "AMPERE_PER_KILOGRAM",
     "MICROAMPERE_PER_KILOGRAM",
     "MILLIAMPERE_PER_KILOGRAM",
+    "SPECIFIC_CURRENT_LADDERS",
     "SPECIFIC_CURRENT_UNITS",
     "AmperePerKilogram",
     "MicroamperePerKilogram",

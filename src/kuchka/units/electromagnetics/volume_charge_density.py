@@ -215,6 +215,16 @@ VOLUME_CHARGE_DENSITY_UNITS: Mapping[str, Callable[[Numeric], VolumeChargeDensit
     )
 )
 
+VOLUME_CHARGE_DENSITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        NANOCOULOMB_PER_CUBIC_METRE,
+        MICROCOULOMB_PER_CUBIC_METRE,
+        MILLICOULOMB_PER_CUBIC_METRE,
+        COULOMB_PER_CUBIC_METRE,
+    ),
+)
+"""The units `auto_scale` moves a volume charge density along, smallest first."""
+
 __all__ = [
     "AMPERE_HOUR_PER_LITRE",
     "COULOMB_PER_CUBIC_CENTIMETRE",
@@ -222,6 +232,7 @@ __all__ = [
     "MICROCOULOMB_PER_CUBIC_METRE",
     "MILLICOULOMB_PER_CUBIC_METRE",
     "NANOCOULOMB_PER_CUBIC_METRE",
+    "VOLUME_CHARGE_DENSITY_LADDERS",
     "VOLUME_CHARGE_DENSITY_UNITS",
     "AmpereHourPerLitre",
     "CoulombPerCubicCentimetre",

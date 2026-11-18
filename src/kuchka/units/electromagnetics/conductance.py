@@ -161,6 +161,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
+    from kuchka.quantities import UnitDef
 SIEMENS_NAME = "siemens"
 SIEMENS_SYMBOL = "S"
 SIEMENS_WORDS = ("mho",)
@@ -362,7 +363,19 @@ CONDUCTANCE_UNITS: Mapping[str, Callable[[Numeric], Conductance]] = unit_table(
     },
 )
 
+CONDUCTANCE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        NANOSIEMENS,
+        MICROSIEMENS,
+        MILLISIEMENS,
+        SIEMENS,
+        KILOSIEMENS,
+    ),
+)
+"""The units `auto_scale` moves a conductance along, smallest first."""
+
 __all__ = [
+    "CONDUCTANCE_LADDERS",
     "CONDUCTANCE_UNITS",
     "KILOSIEMENS",
     "MICROSIEMENS",

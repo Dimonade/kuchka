@@ -377,8 +377,27 @@ CHARGE_UNITS: Mapping[str, Callable[[Numeric], Charge]] = unit_table(
     },
 )
 
+CHARGE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        PICOCOULOMB,
+        NANOCOULOMB,
+        MICROCOULOMB,
+        MILLICOULOMB,
+        COULOMB,
+    ),
+    (
+        MILLIAMPERE_HOUR,
+        AMPERE_HOUR,
+    ),
+)
+"""The runs of units `auto_scale` moves a charge along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
     "AMPERE_HOUR",
+    "CHARGE_LADDERS",
     "CHARGE_UNITS",
     "COULOMB",
     "MICROCOULOMB",

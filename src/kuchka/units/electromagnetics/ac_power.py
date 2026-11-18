@@ -411,7 +411,30 @@ REACTIVE_POWER_UNITS: Mapping[str, Callable[[Numeric], ReactivePower]] = unit_ta
     },
 )
 
+APPARENT_POWER_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLIVOLT_AMPERE,
+        VOLT_AMPERE,
+        KILOVOLT_AMPERE,
+        MEGAVOLT_AMPERE,
+        GIGAVOLT_AMPERE,
+    ),
+)
+"""The units `auto_scale` moves an apparent power along, smallest first."""
+
+REACTIVE_POWER_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLIVAR,
+        VAR,
+        KILOVAR,
+        MEGAVAR,
+        GIGAVAR,
+    ),
+)
+"""The units `auto_scale` moves a reactive power along, smallest first."""
+
 __all__ = [
+    "APPARENT_POWER_LADDERS",
     "APPARENT_POWER_UNITS",
     "GIGAVAR",
     "GIGAVOLT_AMPERE",
@@ -421,6 +444,7 @@ __all__ = [
     "MEGAVOLT_AMPERE",
     "MILLIVAR",
     "MILLIVOLT_AMPERE",
+    "REACTIVE_POWER_LADDERS",
     "REACTIVE_POWER_UNITS",
     "VAR",
     "VOLT_AMPERE",

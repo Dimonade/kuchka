@@ -291,6 +291,24 @@ SURFACE_CHARGE_DENSITY_UNITS: Mapping[
     },
 )
 
+SURFACE_CHARGE_DENSITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        NANOCOULOMB_PER_SQUARE_METRE,
+        MICROCOULOMB_PER_SQUARE_METRE,
+        MILLICOULOMB_PER_SQUARE_METRE,
+        COULOMB_PER_SQUARE_METRE,
+    ),
+    (
+        MICROCOULOMB_PER_SQUARE_CENTIMETRE,
+        MILLICOULOMB_PER_SQUARE_CENTIMETRE,
+        COULOMB_PER_SQUARE_CENTIMETRE,
+    ),
+)
+"""The runs of units `auto_scale` moves a surface charge density along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
     "COULOMB_PER_SQUARE_CENTIMETRE",
     "COULOMB_PER_SQUARE_METRE",
@@ -300,6 +318,7 @@ __all__ = [
     "MILLICOULOMB_PER_SQUARE_CENTIMETRE",
     "MILLICOULOMB_PER_SQUARE_METRE",
     "NANOCOULOMB_PER_SQUARE_METRE",
+    "SURFACE_CHARGE_DENSITY_LADDERS",
     "SURFACE_CHARGE_DENSITY_UNITS",
     "CoulombPerSquareCentimetre",
     "CoulombPerSquareMetre",
