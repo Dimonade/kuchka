@@ -146,6 +146,8 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
+    from kuchka.quantities import UnitDef
+
 HERTZ_NAME = "hertz"
 HERTZ_SYMBOL = "Hz"
 
@@ -426,7 +428,23 @@ FREQUENCY_UNITS: Mapping[str, Callable[[Numeric], Frequency]] = unit_table(
     },
 )
 
+FREQUENCY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        NANOHERTZ,
+        MICROHERTZ,
+        MILLIHERTZ,
+        HERTZ,
+        KILOHERTZ,
+        MEGAHERTZ,
+        GIGAHERTZ,
+        TERAHERTZ,
+        PETAHERTZ,
+    ),
+)
+"""The units `auto_scale` moves a frequency along, smallest first."""
+
 __all__ = [
+    "FREQUENCY_LADDERS",
     "FREQUENCY_UNITS",
     "GIGAHERTZ",
     "HERTZ",

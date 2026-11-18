@@ -129,6 +129,8 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
+    from kuchka.quantities import UnitDef
+
 VOLT_NAME = "volt"
 VOLT_SYMBOL = "V"
 
@@ -391,6 +393,19 @@ VOLTAGE_UNITS: Mapping[str, Callable[[Numeric], Voltage]] = unit_table(
     },
 )
 
+VOLTAGE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        NANOVOLT,
+        MICROVOLT,
+        MILLIVOLT,
+        VOLT,
+        KILOVOLT,
+        MEGAVOLT,
+        PETAVOLT,
+    ),
+)
+"""The units `auto_scale` moves a voltage along, smallest first."""
+
 __all__ = [
     "KILOVOLT",
     "MEGAVOLT",
@@ -399,6 +414,7 @@ __all__ = [
     "NANOVOLT",
     "PETAVOLT",
     "VOLT",
+    "VOLTAGE_LADDERS",
     "VOLTAGE_UNITS",
     "Kilovolt",
     "Megavolt",

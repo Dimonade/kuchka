@@ -955,6 +955,24 @@ TEMPERATURE_UNITS: Mapping[str, Callable[[Numeric], Temperature]] = unit_table(
     },
 )
 
+TEMPERATURE_LADDERS: tuple[tuple[AffineUnitDef, ...], ...] = (
+    (MICROKELVIN, MILLIKELVIN, KELVIN),
+)
+"""The units `auto_scale` moves a temperature along, smallest first.
+
+Only the kelvin scale has a zero that is the absence of temperature, so the degrees
+Celsius, Fahrenheit, and Rankine stand on no ladder.
+"""
+
+TEMPERATURE_DELTA_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (DELTA_MICROKELVIN, DELTA_MILLIKELVIN, DELTA_KELVIN),
+    (DELTA_MICROCELSIUS, DELTA_MILLICELSIUS, DELTA_CELSIUS),
+)
+"""The runs of units `auto_scale` moves a temperature difference along.
+
+A difference has no zero point, so each scale with prefixed units has a ladder.
+"""
+
 __all__ = [
     "CELSIUS",
     "DELTA_CELSIUS",
@@ -972,7 +990,9 @@ __all__ = [
     "MILLICELSIUS",
     "MILLIKELVIN",
     "RANKINE",
+    "TEMPERATURE_DELTA_LADDERS",
     "TEMPERATURE_DELTA_UNITS",
+    "TEMPERATURE_LADDERS",
     "TEMPERATURE_UNITS",
     "Celsius",
     "DeltaCelsius",

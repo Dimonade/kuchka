@@ -147,6 +147,8 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
+    from kuchka.quantities import UnitDef
+
 
 AMPERE_NAME = "ampere"
 AMPERE_SYMBOL = "A"
@@ -410,8 +412,22 @@ CURRENT_UNITS: Mapping[str, Callable[[Numeric], Current]] = unit_table(
     },
 )
 
+CURRENT_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        PICOAMPERE,
+        NANOAMPERE,
+        MICROAMPERE,
+        MILLIAMPERE,
+        AMPERE,
+        KILOAMPERE,
+        MEGAAMPERE,
+    ),
+)
+"""The units `auto_scale` moves a current along, smallest first."""
+
 __all__ = [
     "AMPERE",
+    "CURRENT_LADDERS",
     "CURRENT_UNITS",
     "KILOAMPERE",
     "MEGAAMPERE",

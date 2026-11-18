@@ -26,6 +26,7 @@ from typing import Any
 
 from kuchka import quantities
 from kuchka.internal.unit_table import units_of
+from kuchka.quantities.base.units import bind_ladders
 from kuchka.quantities.base.units import bind_table
 from kuchka.quantities.base.units import bind_units
 from kuchka.units import amount
@@ -285,6 +286,21 @@ for _quantity_type, _table in _TABLE_OF.items():
         (INSTANT_SECOND,) if _quantity_type is quantities.Instant else units_of(_table),
     )
     bind_table(_quantity_type, _table)
+
+_LADDERS_OF = {
+    quantities.Current: CURRENT_LADDERS,
+    quantities.Frequency: FREQUENCY_LADDERS,
+    quantities.Temperature: TEMPERATURE_LADDERS,
+    quantities.TemperatureDelta: TEMPERATURE_DELTA_LADDERS,
+    quantities.Voltage: VOLTAGE_LADDERS,
+}
+
+for _quantity_type, _ladders in _LADDERS_OF.items():
+    bind_ladders(_quantity_type, _ladders)
+"""Each quantity type with a ladder moves along it in `auto_scale`.
+
+A type that is not listed shows a measurement in the unit it was given.
+"""
 """Each quantity type displays in the units of its own table, and parse reads them.
 
 A unit of one quantity that shares the type's dimension (a `baud` for a `frequency`) is
