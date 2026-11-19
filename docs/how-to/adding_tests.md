@@ -7,7 +7,8 @@ New work ships with tests, and the suite does most of the testing for a new unit
 The shared suites find the library's contents by walking it:
 
 - every concrete quantity type, whatever its shape, gets the generic property and contract suites,
-- every published `*_UNITS` table gets the conversion, scaling, and spelling suites,
+- every published `*_UNITS` table gets the conversion, scaling, and spelling suites, and a check that its families of prefixed units have no gap,
+- every quantity type is checked for ladders: it has them, matching its families of prefixed units, or says in the coverage test why it has none, and every laddered type gets the property suite of `auto_scale()`,
 - every archaic `*_UNITS` table gets constructor, spelling, iteration, and pickling checks,
 - the export tests compare each package's `__all__` with its parts, and the generated API is compared with the committed one.
 

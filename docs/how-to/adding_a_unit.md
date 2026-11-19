@@ -138,6 +138,27 @@ Prefixed units have two helpers in `kuchka.internal.prefixes`:
 
 - `prefixed_unit(prefix, name, symbol, dimension)` builds one for an SI unit that is not defined yet, and is what the SI modules use. It takes a `coherent_offset` for a dimension whose canonical unit is not the coherent SI unit: mass counts in kilograms, so every gram prefix carries `-3`.
 
+`with_prefix` takes an affine base too, such as the degree Celsius, and keeps its offset, because a prefix changes the size of a unit and not where its scale starts.
+It pairs every spelling of the base with the prefix, and `paired_aliases` and `paired_words` choose the spellings that take part when one of them reads as another unit once a prefix stands before it: `mC` would be a millicoulomb, so the Celsius units pair only `°C` and `° C`.
+
+## Ladders
+
+A family of prefixed units must hold every step of a thousand between its smallest and its largest member, and a test finds the families from the symbols and fails for a gap.
+Each family is also a ladder, the run of units `auto_scale()` moves a measurement along, declared in the unit module beside the table and bound in the `_LADDERS_OF` block of `kuchka/units/__init__.py`:
+
+<!-- doc-test: skip an illustration of a module that does not exist in the library -->
+
+```python
+KRAKEN_LENGTH_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (SHELL, KILOSHELL, MEGASHELL),
+)
+```
+
+A ladder lists the units of one family, smallest first, and `bind_ladders` refuses a ladder of one unit, a unit the type does not display in, units that do not grow, a unit on two ladders, and a unit that starts away from zero.
+A quantity that has two families, such as the joule and the watt-hour, has two ladders, and a unit stands on one of them.
+A quantity whose units have no family of prefixes in steps of a thousand has no ladder, and gives its reason in the coverage test, which also fails for a prefixed unit that is on no ladder.
+[Readable units](../concepts/auto_scaling.md) describes the rule that picks a unit.
+
 ## Constructor, table, and export
 
 <!-- doc-test: skip an illustration of a module that does not exist in the library -->
@@ -182,6 +203,7 @@ A published unit also joins its type's table there (the `_TABLE_OF` block, which
 - [ ] the unit, with an exact scale and the spellings people use,
 - [ ] a constructor with a docstring and [two kinds of example](writing_unit_documentation.md),
 - [ ] a place in the module's `*_UNITS` table and `__all__`,
+- [ ] a place on the `*_LADDERS` of a prefixed unit, with no step of a thousand left out of its family,
 - [ ] a place in the right package, and its imports and `__all__ +=` lines,
 - [ ] wiring: `_TABLE_OF` for a published unit, `extend_units` with the table for an archaic one,
 - [ ] `just generate-api` for a published unit,

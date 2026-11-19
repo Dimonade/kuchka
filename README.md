@@ -77,6 +77,7 @@ The same dimensional machinery is used whether the calculation is mechanical, el
 - [Physical constants](#physical-constants)
 - [Errors](#errors)
 - [Formatting](#formatting)
+  - [Readable units](#readable-units)
 - [Examples](#examples)
 - [Performance](#performance)
 - [What this is not yet](#what-this-is-not-yet)
@@ -1045,6 +1046,23 @@ The precision, rounding mode, and traps of the active `decimal` context do not a
 The magnitude is rounded once, from its exact value, and a tie rounds away from zero: `f"{Volt(2.665):.2f}"` is `"2.67 V"`.
 Without a precision, a value that has no finite decimal form shows 28 significant digits, so `repr(Volt(Fraction(1, 3)))` is `"0.3333333333333333333333333333 V"`.
 
+### Readable units
+
+A measurement displays in the unit it was given, and two methods choose one that reads well when you ask for it.
+`auto_scale()` returns the same exact value in the prefixed unit that suits its size, and `Time.clock_parts()` splits a duration into days, hours, minutes, and seconds.
+
+```python
+from kuchka import Ampere
+from kuchka import Millisecond
+
+str(Ampere(0.000045).auto_scale()) == "45 µA"  # True
+parts = Millisecond(5_025_500).clock_parts()
+" ".join(map(str, parts)) == "1 h 23 min 45 s 500 ms"  # True
+```
+
+A quantity without prefixed units, a temperature in degrees Celsius, and an angle keep their unit.
+See [Readable units](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/auto_scaling.md) for the ladders, the rule that picks a unit, and the quantities that have none.
+
 ## Examples
 
 The repository contains longer, task-oriented examples:
@@ -1131,6 +1149,7 @@ Deeper design material is kept separately:
 - **[Where the radian meets a length](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/angle_bridges.md)** - how rotational quantities meet lengths: bridges, the moment of inertia, and the relations that stay named constructors.
 - **[Copying, pickling, and persistence](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/persistence.md)** - what `copy` and `pickle` guarantee, why pickle is not a storage format, and how to store a value as exact text and a unit symbol.
 - **[Unit spellings](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/unit_spellings.md)** - what the `*_UNITS` tables accept, how case and plurals are treated, and why no spelling can mean two units.
+- **[Readable units](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/auto_scaling.md)** - `auto_scale()` and its ladders of prefixed units, the rule that picks a unit, the quantities without a ladder, and `Time.clock_parts()`.
 - **[Exactness, angles, and tolerance](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, angles and pi, and comparing with a tolerance.
 - **[How to extend kuchka](https://github.com/Dimonade/kuchka/blob/HEAD/docs/how-to/README.md)** - adding a unit, a quantity, a dimension, or archaic units, splitting a module, and the tests and documentation each needs, with an imaginary krakenpeople example.
 - **[Design proposal](https://github.com/Dimonade/kuchka/blob/HEAD/docs/introduction/design_proposal.md)** - the original pre-implementation design: constructor functions, unit definitions, canonical types, string-resolution boundaries, and the reasons for a curated vocabulary.
