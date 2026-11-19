@@ -63,7 +63,8 @@ A type needs units before it can display anything:
 
 1. a module in `kuchka.units`, in the package [its dimension belongs to](adding_a_unit.md#where-the-module-goes), with the unit definitions, a `*_UNITS` table, and an `__all__`,
 2. the canonical unit, with scale 1, set in that module as `Absement._canonical_unit = METRE_SECOND`,
-3. an entry in the `_UNITS_OF` block of `kuchka/units/__init__.py`, which binds the table to the type.
+3. an entry in the `_UNITS_OF` block of `kuchka/units/__init__.py`, which binds the table to the type,
+4. an entry in the `_LADDERS_OF` block beside it when the units come in prefixes, with a `*_LADDERS` constant in the unit module, and otherwise the reason for none in `NO_LADDER` in `tests/contract/test_ladder_coverage.py`.
 
 A type shares units with another type of its dimension only where a table says so, as `Time` and `SamplingPeriod` share the second.
 [Adding a unit](adding_a_unit.md) describes the module.
@@ -84,6 +85,7 @@ Then run `just generate-api`, which promotes the constructors and the type to th
 - [ ] `just generate-overloads`, which writes the `*` and `/` overloads of every type the new one combines with,
 - [ ] `_register(...)`, stating a relation when another linear kind exists,
 - [ ] a unit module with a canonical unit and a table, and its `_UNITS_OF` entry,
+- [ ] its ladders in `_LADDERS_OF`, or the reason it has none,
 - [ ] the three export lines and `just generate-api`,
 - [ ] [tests](adding_tests.md), including the shared-dimension list when a dimension gains a second kind,
 - [ ] a changelog line.
