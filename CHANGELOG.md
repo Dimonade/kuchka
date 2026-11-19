@@ -15,7 +15,8 @@ See the `Stability` section in `README.md` for what versioning means.
   `Ampere(0.000045).auto_scale()` returns the same measurement in the unit of its ladder that suits its size, here `45 µA`.
   The value is unchanged, the result has the type of the measurement, and `str()` and `f"{q}"` keep showing the unit the measurement was given.
   A ladder is the run of prefixed units of a quantity, such as the nanoampere to the megaampere; a measurement moves along the ladder of the unit it displays in, and a unit on no ladder keeps its display unit.
-  `Current`, `Voltage`, `Frequency`, `Temperature` (the kelvin scale), and `TemperatureDelta` have ladders so far.
+  Every quantity whose units come in decimal or binary prefixes has one ladder for each family of prefixed units: `Data` has the bit and the byte in both, and `Energy` has the joule, the electronvolt, the watt-hour, and the tonne of TNT.
+  `Temperature` has the kelvin scale only, since the size of a reading in degrees Celsius is no size of the temperature.
 
 #### New units of existing quantities
 
