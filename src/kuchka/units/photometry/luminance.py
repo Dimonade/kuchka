@@ -210,10 +210,20 @@ LUMINANCE_UNITS: Mapping[str, Callable[[Numeric], Luminance]] = unit_table(
     },
 )
 
+LUMINANCE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLICANDELA_PER_SQUARE_METRE,
+        CANDELA_PER_SQUARE_METRE,
+        KILOCANDELA_PER_SQUARE_METRE,
+    ),
+)
+"""The units `auto_scale` moves a luminance along, smallest first."""
+
 __all__ = [
     "CANDELA_PER_SQUARE_METRE",
     "FOOT_LAMBERT",
     "KILOCANDELA_PER_SQUARE_METRE",
+    "LUMINANCE_LADDERS",
     "LUMINANCE_UNITS",
     "MILLICANDELA_PER_SQUARE_METRE",
     "STILB",

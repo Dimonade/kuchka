@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
     from kuchka.numeric import Numeric
-
+    from kuchka.quantities import UnitDef
 LUMEN_NAME = "lumen"
 LUMEN_SYMBOL = "lm"
 
@@ -128,9 +128,19 @@ LUMINOUS_FLUX_UNITS: Mapping[str, Callable[[Numeric], LuminousFlux]] = unit_tabl
     },
 )
 
+LUMINOUS_FLUX_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLILUMEN,
+        LUMEN,
+        KILOLUMEN,
+    ),
+)
+"""The units `auto_scale` moves a luminous flux along, smallest first."""
+
 __all__ = [
     "KILOLUMEN",
     "LUMEN",
+    "LUMINOUS_FLUX_LADDERS",
     "LUMINOUS_FLUX_UNITS",
     "MILLILUMEN",
     "Kilolumen",
