@@ -703,7 +703,24 @@ TIME_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
 )
 """The units `auto_scale` moves a time along, smallest first."""
 
+CLOCK_UNITS: tuple[UnitDef, ...] = (
+    DAY,
+    HOUR,
+    MINUTE,
+    SECOND,
+    MILLISECOND,
+    MICROSECOND,
+    NANOSECOND,
+    PICOSECOND,
+    FEMTOSECOND,
+)
+"""The units `clock_parts` splits a time into, largest first.
+
+A day is exactly 86 400 s, so the split holds no calendar.
+"""
+
 __all__ = [
+    "CLOCK_UNITS",
     "DAY",
     "FEMTOSECOND",
     "FORTNIGHT",

@@ -244,3 +244,7 @@ scaled_current: Current = Ampere(0.000045).auto_scale()  # OK
 scaled_frequency: Frequency = Hertz(2_400_000_000).auto_scale()  # OK
 scaled_reading: Temperature = Celsius(25).auto_scale()  # OK
 wrong_scaled: Voltage = Ampere(0.000045).auto_scale()  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+
+# `clock_parts` returns parts of the type it is called on.
+clock: tuple[Time, ...] = Second(90).clock_parts()  # OK
+wrong_clock: tuple[Frequency, ...] = Second(90).clock_parts()  # type: ignore[assignment]  # ty: ignore[invalid-assignment]

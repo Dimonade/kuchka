@@ -317,6 +317,48 @@ def bind_ladders(quantity_type: type[Any], ladders: Iterable[Iterable[Any]]) -> 
     quantity_type._ladder_of = MappingProxyType(claimed)  # noqa: SLF001
 
 
+def bind_clock_units(quantity_type: type[Any], units: Iterable[Any]) -> None:
+    """Bind the units `clock_parts` splits a measurement of `quantity_type` into.
+
+    This is called once per quantity type, after `bind_units`.
+
+    The units are given largest first, such as the day, the hour, and the minute down
+    to the femtosecond.
+    There are at least two, each a bound unit of the type that starts at zero, and
+    every unit is smaller than the one before.
+
+    Raises `TypeError` for a type that has its clock units bound already, a type
+    without bound units, and units that break the rules above, since each is a defect
+    in `kuchka`'s own unit modules.
+    """
+    name = quantity_type.__name__
+    if "_clock_units" in vars(quantity_type):
+        msg = f"{name} already has its clock units bound."
+        raise TypeError(msg)
+    if "_applicable_units" not in vars(quantity_type):
+        msg = f"{name} has no bound units to split into."
+        raise TypeError(msg)
+    run = tuple(units)
+    if len(run) < _MINIMUM_LADDER:
+        msg = f"the clock units of {name} need at least two units, got {run!r}."
+        raise TypeError(msg)
+    for unit in run:
+        if unit not in quantity_type._applicable_units:  # noqa: SLF001
+            msg = f"{unit!r} is not a unit of {name}, so it cannot split one."
+            raise TypeError(msg)
+        if getattr(unit, "offset", 0) != 0:
+            msg = f"{unit!r} starts its scale away from zero: it cannot split a {name}."
+            raise TypeError(msg)
+    for larger, smaller in pairwise(run):
+        if larger.scale <= smaller.scale:
+            msg = (
+                f"the clock units of {name} shrink from each unit to the next, but "
+                f"{larger!r} is followed by {smaller!r}."
+            )
+            raise TypeError(msg)
+    quantity_type._clock_units = run  # noqa: SLF001
+
+
 def _published_unit(name: str) -> _Unit:
     """Return the unit published as `name` by `kuchka.units`; unpickling calls this."""
     try:

@@ -38,6 +38,7 @@ from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import Literal
 from typing import Protocol
+from typing import Self
 from typing import overload
 from typing import runtime_checkable
 
@@ -57,6 +58,7 @@ if TYPE_CHECKING:
     from kuchka.dimensions import Dimension
     from kuchka.quantities.amount import AmountOfSubstance
     from kuchka.quantities.angular import AngularDisplacement
+    from kuchka.quantities.base.units import UnitDef
     from kuchka.quantities.chemistry.entities_per_amount import EntitiesPerAmount
     from kuchka.quantities.chemistry.molar_flow_rate import MolarFlowRate
     from kuchka.quantities.current import Current
@@ -141,7 +143,63 @@ class Time(LinearQuantity):
     """A span of time: a duration, a timeout, an interval between readings."""
 
     dimension: ClassVar[Dimension] = TIME
+    _clock_units: ClassVar[tuple[UnitDef, ...]]
     __slots__ = ()
+
+    def clock_parts(self) -> tuple[Self, ...]:
+        """Split this span into whole days, hours, minutes, seconds, and smaller units.
+
+        The parts are given from the largest unit to the smallest: the day, the hour,
+        the minute, the second, the millisecond, the microsecond, the nanosecond, the
+        picosecond, and the femtosecond.
+        Each unit but the femtosecond takes as many whole counts as fit in what is
+        left, and the femtosecond takes the exact remainder, which can be a fraction of
+        a femtosecond.
+        A unit with a count of zero is left out, every part has the sign of the span,
+        and the parts add up to the span exactly.
+
+        A day is exactly 86 400 s, so the split holds no calendar: a span of 25 hours
+        is a day and an hour, and a longer span is a count of days.
+
+        Returns
+        -------
+        tuple[Self, ...]
+            The non-zero parts, largest unit first, or this span itself when it is
+            zero.
+
+        Examples
+        --------
+        A build that ran for 5 025 500 ms reads as hours, minutes, and seconds in a log:
+
+        >>> from kuchka import Millisecond
+        >>> parts = Millisecond(5_025_500).clock_parts()
+        >>> parts
+        (1 h, 23 min, 45 s, 500 ms)
+        >>> " ".join(map(str, parts))
+        '1 h 23 min 45 s 500 ms'
+
+        A server that has been up for 100 000 s has been up for a day and a bit:
+
+        >>> from kuchka import Second
+        >>> " ".join(map(str, Second(100_000).clock_parts()))
+        '1 d 3 h 46 min 40 s'
+
+        The parts add up to the span exactly, down to a single picosecond:
+
+        >>> from kuchka import Picosecond
+        >>> span = Picosecond(10**12 + 1)
+        >>> span.clock_parts()
+        (1 s, 1 ps)
+        >>> sum(span.clock_parts(), start=Second(0)) == span
+        True
+
+        A task that is 90 s late is a negative span, and each of its parts is negative:
+
+        >>> Second(-90).clock_parts()
+        (-1 min, -30 s)
+
+        """
+        return self._split(self._clock_units)
 
     # BEGIN GENERATED __mul__
     @overload

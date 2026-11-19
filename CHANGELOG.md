@@ -18,6 +18,11 @@ See the `Stability` section in `README.md` for what versioning means.
   Every quantity whose units come in decimal or binary prefixes has one ladder for each family of prefixed units: `Data` has the bit and the byte in both, and `Energy` has the joule, the electronvolt, the watt-hour, and the tonne of TNT.
   `Temperature` has the kelvin scale only, since the size of a reading in degrees Celsius is no size of the temperature.
 
+- **`Time.clock_parts()`:**
+  `Millisecond(5_025_500).clock_parts()` splits a span into whole days, hours, minutes, seconds, and the smaller units, here `(1 h, 23 min, 45 s, 500 ms)`.
+  The parts add up to the span exactly, zero parts are left out, every part has the sign of the span, and the femtosecond takes the exact remainder.
+  A day is exactly 86 400 s, so the split holds no calendar.
+
 #### New units of existing quantities
 
 - **Prefix families without gaps:**

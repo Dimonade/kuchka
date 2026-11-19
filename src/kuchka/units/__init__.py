@@ -26,6 +26,7 @@ from typing import Any
 
 from kuchka import quantities
 from kuchka.internal.unit_table import units_of
+from kuchka.quantities.base.units import bind_clock_units
 from kuchka.quantities.base.units import bind_ladders
 from kuchka.quantities.base.units import bind_table
 from kuchka.quantities.base.units import bind_units
@@ -286,6 +287,11 @@ for _quantity_type, _table in _TABLE_OF.items():
         (INSTANT_SECOND,) if _quantity_type is quantities.Instant else units_of(_table),
     )
     bind_table(_quantity_type, _table)
+"""Each quantity type displays in the units of its own table, and parse reads them.
+
+A unit of one quantity that shares the type's dimension (a `baud` for a `frequency`) is
+not accepted by another.
+"""
 
 _LADDERS_OF = {
     quantities.AbsorbedDose: ABSORBED_DOSE_LADDERS,
@@ -384,11 +390,9 @@ for _quantity_type, _ladders in _LADDERS_OF.items():
 
 A type that is not listed shows a measurement in the unit it was given.
 """
-"""Each quantity type displays in the units of its own table, and parse reads them.
 
-A unit of one quantity that shares the type's dimension (a `baud` for a `frequency`) is
-not accepted by another.
-"""
+bind_clock_units(quantities.Time, CLOCK_UNITS)
+"""A time splits into these units in `clock_parts`, the largest first."""
 
 # Export rule, for every package under `kuchka.units` and `kuchka.quantities`.
 # A leaf module owns the only hand-written `__all__`, naming exactly what it defines.

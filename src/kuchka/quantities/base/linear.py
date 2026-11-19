@@ -11,6 +11,7 @@ that give multiplication and division a precise static type.
 from __future__ import annotations
 
 from fractions import Fraction
+from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import Self
 
@@ -29,6 +30,9 @@ from kuchka.quantities.base.registry import _promote
 from kuchka.quantities.base.registry import _ratio
 from kuchka.quantities.base.storage import _ScalarStorage
 from kuchka.quantities.base.units import UnitDef
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
@@ -214,6 +218,30 @@ class LinearQuantity(_OrderedScalarMixin, _ScalarStorage[UnitDef]):
         for _ in range(abs(exponent) - 1):
             power = power * self
         return power if exponent > 0 else 1 / power
+
+    def _split(self, units: Sequence[UnitDef]) -> tuple[Self, ...]:
+        """Return this measurement as whole counts of `units`, the largest first.
+
+        `units` are given from the largest to the smallest.
+        Each unit but the last takes as many whole counts as fit in what is left, and
+        the last takes the exact remainder, which can be a fraction of that unit.
+        A unit with a count of zero is left out, every part has the sign of the
+        measurement, and the parts add up to the measurement exactly.
+        A zero measurement is returned as it is.
+        """
+        if self._magnitude == 0:
+            return (self,)
+        sign = 1 if self._magnitude > 0 else -1
+        remainder = abs(self._magnitude)
+        parts: list[Self] = []
+        for unit in units[:-1]:
+            count = remainder // unit.scale
+            if count:
+                parts.append(type(self)(sign * count * unit.scale, unit))
+                remainder -= count * unit.scale
+        if remainder:
+            parts.append(type(self)(sign * remainder, units[-1]))
+        return tuple(parts)
 
     def __neg__(self) -> Self:
         return type(self)(-self._magnitude, self._display_unit)
