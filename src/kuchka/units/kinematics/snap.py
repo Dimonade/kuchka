@@ -165,11 +165,20 @@ SNAP_UNITS: Mapping[str, Callable[[Numeric], Snap]] = unit_table(
     },
 )
 
+SNAP_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLIMETRE_PER_SECOND_FOURTH_POWER,
+        METRE_PER_SECOND_FOURTH_POWER,
+    ),
+)
+"""The units `auto_scale` moves a snap along, smallest first."""
+
 __all__ = [
     "METER_PER_SECOND_FOURTH_POWER",
     "METRE_PER_SECOND_FOURTH_POWER",
     "MILLIMETER_PER_SECOND_FOURTH_POWER",
     "MILLIMETRE_PER_SECOND_FOURTH_POWER",
+    "SNAP_LADDERS",
     "SNAP_UNITS",
     "MeterPerSecondFourthPower",
     "MetrePerSecondFourthPower",
