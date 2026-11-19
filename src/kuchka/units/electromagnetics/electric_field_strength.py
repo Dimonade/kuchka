@@ -468,7 +468,30 @@ ELECTRIC_FIELD_STRENGTH_UNITS: Mapping[
     },
 )
 
+ELECTRIC_FIELD_STRENGTH_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROVOLT_PER_METRE,
+        MILLIVOLT_PER_METRE,
+        VOLT_PER_METRE,
+        KILOVOLT_PER_METRE,
+        MEGAVOLT_PER_METRE,
+    ),
+    (
+        VOLT_PER_CENTIMETRE,
+        KILOVOLT_PER_CENTIMETRE,
+    ),
+    (
+        VOLT_PER_MILLIMETRE,
+        KILOVOLT_PER_MILLIMETRE,
+    ),
+)
+"""The runs of units `auto_scale` moves an electric field strength along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
+    "ELECTRIC_FIELD_STRENGTH_LADDERS",
     "ELECTRIC_FIELD_STRENGTH_UNITS",
     "KILOVOLT_PER_CENTIMETRE",
     "KILOVOLT_PER_METRE",

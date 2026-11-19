@@ -56,6 +56,9 @@ from kuchka.units.electromagnetics.surface_charge_density import (
     MICROCOULOMB_PER_SQUARE_METRE,
 )
 from kuchka.units.electromagnetics.surface_charge_density import (
+    MILLICOULOMB_PER_SQUARE_CENTIMETRE,
+)
+from kuchka.units.electromagnetics.surface_charge_density import (
     MILLICOULOMB_PER_SQUARE_METRE,
 )
 from kuchka.units.electromagnetics.surface_charge_density import (
@@ -70,6 +73,9 @@ from kuchka.units.electromagnetics.surface_charge_density import (
 )
 from kuchka.units.electromagnetics.surface_charge_density import (
     MicrocoulombPerSquareMetre,
+)
+from kuchka.units.electromagnetics.surface_charge_density import (
+    MillicoulombPerSquareCentimetre,
 )
 from kuchka.units.electromagnetics.surface_charge_density import (
     MillicoulombPerSquareMetre,
@@ -113,6 +119,9 @@ ELECTRIC_FLUX_DENSITY_UNITS = unit_table(
         ),
         COULOMB_PER_SQUARE_CENTIMETRE: _via_surface_charge_density(
             CoulombPerSquareCentimetre
+        ),
+        MILLICOULOMB_PER_SQUARE_CENTIMETRE: _via_surface_charge_density(
+            MillicoulombPerSquareCentimetre
         ),
         MICROCOULOMB_PER_SQUARE_CENTIMETRE: _via_surface_charge_density(
             MicrocoulombPerSquareCentimetre

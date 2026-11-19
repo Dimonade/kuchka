@@ -123,7 +123,17 @@ EXPOSURE_UNITS: Mapping[str, Callable[[Numeric], Exposure]] = unit_table(
     },
 )
 
+EXPOSURE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROROENTGEN,
+        MILLIROENTGEN,
+        ROENTGEN,
+    ),
+)
+"""The units `auto_scale` moves an exposure along, smallest first."""
+
 __all__ = [
+    "EXPOSURE_LADDERS",
     "EXPOSURE_UNITS",
     "MICROROENTGEN",
     "MILLIROENTGEN",

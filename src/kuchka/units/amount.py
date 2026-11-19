@@ -115,6 +115,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
+    from kuchka.quantities import UnitDef
 MOLE_NAME = "mole"
 MOLE_SYMBOL = "mol"
 
@@ -413,7 +414,21 @@ AMOUNT_OF_SUBSTANCE_UNITS: Mapping[str, Callable[[Numeric], AmountOfSubstance]] 
     )
 )
 
+AMOUNT_OF_SUBSTANCE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        FEMTOMOLE,
+        PICOMOLE,
+        NANOMOLE,
+        MICROMOLE,
+        MILLIMOLE,
+        MOLE,
+        KILOMOLE,
+    ),
+)
+"""The units `auto_scale` moves an amount of substance along, smallest first."""
+
 __all__ = [
+    "AMOUNT_OF_SUBSTANCE_LADDERS",
     "AMOUNT_OF_SUBSTANCE_UNITS",
     "FEMTOMOLE",
     "KILOMOLE",

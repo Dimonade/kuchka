@@ -138,8 +138,17 @@ LUMINOUS_EXPOSURE_UNITS: Mapping[str, Callable[[Numeric], LuminousExposure]] = (
     )
 )
 
+LUMINOUS_EXPOSURE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        LUX_HOUR,
+        KILOLUX_HOUR,
+    ),
+)
+"""The units `auto_scale` moves a luminous exposure along, smallest first."""
+
 __all__ = [
     "KILOLUX_HOUR",
+    "LUMINOUS_EXPOSURE_LADDERS",
     "LUMINOUS_EXPOSURE_UNITS",
     "LUX_HOUR",
     "LUX_SECOND",

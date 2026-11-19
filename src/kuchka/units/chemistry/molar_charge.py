@@ -98,9 +98,18 @@ MOLAR_CHARGE_UNITS: Mapping[str, Callable[[Numeric], MolarCharge]] = unit_table(
     },
 )
 
+MOLAR_CHARGE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        COULOMB_PER_MOLE,
+        KILOCOULOMB_PER_MOLE,
+    ),
+)
+"""The units `auto_scale` moves a molar charge along, smallest first."""
+
 __all__ = [
     "COULOMB_PER_MOLE",
     "KILOCOULOMB_PER_MOLE",
+    "MOLAR_CHARGE_LADDERS",
     "MOLAR_CHARGE_UNITS",
     "CoulombPerMole",
     "KilocoulombPerMole",

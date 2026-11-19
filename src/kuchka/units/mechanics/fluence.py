@@ -5,7 +5,7 @@ exposure is one too.
 Its canonical unit is the joule per square metre (`J/m²`).
 The module provides:
 
-* `JoulePerSquareMetre` and `MegajoulePerSquareMetre`;
+* `JoulePerSquareMetre`, `KilojoulePerSquareMetre`, and `MegajoulePerSquareMetre`;
 * `JoulePerSquareCentimetre`, `MillijoulePerSquareCentimetre`, and
   `MicrojoulePerSquareCentimetre`;
 * `WattHourPerSquareMetre` and `KilowattHourPerSquareMetre`.
@@ -28,8 +28,8 @@ Each unit belongs to the field that counts energy per area:
   and curing, and the pulse fluence of excimer laser surgery;
 * joules per square centimetre (J/cm²) are the settings of therapeutic and aesthetic
   lasers, such as hair removal, and the damage thresholds of optical coatings;
-* joules per square metre (J/m²) count the erythemal dose of sunburn research and the
-  radiant exposure of radiometry;
+* joules and kilojoules per square metre (J/m², kJ/m²) count the erythemal dose of
+  sunburn research and the radiant exposure of radiometry;
 * watt-hours and kilowatt-hours per square metre (Wh/m², kWh/m²) are the daily and
   annual insolation of solar energy and building physics, and megajoules per square
   metre (MJ/m²) are the same insolation in meteorology and agronomy.
@@ -176,6 +176,7 @@ JOULE_PER_SQUARE_METRE = UnitDef(
     aliases=powered("J/m", 2),
     words=("joules per square metre", "joules per square meter"),
 )
+KILOJOULE_PER_SQUARE_METRE = with_prefix(prefixes.KILO, JOULE_PER_SQUARE_METRE)
 MEGAJOULE_PER_SQUARE_METRE = with_prefix(prefixes.MEGA, JOULE_PER_SQUARE_METRE)
 JOULE_PER_SQUARE_CENTIMETRE = UnitDef(
     "joule_per_square_centimetre",
@@ -250,6 +251,40 @@ def JoulePerSquareMetre(value: Numeric) -> Fluence:
     """
     return Fluence(
         to_exact(value) * JOULE_PER_SQUARE_METRE.scale, JOULE_PER_SQUARE_METRE
+    )
+
+
+def KilojoulePerSquareMetre(value: Numeric) -> Fluence:
+    """Construct a Fluence from kilojoules per square metre.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnitude in kilojoules per square metre.
+
+    Returns
+    -------
+    Fluence
+        Fluence represented in kilojoules per square metre.
+
+    Examples
+    --------
+    Sunburn research reports the erythemal ultraviolet dose of a day in kilojoules per
+    square metre, and a summer day at mid latitudes gives a few of them:
+
+    >>> daily_dose = KilojoulePerSquareMetre(5)
+    >>> daily_dose
+    5 kJ/m²
+
+    In the units of a disinfection reactor, 1 kJ/m² is 100 mJ/cm²:
+
+    >>> from kuchka.units import MILLIJOULE_PER_SQUARE_CENTIMETRE
+    >>> KilojoulePerSquareMetre(1).to(MILLIJOULE_PER_SQUARE_CENTIMETRE)
+    100 mJ/cm²
+
+    """
+    return Fluence(
+        to_exact(value) * KILOJOULE_PER_SQUARE_METRE.scale, KILOJOULE_PER_SQUARE_METRE
     )
 
 
@@ -482,6 +517,7 @@ FLUENCE_UNITS: Mapping[str, Callable[[Numeric], Fluence]] = unit_table(
     "FLUENCE_UNITS",
     {
         JOULE_PER_SQUARE_METRE: JoulePerSquareMetre,
+        KILOJOULE_PER_SQUARE_METRE: KilojoulePerSquareMetre,
         MEGAJOULE_PER_SQUARE_METRE: MegajoulePerSquareMetre,
         JOULE_PER_SQUARE_CENTIMETRE: JoulePerSquareCentimetre,
         MILLIJOULE_PER_SQUARE_CENTIMETRE: MillijoulePerSquareCentimetre,
@@ -491,10 +527,33 @@ FLUENCE_UNITS: Mapping[str, Callable[[Numeric], Fluence]] = unit_table(
     },
 )
 
+FLUENCE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROJOULE_PER_SQUARE_CENTIMETRE,
+        MILLIJOULE_PER_SQUARE_CENTIMETRE,
+        JOULE_PER_SQUARE_CENTIMETRE,
+    ),
+    (
+        JOULE_PER_SQUARE_METRE,
+        KILOJOULE_PER_SQUARE_METRE,
+        MEGAJOULE_PER_SQUARE_METRE,
+    ),
+    (
+        WATT_HOUR_PER_SQUARE_METRE,
+        KILOWATT_HOUR_PER_SQUARE_METRE,
+    ),
+)
+"""The runs of units `auto_scale` moves a fluence along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
+    "FLUENCE_LADDERS",
     "FLUENCE_UNITS",
     "JOULE_PER_SQUARE_CENTIMETRE",
     "JOULE_PER_SQUARE_METRE",
+    "KILOJOULE_PER_SQUARE_METRE",
     "KILOWATT_HOUR_PER_SQUARE_METRE",
     "MEGAJOULE_PER_SQUARE_METRE",
     "MICROJOULE_PER_SQUARE_CENTIMETRE",
@@ -502,6 +561,7 @@ __all__ = [
     "WATT_HOUR_PER_SQUARE_METRE",
     "JoulePerSquareCentimetre",
     "JoulePerSquareMetre",
+    "KilojoulePerSquareMetre",
     "KilowattHourPerSquareMetre",
     "MegajoulePerSquareMetre",
     "MicrojoulePerSquareCentimetre",

@@ -691,6 +691,18 @@ TIME_UNITS: UnitTable[Time] = unit_table(
     },
 )
 
+TIME_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        FEMTOSECOND,
+        PICOSECOND,
+        NANOSECOND,
+        MICROSECOND,
+        MILLISECOND,
+        SECOND,
+    ),
+)
+"""The units `auto_scale` moves a time along, smallest first."""
+
 __all__ = [
     "DAY",
     "FEMTOSECOND",
@@ -704,6 +716,7 @@ __all__ = [
     "NANOSECOND",
     "PICOSECOND",
     "SECOND",
+    "TIME_LADDERS",
     "TIME_UNITS",
     "WEEK",
     "Day",

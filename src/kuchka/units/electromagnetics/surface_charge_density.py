@@ -73,6 +73,9 @@ COULOMB_PER_SQUARE_CENTIMETRE = UnitDef(
     aliases=powered("C/cm", 2),
     words=("coulombs per square centimetre", "coulombs per square centimeter"),
 )
+MILLICOULOMB_PER_SQUARE_CENTIMETRE = with_prefix(
+    prefixes.MILLI, COULOMB_PER_SQUARE_CENTIMETRE
+)
 MICROCOULOMB_PER_SQUARE_CENTIMETRE = with_prefix(
     prefixes.MICRO, COULOMB_PER_SQUARE_CENTIMETRE
 )
@@ -190,6 +193,48 @@ def CoulombPerSquareCentimetre(value: Numeric) -> SurfaceChargeDensity:
     )
 
 
+def MillicoulombPerSquareCentimetre(value: Numeric) -> SurfaceChargeDensity:
+    """Construct a SurfaceChargeDensity from millicoulombs per square centimetre.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnitude in millicoulombs per square centimetre.
+
+    Returns
+    -------
+    SurfaceChargeDensity
+        SurfaceChargeDensity represented in millicoulombs per square centimetre.
+
+    Examples
+    --------
+    A stimulation electrode coated with iridium oxide can inject a charge of the order
+    of 1 to 5 mC/cm² in a pulse without damaging itself or the tissue:
+
+    >>> injection_limit = MillicoulombPerSquareCentimetre(2)
+    >>> injection_limit
+    2 mC/cm²
+
+    On a microelectrode of 0.002 cm², which is 0.2 mm², that density is a charge per
+    pulse, and a constant current of 1 mA delivers it in a few milliseconds:
+
+    >>> from kuchka import Milliampere
+    >>> from kuchka import SquareCentimetre
+    >>> from kuchka.units import MICROCOULOMB
+    >>> from kuchka.units import MILLISECOND
+    >>> charge = injection_limit * SquareCentimetre(0.002)
+    >>> charge.to(MICROCOULOMB)
+    4 µC
+    >>> (charge / Milliampere(1)).to(MILLISECOND)
+    4 ms
+
+    """
+    return SurfaceChargeDensity(
+        to_exact(value) * MILLICOULOMB_PER_SQUARE_CENTIMETRE.scale,
+        MILLICOULOMB_PER_SQUARE_CENTIMETRE,
+    )
+
+
 def MicrocoulombPerSquareCentimetre(value: Numeric) -> SurfaceChargeDensity:
     """Construct a SurfaceChargeDensity from microcoulombs per square centimetre.
 
@@ -240,10 +285,29 @@ SURFACE_CHARGE_DENSITY_UNITS: Mapping[
         MICROCOULOMB_PER_SQUARE_METRE: MicrocoulombPerSquareMetre,
         NANOCOULOMB_PER_SQUARE_METRE: NanocoulombPerSquareMetre,
         COULOMB_PER_SQUARE_CENTIMETRE: CoulombPerSquareCentimetre,
+        MILLICOULOMB_PER_SQUARE_CENTIMETRE: MillicoulombPerSquareCentimetre,
         MICROCOULOMB_PER_SQUARE_CENTIMETRE: MicrocoulombPerSquareCentimetre,
         MILLIAMPERE_HOUR_PER_SQUARE_CENTIMETRE: MilliampereHourPerSquareCentimetre,
     },
 )
+
+SURFACE_CHARGE_DENSITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        NANOCOULOMB_PER_SQUARE_METRE,
+        MICROCOULOMB_PER_SQUARE_METRE,
+        MILLICOULOMB_PER_SQUARE_METRE,
+        COULOMB_PER_SQUARE_METRE,
+    ),
+    (
+        MICROCOULOMB_PER_SQUARE_CENTIMETRE,
+        MILLICOULOMB_PER_SQUARE_CENTIMETRE,
+        COULOMB_PER_SQUARE_CENTIMETRE,
+    ),
+)
+"""The runs of units `auto_scale` moves a surface charge density along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
 
 __all__ = [
     "COULOMB_PER_SQUARE_CENTIMETRE",
@@ -251,14 +315,17 @@ __all__ = [
     "MICROCOULOMB_PER_SQUARE_CENTIMETRE",
     "MICROCOULOMB_PER_SQUARE_METRE",
     "MILLIAMPERE_HOUR_PER_SQUARE_CENTIMETRE",
+    "MILLICOULOMB_PER_SQUARE_CENTIMETRE",
     "MILLICOULOMB_PER_SQUARE_METRE",
     "NANOCOULOMB_PER_SQUARE_METRE",
+    "SURFACE_CHARGE_DENSITY_LADDERS",
     "SURFACE_CHARGE_DENSITY_UNITS",
     "CoulombPerSquareCentimetre",
     "CoulombPerSquareMetre",
     "MicrocoulombPerSquareCentimetre",
     "MicrocoulombPerSquareMetre",
     "MilliampereHourPerSquareCentimetre",
+    "MillicoulombPerSquareCentimetre",
     "MillicoulombPerSquareMetre",
     "NanocoulombPerSquareMetre",
 ]

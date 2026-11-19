@@ -206,7 +206,17 @@ ACTIVITY_CONCENTRATION_UNITS: Mapping[
     },
 )
 
+ACTIVITY_CONCENTRATION_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLIBECQUEREL_PER_CUBIC_METRE,
+        BECQUEREL_PER_CUBIC_METRE,
+        KILOBECQUEREL_PER_CUBIC_METRE,
+    ),
+)
+"""The units `auto_scale` moves an activity concentration along, smallest first."""
+
 __all__ = [
+    "ACTIVITY_CONCENTRATION_LADDERS",
     "ACTIVITY_CONCENTRATION_UNITS",
     "BECQUEREL_PER_CUBIC_METRE",
     "BECQUEREL_PER_LITRE",

@@ -9,7 +9,8 @@
 `SpecificActivity` is the activity in each unit of mass, `Activity / Mass`.
 Its canonical unit is the becquerel per kilogram (`Bq/kg`).
 The module provides it with the kilobecquerel per kilogram, the becquerel per gram,
-and the picocurie and curie per gram: one picocurie per gram is exactly 37 Bq/kg.
+and the curie per gram from picocuries to curies: one picocurie per gram is exactly
+37 Bq/kg.
 
 Examples
 --------
@@ -36,6 +37,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from kuchka.dimensions import SPECIFIC_ACTIVITY
+from kuchka.internal import prefixes
+from kuchka.internal.prefixes import with_prefix
 from kuchka.internal.unit_table import unit_table
 from kuchka.numeric import to_exact
 from kuchka.quantities import SpecificActivity
@@ -86,6 +89,9 @@ CURIE_PER_GRAM = UnitDef(
     SPECIFIC_ACTIVITY,
     words=("curies per gram",),
 )
+MILLICURIE_PER_GRAM = with_prefix(prefixes.MILLI, CURIE_PER_GRAM)
+MICROCURIE_PER_GRAM = with_prefix(prefixes.MICRO, CURIE_PER_GRAM)
+NANOCURIE_PER_GRAM = with_prefix(prefixes.NANO, CURIE_PER_GRAM)
 
 SpecificActivity._canonical_unit = BECQUEREL_PER_KILOGRAM  # noqa: SLF001 -- this module owns SpecificActivity's canonical unit
 
@@ -183,6 +189,113 @@ def CuriePerGram(value: Numeric) -> SpecificActivity:
     return SpecificActivity(to_exact(value) * CURIE_PER_GRAM.scale, CURIE_PER_GRAM)
 
 
+def MillicuriePerGram(value: Numeric) -> SpecificActivity:
+    """Construct a SpecificActivity from a magnitude in millicuries per gram.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnitude in millicuries per gram.
+
+    Returns
+    -------
+    SpecificActivity
+        SpecificActivity represented in millicuries per gram.
+
+    Examples
+    --------
+    The curie began as the activity of a gram of radium-226, and a gram of it is a
+    little under a curie, about 989 mCi/g:
+
+    >>> radium_226 = MillicuriePerGram(989)
+    >>> radium_226
+    989 mCi/g
+
+    Radium therapy was dosed in milligram-hours, because a milligram of radium-226 is
+    almost exactly a millicurie.
+    A 10 mg radium needle of that specific activity holds, from radium-226 alone:
+
+    >>> from kuchka import Milligram
+    >>> from kuchka.units import MILLICURIE
+    >>> (radium_226 * Milligram(10)).to(MILLICURIE)
+    9.89 mCi
+
+    """
+    return SpecificActivity(
+        to_exact(value) * MILLICURIE_PER_GRAM.scale, MILLICURIE_PER_GRAM
+    )
+
+
+def MicrocuriePerGram(value: Numeric) -> SpecificActivity:
+    """Construct a SpecificActivity from a magnitude in microcuries per gram.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnitude in microcuries per gram.
+
+    Returns
+    -------
+    SpecificActivity
+        SpecificActivity represented in microcuries per gram.
+
+    Examples
+    --------
+    Pure uranium-238 has a specific activity of about 12.4 kBq/g, which is 0.336 µCi/g:
+
+    >>> uranium_238 = MicrocuriePerGram(0.336)
+    >>> uranium_238.to(BECQUEREL_PER_GRAM)
+    12432 Bq/g
+
+    A 100 g piece of purified uranium metal then carries, from uranium-238 alone:
+
+    >>> from kuchka import Gram
+    >>> from kuchka.units import MICROCURIE
+    >>> (uranium_238 * Gram(100)).to(MICROCURIE)
+    33.6 µCi
+
+    """
+    return SpecificActivity(
+        to_exact(value) * MICROCURIE_PER_GRAM.scale, MICROCURIE_PER_GRAM
+    )
+
+
+def NanocuriePerGram(value: Numeric) -> SpecificActivity:
+    """Construct a SpecificActivity from a magnitude in nanocuries per gram.
+
+    Parameters
+    ----------
+    value : Numeric
+        Magnitude in nanocuries per gram.
+
+    Returns
+    -------
+    SpecificActivity
+        SpecificActivity represented in nanocuries per gram.
+
+    Examples
+    --------
+    Natural potassium carries about 31 Bq of potassium-40 per gram, which is about
+    0.84 nCi/g:
+
+    >>> potassium = NanocuriePerGram(0.84)
+    >>> potassium.to(BECQUEREL_PER_GRAM)
+    31.08 Bq/g
+
+    A reference adult holds about 140 g of potassium, which gives the roughly 4 kBq of
+    potassium-40 in the body:
+
+    >>> from kuchka import Gram
+    >>> from kuchka.units import KILOBECQUEREL
+    >>> f"{(potassium * Gram(140)).to(KILOBECQUEREL):.0f}"
+    '4 kBq'
+
+    """
+    return SpecificActivity(
+        to_exact(value) * NANOCURIE_PER_GRAM.scale, NANOCURIE_PER_GRAM
+    )
+
+
 SPECIFIC_ACTIVITY_UNITS: Mapping[str, Callable[[Numeric], SpecificActivity]] = (
     unit_table(
         "SPECIFIC_ACTIVITY_UNITS",
@@ -190,22 +303,50 @@ SPECIFIC_ACTIVITY_UNITS: Mapping[str, Callable[[Numeric], SpecificActivity]] = (
             BECQUEREL_PER_KILOGRAM: BecquerelPerKilogram,
             KILOBECQUEREL_PER_KILOGRAM: KilobecquerelPerKilogram,
             BECQUEREL_PER_GRAM: BecquerelPerGram,
+            NANOCURIE_PER_GRAM: NanocuriePerGram,
             PICOCURIE_PER_GRAM: PicocuriePerGram,
+            MICROCURIE_PER_GRAM: MicrocuriePerGram,
+            MILLICURIE_PER_GRAM: MillicuriePerGram,
             CURIE_PER_GRAM: CuriePerGram,
         },
     )
 )
+
+SPECIFIC_ACTIVITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        BECQUEREL_PER_KILOGRAM,
+        KILOBECQUEREL_PER_KILOGRAM,
+    ),
+    (
+        PICOCURIE_PER_GRAM,
+        NANOCURIE_PER_GRAM,
+        MICROCURIE_PER_GRAM,
+        MILLICURIE_PER_GRAM,
+        CURIE_PER_GRAM,
+    ),
+)
+"""The runs of units `auto_scale` moves a specific activity along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
 
 __all__ = [
     "BECQUEREL_PER_GRAM",
     "BECQUEREL_PER_KILOGRAM",
     "CURIE_PER_GRAM",
     "KILOBECQUEREL_PER_KILOGRAM",
+    "MICROCURIE_PER_GRAM",
+    "MILLICURIE_PER_GRAM",
+    "NANOCURIE_PER_GRAM",
     "PICOCURIE_PER_GRAM",
+    "SPECIFIC_ACTIVITY_LADDERS",
     "SPECIFIC_ACTIVITY_UNITS",
     "BecquerelPerGram",
     "BecquerelPerKilogram",
     "CuriePerGram",
     "KilobecquerelPerKilogram",
+    "MicrocuriePerGram",
+    "MillicuriePerGram",
+    "NanocuriePerGram",
     "PicocuriePerGram",
 ]

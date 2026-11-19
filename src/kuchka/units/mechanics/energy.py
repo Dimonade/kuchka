@@ -1195,8 +1195,48 @@ ENERGY_UNITS: Mapping[str, Callable[[Numeric], Energy]] = unit_table(
 )
 """Mapping from unit symbol to constructor, for boundary code parsing string units."""
 
+ENERGY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROELECTRONVOLT,
+        MILLIELECTRONVOLT,
+        ELECTRONVOLT,
+        KILOELECTRONVOLT,
+        MEGAELECTRONVOLT,
+        GIGAELECTRONVOLT,
+        TERAELECTRONVOLT,
+        PETAELECTRONVOLT,
+    ),
+    (
+        PICOJOULE,
+        NANOJOULE,
+        MICROJOULE,
+        MILLIJOULE,
+        JOULE,
+        KILOJOULE,
+        MEGAJOULE,
+        GIGAJOULE,
+        TERAJOULE,
+        PETAJOULE,
+    ),
+    (
+        MILLIWATT_HOUR,
+        WATT_HOUR,
+        KILOWATT_HOUR,
+    ),
+    (
+        TONNE_OF_TNT,
+        KILOTONNE_OF_TNT,
+        MEGATONNE_OF_TNT,
+    ),
+)
+"""The runs of units `auto_scale` moves an energy along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
     "ELECTRONVOLT",
+    "ENERGY_LADDERS",
     "ENERGY_UNITS",
     "ERG",
     "GIGAELECTRONVOLT",

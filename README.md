@@ -729,18 +729,18 @@ The units of `kuchka.units.photometry`.
 
 The units of `kuchka.units.radiation`.
 
-| Quantity          | Representative units                                                                                   |
-| ----------------- | ------------------------------------------------------------------------------------------------------ |
-| Activity          | `Millibecquerel` through `Terabecquerel`, `Curie`, `Millicurie`, `Microcurie`, and `Picocurie`         |
-| Absorbed dose     | `Nanogray` through `Megagray`, `Rad`, and `Millirad`                                                   |
-| Equivalent dose   | `Nanosievert` through `Kilosievert`, `Rem`, and `Millirem`                                             |
-| Exposure          | `Roentgen`, `Milliroentgen`, `Microroentgen`, and `C/kg` through `EXPOSURE_UNITS`                      |
-| Abs. dose rate    | `GrayPerSecond`, `GrayPerMinute`, `GrayPerHour` through `NanograyPerHour`, and `RadPerHour`            |
-| Equiv. dose rate  | `SievertPerSecond`, `SievertPerHour` through `NanosievertPerHour`, and `RemPerHour`                    |
-| Exposure rate     | `RoentgenPerSecond` through `RoentgenPerHour`, `MilliroentgenPerHour`, `MicroroentgenPerHour`          |
-| Activity conc.    | `BecquerelPerCubicMetre`, `BecquerelPerLitre`, `PicocuriePerLitre`, and the kilo- and milli- multiples |
-| Specific activity | `BecquerelPerKilogram`, `BecquerelPerGram`, `PicocuriePerGram`, `CuriePerGram`                         |
-| Surface act.      | `BecquerelPerSquareCentimetre`, `DpmPer100SquareCentimetre`, `CuriePerSquareKilometre`                 |
+| Quantity          | Representative units                                                                                        |
+| ----------------- | ----------------------------------------------------------------------------------------------------------- |
+| Activity          | `Millibecquerel` through `Terabecquerel`, `Curie`, `Millicurie`, `Microcurie`, `Nanocurie`, and `Picocurie` |
+| Absorbed dose     | `Nanogray` through `Megagray`, `Rad`, and `Millirad`                                                        |
+| Equivalent dose   | `Nanosievert` through `Kilosievert`, `Rem`, and `Millirem`                                                  |
+| Exposure          | `Roentgen`, `Milliroentgen`, `Microroentgen`, and `C/kg` through `EXPOSURE_UNITS`                           |
+| Abs. dose rate    | `GrayPerSecond`, `GrayPerMinute`, `GrayPerHour` through `NanograyPerHour`, and `RadPerHour`                 |
+| Equiv. dose rate  | `SievertPerSecond`, `SievertPerHour` through `NanosievertPerHour`, and `RemPerHour`                         |
+| Exposure rate     | `RoentgenPerSecond` through `RoentgenPerHour`, `MilliroentgenPerHour`, `MicroroentgenPerHour`               |
+| Activity conc.    | `BecquerelPerCubicMetre`, `BecquerelPerLitre`, `PicocuriePerLitre`, and the kilo- and milli- multiples      |
+| Specific activity | `BecquerelPerKilogram`, `BecquerelPerGram`, `PicocuriePerGram` through `CuriePerGram`                       |
+| Surface activity  | `BecquerelPerSquareCentimetre`, `DpmPer100SquareCentimetre`, `CuriePerSquareKilometre`                      |
 
 ### Temporal
 

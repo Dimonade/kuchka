@@ -405,6 +405,15 @@ TORQUE_UNITS: Mapping[str, Callable[[Numeric], Torque]] = unit_table(
     },
 )
 
+TORQUE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLINEWTON_METRE,
+        NEWTON_METRE,
+        KILONEWTON_METRE,
+    ),
+)
+"""The units `auto_scale` moves a torque along, smallest first."""
+
 __all__ = [
     "JOULE_PER_TURN",
     "KILONEWTON_METER",
@@ -415,6 +424,7 @@ __all__ = [
     "NEWTON_METRE",
     "POUND_FORCE_FOOT",
     "POUND_FORCE_INCH",
+    "TORQUE_LADDERS",
     "TORQUE_UNITS",
     "JoulePerTurn",
     "KilonewtonMeter",

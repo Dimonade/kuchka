@@ -406,8 +406,20 @@ FORCE_UNITS: Mapping[str, Callable[[Numeric], Force]] = unit_table(
     },
 )
 
+FORCE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICRONEWTON,
+        MILLINEWTON,
+        NEWTON,
+        KILONEWTON,
+        MEGANEWTON,
+    ),
+)
+"""The units `auto_scale` moves a force along, smallest first."""
+
 __all__ = [
     "DYNE",
+    "FORCE_LADDERS",
     "FORCE_UNITS",
     "KILOGRAM_FORCE",
     "KILONEWTON",

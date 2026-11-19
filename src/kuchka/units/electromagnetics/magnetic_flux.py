@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
+    from kuchka.quantities import UnitDef
 WEBER_NAME = "weber"
 WEBER_SYMBOL = "Wb"
 
@@ -77,8 +78,20 @@ MAGNETIC_FLUX_UNITS: Mapping[str, Callable[[Numeric], MagneticFlux]] = unit_tabl
     },
 )
 
+MAGNETIC_FLUX_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        NANOWEBER,
+        MICROWEBER,
+        MILLIWEBER,
+        WEBER,
+        KILOWEBER,
+    ),
+)
+"""The units `auto_scale` moves a magnetic flux along, smallest first."""
+
 __all__ = [
     "KILOWEBER",
+    "MAGNETIC_FLUX_LADDERS",
     "MAGNETIC_FLUX_UNITS",
     "MICROWEBER",
     "MILLIWEBER",

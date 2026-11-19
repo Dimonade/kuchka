@@ -180,12 +180,22 @@ SPECIFIC_CHARGE_UNITS: Mapping[str, Callable[[Numeric], SpecificCharge]] = unit_
     },
 )
 
+SPECIFIC_CHARGE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROCOULOMB_PER_KILOGRAM,
+        MILLICOULOMB_PER_KILOGRAM,
+        COULOMB_PER_KILOGRAM,
+    ),
+)
+"""The units `auto_scale` moves a specific charge along, smallest first."""
+
 __all__ = [
     "AMPERE_HOUR_PER_KILOGRAM",
     "COULOMB_PER_KILOGRAM",
     "MICROCOULOMB_PER_KILOGRAM",
     "MILLIAMPERE_HOUR_PER_GRAM",
     "MILLICOULOMB_PER_KILOGRAM",
+    "SPECIFIC_CHARGE_LADDERS",
     "SPECIFIC_CHARGE_UNITS",
     "AmpereHourPerKilogram",
     "CoulombPerKilogram",

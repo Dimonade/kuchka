@@ -127,10 +127,19 @@ MOLAR_MASS_UNITS: Mapping[str, Callable[[Numeric], MolarMass]] = unit_table(
     },
 )
 
+MOLAR_MASS_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        GRAM_PER_MOLE,
+        KILOGRAM_PER_MOLE,
+    ),
+)
+"""The units `auto_scale` moves a molar mass along, smallest first."""
+
 __all__ = [
     "GRAM_PER_MOLE",
     "KILOGRAM_PER_KILOMOLE",
     "KILOGRAM_PER_MOLE",
+    "MOLAR_MASS_LADDERS",
     "MOLAR_MASS_UNITS",
     "GramPerMole",
     "KilogramPerKilomole",

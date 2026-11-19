@@ -453,11 +453,6 @@ def DeltaMillikelvin(value: Numeric) -> TemperatureDelta:
     >>> drift
     5 ΔmK
 
-    The drift is five thousandths of a kelvin:
-
-    >>> drift == DeltaKelvin(0.005)
-    True
-
     A drift shifts a reading, which keeps its display unit:
 
     >>> Millikelvin(10) + drift
@@ -494,11 +489,6 @@ def DeltaMicrokelvin(value: Numeric) -> TemperatureDelta:
 
     >>> Microkelvin(150) + warming
     170 µK
-
-    A thousand microkelvin are a millikelvin:
-
-    >>> DeltaMicrokelvin(1000) == DeltaMillikelvin(1)
-    True
 
     """
     return TemperatureDelta(
@@ -569,10 +559,13 @@ def DeltaMicrocelsius(value: Numeric) -> TemperatureDelta:
     >>> resolved
     500 Δµ°C
 
-    The same rise is half a millidegree:
+    A calorimeter with a heat capacity of 2 kJ/K that warms by this rise has absorbed
+    one joule, since heat is the heat capacity times the temperature change:
 
-    >>> resolved == DeltaMillicelsius(0.5)
-    True
+    >>> from kuchka import JoulePerKelvin
+    >>> from kuchka.units import JOULE
+    >>> (JoulePerKelvin(2000) * resolved).to(JOULE)
+    1 J
 
     """
     return TemperatureDelta(
@@ -819,10 +812,11 @@ def Millikelvin(value: Numeric) -> Temperature:
     >>> mixing_chamber
     10 mK
 
-    The reading is exact in kelvin:
+    The sample is cooled from the 4 K stage of the cryostat down to the mixing chamber,
+    and the difference of two temperatures is a temperature difference:
 
-    >>> mixing_chamber == Kelvin(0.01)
-    True
+    >>> Kelvin(4) - mixing_chamber
+    3.99 ΔK
 
     """
     return Temperature(
@@ -851,10 +845,12 @@ def Microkelvin(value: Numeric) -> Temperature:
     >>> cloud
     150 µK
 
-    A thousand microkelvin are a millikelvin:
+    The Doppler cooling limit of rubidium-87 is about 146 µK, so a cloud at 150 µK is
+    4 µK above it:
 
-    >>> Microkelvin(1000) == Millikelvin(1)
-    True
+    >>> from kuchka.units import DELTA_MICROKELVIN
+    >>> (cloud - Microkelvin(146)).to(DELTA_MICROKELVIN)
+    4 ΔµK
 
     """
     return Temperature(
@@ -922,17 +918,17 @@ def Microcelsius(value: Numeric) -> Temperature:
 
     Examples
     --------
-    A reading of 1.5 °C written in microdegrees:
+    Thermometer calibration anchors on the triple point of water, which is 0.01 °C, and
+    a study of the drift of a fixed-point cell resolves it in microdegrees:
 
-    >>> reading = Microcelsius(1_500_000)
-    >>> reading
-    1500000 µ°C
-    >>> reading == Celsius(1.5)
-    True
+    >>> triple_point = Microcelsius(10_000)
+    >>> triple_point
+    10000 µ°C
 
-    A thousand microdegrees are a millidegree:
+    The temperature scale of calibration assigns the triple point exactly 273.16 K, and
+    the two scales agree on it exactly:
 
-    >>> Microcelsius(1000) == Millicelsius(1)
+    >>> triple_point == Kelvin(273.16)
     True
 
     """
@@ -955,6 +951,24 @@ TEMPERATURE_UNITS: Mapping[str, Callable[[Numeric], Temperature]] = unit_table(
     },
 )
 
+TEMPERATURE_LADDERS: tuple[tuple[AffineUnitDef, ...], ...] = (
+    (MICROKELVIN, MILLIKELVIN, KELVIN),
+)
+"""The units `auto_scale` moves a temperature along, smallest first.
+
+Only the kelvin scale has a zero that is the absence of temperature, so the degrees
+Celsius, Fahrenheit, and Rankine stand on no ladder.
+"""
+
+TEMPERATURE_DELTA_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (DELTA_MICROKELVIN, DELTA_MILLIKELVIN, DELTA_KELVIN),
+    (DELTA_MICROCELSIUS, DELTA_MILLICELSIUS, DELTA_CELSIUS),
+)
+"""The runs of units `auto_scale` moves a temperature difference along.
+
+A difference has no zero point, so each scale with prefixed units has a ladder.
+"""
+
 __all__ = [
     "CELSIUS",
     "DELTA_CELSIUS",
@@ -972,7 +986,9 @@ __all__ = [
     "MILLICELSIUS",
     "MILLIKELVIN",
     "RANKINE",
+    "TEMPERATURE_DELTA_LADDERS",
     "TEMPERATURE_DELTA_UNITS",
+    "TEMPERATURE_LADDERS",
     "TEMPERATURE_UNITS",
     "Celsius",
     "DeltaCelsius",

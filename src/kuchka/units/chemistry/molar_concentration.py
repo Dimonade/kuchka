@@ -200,9 +200,20 @@ MOLAR_CONCENTRATION_UNITS: Mapping[str, Callable[[Numeric], MolarConcentration]]
     )
 )
 
+MOLAR_CONCENTRATION_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        NANOMOLE_PER_LITRE,
+        MICROMOLE_PER_LITRE,
+        MILLIMOLE_PER_LITRE,
+        MOLE_PER_LITRE,
+    ),
+)
+"""The units `auto_scale` moves a molar concentration along, smallest first."""
+
 __all__ = [
     "MICROMOLE_PER_LITRE",
     "MILLIMOLE_PER_LITRE",
+    "MOLAR_CONCENTRATION_LADDERS",
     "MOLAR_CONCENTRATION_UNITS",
     "MOLE_PER_CUBIC_METRE",
     "MOLE_PER_LITRE",

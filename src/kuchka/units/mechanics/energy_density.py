@@ -105,7 +105,17 @@ ENERGY_DENSITY_UNITS: Mapping[str, Callable[[Numeric], EnergyDensity]] = unit_ta
     },
 )
 
+ENERGY_DENSITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        JOULE_PER_CUBIC_METRE,
+        KILOJOULE_PER_CUBIC_METRE,
+        MEGAJOULE_PER_CUBIC_METRE,
+    ),
+)
+"""The units `auto_scale` moves an energy density along, smallest first."""
+
 __all__ = [
+    "ENERGY_DENSITY_LADDERS",
     "ENERGY_DENSITY_UNITS",
     "JOULE_PER_CUBIC_METER",
     "JOULE_PER_CUBIC_METRE",

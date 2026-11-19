@@ -301,7 +301,18 @@ CATALYTIC_ACTIVITY_UNITS: Mapping[str, Callable[[Numeric], CatalyticActivity]] =
     )
 )
 
+CATALYTIC_ACTIVITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        NANOKATAL,
+        MICROKATAL,
+        MILLIKATAL,
+        KATAL,
+    ),
+)
+"""The units `auto_scale` moves a catalytic activity along, smallest first."""
+
 __all__ = [
+    "CATALYTIC_ACTIVITY_LADDERS",
     "CATALYTIC_ACTIVITY_UNITS",
     "ENZYME_UNIT",
     "KATAL",

@@ -10,7 +10,7 @@ Its SI unit is the becquerel (`Bq`), exactly one transformation per second.
 The curie (`Ci`) is the older unit, defined exactly as 37,000,000,000 becquerels.
 
 The module provides the becquerel from milli- through tera- multiples, and the curie in
-milli-, micro-, and pico-multiples.
+milli-, micro-, nano-, and pico-multiples.
 These are units of total activity:
 they are not units of activity concentration, absorbed dose, or biological risk.
 
@@ -136,6 +136,7 @@ GIGABECQUEREL = with_prefix(prefixes.GIGA, BECQUEREL)
 TERABECQUEREL = with_prefix(prefixes.TERA, BECQUEREL)
 MILLICURIE = with_prefix(prefixes.MILLI, CURIE)
 MICROCURIE = with_prefix(prefixes.MICRO, CURIE)
+NANOCURIE = with_prefix(prefixes.NANO, CURIE)
 PICOCURIE = with_prefix(prefixes.PICO, CURIE)
 
 Activity._canonical_unit = BECQUEREL  # noqa: SLF001 -- this module owns Activity's canonical unit
@@ -384,6 +385,42 @@ def Microcurie(value: Numeric) -> Activity:
     return Activity(to_exact(value) * MICROCURIE.scale, MICROCURIE)
 
 
+def Nanocurie(value: Numeric) -> Activity:
+    """Construct an Activity from a magnitude expressed in nanocuries.
+
+    Parameters
+    ----------
+    value : Numeric
+        Activity in nanocuries.
+
+    Returns
+    -------
+    Activity
+        Activity represented in nanocuries.
+
+    Examples
+    --------
+    A leak test wipes the surface of a sealed source and counts what the wipe removed.
+    A wipe that reads 3 nCi removed 111 decays per second:
+
+    >>> wipe = Nanocurie(3)
+    >>> wipe.to(BECQUEREL)
+    111 Bq
+
+    A sealed source is regarded as leaking when a wipe removes 0.005 µCi or more, which
+    is exactly 185 Bq since the curie is exactly 37 GBq.
+    The comparison is exact and works across units:
+
+    >>> leak_limit = Microcurie(0.005)
+    >>> leak_limit == Becquerel(185)
+    True
+    >>> wipe < leak_limit
+    True
+
+    """
+    return Activity(to_exact(value) * NANOCURIE.scale, NANOCURIE)
+
+
 def Picocurie(value: Numeric) -> Activity:
     """Construct an Activity from a magnitude expressed in picocuries.
 
@@ -426,11 +463,35 @@ ACTIVITY_UNITS: Mapping[str, Callable[[Numeric], Activity]] = unit_table(
         CURIE: Curie,
         MILLICURIE: Millicurie,
         MICROCURIE: Microcurie,
+        NANOCURIE: Nanocurie,
         PICOCURIE: Picocurie,
     },
 )
 
+ACTIVITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLIBECQUEREL,
+        BECQUEREL,
+        KILOBECQUEREL,
+        MEGABECQUEREL,
+        GIGABECQUEREL,
+        TERABECQUEREL,
+    ),
+    (
+        PICOCURIE,
+        NANOCURIE,
+        MICROCURIE,
+        MILLICURIE,
+        CURIE,
+    ),
+)
+"""The runs of units `auto_scale` moves an activity along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
+    "ACTIVITY_LADDERS",
     "ACTIVITY_UNITS",
     "BECQUEREL",
     "CURIE",
@@ -440,6 +501,7 @@ __all__ = [
     "MICROCURIE",
     "MILLIBECQUEREL",
     "MILLICURIE",
+    "NANOCURIE",
     "PICOCURIE",
     "TERABECQUEREL",
     "Becquerel",
@@ -450,6 +512,7 @@ __all__ = [
     "Microcurie",
     "Millibecquerel",
     "Millicurie",
+    "Nanocurie",
     "Picocurie",
     "Terabecquerel",
 ]

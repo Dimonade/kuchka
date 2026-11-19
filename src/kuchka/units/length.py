@@ -954,6 +954,27 @@ LENGTH_UNITS: Mapping[str, Callable[[Numeric], Length]] = unit_table(
     },
 )
 
+LENGTH_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        PICOMETRE,
+        NANOMETRE,
+        MICROMETRE,
+        MILLIMETRE,
+        METRE,
+        KILOMETRE,
+    ),
+    (
+        PARSEC,
+        KILOPARSEC,
+        MEGAPARSEC,
+        GIGAPARSEC,
+    ),
+)
+"""The runs of units `auto_scale` moves a length along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
     "ASTRONOMICAL_UNIT",
     "CENTIMETER",
@@ -966,6 +987,7 @@ __all__ = [
     "KILOMETER",
     "KILOMETRE",
     "KILOPARSEC",
+    "LENGTH_LADDERS",
     "LENGTH_UNITS",
     "LIGHT_YEAR",
     "MEGAPARSEC",

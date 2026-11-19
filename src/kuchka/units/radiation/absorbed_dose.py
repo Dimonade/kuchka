@@ -502,7 +502,27 @@ ABSORBED_DOSE_UNITS: Mapping[str, Callable[[Numeric], AbsorbedDose]] = unit_tabl
     },
 )
 
+ABSORBED_DOSE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        NANOGRAY,
+        MICROGRAY,
+        MILLIGRAY,
+        GRAY,
+        KILOGRAY,
+        MEGAGRAY,
+    ),
+    (
+        MILLIRAD,
+        RAD,
+    ),
+)
+"""The runs of units `auto_scale` moves an absorbed dose along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
+    "ABSORBED_DOSE_LADDERS",
     "ABSORBED_DOSE_UNITS",
     "CENTIGRAY",
     "GRAY",

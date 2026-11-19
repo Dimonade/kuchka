@@ -311,8 +311,18 @@ IMPULSE_UNITS: Mapping[str, Callable[[Numeric], Impulse]] = unit_table(
     },
 )
 
+IMPULSE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLINEWTON_SECOND,
+        NEWTON_SECOND,
+        KILONEWTON_SECOND,
+    ),
+)
+"""The units `auto_scale` moves an impulse along, smallest first."""
+
 __all__ = [
     "DYNE_SECOND",
+    "IMPULSE_LADDERS",
     "IMPULSE_UNITS",
     "KILONEWTON_SECOND",
     "MILLINEWTON_SECOND",

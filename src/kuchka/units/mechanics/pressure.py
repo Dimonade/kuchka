@@ -555,6 +555,23 @@ PRESSURE_UNITS: UnitTable[Pressure] = unit_table(
     },
 )
 
+PRESSURE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        PASCAL,
+        KILOPASCAL,
+        MEGAPASCAL,
+        GIGAPASCAL,
+    ),
+    (
+        MILLIBAR,
+        BAR,
+    ),
+)
+"""The runs of units `auto_scale` moves a pressure along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
     "ATMOSPHERE",
     "BAR",
@@ -566,6 +583,7 @@ __all__ = [
     "MILLIBAR",
     "PASCAL",
     "POUND_PER_SQUARE_INCH",
+    "PRESSURE_LADDERS",
     "PRESSURE_UNITS",
     "Atmosphere",
     "Bar",

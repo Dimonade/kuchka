@@ -360,9 +360,19 @@ SOLID_ANGLE_UNITS: Mapping[str, Callable[[Numeric], SolidAngle]] = unit_table(
     },
 )
 
+SOLID_ANGLE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROSTERADIAN,
+        MILLISTERADIAN,
+        STERADIAN,
+    ),
+)
+"""The units `auto_scale` moves a solid angle along, smallest first."""
+
 __all__ = [
     "MICROSTERADIAN",
     "MILLISTERADIAN",
+    "SOLID_ANGLE_LADDERS",
     "SOLID_ANGLE_UNITS",
     "SQUARE_ARCMINUTE",
     "SQUARE_ARCSECOND",

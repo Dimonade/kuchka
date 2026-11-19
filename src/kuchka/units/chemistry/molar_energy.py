@@ -128,10 +128,19 @@ MOLAR_ENERGY_UNITS: Mapping[str, Callable[[Numeric], MolarEnergy]] = unit_table(
     },
 )
 
+MOLAR_ENERGY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        JOULE_PER_MOLE,
+        KILOJOULE_PER_MOLE,
+    ),
+)
+"""The units `auto_scale` moves a molar energy along, smallest first."""
+
 __all__ = [
     "JOULE_PER_MOLE",
     "KILOCALORIE_PER_MOLE",
     "KILOJOULE_PER_MOLE",
+    "MOLAR_ENERGY_LADDERS",
     "MOLAR_ENERGY_UNITS",
     "JoulePerMole",
     "KilocaloriePerMole",

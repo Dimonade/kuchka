@@ -164,8 +164,20 @@ LINEAR_CHARGE_DENSITY_UNITS: Mapping[str, Callable[[Numeric], LinearChargeDensit
     )
 )
 
+LINEAR_CHARGE_DENSITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        PICOCOULOMB_PER_METRE,
+        NANOCOULOMB_PER_METRE,
+        MICROCOULOMB_PER_METRE,
+        MILLICOULOMB_PER_METRE,
+        COULOMB_PER_METRE,
+    ),
+)
+"""The units `auto_scale` moves a linear charge density along, smallest first."""
+
 __all__ = [
     "COULOMB_PER_METRE",
+    "LINEAR_CHARGE_DENSITY_LADDERS",
     "LINEAR_CHARGE_DENSITY_UNITS",
     "MICROCOULOMB_PER_METRE",
     "MILLICOULOMB_PER_METRE",

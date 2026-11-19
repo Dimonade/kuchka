@@ -573,6 +573,16 @@ VOLUME_UNITS: Mapping[str, Callable[[Numeric], Volume]] = unit_table(
     },
 )
 
+VOLUME_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROLITRE,
+        MILLILITRE,
+        LITRE,
+        KILOLITRE,
+    ),
+)
+"""The units `auto_scale` moves a volume along, smallest first."""
+
 __all__ = [
     "CUBIC_CENTIMETER",
     "CUBIC_CENTIMETRE",
@@ -586,6 +596,7 @@ __all__ = [
     "MICROLITRE",
     "MILLILITRE",
     "US_GALLON",
+    "VOLUME_LADDERS",
     "VOLUME_UNITS",
     "CubicCentimeter",
     "CubicCentimetre",

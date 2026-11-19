@@ -129,6 +129,8 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
+    from kuchka.quantities import UnitDef
+
 VOLT_NAME = "volt"
 VOLT_SYMBOL = "V"
 
@@ -138,6 +140,8 @@ MILLIVOLT = prefixed_unit(prefixes.MILLI, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
 VOLT = prefixed_unit(prefixes.UNIT, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
 KILOVOLT = prefixed_unit(prefixes.KILO, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
 MEGAVOLT = prefixed_unit(prefixes.MEGA, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
+GIGAVOLT = prefixed_unit(prefixes.GIGA, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
+TERAVOLT = prefixed_unit(prefixes.TERA, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
 PETAVOLT = prefixed_unit(prefixes.PETA, VOLT_NAME, VOLT_SYMBOL, VOLTAGE)
 
 
@@ -351,6 +355,78 @@ def Megavolt(value: Numeric) -> Voltage:
     return Voltage(to_exact(value) * MEGAVOLT.scale, MEGAVOLT)
 
 
+def Gigavolt(value: Numeric) -> Voltage:
+    """Construct a Voltage from a magnitude expressed in gigavolts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Voltage magnitude in gigavolts.
+
+    Returns
+    -------
+    Voltage
+        Voltage represented in gigavolts.
+
+    Examples
+    --------
+    The potential difference between a thundercloud and the ground before a lightning
+    stroke is estimated at hundreds of megavolts up to about a gigavolt:
+
+    >>> cloud_to_ground = Gigavolt(1)
+    >>> cloud_to_ground
+    1 GV
+
+    A charge that falls through a potential difference gains kinetic energy equal to
+    the charge times the voltage, in vacuum, from rest, and without losses.
+    This is the definition of the electronvolt, and the elementary charge is exact, so
+    an electron falling through one gigavolt gains exactly one gigaelectronvolt:
+
+    >>> from kuchka.constants.codata_2022 import ELEMENTARY_CHARGE
+    >>> from kuchka.units import GIGAELECTRONVOLT
+    >>> (ELEMENTARY_CHARGE * Gigavolt(1)).to(GIGAELECTRONVOLT)
+    1 GeV
+
+    """
+    return Voltage(to_exact(value) * GIGAVOLT.scale, GIGAVOLT)
+
+
+def Teravolt(value: Numeric) -> Voltage:
+    """Construct a Voltage from a magnitude expressed in teravolts.
+
+    Parameters
+    ----------
+    value : Numeric
+        Voltage magnitude in teravolts.
+
+    Returns
+    -------
+    Voltage
+        Voltage represented in teravolts.
+
+    Examples
+    --------
+    Teravolt is an astrophysical scale.
+    The potential drop across the polar cap of a typical radio pulsar is estimated to
+    be of the order of a teravolt:
+
+    >>> polar_cap = Teravolt(1)
+    >>> polar_cap
+    1 TV
+
+    A pulsar model that works in plain volts can report its result at the scale that
+    reads best, and the value stays the same:
+
+    >>> potential_drop = Volt(3_400_000_000_000)
+    >>> potential_drop.auto_scale()
+    3.4 TV
+    >>> potential_drop.auto_scale() == potential_drop
+    True
+
+    """
+    return Voltage(to_exact(value) * TERAVOLT.scale, TERAVOLT)
+
+
 def Petavolt(value: Numeric) -> Voltage:
     """Construct a Voltage from a magnitude expressed in petavolts.
 
@@ -387,24 +463,46 @@ VOLTAGE_UNITS: Mapping[str, Callable[[Numeric], Voltage]] = unit_table(
         VOLT: Volt,
         KILOVOLT: Kilovolt,
         MEGAVOLT: Megavolt,
+        GIGAVOLT: Gigavolt,
+        TERAVOLT: Teravolt,
         PETAVOLT: Petavolt,
     },
 )
 
+VOLTAGE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        NANOVOLT,
+        MICROVOLT,
+        MILLIVOLT,
+        VOLT,
+        KILOVOLT,
+        MEGAVOLT,
+        GIGAVOLT,
+        TERAVOLT,
+        PETAVOLT,
+    ),
+)
+"""The units `auto_scale` moves a voltage along, smallest first."""
+
 __all__ = [
+    "GIGAVOLT",
     "KILOVOLT",
     "MEGAVOLT",
     "MICROVOLT",
     "MILLIVOLT",
     "NANOVOLT",
     "PETAVOLT",
+    "TERAVOLT",
     "VOLT",
+    "VOLTAGE_LADDERS",
     "VOLTAGE_UNITS",
+    "Gigavolt",
     "Kilovolt",
     "Megavolt",
     "Microvolt",
     "Millivolt",
     "Nanovolt",
     "Petavolt",
+    "Teravolt",
     "Volt",
 ]

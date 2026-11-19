@@ -255,8 +255,19 @@ BAUD_RATE_UNITS: Mapping[str, Callable[[Numeric], BaudRate]] = unit_table(
     },
 )
 
+BAUD_RATE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        BAUD,
+        KILOBAUD,
+        MEGABAUD,
+        GIGABAUD,
+    ),
+)
+"""The units `auto_scale` moves a baud rate along, smallest first."""
+
 __all__ = [
     "BAUD",
+    "BAUD_RATE_LADDERS",
     "BAUD_RATE_UNITS",
     "GIGABAUD",
     "KILOBAUD",

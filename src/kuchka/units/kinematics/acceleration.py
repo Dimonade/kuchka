@@ -313,7 +313,17 @@ ACCELERATION_UNITS: Mapping[str, Callable[[Numeric], Acceleration]] = unit_table
     },
 )
 
+ACCELERATION_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROGAL,
+        MILLIGAL,
+        GAL,
+    ),
+)
+"""The units `auto_scale` moves an acceleration along, smallest first."""
+
 __all__ = [
+    "ACCELERATION_LADDERS",
     "ACCELERATION_UNITS",
     "GAL",
     "METER_PER_SECOND_SQUARED",

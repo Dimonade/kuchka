@@ -1031,6 +1031,35 @@ POWER_UNITS: Mapping[str, Callable[[Numeric], Power]] = unit_table(
     },
 )
 
+POWER_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        PICOWATT,
+        NANOWATT,
+        MICROWATT,
+        MILLIWATT,
+        WATT,
+        KILOWATT,
+        MEGAWATT,
+        GIGAWATT,
+        TERAWATT,
+        PETAWATT,
+    ),
+    (
+        JOULE_PER_HOUR,
+        KILOJOULE_PER_HOUR,
+        MEGAJOULE_PER_HOUR,
+        GIGAJOULE_PER_HOUR,
+    ),
+    (
+        JOULE_PER_MINUTE,
+        KILOJOULE_PER_MINUTE,
+    ),
+)
+"""The runs of units `auto_scale` moves a power along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
     "GIGAJOULE_PER_HOUR",
     "GIGAWATT",
@@ -1048,6 +1077,7 @@ __all__ = [
     "NANOWATT",
     "PETAWATT",
     "PICOWATT",
+    "POWER_LADDERS",
     "POWER_UNITS",
     "TERAWATT",
     "WATT",

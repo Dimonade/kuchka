@@ -180,9 +180,18 @@ MOLAR_HEAT_CAPACITY_UNITS: UnitTable[MolarHeatCapacity] = unit_table(
     },
 )
 
+MOLAR_HEAT_CAPACITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        JOULE_PER_MOLE_KELVIN,
+        KILOJOULE_PER_MOLE_KELVIN,
+    ),
+)
+"""The units `auto_scale` moves a molar heat capacity along, smallest first."""
+
 __all__ = [
     "JOULE_PER_MOLE_KELVIN",
     "KILOJOULE_PER_MOLE_KELVIN",
+    "MOLAR_HEAT_CAPACITY_LADDERS",
     "MOLAR_HEAT_CAPACITY_UNITS",
     "THERMOCHEMICAL_CALORIE_PER_MOLE_KELVIN",
     "JoulePerMoleKelvin",

@@ -689,9 +689,47 @@ DATA_UNITS: Mapping[str, Callable[[Numeric], Data]] = unit_table(
     },
 )
 
+DATA_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        BIT,
+        KILOBIT,
+        MEGABIT,
+        GIGABIT,
+        TERABIT,
+        PETABIT,
+    ),
+    (
+        BYTE,
+        KILOBYTE,
+        MEGABYTE,
+        GIGABYTE,
+        TERABYTE,
+        PETABYTE,
+    ),
+    (
+        KIBIBIT,
+        MEBIBIT,
+        GIBIBIT,
+        TEBIBIT,
+        PEBIBIT,
+    ),
+    (
+        KIBIBYTE,
+        MEBIBYTE,
+        GIBIBYTE,
+        TEBIBYTE,
+        PEBIBYTE,
+    ),
+)
+"""The runs of units `auto_scale` moves a data along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
     "BIT",
     "BYTE",
+    "DATA_LADDERS",
     "DATA_UNITS",
     "GIBIBIT",
     "GIBIBYTE",

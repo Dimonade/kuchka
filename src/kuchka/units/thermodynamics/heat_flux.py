@@ -233,7 +233,26 @@ HEAT_FLUX_UNITS: Mapping[str, Callable[[Numeric], HeatFlux]] = unit_table(
     },
 )
 
+HEAT_FLUX_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLIWATT_PER_SQUARE_METRE,
+        WATT_PER_SQUARE_METRE,
+        KILOWATT_PER_SQUARE_METRE,
+        MEGAWATT_PER_SQUARE_METRE,
+    ),
+    (
+        MICROWATT_PER_SQUARE_CENTIMETRE,
+        MILLIWATT_PER_SQUARE_CENTIMETRE,
+        WATT_PER_SQUARE_CENTIMETRE,
+    ),
+)
+"""The runs of units `auto_scale` moves a heat flux along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
+    "HEAT_FLUX_LADDERS",
     "HEAT_FLUX_UNITS",
     "KILOWATT_PER_SQUARE_METRE",
     "MEGAWATT_PER_SQUARE_METRE",

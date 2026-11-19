@@ -342,11 +342,21 @@ SURFACE_TENSION_UNITS: Mapping[str, Callable[[Numeric], SurfaceTension]] = unit_
     },
 )
 
+SURFACE_TENSION_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLINEWTON_PER_METRE,
+        NEWTON_PER_METRE,
+        KILONEWTON_PER_METRE,
+    ),
+)
+"""The units `auto_scale` moves a surface tension along, smallest first."""
+
 __all__ = [
     "DYNE_PER_CENTIMETRE",
     "KILONEWTON_PER_METRE",
     "MILLINEWTON_PER_METRE",
     "NEWTON_PER_METRE",
+    "SURFACE_TENSION_LADDERS",
     "SURFACE_TENSION_UNITS",
     "DynePerCentimetre",
     "KilonewtonPerMetre",

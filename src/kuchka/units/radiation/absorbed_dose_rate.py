@@ -533,7 +533,29 @@ ABSORBED_DOSE_RATE_UNITS: Mapping[str, Callable[[Numeric], AbsorbedDoseRate]] = 
     )
 )
 
+ABSORBED_DOSE_RATE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        NANOGRAY_PER_HOUR,
+        MICROGRAY_PER_HOUR,
+        MILLIGRAY_PER_HOUR,
+        GRAY_PER_HOUR,
+    ),
+    (
+        MILLIRAD_PER_HOUR,
+        RAD_PER_HOUR,
+    ),
+    (
+        MILLIGRAY_PER_SECOND,
+        GRAY_PER_SECOND,
+    ),
+)
+"""The runs of units `auto_scale` moves an absorbed dose rate along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
+    "ABSORBED_DOSE_RATE_LADDERS",
     "ABSORBED_DOSE_RATE_UNITS",
     "CENTIGRAY_PER_MINUTE",
     "GRAY_PER_HOUR",

@@ -505,10 +505,29 @@ CURRENT_DENSITY_UNITS: Mapping[str, Callable[[Numeric], CurrentDensity]] = unit_
     },
 )
 
+CURRENT_DENSITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLIAMPERE_PER_SQUARE_METRE,
+        AMPERE_PER_SQUARE_METRE,
+        KILOAMPERE_PER_SQUARE_METRE,
+        MEGAAMPERE_PER_SQUARE_METRE,
+    ),
+    (
+        MICROAMPERE_PER_SQUARE_CENTIMETRE,
+        MILLIAMPERE_PER_SQUARE_CENTIMETRE,
+        AMPERE_PER_SQUARE_CENTIMETRE,
+    ),
+)
+"""The runs of units `auto_scale` moves a current density along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
     "AMPERE_PER_SQUARE_CENTIMETRE",
     "AMPERE_PER_SQUARE_METRE",
     "AMPERE_PER_SQUARE_MILLIMETRE",
+    "CURRENT_DENSITY_LADDERS",
     "CURRENT_DENSITY_UNITS",
     "KILOAMPERE_PER_SQUARE_METRE",
     "MEGAAMPERE_PER_SQUARE_METRE",

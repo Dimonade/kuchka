@@ -86,8 +86,7 @@ from kuchka.quantities import Resistance
 
 if TYPE_CHECKING:
     from kuchka.internal.unit_table import UnitTable
-
-
+    from kuchka.quantities import UnitDef
 OHM_NAME = "ohm"
 OHM_SYMBOL = symbols.OMEGA
 OHM_ALIASES = ("ohm", "Ohm")
@@ -338,6 +337,18 @@ RESISTANCE_UNITS: UnitTable[Resistance] = unit_table(
     },
 )
 
+RESISTANCE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MICROOHM,
+        MILLIOHM,
+        OHM,
+        KILOOHM,
+        MEGAOHM,
+        GIGAOHM,
+    ),
+)
+"""The units `auto_scale` moves a resistance along, smallest first."""
+
 __all__ = [
     "GIGAOHM",
     "KILOOHM",
@@ -345,6 +356,7 @@ __all__ = [
     "MICROOHM",
     "MILLIOHM",
     "OHM",
+    "RESISTANCE_LADDERS",
     "RESISTANCE_UNITS",
     "Gigaohm",
     "Kiloohm",

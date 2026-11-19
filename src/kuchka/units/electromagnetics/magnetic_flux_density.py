@@ -109,6 +109,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
+    from kuchka.quantities import UnitDef
 TESLA_NAME = "tesla"
 TESLA_SYMBOL = "T"
 
@@ -668,12 +669,38 @@ MAGNETIC_FLUX_DENSITY_UNITS: Mapping[str, Callable[[Numeric], MagneticFluxDensit
     )
 )
 
+MAGNETIC_FLUX_DENSITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        FEMTOGAUSS,
+        PICOGAUSS,
+        NANOGAUSS,
+        MICROGAUSS,
+        MILLIGAUSS,
+        GAUSS,
+        KILOGAUSS,
+    ),
+    (
+        FEMTOTESLA,
+        PICOTESLA,
+        NANOTESLA,
+        MICROTESLA,
+        MILLITESLA,
+        TESLA,
+        KILOTESLA,
+    ),
+)
+"""The runs of units `auto_scale` moves a magnetic flux density along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
     "FEMTOGAUSS",
     "FEMTOTESLA",
     "GAUSS",
     "KILOGAUSS",
     "KILOTESLA",
+    "MAGNETIC_FLUX_DENSITY_LADDERS",
     "MAGNETIC_FLUX_DENSITY_UNITS",
     "MICROGAUSS",
     "MICROTESLA",

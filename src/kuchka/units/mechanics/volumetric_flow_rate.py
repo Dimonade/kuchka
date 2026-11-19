@@ -339,6 +339,14 @@ VOLUMETRIC_FLOW_RATE_UNITS: Mapping[str, Callable[[Numeric], VolumetricFlowRate]
     )
 )
 
+VOLUMETRIC_FLOW_RATE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLILITRE_PER_MINUTE,
+        LITRE_PER_MINUTE,
+    ),
+)
+"""The units `auto_scale` moves a volumetric flow rate along, smallest first."""
+
 __all__ = [
     "CUBIC_FOOT_PER_MINUTE",
     "CUBIC_METRE_PER_HOUR",
@@ -348,6 +356,7 @@ __all__ = [
     "LITRE_PER_SECOND",
     "MILLILITRE_PER_MINUTE",
     "US_GALLON_PER_MINUTE",
+    "VOLUMETRIC_FLOW_RATE_LADDERS",
     "VOLUMETRIC_FLOW_RATE_UNITS",
     "CubicFootPerMinute",
     "CubicMeterPerHour",

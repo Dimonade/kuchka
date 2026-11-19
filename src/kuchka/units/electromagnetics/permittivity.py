@@ -89,6 +89,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
+    from kuchka.quantities import UnitDef
 FARAD_PER_METRE_NAME = "farad_per_metre"
 FARAD_PER_METRE_SYMBOL = "F/m"
 FARAD_PER_METRE_WORDS = ("farad per metre", "farad per meter")
@@ -375,11 +376,23 @@ PERMITTIVITY_UNITS: Mapping[str, Callable[[Numeric], Permittivity]] = unit_table
     },
 )
 
+PERMITTIVITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        PICOFARAD_PER_METRE,
+        NANOFARAD_PER_METRE,
+        MICROFARAD_PER_METRE,
+        MILLIFARAD_PER_METRE,
+        FARAD_PER_METRE,
+    ),
+)
+"""The units `auto_scale` moves a permittivity along, smallest first."""
+
 __all__ = [
     "FARAD_PER_METRE",
     "MICROFARAD_PER_METRE",
     "MILLIFARAD_PER_METRE",
     "NANOFARAD_PER_METRE",
+    "PERMITTIVITY_LADDERS",
     "PERMITTIVITY_UNITS",
     "PICOFARAD_PER_METRE",
     "FaradPerMetre",

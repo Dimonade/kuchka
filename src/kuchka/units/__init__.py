@@ -26,6 +26,7 @@ from typing import Any
 
 from kuchka import quantities
 from kuchka.internal.unit_table import units_of
+from kuchka.quantities.base.units import bind_ladders
 from kuchka.quantities.base.units import bind_table
 from kuchka.quantities.base.units import bind_units
 from kuchka.units import amount
@@ -285,6 +286,104 @@ for _quantity_type, _table in _TABLE_OF.items():
         (INSTANT_SECOND,) if _quantity_type is quantities.Instant else units_of(_table),
     )
     bind_table(_quantity_type, _table)
+
+_LADDERS_OF = {
+    quantities.AbsorbedDose: ABSORBED_DOSE_LADDERS,
+    quantities.AbsorbedDoseRate: ABSORBED_DOSE_RATE_LADDERS,
+    quantities.Acceleration: ACCELERATION_LADDERS,
+    quantities.Activity: ACTIVITY_LADDERS,
+    quantities.ActivityConcentration: ACTIVITY_CONCENTRATION_LADDERS,
+    quantities.AmountOfSubstance: AMOUNT_OF_SUBSTANCE_LADDERS,
+    quantities.ApparentPower: APPARENT_POWER_LADDERS,
+    quantities.BaudRate: BAUD_RATE_LADDERS,
+    quantities.Capacitance: CAPACITANCE_LADDERS,
+    quantities.CatalyticActivity: CATALYTIC_ACTIVITY_LADDERS,
+    quantities.Charge: CHARGE_LADDERS,
+    quantities.Conductance: CONDUCTANCE_LADDERS,
+    quantities.Current: CURRENT_LADDERS,
+    quantities.CurrentDensity: CURRENT_DENSITY_LADDERS,
+    quantities.Data: DATA_LADDERS,
+    quantities.DataRate: DATA_RATE_LADDERS,
+    quantities.Density: DENSITY_LADDERS,
+    quantities.DynamicViscosity: DYNAMIC_VISCOSITY_LADDERS,
+    quantities.ElectricFieldStrength: ELECTRIC_FIELD_STRENGTH_LADDERS,
+    quantities.ElectricFluxDensity: SURFACE_CHARGE_DENSITY_LADDERS,
+    quantities.Energy: ENERGY_LADDERS,
+    quantities.EnergyDensity: ENERGY_DENSITY_LADDERS,
+    quantities.Entropy: HEAT_CAPACITY_LADDERS,
+    quantities.EquivalentDose: EQUIVALENT_DOSE_LADDERS,
+    quantities.EquivalentDoseRate: EQUIVALENT_DOSE_RATE_LADDERS,
+    quantities.Exposure: EXPOSURE_LADDERS,
+    quantities.ExposureRate: EXPOSURE_RATE_LADDERS,
+    quantities.Fluence: FLUENCE_LADDERS,
+    quantities.Force: FORCE_LADDERS,
+    quantities.Frequency: FREQUENCY_LADDERS,
+    quantities.HeatCapacity: HEAT_CAPACITY_LADDERS,
+    quantities.HeatFlux: HEAT_FLUX_LADDERS,
+    quantities.Illuminance: ILLUMINANCE_LADDERS,
+    quantities.Impedance: RESISTANCE_LADDERS,
+    quantities.Impulse: IMPULSE_LADDERS,
+    quantities.Inductance: INDUCTANCE_LADDERS,
+    quantities.Jerk: JERK_LADDERS,
+    quantities.Length: LENGTH_LADDERS,
+    quantities.LinearChargeDensity: LINEAR_CHARGE_DENSITY_LADDERS,
+    quantities.Luminance: LUMINANCE_LADDERS,
+    quantities.LuminousExposure: LUMINOUS_EXPOSURE_LADDERS,
+    quantities.LuminousFlux: LUMINOUS_FLUX_LADDERS,
+    quantities.MagneticFieldStrength: MAGNETIC_FIELD_STRENGTH_LADDERS,
+    quantities.MagneticFlux: MAGNETIC_FLUX_LADDERS,
+    quantities.MagneticFluxDensity: MAGNETIC_FLUX_DENSITY_LADDERS,
+    quantities.Magnetization: MAGNETIC_FIELD_STRENGTH_LADDERS,
+    quantities.Mass: MASS_LADDERS,
+    quantities.MassFlowRate: MASS_FLOW_RATE_LADDERS,
+    quantities.Molality: MOLALITY_LADDERS,
+    quantities.MolarCharge: MOLAR_CHARGE_LADDERS,
+    quantities.MolarConcentration: MOLAR_CONCENTRATION_LADDERS,
+    quantities.MolarEnergy: MOLAR_ENERGY_LADDERS,
+    quantities.MolarEntropy: MOLAR_HEAT_CAPACITY_LADDERS,
+    quantities.MolarFlowRate: MOLAR_FLOW_RATE_LADDERS,
+    quantities.MolarHeatCapacity: MOLAR_HEAT_CAPACITY_LADDERS,
+    quantities.MolarMass: MOLAR_MASS_LADDERS,
+    quantities.MomentOfInertia: MOMENT_OF_INERTIA_LADDERS,
+    quantities.Permeability: PERMEABILITY_LADDERS,
+    quantities.Permittivity: PERMITTIVITY_LADDERS,
+    quantities.Power: POWER_LADDERS,
+    quantities.Pressure: PRESSURE_LADDERS,
+    quantities.Reactance: RESISTANCE_LADDERS,
+    quantities.ReactivePower: REACTIVE_POWER_LADDERS,
+    quantities.Resistance: RESISTANCE_LADDERS,
+    quantities.SampleRate: SAMPLE_RATE_LADDERS,
+    quantities.SamplingPeriod: TIME_LADDERS,
+    quantities.Snap: SNAP_LADDERS,
+    quantities.SolidAngle: SOLID_ANGLE_LADDERS,
+    quantities.SpecificActivity: SPECIFIC_ACTIVITY_LADDERS,
+    quantities.SpecificCharge: SPECIFIC_CHARGE_LADDERS,
+    quantities.SpecificCurrent: SPECIFIC_CURRENT_LADDERS,
+    quantities.SpecificEnergy: SPECIFIC_ENERGY_LADDERS,
+    quantities.SpecificEntropy: SPECIFIC_HEAT_CAPACITY_LADDERS,
+    quantities.SpecificHeatCapacity: SPECIFIC_HEAT_CAPACITY_LADDERS,
+    quantities.SpecificPower: SPECIFIC_POWER_LADDERS,
+    quantities.Stress: PRESSURE_LADDERS,
+    quantities.SurfaceActivity: SURFACE_ACTIVITY_LADDERS,
+    quantities.SurfaceChargeDensity: SURFACE_CHARGE_DENSITY_LADDERS,
+    quantities.SurfaceTension: SURFACE_TENSION_LADDERS,
+    quantities.Temperature: TEMPERATURE_LADDERS,
+    quantities.TemperatureDelta: TEMPERATURE_DELTA_LADDERS,
+    quantities.ThermalConductivity: THERMAL_CONDUCTIVITY_LADDERS,
+    quantities.Time: TIME_LADDERS,
+    quantities.Torque: TORQUE_LADDERS,
+    quantities.Voltage: VOLTAGE_LADDERS,
+    quantities.Volume: VOLUME_LADDERS,
+    quantities.VolumeChargeDensity: VOLUME_CHARGE_DENSITY_LADDERS,
+    quantities.VolumetricFlowRate: VOLUMETRIC_FLOW_RATE_LADDERS,
+}
+
+for _quantity_type, _ladders in _LADDERS_OF.items():
+    bind_ladders(_quantity_type, _ladders)
+"""Each quantity type with a ladder moves along it in `auto_scale`.
+
+A type that is not listed shows a measurement in the unit it was given.
+"""
 """Each quantity type displays in the units of its own table, and parse reads them.
 
 A unit of one quantity that shares the type's dimension (a `baud` for a `frequency`) is

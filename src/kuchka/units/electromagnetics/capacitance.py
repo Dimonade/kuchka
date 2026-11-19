@@ -72,6 +72,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
+    from kuchka.quantities import UnitDef
 FARAD_NAME = "farad"
 FARAD_SYMBOL = "F"
 
@@ -342,7 +343,21 @@ CAPACITANCE_UNITS: Mapping[str, Callable[[Numeric], Capacitance]] = unit_table(
     },
 )
 
+CAPACITANCE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        FEMTOFARAD,
+        PICOFARAD,
+        NANOFARAD,
+        MICROFARAD,
+        MILLIFARAD,
+        FARAD,
+        KILOFARAD,
+    ),
+)
+"""The units `auto_scale` moves a capacitance along, smallest first."""
+
 __all__ = [
+    "CAPACITANCE_LADDERS",
     "CAPACITANCE_UNITS",
     "FARAD",
     "FEMTOFARAD",

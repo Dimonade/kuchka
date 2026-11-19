@@ -286,6 +286,14 @@ MOMENT_OF_INERTIA_UNITS: Mapping[str, Callable[[Numeric], MomentOfInertia]] = (
     )
 )
 
+MOMENT_OF_INERTIA_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        GRAM_SQUARE_CENTIMETRE,
+        KILOGRAM_SQUARE_CENTIMETRE,
+    ),
+)
+"""The units `auto_scale` moves a moment of inertia along, smallest first."""
+
 __all__ = [
     "GRAM_SQUARE_CENTIMETER",
     "GRAM_SQUARE_CENTIMETRE",
@@ -295,6 +303,7 @@ __all__ = [
     "KILOGRAM_SQUARE_METER_PER_SQUARE_TURN",
     "KILOGRAM_SQUARE_METRE",
     "KILOGRAM_SQUARE_METRE_PER_SQUARE_TURN",
+    "MOMENT_OF_INERTIA_LADDERS",
     "MOMENT_OF_INERTIA_UNITS",
     "POUND_SQUARE_FOOT",
     "POUND_SQUARE_INCH",

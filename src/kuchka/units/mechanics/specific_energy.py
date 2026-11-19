@@ -150,6 +150,22 @@ SPECIFIC_ENERGY_UNITS: Mapping[str, Callable[[Numeric], SpecificEnergy]] = unit_
     },
 )
 
+SPECIFIC_ENERGY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        JOULE_PER_KILOGRAM,
+        KILOJOULE_PER_KILOGRAM,
+        MEGAJOULE_PER_KILOGRAM,
+    ),
+    (
+        WATT_HOUR_PER_KILOGRAM,
+        KILOWATT_HOUR_PER_KILOGRAM,
+    ),
+)
+"""The runs of units `auto_scale` moves a specific energy along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
     "JOULE_PER_GRAM",
     "JOULE_PER_KILOGRAM",
@@ -157,6 +173,7 @@ __all__ = [
     "KILOJOULE_PER_KILOGRAM",
     "KILOWATT_HOUR_PER_KILOGRAM",
     "MEGAJOULE_PER_KILOGRAM",
+    "SPECIFIC_ENERGY_LADDERS",
     "SPECIFIC_ENERGY_UNITS",
     "WATT_HOUR_PER_KILOGRAM",
     "JoulePerGram",

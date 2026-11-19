@@ -11,11 +11,13 @@ from __future__ import annotations
 import importlib
 import pickle
 from fractions import Fraction
+from types import MappingProxyType
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import ClassVar
 from typing import Generic
 from typing import NoReturn
+from typing import Self
 from typing import TypeVar
 
 from kuchka.dimensions import Dimension
@@ -33,6 +35,7 @@ _STATE_LENGTH = 2
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
+    from collections.abc import Mapping
 
     from kuchka.internal.unit_table import UnitTable
 
@@ -91,6 +94,19 @@ class _ScalarStorage(Generic[_UnitT]):
 
     `extend_units` adds the units of an imported collection, such as the archaic ones.
     """
+
+    _scales_by_size: ClassVar[bool] = False
+    """Whether the size of the magnitude says which unit reads best.
+
+    A shape sets it where the zero of a unit is the absence of the quantity, so that a
+    larger magnitude is a larger quantity; modular and logarithmic shapes do not.
+    """
+
+    _ladders: ClassVar[tuple[tuple[Any, ...], ...]] = ()
+    """The runs of units `auto_scale` moves along, bound by `bind_ladders`."""
+
+    _ladder_of: ClassVar[Mapping[object, tuple[Any, ...]]] = MappingProxyType({})
+    """The ladder each of the units on a ladder stands on."""
 
     _extension_units: ClassVar[frozenset[object]]
     """The units `extend_units` added to those `bind_units` bound; absent until then."""
@@ -283,6 +299,84 @@ class _ScalarStorage(Generic[_UnitT]):
         scale-plus-offset (`AffineQuantity`).
         """
         raise NotImplementedError
+
+    def auto_scale(self) -> Self:
+        """Return an equal measurement in the unit of its ladder that suits its size.
+
+        A ladder is the run of decimal-prefixed units of a quantity, such as the
+        picoampere to the megaampere, and a measurement moves along the ladder of the
+        unit it displays in.
+        It is shown in the largest unit of the ladder in which its size is at least 1,
+        or in the smallest unit when it is under 1 in all of them.
+        The sign is left out of the size, and zero keeps the unit it has.
+        The value is the same exact value, so `q.auto_scale() == q`.
+
+        Returns
+        -------
+        Self
+            This measurement when the display unit is already the one chosen, when it
+            is zero, when its unit is on no ladder, or when its type has none, and
+            otherwise the same value in the chosen unit.
+
+        Notes
+        -----
+        A unit on no ladder keeps its display unit: `Inch(100_000).auto_scale()` still
+        shows inches, and `Celsius(0.5)` still shows degrees Celsius, since the size of
+        a reading on a scale with an offset is no size of the quantity.
+        A unit stands on one ladder, so a kibibyte moves along the binary ladder and a
+        kilobyte along the decimal one.
+
+        The unit is chosen from the exact value, and the digits are rounded when the
+        value is shown, so a value just under a step can round up to the step of the
+        unit below it, as the last example shows.
+
+        Examples
+        --------
+        A small current is shown in the unit that reads best:
+
+        >>> from kuchka import Ampere
+        >>> Ampere(0.000045).auto_scale()
+        45 µA
+
+        The value is unchanged, and only the display unit differs:
+
+        >>> Ampere(0.000045).auto_scale() == Ampere(0.000045)
+        True
+
+        A large frequency, and a negative voltage, move the same way:
+
+        >>> from kuchka import Hertz
+        >>> from kuchka import Volt
+        >>> Hertz(2_400_000_000).auto_scale()
+        2.4 GHz
+        >>> Volt(-0.025).auto_scale()
+        -25 mV
+
+        A value at a step moves up to it, and zero keeps its unit:
+
+        >>> from kuchka import Milliampere
+        >>> Milliampere(1000).auto_scale()
+        1 A
+        >>> Milliampere(0).auto_scale()
+        0 mA
+
+        The unit is picked before the digits are rounded, so 999.9999 µA shown to one
+        decimal reads as 1000.0 µA:
+
+        >>> f"{Milliampere(0.9999999).auto_scale():.1f}"
+        '1000.0 µA'
+
+        """
+        ladder = self._ladder_of.get(self._display_unit)
+        if ladder is None or self._magnitude == 0:
+            return self
+        chosen = next(
+            (unit for unit in reversed(ladder) if abs(self.value_in(unit)) >= 1),
+            ladder[0],
+        )
+        if chosen == self._display_unit:
+            return self
+        return type(self)(self._magnitude, chosen)
 
     def __bool__(self) -> NoReturn:
         """Raise: a quantity has no truth value.

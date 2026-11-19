@@ -159,7 +159,16 @@ JERK_UNITS: Mapping[str, Callable[[Numeric], Jerk]] = unit_table(
     },
 )
 
+JERK_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        MILLIMETRE_PER_SECOND_CUBED,
+        METRE_PER_SECOND_CUBED,
+    ),
+)
+"""The units `auto_scale` moves a jerk along, smallest first."""
+
 __all__ = [
+    "JERK_LADDERS",
     "JERK_UNITS",
     "METER_PER_SECOND_CUBED",
     "METRE_PER_SECOND_CUBED",

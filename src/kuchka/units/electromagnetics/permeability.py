@@ -80,6 +80,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
+    from kuchka.quantities import UnitDef
 HENRY_PER_METRE_NAME = "henry_per_metre"
 HENRY_PER_METRE_SYMBOL = "H/m"
 HENRY_PER_METRE_WORDS = ("henry per metre", "henry per meter")
@@ -292,11 +293,22 @@ PERMEABILITY_UNITS: Mapping[str, Callable[[Numeric], Permeability]] = unit_table
     },
 )
 
+PERMEABILITY_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        NANOHENRY_PER_METRE,
+        MICROHENRY_PER_METRE,
+        MILLIHENRY_PER_METRE,
+        HENRY_PER_METRE,
+    ),
+)
+"""The units `auto_scale` moves a permeability along, smallest first."""
+
 __all__ = [
     "HENRY_PER_METRE",
     "MICROHENRY_PER_METRE",
     "MILLIHENRY_PER_METRE",
     "NANOHENRY_PER_METRE",
+    "PERMEABILITY_LADDERS",
     "PERMEABILITY_UNITS",
     "HenryPerMetre",
     "MicrohenryPerMetre",
