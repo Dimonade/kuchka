@@ -756,9 +756,47 @@ DATA_RATE_UNITS: Mapping[str, Callable[[Numeric], DataRate]] = unit_table(
     },
 )
 
+DATA_RATE_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        BIT_PER_SECOND,
+        KILOBIT_PER_SECOND,
+        MEGABIT_PER_SECOND,
+        GIGABIT_PER_SECOND,
+        TERABIT_PER_SECOND,
+        PETABIT_PER_SECOND,
+    ),
+    (
+        BYTE_PER_SECOND,
+        KILOBYTE_PER_SECOND,
+        MEGABYTE_PER_SECOND,
+        GIGABYTE_PER_SECOND,
+        TERABYTE_PER_SECOND,
+        PETABYTE_PER_SECOND,
+    ),
+    (
+        KIBIBIT_PER_SECOND,
+        MEBIBIT_PER_SECOND,
+        GIBIBIT_PER_SECOND,
+        TEBIBIT_PER_SECOND,
+        PEBIBIT_PER_SECOND,
+    ),
+    (
+        KIBIBYTE_PER_SECOND,
+        MEBIBYTE_PER_SECOND,
+        GIBIBYTE_PER_SECOND,
+        TEBIBYTE_PER_SECOND,
+        PEBIBYTE_PER_SECOND,
+    ),
+)
+"""The runs of units `auto_scale` moves a data rate along.
+
+There is one run for each family of prefixed units, smallest first.
+"""
+
 __all__ = [
     "BIT_PER_SECOND",
     "BYTE_PER_SECOND",
+    "DATA_RATE_LADDERS",
     "DATA_RATE_UNITS",
     "GIBIBIT_PER_SECOND",
     "GIBIBYTE_PER_SECOND",

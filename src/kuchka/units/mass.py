@@ -748,12 +748,26 @@ MASS_UNITS: Mapping[str, Callable[[Numeric], Mass]] = unit_table(
     },
 )
 
+MASS_LADDERS: tuple[tuple[UnitDef, ...], ...] = (
+    (
+        PICOGRAM,
+        NANOGRAM,
+        MICROGRAM,
+        MILLIGRAM,
+        GRAM,
+        KILOGRAM,
+        MEGAGRAM,
+    ),
+)
+"""The units `auto_scale` moves a mass along, smallest first."""
+
 __all__ = [
     "DALTON",
     "EARTH_MASS",
     "GRAIN",
     "GRAM",
     "KILOGRAM",
+    "MASS_LADDERS",
     "MASS_UNITS",
     "MEGAGRAM",
     "MICROGRAM",
