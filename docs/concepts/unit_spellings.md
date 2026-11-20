@@ -132,6 +132,22 @@ The caller names the type because the same text can mean different quantities, a
 The text is normalized the way the tables normalize it, so a micro sign, a superscript, a non-breaking space, and the minus sign `−` read as the characters they stand for.
 A unit that starts with a digit, such as the `1` of a `Proportion`, takes a space after the number.
 
+The number is read exactly, as a decimal or as a fraction of two whole numbers:
+
+```python
+from kuchka import Proportion
+
+parse("0.1 V", Voltage)  # 0.1 V
+parse("1/3 V", Voltage)  # 0.3333333333333333333333333333 V, exactly one third
+```
+
+A fraction is written without spaces and without an exponent, and a denominator of zero is a `ParseError`.
+
+A number with no unit is read only where the table of the type names a bare unit, the unit it stands for.
+`PROPORTION_UNITS` names the ratio, so `parse("0.25", Proportion)` is the same measurement as `parse("0.25 1", Proportion)`, and `"25"` is a ratio of twenty-five, which is `2500 %`; a percent is written `"25 %"`.
+Every other table refuses a number with no unit, because `2.8` does not say whether it is volts.
+Any other unit written after the number of a proportion is an `UnknownUnitError`.
+
 ## Iterating a table
 
 Iterating a table yields each unit's display symbol once, in definition order, and its length is the number of units.
