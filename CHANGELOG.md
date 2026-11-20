@@ -23,6 +23,15 @@ See the `Stability` section in `README.md` for what versioning means.
   The parts add up to the span exactly, zero parts are left out, every part has the sign of the span, and the femtosecond takes the exact remainder.
   A day is exactly 86 400 s, so the split holds no calendar.
 
+#### Reading text
+
+- **Fractions in `parse`:**
+  `parse("1/3 V", Voltage)` reads exactly one third of a volt, which no decimal holds.
+  A fraction is two whole numbers around a slash, written without spaces and without an exponent.
+- **A proportion without a unit:**
+  `parse("0.25", Proportion)` is a ratio of a quarter, the same as `parse("0.25 1", Proportion)`.
+  A unit table may name a bare unit, the unit a number with no unit is read in, and `PROPORTION_UNITS` names the ratio; every other quantity still needs its unit, and any other unit after the number of a proportion is an `UnknownUnitError`.
+
 #### New units of existing quantities
 
 - **Prefix families without gaps:**

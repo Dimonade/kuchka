@@ -242,11 +242,14 @@ Quote the value and keep the unit in the string, and the digits are read exactly
 ```python
 from fractions import Fraction
 
+from kuchka import Proportion
 from kuchka import Temperature
 from kuchka import Volt
 
 parse("0.1 V", Voltage) == Volt(Fraction(1, 10))  # True: the number is read exactly
+parse("1/3 V", Voltage) == Volt(1) / 3  # True: a fraction holds what no decimal can
 parse("-40 °C", Temperature)  # -40 °C
+parse("0.25", Proportion)  # 0.25 1: a proportion is a pure number and needs no unit
 ```
 
 The tables accept the notations that real files use, so these all read as the same temperature:
