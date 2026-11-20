@@ -134,6 +134,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     from kuchka.internal.unit_table import UnitTable
+    from kuchka.numeric import Numeric
     from kuchka.quantities.base.storage import _ScalarStorage
 
 _QuantityT = TypeVar("_QuantityT", bound="_ScalarStorage[Any]")
@@ -332,7 +333,7 @@ def _constructor(
     table: UnitTable[Any],
     text: str,
     policy: ArchaicPolicy,
-) -> Callable[[Decimal | Fraction], Any]:
+) -> Callable[[Numeric], Any]:
     """Return the constructor that `policy` lets read `text` as a unit of `quantity`.
 
     Several tables may hold one unit, as a table of the units of a region does with the
