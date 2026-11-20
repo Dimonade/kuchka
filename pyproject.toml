@@ -51,7 +51,13 @@ requires = ["uv_build>=0.13.5,<0.14.0"]
 build-backend = "uv_build"
 
 [dependency-groups]
-test = ["coverage>=7.17.0", "hypothesis>=6.170.8", "pytest>=9.1.1"]
+# `attrs` is imported by the tests of `kuchka.attrs`, whose own code imports nothing from it.
+test = [
+  "attrs>=26.1.0",
+  "coverage>=7.17.3",
+  "hypothesis>=6.170.8",
+  "pytest>=9.1.1",
+]
 
 typing = ["mypy>=2.4.0"]
 
@@ -209,8 +215,8 @@ env_list = [
 description = "run the doctests and the test suite on Python {base_python}"
 # `typing` brings mypy in for the test that checks the static types agree with the runtime.
 dependency_groups = ["test", "typing", "ruff"]
-# The checkers an environment installs: a test that needs one fails, and does not skip, if it is missing.
-set_env = { KUCHKA_CHECKERS = "mypy" }
+# The checkers an environment installs, and the libraries the integrations are tested against: a test that needs one fails, and does not skip, if it is missing.
+set_env = { KUCHKA_CHECKERS = "mypy", KUCHKA_LIBRARIES = "attrs" }
 commands = [
   [
     "pytest",
@@ -273,7 +279,7 @@ base_python = ["3.11"]
 dependency_groups = ["test"]
 # The floor of the type-checker policy in `README.md`: the oldest mypy that checks the library's own source cleanly.
 deps = ["mypy==1.11.2"]
-set_env = { KUCHKA_CHECKERS = "mypy" }
+set_env = { KUCHKA_CHECKERS = "mypy", KUCHKA_LIBRARIES = "attrs" }
 commands = [
   [
     "mypy",
@@ -294,7 +300,7 @@ commands = [
 description = "check the consumer-side types on pyright"
 base_python = ["3.11"]
 dependency_groups = ["test", "pyright"]
-set_env = { KUCHKA_CHECKERS = "pyright" }
+set_env = { KUCHKA_CHECKERS = "pyright", KUCHKA_LIBRARIES = "attrs" }
 commands = [
   [
     "pytest",

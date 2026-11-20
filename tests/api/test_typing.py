@@ -20,15 +20,40 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
+from tests.support import libraries
 from tests.support.static_checkers import require_or_skip
 
-FIXTURE = Path(__file__).parent / "typing_fixtures" / "should_fail.py"
+_FIXTURES = Path(__file__).parent / "typing_fixtures"
+FIXTURES: dict[str, tuple[Path, str | None, tuple[str, ...]]] = {
+    "should_fail": (_FIXTURES / "should_fail.py", None, ("mypy", "pyright")),
+    "attrs_converter": (_FIXTURES / "attrs_converter.py", None, ("mypy", "pyright")),
+    "attrs_fields": (_FIXTURES / "attrs_fields.py", "attrs", ("pyright",)),
+    "attrs_fields_mypy": (_FIXTURES / "attrs_fields_mypy.py", "attrs", ("mypy",)),
+}
+"""Each fixture, the library it needs installed, and the checkers it is held to."""
 
 
-def test_mypy_agrees_with_runtime_on_the_fixture() -> None:
+def _fixture(name: str) -> Path:
+    """Return the path of fixture `name`, skipping or failing for a missing library."""
+    path, library, _ = FIXTURES[name]
+    if library is not None:
+        libraries.require_or_skip(library)
+    return path
+
+
+def _for(checker: str) -> list[str]:
+    """Return the names of the fixtures that `checker` is held to."""
+    return [name for name, (_, _, checkers) in FIXTURES.items() if checker in checkers]
+
+
+@pytest.mark.parametrize("name", _for("mypy"))
+def test_mypy_agrees_with_runtime_on_the_fixture(name: str) -> None:
     require_or_skip("mypy")
+    fixture = _fixture(name)
     result = subprocess.run(
-        [sys.executable, "-m", "mypy", "--strict", str(FIXTURE)],
+        [sys.executable, "-m", "mypy", "--strict", str(fixture)],
         capture_output=True,
         text=True,
         check=False,
@@ -39,9 +64,11 @@ def test_mypy_agrees_with_runtime_on_the_fixture() -> None:
     )
 
 
-def test_pyright_agrees_with_runtime_on_the_fixture(tmp_path: Path) -> None:
+@pytest.mark.parametrize("name", _for("pyright"))
+def test_pyright_agrees_with_runtime_on_the_fixture(name: str, tmp_path: Path) -> None:
     require_or_skip("pyright")
-    shutil.copy(FIXTURE, tmp_path / FIXTURE.name)
+    fixture = _fixture(name)
+    shutil.copy(fixture, tmp_path / fixture.name)
     (tmp_path / "pyrightconfig.json").write_text(
         json.dumps(
             {
@@ -52,7 +79,7 @@ def test_pyright_agrees_with_runtime_on_the_fixture(tmp_path: Path) -> None:
         )
     )
     result = subprocess.run(
-        ["pyright", "--pythonpath", sys.executable, FIXTURE.name],
+        ["pyright", "--pythonpath", sys.executable, fixture.name],
         capture_output=True,
         text=True,
         check=False,

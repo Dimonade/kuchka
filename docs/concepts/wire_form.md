@@ -74,6 +74,51 @@ Every refusal of data is a `ParseError`, and a `ParseError` is a `ValueError`: t
 A framework that reports the `ValueError` of a validator as a validation error needs nothing else, and one `except ParseError` around the loading of a file catches every bad value in it.
 A `TypeError` marks a mistake in the program, such as a quantity that is no quantity type with units.
 
+## In an attrs class
+
+`kuchka.attrs.parse_field(Voltage)` is `load` for one quantity type, as the converter of an `attrs` field:
+
+```python
+from collections.abc import Mapping
+
+import attrs
+
+from kuchka import Voltage
+from kuchka.attrs import parse_field
+
+
+@attrs.define(frozen=True)
+class SensorSpec:
+    threshold: Voltage = attrs.field(converter=parse_field(Voltage))
+
+
+SensorSpec("2800 mV").threshold  # 2800 mV
+SensorSpec(3.3)  # rejected: `ParseError`.
+```
+
+The attribute is a `Voltage` whatever arrived, and a value that is no voltage fails when the instance is made, with a `ValueError` that says why.
+The converter is a plain function, so `kuchka.attrs` imports nothing from `attrs`.
+
+`pyright` reads the converter in full, so `SensorSpec(3.3)` is a static error there.
+`mypy` types the attribute as `Voltage` and reports a converter that is a call as unsupported, because its `attrs` plugin reads only named functions, types, and lambdas.
+A named function gives `mypy` the same `__init__`:
+
+```python
+from kuchka import wire
+
+
+def to_voltage(value: Voltage | str | Mapping[str, object]) -> Voltage:
+    return wire.load(value, Voltage)
+
+
+@attrs.define(frozen=True)
+class Probe:
+    limit: Voltage = attrs.field(converter=to_voltage)
+
+
+Probe("1 V").limit  # 1 V
+```
+
 ## Archaic units
 
 An archaic unit is written like any other.
