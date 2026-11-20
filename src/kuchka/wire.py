@@ -117,12 +117,12 @@ from typing import TypeVar
 from kuchka.errors import InvalidMeasurementError
 from kuchka.errors import ParseError
 from kuchka.internal.limits import NUMERIC_LIMITS
+from kuchka.internal.reading import ArchaicPolicy
+from kuchka.internal.reading import archaic_policy_of
+from kuchka.internal.reading import split_number
+from kuchka.internal.reading import unit_constructor
+from kuchka.internal.reading import unit_table_of
 from kuchka.internal.spelling import normalize
-from kuchka.parsing import ArchaicPolicy
-from kuchka.parsing import _constructor
-from kuchka.parsing import _policy
-from kuchka.parsing import _split
-from kuchka.parsing import _table_of
 from kuchka.parsing import parse
 from kuchka.quantities.base.storage import _ScalarStorage
 
@@ -177,7 +177,7 @@ def dump(quantity: _ScalarStorage[Any]) -> str:
         raise TypeError(msg)
     unit = quantity.unit
     text = _magnitude_text(quantity.value_in(unit))
-    bare = _table_of(type(quantity)).bare
+    bare = unit_table_of(type(quantity)).bare
     if bare is not None and bare[0] == unit:
         return text
     return f"{text} {unit.symbol}"
@@ -227,8 +227,8 @@ def load(
     True
 
     """
-    policy = _policy(allow_archaic)
-    table = _table_of(quantity)
+    policy = archaic_policy_of(allow_archaic)
+    table = unit_table_of(quantity)
     try:
         result: _QuantityT = _load(value, quantity, table, policy)
     except ParseError:
@@ -314,7 +314,7 @@ def _from_mapping(
     if not unit_text:
         msg = f"the 'unit' of {value!r} is empty."
         raise ParseError(msg)
-    return _constructor(quantity, table, unit_text, policy)(number)
+    return unit_constructor(quantity, table, unit_text, policy)(number)
 
 
 def _number_of(value: object) -> Decimal | Fraction | int | float:
@@ -324,7 +324,7 @@ def _number_of(value: object) -> Decimal | Fraction | int | float:
         raise ParseError(msg)
     if not isinstance(value, str):
         return value
-    number, unit_text = _split(normalize(value).strip(), value)
+    number, unit_text = split_number(normalize(value).strip(), value)
     if unit_text:
         msg = f"the 'value' {value!r} holds more than a number: the unit is the 'unit'."
         raise ParseError(msg)
