@@ -11,6 +11,10 @@ What a table accepts is data on the unit definitions it is built from:
   `fold`, ignoring letter case, and a trailing plural `s` is tolerated, so
   `Degrees C` and `volts` both resolve.
 
+A table may name a bare unit, the unit a number is read in when no unit is written:
+`PROPORTION_UNITS` names the ratio, so `0.25` is a ratio of a quarter.
+A table without one refuses a number with no unit.
+
 A spelling must resolve to one unit.
 Building a table raises `ValueError` if two units claim the same spelling, or if a
 word could be read as another unit's plural, so a table that exists has no ambiguity.
@@ -51,16 +55,25 @@ class SpelledUnit(Protocol):
 class UnitTable(Mapping[str, Callable[["Numeric"], _QuantityT]]):
     """A read-only mapping from the text of a unit to its constructor."""
 
-    __slots__ = ("_entries", "_exact", "_label", "_words")
+    __slots__ = ("_bare", "_entries", "_exact", "_label", "_words")
 
     def __init__(
         self,
         label: str,
         entries: Mapping[SpelledUnit, Callable[[Numeric], _QuantityT]],
+        *,
+        bare: SpelledUnit | None = None,
     ) -> None:
-        """Index `entries`, raising `ValueError` if any spelling is ambiguous."""
+        """Index `entries`, raising `ValueError` if any spelling is ambiguous.
+
+        `bare`, a unit of `entries`, is the unit a number with no unit is read in.
+        """
         self._label = label
         self._entries = tuple(entries.items())
+        if bare is not None and bare not in entries:
+            msg = f"{label}: the bare unit {bare.name!r} is not a unit of the table."
+            raise ValueError(msg)
+        self._bare = None if bare is None else (bare, entries[bare])
         self._exact: dict[str, tuple[SpelledUnit, Callable[[Numeric], _QuantityT]]] = {}
         self._words: dict[str, tuple[SpelledUnit, Callable[[Numeric], _QuantityT]]] = {}
         for unit, constructor in self._entries:
@@ -118,6 +131,13 @@ class UnitTable(Mapping[str, Callable[["Numeric"], _QuantityT]]):
         """The unit definitions in the table, in definition order."""
         return tuple(unit for unit, _ in self._entries)
 
+    @property
+    def bare(
+        self,
+    ) -> tuple[SpelledUnit, Callable[[Numeric], _QuantityT]] | None:
+        """The unit a number with no unit is read in, and its constructor, if any."""
+        return self._bare
+
     def resolve(
         self, spelling: object
     ) -> tuple[SpelledUnit, Callable[[Numeric], _QuantityT]]:
@@ -164,6 +184,7 @@ class UnitTable(Mapping[str, Callable[["Numeric"], _QuantityT]]):
         return UnitTable(
             label,
             {unit: transform(constructor) for unit, constructor in self._entries},
+            bare=None if self._bare is None else self._bare[0],
         )
 
     @override
@@ -173,10 +194,16 @@ class UnitTable(Mapping[str, Callable[["Numeric"], _QuantityT]]):
 
 
 def unit_table(
-    label: str, entries: Mapping[SpelledUnit, Callable[[Numeric], _QuantityT]]
+    label: str,
+    entries: Mapping[SpelledUnit, Callable[[Numeric], _QuantityT]],
+    *,
+    bare: SpelledUnit | None = None,
 ) -> UnitTable[_QuantityT]:
-    """Build the table `label` from unit definitions and their constructors."""
-    return UnitTable(label, entries)
+    """Build the table `label` from unit definitions and their constructors.
+
+    `bare` names the unit a number with no unit is read in, when there is one.
+    """
+    return UnitTable(label, entries, bare=bare)
 
 
 def units_of(

@@ -58,7 +58,10 @@ A percent is exactly one hundredth of a ratio, so
 
 `PROPORTION_UNITS` maps the symbols ``"1"`` and ``"%"`` to their constructors, for
 boundary code that reads a unit as a string from outside the application.
-`parse` reads text such as ``"5 %"`` and ``"0.05 1"``.
+`parse` reads text such as ``"5 %"`` and ``"0.05 1"``, and reads a number written with
+no unit as a ratio: ``"0.05"`` is `Ratio(0.05)`, and ``"5"`` is a ratio of five, five
+hundred percent.
+Write ``"5 %"`` for a percent.
 
 References
 ----------
@@ -186,6 +189,7 @@ PROPORTION_UNITS: Mapping[str, Callable[[Numeric], Proportion]] = unit_table(
         RATIO: Ratio,
         PERCENT: Percent,
     },
+    bare=RATIO,
 )
 
 __all__ = [
