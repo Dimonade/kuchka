@@ -37,6 +37,11 @@ See the `Stability` section in `README.md` for what versioning means.
   `wire.load(value, Voltage)` reads what a boundary delivers: an instance of the type, text, a `{"value", "unit"}` mapping, or, for a `Proportion`, a number.
   Every refusal is a `ParseError`, which is a `ValueError`, so a validation framework reports it without a wrapper.
 
+- **`kuchka.attrs`:**
+  `attrs.field(converter=parse_field(Voltage))` makes a field a `Voltage` whatever arrives: an instance, text, a `{"value", "unit"}` mapping, or for a `Proportion` a number.
+  The module imports nothing from `attrs`, and `pyright` types the `__init__` from the converter, so a bare number for a voltage is a static error.
+  `mypy` reads only named functions as converters, so it types the attribute and leaves the `__init__` parameter as `Any`.
+
 #### New units of existing quantities
 
 - **Prefix families without gaps:**

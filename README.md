@@ -285,6 +285,7 @@ wire.load(2.8, Voltage)  # rejected: `ParseError`.
 ```
 
 Every refusal is a `ParseError`, which is a `ValueError`, so a validation framework reports it without a wrapper.
+An `attrs` class gets the same reading from `kuchka.attrs.parse_field(Voltage)`, the converter of a field; see [The wire form](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/wire_form.md).
 
 ### 3. Compose real engineering relationships
 
@@ -1102,7 +1103,7 @@ See [`benchmarks`](https://github.com/Dimonade/kuchka/blob/HEAD/benchmarks/READM
 The vocabulary is intentionally curated and will remain finite. Current gaps include:
 
 - There is no NumPy/Pandas integration.
-- There are no Pydantic, attrs, or msgspec integrations yet; `kuchka.wire` is the text form they read and write.
+- There are no Pydantic or msgspec integrations yet; `kuchka.attrs.parse_field` converts the fields of `attrs` classes, and `kuchka.wire` is the text form they read and write.
 
 ## Stability
 
