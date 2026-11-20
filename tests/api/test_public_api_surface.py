@@ -173,7 +173,7 @@ def _promoted_by_policy() -> set[str]:
         | quantity_types
         | set(errors.__all__)
         | set(parsing.__all__)
-        | {"__version__", "codata_2022", "icrp_103"}
+        | {"__version__", "codata_2022", "icrp_103", "wire"}
     )
 
 

@@ -62,6 +62,7 @@ from kuchka import VoltAmpere
 from kuchka import Volume
 from kuchka import Watt
 from kuchka import parse
+from kuchka import wire
 
 
 def analyse_voltage(_voltage: Voltage) -> None: ...
@@ -238,6 +239,13 @@ wrong_quantity: Current = parse("5 mV", Voltage)  # type: ignore[assignment]  # 
 _parse_a_number = parse(5, Voltage)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 _parse_a_constructor = parse("5 mV", Volt)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 _parse_with_a_word = parse("5 mV", Voltage, allow_archaic="yes")  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
+
+# `wire.load` builds the quantity type it is given from what a boundary delivers.
+loaded: Voltage = wire.load("5 mV", Voltage)  # OK
+wrong_loaded: Current = wire.load("5 mV", Voltage)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
+_load_a_constructor = wire.load("5 mV", Volt)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
+dumped: str = wire.dump(Volt(5))  # OK
+_dump_a_string = wire.dump("5 V")  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
 # `auto_scale` returns the type it is called on.
 scaled_current: Current = Ampere(0.000045).auto_scale()  # OK

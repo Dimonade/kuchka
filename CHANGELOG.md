@@ -32,6 +32,11 @@ See the `Stability` section in `README.md` for what versioning means.
   `parse("0.25", Proportion)` is a ratio of a quarter, the same as `parse("0.25 1", Proportion)`.
   A unit table may name a bare unit, the unit a number with no unit is read in, and `PROPORTION_UNITS` names the ratio; every other quantity still needs its unit, and any other unit after the number of a proportion is an `UnknownUnitError`.
 
+- **`kuchka.wire`:**
+  `wire.dump(Volt(1) / 3)` writes a measurement as one string, `"1/3 V"`: the exact magnitude in the unit it displays in, a decimal when it terminates and a fraction when it does not, and the unit's symbol.
+  `wire.load(value, Voltage)` reads what a boundary delivers: an instance of the type, text, a `{"value", "unit"}` mapping, or, for a `Proportion`, a number.
+  Every refusal is a `ParseError`, which is a `ValueError`, so a validation framework reports it without a wrapper.
+
 #### New units of existing quantities
 
 - **Prefix families without gaps:**

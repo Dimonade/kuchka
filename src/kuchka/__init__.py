@@ -9,7 +9,8 @@
 
 Two-tier export policy:
   - kuchka (this package): unit constructors (Volt, Tonne, ...), semantic quantity
-  types (Voltage, Temperature, ...), the errors, and `parse` with its `ArchaicPolicy`.
+  types (Voltage, Temperature, ...), the errors, `parse` with its `ArchaicPolicy`, and
+  the `wire` module, which writes a measurement as text and reads it back.
   - kuchka.units / kuchka.quantities: the complete surface, including raw `UnitDef`
   constants (VOLT, KILOVOLT, ...) and `*_UNITS` boundary tables.
   _see docs/examples/config_migration for why those exist and who needs them._
@@ -33,6 +34,7 @@ from importlib.metadata import version
 from kuchka import _api
 from kuchka import errors
 from kuchka import parsing
+from kuchka import wire
 from kuchka._api import *
 from kuchka.constants import codata_2022
 from kuchka.constants import icrp_103
@@ -47,7 +49,7 @@ except PackageNotFoundError:  # pragma: no cover -- running from an uninstalled 
 
 _close()
 
-__all__: list[str] = ["__version__", "codata_2022", "icrp_103"]
+__all__: list[str] = ["__version__", "codata_2022", "icrp_103", "wire"]
 __all__ += _api.__all__
 __all__ += errors.__all__
 __all__ += parsing.__all__

@@ -33,25 +33,23 @@ It is a way to transport a value, and the file or database is better served by a
 
 ## Storing a value
 
-Store two things: the magnitude in the display unit as exact text, and the unit's symbol.
+Store the written form of the value, `wire.dump(value)`, and read it back with `wire.load(text, Quantity)`:
 
 ```python
 import json
 from fractions import Fraction
 
 from kuchka import Millivolt
-from kuchka.units import VOLTAGE_UNITS
+from kuchka import Voltage
+from kuchka import wire
 
 value = Millivolt(Fraction(7, 3))
-stored = {"value": str(value.value_in(value.unit)), "unit": value.unit.symbol}
-text = json.dumps(stored)  # '{"value": "7/3", "unit": "mV"}'
+text = json.dumps({"supply": wire.dump(value)})  # '{"supply": "7/3 mV"}'
 
-loaded = json.loads(text)
-constructor = VOLTAGE_UNITS[loaded["unit"]]
-restored = constructor(Fraction(loaded["value"]))
+restored = wire.load(json.loads(text)["supply"], Voltage)
 restored == value  # True
 ```
 
-A `Fraction` written as text restores exactly, which a `float` does not.
-The symbol is read through the quantity's `*_UNITS` table, which accepts the display symbol and the other spellings of a unit (see [Unit spellings](unit_spellings.md)), so a file written by hand with `uV` or `degrees C` restores as well as one written by this code.
-The same two fields work for every quantity shape and every unit, including temperatures and levels.
+A fraction written as text restores exactly, which a `float` does not.
+The unit is read through the quantity's `*_UNITS` table, which accepts the display symbol and the other spellings of a unit (see [Unit spellings](unit_spellings.md)), so a file written by hand with `uV` or `degrees C` restores as well as one written by this code.
+The same form works for every quantity shape and every unit, including temperatures and levels, and [The wire form](wire_form.md) describes it, with the mapping `{"value": "7/3", "unit": "mV"}` that is read as well.
