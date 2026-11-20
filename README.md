@@ -273,6 +273,19 @@ The caller names the type because the same text can mean different quantities: `
 
 When the unit arrives in a field of its own, such as a CSV column or a `{ value, unit }` pair, the `*_UNITS` table of the type resolves the spelling directly: `VOLTAGE_UNITS["mV"]` is the `Millivolt` constructor.
 
+`kuchka.wire` writes a measurement as text and reads what a boundary delivers, so a value crosses a file, a payload, or a database column and comes back exactly:
+
+```python
+from kuchka import wire
+
+wire.dump(Volt(1) / 3)  # '1/3 V'
+wire.load("1/3 V", Voltage) == Volt(1) / 3  # True
+wire.load({"value": "2800", "unit": "mV"}, Voltage)  # 2800 mV
+wire.load(2.8, Voltage)  # rejected: `ParseError`.
+```
+
+Every refusal is a `ParseError`, which is a `ValueError`, so a validation framework reports it without a wrapper.
+
 ### 3. Compose real engineering relationships
 
 A calculation is most useful when it crosses physical domains and every step keeps its type.
@@ -1089,9 +1102,7 @@ See [`benchmarks`](https://github.com/Dimonade/kuchka/blob/HEAD/benchmarks/READM
 The vocabulary is intentionally curated and will remain finite. Current gaps include:
 
 - There is no NumPy/Pandas integration.
-- There is no JSON/DB persistence layer.
-
-A future persistence layer may use a representation such as `{"value": 4.2, "unit": "V"}` at the serialization boundary while reconstructing a typed quantity when data enters application code.
+- There are no Pydantic, attrs, or msgspec integrations yet; `kuchka.wire` is the text form they read and write.
 
 ## Stability
 
@@ -1151,6 +1162,7 @@ Deeper design material is kept separately:
 - **[Dimensional algebra and derived quantities](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/dimensional_algebra.md)** - exponent-vector arithmetic, registered results, reciprocal relationships, and the boundary between runtime algebra and static overloads.
 - **[Where the radian meets a length](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/angle_bridges.md)** - how rotational quantities meet lengths: bridges, the moment of inertia, and the relations that stay named constructors.
 - **[Copying, pickling, and persistence](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/persistence.md)** - what `copy` and `pickle` guarantee, why pickle is not a storage format, and how to store a value as exact text and a unit symbol.
+- **[The wire form](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/wire_form.md)** - `wire.dump` and `wire.load`: a measurement as one exact string, what a boundary may deliver for a field, and why a bare number is refused.
 - **[Unit spellings](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/unit_spellings.md)** - what the `*_UNITS` tables accept, how case and plurals are treated, and why no spelling can mean two units.
 - **[Readable units](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/auto_scaling.md)** - `auto_scale()` and its ladders of prefixed units, the rule that picks a unit, the quantities without a ladder, and `Time.clock_parts()`.
 - **[Exactness, angles, and tolerance](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/exactness.md)** - `Fraction` storage, decimal materialization, float input normalization, angles and pi, and comparing with a tolerance.
