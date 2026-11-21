@@ -1,10 +1,11 @@
-"""Not a pytest file directly-- run through pyright, like `should_fail.py`.
+"""Not a pytest file directly-- run through mypy and pyright, like `should_fail.py`.
 
 The static contract of `kuchka.attrs.parse_field` in an `attrs` class: the attribute is
 the exact quantity type, the `__init__` takes what the converter reads, and a bare
 number for a field that needs a unit is refused before the program runs.
-`mypy` reads the type of a converter that is a call only as `Any`, so it has its own
-fixture, `attrs_fields_mypy.py`.
+`pyright` holds it; `mypy` does not yet, because its `attrs` plugin reads only named
+functions, types, and lambdas as converters, and the test for `mypy` is an `xfail` that
+fails when `mypy` starts to hold it (see the ticket on typing `attrs` quantity fields).
 """
 
 import attrs

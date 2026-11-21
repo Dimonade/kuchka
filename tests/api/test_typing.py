@@ -29,8 +29,12 @@ _FIXTURES = Path(__file__).parent / "typing_fixtures"
 FIXTURES: dict[str, tuple[Path, str | None, tuple[str, ...]]] = {
     "should_fail": (_FIXTURES / "should_fail.py", None, ("mypy", "pyright")),
     "attrs_converter": (_FIXTURES / "attrs_converter.py", None, ("mypy", "pyright")),
-    "attrs_fields": (_FIXTURES / "attrs_fields.py", "attrs", ("pyright",)),
-    "attrs_fields_mypy": (_FIXTURES / "attrs_fields_mypy.py", "attrs", ("mypy",)),
+    "attrs_named_converter": (
+        _FIXTURES / "attrs_named_converter.py",
+        "attrs",
+        ("mypy", "pyright"),
+    ),
+    "attrs_fields": (_FIXTURES / "attrs_fields.py", "attrs", ("mypy", "pyright")),
 }
 """Each fixture, the library it needs installed, and the checkers it is held to."""
 
@@ -43,9 +47,28 @@ def _fixture(name: str) -> Path:
     return path
 
 
-def _for(checker: str) -> list[str]:
-    """Return the names of the fixtures that `checker` is held to."""
-    return [name for name, (_, _, checkers) in FIXTURES.items() if checker in checkers]
+KNOWN_GAPS: dict[tuple[str, str], str] = {
+    ("mypy", "attrs_fields"): (
+        "mypy's attrs plugin reads only named functions, types, and lambdas as "
+        "converters, so `converter=parse_field(Voltage)` is reported as unsupported "
+        "and the `__init__` parameter is `Any`; see the ticket on typing `attrs` "
+        "quantity fields. When this test starts to pass, mypy reads such converters: "
+        "remove the entry and update docs/concepts/wire_form.md."
+    ),
+}
+"""The fixtures a checker does not hold yet, by (checker, fixture), and why."""
+
+
+def _for(checker: str) -> list[object]:
+    """Return the fixtures that `checker` is held to, a known gap marked `xfail`."""
+    params: list[object] = []
+    for name, (_, _, checkers) in FIXTURES.items():
+        if checker not in checkers:
+            continue
+        reason = KNOWN_GAPS.get((checker, name))
+        marks = [pytest.mark.xfail(strict=True, reason=reason)] if reason else []
+        params.append(pytest.param(name, marks=marks))
+    return params
 
 
 @pytest.mark.parametrize("name", _for("mypy"))
