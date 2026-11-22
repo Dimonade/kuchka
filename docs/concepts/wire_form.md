@@ -180,6 +180,8 @@ Both hooks raise `NotImplementedError` for what is not a quantity, the protocol 
 `make_dec_hook(allow_archaic=True)` makes a decoding hook that reads archaic units.
 The same text works in every `msgspec` format and in `msgspec.convert` and `msgspec.to_builtins`.
 
+A field may also limit its range, with `Bounds` from the same bridge; see [Bounds](bounds.md).
+
 ## Archaic units
 
 An archaic unit is written like any other.
