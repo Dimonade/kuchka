@@ -35,6 +35,11 @@ FIXTURES: dict[str, tuple[Path, str | None, tuple[str, ...]]] = {
         ("mypy", "pyright"),
     ),
     "attrs_fields": (_FIXTURES / "attrs_fields.py", "attrs", ("mypy", "pyright")),
+    "pydantic_fields": (
+        _FIXTURES / "pydantic_fields.py",
+        "pydantic",
+        ("mypy", "pyright"),
+    ),
 }
 """Each fixture, the library it needs installed, and the checkers it is held to."""
 

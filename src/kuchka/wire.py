@@ -119,6 +119,7 @@ from kuchka.errors import ParseError
 from kuchka.internal.limits import NUMERIC_LIMITS
 from kuchka.internal.reading import ArchaicPolicy
 from kuchka.internal.reading import archaic_policy_of
+from kuchka.internal.reading import example_unit
 from kuchka.internal.reading import split_number
 from kuchka.internal.reading import unit_constructor
 from kuchka.internal.reading import unit_table_of
@@ -272,7 +273,7 @@ def _from_number(value: float | Decimal | Fraction, table: UnitTable[Any]) -> An
     if bare is None:
         msg = (
             f"{value!r} has no unit, so it does not say what it measures; "
-            f"write it as text with a unit, {_expectation(table)}."
+            f"write it with one, as {_expectation(table)}."
         )
         raise ParseError(msg)
     return bare[1](value)
@@ -303,7 +304,7 @@ def _from_mapping(
             msg = (
                 f"{value!r} has no unit, so it does not say what it measures; "
                 f"a {quantity.__name__} needs a 'unit' such as "
-                f"{_example_unit(table)!r}."
+                f"{example_unit(table)!r}."
             )
             raise ParseError(msg)
         return bare[1](number)
@@ -333,18 +334,9 @@ def _number_of(value: object) -> Decimal | Fraction | int | float:
 
 def _expectation(table: UnitTable[Any]) -> str:
     """Return what a quantity of `table` can be written as, for an error message."""
-    example = f'"5 {_example_unit(table)}"'
     if table.bare is not None:
-        return f'a number, or text such as {example} or "0.25"'
-    return f"text such as {example}"
-
-
-def _example_unit(table: UnitTable[Any]) -> str:
-    """Return the symbol of a coherent unit of `table`, or of its first unit."""
-    for unit in table.units:
-        if getattr(unit, "scale", None) == 1:
-            return unit.symbol
-    return table.units[0].symbol
+        return 'a number, or text such as "0.25"'
+    return f'text such as "5 {example_unit(table)}"'
 
 
 def _magnitude_text(magnitude: Fraction) -> str:
