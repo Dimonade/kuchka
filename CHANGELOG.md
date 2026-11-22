@@ -52,6 +52,11 @@ See the `Stability` section in `README.md` for what versioning means.
   A refusal is a `msgspec.ValidationError` with the path of the field, the hooks raise `NotImplementedError` for what is not a quantity so they chain with an application's own, and `kuchka_schema_hook` lets `msgspec.json.schema` describe the quantity types.
   It is the `kuchka[msgspec]` extra.
 
+- **`kuchka.bounds`:**
+  `Bounds(gt=Volt(0), le=Volt(60))` holds the range a field accepts, compared exactly in any unit, and `check` raises `BoundsError`, a `ValueError`, that writes the value and the bound.
+  `kuchka.pydantic.Bounds` is the `Annotated` marker beside `Quantity`, and `kuchka.attrs.Bounds` is the `attrs` validator; a `msgspec` struct calls `check` in `__post_init__`.
+  A quantity with no ordering, such as an `Angle`, has no bounds, and both checkers report it.
+
 #### New units of existing quantities
 
 - **Prefix families without gaps:**

@@ -14,13 +14,14 @@ from kuchka import Current
 from kuchka import Length
 from kuchka import Volt
 from kuchka import Voltage
+from kuchka.pydantic import Bounds
 from kuchka.pydantic import Quantity
 
 
 class PowerSupplyConfig(BaseModel):
     """A supply limit and a length of cable that may be archaic."""
 
-    max_voltage: Annotated[Voltage, Quantity]
+    max_voltage: Annotated[Voltage, Quantity, Bounds(gt=Volt(0), le=Volt(60))]
     cable: Annotated[Length, Quantity(allow_archaic=True)]
 
 

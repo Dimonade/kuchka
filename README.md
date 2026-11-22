@@ -1037,6 +1037,7 @@ Application-level measurement errors derive from `MeasurementError`:
 | `UnrepresentableDimensionError` | arithmetic produces a dimension without a registered engineering type                                           |
 | `PlannedDimensionError`         | an unregistered dimension already has a named future type                                                       |
 | `AmbiguousKindError`            | arithmetic produces a dimension shared by several kinds, none of them principal                                 |
+| `BoundsError`                   | `Bounds` receives a measurement outside its range; also a `ValueError`                                          |
 | `ParseError`                    | `parse` receives text that is no measurement of the type, or a unit that two tables claim; also a `ValueError`  |
 | `UnknownUnitError`              | `parse` receives a unit that the quantity type does not have                                                    |
 
@@ -1163,6 +1164,7 @@ Deeper design material is kept separately:
 - **[Dimensional algebra and derived quantities](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/dimensional_algebra.md)** - exponent-vector arithmetic, registered results, reciprocal relationships, and the boundary between runtime algebra and static overloads.
 - **[Where the radian meets a length](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/angle_bridges.md)** - how rotational quantities meet lengths: bridges, the moment of inertia, and the relations that stay named constructors.
 - **[Copying, pickling, and persistence](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/persistence.md)** - what `copy` and `pickle` guarantee, why pickle is not a storage format, and how to store a value as exact text and a unit symbol.
+- **[Bounds](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/bounds.md)** - `Bounds(gt=Volt(0), le=Volt(60))`: the range a field accepts, exactly and in any unit, as a Pydantic annotation, an `attrs` validator, or a check in a `msgspec` struct.
 - **[The wire form](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/wire_form.md)** - `wire.dump` and `wire.load`: a measurement as one exact string, what a boundary may deliver for a field, and why a bare number is refused.
 - **[Unit spellings](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/unit_spellings.md)** - what the `*_UNITS` tables accept, how case and plurals are treated, and why no spelling can mean two units.
 - **[Readable units](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/auto_scaling.md)** - `auto_scale()` and its ladders of prefixed units, the rule that picks a unit, the quantities without a ladder, and `Time.clock_parts()`.

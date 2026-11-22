@@ -19,6 +19,7 @@ a number as well.
 
 The converter is a plain function, so this module imports nothing from `attrs` and
 needs no extra to install.
+`Bounds(gt=Volt(0), le=Volt(60))` is the validator that limits the range of the field.
 
 Static types
 ------------
@@ -65,9 +66,12 @@ from typing import Any
 from typing import TypeVar
 from typing import overload
 
+from kuchka.bounds import Bounds as _Bounds
+from kuchka.errors import BoundsError
 from kuchka.internal.reading import ArchaicPolicy
 from kuchka.internal.reading import archaic_policy_of
 from kuchka.internal.reading import unit_table_of
+from kuchka.quantities.base.ordering import _OrderedScalarMixin
 from kuchka.wire import load
 
 if TYPE_CHECKING:
@@ -76,10 +80,13 @@ if TYPE_CHECKING:
     from decimal import Decimal
     from fractions import Fraction
 
+    from attrs import Attribute
+
     from kuchka.quantities import Proportion
     from kuchka.quantities.base.storage import _ScalarStorage
 
 _QuantityT = TypeVar("_QuantityT", bound="_ScalarStorage[Any]")
+_OrderedT = TypeVar("_OrderedT", bound=_OrderedScalarMixin)
 
 
 @overload
@@ -148,4 +155,35 @@ def parse_field(
     return convert
 
 
-__all__ = ["parse_field"]
+class Bounds(_Bounds[_OrderedT]):
+    """The range an `attrs` quantity field accepts, as the validator of the field.
+
+        threshold: Voltage = attrs.field(
+            converter=parse_field(Voltage), validator=Bounds(gt=Volt(0), le=Volt(60))
+        )
+
+    `kuchka.bounds.Bounds` as an `attrs` validator, which attrs runs after the
+    converter: a value outside the range raises `BoundsError`, a `ValueError`, that
+    names the attribute and writes the value and the bound.
+    A converter and bounds of different quantity types are reported, with the
+    attribute, when the instance is made.
+    """
+
+    def __call__(
+        self,
+        instance: object,  # noqa: ARG002 -- the protocol of an attrs validator
+        attribute: Attribute[Any],
+        value: _OrderedT,
+    ) -> None:
+        """Raise `BoundsError` unless `value` is within the bounds."""
+        try:
+            self.check(value)
+        except BoundsError as exc:
+            msg = f"{attribute.name}: {exc}"
+            raise BoundsError(msg) from exc
+        except TypeError as exc:
+            msg = f"{attribute.name}: {exc}"
+            raise TypeError(msg) from exc
+
+
+__all__ = ["Bounds", "parse_field"]

@@ -124,6 +124,17 @@ class UnknownUnitError(ParseError):
         self.quantity = quantity
 
 
+class BoundsError(InvalidMeasurementError, ValueError):
+    """A measurement lies outside the range a field accepts.
+
+    Raised by `Bounds` for a measurement that is below, above, or on the excluded edge
+    of its bounds; the message writes the measurement and the bound with their units.
+    Also a `ValueError`, so a validation framework reports it, and an
+    `InvalidMeasurementError`, so one `except` clause handles it together with a
+    `ParseError`.
+    """
+
+
 class UnrepresentableDimensionError(MeasurementError):
     """Arithmetic produced a dimension with no registered engineering type.
 
@@ -192,6 +203,7 @@ class AmbiguousKindError(UnrepresentableDimensionError):
 
 __all__ = [
     "AmbiguousKindError",
+    "BoundsError",
     "DivisionByZeroError",
     "IncompatibleDimensionError",
     "InvalidConversionError",
