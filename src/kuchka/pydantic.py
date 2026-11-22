@@ -85,9 +85,8 @@ except (
 
 from kuchka.internal.reading import ArchaicPolicy
 from kuchka.internal.reading import archaic_policy_of
-from kuchka.internal.reading import example_unit
 from kuchka.internal.reading import unit_table_of
-from kuchka.quantities import Proportion
+from kuchka.internal.wire_schema import json_schema
 from kuchka.quantities.base.storage import _ScalarStorage
 from kuchka.wire import dump
 from kuchka.wire import load
@@ -158,23 +157,7 @@ class _Quantity:
         quantity = (schema.get("metadata") or {}).get(_METADATA_KEY)
         if quantity is None:  # pragma: no cover -- a wrapper that dropped the metadata
             return {"type": "string", "description": "A number and a unit."}
-        if issubclass(quantity, Proportion):
-            return {
-                "anyOf": [{"type": "string"}, {"type": "number"}],
-                "description": (
-                    f"A {quantity.__name__}, written as a number, such as "
-                    '"0.25", or as a number and a unit, such as "25 %".'
-                ),
-            }
-        example = f"5 {example_unit(unit_table_of(quantity))}"
-        return {
-            "type": "string",
-            "description": (
-                f"A {quantity.__name__}, written as a number and a unit, "
-                f'such as "{example}".'
-            ),
-            "examples": [example],
-        }
+        return json_schema(quantity)
 
 
 Quantity = _Quantity()
