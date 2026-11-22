@@ -150,6 +150,36 @@ A field may be optional, in a list, or in a dict, and `Quantity(allow_archaic=Tr
 Both type checkers type the attribute as `Voltage`.
 The constructor of a model takes the annotated type, so `PowerSupplyConfig(max_voltage="2800 mV")` is reported by `mypy` and `pyright` and works at runtime; data from a file or a payload enters through `model_validate` and `model_validate_json`, which take any data.
 
+## In a msgspec struct
+
+`kuchka.msgspec` has the hooks that `msgspec` calls for a type it does not know; it needs the extra, `pip install kuchka[msgspec]`:
+
+```python
+import msgspec
+
+from kuchka.msgspec import kuchka_dec_hook
+from kuchka.msgspec import kuchka_enc_hook
+
+
+class Payload(msgspec.Struct):
+    v: Voltage
+
+
+payload = msgspec.json.decode(b'{"v": "4.2 V"}', type=Payload, dec_hook=kuchka_dec_hook)
+payload.v  # 4.2 V
+msgspec.json.encode(payload, enc_hook=kuchka_enc_hook)  # b'{"v":"4.2 V"}'
+msgspec.json.decode(
+    b'{"v": 3.3}', type=Payload, dec_hook=kuchka_dec_hook
+)  # rejected: `ValueError`.
+```
+
+The decoding hook is `load` and the encoding hook is `dump`.
+A refusal is a `ParseError`, a `ValueError`, so `msgspec` reports it as its `ValidationError` with the path of the field, such as `` at `$.v` ``.
+Both hooks raise `NotImplementedError` for what is not a quantity, the protocol `msgspec` defines, so an application chains them with its own hooks.
+`msgspec.json.schema` refuses a type it does not know, and `kuchka_schema_hook` describes the quantity types to it: `msgspec.json.schema(Payload, schema_hook=kuchka_schema_hook)`.
+`make_dec_hook(allow_archaic=True)` makes a decoding hook that reads archaic units.
+The same text works in every `msgspec` format and in `msgspec.convert` and `msgspec.to_builtins`.
+
 ## Archaic units
 
 An archaic unit is written like any other.
