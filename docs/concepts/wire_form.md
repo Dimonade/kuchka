@@ -119,6 +119,37 @@ class Probe:
 Probe("1 V").limit  # 1 V
 ```
 
+## In a Pydantic model
+
+`kuchka.pydantic.Quantity` is `load` and `dump` as a Pydantic v2 field; it needs the extra, `pip install kuchka[pydantic]`:
+
+```python
+from typing import Annotated
+
+from pydantic import BaseModel
+
+from kuchka.pydantic import Quantity
+
+
+class PowerSupplyConfig(BaseModel):
+    max_voltage: Annotated[Voltage, Quantity]
+
+
+config = PowerSupplyConfig.model_validate({"max_voltage": "2800 mV"})
+config.max_voltage  # 2800 mV
+config.model_dump_json()  # '{"max_voltage":"2800 mV"}'
+PowerSupplyConfig.model_validate_json(config.model_dump_json()) == config  # True
+PowerSupplyConfig.model_validate({"max_voltage": 3.3})  # rejected: `ValueError`.
+```
+
+The refusals of `load` are `ValueError`s, so Pydantic reports them as its `ValidationError`, which is a `ValueError` too, and the message says what to write.
+`model_dump()` keeps the `Voltage`, and `model_dump(mode="json")` writes the text, which validation reads back exactly, in the unit it was written in.
+The JSON Schema of the field is a string whose description names the quantity (a `Proportion` also allows a number).
+A field may be optional, in a list, or in a dict, and `Quantity(allow_archaic=True)` reads archaic units.
+
+Both type checkers type the attribute as `Voltage`.
+The constructor of a model takes the annotated type, so `PowerSupplyConfig(max_voltage="2800 mV")` is reported by `mypy` and `pyright` and works at runtime; data from a file or a payload enters through `model_validate` and `model_validate_json`, which take any data.
+
 ## Archaic units
 
 An archaic unit is written like any other.

@@ -42,6 +42,11 @@ See the `Stability` section in `README.md` for what versioning means.
   The module imports nothing from `attrs`, and `pyright` types the `__init__` from the converter, so a bare number for a voltage is a static error.
   `mypy` reads only named functions as converters, so it types the attribute and leaves the `__init__` parameter as `Any`.
 
+- **`kuchka.pydantic`:**
+  `Annotated[Voltage, Quantity]` makes a Pydantic v2 field a `Voltage` whatever arrives, reading as `wire.load` reads and reporting every refusal as a `ValidationError`.
+  `model_dump()` keeps the quantity, `model_dump(mode="json")` writes `"2800 mV"` and reads back exactly, and the JSON Schema is a string that names the quantity.
+  It is the `kuchka[pydantic]` extra; `import kuchka` loads no integration library.
+
 #### New units of existing quantities
 
 - **Prefix families without gaps:**
