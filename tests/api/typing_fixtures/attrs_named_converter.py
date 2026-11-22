@@ -11,8 +11,10 @@ import attrs
 
 from kuchka import Ampere
 from kuchka import Current
+from kuchka import Volt
 from kuchka import Voltage
 from kuchka import wire
+from kuchka.attrs import Bounds
 
 
 def to_voltage(value: Voltage | str | Mapping[str, object]) -> Voltage:
@@ -24,7 +26,9 @@ def to_voltage(value: Voltage | str | Mapping[str, object]) -> Voltage:
 class Probe:
     """A limit, converted by its field."""
 
-    limit: Voltage = attrs.field(converter=to_voltage)
+    limit: Voltage = attrs.field(
+        converter=to_voltage, validator=Bounds(gt=Volt(0), le=Volt(60))
+    )
 
 
 from_text = Probe("2800 mV")  # OK
