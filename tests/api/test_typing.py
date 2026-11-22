@@ -40,6 +40,11 @@ FIXTURES: dict[str, tuple[Path, str | None, tuple[str, ...]]] = {
         "pydantic",
         ("mypy", "pyright"),
     ),
+    "msgspec_fields": (
+        _FIXTURES / "msgspec_fields.py",
+        "msgspec",
+        ("mypy", "pyright"),
+    ),
 }
 """Each fixture, the library it needs installed, and the checkers it is held to."""
 
