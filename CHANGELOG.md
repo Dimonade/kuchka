@@ -47,6 +47,11 @@ See the `Stability` section in `README.md` for what versioning means.
   `model_dump()` keeps the quantity, `model_dump(mode="json")` writes `"2800 mV"` and reads back exactly, and the JSON Schema is a string that names the quantity.
   It is the `kuchka[pydantic]` extra; `import kuchka` loads no integration library.
 
+- **`kuchka.msgspec`:**
+  `kuchka_dec_hook` and `kuchka_enc_hook` let `msgspec` decode and encode a struct field typed `Voltage`: `msgspec.json.decode(b'{"v": "4.2 V"}', type=Payload, dec_hook=kuchka_dec_hook)`.
+  A refusal is a `msgspec.ValidationError` with the path of the field, the hooks raise `NotImplementedError` for what is not a quantity so they chain with an application's own, and `kuchka_schema_hook` lets `msgspec.json.schema` describe the quantity types.
+  It is the `kuchka[msgspec]` extra.
+
 #### New units of existing quantities
 
 - **Prefix families without gaps:**
