@@ -205,9 +205,18 @@ def unit_constructor(
     raise UnknownUnitError(msg, unit=text, quantity=quantity)
 
 
+def example_unit(table: UnitTable[Any]) -> str:
+    """Return the symbol of a coherent unit of `table`, else of its first."""
+    for unit in table.units:
+        if getattr(unit, "scale", None) == 1:
+            return unit.symbol
+    return table.units[0].symbol
+
+
 __all__ = [
     "ArchaicPolicy",
     "archaic_policy_of",
+    "example_unit",
     "split_number",
     "unit_constructor",
     "unit_table_of",
