@@ -39,6 +39,13 @@ classifiers = [
 license = "Apache-2.0"
 license-files = ["LICENSE-APACHE"]
 
+[project.optional-dependencies]
+# The integrations import their library only where they need it.
+# Therefore, `import kuchka` does not load any of them.
+# `kuchka.pedantic` needs pydantic.
+# `kuchka.attrs` does not need anything.
+pydantic = ["pydantic>=2.9"]
+
 [project.urls]
 Homepage = "https://github.com/Dimonade/kuchka"
 Source = "https://github.com/Dimonade/kuchka"
@@ -51,9 +58,11 @@ requires = ["uv_build>=0.13.5,<0.14.0"]
 build-backend = "uv_build"
 
 [dependency-groups]
-# `attrs` is imported by the tests of `kuchka.attrs`, whose own code imports nothing from it.
+# The libraries the integrations are tested and type-checked against.
+integrations = ["attrs>=26.1.0", "pydantic>=2.9"]
+
 test = [
-  "attrs>=26.1.0",
+  { include-group = "integrations" },
   "coverage>=7.17.3",
   "hypothesis>=6.170.8",
   "pytest>=9.1.1",
@@ -69,6 +78,7 @@ ruff = ["ruff>=0.17.2"]
 lint = [
   { include-group = "ruff" },
   { include-group = "typing" },
+  { include-group = "integrations" },
   "mccabe>=0.7.0",
   "pylsp-mypy>=0.8.2",
   "python-lsp-server>=1.15.0",
@@ -216,7 +226,7 @@ description = "run the doctests and the test suite on Python {base_python}"
 # `typing` brings mypy in for the test that checks the static types agree with the runtime.
 dependency_groups = ["test", "typing", "ruff"]
 # The checkers an environment installs, and the libraries the integrations are tested against: a test that needs one fails, and does not skip, if it is missing.
-set_env = { KUCHKA_CHECKERS = "mypy", KUCHKA_LIBRARIES = "attrs" }
+set_env = { KUCHKA_CHECKERS = "mypy", KUCHKA_LIBRARIES = "attrs,pydantic" }
 commands = [
   [
     "pytest",
@@ -279,7 +289,7 @@ base_python = ["3.11"]
 dependency_groups = ["test"]
 # The floor of the type-checker policy in `README.md`: the oldest mypy that checks the library's own source cleanly.
 deps = ["mypy==1.11.2"]
-set_env = { KUCHKA_CHECKERS = "mypy", KUCHKA_LIBRARIES = "attrs" }
+set_env = { KUCHKA_CHECKERS = "mypy", KUCHKA_LIBRARIES = "attrs,pydantic" }
 commands = [
   [
     "mypy",
@@ -300,7 +310,7 @@ commands = [
 description = "check the consumer-side types on pyright"
 base_python = ["3.11"]
 dependency_groups = ["test", "pyright"]
-set_env = { KUCHKA_CHECKERS = "pyright", KUCHKA_LIBRARIES = "attrs" }
+set_env = { KUCHKA_CHECKERS = "pyright", KUCHKA_LIBRARIES = "attrs,pydantic" }
 commands = [
   [
     "pytest",
