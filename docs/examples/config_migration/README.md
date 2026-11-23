@@ -36,7 +36,7 @@ minimum = "0 V"
 maximum = "3.3 V"
 
 [red_led.accepted_temperature]
-minimum = "15 °C"
+minimum = "15 °C"  # "Deg C", "degrees C", "C", or many other variations are acceptable too.
 maximum = "45 °C"
 
 [blue_led.accepted_temperature]
