@@ -25,6 +25,7 @@ pytest.importorskip("attrs")
 import settings_attrs
 import settings_parse
 import settings_pydantic
+from mistakes import MISTAKES
 from pydantic import ValidationError
 
 from kuchka import Celsius
@@ -40,24 +41,6 @@ RUNGS = {
     "pydantic": (settings_pydantic.loads, ValidationError),
     "attrs": (settings_attrs.loads, (ValueError, TypeError)),
     "parse": (settings_parse.loads, settings_parse.ConfigError),
-}
-
-MISTAKES = {
-    "a current's unit in a voltage field": ('minimum = "-1 mV"', 'minimum = "-1 mA"'),
-    "a number with no unit": ('minimum = "-1 mV"', "minimum = -1.0"),
-    "text with no number": ('minimum = "-1 mV"', 'minimum = "mV"'),
-    "a limit beyond what the fixture can do": (
-        'maximum = "20 mA"',
-        'maximum = "0.5 A"',
-    ),
-    "a voltage beyond what the fixture can do": ('maximum = "1 mV"', 'maximum = "6 V"'),
-    "a swapped range": (
-        'minimum = "15 °C"\nmaximum = "45 °C"',
-        'minimum = "45 °C"\nmaximum = "15 °C"',
-    ),
-    "a frequency written as a baud rate": ('"9600 Bd"', '"500 Hz"'),
-    "a missing key": ('maximum = "20 mA"\n', ""),
-    "an unknown key": ("[comms]\n", '[comms]\nparity = "none"\n'),
 }
 
 
@@ -107,10 +90,40 @@ def test_limits_in_different_units_compare_without_conversion(rung: str) -> None
 @pytest.mark.parametrize("mistake", MISTAKES)
 def test_every_rung_refuses_every_mistake(rung: str, mistake: str) -> None:
     loads, error = RUNGS[rung]
-    old, new = MISTAKES[mistake]
-    assert old in MODERN, old
     with pytest.raises(error):
-        loads(MODERN.replace(old, new, 1))
+        loads(MISTAKES[mistake](MODERN))
+
+
+# The file may come out of a checkout with other line endings, or out of a formatter
+# with blank lines of its own; the rungs and the mistakes do not depend on them.
+FORMS = {
+    "lf": lambda text: text,
+    "crlf": lambda text: text.replace("\n", "\r\n"),
+    "doubled": lambda text: text.replace("\n", "\n\n"),
+    "no_blank_lines": lambda text: "\n".join(
+        line for line in text.splitlines() if line.strip()
+    ),
+}
+
+
+@pytest.mark.parametrize("form", FORMS)
+@pytest.mark.parametrize("rung", RUNGS)
+def test_the_rungs_read_the_file_whatever_its_line_endings(
+    rung: str, form: str
+) -> None:
+    loads, _ = RUNGS[rung]
+    assert limits(loads(FORMS[form](MODERN))) == limits(loads(MODERN))
+
+
+@pytest.mark.parametrize("form", FORMS)
+@pytest.mark.parametrize("mistake", MISTAKES)
+def test_the_mistakes_break_the_file_whatever_its_line_endings(
+    mistake: str, form: str
+) -> None:
+    broken = MISTAKES[mistake](FORMS[form](MODERN))
+    assert broken != MODERN
+    with pytest.raises(settings_parse.ConfigError):
+        settings_parse.loads(broken)
 
 
 @pytest.mark.parametrize("rung", RUNGS)

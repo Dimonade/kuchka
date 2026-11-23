@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+import tomllib
 from decimal import Decimal
 from pathlib import Path
 
@@ -24,8 +25,14 @@ LEGACY = (HERE / "config_legacy.ini").read_text(encoding="utf-8")
 MODERN = (HERE / "config_modern.toml").read_text(encoding="utf-8")
 
 
-def test_the_shipped_modern_file_is_what_the_migration_writes() -> None:
-    assert migrate.migrate(LEGACY) == MODERN
+def test_the_shipped_modern_file_holds_what_the_migration_writes() -> None:
+    assert tomllib.loads(migrate.migrate(LEGACY)) == tomllib.loads(MODERN)
+
+
+def test_the_migration_writes_one_exact_string_per_measurement() -> None:
+    lines = [line for line in migrate.migrate(LEGACY).splitlines() if " = " in line]
+    assert lines[0] == 'minimum = "-1 mV"'
+    assert len(lines) == len(tomllib.loads(MODERN)["red_led"]) * 2 * 2 + 2
 
 
 def test_each_value_keeps_the_unit_the_legacy_key_named() -> None:

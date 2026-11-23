@@ -16,6 +16,7 @@ Needs `pip install "kuchka[pydantic]" attrs`.
 
 from __future__ import annotations
 
+import tomllib
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +24,8 @@ import migrate
 import settings_attrs
 import settings_parse
 import settings_pydantic
+from mistakes import MISTAKES
+from mistakes import set_value
 from pydantic import ValidationError
 
 from kuchka import BoundsError
@@ -63,30 +66,6 @@ def show(config: Any) -> None:  # noqa: ANN401 -- any rung's configuration
         print(f"  {name:<32}{value}")
 
 
-# Three honest mistakes, and the two that engineers make while copy-pasting.
-MISTAKES = {
-    "a current's unit in a voltage field": ('minimum = "-1 mV"', 'minimum = "-1 mA"'),
-    "a number with no unit (TOML reads it as a float)": (
-        'minimum = "-1 mV"',
-        "minimum = -1.0",
-    ),
-    "a limit the fixture's hardware cannot reach": (
-        'maximum = "20 mA"',
-        'maximum = "0.5 A"',
-    ),
-    "a minimum and a maximum swapped": (
-        'minimum = "15 °C"\nmaximum = "45 °C"',
-        'minimum = "45 °C"\nmaximum = "15 °C"',
-    ),
-}
-
-
-def broken(old: str, new: str) -> str:
-    """Return the shipped file with `old` replaced by `new`, once."""
-    assert old in MODERN, old  # noqa: S101 -- a typo in this demo would hide the point
-    return MODERN.replace(old, new, 1)
-
-
 def rung_pydantic() -> None:
     """Rung 1: the whole file validates, and every mistake is reported at once."""
     heading("Rung 1 -- Pydantic: annotate the fields")
@@ -95,10 +74,10 @@ def rung_pydantic() -> None:
     show(config)
 
     print("\nNow the mistakes. Pydantic names where each one is:\n")
-    for what, (old, new) in MISTAKES.items():
+    for what, mistake in MISTAKES.items():
         print(f"  {what}")
         try:
-            settings_pydantic.loads(broken(old, new))
+            settings_pydantic.loads(mistake(MODERN))
         except ValidationError as error:
             for problem in error.errors():
                 where = ".".join(str(part) for part in problem["loc"])
@@ -107,8 +86,8 @@ def rung_pydantic() -> None:
         print()
 
     print("  Two mistakes in one file are both reported, in one go:")
-    both = broken('minimum = "-1 mV"', 'minimum = "-1 mA"')
-    both = both.replace('uart_baud_rate = "9600 Bd"', 'uart_baud_rate = "9600 V"')
+    both = MISTAKES["a current's unit in a voltage field"](MODERN)
+    both = set_value(both, "comms", "uart_baud_rate", '"9600 V"')
     try:
         settings_pydantic.loads(both)
     except ValidationError as error:
@@ -125,10 +104,10 @@ def rung_attrs() -> None:
     show(config)
 
     print("\nThe same mistakes. attrs stops at the first, and says less about where:\n")
-    for what, (old, new) in MISTAKES.items():
+    for what, mistake in MISTAKES.items():
         print(f"  {what}")
         try:
-            settings_attrs.loads(broken(old, new))
+            settings_attrs.loads(mistake(MODERN))
         except (ValueError, TypeError) as error:
             print(f"     {type(error).__name__}: {error}")
         print()
@@ -142,10 +121,10 @@ def rung_parse() -> None:
     show(config)
 
     print("\nThe same mistakes, in the application's own ConfigError:\n")
-    for what, (old, new) in MISTAKES.items():
+    for what, mistake in MISTAKES.items():
         print(f"  {what}")
         try:
-            settings_parse.loads(broken(old, new))
+            settings_parse.loads(mistake(MODERN))
         except settings_parse.ConfigError as error:
             print(f"     ConfigError: {error}")
         print()
@@ -210,7 +189,8 @@ def rung_tables() -> None:
     print("migrate.py writes what every rung above reads, one exact string a value:\n")
     for line in excerpt(modern, "red_led.accepted_voltage", 2):
         print(f"  {line}")
-    print(f"\n  identical to the shipped config_modern.toml: {modern == MODERN}")
+    same = tomllib.loads(modern) == tomllib.loads(MODERN)
+    print(f"\n  the same data as the shipped config_modern.toml: {same}")
 
     print(
         "\nThe convention was never checked. A voltage key with a current's suffix:\n"

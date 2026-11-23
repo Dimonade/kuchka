@@ -13,6 +13,8 @@ import pytest
 pytest.importorskip("pydantic")
 
 import settings_pydantic
+from mistakes import TEMPERATURE
+from mistakes import swap_values
 from pydantic import ValidationError
 
 MODERN = (HERE / "config_modern.toml").read_text(encoding="utf-8")
@@ -37,9 +39,7 @@ def test_each_error_names_the_path_and_says_why() -> None:
 
 
 def test_the_swapped_range_is_reported_at_the_window() -> None:
-    text = MODERN.replace(
-        'minimum = "15 °C"\nmaximum = "45 °C"', 'minimum = "45 °C"\nmaximum = "15 °C"'
-    )
+    text = swap_values(MODERN, TEMPERATURE, "minimum", "maximum")
     with pytest.raises(ValidationError) as raised:
         settings_pydantic.loads(text)
     (error,) = raised.value.errors()

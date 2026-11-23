@@ -10,6 +10,7 @@ sys.path.insert(0, str(HERE))
 
 import pytest
 import settings_parse
+from mistakes import MISTAKES
 
 from kuchka import Volt
 
@@ -17,37 +18,31 @@ MODERN = (HERE / "config_modern.toml").read_text(encoding="utf-8")
 
 
 @pytest.mark.parametrize(
-    ("old", "new", "message"),
+    ("mistake", "message"),
     [
         (
-            'minimum = "-1 mV"',
-            'minimum = "-1 mA"',
+            "a current's unit in a voltage field",
             "red_led.accepted_voltage.minimum: 'mA' is not a unit of Voltage",
         ),
         (
-            'minimum = "-1 mV"',
-            "minimum = -1.0",
+            "a number with no unit (TOML reads it as a float)",
             "red_led.accepted_voltage.minimum: expected a number and its unit as text",
         ),
         (
-            'maximum = "20 mA"',
-            'maximum = "0.5 A"',
+            "a current the fixture cannot source",
             "red_led.accepted_current.maximum: 0.5 A is above 100 mA",
         ),
         (
-            'minimum = "15 °C"\nmaximum = "45 °C"',
-            'minimum = "45 °C"\nmaximum = "15 °C"',
+            "a minimum and a maximum swapped",
             "red_led.accepted_temperature: no measurement is at least 45 °C",
         ),
-        ('maximum = "20 mA"\n', "", "red_led.accepted_current.maximum: missing"),
-        ("[comms]\n", '[comms]\nparity = "none"\n', "comms: unknown key(s) parity"),
+        ("a missing key", "red_led.accepted_current.maximum: missing"),
+        ("an unknown key", "comms: unknown key(s) parity"),
     ],
 )
-def test_the_message_names_the_key_and_says_why(
-    old: str, new: str, message: str
-) -> None:
+def test_the_message_names_the_key_and_says_why(mistake: str, message: str) -> None:
     with pytest.raises(settings_parse.ConfigError) as raised:
-        settings_parse.loads(MODERN.replace(old, new, 1))
+        settings_parse.loads(MISTAKES[mistake](MODERN))
     assert message in str(raised.value)
 
 

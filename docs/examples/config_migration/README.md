@@ -16,6 +16,7 @@ python demo.py
 | `config_modern.toml`   | The limits file: one string per measurement, a number and its unit |
 | `config_legacy.ini`    | The old format it was migrated from                                |
 | `fixture.py`           | What the fixture's hardware can do                                 |
+| `mistakes.py`          | Ways to break the file on purpose, for the demo and the tests      |
 | `settings_pydantic.py` | Rung 1: annotate the fields                                        |
 | `settings_attrs.py`    | Rung 2: a converter and a validator per field                      |
 | `settings_parse.py`    | Rung 3: no framework, `parse` and ordinary Python                  |
@@ -152,7 +153,7 @@ This is what the `*_UNITS` tables are for: a table maps the spelling of a unit t
 ```
 
 `VOLTAGE_UNITS["mV"]` is `Millivolt`, and `Millivolt(Decimal("-1.000"))` keeps the digits as they were typed.
-`wire.dump` writes each quantity back as the one exact string every rung above reads, and `config_modern.toml` is the output of this rung, which a test holds to.
+`wire.dump` writes each quantity back as the one exact string every rung above reads, and `config_modern.toml` is the output of this rung, and a test holds the shipped file to the data the migration writes.
 
 The old convention never checked that a suffix belonged to its key:
 
@@ -180,7 +181,7 @@ MigrationError: red_led.accepted_voltage_min_ma: 'ma' is not a unit of voltage
 | Says where the mistake is           | the full path     | sometimes the attribute | the full path, written by hand              |
 | Writes a value back as text         | `model_dump_json` | `wire.dump`             | `wire.dump`                                 |
 
-`test_ladder.py` holds the three rungs to each other: the same file reads into the same limits, and every mistake in a list of nine is refused by all three.
+`test_ladder.py` holds the three rungs to each other: the same file reads into the same limits, every mistake in `mistakes.py`, a list of nine, is refused by all three, and the file reads the same whatever its line endings.
 
 ## On the line
 
