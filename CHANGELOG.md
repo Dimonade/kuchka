@@ -57,6 +57,14 @@ See the `Stability` section in `README.md` for what versioning means.
   `kuchka.pydantic.Bounds` is the `Annotated` marker beside `Quantity`, and `kuchka.attrs.Bounds` is the `attrs` validator; a `msgspec` struct calls `check` in `__post_init__`.
   A quantity with no ordering, such as an `Angle`, has no bounds, and both checkers report it.
 
+#### Documentation
+
+- **The limits-file example, read four ways:**
+  `docs/examples/config_migration` reads one realistic configuration for an LED test fixture with Pydantic, with `attrs`, with `parse`, and through the `*_UNITS` tables that migrate the legacy file it came from, and `demo.py` walks the four rungs and breaks the file on purpose.
+  Every rung refuses the same nine mistakes, checks the limits against what the hardware can do with `Bounds`, and a test holds the README excerpts to the modules.
+- **Quick start 2 follows the same ladder:**
+  the README reads one limits file with Pydantic, `attrs`, `parse`, and the unit tables, and writes it back with `wire`.
+
 #### New units of existing quantities
 
 - **Prefix families without gaps:**

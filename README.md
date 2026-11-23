@@ -207,12 +207,77 @@ The point is to make one particular style of engineering code feel natural: ordi
 
 ### 2. Read measurements from text and config
 
-Configuration files, CSV logs, command lines, and instrument replies write units as text.
-That does not mean the rest of the application has to become stringly typed.
-`parse` reads the number and the unit together, through the table of units of the type you name, and returns a typed value:
+Configuration files, JSON payloads, CSV logs, and command lines write units as text.
+That does not mean the rest of the application has to become stringly typed: a field says which quantity it is, and the value that arrives is a measurement of that quantity or an error that says why.
+The same limits file, read four ways, from the one that does the most for you to the one that shows how it works:
+
+```toml
+[red_led]
+max_current = "20 mA"
+max_temperature = "45 C"
+```
+
+**With Pydantic**, annotate the fields.
+`Bounds` limits the range, because a limits file may narrow what the hardware can do and never exceed it:
 
 ```python
 import tomllib
+from typing import Annotated
+
+from pydantic import BaseModel
+
+from kuchka import Current
+from kuchka import Milliampere
+from kuchka import Temperature
+from kuchka.pydantic import Bounds
+from kuchka.pydantic import Quantity
+
+
+class LedLimits(BaseModel):
+    max_current: Annotated[
+        Current,
+        Quantity,
+        Bounds(gt=Milliampere(0), le=Milliampere(100)),
+    ]
+    max_temperature: Annotated[Temperature, Quantity]
+
+
+raw = tomllib.loads('max_current = "20 mA"\nmax_temperature = "45 C"')
+limits = LedLimits.model_validate(raw)
+limits.max_current  # 20 mA
+limits.max_temperature  # 45 °C
+LedLimits.model_validate({**raw, "max_current": "0.5 A"})  # rejected: `ValueError`.
+LedLimits.model_validate({**raw, "max_current": 20})  # rejected: `ValueError`.
+```
+
+The refusals are Pydantic's own `ValidationError`, with the path of the field and a message that says what to write: `0.5 A is above 100 mA, the most allowed.` and `20 has no unit, so it does not say what it measures`.
+The model also writes JSON back, and describes the field in its JSON Schema (`pip install kuchka[pydantic]`).
+
+**With `attrs`**, the same in a converter and a validator per field; `kuchka.attrs` imports nothing from `attrs`, so there is no extra to install:
+
+```python
+import attrs
+
+from kuchka.attrs import Bounds
+from kuchka.attrs import parse_field
+
+
+@attrs.define(frozen=True)
+class LedLimits:
+    max_current: Current = attrs.field(
+        converter=parse_field(Current),
+        validator=Bounds(gt=Milliampere(0), le=Milliampere(100)),
+    )
+
+
+LedLimits("20 mA").max_current  # 20 mA
+LedLimits("0.5 A")  # rejected: `BoundsError`.
+```
+
+**With `parse`**, when no framework is involved, or the messages are written by hand.
+`parse` reads the number and the unit together, through the table of units of the type you name, and returns a typed value:
+
+```python
 from dataclasses import dataclass
 
 from kuchka import Voltage
@@ -243,7 +308,6 @@ Quote the value and keep the unit in the string, and the digits are read exactly
 from fractions import Fraction
 
 from kuchka import Proportion
-from kuchka import Temperature
 from kuchka import Volt
 
 parse("0.1 V", Voltage) == Volt(Fraction(1, 10))  # True: the number is read exactly
@@ -271,9 +335,22 @@ See [Unit spellings](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/
 
 The caller names the type because the same text can mean different quantities: `"5 s"` is a `Time`, an `Instant`, or a `SamplingPeriod`, so there is no untyped `parse`.
 
-When the unit arrives in a field of its own, such as a CSV column or a `{ value, unit }` pair, the `*_UNITS` table of the type resolves the spelling directly: `VOLTAGE_UNITS["mV"]` is the `Millivolt` constructor.
+**With the `*_UNITS` tables**, when the unit arrives apart from the number: a CSV column, a database field, or a legacy key such as `accepted_voltage_min_mv`.
+The table of a quantity maps the spelling of a unit to its constructor:
 
-`kuchka.wire` writes a measurement as text and reads what a boundary delivers, so a value crosses a file, a payload, or a database column and comes back exactly:
+```python
+from decimal import Decimal
+
+from kuchka.units import VOLTAGE_UNITS
+
+VOLTAGE_UNITS["mV"](Decimal("-1.000"))  # -1 mV
+VOLTAGE_UNITS["mA"]  # rejected: `KeyError`.
+```
+
+The digits stay as they were typed, and `mA` has no constructor in the table of voltages.
+
+**And back out.**
+`kuchka.wire` writes a measurement as one exact string and reads what a boundary delivers, so a value crosses a file, a payload, or a database column and comes back unchanged, a third of a volt included:
 
 ```python
 from kuchka import wire
@@ -285,7 +362,9 @@ wire.load(2.8, Voltage)  # rejected: `ParseError`.
 ```
 
 Every refusal is a `ParseError`, which is a `ValueError`, so a validation framework reports it without a wrapper.
-An `attrs` class gets the same reading from `kuchka.attrs.parse_field(Voltage)`, the converter of a field, and a Pydantic v2 model from `Annotated[Voltage, kuchka.pydantic.Quantity]`, which also writes and describes the field in JSON (`pip install kuchka[pydantic]`), and a `msgspec` struct from the hooks of `kuchka.msgspec` (`pip install kuchka[msgspec]`); see [The wire form](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/wire_form.md).
+A `msgspec` struct reads and writes the same text through the hooks of `kuchka.msgspec` (`pip install kuchka[msgspec]`); see [The wire form](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/wire_form.md) and [Bounds](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/bounds.md).
+
+The [limits-file example](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/config_migration/README.md) reads one realistic file all four ways, and migrates the legacy file it came from.
 
 ### 3. Compose real engineering relationships
 
@@ -1086,7 +1165,7 @@ See [Readable units](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/
 The repository contains longer, task-oriented examples:
 
 - **[A heated beaker on a stepper-driven lever](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/heated_beaker/README.md)** - reads a TOML spec and a CSV run log whose cells mix `V`, `mV`, `°C`, and `°F`, then measures the run with angles that wrap, temperature differences, tolerances, and power into energy.
-- **[Migrating a config from unit-suffixed keys to `kuchka`](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/config_migration/README.md)** - moves units from names such as `accepted_voltage_min_mv` into TOML strings such as `"-1.000 mV"` and reads them with `parse` into typed dataclasses at the boundary.
+- **[A limits file, read four ways](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/config_migration/README.md)** - one realistic configuration for an LED test fixture, read with Pydantic, with `attrs`, with `parse`, and through the `*_UNITS` tables that migrate the legacy file it came from; every rung refuses the same mistakes, and the limits are checked against what the hardware can do.
 - **[Working around an unrepresentable intermediate dimension](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/unrepresentable_dimensions/README.md)** - shows how to handle formulas such as `P = V²/R` and parallel resistor networks when an intermediate dimension has no registered type.
 - **[Hiroshimas per datacenter](https://github.com/Dimonade/kuchka/blob/HEAD/docs/examples/hiroshimas_per_datacenter/README.md)** - counts the heat of a planned off-grid data center in Hiroshimas, with an efficiency as a `Proportion`, TNT equivalents, terajoules, a fluence over acres, and the Reddit unit of Hiroshimas per Walmart Supercenter built as a reference quantity.
 
