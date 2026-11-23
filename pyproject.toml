@@ -44,7 +44,7 @@ license-files = ["LICENSE-APACHE"]
 # Therefore, `import kuchka` does not load any of them.
 # `kuchka.pedantic` needs pydantic.
 # `kuchka.attrs` does not need anything.
-msgspec = ["msgspec>=0.18"]
+msgspec = ["msgspec>=0.18.5"]
 pydantic = ["pydantic>=2.9"]
 
 [project.urls]
@@ -60,7 +60,7 @@ build-backend = "uv_build"
 
 [dependency-groups]
 # The libraries the integrations are tested and type-checked against.
-integrations = ["attrs>=26.1.0", "msgspec>=0.18", "pydantic>=2.9"]
+integrations = ["attrs>=26.1.0", "msgspec>=0.18.5", "pydantic>=2.9"]
 
 test = [
   { include-group = "integrations" },
