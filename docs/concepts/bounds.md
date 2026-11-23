@@ -1,7 +1,7 @@
 # Bounds: the range a field accepts
 
 A value that reads as a voltage can still be a voltage the device must not be given: a supply is above zero and at most 60 V, a duty is between 0 and 1, an operating temperature is between -40 °C and 85 °C.
-`kuchka.bounds.Bounds` holds such a limit, as measurements of one quantity type:
+`kuchka.bounds.Bounds` holds such a limit, as measurements of one quantity type; the [limits-file example](../examples/config_migration/README.md) uses it to refuse a configuration that asks for more than the hardware can do:
 
 ```python
 from kuchka import Millivolt
