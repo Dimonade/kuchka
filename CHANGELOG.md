@@ -88,6 +88,10 @@ See the `Stability` section in `README.md` for what versioning means.
   `Millivolt(2800).value_in(AMPERE)` returned `14/5`, a voltage expressed in amperes, and a value that was no unit at all raised an `AttributeError`.
   It now raises `InvalidConversionError`, as `to` always did, in all four shapes, and the two methods share one check.
   The display unit that `repr`, `format`, and `wire` pass is trusted and skips it.
+- **A level is made from a `Proportion`:**
+  `LogarithmicRatio.from_power_ratio` and `from_field_ratio` leaked an `AttributeError` for anything else, and raise a `TypeError` that says what they take.
+- **A format specification is a string:**
+  `format_parts(None)` was taken for an empty specification, and raises a `TypeError`, as `format(x, None)` does.
 
 ## [0.1.5] - 2026-11-16
 

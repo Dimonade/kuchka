@@ -426,7 +426,8 @@ class _ScalarStorage(Generic[_UnitT]):
 
         For a table, a CSV column, or a protocol that renders the number and the unit
         apart, without splitting a formatted string on its space.
-        `spec` is the format specification of `__format__`, and the two are one rule:
+        `spec` is the format specification of `__format__`, a `str`, and the two are
+        one rule:
         `" ".join(voltage.format_parts(spec))` is `format(voltage, spec)`, so the
         magnitude is rounded once, from its exact value, a tie rounds away from zero,
         and an empty spec shows 28 significant digits for a value with no finite
@@ -441,6 +442,9 @@ class _ScalarStorage(Generic[_UnitT]):
         ('1234.5', 'V')
 
         """
+        if not isinstance(spec, str):
+            msg = f"format_parts() argument 1 must be str, not {type(spec).__name__}"
+            raise TypeError(msg)
         unit = self._display_unit
         return render(self._magnitude_in(unit), spec or "f"), unit.symbol
 

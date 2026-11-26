@@ -61,6 +61,12 @@ def _linear_ratio(level: Fraction, divisor: Fraction) -> Proportion:
 
 def _level_of(ratio: Proportion, divisor: Fraction) -> Fraction:
     """Evaluate ``divisor * log10(ratio)`` in decibels."""
+    if not isinstance(ratio, Proportion):
+        msg = (
+            "a level is made from a Proportion, such as Ratio(1000), "
+            f"not {type(ratio).__name__} ({ratio!r})."
+        )
+        raise TypeError(msg)
     value = ratio.magnitude
     if value <= 0:
         msg = (
@@ -100,7 +106,8 @@ class LogarithmicRatio(PureLogarithmicQuantity):
         """Return the level, in decibels, of a ratio of two power quantities.
 
         ``LogarithmicRatio.from_power_ratio(Ratio(1000)) == Decibel(30)``.
-        Raises `InvalidMeasurementError` unless the ratio is positive.
+        Raises `InvalidMeasurementError` unless the ratio is positive, and `TypeError`
+        unless it is a `Proportion`.
         """
         return cls(_level_of(ratio, _POWER_DIVISOR), cls._canonical_unit)
 
@@ -109,7 +116,8 @@ class LogarithmicRatio(PureLogarithmicQuantity):
         """Return the level, in decibels, of a ratio of two field quantities.
 
         ``LogarithmicRatio.from_field_ratio(Ratio(100)) == Decibel(40)``.
-        Raises `InvalidMeasurementError` unless the ratio is positive.
+        Raises `InvalidMeasurementError` unless the ratio is positive, and `TypeError`
+        unless it is a `Proportion`.
         """
         return cls(_level_of(ratio, _FIELD_DIVISOR), cls._canonical_unit)
 
