@@ -82,6 +82,13 @@ See the `Stability` section in `README.md` for what versioning means.
   `Millikelvin`, `Microkelvin`, `Millicelsius`, and `Microcelsius`, each with a `Delta` form.
   A prefix keeps the zero of the scale, so `Millicelsius(0)` is 273.15 K, and `m°C` is the spelling of the millidegree.
 
+### Fixed
+
+- **`value_in` refuses a unit that is no unit of the quantity:**
+  `Millivolt(2800).value_in(AMPERE)` returned `14/5`, a voltage expressed in amperes, and a value that was no unit at all raised an `AttributeError`.
+  It now raises `InvalidConversionError`, as `to` always did, in all four shapes, and the two methods share one check.
+  The display unit that `repr`, `format`, and `wire` pass is trusted and skips it.
+
 ## [0.1.5] - 2026-11-16
 
 ### Added
