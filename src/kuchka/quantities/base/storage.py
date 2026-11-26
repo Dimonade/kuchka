@@ -293,10 +293,19 @@ class _ScalarStorage(Generic[_UnitT]):
         self._store(magnitude, display_unit)
 
     def value_in(self, unit: _UnitT) -> Fraction:
-        """Exact magnitude expressed in `unit`.
+        """Exact magnitude expressed in `unit`, which has to be a unit of this type.
 
         Overridden per algebraic base: a pure scale (`LinearQuantity`) vs. a
-        scale-plus-offset (`AffineQuantity`).
+        scale-plus-offset (`AffineQuantity`), each of which refuses a unit that is no
+        unit of its quantity.
+        """
+        raise NotImplementedError
+
+    def _magnitude_in(self, unit: _UnitT) -> Fraction:
+        """Exact magnitude expressed in `unit`, which the caller knows is a unit of it.
+
+        `value_in` without the check, for the code that passes the display unit of the
+        measurement itself or a unit taken from its own ladder.
         """
         raise NotImplementedError
 
@@ -371,7 +380,7 @@ class _ScalarStorage(Generic[_UnitT]):
         if ladder is None or self._magnitude == 0:
             return self
         chosen = next(
-            (unit for unit in reversed(ladder) if abs(self.value_in(unit)) >= 1),
+            (unit for unit in reversed(ladder) if abs(self._magnitude_in(unit)) >= 1),
             ladder[0],
         )
         if chosen == self._display_unit:
@@ -412,11 +421,32 @@ class _ScalarStorage(Generic[_UnitT]):
             )
         raise InvalidMeasurementError(msg)
 
+    def format_parts(self, spec: str = "") -> tuple[str, str]:
+        """Return the formatted magnitude and the unit symbol, as two strings.
+
+        For a table, a CSV column, or a protocol that renders the number and the unit
+        apart, without splitting a formatted string on its space.
+        `spec` is the format specification of `__format__`, and the two are one rule:
+        `" ".join(voltage.format_parts(spec))` is `format(voltage, spec)`, so the
+        magnitude is rounded once, from its exact value, a tie rounds away from zero,
+        and an empty spec shows 28 significant digits for a value with no finite
+        decimal form.
+
+        Examples
+        --------
+        >>> from kuchka import Volt
+        >>> Volt(1234.5).format_parts(".2f")
+        ('1234.50', 'V')
+        >>> Volt(1234.5).format_parts()
+        ('1234.5', 'V')
+
+        """
+        unit = self._display_unit
+        return render(self._magnitude_in(unit), spec or "f"), unit.symbol
+
     @override
     def __repr__(self) -> str:
-        return (
-            f"{render(self.value_in(self._display_unit))} {self._display_unit.symbol}"
-        )
+        return " ".join(self.format_parts())
 
     @override
     def __format__(self, format_spec: str) -> str:
@@ -426,11 +456,9 @@ class _ScalarStorage(Generic[_UnitT]):
         A non-empty spec is a `Decimal` format spec applied to the exact value, rounded
         once and independent of the active `Decimal` context; the unit symbol follows:
         `f"{Volt(4.2):.2f}"` reads `"4.20 V"`.
+        `format_parts` returns the two parts apart.
         """
-        if not format_spec:
-            return repr(self)
-        text = render(self.value_in(self._display_unit), format_spec)
-        return f"{text} {self._display_unit.symbol}"
+        return " ".join(self.format_parts(format_spec))
 
 
 __all__ = ["_ScalarStorage"]

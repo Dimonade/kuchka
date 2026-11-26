@@ -240,6 +240,10 @@ _parse_a_number = parse(5, Voltage)  # type: ignore[arg-type]  # ty: ignore[inva
 _parse_a_constructor = parse("5 mV", Volt)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 _parse_with_a_word = parse("5 mV", Voltage, allow_archaic="yes")  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
+# `format_parts` returns the magnitude and the symbol as two strings.
+parts: tuple[str, str] = Volt(1234.5).format_parts(".2f")  # OK
+_bad_spec = Volt(1).format_parts(2)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
+
 # `wire.load` builds the quantity type it is given from what a boundary delivers.
 loaded: Voltage = wire.load("5 mV", Voltage)  # OK
 wrong_loaded: Current = wire.load("5 mV", Voltage)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]

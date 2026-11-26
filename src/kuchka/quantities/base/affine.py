@@ -91,12 +91,8 @@ class AffineQuantity(
     _scales_by_size: ClassVar[bool] = True
     __slots__ = ()
 
-    def to(self, unit: AffineUnitDef) -> Self:
-        """Return an equal reading that displays as ``unit``.
-
-        This never changes the value being represented, only what ``repr()`` and
-        ``value_in()`` return by default.
-        """
+    def _require_unit(self, unit: object) -> None:
+        """Raise `InvalidConversionError` unless `unit` is a unit of this quantity."""
         if not isinstance(unit, AffineUnitDef):
             msg = (
                 f"conversion target must be {self._conversion_target_hint}, "
@@ -104,11 +100,37 @@ class AffineQuantity(
             )
             raise InvalidConversionError(msg)
         self._reject_foreign_unit(unit)
+
+    def to(self, unit: AffineUnitDef) -> Self:
+        """Return an equal reading that displays as ``unit``.
+
+        This never changes the value being represented, only what ``repr()`` and
+        ``value_in()`` return by default.
+
+        Raises
+        ------
+        InvalidConversionError
+            `unit` is no affine unit, or a unit of another quantity.
+
+        """
+        self._require_unit(unit)
         return type(self)(self._magnitude, unit)
 
     @override
     def value_in(self, unit: AffineUnitDef) -> Fraction:
-        """Exact magnitude expressed in ``unit``."""
+        """Exact magnitude expressed in ``unit``, which has to be a unit of this type.
+
+        Raises
+        ------
+        InvalidConversionError
+            `unit` is no affine unit, or a unit of another quantity.
+
+        """
+        self._require_unit(unit)
+        return self._magnitude_in(unit)
+
+    @override
+    def _magnitude_in(self, unit: AffineUnitDef) -> Fraction:
         return (self._magnitude - unit.offset) / unit.scale
 
     def __add__(self, other: _DeltaT) -> Self:

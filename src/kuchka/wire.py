@@ -41,6 +41,18 @@ since `2.8` does not say whether it is volts.
 A `float` is read by the digits it shows, the way the unit constructors read it, so
 `0.1` is exactly one tenth.
 
+As a mapping
+------------
+`to_dict(quantity)` writes the same exact data as the two fields a JSON document or a
+database row wants, `{"value": "2800", "unit": "mV"}`, and `from_dict(data, Voltage)`
+reads it back; the value is the text of `dump`, a decimal when it terminates and a
+fraction when it does not, so `{"value": "1/3", "unit": "V"}` is a third of a volt.
+`to_dict(quantity, unit="V")` writes the measurement in another unit of its quantity,
+converted exactly, and `as_float=True` writes `value` as a JSON number for a consumer
+that accepts nothing else, which is as exact as a `float` is.
+The text of `dump` stays the canonical form; the mapping is for storage that wants
+fields, and `load` reads both.
+
 Errors
 ------
 Every refusal of data is a `ParseError`, which is a `ValueError`: text that is no
@@ -74,6 +86,17 @@ through:
 2800 mV
 >>> load(Volt(3.3), Voltage)
 3.3 V
+
+Written as a mapping and read back:
+
+>>> to_dict(Millivolt(2800))
+{'value': '2800', 'unit': 'mV'}
+>>> to_dict(Volt(1) / 3)
+{'value': '1/3', 'unit': 'V'}
+>>> to_dict(Millivolt(2800), unit="V")
+{'value': '2.8', 'unit': 'V'}
+>>> from_dict({"value": "1/3", "unit": "V"}, Voltage) == Volt(1) / 3
+True
 
 A proportion needs no unit, and every other quantity does:
 
@@ -114,8 +137,10 @@ from typing import TYPE_CHECKING
 from typing import Any
 from typing import TypeVar
 
+from kuchka.errors import InvalidConversionError
 from kuchka.errors import InvalidMeasurementError
 from kuchka.errors import ParseError
+from kuchka.errors import UnknownUnitError
 from kuchka.internal.limits import NUMERIC_LIMITS
 from kuchka.internal.reading import ArchaicPolicy
 from kuchka.internal.reading import archaic_policy_of
@@ -129,6 +154,7 @@ from kuchka.quantities.base.storage import _ScalarStorage
 
 if TYPE_CHECKING:
     from kuchka.internal.unit_table import UnitTable
+    from kuchka.quantities.base.units import UnitDef
 
 _QuantityT = TypeVar("_QuantityT", bound="_ScalarStorage[Any]")
 
@@ -177,7 +203,7 @@ def dump(quantity: _ScalarStorage[Any]) -> str:
         msg = f"dump writes a measurement, not {type(quantity).__name__}."
         raise TypeError(msg)
     unit = quantity.unit
-    text = _magnitude_text(quantity.value_in(unit))
+    text = _magnitude_text(quantity._magnitude_in(unit))  # noqa: SLF001 -- its own unit
     bare = unit_table_of(type(quantity)).bare
     if bare is not None and bare[0] == unit:
         return text
@@ -236,6 +262,164 @@ def load(
         raise
     except InvalidMeasurementError as exc:
         raise ParseError(str(exc)) from exc
+    return result
+
+
+def to_dict(
+    quantity: _ScalarStorage[Any],
+    *,
+    unit: UnitDef | str | None = None,
+    as_float: bool = False,
+) -> dict[str, str | int | float]:
+    """Write `quantity` as a mapping of its exact `value` and its `unit` symbol.
+
+    Parameters
+    ----------
+    quantity : _ScalarStorage
+        A measurement of any quantity type and shape.
+    unit : UnitDef or str, optional
+        The unit to write it in, as a unit constant or a spelling that the table of
+        the quantity reads, converted exactly; the unit the measurement displays in
+        if omitted.
+    as_float : bool, optional
+        Write `value` as a JSON number, an `int` when the magnitude is whole and a
+        `float` otherwise, for a consumer that accepts no text.
+        The text of the default is exact and this is as exact as a `float`.
+
+    Returns
+    -------
+    dict
+        ``{"value": ..., "unit": ...}``, where the value is the text `dump` writes: a
+        decimal when the magnitude terminates and a fraction when it does not.
+        A ratio keeps its symbol, ``"1"``.
+
+    Raises
+    ------
+    TypeError
+        `quantity` is no measurement.
+    UnknownUnitError
+        `unit` is a spelling that the table of the quantity does not read.
+    InvalidConversionError
+        `unit` is a unit of another quantity, or a unit that the quantity is never
+        displayed in, such as the milliseconds of an `Instant`.
+    InvalidMeasurementError
+        `as_float` is set, and the magnitude is beyond the range of a `float`, or so
+        small that a `float` would write it as zero.
+
+    Examples
+    --------
+    >>> from kuchka import Millivolt
+    >>> to_dict(Millivolt(2800))
+    {'value': '2800', 'unit': 'mV'}
+    >>> to_dict(Millivolt(2800), unit="V", as_float=True)
+    {'value': 2.8, 'unit': 'V'}
+
+    """
+    if not isinstance(quantity, _ScalarStorage):
+        msg = f"to_dict writes a measurement, not {type(quantity).__name__}."
+        raise TypeError(msg)
+    shown = quantity if unit is None else _in_unit(quantity, unit)
+    written = shown.unit
+    magnitude = shown._magnitude_in(written)  # noqa: SLF001 -- its own unit
+    value = _float_value(magnitude) if as_float else _magnitude_text(magnitude)
+    return {"value": value, "unit": written.symbol}
+
+
+def from_dict(
+    data: Mapping[str, object],
+    quantity: type[_QuantityT],
+    *,
+    allow_archaic: ArchaicPolicy | bool = ArchaicPolicy.Deny,
+) -> _QuantityT:
+    """Read a mapping of a `value` and a `unit` as a measurement of type `quantity`.
+
+    Parameters
+    ----------
+    data : Mapping
+        ``{"value": ..., "unit": ...}``: the value is a number or the text of one,
+        including a fraction such as ``"1/3"``, and the unit is a spelling of a unit
+        of `quantity`.
+    quantity : type
+        The quantity type the field holds, such as `Voltage`.
+    allow_archaic : ArchaicPolicy or bool, optional
+        Whether to read archaic units, as `parse` does.
+
+    Returns
+    -------
+    _QuantityT
+        The measurement, in the unit that was written.
+
+    Raises
+    ------
+    ParseError
+        `data` is no mapping, lacks the `value` or the `unit`, has another key, holds
+        a `bool` or another value that is no number, or holds a measurement that
+        `quantity` cannot hold, such as ``-300`` in ``°C``.
+    UnknownUnitError
+        The unit is no unit of `quantity`.
+    TypeError
+        `quantity` is not a quantity type with units.
+
+    Examples
+    --------
+    >>> from kuchka import Voltage
+    >>> from_dict({"value": "2800", "unit": "mV"}, Voltage)
+    2800 mV
+
+    """
+    if not isinstance(data, Mapping):
+        msg = (
+            f"a {quantity.__name__} is read from a mapping of a 'value' and a 'unit', "
+            f"not {type(data).__name__} ({data!r})."
+        )
+        raise ParseError(msg)
+    absent = [key for key in _KEYS if data.get(key) is None]
+    if absent:
+        msg = (
+            f"a {quantity.__name__} is read from a mapping of a 'value' and a 'unit': "
+            f"{' and '.join(repr(key) for key in absent)} missing from {data!r}."
+        )
+        raise ParseError(msg)
+    return load(data, quantity, allow_archaic=allow_archaic)
+
+
+def _in_unit(quantity: _ScalarStorage[Any], unit: UnitDef | str) -> Any:  # noqa: ANN401 -- same type
+    """Return `quantity` displayed in `unit`, which has to be a unit of its type."""
+    target: Any = unit
+    asked: str | None = None
+    if isinstance(unit, str):
+        kind = type(quantity)
+        table = unit_table_of(kind)
+        try:
+            spelled, constructor = table.resolve(unit)
+        except KeyError:
+            msg = f"{unit!r} is not a unit of {kind.__name__} (see {table.label})."
+            raise UnknownUnitError(msg, unit=unit, quantity=kind) from None
+        target = constructor(0).unit  # the unit the table builds, of whatever shape
+        asked = spelled.symbol
+    converting: Any = quantity  # `to` is on every shape, and typed on each
+    shown = converting.to(target)
+    if asked is not None and shown.unit.symbol != asked:
+        msg = (
+            f"a {type(quantity).__name__} is displayed in {shown.unit.symbol}, "
+            f"and cannot be written in {asked}."
+        )
+        raise InvalidConversionError(msg)
+    return shown
+
+
+def _float_value(magnitude: Fraction) -> int | float:
+    """Write a magnitude as a JSON number: an `int` if whole, else a `float`."""
+    if magnitude.denominator == 1:
+        return magnitude.numerator
+    try:
+        result = float(magnitude)
+    except OverflowError:
+        msg = f"{magnitude} is beyond the range of a float."
+        raise InvalidMeasurementError(msg) from None
+    if result == 0.0:
+        msg = f"{magnitude} is so small that a float would write it as zero."
+        raise InvalidMeasurementError(msg)
     return result
 
 
@@ -371,4 +555,4 @@ def _decimal_text(magnitude: Fraction) -> str | None:
     return f"{sign}{whole}.{fraction}" if places else f"{sign}{whole}"
 
 
-__all__ = ["dump", "load"]
+__all__ = ["dump", "from_dict", "load", "to_dict"]
