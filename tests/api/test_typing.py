@@ -40,6 +40,7 @@ FIXTURES: dict[str, tuple[Path, str | None, tuple[str, ...]]] = {
         "pydantic",
         ("mypy", "pyright"),
     ),
+    "wire_mapping": (_FIXTURES / "wire_mapping.py", None, ("mypy", "pyright")),
     "msgspec_fields": (
         _FIXTURES / "msgspec_fields.py",
         "msgspec",
