@@ -61,6 +61,10 @@ See the `Stability` section in `README.md` for what versioning means.
   `wire.to_dict(Volt(1) / 3)` writes `{"value": "1/3", "unit": "V"}`, the exact data of the text form as two fields for a JSON document or a database row, and `wire.from_dict(data, Voltage)` reads it back with the strictness of `parse`.
   `unit="V"` writes the measurement in another unit of its quantity, converted exactly, and `as_float=True` writes a JSON number for a consumer that accepts nothing else, refusing a magnitude a `float` would corrupt.
 
+- **`format_parts`:**
+  `Volt(1234.5).format_parts(".2f")` returns `("1234.50", "V")`, the formatted magnitude and the unit symbol apart, for a table, a CSV column, or a protocol that renders them separately.
+  It is the one rule behind `format`, `str`, and `repr`, which now join its two parts, so the rounding and the 28-digit default are the same everywhere.
+
 #### Documentation
 
 - **The limits-file example, read four ways:**

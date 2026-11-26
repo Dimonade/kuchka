@@ -1146,6 +1146,13 @@ The precision, rounding mode, and traps of the active `decimal` context do not a
 The magnitude is rounded once, from its exact value, and a tie rounds away from zero: `f"{Volt(2.665):.2f}"` is `"2.67 V"`.
 Without a precision, a value that has no finite decimal form shows 28 significant digits, so `repr(Volt(Fraction(1, 3)))` is `"0.3333333333333333333333333333 V"`.
 
+A table, a CSV column, or a protocol that renders the number and the unit apart gets them from `format_parts`, which follows the same rule and never splits a string on its space:
+
+```python
+voltage.format_parts(".2f")  # ('1234.50', 'V')
+" ".join(voltage.format_parts(".2f")) == f"{voltage:.2f}"  # True
+```
+
 ### Readable units
 
 A measurement displays in the unit it was given, and two methods choose one that reads well when you ask for it.
