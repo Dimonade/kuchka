@@ -1,6 +1,6 @@
 name: Bug report
 description: Something behaves differently from what the documentation says, or raises an unexpected error.
-labels: ["type/bug"]
+type: bug
 body:
   - type: textarea
     id: what
