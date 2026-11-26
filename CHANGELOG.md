@@ -57,6 +57,10 @@ See the `Stability` section in `README.md` for what versioning means.
   `kuchka.pydantic.Bounds` is the `Annotated` marker beside `Quantity`, and `kuchka.attrs.Bounds` is the `attrs` validator; a `msgspec` struct calls `check` in `__post_init__`.
   A quantity with no ordering, such as an `Angle`, has no bounds, and both checkers report it.
 
+- **`wire.to_dict` and `wire.from_dict`:**
+  `wire.to_dict(Volt(1) / 3)` writes `{"value": "1/3", "unit": "V"}`, the exact data of the text form as two fields for a JSON document or a database row, and `wire.from_dict(data, Voltage)` reads it back with the strictness of `parse`.
+  `unit="V"` writes the measurement in another unit of its quantity, converted exactly, and `as_float=True` writes a JSON number for a consumer that accepts nothing else, refusing a magnitude a `float` would corrupt.
+
 #### Documentation
 
 - **The limits-file example, read four ways:**

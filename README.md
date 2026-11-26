@@ -359,7 +359,10 @@ wire.dump(Volt(1) / 3)  # '1/3 V'
 wire.load("1/3 V", Voltage) == Volt(1) / 3  # True
 wire.load({"value": "2800", "unit": "mV"}, Voltage)  # 2800 mV
 wire.load(2.8, Voltage)  # rejected: `ParseError`.
+wire.to_dict(Volt(1) / 3)  # {'value': '1/3', 'unit': 'V'}
 ```
+
+`to_dict` writes the number and the unit as two fields, for a JSON document or a database row, and `from_dict` reads them back exactly.
 
 Every refusal is a `ParseError`, which is a `ValueError`, so a validation framework reports it without a wrapper.
 A `msgspec` struct reads and writes the same text through the hooks of `kuchka.msgspec` (`pip install kuchka[msgspec]`); see [The wire form](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/wire_form.md) and [Bounds](https://github.com/Dimonade/kuchka/blob/HEAD/docs/concepts/bounds.md).
