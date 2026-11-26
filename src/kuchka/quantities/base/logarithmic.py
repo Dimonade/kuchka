@@ -73,13 +73,8 @@ class PureLogarithmicQuantity(_OrderedScalarMixin, _ScalarStorage[LogarithmicUni
         """Magnitude in this quantity's canonical unit."""
         return self._magnitude
 
-    def to(self, unit: LogarithmicUnitDef) -> Self:
-        """Return an equal level that displays as ``unit``.
-
-        This never changes the value being represented: ``Decibel(10)`` and
-        ``Decibel(10).to(BEL)`` compare equal.
-        It only changes what ``repr()`` and ``value_in()`` return by default.
-        """
+    def _require_unit(self, unit: object) -> None:
+        """Raise `InvalidConversionError` unless `unit` is a unit of this quantity."""
         if not isinstance(unit, LogarithmicUnitDef):
             msg = (
                 f"invalid conversion target {unit!r}: expected a logarithmic unit "
@@ -87,11 +82,38 @@ class PureLogarithmicQuantity(_OrderedScalarMixin, _ScalarStorage[LogarithmicUni
             )
             raise InvalidConversionError(msg)
         self._reject_foreign_unit(unit)
+
+    def to(self, unit: LogarithmicUnitDef) -> Self:
+        """Return an equal level that displays as ``unit``.
+
+        This never changes the value being represented: ``Decibel(10)`` and
+        ``Decibel(10).to(BEL)`` compare equal.
+        It only changes what ``repr()`` and ``value_in()`` return by default.
+
+        Raises
+        ------
+        InvalidConversionError
+            `unit` is no logarithmic unit, or a unit of another quantity.
+
+        """
+        self._require_unit(unit)
         return type(self)(self._magnitude, unit)
 
     @override
     def value_in(self, unit: LogarithmicUnitDef) -> Fraction:
-        """Exact magnitude expressed in ``unit``."""
+        """Exact magnitude expressed in ``unit``, which has to be a unit of this type.
+
+        Raises
+        ------
+        InvalidConversionError
+            `unit` is no logarithmic unit, or a unit of another quantity.
+
+        """
+        self._require_unit(unit)
+        return self._magnitude_in(unit)
+
+    @override
+    def _magnitude_in(self, unit: LogarithmicUnitDef) -> Fraction:
         return self._magnitude / unit.scale
 
     def __add__(self, other: Self) -> Self:

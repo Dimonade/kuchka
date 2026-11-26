@@ -203,7 +203,7 @@ def dump(quantity: _ScalarStorage[Any]) -> str:
         msg = f"dump writes a measurement, not {type(quantity).__name__}."
         raise TypeError(msg)
     unit = quantity.unit
-    text = _magnitude_text(quantity.value_in(unit))
+    text = _magnitude_text(quantity._magnitude_in(unit))  # noqa: SLF001 -- its own unit
     bare = unit_table_of(type(quantity)).bare
     if bare is not None and bare[0] == unit:
         return text
@@ -320,7 +320,7 @@ def to_dict(
         raise TypeError(msg)
     shown = quantity if unit is None else _in_unit(quantity, unit)
     written = shown.unit
-    magnitude = shown.value_in(written)
+    magnitude = shown._magnitude_in(written)  # noqa: SLF001 -- its own unit
     value = _float_value(magnitude) if as_float else _magnitude_text(magnitude)
     return {"value": value, "unit": written.symbol}
 

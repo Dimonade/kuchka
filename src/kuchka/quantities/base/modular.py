@@ -65,8 +65,8 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
         """Magnitude in this quantity's canonical unit."""
         return self._magnitude
 
-    def to(self, unit: UnitDef) -> Self:
-        """Return an equal reading that displays as ``unit``."""
+    def _require_unit(self, unit: object) -> None:
+        """Raise `InvalidConversionError` unless `unit` is a unit of this quantity."""
         if not isinstance(unit, UnitDef):
             msg = (
                 f"invalid conversion target {unit!r}: expected a Kuchka unit definition"
@@ -81,11 +81,34 @@ class ModularQuantity(_ScalarStorage[UnitDef]):
             )
             raise InvalidConversionError(msg)
         self._reject_foreign_unit(unit)
+
+    def to(self, unit: UnitDef) -> Self:
+        """Return an equal reading that displays as ``unit``.
+
+        Raises
+        ------
+        InvalidConversionError
+            `unit` is no unit, or a unit of another dimension or of another quantity.
+
+        """
+        self._require_unit(unit)
         return type(self)(self._magnitude, unit)
 
     @override
     def value_in(self, unit: UnitDef) -> Fraction:
-        """Exact magnitude expressed in ``unit``."""
+        """Exact magnitude expressed in ``unit``, which has to be a unit of this type.
+
+        Raises
+        ------
+        InvalidConversionError
+            `unit` is no unit, or a unit of another dimension or of another quantity.
+
+        """
+        self._require_unit(unit)
+        return self._magnitude_in(unit)
+
+    @override
+    def _magnitude_in(self, unit: UnitDef) -> Fraction:
         return self._magnitude / unit.scale
 
     def is_close(self, other: Self, *, tolerance: Self) -> bool:

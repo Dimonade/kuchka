@@ -293,10 +293,19 @@ class _ScalarStorage(Generic[_UnitT]):
         self._store(magnitude, display_unit)
 
     def value_in(self, unit: _UnitT) -> Fraction:
-        """Exact magnitude expressed in `unit`.
+        """Exact magnitude expressed in `unit`, which has to be a unit of this type.
 
         Overridden per algebraic base: a pure scale (`LinearQuantity`) vs. a
-        scale-plus-offset (`AffineQuantity`).
+        scale-plus-offset (`AffineQuantity`), each of which refuses a unit that is no
+        unit of its quantity.
+        """
+        raise NotImplementedError
+
+    def _magnitude_in(self, unit: _UnitT) -> Fraction:
+        """Exact magnitude expressed in `unit`, which the caller knows is a unit of it.
+
+        `value_in` without the check, for the code that passes the display unit of the
+        measurement itself or a unit taken from its own ladder.
         """
         raise NotImplementedError
 
@@ -371,7 +380,7 @@ class _ScalarStorage(Generic[_UnitT]):
         if ladder is None or self._magnitude == 0:
             return self
         chosen = next(
-            (unit for unit in reversed(ladder) if abs(self.value_in(unit)) >= 1),
+            (unit for unit in reversed(ladder) if abs(self._magnitude_in(unit)) >= 1),
             ladder[0],
         )
         if chosen == self._display_unit:
@@ -433,7 +442,7 @@ class _ScalarStorage(Generic[_UnitT]):
 
         """
         unit = self._display_unit
-        return render(self.value_in(unit), spec or "f"), unit.symbol
+        return render(self._magnitude_in(unit), spec or "f"), unit.symbol
 
     @override
     def __repr__(self) -> str:
