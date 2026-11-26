@@ -88,19 +88,23 @@ The value is the text that `dump` writes, a decimal when the magnitude terminate
 A ratio keeps its symbol, `1`, so the mapping is always explicit, and `from_dict` needs both keys where `load` lets a proportion go without a unit.
 The text of `dump` remains the canonical form, and `load` reads both.
 
-`unit` writes the measurement in another unit of its quantity, given as a spelling or as a unit constant, and the conversion is exact:
+`unit` writes the measurement in another unit of its quantity, given as a unit constant such as `VOLT` or as a spelling the table of the quantity reads, and the conversion is exact; anything else, a unit of another quantity included, is refused:
 
 ```python
 wire.to_dict(Millivolt(2800), unit="V")  # {'value': '2.8', 'unit': 'V'}
 wire.to_dict(Celsius(20), unit="K")  # {'value': '293.15', 'unit': 'K'}
 wire.to_dict(Volt(1), unit="mA")  # rejected: `UnknownUnitError`.
+wire.to_dict(Volt(1), unit=5)  # rejected: `InvalidConversionError`.
 ```
 
-A consumer that accepts only JSON numbers gets `as_float=True`, which writes `value` as an `int` when the magnitude is whole and as a `float` otherwise:
+A consumer that accepts only JSON numbers gets `form=wire.ValueForm.Float`, which writes `value` as an `int` when the magnitude is whole and as a `float` otherwise; the default is `ValueForm.Exact`, and nothing else is a form, a `bool` included:
 
 ```python
-wire.to_dict(Volt(4.2), as_float=True)  # {'value': 4.2, 'unit': 'V'}
-wire.to_dict(Millivolt(2800), as_float=True)  # {'value': 2800, 'unit': 'mV'}
+wire.to_dict(Volt(4.2), form=wire.ValueForm.Float)  # {'value': 4.2, 'unit': 'V'}
+wire.to_dict(
+    Millivolt(2800), form=wire.ValueForm.Float
+)  # {'value': 2800, 'unit': 'mV'}
+wire.to_dict(Volt(1), form=True)  # rejected: `TypeError`.
 ```
 
 A float is exact only where it reads back to the same decimal: `4.2` does, and a third of a volt does not, so the default is the one that round-trips.

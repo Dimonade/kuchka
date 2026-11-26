@@ -16,6 +16,7 @@ from hypothesis import strategies as st
 
 from kuchka import Celsius
 from kuchka import Current
+from kuchka import Decibel
 from kuchka import Degree
 from kuchka import InvalidConversionError
 from kuchka import InvalidMeasurementError
@@ -31,6 +32,7 @@ from kuchka import Volt
 from kuchka import Voltage
 from kuchka import wire
 from kuchka.units import AMPERE
+from kuchka.units import KELVIN
 from kuchka.units.archaic.russian import length as russian_length
 from kuchka.units.electromagnetics.voltage import VOLT
 
@@ -114,25 +116,27 @@ def test_to_dict_writes_a_measurement_only(value: object) -> None:
 def test_a_json_number_is_an_int_when_whole_and_a_float_otherwise(
     value: object, expected: dict[str, object]
 ) -> None:
-    written = wire.to_dict(value, as_float=True)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
+    written = wire.to_dict(value, form=wire.ValueForm.Float)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
     assert written == expected
     assert type(written["value"]) is type(expected["value"])
 
 
 def test_a_float_is_lossy_only_where_a_float_is() -> None:
     exact = Volt(4.2)
-    written = wire.to_dict(exact, as_float=True)
+    written = wire.to_dict(exact, form=wire.ValueForm.Float)
     assert wire.from_dict(written, Voltage) == exact
     third = Volt(1) / 3
-    assert wire.from_dict(wire.to_dict(third, as_float=True), Voltage) != third
+    assert (
+        wire.from_dict(wire.to_dict(third, form=wire.ValueForm.Float), Voltage) != third
+    )
     assert wire.from_dict(wire.to_dict(third), Voltage) == third
 
 
 def test_a_value_a_float_cannot_hold_is_refused_and_not_written_as_zero() -> None:
     with pytest.raises(InvalidMeasurementError, match="so small"):
-        wire.to_dict(Volt(Fraction(1, 10**400)), as_float=True)
+        wire.to_dict(Volt(Fraction(1, 10**400)), form=wire.ValueForm.Float)
     with pytest.raises(InvalidMeasurementError, match="beyond the range"):
-        wire.to_dict(Volt(Fraction(10**400, 3)), as_float=True)
+        wire.to_dict(Volt(Fraction(10**400, 3)), form=wire.ValueForm.Float)
     tiny = Volt(Fraction(1, 10**400))
     assert wire.from_dict(wire.to_dict(tiny), Voltage) == tiny
 
@@ -236,3 +240,43 @@ def test_a_mapping_of_another_quantity_is_read_as_that_quantity_only() -> None:
 def test_a_degree_written_in_radians_keeps_its_value() -> None:
     written = wire.to_dict(Degree(90), unit="rad")
     assert wire.from_dict(written, type(Degree(90))) == Degree(90)
+
+
+class Dinosaur:
+    """Nothing `to_dict` should take for a unit."""
+
+
+@pytest.mark.parametrize(
+    "unit",
+    [5, 1.5, True, [VOLT], {"unit": "V"}, Dinosaur(), Voltage, Volt(1), AMPERE, KELVIN],
+    ids=lambda unit: type(unit).__name__ + ":" + str(getattr(unit, "name", unit))[:12],
+)
+def test_a_unit_that_is_no_unit_of_the_quantity_is_refused(unit: object) -> None:
+    with pytest.raises(InvalidConversionError):
+        wire.to_dict(Millivolt(2800), unit=unit)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
+
+
+def test_the_unit_of_a_temperature_or_a_level_is_a_unit_constant_too() -> None:
+    from kuchka.units import DECIBEL
+    from kuchka.units.thermal import KELVIN as KELVIN_OF_TEMPERATURE
+
+    assert wire.to_dict(Celsius(20), unit=KELVIN_OF_TEMPERATURE) == {
+        "value": "293.15",
+        "unit": "K",
+    }
+    assert wire.to_dict(Decibel(3), unit=DECIBEL) == {"value": "3", "unit": "dB"}
+
+
+@pytest.mark.parametrize(
+    "form", [True, False, None, "float", "exact", 1, 0.5, object()]
+)
+def test_the_form_of_the_value_is_a_value_form_and_nothing_else(form: object) -> None:
+    with pytest.raises(TypeError, match="ValueForm"):
+        wire.to_dict(Volt(1), form=form)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
+
+
+def test_the_default_form_is_exact() -> None:
+    assert wire.to_dict(Volt(1) / 3) == wire.to_dict(
+        Volt(1) / 3, form=wire.ValueForm.Exact
+    )
+    assert [member.name for member in wire.ValueForm] == ["Exact", "Float"]

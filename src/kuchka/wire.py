@@ -48,8 +48,8 @@ database row wants, `{"value": "2800", "unit": "mV"}`, and `from_dict(data, Volt
 reads it back; the value is the text of `dump`, a decimal when it terminates and a
 fraction when it does not, so `{"value": "1/3", "unit": "V"}` is a third of a volt.
 `to_dict(quantity, unit="V")` writes the measurement in another unit of its quantity,
-converted exactly, and `as_float=True` writes `value` as a JSON number for a consumer
-that accepts nothing else, which is as exact as a `float` is.
+converted exactly, and `form=ValueForm.Float` writes `value` as a JSON number for a
+consumer that accepts nothing else, which is as exact as a `float` is.
 The text of `dump` stays the canonical form; the mapping is for storage that wants
 fields, and `load` reads both.
 
@@ -132,6 +132,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from decimal import Decimal
+from enum import Enum
 from fractions import Fraction
 from typing import TYPE_CHECKING
 from typing import Any
@@ -154,12 +155,27 @@ from kuchka.quantities.base.storage import _ScalarStorage
 
 if TYPE_CHECKING:
     from kuchka.internal.unit_table import UnitTable
+    from kuchka.quantities.base.units import AffineUnitDef
+    from kuchka.quantities.base.units import LogarithmicUnitDef
     from kuchka.quantities.base.units import UnitDef
 
 _QuantityT = TypeVar("_QuantityT", bound="_ScalarStorage[Any]")
 
 _KEYS = ("value", "unit")
 _NUMBER_TYPES = (int, float, Decimal, Fraction)
+
+
+class ValueForm(Enum):
+    """How `to_dict` writes the value of a measurement.
+
+    `Exact` writes the text of `dump`, which reads back to the same measurement.
+    `Float` writes a JSON number, an `int` when the magnitude is whole and a `float`
+    otherwise, for a consumer that accepts no text: it is as exact as a `float` is, and
+    refuses a magnitude that a `float` would corrupt.
+    """
+
+    Exact = "exact"
+    Float = "float"
 
 
 def dump(quantity: _ScalarStorage[Any]) -> str:
@@ -268,8 +284,8 @@ def load(
 def to_dict(
     quantity: _ScalarStorage[Any],
     *,
-    unit: UnitDef | str | None = None,
-    as_float: bool = False,
+    unit: UnitDef | AffineUnitDef | LogarithmicUnitDef | str | None = None,
+    form: ValueForm = ValueForm.Exact,
 ) -> dict[str, str | int | float]:
     """Write `quantity` as a mapping of its exact `value` and its `unit` symbol.
 
@@ -277,14 +293,15 @@ def to_dict(
     ----------
     quantity : _ScalarStorage
         A measurement of any quantity type and shape.
-    unit : UnitDef or str, optional
-        The unit to write it in, as a unit constant or a spelling that the table of
-        the quantity reads, converted exactly; the unit the measurement displays in
-        if omitted.
-    as_float : bool, optional
-        Write `value` as a JSON number, an `int` when the magnitude is whole and a
-        `float` otherwise, for a consumer that accepts no text.
-        The text of the default is exact and this is as exact as a `float`.
+    unit : unit constant or str, optional
+        The unit to write it in: a unit constant of the quantity, such as `VOLT`, or a
+        spelling that the table of the quantity reads, such as ``"V"``, and the
+        conversion is exact.
+        `None`, the default, writes the unit the measurement displays in.
+        Anything else, a unit of another quantity included, is refused.
+    form : ValueForm, optional
+        `ValueForm.Exact`, the default, writes the text of `dump`, and
+        `ValueForm.Float` writes a JSON number; see `ValueForm`.
 
     Returns
     -------
@@ -296,32 +313,39 @@ def to_dict(
     Raises
     ------
     TypeError
-        `quantity` is no measurement.
+        `quantity` is no measurement, or `form` is no `ValueForm`, a `bool` included.
     UnknownUnitError
         `unit` is a spelling that the table of the quantity does not read.
     InvalidConversionError
-        `unit` is a unit of another quantity, or a unit that the quantity is never
-        displayed in, such as the milliseconds of an `Instant`.
+        `unit` is no unit, a unit of another quantity, or a unit that the quantity is
+        never displayed in, such as the milliseconds of an `Instant`.
     InvalidMeasurementError
-        `as_float` is set, and the magnitude is beyond the range of a `float`, or so
-        small that a `float` would write it as zero.
+        `form` is `ValueForm.Float`, and the magnitude is beyond the range of a
+        `float`, or so small that a `float` would write it as zero.
 
     Examples
     --------
     >>> from kuchka import Millivolt
     >>> to_dict(Millivolt(2800))
     {'value': '2800', 'unit': 'mV'}
-    >>> to_dict(Millivolt(2800), unit="V", as_float=True)
+    >>> to_dict(Millivolt(2800), unit="V", form=ValueForm.Float)
     {'value': 2.8, 'unit': 'V'}
 
     """
     if not isinstance(quantity, _ScalarStorage):
         msg = f"to_dict writes a measurement, not {type(quantity).__name__}."
         raise TypeError(msg)
+    if not isinstance(form, ValueForm):
+        msg = f"form is a ValueForm, such as ValueForm.Exact, not {form!r}."
+        raise TypeError(msg)
     shown = quantity if unit is None else _in_unit(quantity, unit)
     written = shown.unit
     magnitude = shown._magnitude_in(written)  # noqa: SLF001 -- its own unit
-    value = _float_value(magnitude) if as_float else _magnitude_text(magnitude)
+    value = (
+        _float_value(magnitude)
+        if form is ValueForm.Float
+        else _magnitude_text(magnitude)
+    )
     return {"value": value, "unit": written.symbol}
 
 
@@ -383,7 +407,10 @@ def from_dict(
     return load(data, quantity, allow_archaic=allow_archaic)
 
 
-def _in_unit(quantity: _ScalarStorage[Any], unit: UnitDef | str) -> Any:  # noqa: ANN401 -- same type
+def _in_unit(
+    quantity: _ScalarStorage[Any],
+    unit: UnitDef | AffineUnitDef | LogarithmicUnitDef | str,
+) -> Any:  # noqa: ANN401 -- same type
     """Return `quantity` displayed in `unit`, which has to be a unit of its type."""
     target: Any = unit
     asked: str | None = None
@@ -555,4 +582,4 @@ def _decimal_text(magnitude: Fraction) -> str | None:
     return f"{sign}{whole}.{fraction}" if places else f"{sign}{whole}"
 
 
-__all__ = ["dump", "from_dict", "load", "to_dict"]
+__all__ = ["ValueForm", "dump", "from_dict", "load", "to_dict"]
