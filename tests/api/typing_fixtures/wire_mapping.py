@@ -5,13 +5,18 @@ is written as a mapping of JSON values, and a mapping, and only a mapping, is re
 the quantity type that is asked for.
 """
 
+from kuchka import Celsius
 from kuchka import Current
 from kuchka import Volt
 from kuchka import Voltage
 from kuchka import wire
+from kuchka.units.thermal import KELVIN
 
 mapping: dict[str, str | int | float] = wire.to_dict(Volt(1))  # OK
-converted = wire.to_dict(Volt(1), unit="mV", as_float=True)  # OK
+converted = wire.to_dict(Volt(1), unit="mV", form=wire.ValueForm.Float)  # OK
+in_kelvin = wire.to_dict(Celsius(20), unit=KELVIN)  # OK
+_bool_form = wire.to_dict(Volt(1), form=True)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
+_not_a_unit = wire.to_dict(Volt(1), unit=5)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 _not_a_measurement = wire.to_dict(Voltage)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
 # The quantity type that is asked for is the one that is read.
