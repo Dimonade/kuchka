@@ -68,6 +68,44 @@ A bare `2.8` does not say whether it is volts, and a binary float from a file ha
 A proportion is the exception because it has no unit to leave out: its table names the ratio as the bare unit, so a number with no unit is a ratio.
 That makes `25` a ratio of twenty-five, which is `2500 %`, and a percent is written `"25 %"`.
 
+## As a mapping
+
+A JSON document or a database row often wants the number and the unit as two fields, and `to_dict` writes the same exact data that way, with `from_dict` as its reader:
+
+```python
+from kuchka import Millivolt
+from kuchka import Voltage
+
+wire.to_dict(Millivolt(2800))  # {'value': '2800', 'unit': 'mV'}
+wire.to_dict(Volt(1) / 3)  # {'value': '1/3', 'unit': 'V'}
+wire.from_dict({"value": "1/3", "unit": "V"}, Voltage) == Volt(1) / 3  # True
+wire.from_dict({"value": "5", "unit": "mA"}, Voltage)  # rejected: `UnknownUnitError`.
+wire.from_dict({"value": True, "unit": "V"}, Voltage)  # rejected: `ParseError`.
+wire.from_dict("5 V", Voltage)  # rejected: `ParseError`.
+```
+
+The value is the text that `dump` writes, a decimal when the magnitude terminates and a fraction when it does not, so no digit is rounded away and the unit is the one the measurement displays in.
+A ratio keeps its symbol, `1`, so the mapping is always explicit, and `from_dict` needs both keys where `load` lets a proportion go without a unit.
+The text of `dump` remains the canonical form, and `load` reads both.
+
+`unit` writes the measurement in another unit of its quantity, given as a spelling or as a unit constant, and the conversion is exact:
+
+```python
+wire.to_dict(Millivolt(2800), unit="V")  # {'value': '2.8', 'unit': 'V'}
+wire.to_dict(Celsius(20), unit="K")  # {'value': '293.15', 'unit': 'K'}
+wire.to_dict(Volt(1), unit="mA")  # rejected: `UnknownUnitError`.
+```
+
+A consumer that accepts only JSON numbers gets `as_float=True`, which writes `value` as an `int` when the magnitude is whole and as a `float` otherwise:
+
+```python
+wire.to_dict(Volt(4.2), as_float=True)  # {'value': 4.2, 'unit': 'V'}
+wire.to_dict(Millivolt(2800), as_float=True)  # {'value': 2800, 'unit': 'mV'}
+```
+
+A float is exact only where it reads back to the same decimal: `4.2` does, and a third of a volt does not, so the default is the one that round-trips.
+A magnitude beyond the range of a `float`, or so small that a `float` would write it as zero, is refused with an `InvalidMeasurementError` and never written as a wrong number.
+
 ## Errors
 
 Every refusal of data is a `ParseError`, and a `ParseError` is a `ValueError`: text that is no measurement of the type, an unknown unit, a number with no unit, a measurement of another quantity type, and a value the quantity cannot hold, such as `-300 °C`.

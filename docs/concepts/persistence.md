@@ -52,4 +52,5 @@ restored == value  # True
 
 A fraction written as text restores exactly, which a `float` does not.
 The unit is read through the quantity's `*_UNITS` table, which accepts the display symbol and the other spellings of a unit (see [Unit spellings](unit_spellings.md)), so a file written by hand with `uV` or `degrees C` restores as well as one written by this code.
-The same form works for every quantity shape and every unit, including temperatures and levels, and [The wire form](wire_form.md) describes it, with the mapping `{"value": "7/3", "unit": "mV"}` that is read as well.
+The same form works for every quantity shape and every unit, including temperatures and levels, and [The wire form](wire_form.md) describes it.
+Where a column or a document wants the number and the unit as two fields, `wire.to_dict(value)` writes `{"value": "7/3", "unit": "mV"}` and `wire.from_dict(data, Voltage)` reads it back exactly.
