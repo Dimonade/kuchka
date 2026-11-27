@@ -1,6 +1,7 @@
 # kuchka
 
-![PyPI Version](https://img.shields.io/pypi/v/kuchka)
+![PyPI Kuchka Version](https://img.shields.io/pypi/v/kuchka)
+![PyPI Python Versions](https://img.shields.io/pypi/pyversions/kuchka)
 ![PyPI License](https://img.shields.io/pypi/l/kuchka)
 
 ---
