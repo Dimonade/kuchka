@@ -15,6 +15,7 @@ from fractions import Fraction
 import pytest
 
 from kuchka import Decibel
+from kuchka import MeasurementError
 from kuchka import Millivolt
 from kuchka import Ratio
 from kuchka import Volt
@@ -69,6 +70,8 @@ def test_no_public_method_leaks_an_internal_error(name: str) -> None:
             for what, value in NONSENSE.items():
                 try:
                     method(**{parameter.name: value})
+                except MeasurementError:
+                    pass  # a refusal that says what was wrong, such as a zero
                 except LEAKS as error:
                     pytest.fail(
                         f"{name}.{method_name}({parameter.name}={what}) "

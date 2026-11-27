@@ -1,4 +1,4 @@
-"""kuchka -- a small pile of physically-typed units for engineering code.
+"""kuchka -- A pile of strongly-typed physical quantities and engineering units.
 
     from kuchka import Milliampere
     from kuchka import Volt

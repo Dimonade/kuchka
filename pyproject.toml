@@ -1,7 +1,7 @@
 [project]
 name = "kuchka"
 version = "0.1.5"
-description = "A small pile of strongly-typed engineering units for Python."
+description = "A pile of strongly-typed physical quantities and engineering units for Python."
 readme = "README.md"
 keywords = [
   "units",
