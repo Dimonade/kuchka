@@ -55,7 +55,7 @@ Changelog = "https://github.com/Dimonade/kuchka/blob/HEAD/CHANGELOG.md"
 Issues = "https://github.com/Dimonade/kuchka/issues"
 
 [build-system]
-requires = ["uv_build>=0.13.5,<0.14.0"]
+requires = ["uv_build>=0.13.9,<0.14.0"]
 build-backend = "uv_build"
 
 [dependency-groups]
@@ -64,8 +64,8 @@ integrations = ["attrs>=26.1.0", "msgspec>=0.18.5", "pydantic>=2.9"]
 
 test = [
   { include-group = "integrations" },
-  "coverage>=7.17.3",
-  "hypothesis>=6.170.8",
+  "coverage>=7.17.4",
+  "hypothesis>=6.170.17",
   "pytest>=9.1.1",
 ]
 
@@ -74,7 +74,7 @@ typing = ["mypy>=2.4.0"]
 pyright = ["pyright>=1.1.414"]
 
 # The overload generator formats what it writes with ruff, and a test runs it.
-ruff = ["ruff>=0.17.2"]
+ruff = ["ruff>=0.17.6"]
 
 lint = [
   { include-group = "ruff" },
@@ -83,10 +83,10 @@ lint = [
   "mccabe>=0.7.0",
   "pylsp-mypy>=0.8.2",
   "python-lsp-server>=1.15.0",
-  "ty>=0.0.91",
+  "ty>=0.0.107",
 ]
 
-dev = [{ include-group = "test" }, { include-group = "lint" }, "tox>=4.67.1"]
+dev = [{ include-group = "test" }, { include-group = "lint" }, "tox>=4.67.15"]
 
 [tool.coverage.run]
 branch = true
