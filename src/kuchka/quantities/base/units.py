@@ -21,6 +21,7 @@ from typing import TYPE_CHECKING
 from typing import Any
 from typing import Protocol
 
+from kuchka.dimensions import Dimension
 from kuchka.errors import InvalidMeasurementError
 from kuchka.internal.typing import override
 from kuchka.internal.unit_table import UnitTable
@@ -32,7 +33,6 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
     from fractions import Fraction
 
-    from kuchka.dimensions import Dimension
     from kuchka.numeric import Numeric
 
 
@@ -50,6 +50,14 @@ def _checked_spellings(
         msg = f"{kind} {name!r} needs a tuple of non-empty strings, got {spellings!r}."
         raise InvalidMeasurementError(msg)
     return spellings
+
+
+def _checked_text(kind: str, field: str, value: object, name: object) -> str:
+    """Return `value`, which must be a non-empty string, for the `field` of a unit."""
+    if not isinstance(value, str) or not value.strip():
+        msg = f"{kind} {name!r} needs a non-empty string as its {field}, got {value!r}."
+        raise InvalidMeasurementError(msg)
+    return value
 
 
 def _positive_scale(kind: str, name: str, scale: Numeric) -> Fraction:
@@ -400,9 +408,12 @@ class UnitDef(_Unit):
         words: tuple[str, ...] = (),
     ) -> None:
         """Store name, symbol, scale, dimension, and the other accepted spellings."""
+        if not isinstance(dimension, Dimension):
+            msg = f"unit {name!r} needs a Dimension, got {dimension!r}."
+            raise InvalidMeasurementError(msg)
         self._store(
-            name=name,
-            symbol=symbol,
+            name=_checked_text("unit", "name", name, name),
+            symbol=_checked_text("unit", "symbol", symbol, name),
             scale=_positive_scale("unit", name, scale),
             dimension=dimension,
             aliases=_checked_spellings("unit", name, aliases),
@@ -454,8 +465,8 @@ class AffineUnitDef(_Unit):
     ) -> None:
         """Store name, symbol, scale/offset (as ``Fraction``), and other spellings."""
         self._store(
-            name=name,
-            symbol=symbol,
+            name=_checked_text("unit", "name", name, name),
+            symbol=_checked_text("unit", "symbol", symbol, name),
             scale=_positive_scale("unit", name, scale),
             offset=to_exact(offset),
             aliases=_checked_spellings("unit", name, aliases),
@@ -508,8 +519,8 @@ class LogarithmicUnitDef(_Unit):
     ) -> None:
         """Store name, symbol, scale (as ``Fraction``), and other spellings."""
         self._store(
-            name=name,
-            symbol=symbol,
+            name=_checked_text("unit", "name", name, name),
+            symbol=_checked_text("unit", "symbol", symbol, name),
             scale=_positive_scale("unit", name, scale),
             aliases=_checked_spellings("unit", name, aliases),
             words=_checked_spellings("unit", name, words),

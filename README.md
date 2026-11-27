@@ -2,11 +2,12 @@
 
 ![PyPI Kuchka Version](https://img.shields.io/pypi/v/kuchka)
 ![PyPI Python Versions](https://img.shields.io/pypi/pyversions/kuchka)
+![PyPI Types](https://img.shields.io/pypi/types/kuchka)
 ![PyPI License](https://img.shields.io/pypi/l/kuchka)
 
 ---
 
-A small pile of strongly-typed physical quantities and engineering units for Python.
+A pile of strongly-typed physical quantities and engineering units for Python.
 
 `kuchka` turns engineering values into first-class Python types instead of raw numbers.
 `Volt(5)` returns a `Voltage`; `Kilogram(1000)` returns a `Mass`; `Mass * Acceleration` returns a `Force` automatically, and that physical meaning travels with the value through the rest of your code.

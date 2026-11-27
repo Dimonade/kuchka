@@ -90,6 +90,8 @@ See the `Stability` section in `README.md` for what versioning means.
   The display unit that `repr`, `format`, and `wire` pass is trusted and skips it.
 - **A level is made from a `Proportion`:**
   `LogarithmicRatio.from_power_ratio` and `from_field_ratio` leaked an `AttributeError` for anything else, and raise a `TypeError` that says what they take.
+- **A unit definition is built from text and a `Dimension`:**
+  `UnitDef`, `AffineUnitDef`, and `LogarithmicUnitDef` checked their scale and their spellings and took anything for a name, a symbol, or a dimension, so `UnitDef(None, None, 1, "banana")` was a unit that failed far from the line that built it; they raise `InvalidMeasurementError`.
 - **A format specification is a string:**
   `format_parts(None)` was taken for an empty specification, and raises a `TypeError`, as `format(x, None)` does.
 
