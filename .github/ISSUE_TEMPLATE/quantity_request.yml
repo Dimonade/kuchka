@@ -1,6 +1,7 @@
 name: Quantity or unit request
 description: Ask for a quantity, a unit, or a relationship between quantities that kuchka does not have.
 type: feature
+labels: ["new quantity or unit"]
 body:
   - type: markdown
     attributes:
